@@ -1,3 +1,4 @@
+//*LastUpdate : jsf-1-12  16-October-1999  A.Miyamoto
 //*LastUpdate : jsf-1-11  26-July-1999  A.Miyamoto
 //*LastUpdate : jsf-1-5  1-March-1999  A.Miyamoto
 //*-- Author  : Akiya Miyamoto  1-March-1999  A.Miyamoto
@@ -8,7 +9,10 @@
 //
 //  Basic class to describe helical track
 //
-//$Id: 
+//(Update)
+//  16-October-1999  In SetHelixByFitToCyl, trial helix is determined
+//                   by using first, center, and last space points
+//$Id$ 
 //
 ////////////////////////////////////////////////////////////////////////
 
@@ -470,13 +474,13 @@ void JSFHelicalTrack::SetTrackByFitToCyl(Int_t npnt, JSFHitCylinder *hits, Doubl
   }
 
   // Set trial helix.
-  JSF3DV p1=pSP[2].sp.XYZ();
-  JSF3DV p2=pSP[1].sp.XYZ();
+  JSF3DV p1=pSP[nSP].sp.XYZ();
+  JSF3DV p2=pSP[nSP/2].sp.XYZ();
   JSF3DV p3=pSP[0].sp.XYZ();
 
   SetHelix(p1, p2, p3, bf);
-
-  //  Print();
+  //  p1.Print(); p2.Print(); p3.Print();
+  //Print();
 
   // Setup Minuit
 
