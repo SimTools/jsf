@@ -13,7 +13,7 @@
 /*  Some macros specific to jsf	building				*/
 /*----------------------------------------------------------------------*/
 
-#include    "../../conf/makejsf.tmpl"
+#include    "conf/makejsf.tmpl"
 
 /*----------------------------------------------------------------------*/
 /*  Source files, headers, and objects to build				*/
@@ -39,10 +39,9 @@ libJSF.$(DllSuf): $(OBJJSF)
 	@echo "Linking $@ "
 	$(LD) $(SOFLAGS)  $(OBJJSF) -o $@
 
-install:: JSFDefines.h $(HDRJSF)
+install:: $(HDRJSF)
 	mkdir -p $(JSFLIBDIR)
 	install -p -m 644 $(HDRJSF) $(JSFINCDIR)
-	install -p -m 644  JSFDefines.h $(JSFINCDIR)
 	install -p -m 755 libJSF.$(DllSuf) $(JSFLIBDIR)
 	install -p -m 755 jsf $(JSFBINDIR)
 
@@ -75,7 +74,8 @@ web:
 
 libJSF.$(SrcSuf): $(HDRJSF)
 		@echo "Generating dictionary ..."
-		rootcint  -f libJSF.$(SrcSuf) -c -I$(JSFROOT)/include \
+		rootcint  -f libJSF.$(SrcSuf) -c \
+		$(shell jsf-config --includes) \
 		$(RCINTDEFINES) $(HDRJSF)
 
 
