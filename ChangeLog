@@ -1,3 +1,35 @@
+
+-------------------------------------------------------------------------------
+2000/01/29  A.Miyamoto
+-------------------------------------------------------------------------------
+(1) Add more Getter in JSFSpringParton Class
+(2) JSFSteer::SetReturnCode(EJSFRetrunCode ir) is included.
+    User can set return code.  User macro should write properly to perform analysis
+    as expected.  Sample code is as follows.
+
+        EJSFReturnCode iret=kJSFOK;
+	Bool_t flag=kTRUE;
+	for(nr=runfrom; nr<=runto; nr++) {
+	  jsf->BeginRun(nr);
+	  for(ne=eventfrom; ne<=eventto; ne++) {
+	    flag=jsf->Process(ev);
+	    iret=jsf->GetReturnCode();
+	    if( iret&jsf->kJSFFALSE ) goto EndRun;
+  	    if( iret&jsf->kJSFNoOutput) ) jsf->FillTree();
+	    jsf->Clear();
+  	    if( iret&(jsf->kJSFDoEndRun|jsf->kJSFTerminate|kJSFQuit) ) goto EndRun;
+          }
+	EndRun:
+	  if( iret & (jsf->kJSFTerminate|jsf->kJSFQuit) ) break;
+	  flag=jsf->EndRun();
+	  if( (iret=jsf->GetReturnCode())&(jsf->kJSFTerminte|jsf->kJSFQuit)) continue;
+	}
+        jsf->Terminate();	
+
+(3) in jsf.conf, a line started by "#." is a pure comment line, which is not shown in 
+    help message of dialog.
+(4) Memory leak in JSFReadJIMBuf.cx is fixed.	
+
 ****************************************************
 jsf-1-13  25-January-2000  A.Miyamoto
 ****************************************************
