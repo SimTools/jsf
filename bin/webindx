@@ -1,0 +1,51 @@
+#!/usr/local/bin/perl
+# ##########################################################
+#
+#  Make a JSF_Index.html in html directory
+#
+#$Id$
+#
+#(Author) Akiya Miyamoto, KEK, 14-Feburary-1999
+#
+# ##########################################################
+$jsfroot="/proj/phys/lclib/jsf";
+if ( $ENV{"JSFROOT"} =~ "" ) { $jsfroot=$ENV{"JSFROOT"} }
+$htmldir=join('',$jsfroot,"/html");
+$indexfile=join('',$htmldir,"/JSF_Index.html");
+
+@htmlf=( "JSFMain_Index.html", "CCDAnal_Index.html", "FFbarSpring_Index.html");
+
+# #############################
+# Main reference index file
+# #############################
+for( $i=0;$i<=$#htmlf;$i++){
+  $ifile=join('',$htmldir,"/",$htmlf[$i]);
+  open(FIN,$ifile);
+  $ipre=0;
+  while(<FIN>){
+    if ( /<pre>/ ) { 
+	$ipre=1;  
+	if( $i == 0 ) { print "<pre>\n" ; }
+	next; 
+    }
+    if( /<\/pre>/ ) { 
+	$ipre=2; 
+	if( $i == $#htmlf ) { print "</pre>\n" ; }
+	 next; 
+    }
+    if( $i != 0 && $ipre==0 ) { next; }
+    if( $i != $#htmlf && $ipre == 2 ) { next; }
+
+    if( $ipre == 1 && $_ =~ /^<li>/ ) {
+	@array=split(/"/,$_);
+	if( $i == 0 ) { print ; }
+	if( $i == 1 && $array[1] =~ /^CCD*/ ) { print ; }
+	if( $i == 2 && $array[1] =~ /^FFbar*/ ) { print ; }
+    }
+    else { print ; }
+
+  }
+
+}
+
+exit;
