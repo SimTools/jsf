@@ -1,5 +1,7 @@
 How to install
 
+0) Install ROOT4.00/06 or later
+
 1) Do
 	setenv CERN_ROOT <<cern directory>>
 	setenv LCLIBROOT <<lclib directory>>
@@ -8,9 +10,28 @@ How to install
 	set path=(. $JSFROOT/bin $ROOTSYS/bin $path)
 	setenv IMAKEINCLUDE "-I$JSFROOT -I$LCLIBROOT"
 
-2) Specify Pythia version number in conf/configure.in.
-   Make sure, LCLIB and ROOT are compiled with same version 
-   number
+2) For sucesfull installation Pythia is mandatory,
+ but that is not included in the standard distribution.
+
+ Please get it from http://www.thep.lu.se/~torbjorn/Pythia.html
+ or anywhere else, and save in $JSFROOT/share/phythia directory.
+ File name is something like, pythia6222.f. In this case 6 is 
+ a version number and 222 is a sub version number.
+ Then specify these numbers in a file, conf/configure.in.
+ There you have to specify 
+	PYTHIA_VERSION
+	PYTHIA_SUBVERSION
+	PYTHIA_LIBNAME
+
+ Make sure, LCLIB and ROOT are compiled with same version 
+ number. Pythia5, Pythia6.1, and Pythia6.2 have different
+ common block definition and we can not support different different
+ version with same library.  Current (1-July-2004) ROOT default
+ supports Pythia6.2, thus you can use a ROOT binary without compilation 
+ if you use Pythia6.2
+  
+ To use Pythia6.1 or before, some source code modification of 
+ ROOT-Pythia-JSF interface is necessary.
 
 3) do 
 	cd $JSFROOT
