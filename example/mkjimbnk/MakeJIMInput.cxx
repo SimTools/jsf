@@ -33,7 +33,11 @@ extern "C" {
 
 };  
 
+#if __PYTHIA_VERSION__ >= 6
+#define NMXHEP 4000
+#else
 #define NMXHEP 2000
+#endif
 typedef struct {
   Int_t nevhep, nhep;
   Int_t isthep[NMXHEP], idhep[NMXHEP];
@@ -157,6 +161,7 @@ void MakeJIMInput::MakeTrack(Int_t jseg, Int_t idata[])
     rdata[13]=hepevt_.vhep[jseg][1]/10.0;
     rdata[14]=hepevt_.vhep[jseg][2]/10.0;
     rdata[15]=hepevt_.vhep[jseg][3]/10.0;
+
     rdata[16]=charge;
     rdata[17]=ctau;
     rdata[18]=0;
