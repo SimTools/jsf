@@ -13,6 +13,7 @@
 //////////////////////////////////////////////////////////////////
 
 #include <TSystem.h>
+#include <TGMsgBox.h>
 #include "JSFSteer.h"
 #include "JSFEnv.h"
 #include "InputDialog.h"

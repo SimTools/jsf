@@ -26,6 +26,7 @@
 #include <TGXW.h>
 #endif
 
+#include <TCanvas.h>
 #include <TGeometry.h>
 #include <TGListBox.h>
 #include <TGClient.h>

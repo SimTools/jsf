@@ -26,6 +26,8 @@
 #include <TGXW.h>
 #endif
 
+#include <TGButton.h>
+#include <TGListBox.h>
 #include "JSFEnv.h"
 
 
