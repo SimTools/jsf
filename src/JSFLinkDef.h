@@ -10,6 +10,8 @@
 #pragma link C++ class JSFEventBuf;
 #pragma link C++ class JSFDBS;
 #pragma link C++ class JSFUtil;
+#pragma link C++ class JSFEnv;
+#pragma link C++ class JSFEnvRec;
 
 #pragma link C++ class JSF2DV;
 

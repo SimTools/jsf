@@ -22,6 +22,7 @@
    html.MakeClass("JSFDBS");
    html.MakeClass("JSFUtil");
    html.MakeClass("JSFEnv");
+   html.MakeClass("JSFEnvRec");
 
    html.MakeClass("JSFSpring");
    html.MakeClass("JSFSpringBuf");

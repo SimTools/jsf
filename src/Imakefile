@@ -36,6 +36,7 @@ INC           = ../include
 
 OBJJSF        = JSFSteer.$(ObjSuf) JSFModule.$(ObjSuf) \
 		JSFDBS.$(ObjSuf) JSFUtil.$(ObjSuf) \
+		JSFEnv.$(ObjSuf) \
 		libJSF.$(ObjSuf)
 
 OBJJSFLCFULL  = JSFBases.$(ObjSuf) \
@@ -56,7 +57,8 @@ OBJJSFQUICKSIM= JSFQuickSimParam.$(ObjSuf) JSFQuickSim.$(ObjSuf) \
 		libJSFQuickSim.$(ObjSuf) simdstutil.o 
 
 SRCJSF        = JSFSteer.$(SrcSuf) JSFModule.$(SrcSuf) \
-		JSFDBS.$(SrcSuf) JSFUtil.$(SrcSuf)
+		JSFDBS.$(SrcSuf) JSFUtil.$(SrcSuf) \
+		JSFEnv.$(SrcSuf) 
 
 SRCJSFLCFULL    = JSFBases.$(SrcSuf) \
 		JSFSpringParton.$(SrcSuf) JSFSpring.$(SrcSuf) \
@@ -76,7 +78,8 @@ SRCJSFQUICKSIM= JSFQuickSimParam.$(SrcSuf) JSFQuickSim.$(SrcSuf) \
 
 SRC = $(SRCJSF) $(SRCJSFLCFULL) $(SRCJSFQUICKSIM)
 
-HDRJSF	      = JSFUtil.h JSFDBS.h JSFModule.h JSFSteer.h \
+HDRJSF	      = JSFEnv.h \
+		JSFUtil.h JSFDBS.h JSFModule.h JSFSteer.h \
 		JSFBasicClasses.h JSFLinkDef.h
 
 HDRJSFLCFULL  = JSFBases.h \
@@ -94,6 +97,7 @@ HDRJSFQUICKSIM= JSFVTXHit.h JSFCALHit.h \
 		JSFQuickSimParam.h JSFQuickSim.h \
 		JSFSIMDST.h JSFQuickSimLinkDef.h \
 
+HDR	      = $(HDRJSF) $(HDRJSFLCFULL) $(HDRJSFQUICKSIM)
 
 all::  libjsf libjsflcfull libjsfquicksim jsf
 
@@ -128,12 +132,15 @@ clean::
 	@rm -f libJSFQuickSim.$(SrcSuf) libJSFQuickSim.h
 
 depend:: 
-	makedepend -I$(ROOTSYS)/include -I$(JSFROOT)/include $(SRC)
+	makedepend -I$(ROOTSYS)/include -I$(JSFROOT)/include $(SRC) $(HDR)
 
 distclean:: clean
 	@rm -f $(OBJS) core *~ *.o
 	@rm -f PYTHIA.SEED *.bak *.a
 	@rm -f jsf *.root Makefile 
+
+web:
+	../bin/jsf -q -b html.C
 
 ###
 
