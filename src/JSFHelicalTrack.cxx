@@ -479,7 +479,9 @@ void JSFHelicalTrack::SetTrackByFitToCyl(Int_t npnt, JSFHitCylinder *hits, Doubl
   //    JSFHelicalTrack hlx;
   //    hlx.FitCylinderGeometry(npnt, hits, bf);
   //  Then fitted result are saved in the object, hlx.
-
+  //  
+  //  For input space points, hits, ri , zi, dzi, dphi  are in unit of lenght (cm, etc)
+  //  phii is radian.  dphi is an actually r-phi resolution in unit of length.
 
   // 
   nSP = npnt ;
