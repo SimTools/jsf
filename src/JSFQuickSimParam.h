@@ -151,6 +151,10 @@ public:
    Float_t GetVTXSigmaSP(){ return fVTXError[0]; }
    Int_t   GetVTXLayerNumber(Float_t radius);   
 
+   Float_t GetClusteringParameter(Int_t idev, Int_t ipar){ return fCLSPAR[idev][ipar];}
+   Float_t GetCMBCUT(Int_t ipar){ return fCMBCUT[ipar]; }
+
+
    ClassDef(JSFQuickSimParam,3) // JSFQuickSim Parameters
 };
  
