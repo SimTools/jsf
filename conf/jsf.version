@@ -6,7 +6,7 @@ XCOMM #
 XCOMM # JSF_PATCHLEVEL and JSF_VERSIONDATE are updated daily by cron
 XCOMM # job, when any modification is applied to JSF repository.
 XCOMM #
-XCOMM #$Id:
+XCOMM #$Id$
 XCOMM #
 
 #define __JSF_VERSION__ 1
