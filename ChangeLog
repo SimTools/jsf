@@ -13,6 +13,15 @@ To-Do  -- Help wanted
 	
 	
 **********************************************************
+jsf-1-7  8-April-1999 A.Miyamoto
+**********************************************************
+(1) Add JSFReadGenerator class to read HEPEVT format Fortran binray data.
+(2) PythiaGenerator class is modified to save all intermediate particles
+    in the JSFGenerator class.
+(3) Modify files in example/simdst and macro/MainSimdst.C to add
+    options to make simdst data while reading the generator data.
+	
+**********************************************************
 jsf-1-6  1-April-1999 A.Miyamoto
 **********************************************************
 (1) Format of SIMDST data is changed.   Calorimeter hit information
