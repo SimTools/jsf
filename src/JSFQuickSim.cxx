@@ -1,9 +1,27 @@
-//*LastUpdate :  0.03/08  29-September-1998  By A.Miyamoto
+//*LastUpdate :  jsf-1-4  6-Feburary-1999  By Akiya Miyamoto
+//*LastUpdate :  jsf-0-3-8  29-September-1998  By A.Miyamoto
 //*-- Author  : A.Miyamoto  11-September-1998
+
+
+///////////////////////////////////////////////////////////////////
+//
+// JSFQuickSim 
+//
+// Quick simulator for JLC detector.
+// This version calls Quick simulator written by Fortran, which is 
+// those in lclib, then detector informations are output a la C++ class.
+//   
+// When Quick Simulator is executed, detector information are saved in
+// JSFQuickSimBuf class, where pointers to detector signals are prepared.
+//   
+//////////////////////////////////////////////////////////////////
+
 
 #include "JSFSteer.h"
 #include "JSFLCFULL.h"
 #include "JSFGenerator.h"
+
+#include "JSFQuickSimCommon.h"
 #include "JSFQuickSim.h"
 
 extern "C" {
@@ -21,10 +39,38 @@ extern void cmbtrk_(int *iret);
 
 ClassImp(JSFQuickSim)
 ClassImp(JSFQuickSimParam)
-ClassImp(JSFQuickSimData)
 ClassImp(JSFQuickSimBuf)
 
 TClonesArray *gTracks;
+TClonesArray *gCDCTracks;
+TClonesArray *gVTXHits;
+TClonesArray *gEMCHits;
+TClonesArray *gHDCHits;
+
+
+// ******* Common /PRJUNK/  ****************
+// to access temporary information of LTKCL package.
+const int MXxZET=43;
+const int MXxPHI=77;
+const int MXxBD=(MXxZET+1)*(MXxPHI+1);
+const int MXxCLS=5000;
+const int MXxWRK=1000;
+const int LNxTRK = 100;
+const int MXxTRK = 500;
+typedef struct {
+  Int_t NBNON, NCELLS;
+  Int_t JBNPNT[MXxPHI+1][MXxZET+1];
+  Int_t IBNPNT[MXxBD][2], NCLIN[MXxBD], ICLPNT[MXxCLS][5];
+  Float_t  WORK[MXxWRK];
+  Int_t NCDCTK;
+  Float_t RTKBNK[MXxTRK][LNxTRK];
+  Int_t   KBNPNT[MXxPHI+1][MXxZET+1], NTKIN[MXxBD];
+  Int_t   ITKPNT[MXxBD][MXxTRK], KCNTRK[MXxTRK];
+} COMMON_PRJUNK;
+
+extern COMMON_PRJUNK prjunk_;
+// *****************************************************
+
 
 //_____________________________________________________________________________
 JSFQuickSim::JSFQuickSim(const char *name, const char *title)
@@ -33,16 +79,10 @@ JSFQuickSim::JSFQuickSim(const char *name, const char *title)
   // JLC QuickSimulator module.
   // 
   fParam   = new JSFQuickSimParam();
-  fData    = new JSFQuickSimData("JSFQuickSimData", "JSFQuickSim Data");
   fEventBuf= new JSFQuickSimBuf("JSFQuickSimBuf", 
 			       "JSF QuickSim Event data", this);
 }
 
-//_____________________________________________________________________________
-JSFQuickSimData::JSFQuickSimData(const char *name, const char *title)
-       : TNamed(name,title)
-{
-}
 
 //_____________________________________________________________________________
 JSFQuickSimBuf::JSFQuickSimBuf(const char *name, const char *title, JSFQuickSim *sim)
@@ -51,13 +91,29 @@ JSFQuickSimBuf::JSFQuickSimBuf(const char *name, const char *title, JSFQuickSim 
   fNtracks=0;
   if( !gTracks ) gTracks= new TClonesArray("JSFLTKCLTrack", 1000);
   fTracks=gTracks;
+
+  fNCDCTracks=0;
+  if( !gCDCTracks )gCDCTracks= new TClonesArray("JSFCDCTrack", kMaxCDCTracks);
+  fCDCTracks=gCDCTracks;
+
+  fNVTXHits=0 ;
+  if( !gVTXHits ) gVTXHits= new TClonesArray("JSFVTXHit", kMaxVTXHits);
+  fVTXHits=gVTXHits;
+
+  fNEMCHits=0 ;
+  if( !gEMCHits ) gEMCHits= new TClonesArray("JSFEMCHit", kMaxCalHits);
+  fEMCHits=gEMCHits;
+
+  fNHDCHits=0 ;
+  if( !gHDCHits ) gHDCHits= new TClonesArray("JSFHDCHit", kMaxCalHits);
+  fHDCHits=gHDCHits;
+
 }
 
 //_____________________________________________________________________________
 JSFQuickSim::~JSFQuickSim()
 {
   if( fParam ) delete fParam;
-  if( fData  ) delete fData;
   if( fEventBuf  ) delete fEventBuf;
 }
 
@@ -76,6 +132,7 @@ Bool_t JSFQuickSim::BeginRun(Int_t nrun)
 
   fParam->SetSwimParam();
   fParam->SetSmearParam();
+  
 
   smrjin_();
   if( fFile->IsWritable() ) fParam->Write();
@@ -127,11 +184,6 @@ Bool_t JSFQuickSim::TBPUTGeneratorParticles()
     data[15]=p->fLifeTime;
     data[16]=p->fDecayLength;
     Int_t ielm=j+1;
-    //    printf(" data[0:3]=%g %g %g %g ",data[0],data[1],data[2],data[3]);
-    //    printf(" data[4:10]=%g %g %g %g == %g %g %g \n",
-    //	   data[4],data[5],data[6],data[7],data[8],data[9],data[10]);
-    // printf(" data[11:16]=%g %g %g %g %g %g \n",
-    //	   data[11],data[12],data[13],data[14],data[15],data[16]);
     gJSFLCFULL->TBPUT(1,"Generator:Particle_List",ielm,20,(Int_t*)data,iret);
   }
 
@@ -179,6 +231,196 @@ Bool_t JSFQuickSim::MakeJSFLTKCLTracks()
   return kTRUE;
 }
 
+
+//_____________________________________________________________________________
+Bool_t JSFQuickSim::MakeCALHits()
+{
+  // Create JSFEMCHits and JSFHDCHits from 
+  // the TBS bank, Production:EMC;Hit_Cell and Production:HDC;Hit_Cell
+
+  JSFQuickSimBuf *buf=(JSFQuickSimBuf*)EventBuf();
+  TClonesArray &emc=*(buf->GetEMCHits());
+  Int_t nemc=0;
+  Int_t nelm, neary[kMaxCalHits];
+  Int_t iwrk[50]; 
+  Int_t i,nw,iret;
+
+  gJSFLCFULL->TBNOEL(1,"Production:EMC;Hit_Cell", nelm, neary);
+  if( nelm >= kMaxCalHits ) {
+      printf("Error in JSFQuickSim::MakeCALHits\n");
+      printf("Number of EMC Calorimeter hits =%d, exceeded buffer size\n",nelm);
+      return kFALSE;
+  }
+  for(i=0;i<nelm;i++){
+    gJSFLCFULL->TBGET(1,"Production:EMC;Hit_Cell",neary[i],nw,iwrk,iret);
+    new(emc[nemc++])  JSFEMCHit(iwrk[0], iwrk[1]);
+  }
+  buf->SetNEMCHits(nemc);
+
+  Int_t nhdc=0;
+  TClonesArray &hdc=*(buf->GetHDCHits());
+  gJSFLCFULL->TBNOEL(1,"Production:HDC;Hit_Cell", nelm, neary);
+  if( nhdc >= kMaxCalHits ) {
+    printf("Error in JSFQuickSim::MakeCALHits\n");
+    printf("Number of HDC Calorimeter hits =%d, exceeded buffer size\n",nelm);
+    return kFALSE;
+  }
+  for(i=0;i<nelm;i++){
+    gJSFLCFULL->TBGET(1,"Production:HDC;Hit_Cell",neary[i],nw,iwrk,iret);
+    new(hdc[nhdc++])  JSFHDCHit(iwrk[0], iwrk[1]);
+  }
+  buf->SetNHDCHits(nhdc);
+
+  return kTRUE;
+}
+
+//_____________________________________________________________________________
+Bool_t JSFQuickSim::MakeVTXHits()
+{
+  // Create JSFVTXHits class 
+  // the TBS bank, Production:VTX;Hit and Production:VTX;Hit_Errors
+
+  JSFQuickSimBuf *buf=(JSFQuickSimBuf*)EventBuf();
+  TClonesArray &vtx=*(buf->GetVTXHits());
+  Int_t nelm, neary[kMaxVTXHits];
+
+  gJSFLCFULL->TBNOEL(1,"Production:VTX;Space_Point",nelm,neary);
+  if( nelm >= kMaxVTXHits ) {
+      printf("Error in JSFQuickSim::MakeVTXHits\n");
+      printf("Number of VTX hits =%d, exceeded buffer size\n",nelm);
+      return kFALSE;
+  }
+
+  const Int_t kMaxBuff=200;
+  Float_t hits[kMaxBuff][3], errs[kMaxBuff][2]; 
+  Int_t i,nwh,nwe,iret;
+  Int_t nvtx=0;
+  for(i=0;i<nelm;i++){
+    gJSFLCFULL->TBGET(1,"Production:VTX;Space_Point",neary[i],
+		      nwh, (Int_t*)hits,iret);
+    if( iret < 0 || nwh > 3*kMaxBuff ) {
+      printf("Error to TBGET Production:VTX;Space_Point ..");
+      printf("Element# %d  IRET=%d",neary[i],iret);
+      printf("nwh=%d buffer size=%d",nwh,3*kMaxBuff);
+      printf("\n");
+      return kFALSE;
+    }
+    gJSFLCFULL->TBGET(1,"Production:VTX;Space_Point_Error",neary[i],
+		      nwe, (Int_t*)errs,iret);
+    if( iret < 0 || nwe > 2*kMaxBuff ) {
+      printf("Error to TBGET Production:VTX;Space_Point_Error ..");
+      printf("Element# %d  IRET=%d",neary[i],iret);
+      printf("nwe=%d buffer size=%d",nwe,2*kMaxBuff);
+      return kFALSE;
+    }
+    
+    Int_t nh=nwh/3;
+    Int_t j;
+    for(j=0;j<nh;j++){
+      Int_t layer=fParam->GetVTXLayerNumber(hits[j][0]);
+      Int_t lkt=0;
+      Int_t igid=neary[i];
+      new(vtx[nvtx++])  JSFVTXHit(hits[j][0], hits[j][1], hits[j][2],
+				  errs[j][0], errs[j][1], layer, lkt, igid);
+    }  
+  }
+  buf->SetNVTXHits(nvtx);
+
+  return kTRUE;
+}
+
+//_____________________________________________________________________________
+Bool_t JSFQuickSim::MakeCDCTracks()
+{
+  // Create JSFCDCTracks class 
+  // the TBS bank, Production:CDC;Tracks and Production:CDC;Tracks
+
+  JSFQuickSimBuf *buf=(JSFQuickSimBuf*)EventBuf();
+  TClonesArray &cdc=*(buf->GetCDCTracks());
+  Int_t nelm, neary[kMaxCDCTracks];
+
+  gJSFLCFULL->TBNOEL(1,"Production:CDC;Track_Parameter",nelm,neary);
+  if( nelm >= kMaxCDCTracks ) {
+      printf("Error in JSFQuickSim::MakeCDCTracks\n");
+      printf("Number of CDC tracks =%d, exceeded buffer size\n",nelm);
+      return kFALSE;
+  }
+
+  Int_t i,nw,iret;
+  Int_t itrkp[100]; 
+  Int_t ncdc=0;
+  for(i=0;i<nelm;i++){
+    Int_t icdc=neary[i];
+    gJSFLCFULL->TBGET(1,"Production:CDC;Track_Parameter",icdc,
+		      nw, itrkp,iret);
+    if( iret < 0 ) {
+      printf("Error to TBGET Production:CDC;Track_Parameter ..");
+      printf("Element# %d  IRET=%d",neary[i],iret);
+      printf("\n");
+
+      return kFALSE;
+    }
+    
+    new(cdc[ncdc]) JSFCDCTrack( itrkp );
+    Int_t *ncel=(Int_t*)&prjunk_.RTKBNK[icdc-1][59];
+    if( *ncel > 0 ) {
+      JSFCDCTrack *t=(JSFCDCTrack*)cdc.UncheckedAt(ncdc);
+      t->SetPositionAtEMC( &prjunk_.RTKBNK[icdc-1][60] );
+    }
+    ncdc++;
+  }
+  buf->SetNCDCTracks(ncdc);
+
+  return kTRUE;
+}
+
+
+//_____________________________________________________________________________
+Bool_t JSFQuickSim::LinkCDCandVTX()
+{
+  // Links CDC and VTX hits.
+
+  JSFQuickSimBuf *buf=(JSFQuickSimBuf*)EventBuf();
+
+  JSFGenerator *gen=(JSFGenerator*)gJSF->FindModule("JSFGenerator");
+  JSFGeneratorBuf *gbuf=(JSFGeneratorBuf*)gen->EventBuf();
+
+  TClonesArray *cdc=buf->GetCDCTracks();
+  TClonesArray *vtx=buf->GetVTXHits();
+
+  Int_t ngen=gbuf->GetNparticles();
+
+  Int_t gen2cdc[ngen+1];
+  Int_t i;
+  for(i=0;i<=ngen;i++){ gen2cdc[i]=-1; }
+  JSFCDCTrack *ct;
+  Int_t ncdc=buf->GetNCDCTracks();
+  for(i=0;i<ncdc;i++){ 
+    ct=(JSFCDCTrack*)cdc->UncheckedAt(i);
+    gen2cdc[ct->GetGenID()]=i;
+  }
+  
+  JSFVTXHit *vh;
+  Int_t nvh[ncdc];
+  for(i=0;i<ncdc;i++){ nvh[i]=0; }
+  for(i=0;i<buf->GetNVTXHits();i++){
+    vh=(JSFVTXHit*)vtx->UncheckedAt(i);
+    Int_t ig=vh->GetGeneratorTrack() ;
+    if( gen2cdc[ig] < 0 ) continue ;
+    Int_t icdc=gen2cdc[ig];
+    vh->SetLinkedTrack(icdc+1);
+    nvh[icdc]++;
+  }
+
+  for(i=0;i<ncdc;i++){
+    ct=(JSFCDCTrack*)cdc->UncheckedAt(i);
+    ct->SetNVTX(nvh[i]);
+  }
+
+  return kTRUE;
+}
+
+
 //_____________________________________________________________________________
 Bool_t JSFQuickSim::Process(Int_t ev)
 {
@@ -212,18 +454,56 @@ Bool_t JSFQuickSim::Process(Int_t ev)
 
    cmbtrk_(&iret);
 
+   if( !ReviseGeneratorInfo() ) return kFALSE;
+
    if( !MakeJSFLTKCLTracks() ) return kFALSE;
+   if( !MakeCALHits() ) return kFALSE;
+   if( !MakeVTXHits() ) return kFALSE;
+   if( !MakeCDCTracks() ) return kFALSE;
+   if( !LinkCDCandVTX() ) return kFALSE;
 
    return kTRUE;
 }
 
 
 //_____________________________________________________________________________
+Bool_t JSFQuickSim::ReviseGeneratorInfo()
+{
+  //  Generator information of particles with finite decay length is revised
+  //  by swim routine.  JSFGenerator class information is updated according to the
+  //  updated Generator:Particle_List informations.
+
+  JSFGenerator *gen=(JSFGenerator*)gJSF->FindModule("JSFGenerator");
+  JSFGeneratorBuf *gevt=(JSFGeneratorBuf*)gen->EventBuf();
+  TClonesArray *pa=gevt->GetParticles();
+
+  Int_t i, nw,iret;
+  Float_t wrk[20];
+  Int_t nelm=0;
+  for(i=0;i<gevt->GetNparticles();i++){
+    JSFGeneratorParticle *p=(JSFGeneratorParticle*)pa->At(i);
+    nelm=i+1;
+    gJSFLCFULL->TBGET(1,"Generator:Particle_List",nelm,nw,(Int_t*)wrk,iret);
+    if( iret < 0 ) {
+      printf("Error to get Generator:Particle_List bank in JSFQuickSim::ReviseGeneratorInfo\n");
+      printf("TBGET's IRET=%d\n",iret);
+      return kFALSE;
+    }
+    p->fX[1]=wrk[8];
+    p->fX[2]=wrk[9];
+    p->fX[3]=wrk[10];
+    p->fLifeTime=wrk[15];
+    p->fDecayLength=wrk[16];
+  }
+
+  return kTRUE;
+}
+
+//_____________________________________________________________________________
 JSFQuickSimParam::JSFQuickSimParam()
 {
   //  Parameters of JLC QUick Simulator.
   //  
-
 
   fBfield=20.0;
   fSeed=314159 ;
@@ -331,7 +611,8 @@ JSFQuickSimParam::JSFQuickSimParam()
 
   // Load parameters
 
-  printf(" Parameter file is %s\n",gJSF->Env()->GetValue("JSFQuickSim.ParameterFile","Undefined"));
+  printf(" Parameter file is %s\n",
+	 gJSF->Env()->GetValue("JSFQuickSim.ParameterFile","Undefined"));
   sscanf(gJSF->Env()->GetValue("JSFQuickSim.ParameterFile","Undefined"),
 	 "%s",fParamFile);
    printf(" file name is %s\n",fParamFile);
@@ -344,11 +625,23 @@ JSFQuickSimParam::JSFQuickSimParam()
   sscanf(gJSF->Env()->GetValue("JSFQuickSim.CMBCUT.ENSGHD","2.0"),
 	 "%g",&fCMBCUT[2]);
 
+  // Set Calorimeter Geometry info.
+
+  fEMCGeom = new JSFCALGeoParam(kEMC, 
+	    (Int_t)fEMCal[0], (Int_t)fEMCal[1], (Int_t)fEMCal[2],
+	           fEMCal[3], fEMCal[4], fEMCal[5], fEMCal[6] );		    
+
+  fHDCGeom = new JSFCALGeoParam(kHDC, 
+	    (Int_t)fHDCal[0], (Int_t)fHDCal[1], (Int_t)fHDCal[2],
+	           fHDCal[3], fHDCal[4], fHDCal[5], fHDCal[6] );		    
+
 }
 
 //_____________________________________________________________________________
 JSFQuickSimParam::~JSFQuickSimParam()
 {
+  delete fEMCGeom;
+  delete fHDCGeom;
 }
 
 //_____________________________________________________________________________
@@ -384,7 +677,7 @@ void JSFQuickSimParam::ReadParamDetector(Char_t *file)
     }
     else if( 10 < id && id < 20 ) fTrack[id-11]=val;
     else if( 30 < id && id < 50 ) fEMCal[id-31]=val;
-    else if( 50 < id && id < 70 ) fEMCal[id-51]=val;
+    else if( 50 < id && id < 70 ) fHDCal[id-51]=val;
     else if( id == 70 ) fNERRVX = (Int_t)val ; //# sampling layers + 1 = NSMPVX
     else if( id == 71 ) fNSMPVX = (Int_t)val ; //# sampling layers + 1 = NSMPVX
     else if( id == 72 ) fDPHIVX = val ; // phi pitch (cm)
@@ -491,6 +784,30 @@ void JSFQuickSimParam::SetSmearParam()
   cmbcut_.ensgem = fCMBCUT[1] ;
   cmbcut_.ensghd = fCMBCUT[2] ;
 
+  // Set Calorimeter Geometry info.
+
+  fEMCGeom->SetGeoParam(kEMC, (Int_t)fEMCal[0], (Int_t)fEMCal[1], (Int_t)fEMCal[2],
+	           fEMCal[3], fEMCal[4], fEMCal[5], fEMCal[6] );		    
+
+  fHDCGeom->SetGeoParam(kHDC, (Int_t)fHDCal[0], (Int_t)fHDCal[1], (Int_t)fHDCal[2],
+	           fHDCal[3], fHDCal[4], fHDCal[5], fHDCal[6] );		    
+
+}
+
+//____________________________________________________________________________
+Int_t JSFQuickSimParam::GetVTXLayerNumber(Float_t radius)
+{
+//  Convert Radius of VTX hit into VTX layer ID,
+//  Using the simulation parameter in smrpar[].
+//  Layer number of inner most detector is 1.
+//
+   Float_t wid=0.01;
+   Int_t i;
+   for(i=1;i<GetVTXNLayer();i++){
+     if( radius > GetVTXRadius(i)-wid && radius < GetVTXRadius(i)+wid ) 
+       return i;
+   }
+   return 0;
 }
 
 
@@ -503,8 +820,8 @@ void JSFQuickSim::MakeBranch(TTree *tree)
    if( fEventBuf && fMakeBranch ) {
      Int_t split=0;
      Int_t bsize=10000;
-     tree->Branch(fData->GetName(), fData->ClassName() ,&fData, bsize, split);
-     tree->Branch(fEventBuf->GetName(), fEventBuf->ClassName() ,&fEventBuf, bsize, split);
+     tree->Branch(fEventBuf->GetName(), fEventBuf->ClassName() ,
+		  &fEventBuf, bsize, split);
    }
 }
 
@@ -515,12 +832,6 @@ void JSFQuickSim::SetBranch(TTree *tree)
 //  Set Branch address for this module
 
    fTree=tree;
-   if( fData ) {
-     Char_t name[50];
-     sprintf(name,"%s",fData->GetName());
-     TBranch *branch=tree->GetBranch(name);
-     branch->SetAddress(&fData);
-   }
    if( fEventBuf ) {
      Char_t name[50];
      sprintf(name,"%s",fEventBuf->GetName());
@@ -563,357 +874,5 @@ void JSFQuickSimParam::Streamer(TBuffer &R__b)
       R__b.WriteArray((float*)fVTXLayer, nout);
       R__b.WriteArray((float*)fCLSPAR, 20);
    }
-}
-
-
-//______________________________________________________________________________
-void JSFQuickSimData::Streamer(TBuffer &R__b)
-{
-   // Stream an object of class JSFQuickSimData.
-   Int_t i, j, iret, kw, nw, nelm[500];
-   Float_t   rbuf[10000];
-
-   if (R__b.IsReading()) {
-      Version_t R__v = R__b.ReadVersion(); if (R__v) { }
-      TNamed::Streamer(R__b);
-
-   // Create banks
-     gJSFLCFULL->TBCRTE(1,"Production:EMC;Hit_Pad",0,0,iret);
-
-     gJSFLCFULL->TBCRTE(1,"Production:EMC;Hit_Cell",0,0,iret);
-     gJSFLCFULL->TBCRTE(1,"Production:EMC;Cluster",0,0,iret);
-     gJSFLCFULL->TBCRTE(1,"Production:EMC;Cluster_to_Cell",0,0,iret);
-     gJSFLCFULL->TBCRTE(1,"Production:HDC;Hit_Cell",0,0,iret);
-     gJSFLCFULL->TBCRTE(1,"Production:HDC;Cluster",0,0,iret);
-     gJSFLCFULL->TBCRTE(1,"Production:HDC;Cluster_to_Cell",0,0,iret);
-
-     gJSFLCFULL->TBCRTE(1,"Production:CDC;Track_Parameter",0,0,iret);
-     gJSFLCFULL->TBCRTE(1,"Production:CDC_VTX;Track_Parameter",0,0,iret);
-     gJSFLCFULL->TBCRTE(1,"Production:VTX;Space_Point",0,0,iret);
-
-
-  // Production:VTX;Space_Point
-      R__b >> nw;
-      for(i=0;i<nw;i++){
-	R__b >> j;
-	R__b >> kw;
-	R__b.ReadStaticArray((float*)rbuf);
-        gJSFLCFULL->TBPUT(1,"Production:VTX;Space_Point",j,
-			  kw,(Int_t*)rbuf, iret);
-      }
-
-  // Production:CDC;Track_Parameter
-      R__b >> nw;
-      for(i=0;i<nw;i++){
-        R__b >> j;
-	R__b >> kw;
-	R__b.ReadStaticArray((float*)rbuf);
-	R__b.ReadStaticArray((int*)(rbuf+8));
-	R__b.ReadStaticArray((float*)(rbuf+10));
-	R__b.ReadStaticArray((double*)(rbuf+20));
-	R__b.ReadStaticArray((Short_t*)(rbuf+50));
-	R__b.ReadStaticArray((float*)(rbuf+53));
-	R__b.ReadStaticArray((int*)(rbuf+55));
-        gJSFLCFULL->TBPUT(1,"Production:CDC;Track_Parameter",j,
-			  kw, (Int_t*)rbuf , iret);
-      }
-
-  // Production:CDC_VTX;Track_Parameter
-      R__b >> nw;
-      for(i=0;i<nw;i++){
-        R__b >> j;
-	R__b >> kw;
-	R__b.ReadStaticArray((float*)rbuf);
-	R__b.ReadStaticArray((int*)(rbuf+8));
-	R__b.ReadStaticArray((float*)(rbuf+10));
-	R__b.ReadStaticArray((double*)(rbuf+20));
-	R__b.ReadStaticArray((Short_t*)(rbuf+50));
-	R__b.ReadStaticArray((int*)(rbuf+52));
-        gJSFLCFULL->TBPUT(1,"Production:CDC_VTX;Track_Parameter",j,
-			  kw, (Int_t*)rbuf , iret);
-      }
-
-  // Production:EMC;Hit_Cell
-      R__b >> nw;   // number of elements
-      for(i=0;i<nw;i++){
-        R__b >> j;  // element number
-	R__b >> kw; // number of words
-	R__b.ReadStaticArray((float*)rbuf);
-	R__b.ReadStaticArray((int*)(rbuf+3));
-        gJSFLCFULL->TBPUT(1,"Production:EMC;Hit_Cell",j,
-			  kw, (Int_t*)rbuf , iret);
-      }
-
-  // Production:EMC;Cluster
-      R__b >> nw;
-      for(i=0;i<nw;i++){
-        R__b >> j;
-	R__b >> kw;
-	R__b.ReadStaticArray((float*)rbuf);
-	R__b.ReadStaticArray((int*)(rbuf+13));
-        gJSFLCFULL->TBPUT(1,"Production:EMC;Cluster",j,
-			  kw, (Int_t*)rbuf , iret);
-      }
-
-  // Production:EMC;Cluster_to_Cell
-      R__b >> nw;
-      for(i=0;i<nw;i++){
-        R__b >> j;
-	R__b >> kw;
-        R__b.ReadStaticArray((int*)rbuf);
-        gJSFLCFULL->TBGET(1,"Production:EMC;Cluster_to_Cell",j,
-			  kw, (Int_t*)rbuf , iret);
-      }
-
-  // Production:EMC;Hit_Pad
-      R__b >> nw;
-      for(i=0;i<nw;i++){
-        R__b >> j;
-        gJSFLCFULL->TBGET(1,"Production:EMC;Hit_Pad",j,
-			  kw, (Int_t*)rbuf , iret);
-	R__b >> kw;
-	R__b.ReadStaticArray((int*)(rbuf));
-      }
-
-
-  // Production:HDC;Hit_Cell
-      R__b >> nw;   // number of elements
-      for(i=0;i<nw;i++){
-        R__b >> j;  // element number
-	R__b >> kw; // number of words
-	R__b.ReadStaticArray((float*)rbuf);
-	R__b.ReadStaticArray((int*)(rbuf+3));
-        gJSFLCFULL->TBPUT(1,"Production:HDC;Hit_Cell",j,
-			  kw, (Int_t*)rbuf , iret);
-      }
-
-  // Production:HDC;Cluster
-      R__b >> nw;
-      for(i=0;i<nw;i++){
-        R__b >> j;
-	R__b >> kw;
-	R__b.ReadStaticArray((float*)rbuf);
-	R__b.ReadStaticArray((int*)(rbuf+13));
-        gJSFLCFULL->TBPUT(1,"Production:HDC;Cluster",j,
-			  kw, (Int_t*)rbuf , iret);
-      }
-
-  // Production:HDC;Cluster_to_Cell
-      R__b >> nw;
-      for(i=0;i<nw;i++){
-        R__b >> j;
-	R__b >> kw;
-        R__b.ReadStaticArray((int*)rbuf);
-        gJSFLCFULL->TBGET(1,"Production:HDC;Cluster_to_Cell",j,
-			  kw, (Int_t*)rbuf , iret);
-      }
-
-
-  // Production:Combined_Gamma_Track
-      R__b >> nw;
-      for(i=0;i<nw;i++){
-        R__b >> j;
-	R__b >> kw;
-        R__b.ReadStaticArray((int*)rbuf);
-        gJSFLCFULL->TBGET(1,"Production:Combined_Gamma_Track",j,
-			  kw, (Int_t*)rbuf , iret);
-      }
-
-
-  // Production:Combined_Lepton_Track
-      R__b >> nw;
-      for(i=0;i<nw;i++){
-        R__b >> j;
-	R__b >> kw;
-        R__b.ReadStaticArray((int*)rbuf);
-        gJSFLCFULL->TBGET(1,"Production:Combined_Lepton_Track",j,
-			  kw, (Int_t*)rbuf , iret);
-      }
-
-
-  // Production:Combined_Hadron_Track
-      R__b >> nw;
-      for(i=0;i<nw;i++){
-        R__b >> j;
-	R__b >> kw;
-        R__b.ReadStaticArray((int*)rbuf);
-        gJSFLCFULL->TBGET(1,"Production:Combined_Hadron_Track",j,
-			  kw, (Int_t*)rbuf , iret);
-      }
-
-
-
-//================  Output stream
-   } else {
-      R__b.WriteVersion(JSFQuickSimData::IsA());
-      TNamed::Streamer(R__b);
-  // Production:VTX;Space_Point
-      gJSFLCFULL->TBNOEL(1,"Production:VTX;Space_Point",nw,nelm);
-      R__b << nw;
-      for(i=0;i<nw;i++){
-        R__b << nelm[i];
-        gJSFLCFULL->TBGET(1,"Production:VTX;Space_Point",nelm[i],
-			  kw, (Int_t*)rbuf , iret);
-	R__b << kw;
-	R__b.WriteArray((float*)rbuf, kw);
-      }
-
-  // Production:CDC;Track_Parameter
-      gJSFLCFULL->TBNOEL(1,"Production:CDC;Track_Parameter",nw,nelm);
-      R__b << nw;
-      for(i=0;i<nw;i++){
-        R__b << nelm[i];
-        gJSFLCFULL->TBGET(1,"Production:CDC;Track_Parameter",nelm[i],
-			  kw, (Int_t*)rbuf , iret);
-	R__b << kw;
-	R__b.WriteArray((float*)rbuf, 8);
-	R__b.WriteArray((int*)(rbuf+8), 1);
-	R__b.WriteArray((float*)(rbuf+10), 8);
-	R__b.WriteArray((double*)(rbuf+20), 15);
-	R__b.WriteArray((Short_t*)(rbuf+50), 4);
-	R__b.WriteArray((float*)(rbuf+53), 2);
-	Int_t lw=kw-55;
-	R__b.WriteArray((int*)(rbuf+55), lw);
-      }
-
-  // Production:CDC_VTX;Track_Parameter
-      gJSFLCFULL->TBNOEL(1,"Production:CDC_VTX;Track_Parameter",nw,nelm);
-      R__b << nw;
-      for(i=0;i<nw;i++){
-        R__b << nelm[i];
-        gJSFLCFULL->TBGET(1,"Production:CDC_VTX;Track_Parameter",nelm[i],
-			  kw, (Int_t*)rbuf , iret);
-	R__b << kw;
-	R__b.WriteArray((float*)rbuf, 8);
-	R__b.WriteArray((int*)(rbuf+8), 1);
-	R__b.WriteArray((float*)(rbuf+10), 8);
-	R__b.WriteArray((double*)(rbuf+20), 15);
-	R__b.WriteArray((Short_t*)(rbuf+50), 4);
-	R__b.WriteArray((int*)(rbuf+52), 3);
-      }
-
-  // Production:EMC;Hit_Cell
-      gJSFLCFULL->TBNOEL(1,"Production:EMC;Hit_Cell",nw,nelm);
-      R__b << nw;
-      for(i=0;i<nw;i++){
-        R__b << nelm[i];
-        gJSFLCFULL->TBGET(1,"Production:EMC;Hit_Cell",nelm[i],
-			  kw, (Int_t*)rbuf , iret);
-	R__b << kw;
-	Int_t lw=kw-3;
-	R__b.WriteArray((float*)rbuf, 3);
-	R__b.WriteArray((int*)(rbuf+3), lw);
-      }
-
-  // Production:EMC;Cluster
-      gJSFLCFULL->TBNOEL(1,"Production:EMC;Cluster",nw,nelm);
-      R__b << nw;
-      for(i=0;i<nw;i++){
-        R__b << nelm[i];
-        gJSFLCFULL->TBGET(1,"Production:EMC;Cluster",nelm[i],
-			  kw, (Int_t*)rbuf , iret);
-	R__b << kw;
-	Int_t lw=kw-13;
-	R__b.WriteArray((float*)rbuf, 7);
-	R__b.WriteArray((int*)(rbuf+13), lw);
-      }
-
-  // Production:EMC;Cluster_to_Cell
-      gJSFLCFULL->TBNOEL(1,"Production:EMC;Cluster_to_Cell",nw,nelm);
-      R__b << nw;
-      for(i=0;i<nw;i++){
-        R__b << nelm[i];
-        gJSFLCFULL->TBGET(1,"Production:EMC;Cluster_to_Cell",nelm[i],
-			  kw, (Int_t*)rbuf , iret);
-	R__b << kw;
-	R__b.WriteArray((int*)(rbuf), kw);
-      }
-
-  // Production:EMC;Hit_Pad
-      gJSFLCFULL->TBNOEL(1,"Production:EMC;Hit_Pad",nw,nelm);
-      R__b << nw;
-      for(i=0;i<nw;i++){
-        R__b << nelm[i];
-        gJSFLCFULL->TBGET(1,"Production:EMC;Hit_Pad",nelm[i],
-			  kw, (Int_t*)rbuf , iret);
-	R__b << kw;
-	R__b.WriteArray((int*)(rbuf), kw);
-      }
-
-  // Production:HDC;Hit_Cell
-      gJSFLCFULL->TBNOEL(1,"Production:HDC;Hit_Cell",nw,nelm);
-      R__b << nw;
-      for(i=0;i<nw;i++){
-        R__b << nelm[i];
-        gJSFLCFULL->TBGET(1,"Production:HDC;Hit_Cell",nelm[i],
-			  kw, (Int_t*)rbuf , iret);
-	R__b << kw;
-	Int_t lw=kw-3;
-	R__b.WriteArray((float*)rbuf, 3);
-	R__b.WriteArray((int*)(rbuf+3), lw);
-      }
-
-
-  // Production:HDC;Cluster
-      gJSFLCFULL->TBNOEL(1,"Production:HDC;Cluster",nw,nelm);
-      R__b << nw;
-      for(i=0;i<nw;i++){
-        R__b << nelm[i];
-        gJSFLCFULL->TBGET(1,"Production:HDC;Cluster",nelm[i],
-			  kw, (Int_t*)rbuf , iret);
-	R__b << kw;
-	Int_t lw=kw-13;
-	R__b.WriteArray((float*)rbuf, 7);
-	R__b.WriteArray((int*)(rbuf+13), lw);
-      }
-
-  // Production:HDC;Cluster_to_Cell
-      gJSFLCFULL->TBNOEL(1,"Production:HDC;Cluster_to_Cell",nw,nelm);
-      R__b << nw;
-      for(i=0;i<nw;i++){
-        R__b << nelm[i];
-        gJSFLCFULL->TBGET(1,"Production:HDC;Cluster_to_Cell",nelm[i],
-			  kw, (Int_t*)rbuf , iret);
-	R__b << kw;
-	R__b.WriteArray((int*)(rbuf), kw);
-      }
-
-
-  // Production:Combined_Gamma_Track
-      gJSFLCFULL->TBNOEL(1,"Production:Combined_Gamma_Track",nw,nelm);
-      R__b << nw;
-      for(i=0;i<nw;i++){
-        R__b << nelm[i];
-        gJSFLCFULL->TBGET(1,"Production:HDC;Combined_Gamma_Track",nelm[i],
-			  kw, (Int_t*)rbuf , iret);
-	R__b << kw;
-	R__b.WriteArray((int*)(rbuf), kw);
-      }
-
-  // Production:Combined_Lepton_Track
-      gJSFLCFULL->TBNOEL(1,"Production:Combined_Lepton_Track",nw,nelm);
-      R__b << nw;
-      for(i=0;i<nw;i++){
-        R__b << nelm[i];
-        gJSFLCFULL->TBGET(1,"Production:HDC;Combined_Lepton_Track",nelm[i],
-			  kw, (Int_t*)rbuf , iret);
-	R__b << kw;
-	R__b.WriteArray((int*)(rbuf), kw);
-      }
-
-  // Production:Combined_Hadron_Track
-      gJSFLCFULL->TBNOEL(1,"Production:Combined_Hadron_Track",nw,nelm);
-      R__b << nw;
-      for(i=0;i<nw;i++){
-        R__b << nelm[i];
-        gJSFLCFULL->TBGET(1,"Production:HDC;Combined_Hadron_Track",nelm[i],
-			  kw, (Int_t*)rbuf , iret);
-	R__b << kw;
-	R__b.WriteArray((int*)(rbuf), kw);
-      }
-
-     
-
-   } // End of WriteStreamer
 }
 

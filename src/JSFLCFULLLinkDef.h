@@ -17,10 +17,11 @@
 #pragma link C++ class JSFFULLGenerator;
 #pragma link C++ class JSFHadronizer;
 
-#pragma link C++ class JSFQuickSim;
-#pragma link C++ class JSFQuickSimParam-;
-#pragma link C++ class JSFQuickSimData-;
-#pragma link C++ class JSFQuickSimBuf;
+// #pragma link C++ class JSFQuickSim;
+// #pragma link C++ class JSFQuickSimParam-;
+// #pragma link C++ class JSFQuickSimData-;
+// #pragma link C++ class JSFQuickSimBuf;
+
 #pragma link C++ class JSFLTKCLTrack;
 
 #pragma link C++ class DebugGenerator;

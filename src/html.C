@@ -24,16 +24,23 @@
    html.MakeClass("JSFFULLGenerator");
    html.MakeClass("JSFHadronizer");
 
-   html.MakeClass("JSFQuickSim");
-   html.MakeClass("JSFQuickSimParam");
-   html.MakeClass("JSFQuickSimData");
-   html.MakeClass("JSFQuickSimBuf");
 
    html.MakeClass("PythiaGenerator");
    html.MakeClass("DebugGenerator");
    html.MakeClass("DebugWGenerator");
+
+   html.MakeClass("JSFQuickSim");
+   html.MakeClass("JSFQuickSimParam");
+   html.MakeClass("JSFQuickSimBuf");
    html.MakeClass("JSFLTKCLTrack");
+   html.MakeClass("JSFCDCTrack");
+   html.MakeClass("JSFVTXHit");
+   html.MakeClass("JSFCALHit");
+   html.MakeClass("JSFEMCHit");
+   html.MakeClass("JSFHDCHit");
+   html.MakeClass("JSFCALGeoParam");
 
    html.MakeIndex();
 }
+
 

@@ -21,77 +21,15 @@
 #ifndef __JSFLTKCLTrack__
 #include "JSFLTKCLTrack.h"
 #endif
-
-// ******* Commons for Smearing ****************
-typedef struct {
-  Float_t bfield, ptor, ropt;
-} COMMON_PRFELD;
-
-typedef struct { 
-  Int_t iseed;
-} COMMON_SWMRND;
-
-typedef struct {
-  Int_t imodbf[2];
-  Float_t bfdata[2];
-} COMMON_SMRFLD;
-
-extern COMMON_SWMRND swmrnd_;
-extern COMMON_PRFELD prfeld_;
-extern COMMON_SMRFLD smrfld_;
-
-
-// ******* Commons for smearng *****************
-static const Int_t kMXxVXL=11;
-typedef struct {
-  Int_t   nsmpvx;
-  Float_t dphivx, dzeevx;
-  Float_t rcyvx[kMXxVXL], zcyvx[kMXxVXL][2], rdlvx[kMXxVXL];
-  Int_t   nerrvx;
-  Float_t errvx[5];
-} COMMON_SMRVGO ;
-extern COMMON_SMRVGO smrvgo_;
-
-typedef struct {
-  Int_t nsmptk, nsmpct;
-  Float_t dsmptk, rcytk[2], zcytk[2];
-} COMMON_SMRTGO;
-extern COMMON_SMRTGO smrtgo_;
-
-typedef struct {
-  Int_t nphiem, nthtem, nradem;
-  Float_t  dphiem, dthtem, drdmem;
-  Float_t  drdpem, thmnem, thmxem, rmmnem, rmmxem;
-  Float_t  rpmnem, rpmxem, rcyem[2], zcyem[2];
-  Int_t    npadem;
-} COMMON_SMREGO;
-extern COMMON_SMREGO smrego_;
-
-
-typedef struct {
-  Int_t   nphihd, nththd, nradhd;
-  Float_t dphihd, dththd, drdmhd;
-  Float_t drdphd, thmnhd, thmxhd, rmmnhd, rmmxhd;
-  Float_t rpmnhd, rpmxhd, rcyhd[2], zcyhd[2];
-} COMMON_SMRHGO;
-extern COMMON_SMRHGO smrhgo_;
-
-typedef struct {
-  Float_t sigrf , sigze;
-  Float_t sgemb0, sgemb, sgeme0, sgeme, sghdb0, sghdb;
-  Float_t sghde0, sghde;
-} COMMON_SMRRES;
-extern COMMON_SMRRES smrres_;
-
-typedef struct {
-  Float_t clspar[4][5];
-} COMMON_SMRCLP;
-extern COMMON_SMRCLP smrclp_;
-
-typedef struct {
-  Float_t adxect, ensgem, ensghd;
-} COMMON_CMBCUT;
-extern COMMON_CMBCUT cmbcut_;
+#ifndef __JSFCALHit__
+#include "JSFCALHit.h"
+#endif
+#ifndef __JSFVTXHit__
+#include "JSFVTXHit.h"
+#endif
+#ifndef __JSFCDCTrack__
+#include "JSFCDCTrack.h"
+#endif
 
 // ******* JSFQuickSimParam *********
 class JSFQuickSimParam : public TNamed {
@@ -110,7 +48,9 @@ public:
    Int_t   fNERRVX;          // VTX Error flag. 
    Float_t fCLSPAR[4][5]   ; // Clustering parameter.
    Float_t fCMBCUT[3] ; // ADXEVT, ENSGEM, ENSGHD for CMBCUT
-    
+
+   JSFCALGeoParam *fEMCGeom; //! EMC Geometry ( set by SetSmearParam() )
+   JSFCALGeoParam *fHDCGeom; //! HDC Geometry
 public:
    JSFQuickSimParam();
    ~JSFQuickSimParam();
@@ -118,34 +58,38 @@ public:
    void SetSwimParam() ; // Set swimmer parameters
    void SetSmearParam() ; // Set smear parameters
    void ReadParamDetector(Char_t *file) ;// Read detector parameter
+					      
+   virtual JSFCALGeoParam *GetEMCGeom(){ return fEMCGeom; }  
+   virtual JSFCALGeoParam *GetHDCGeom(){ return fHDCGeom; }  
+
+   Int_t   GetVTXNLayer(){ return fNSMPVX; }
+   Float_t GetVTXPhiPitch(){ return fDPHIVX; }
+   Float_t GetVTXZPitch(){ return fDZEEVX; }
+   Float_t GetVTXRadius(Int_t layer){ return fVTXLayer[layer][0]; }
+   Float_t GetVTXZminus(Int_t layer){ return fVTXLayer[layer][1]; }
+   Float_t GetVTXZplus(Int_t layer){ return fVTXLayer[layer][2]; }
+   Float_t GetVTXThickness(Int_t layer){ return fVTXLayer[layer][3]; }
+   Float_t GetVTXSigmaSP(){ return fVTXError[0]; }
+   Int_t   GetVTXLayerNumber(Float_t radius);   
 
    ClassDef(JSFQuickSimParam,1) // JSFQuickSim Parameters
 };
  
-// ******* JSFQuickSimData class 
-// This class is special purpose to save TBS format event data.
-class JSFQuickSimData : public TNamed {
-public:
-  Int_t   fNVTXSP;         // number of VTX Space point
-  Int_t   *fSimdata;       // simulator data.
-public:
-  JSFQuickSimData(){}
-  JSFQuickSimData(const char *name, const char *title);
-  ~JSFQuickSimData(){}
-
-  void SetVTXSP(){}
-
-  ClassDef(JSFQuickSimData, 1) // TBS Data buffer
-
-};
- 
 class JSFQuickSim;
 
-// ******* JSFQuickSimBuf class 
+// ******* JSFQuickSimBuf class ********************************
 class JSFQuickSimBuf : public JSFEventBuf {
-public:
-   Int_t            fNtracks;  // Number of particles 
-   TClonesArray    *fTracks;  // Pointers to Particles
+private:
+   Int_t            fNtracks   ;  // Number of particles 
+   TClonesArray    *fTracks    ;  //! Pointers to Particles
+   Int_t            fNCDCTracks;  // Number of CDC tracks.
+   TClonesArray    *fCDCTracks ;  //! Pointer to CDC Tracks
+   Int_t            fNVTXHits  ;  // Number of VTXHits
+   TClonesArray    *fVTXHits   ;  //! Pointers to VTX Hits
+   Int_t            fNEMCHits  ;  // Number of EMC hit cells
+   TClonesArray    *fEMCHits   ;  //! Pointers to EMC Hit cells 
+   Int_t            fNHDCHits  ;  // Number of HDC hit cells
+   TClonesArray    *fHDCHits   ;  //! Pointers to EMC Hit cells 
 public:
    JSFQuickSimBuf(const char *name="JSFQuickSimBuf",
 		   const char *title="JSF QuickSim event class",
@@ -155,15 +99,30 @@ public:
   Int_t GetNtracks(){ return fNtracks; }
   TClonesArray *GetTracks(){ return fTracks; }
 
+  void SetNCDCTracks(Int_t nt){ fNCDCTracks=nt;}
+  Int_t GetNCDCTracks(){ return fNCDCTracks; }
+  TClonesArray *GetCDCTracks(){ return fCDCTracks; }
+
+  void SetNVTXHits(Int_t nt){ fNVTXHits=nt;}
+  Int_t GetNVTXHits(){ return fNVTXHits; }
+  TClonesArray *GetVTXHits(){ return fVTXHits; }
+
+  void SetNEMCHits(Int_t nt){ fNEMCHits=nt;}
+  Int_t GetNEMCHits(){ return fNEMCHits; }
+  TClonesArray *GetEMCHits(){ return fEMCHits; }
+
+  void SetNHDCHits(Int_t nt){ fNHDCHits=nt;}
+  Int_t GetNHDCHits(){ return fNHDCHits; }
+  TClonesArray *GetHDCHits(){ return fHDCHits; }
+
   ClassDef(JSFQuickSimBuf, 1) // QuickSim event buffer class.
 
 };
 
-// ******* JSFQuickSim class 
+// ******* JSFQuickSim class *********************************
 class JSFQuickSim : public JSFModule {
-public:
+protected:
    JSFQuickSimParam  *fParam ; //! Parameters for JSFQuickSim
-   JSFQuickSimData   *fData  ; //! Pointer to TBS data
 public:
    JSFQuickSim(const char *name="JSFQuickSim", 
 	       const char *title="JSF Quick Simulator");
@@ -174,7 +133,12 @@ public:
    virtual Bool_t  BeginRun(Int_t nrun);
 
    Bool_t TBPUTGeneratorParticles();
+   Bool_t ReviseGeneratorInfo();
    Bool_t MakeJSFLTKCLTracks();
+   Bool_t MakeCALHits();
+   Bool_t MakeVTXHits();
+   Bool_t MakeCDCTracks();
+   Bool_t LinkCDCandVTX();
    
    virtual  void MakeBranch(TTree *tree); // Make branch for the module 
    virtual  void SetBranch(TTree *tree);  // Set Branch address for the module

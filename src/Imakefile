@@ -18,16 +18,11 @@ ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
 LCLIBDIR      = $(LCDIR)/lib
 
 ANALLIB = -L$(LCLIBDIR) -lGENUTIL -lLUHADR -lTAUOLA \
-        -lSIMJLC -lLTKCL \
-        -lLCFULL -lBASESV5.1 -lTBS \
-        -lHELASV204 -lFORTLIB \
-        -lCOM -lCLI \
+        -lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
+        -lHELASV204 -lFORTLIB -lCOM -lCLI \
         $(EXTRALIBS)
 
-
 FFLAGS = -I$(LCDIR)/simjlc/src -I$(LCDIR)/util/fortlib/src 
-
-
 
 #-------------------------------------------------------------
 
@@ -42,10 +37,15 @@ OBJJSFLCFULL  = JSFBases.$(ObjSuf) \
 		JSFGeneratorParticle.$(ObjSuf) JSFGenerator.$(ObjSuf) \
 		JSFFULLGenerator.$(ObjSuf) JSFHadronizer.$(ObjSuf) \
 		JSFLCFULL.$(ObjSuf) \
-		JSFLTKCLTrack.$(ObjSuf) JSFQuickSim.$(ObjSuf) \
 		DebugGenerator.$(ObjSuf) DebugWGenerator.$(ObjSuf) \
 		PythiaGenerator.$(ObjSuf) \
 		libJSFLCFULL.$(ObjSuf)
+
+OBJJSFQUICKSIM= JSFQuickSim.$(ObjSuf) JSFLTKCLTrack.$(ObjSuf) \
+		JSFSIMDST.$(ObjSuf) \
+		JSFVTXHit.$(ObjSuf) JSFCALHit.$(ObjSuf) \
+		JSFCDCTrack.$(ObjSuf) \
+		libJSFQuickSim.$(ObjSuf) simdstutil.o
 
 SRCJSF           = JSFSteer.$(SrcSuf) JSFModule.$(SrcSuf) 
 
@@ -54,11 +54,16 @@ SRCJSFLCFULL    = JSFBases.$(SrcSuf) \
 		JSFGeneratorParticle.$(SrcSuf) JSFGenerator.$(SrcSuf) \
 		JSFFULLGenerator.$(SrcSuf) JSFHadronizer.$(SrcSuf) \
 		JSFLCFULL.$(SrcSuf) \
-		JSFLTKCLTrack.$(SrcSuf)	JSFQuickSim.$(SrcSuf) \
 		DebugGenerator.$(SrcSuf) DebugWGenerator.$(SrcSuf) \
 		PythiaGenerator.$(SrcSuf)
 
-SRC = $(SRCJSF) $(SRCLCFULL)
+SRCJSFQUICKSIM= JSFQuickSim.$(SrcSuf) JSFLTKCLTrack.$(SrcSuf) \
+		JSFSIMDST.$(SrcSuf) \
+		JSFVTXHit.$(SrcSuf) JSFCALHit.$(SrcSuf) \
+		JSFCDCTrack.$(SrcSuf)
+
+
+SRC = $(SRCJSF) $(SRCLCFULL) $(SRCJSFQUICKSIM)
 
 HDRJSF	      = JSFDBS.h JSFModule.h JSFSteer.h JSFLinkDef.h
 
@@ -67,18 +72,20 @@ HDRJSFLCFULL  = JSFBases.h \
 		JSFGeneratorParticle.h JSFGenerator.h \
 		JSFFULLGenerator.h JSFHadronizer.h \
 		JSFLCFULL.h \
-		JSFLTKCLTrack.h JSFQuickSim.h \
 		DebugGenerator.h DebugWGenerator.h \
 		PythiaGenerator.h JSFLCFULLLinkDef.h
 
+HDRJSFQUICKSIM= JSFLTKCLTrack.h JSFVTXHit.h JSFCALHit.h \
+		JSFCDCTrack.h \
+		JSFQuickSim.h JSFSIMDST.h JSFQuickSimLinkDef.h 
 
-all::  libjsf libjsflcfull jsf
+
+all::  libjsf libjsflcfull libjsfquicksim jsf
 
 libjsf:     $(OBJJSF)
 		@/bin/rm -f libJSF.a
 		ar -r libJSF.a $(OBJJSF)
 		@cp -p libJSF.a ../lib
-
 
 libjsflcfull:     $(OBJJSFLCFULL)
 		@echo "Linking libJSFLCFULL.a ..."
@@ -86,24 +93,31 @@ libjsflcfull:     $(OBJJSFLCFULL)
 		ar -r libJSFLCFULL.a $(OBJJSFLCFULL)
 		@cp -p libJSFLCFULL.a ../lib
 
+libjsfquicksim:     $(OBJJSFQUICKSIM)
+		@echo "Linking libJSFQuickSim.a ..."
+		@/bin/rm -f libJSFQuickSim.a
+		ar -r libJSFQuickSim.a $(OBJJSFQUICKSIM)
+		@cp -p libJSFQuickSim.a ../lib
+
 jsf: $(OBJS) jsfmain.o
 	$(LD) jsfmain.o $(BLOCKDATA) $(OBJJSF) $(OBJJSFLCFULL) \
-	 $(LDFLAGS) -o jsf
+	$(OBJJSFQUICKSIM) $(LDFLAGS) -o jsf
 	@cp -p jsf ../bin
 	@rm -f jsf
 	@echo jsf was installed in ../bin/jsf
 
 clean:: 
-	@rm -f $(OBJS) core *.so 
+	@rm -f $(OBJS) core *.so *~
 	@rm -f libJSF.$(SrcSuf) libJSF.h
 	@rm -f libJSFLCFULL.$(SrcSuf) libJSFLCFULL.h
+	@rm -f libJSFQuickSim.$(SrcSuf) libJSFQuickSim.h
 
 depend:: 
 	makedepend -I$(ROOTSYS)/include $(SRC)
 
-distclean::
+distclean:: clean
 	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h *.~ *.o
-	@rm -f PYTHIA.SEED *.bak
+	@rm -f PYTHIA.SEED *.bak *.a
 	@rm -f jsf *.root Makefile 
 
 ###
@@ -114,6 +128,9 @@ libJSF.$(SrcSuf): $(HDRJSF)
 libJSFLCFULL.$(SrcSuf): $(HDRJSFLCFULL)
 		@echo "Generating dictionary ..."
 		rootcint -f libJSFLCFULL.$(SrcSuf) -c $(HDRJSFLCFULL)
+libJSFQuickSim.$(SrcSuf): $(HDRJSFQUICKSIM)
+		@echo "Generating dictionary ..."
+		rootcint -f libJSFQuickSim.$(SrcSuf) -c $(HDRJSFQUICKSIM)
 #---------------------------------------------------
 
 .SUFFIXES: .$(SrcSuf)
