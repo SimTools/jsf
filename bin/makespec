@@ -28,10 +28,14 @@ if ( !(`which root | grep -c root `)  ) goto message
 echo -n "  Creating system information ."
 set specfile=$jsfroot/src/JSFConfig.h
 
+echo "#ifndef __JSFCONFIG__" >! $specfile
+echo "#define __JSFCONFIG__\n" >> $specfile
+
 echo -n "\nRoot version .."
-root -q -b $jsfroot/macro/printversion.C | grep "ROOT_" >! $specfile
+root -q -b $jsfroot/macro/printversion.C | grep "ROOT_" >> $specfile
 
 
+echo "\n#ifndef __CINT__" >> $specfile
 echo -n "#define __UNAME_MACHINE__ " >> $specfile
 uname -m >> $specfile
 echo -n "#define __UNAME_SYSNAME__ " >> $specfile
@@ -65,6 +69,10 @@ else if( $g77version == 1 && $g77mversion == 0 ) then
 endif
 echo -n "#define __G77EGCS_LIBNAME__ " >> $specfile
 echo $g77lib  >> $specfile
+
+echo "#endif" >> $specfile
+echo "\n#endif" >> $specfile
+
 
 exitmsg:
 

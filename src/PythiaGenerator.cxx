@@ -132,7 +132,11 @@ Bool_t PythiaGenerator::EndRun()
 
    if( fPrintStat ) {
      printf(" End of Pythia run.\n");
+#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 23
+     fPythia->Pystat(fPrintStat);
+#else
      fPythia->PyStat(fPrintStat);
+#endif
    }
 
    // Save random seed

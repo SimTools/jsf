@@ -37,6 +37,8 @@
 //
 ///////////////////////////////////////////////////////////////////
 
+#include "JSFConfig.h"
+
 #include "TGWindow.h"
 #include "TGLabel.h"
 #include "TGButton.h"
@@ -155,7 +157,11 @@ InputDialog::InputDialog(const char *prompt, const char *defval, char *retstr,
    Window_t wdum;
    int      ax, ay;
 
+#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 23
+   gVirtualX->TranslateCoordinates(main->GetId(), main->GetId(),
+#else
    gGXW->TranslateCoordinates(main->GetId(), main->GetId(),
+#endif
                           (((TGFrame *) main)->GetWidth() - width) >> 1,
                           (((TGFrame *) main)->GetHeight() - height) >> 1,
                           ax, ay, wdum);

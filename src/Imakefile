@@ -1,21 +1,13 @@
-#---------------------------------------------------
+/*----------------------------------------------------------------------*/
+/*  Some macros specific to jsf	building				*/
+/*----------------------------------------------------------------------*/
 
 #include    "config/lclib.tmpl"
 #include    "../conf/makejsf.tmpl"
-#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 22 
-ROOT222LIBS	= -lPhysics
-#endif
 
 CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lpacklib
 
-ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
-		-lEGPythia -lEG \
-                -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
-		$(ROOT222LIBS) -lPostscript -lProof -lTree -lUnix -lZip \
-		-Wl,-u,pytest_ \
-		$(CERNLIBS)
-
-ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
+ROOTLIBS     += -lEGPythia -lEG -Wl,-u,pytest_ $(CERNLIBS)
 
 LCLIBDIR      = $(LCLIBROOT)/lib
 
@@ -30,31 +22,11 @@ ANALLIB = -L$(LCLIBDIR) $(EXTRALDOPT) -lGENUTIL -lLUHADR -lTAUOLA \
 
 EXTRADEFINES = -I$(LCLIBROOT)/simjlc/src -I$(LCLIBROOT)/util/fortlib/src 
 
-#-------------------------------------------------------------
-
 INC           = ../include 
 
-OBJJSF        = JSFSteer.$(ObjSuf) JSFModule.$(ObjSuf) \
-		JSFDBS.$(ObjSuf) JSFUtil.$(ObjSuf) \
-		JSFEnv.$(ObjSuf) \
-		libJSF.$(ObjSuf)
-
-OBJJSFLCFULL  = JSFBases.$(ObjSuf) \
-		JSFSpringParton.$(ObjSuf) JSFSpring.$(ObjSuf) \
-		JSFGeneratorParticle.$(ObjSuf) JSFGenerator.$(ObjSuf) \
-		JSFFULLGenerator.$(ObjSuf) JSFHadronizer.$(ObjSuf) \
-		JSFLCFULL.$(ObjSuf) \
-		DebugGenerator.$(ObjSuf) DebugWGenerator.$(ObjSuf) \
-		PythiaGenerator.$(ObjSuf) \
-		JSFReadGenerator.$(ObjSuf) readgenutil.o \
-		JSFReadParton.$(ObjSuf) readparton.o JSFMergeEvent.$(ObjSuf) \
-		libJSFLCFULL.$(ObjSuf)
-
-OBJJSFQUICKSIM= JSFQuickSimParam.$(ObjSuf) JSFQuickSim.$(ObjSuf) \
-		JSFLTKCLTrack.$(ObjSuf) JSFSIMDST.$(ObjSuf) \
-		JSFVTXHit.$(ObjSuf) JSFCALHit.$(ObjSuf) \
-		JSFHelicalTrack.$(ObjSuf) JSFCDCTrack.$(ObjSuf) \
-		libJSFQuickSim.$(ObjSuf) simdstutil.o 
+/*----------------------------------------------------------------------*/
+/*  Source files, headers, and objects to build				*/
+/*----------------------------------------------------------------------*/
 
 SRCJSF        = JSFSteer.$(SrcSuf) JSFModule.$(SrcSuf) \
 		JSFDBS.$(SrcSuf) JSFUtil.$(SrcSuf) \
@@ -75,29 +47,36 @@ SRCJSFQUICKSIM= JSFQuickSimParam.$(SrcSuf) JSFQuickSim.$(SrcSuf) \
 		JSFVTXHit.$(SrcSuf) JSFCALHit.$(SrcSuf) \
 		JSFHelicalTrack.$(SrcSuf) JSFCDCTrack.$(SrcSuf)
 
-
 SRC = $(SRCJSF) $(SRCJSFLCFULL) $(SRCJSFQUICKSIM)
 
-HDRJSF	      = JSFEnv.h \
-		JSFUtil.h JSFDBS.h JSFModule.h JSFSteer.h \
-		JSFBasicClasses.h JSFLinkDef.h
 
-HDRJSFLCFULL  = JSFBases.h \
-		JSFSpringParton.h JSFSpring.h \
-		JSFGeneratorParticle.h JSFGenerator.h \
-		JSFFULLGenerator.h JSFHadronizer.h \
-		JSFLCFULL.h \
-		DebugGenerator.h DebugWGenerator.h \
-		JSFReadGenerator.h JSFReadParton.h JSFMergeEvent.h \
-		PythiaGenerator.h JSFLCFULLLinkDef.h
+OBJJSF        = $(subst .$(SrcSuf),.$(ObjSuf),$(SRCJSF)) \
+		libJSF.$(ObjSuf)
 
-HDRJSFQUICKSIM= JSFVTXHit.h JSFCALHit.h \
-		JSFHelicalTrack.h \
-		JSFCDCTrack.h JSFLTKCLTrack.h \
-		JSFQuickSimParam.h JSFQuickSim.h \
-		JSFSIMDST.h JSFQuickSimLinkDef.h \
+OBJJSFLCFULL  = $(subst .$(SrcSuf),.$(ObjSuf),$(SRCJSFLCFULL)) \
+		readgenutil.o readparton.o \
+		libJSFLCFULL.$(ObjSuf)
+
+OBJJSFQUICKSIM= $(subst .$(SrcSuf),.$(ObjSuf),$(SRCJSFQUICKSIM)) \
+		simdstutil.o \
+		libJSFQuickSim.$(ObjSuf)
+
+
+HDRJSF	      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRCJSF)) \
+		JSFBasicClasses.h \
+		JSFLinkDef.h
+
+HDRJSFLCFULL  = $(subst .$(SrcSuf),.$(HdrSuf),$(SRCJSFLCFULL)) \
+		JSFLCFULLLinkDef.h
+
+HDRJSFQUICKSIM= $(subst .$(SrcSuf),.$(HdrSuf),$(SRCJSFQUICKSIM)) \
+		JSFQuickSimLinkDef.h
 
 HDR	      = $(HDRJSF) $(HDRJSFLCFULL) $(HDRJSFQUICKSIM)
+
+/*----------------------------------------------------------------------*/
+/*  Make targets							*/
+/*----------------------------------------------------------------------*/
 
 all::  libjsf libjsflcfull libjsfquicksim jsf
 
@@ -142,8 +121,6 @@ distclean:: clean
 web:
 	../bin/jsf -q -b html.C
 
-###
-
 libJSF.$(SrcSuf): $(HDRJSF)
 		@echo "Generating dictionary ..."
 		rootcint -f libJSF.$(SrcSuf) -c $(HDRJSF)
@@ -153,9 +130,5 @@ libJSFLCFULL.$(SrcSuf): $(HDRJSFLCFULL)
 libJSFQuickSim.$(SrcSuf): $(HDRJSFQUICKSIM)
 		@echo "Generating dictionary ..."
 		rootcint -f libJSFQuickSim.$(SrcSuf) -c $(HDRJSFQUICKSIM)
-#---------------------------------------------------
-
-
-
 
 

@@ -1,47 +1,9 @@
-#---------------------------------------------------
+/*----------------------------------------------------------------------*/
+/*  Some macros specific to gui building                                */
+/*----------------------------------------------------------------------*/
 
 #include    "config/lclib.tmpl"
 #include    "conf/makejsf.tmpl"
-#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 22 
-ROOT222LIBS	= -lPhysics
-#endif
-
-ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
-                -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
-                -lPostscript -lProof -lTree -lUnix -lZip 
-
-ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
-
-
-#-------------------------------------------------------------
-
-INC           = $(JSFROOT)/include
-
-OBJJSFGUI     = InputDialog.$(ObjSuf) \
-		JSFEventDisplay.$(ObjSuf) \
-		JSFGUIFrame.$(ObjSuf) \
-		JSFGUIAnalysis.$(ObjSuf) \
-		JSFEnvGUIFrame.$(ObjSuf) \
-		JSFDemoDisplay.$(ObjSuf) \
-		libJSFGUI.$(ObjSuf)
-
-OBJS          = $(OBJJSFGUI)
-
-SRCJSFGUI     = InputDialog.$(SrcSuf) JSFDemoDisplay.$(SrcSuf) \
-		JSFEventDisplay.$(SrcSuf) JSFEnvGUIFrame.$(SrcSuf) \
-		JSFGUIFrame.$(SrcSuf) JSFGUIAnalysis.$(SrcSuf)
-
-SRC 	      = $(SRCJSFGUI)
-
-HDRJSFGUI     = InputDialog.h \
-		JSFEventDisplay.h JSFDemoDisplay.h \
-		JSFGUIFrame.h JSFGUIAnalysis.h \
-		JSFEnvGUIFrame.h \
-		JSFGUILinkDef.h
-
-SOLIBNAME     = libJSFGUI
-SONAME	      = $(SOLIBNAME).$(SOEXT)	
-
 
 #ifdef hitachiArchitecture
 
@@ -58,9 +20,7 @@ ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
 
 LCLIBDIR      = $(LCLIBROOT)/lib
 
-#ifdef hitachiArchitecture
 EXTRALDOPT = -Wl,-a,default 
-#endif
 
 ANALLIB = $(JSFLIBS) $(EXTRALDOPT) \
 	-L$(LCLIBDIR) -lGENUTIL -lLUHADR -lTAUOLA \
@@ -70,7 +30,35 @@ ANALLIB = $(JSFLIBS) $(EXTRALDOPT) \
 
 #endif	
 
-# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+INC           = $(JSFROOT)/include
+
+/*----------------------------------------------------------------------*/
+/*  Source files, headers, and objects to build                         */
+/*----------------------------------------------------------------------*/ 
+SRCJSFGUI     = InputDialog.$(SrcSuf) \
+		JSFDemoDisplay.$(SrcSuf) \
+		JSFEventDisplay.$(SrcSuf) \
+		JSFEnvGUIFrame.$(SrcSuf) \
+		JSFGUIFrame.$(SrcSuf) \
+		JSFGUIAnalysis.$(SrcSuf)
+
+OBJJSFGUI     = $(subst .$(SrcSuf),.$(ObjSuf),$(SRCJSFGUI)) \
+		libJSFGUI.$(ObjSuf)
+
+OBJS          = $(OBJJSFGUI)
+
+SRC 	      = $(SRCJSFGUI)
+
+HDRJSFGUI     = $(subst .$(SrcSuf),.$(HdrSuf),$(SRCJSFGUI)) \
+		JSFGUILinkDef.h
+
+SOLIBNAME     = libJSFGUI
+SONAME	      = $(SOLIBNAME).$(SOEXT)	
+
+
+/*----------------------------------------------------------------------*/
+/*  Make targets                                                        */
+/*----------------------------------------------------------------------*/
 
 #ifdef hitachiArchitecture
 all::  jsf jsfgui
@@ -104,11 +92,8 @@ distclean:: clean
 web:	
 	jsf -q -b html.C 
 
-###
-
 libJSFGUI.$(SrcSuf): $(HDRJSFGUI)
 		@echo "Generating dictionary ..."
 		rootcint -f libJSFGUI.$(SrcSuf) \
 	 	-c -I$(JSFROOT)/include $(HDRS) $(HDRJSFGUI)
 
-#

@@ -73,7 +73,6 @@
 
 #include <TROOT.h>
 #include <TApplication.h>
-#include <TGXW.h>
 
 #include <TBrowser.h>
 

@@ -1,6 +1,3 @@
-#---------------------------------------------------
-#$Id$
-#
 #include "conf/makejsf.tmpl"
 
 ANALLIB   = -L$(JSFROOT)/lib -lJSF
@@ -10,24 +7,15 @@ FFLAGS =
 USEFORTRAN =
 
 
-
-#-------------------------------------------------------------
-
-
-OBJS          = CCDRawData.$(ObjSuf) \
-	        CCDRawData3.$(ObjSuf) \
-	        CCDCorrectDark.$(ObjSuf) \
-	        CCDRawHist.$(ObjSuf) \
-	        CCD2x2Cluster.$(ObjSuf) \
-	        CCDDBS.$(ObjSuf) \
-		libCCD.$(ObjSuf)
-
 SRC           = CCDRawData.$(SrcSuf) \
 		CCDRawData3.$(SrcSuf) \
 		CCDCorrectDark.$(SrcSuf) \
 		CCDRawHist.$(SrcSuf) \
 		CCD2x2Cluster.$(SrcSuf) \
 		CCDDBS.$(SrcSuf)
+
+OBJS          = $(subst .$(SrcSuf),.$(ObjSuf),$(SRC)) \
+		libCCD.$(ObjSuf)
 
 HDRS	      = CCDDBS.h CCDRawData.h CCDRawHist.h CCDCorrectDark.h \
 		CCD2x2Cluster.h 
@@ -60,11 +48,7 @@ distclean::
 	@rm -f PYTHIA.SEED *.bak
 	@rm -f ccd jsf.root Makefile
 
-###
-
 $(SOLIBNAME).$(SrcSuf): $(HDRS) LinkDef.h
 		@echo "Generating dictionary ..."
 		rootcint -f $(SOLIBNAME).$(SrcSuf) \
 	 	-c -I$(JSFROOT)/include $(HDRS) LinkDef.h
-
-#---------------------------------------------------

@@ -14,11 +14,18 @@
 #ifndef __JSFEventDisplay__
 #define __JSFEventDisplay__
 
+#include "JSFConfig.h"
+
 #include <TROOT.h>
 #include <TCanvas.h>
 #include <TView.h>
+#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 23
+#include <TVirtualX.h>
+#else
 #include <TGXW.h>
+#endif
 
+#include <TGeometry.h>
 #include <TGListBox.h>
 #include <TGClient.h>
 #include <TGFrame.h>
@@ -77,8 +84,9 @@ protected:
   TView   *fView;
   TList   *fWidgets;
   TList   *fSignals, *fHelixes;
+  TGeometry *fGeometry;
 
-  Int_t  fViewNo;
+  Int_t   fViewNo;
   Float_t fViewAngle[3];
   Float_t fViewRange[3][6];
   Int_t   fCanvasSize[2];

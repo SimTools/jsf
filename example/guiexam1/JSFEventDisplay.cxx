@@ -181,9 +181,10 @@ JSFEventDisplay::JSFEventDisplay(JSFGUIFrame *gui)
   fCanvas=NULL;
   fGUIMain=gui;
 
-  fWidgets = new TList();
-  fSignals = new TList();
-  fHelixes = new TList();
+  fWidgets  = new TList();
+  fSignals  = new TList();
+  fHelixes  = new TList();
+  fGeometry = new TGeometry("jlc","jlc");
 
   gGeometryIsInitialized=kFALSE;
 
@@ -261,6 +262,7 @@ JSFEventDisplay::~JSFEventDisplay()
   delete fWidgets;
   delete fSignals;
   delete fSignals;
+  delete fGeometry;
 }
 
 //---------------------------------------------------------------------------
@@ -294,11 +296,9 @@ void JSFEventDisplay::DisplayEventData()
   Int_t ierr;
   evview->SetView(fViewAngle[0], fViewAngle[1], fViewAngle[2], ierr);
   evview->SetRange(&fViewRange[fDisplayType][0], &fViewRange[fDisplayType][3]);
-
   if( !simdst ) simdst=(JSFSIMDST*)gJSF->FindModule("JSFSIMDST");
 
   if( fDrawGeometry ) DrawGeometry(fDisplayType);
-
   switch (fDisplayType) {
     case 0:
       if( fLTKCLTrack->fShow ) DisplayLTKCLMomentum();
@@ -352,7 +352,6 @@ void JSFEventDisplay::InitializeGeometry()
 {
   if( gJSF == 0 ) { printf("JSFSteer is not defined yet.\n"); return; }
   JSFQuickSimParam *p=(JSFQuickSimParam*)simdst->Param();
-
 
   TRotMatrix *rotx=new TRotMatrix("XDIR", "XDIR", 0.0, 0.0, 90.0, 90.0, 90.0, 0.0);
   TRotMatrix *roty=new TRotMatrix("YDIR", "YDIR", 90.0, 0.0, 0.0, 0.0, 90.0, 90.0);

@@ -25,8 +25,8 @@ int hist(Int_t id)
     gFile->cd("/");  // Histograms are created at the top directory
     hCosp=new TH1F("hCosp","Costh of parton",20,-1.0, 1.0);
     hE=new TH1F("hPhad","Hadron momentum",100,0.0, 20.0);
-    c1=new TCanvas("c1","Canvas 1",200, 10, 400, 380);
-    hCosp->Draw();
+    c1=new TCanvas("c1","Canvas 1",10, 10, 800, 400);
+    c1->Divide(2,1);
     c1->Update();
     last->cd();
     return 0;
@@ -37,7 +37,7 @@ int hist(Int_t id)
 
     // Histogram Spring-parton costh
     Int_t i;
-    FFbarSpringBuf *sbuf=spring->EventBuf();
+    FFbarSpringBuf *sbuf=(FFbarSpringBuf*)spring->EventBuf();
     TClonesArray *pa=sbuf->GetPartons();
     for(i=0;i<sbuf->GetNpartons();i++){
        JSFSpringParton *p=pa->At(i);
@@ -54,7 +54,9 @@ int hist(Int_t id)
 
     // Show hCosp histogram
     c1->cd();
-    hCosp->Draw();
+    Int_t Ihist = 0;
+    c1->cd(++Ihist); hCosp->Draw();
+    c1->cd(++Ihist); hE->Draw();
     c1->Update();
     last->cd();
   }

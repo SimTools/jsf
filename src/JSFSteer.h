@@ -127,6 +127,6 @@ public:
 
 };
 
-EXTERN JSFSteer *gJSF;
+R__EXTERN JSFSteer *gJSF;
 
 #endif

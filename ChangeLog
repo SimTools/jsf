@@ -1,3 +1,113 @@
+-------------------------------------------------------------------------------
+99/10/30  K.Fujii       Moving to ROOT v.2.23
+-------------------------------------------------------------------------------
+[1] Conversion Rules to 2.23
+
+TRotMatrix ... and other classes in G3D_*.cxx suppose the
+existence of an instance of TGeometry object.
+This is the reason why JSFGUI stopped working since I switched
+to v.2.23.
+
+[1-1] Some member functions have been renamed in Pythia related classes.
+  (e.g.)
+        LuComp  ---> Lucomp
+        PyStat  ---> Pystat
+
+  To get version info from inside a root macro do:
+
+        sscanf(gROOT->GetVersion(),"%d.%d/%d",&rootver,&rootmver,&rootplevel);
+
+[1-2] GUI API changed a lot:
+        TGXW    --->    TVirtualX
+        gGXW    --->    gVirtualX
+
+[1-3] ROOT library structure drastically changed. Use root-config whenever
+      possible.
+      (e.g.)
+        ROOTLIBS      = $(shell root-config --libs) -lMinuit
+        ROOTGLIBS     = -lGui
+      Once this is defined, we can expand them with += directive:
+      (e.g.)
+        ROOTLIBS     += -lEGPythia -lEG -Wl,-u,pytest_ $(CERNLIBS)
+
+
+[2] Modified Files
+
+[2-1] Changes due to Pythia related modifications
+macro/InitPythia.C
+     /PythiaZH.C
+example/demo/DemoPythia.C:
+       /ZHStudy/zhsim.C
+        LuComp(...) --> Lucomp(...)
+
+  Int_t rootver, rootmver, rootplevel;
+  sscanf(gROOT->GetVersion(),"%d.%d/%d",&rootver,&rootmver,&rootplevel);
+  if (rootver >= 2 && rootmver >= 23) {
+     Int_t kc=tpy->Lucomp(kf);      // Get kc code for Higgs.
+  } else {
+     Int_t kc=tpy->LuComp(kf);      // Get kc code for Higgs.
+  }
+
+src/PythiaGenerator.cxx
+        PyStat(...)  -->  Pystat(...)
+
+[2-2] Changes due to X related modifications
+example/guiexam1/InputDialog.c
+                /JSFEnvGUIFrame.h
+                /JSFEventDisplay.h
+                /JSFGUIAnalysis.h
+                /JSFGUIFrame.cxx
+                /JSFGUIFrame.h
+        GXW --> VirtualX: <TGXW.h>  --> <TVirtualX.h>
+                        : gGXW->... --> gVirtualX->...
+
+[2-3] Changes due to geometry related modifications
+example/guiexam1/JSFEventDisplay.h
+        #include <TGeometry.h>
+        ....
+        TGeometry *fGeometry;
+example/guiexam1/JSFEventDisplay.cxx
+        ....
+        fGeometry = new TGeometry("jlc","jlc"); // in ctor
+        ....
+        delete fGeometry;                       // in dtor
+        ....
+
+[2-4] Changes due to macro modifications
+src/JSFLCFULL.h
+        EXTERN JSFLCFULL *gJSFLCFULL;
+                -->     R__EXTERN JSFLCFULL *gJSFLCFULL;
+   /JSFSteer.h
+        EXTERN JSFSteer *gJSF;
+                -->     R__EXTERN JSFSteer *gJSF;
+
+[2-5] Changes due to library reorganizations
+conf/makejsf.tmpl
+        #if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 23
+        ROOTLIBS      = $(shell root-config --libs) -lMinuit
+        ROOTGLIBS     = -lGui
+        #endif
+
+example/ZHStudy/Imakefile
+       /FFbarSpring/Imakefile
+       /ww/Imakefile
+        Renived RIITGKUBS macro.
+        ROOTLIBS     += -lEGPythia -lEG -Wl,-u,pytest_ $(CERNLIBS)
+
+example/CCDAnal/Imakefile
+
+example/guiexam1/Imakefile
+        Removed ROOTLIBS and ROOTGLIBS macros.
+
+src/Imakefile
+        Renived RIITGKUBS macro.
+        ROOTLIBS     += -lEGPythia -lEG -Wl,-u,pytest_ $(CERNLIBS)
+
+[2-6] Some bug fixes
+example/FFbarSpring/anal.C
+        Fixed segfaults caused by missing type cast
+
+
 **********************************************************
 Change Log and some future plan.
 **********************************************************

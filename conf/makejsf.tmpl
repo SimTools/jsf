@@ -18,6 +18,7 @@ XCOMM #
 DllSuf        = $(SOEXT)
 SrcSuf        = cxx
 ObjSuf        = o
+HdrSuf        = h
 
 LD            = $(CXX)
 
@@ -27,7 +28,7 @@ ROOT222LIBS	= -lPhysics
 
 ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
                 -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
-                $(ROOT222LIBS) -lPostscript -lProof -lTree -lUnix -lZip
+                $(ROOT222LIBS) -lPostscript -lProof -lTree -lUnix -lZip -lRint
 ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
 
 LCLIBDIR      = $(LCLIBROOT)/lib
@@ -48,13 +49,13 @@ SOEXT         = so
 LIBF2C	      = -l$(G77EGCS_LIBNAME)
 FC	      = g77
 CXX           = g++ -O2
-CXXFLAGS      = -Wall  -fno-rtti -fno-exceptions -fPIC \
+CXXFLAGS      = -Wall -fPIC \
 		$(EXTRACXXOPT) \
 		-I$(JSFROOT)/include -I$(ROOTSYS)/include
 SOFLAGS       = -shared -Wl,-soname,$(SONAME) -rdynamic
 LDFLAGS       = $(ANALLIB) $(GLIBS) -rdynamic
 LIBS          = $(ROOTLIBS) -lm -ldl
-GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -L/usr/X11R6/lib \
+GLIBS         = $(ROOTLIBS) $(ROOTGLIBS) -L/usr/X11R6/lib \
 		-lXpm -lX11 $(LIBF2C) -lm -ldl
 BLOCKDATA     = 
 #endif
@@ -69,15 +70,15 @@ XCOMM # -----------------------------------------------------
 #endif
 #if defined(PPCArchitecture)
 SOEXT         = so
-LIBF2C        = -lg2c           
+LIBF2C	      = -l$(G77EGCS_LIBNAME)
 CXX           = g++ -O2
-CXXFLAGS      = -Wall -fsigned-char -fno-rtti -fno-exceptions -fPIC \
+CXXFLAGS      = -Wall -fsigned-char -fPIC \
 		$(EXTRACXXOPT) \
                 -I$(JSFROOT)/include -I$(ROOTSYS)/include
 SOFLAGS       = -shared -Wl,-soname,$(SONAME) -rdynamic
 LDFLAGS       = $(ANALLIB) $(GLIBS) -rdynamic
 LIBS          = $(ROOTLIBS) -lm -ldl
-GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -L/usr/X11R6/lib \
+GLIBS         = $(ROOTLIBS) $(ROOTGLIBS) -L/usr/X11R6/lib \
                 -lXpm -lX11 $(LIBF2C) -lm -ldl
 BLOCKDATA     = 
 #endif
@@ -95,7 +96,7 @@ CXXFLAGS      = -Wall  -fno-rtti -fno-exceptions -fPIC \
 SOFLAGS       = -shared -Wl,-soname,$(SONAME) -rdynamic
 LDFLAGS       = $(ANALLIB) $(GLIBS) -rdynamic
 LIBS          = $(ROOTLIBS) -lm -ldl
-GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -L/usr/X11R6/lib \
+GLIBS         = $(ROOTLIBS) $(ROOTGLIBS) -L/usr/X11R6/lib \
 		-lXpm -lX11 $(LIBF2C) -lm -ldl
 BLOCKDATA     = 
 #endif
@@ -104,6 +105,7 @@ XCOMM # -----------------------------------------------------
 XCOMM # HI-UX
 XCOMM # -----------------------------------------------------
 #if defined(hitachiArchitecture)
+SOEXT         = sl
 CXX           = g++ -O2
 CXXFLAGS      = -Wall  -fno-rtti -fno-exceptions -fPIC \
 		$(EXTRACXXOPT) \
@@ -114,9 +116,8 @@ LDFLAGS       = $(ANALLIB) -Wl,+s $(GLIBS) $(F90LIB)
 MYLDOPT       = -lmsl2 -L/lib/pa1.1 -lm
 F90LIB        =  $(MYLDOPT) -Wl,-a,archive -lhf90math -lf90 \
 		-Wl,-a,default -lc
-SOEXT         = sl
 LIBS          = $(ROOTLIBS) -lm -ldld
-GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -lXpm -lX11 -lm -ldld
+GLIBS         = $(ROOTLIBS) $(ROOTGLIBS) -lXpm -lX11 -lm -ldld
 FC            = f90
 USEFORTRAN    = -D_HIUX_FORTRAN
 BLOCKDATA     = $(LCLIBROOT)/util/lcfull/src/prblk1.o \
@@ -130,6 +131,7 @@ XCOMM # -----------------------------------------------------
 XCOMM # HP-UX
 XCOMM # -----------------------------------------------------
 #if defined(HPArchitecture)
+SOEXT         = sl
 LIBF2C        = -L/opt/fortran/lib -lU77
 CXX	      = aCC -O
 CXXFLAGS      = +W70,495,740,749,829 -DR__ACC -z +Z \
@@ -137,10 +139,15 @@ CXXFLAGS      = +W70,495,740,749,829 -DR__ACC -z +Z \
 		-I$(JSFROOT)/include -I$(ROOTSYS)/include
 SOFLAGS       = -b -z -Wl,+vnocompatwarnings -Wl,-E
 LDFLAGS       = -z -Wl,+s -Wl,-E $(ANALLIB) $(GLIBS)
-SOEXT         = sl
 LIBS          = $(ROOTLIBS) -L/usr/lib -lm -ldld
-GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -lXpm -lX11 \
+GLIBS         = $(ROOTLIBS) $(ROOTGLIBS) -lXpm -lX11 \
 		$(LIBF2C) -L/usr/lib -lm -ldld
 BLOCKDATA     = 
+#endif
+
+
+#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 23 
+ROOTLIBS      = $(shell root-config --libs) -lMinuit
+ROOTGLIBS     = -lGui
 #endif
 

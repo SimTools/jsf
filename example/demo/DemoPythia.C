@@ -3,6 +3,7 @@
 //   for e+e- -> zh event.
 //$Id$
 // *****************************************
+
 void InitPythia()
 {
   Float_t fHiggsmass;       // Higgs mass
@@ -11,7 +12,13 @@ void InitPythia()
   //  tpy->SetMSEL(18);                  // e+e- -> ZH process
 
   Int_t kf=25;                   // kf code for H0 is 25
-  Int_t kc=tpy->LuComp(kf);      // Get kc code for Higgs.
+  Int_t rootver, rootmver, rootplevel;
+  sscanf(gROOT->GetVersion(),"%d.%d/%d",&rootver,&rootmver,&rootplevel);
+  if (rootver >= 2 && rootmver >= 23) {
+     Int_t kc=tpy->Lucomp(kf);      // Get kc code for Higgs.
+  } else {
+     Int_t kc=tpy->LuComp(kf);      // Get kc code for Higgs.
+  }
   tpy->SetPMAS(kc,1,fHiggsmass); // Set Higgs mass 
   printf(" Higgs mass parameters Mass=%g Width=%g Trancat %g LifeTime=%g\n",
 	 tpy->GetPMAS(kc,1), tpy->GetPMAS(kc,2), 

@@ -4,15 +4,10 @@ XCOMM #---------------------------------------------------
 
 #include "config/lclib.tmpl"
 #include "conf/makejsf.tmpl"
-#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 22 
-ROOT222LIBS	= -lPhysics
-#endif
-ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
-		-lEG -lEGPythia \
-		-L/cern/pro/lib -ljetset74 -lpacklib \
-                -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
-                $(ROOT222LIBS) -lPostscript -lProof -lTree -lUnix -lZip
-ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
+
+CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lpacklib
+
+ROOTLIBS     += -lEGPythia -lEG -Wl,-u,pytest_ $(CERNLIBS)
 
 ANALLIB   = -L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim \
 	    -L$(LCLIBROOT)/lib -lLCFULL -lGENUTIL -lLUHADR -lTAUOLA \

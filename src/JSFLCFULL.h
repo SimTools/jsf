@@ -78,7 +78,7 @@ public:
 
 };
 
-EXTERN JSFLCFULL *gJSFLCFULL;
+R__EXTERN JSFLCFULL *gJSFLCFULL;
 
 #endif
 

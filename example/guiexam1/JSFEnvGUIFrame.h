@@ -3,11 +3,18 @@
 //
 //$Id$
 //
+
+#include "JSFConfig.h"
+
 #include <stdlib.h>
 
 #include <TROOT.h>
 #include <TApplication.h>
+#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 23
+#include <TVirtualX.h>
+#else
 #include <TGXW.h>
+#endif
 
 #include <TGListBox.h>
 #include <TGClient.h>
