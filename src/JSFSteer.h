@@ -16,13 +16,11 @@
 
 #include <TNamed.h>
 #include <TTree.h>
-#include <TEnv.h>
+// #include <TEnv.h>
 #include <TChain.h>
 #include <TDatime.h>
 
-// #ifndef __JSFModule__     
-// #include "JSFModule.h"
-// #endif                    
+#include "JSFEnv.h"
 
 class JSFModule;
 
@@ -64,7 +62,7 @@ protected:
   TFile      *fOFile;       //! Pointer to output file
   TTree      *fITree;        //! Pointer to input event tree
   TTree      *fOTree;        //! Pointer to output event tree
-  TEnv       *fEnv;         //! Pointer to the env data.
+  JSFEnv       *fEnv;         //! Pointer to the env data.
   TBranch    *fBrJSF;      //! Branch address of JSFSteer.
 
 // Followings are event-by-event information
@@ -99,7 +97,7 @@ public:
   TTree     *OTree() {return fOTree;}
   TList     *Modules()  {return fModules;}
   JSFModule *FindModule(Text_t *classname,const Option_t *opt="");
-  TEnv      *Env(){ return fEnv;}
+  JSFEnv    *Env(){ return fEnv;}
 
   Int_t     GetVersion(){ return fVersion;}
   Int_t     GetVersionDate() { return fVersionDate;}

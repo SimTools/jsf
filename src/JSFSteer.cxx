@@ -1,3 +1,4 @@
+//*LastUpdate:  jsf-1-12 31-July-1999  by A.Miyamoto
 //*LastUpdate:  jsf-1-11 28-July-1999  by A.Miyamoto
 //*LastUpdate:  jsf-1-9 28-May-1999  by A.Miyamoto
 //*LastUpdate:  jsf-1-7-2 16-April-1999  by A.Miyamoto
@@ -5,6 +6,11 @@
 //*LastUpdate:  jsf-1-4 14-Feburary-1999  by A.Miyamoto
 //*LastUpdate:  v0.3.08 09/29/1998  by A.Miyamoto
 //*-- Author :  Akiya Miyamoto  09/24/1998
+
+/*  Update history
+  26-August-1999  A.Miyamoto  Use JSFEnv instead of TEnv. 
+                              Suppress output of readin module name.
+*/
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -117,8 +123,8 @@ JSFSteer::JSFSteer(const char *name, const char *title)
   fModules = 0;
   fConf    = 0;
   fReadin  = 0;
-  fVersion    = 111  ;  // JSFSteer version number
-  fVersionDate  = 19990723 ; // version date.
+  fVersion    = 112  ;  // JSFSteer version number
+  fVersionDate  = 19990826 ; // version date.
   fIsInitialized = kFALSE ;
   fIsTerminated  = kFALSE ;
   fLastRun       = 0 ;
@@ -146,7 +152,7 @@ JSFSteer::JSFSteer(const char *name, const char *title)
         envfile=nenvfile;    
       }
     }
-    fEnv=new TEnv(envfile);  // Create pointer to env file.
+    fEnv=new JSFEnv(envfile);  // Create pointer to env file.
 
     SetIOFiles();
 
@@ -408,8 +414,8 @@ Bool_t JSFSteer::EndRun()
       gDirectory->mkdir(keyname);
    }
 
-
     sprintf(keyname,"/conf/end%5.5d",fRun);
+
     TIter next(fModules);
     JSFModule *module;
     while (( module = (JSFModule*)next())) {
@@ -487,12 +493,13 @@ Int_t JSFSteer::GetEvent(Int_t nevt)
 // nevt is the number from 1 to n, Note the difference with 
 // the event number of root, which ranges from 0 to n-1.
 
-    Int_t  nb=fITree->GetEvent(nevt-1); 
+   Int_t  nb=fITree->GetEvent(nevt-1); 
 
-    fRun = fReadin->GetRunNumber();
-    fEvent = fReadin->GetEventNumber(); 
-    fIsGetEvent=kTRUE;
-    return nb; 
+   fRun = fReadin->GetRunNumber();
+   fEvent = fReadin->GetEventNumber(); 
+   fIsGetEvent=kTRUE;
+
+   return nb; 
 }
 
 //_____________________________________________________________________________
@@ -624,7 +631,7 @@ Bool_t JSFSteer::SetupTree()
   for(Int_t i=0;i<fReadin->fConf->fNmodule;i++){
     sprintf(temp,"%s mod%d(\"%s\",\"Readin module\")",
 	    fReadin->fConf->fClasses[i],i,fReadin->fConf->fNames[i]);
-    printf(" temp=%s\n",temp);
+    //    printf(" temp=%s\n",temp);
     gROOT->ProcessLine(temp);
 
     JSFModule *module = FindModule(fReadin->fConf->fClasses[i]);

@@ -1,4 +1,6 @@
 {
+//$id$
+
   THtml html; 
   html.SetOutputDir("../html/"); 
 //  html.SetSourceDir("./"); 
@@ -19,6 +21,7 @@
    html.MakeClass("JSFEventBuf");
    html.MakeClass("JSFDBS");
    html.MakeClass("JSFUtil");
+   html.MakeClass("JSFEnv");
 
    html.MakeClass("JSFSpring");
    html.MakeClass("JSFSpringBuf");
@@ -63,6 +66,11 @@
 //   html.MakeClass("JSFHelixErrorMatrix_u");
 
    html.MakeIndex();
+
+   Char_t *cmd="cd ../../html ; mv USER_Index.html JSFMain_Index.html";
+   gSystem->Exec(cmd);
+
+
 }
 
 
