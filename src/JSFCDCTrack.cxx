@@ -1,16 +1,10 @@
+//*LastUpdate : jsf-1-14  1-Fburary-2000  A.Miyamoto
 //*LastUpdate : jsf-1-11  11-July-1999  A.Miyamoto
 //*LastUpdate : jsf-1-9  17-May-1999  A.Miyamoto
 //*LastUpdate : jsf-1-8  2-May-1999  A.Miyamoto
 //*LastUpdate : jsf-1-4  7-Feburary-1999  A.Miyamoto
 //*-- Author  : Akiya Miyamoto  7-Feburary-1999  A.Miyamoto
 
-/*
-2-May-1999 A.Miyamoto  Bug in MovePivot is fixed.
-5-May-1999 A.Miyamoto  Add MovePivotToIP(...) and AddMSError(...)
-14-May-1999 A.Miyamoto Avoid negative costh in MovePivotToIP.
-17-May-1999 A.Miyamoto Put "delete helix" in MovePivotToIP to avoid memory leak
-                     problem.  Thanks Hyunwoo Kim for pointed out the problem.
-*/
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -18,6 +12,14 @@
 //
 //  Utilities for CDC Tracks 
 //
+// (Update)
+// 2-May-1999 A.Miyamoto  Bug in MovePivot is fixed.
+// 5-May-1999 A.Miyamoto  Add MovePivotToIP(...) and AddMSError(...)
+// 14-May-1999 A.Miyamoto Avoid negative costh in MovePivotToIP.
+// 17-May-1999 A.Miyamoto Put "delete helix" in MovePivotToIP to avoid memory leak
+//                      problem.  Thanks Hyunwoo Kim for pointed out the problem.
+//  1-Feb-2000 A.Miyamoto Increase limitter of #VTX hits in AddVTXHits from 10 to kMaxVTXAssoc. 
+//                        and avoid invalid memory access when hits exceds kMaxVTXAssoc.
 // 
 //$Id$
 //
@@ -65,7 +67,7 @@ JSFCDCTrack::JSFCDCTrack(Int_t itrkp[])
 #endif
 
   fNVTX = 0;
-  for(i=0;i<10;i++){ fVTXHits[i]=NULL; }
+  for(i=0;i<kMaxVTXAssoc;i++){ fVTXHits[i]=NULL; }
 
 }
 
@@ -87,7 +89,7 @@ JSFCDCTrack::JSFCDCTrack(Float_t trkf[], Double_t trkd[])
   for(i=0;i<15;i++){ fError[i]=trkd[i]; }
 
   fNVTX = 0;
-  for(i=0;i<22;i++){ fVTXHits[i]=NULL; }
+  for(i=0;i<kMaxVTXAssoc;i++){ fVTXHits[i]=NULL; }
 
 }
 
@@ -119,11 +121,17 @@ JSFCDCTrack::~JSFCDCTrack()
 //_____________________________________________________________________________
 void JSFCDCTrack::AddVTXHit(JSFVTXHit *v)
 { 
-  if( fNVTX >= 10 ) { 
+  static Int_t ntrue=0;
+  if( fNVTX >= kMaxVTXAssoc ) { 
+    ntrue++;
     printf("Too many VTX hits linked to CDC tracks in JSFCDCTrack::AddVTXHit.\n");
+    printf("Track Momentum (E,Px,Py,Pz)=(%g,%g,%g,%g)\n",fE,fP[0],fP[1],fP[2]);
+    printf("This is %d-th hit, but not saved in the buffer.\n",ntrue);
+    return;
   }
   fVTXHits[fNVTX]=v; 
   fNVTX++ ; 
+  ntrue=fNVTX;
 }
 
 

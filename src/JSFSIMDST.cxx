@@ -1,18 +1,9 @@
+//*LastUpdate :  jsf-1-14  1-Feb-2000  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-11  30-July-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-9  27-March-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-6  30-March-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-4  28-January-1999  By Akiya Miyamoto
 //*-- Author  : Akiya Miyamoto  28-January-1999
-
-/*
- 30-March-1999  A.Miyamoto
-   SIMDST Format is changed.  EMH(2,i), HDH(2,i) is increased to 
-   EMH(3,i), and HDH(3,i), to store EM and HD responce separately. 
- 17-May-1999  A.Miyamoto   igendat is changed from Short to Int
- 27-May-1999  A.Miyamoto   kVTXHmax is increased from 10 to 22.
- 30-July-1999  A.Miyamoto   Does not use global variable to store particle information
-*/
-
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -49,6 +40,17 @@
 //     TRKF, TRKD, VTX : Max. 500 tracks.
 //     EMH, HDH        : Max. 1000 hits.
 //   
+//
+// (Update)
+//
+//  30-March-1999  A.Miyamoto
+//    SIMDST Format is changed.  EMH(2,i), HDH(2,i) is increased to 
+//    EMH(3,i), and HDH(3,i), to store EM and HD responce separately. 
+//  17-May-1999  A.Miyamoto   igendat is changed from Short to Int
+//  27-May-1999  A.Miyamoto   kVTXHmax is increased from 10 to 22.
+//  30-July-1999  A.Miyamoto   Does not use global variable to store particle information
+//   2-Feb-2000   A.Miyamoto   kVTXHmax is increased to 52 ( curled track is produced by JIM)
+//
 //$Id$
 //
 //////////////////////////////////////////////////////////////////

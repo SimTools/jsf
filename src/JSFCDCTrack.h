@@ -30,6 +30,7 @@
 class JSFQuickSimParam;
 
 const Int_t kMaxCDCTracks=500;
+const Int_t kMaxVTXAssoc=22;
 
 class JSFCDCTrack : public TObject {
 friend class JSFQuickSimBuf;
@@ -46,7 +47,7 @@ protected:
   Float_t  fPosAtEMC[3]  ; // ( r, th, phi) at EMC entrance.
   Float_t  fEPosAtEMC[2] ; // (dth,dphi) of EMC entrance position.
   Int_t    fNVTX    ; // Number of matched VTX hits.
-  JSFVTXHit *fVTXHits[22] ; //! Pointer to linked VTX hits. 
+  JSFVTXHit *fVTXHits[kMaxVTXAssoc] ; //! Pointer to linked VTX hits. 
 
 public:
   JSFCDCTrack(){}
