@@ -7,9 +7,10 @@
 //                                                                       //
 ///////////////////////////////////////////////////////////////////////////
 
-#include "TGFrame.h"
-#include "TGTextEntry.h"
-#include "TList.h"
+#include <TGFrame.h>
+#include <TGTextEntry.h>
+#include <TGTextView.h>
+#include <TList.h>
 
 class InputDialog {
 
@@ -20,7 +21,8 @@ private:
    char             *fRetStr;  // address to store return string
 
 public:
-   InputDialog(const char *prompt, const char *defval, char *retstr);
+   InputDialog(const char *prompt, const char *defval, char *retstr, Int_t line=1,
+	       UInt_t w=400);
    ~InputDialog();
    void ProcessMessage(Long_t msg, Long_t parm1, Long_t parm2);
 };

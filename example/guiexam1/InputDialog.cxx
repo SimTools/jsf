@@ -63,7 +63,8 @@ InputDialog::~InputDialog()
 }
 
 //_______________________________________________________________________________
-InputDialog::InputDialog(const char *prompt, const char *defval, char *retstr)
+InputDialog::InputDialog(const char *prompt, const char *defval, char *retstr,
+			 Int_t line, UInt_t w)
 {
    // Create simple input dialog.
 
@@ -72,28 +73,36 @@ InputDialog::InputDialog(const char *prompt, const char *defval, char *retstr)
    const TGWindow *main = gClient->GetRoot();
    fDialog = new TGTransientFrame(main, main, 10, 10);
 
-   // command to be executed by buttons and text entry widget
-   char cmd[128];
-   sprintf(cmd, "{long r__ptr=0x%x; ((InputDialog*)r__ptr)->ProcessMessage($MSG,$PARM1,$PARM2);}", (UInt_t)this);
-
-   // create prompt label and textentry widget
-   TGLabel *label = new TGLabel(fDialog, prompt);
-   fWidgets->Add(label);
-
-   TGTextBuffer *tbuf = new TGTextBuffer(256);  //will be deleted by TGtextEntry
-   tbuf->AddText(0, defval);
-
-   fTE = new TGTextEntry(fDialog, tbuf);
-   fTE->Resize(260, fTE->GetDefaultHeight());
-   // fTE->Associate(fDialog);
-   fTE->SetCommand(cmd);
-
    TGLayoutHints *l1 = new TGLayoutHints(kLHintsTop | kLHintsLeft, 5, 5, 5, 0);
    TGLayoutHints *l2 = new TGLayoutHints(kLHintsTop | kLHintsLeft, 5, 5, 5, 5);
    fWidgets->Add(l1);
    fWidgets->Add(l2);
 
-   fDialog->AddFrame(label, l1);
+   // command to be executed by buttons and text entry widget
+   char cmd[128];
+   sprintf(cmd, "{long r__ptr=0x%x; ((InputDialog*)r__ptr)->ProcessMessage($MSG,$PARM1,$PARM2);}", (UInt_t)this);
+
+   // create prompt label and textentry widget
+   if( line > 1  ) {
+     TGTextFrame *label=new TGTextFrame(fDialog, w, 15*line, kDoubleBorder);
+     label->LoadBuffer(prompt);
+     fWidgets->Add(label);
+     fDialog->AddFrame(label, l1);
+   }
+   else {
+     TGLabel *label = new TGLabel(fDialog, prompt);
+     fWidgets->Add(label);
+     fDialog->AddFrame(label, l1);
+   }
+
+   TGTextBuffer *tbuf = new TGTextBuffer(256);  //will be deleted by TGtextEntry
+   tbuf->AddText(0, defval);
+
+   fTE = new TGTextEntry(fDialog, tbuf);
+   fTE->Resize(w, fTE->GetDefaultHeight());
+   // fTE->Associate(fDialog);
+   fTE->SetCommand(cmd);
+
    fDialog->AddFrame(fTE, l2);
 
    // create frame and layout hints for Ok and Cancel buttons
