@@ -7,9 +7,11 @@
 
 
 #if defined(MacOSXArchitecture) || defined(DarwinArchitecture)
-ROOTLIBS     += -lEGPythia -lEG $(CERNLIBS)
+ROOTLIBS     += -l$(EGPYTHIA) -lEG $(CERNLIBS)
+#elif defined(AIXArchitecture)
+ROOTLIBS     += -l$(EGPYTHIA) -lEG -Wl,-u,pytest_ $(shell cernlib mathlib)
 #else
-ROOTLIBS     += -lEGPythia -lEG -Wl,-u,pytest_ $(CERNLIBS)
+ROOTLIBS     += -l$(EGPYTHIA) -lEG -Wl,-u,pytest_ $(CERNLIBS)
 #endif
 
 LCLIBDIR      = $(LCLIBROOT)/lib
