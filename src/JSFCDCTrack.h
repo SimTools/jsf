@@ -62,7 +62,7 @@ public:
 
   void SetGenID(Int_t igen){ fGenID=igen; }
 
-  void Print();
+  virtual void Print();
   void SetPositionAtEMC(Float_t pos[]);
   void ExtrapolateErrorAtEMC(Float_t helix[], Float_t x[], Float_t dx[]);
   void MovePivot(Float_t pivot[], Float_t bfield);

@@ -16,8 +16,8 @@
 
 //_____________________________________________________________________________
 JSFHelicalTrack::JSFHelicalTrack(Float_t helix[], Float_t pivot[],
-		  Int_t ndf=-1, Double_t chisq=0, Double_t cl=0,
-		  Double_t *error=0 )
+		  Int_t ndf, Double_t chisq, Double_t cl,
+		  Double_t *error )
 {
   fHelix.dr    = helix[0];
   fHelix.phi0  = helix[1];
@@ -44,7 +44,7 @@ JSFHelicalTrack::JSFHelicalTrack(Float_t helix[], Float_t pivot[],
 //_____________________________________________________________________________
 JSFHelicalTrack::JSFHelicalTrack(Float_t px, Float_t py, Float_t pz, 
 				 Float_t bz, Float_t charge, 
-				 Float_t x=0, Float_t y=0, Float_t z=0)
+				 Float_t x, Float_t y, Float_t z)
 {
   // Construct the object from momentum (px,py,pz), charge, Bz, and 
   // starting point of the helix (x,y,z)

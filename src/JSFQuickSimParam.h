@@ -68,8 +68,8 @@ public:
   void SetGeoParam(EJSFCALType type, Int_t nphi, Int_t ntheta, Int_t nrad,
  	       Float_t rmin, Float_t rmax,  Float_t zminus, Float_t zplus );
 
-  JSFRThPhi JSFCALGeoParam::HitPosition(Int_t iCellID);
-  void JSFCALGeoParam::HitCellGeom(Int_t iCellID, Float_t geo[]);
+  JSFRThPhi HitPosition(Int_t iCellID);
+  void HitCellGeom(Int_t iCellID, Float_t geo[]);
 
   Float_t GetRmin(){ return fRmin; }
   Float_t GetRmax(){ return fRmax; } 
