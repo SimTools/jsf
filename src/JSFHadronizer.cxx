@@ -69,8 +69,7 @@ JSFHadronizer::JSFHadronizer(const char *name, const char *title)
   ITDKRC = gJSF->Env()->GetValue("JSFHadronizer.ITDKRC",1);
   KEYA1 = gJSF->Env()->GetValue("JSFHadronizer.KEYA1",1);
   IHLON = gJSF->Env()->GetValue("JSFHadronizer.IHLON",1);
-  XK0DEC = gJSF->Env()->GetValue("JSFHadronizer.XK0DEC",0.001);
-
+  sscanf(gJSF->Env()->GetValue("JSFHadronizer.XK0DEC","0.001"),"%g",&XK0DEC);
 
 }
 
