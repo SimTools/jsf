@@ -74,6 +74,11 @@ JSFBases::JSFBases(const char *name, const char *title)
   fNWILD=-1;
   fNCALL=-1;   // Negative value means to use default value.
 
+  for(Int_t i=0;i<(Int_t)(sizeof(fIG)/4);i++){
+    fIG[i]=1;
+    fXU[i]=-1.0e6;
+  }
+
   fPrintInfo=kTRUE;
   fPrintHist=kTRUE;
 
@@ -186,6 +191,7 @@ void JSFBases::Userin()
   for(Int_t i=0;i<bparm1_.ndim;i++){
      bparm1_.xl[i]=fXL[i];
      bparm1_.xu[i]=fXU[i];
+     bparm1_.ig[i]=fIG[i];
   }
 
   return ;
