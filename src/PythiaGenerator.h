@@ -19,7 +19,7 @@
 
 class PythiaGenerator : public JSFGenerator {
 private:
-  Double_t fEcm;     ; // Center of mass energy (GeV)
+  Double_t fEcm      ; // Center of mass energy (GeV)
   TPythia  *fPythia  ; //! Pointer to the pythia class
   Char_t   fFrame[8]; // Name of beam particle
   Char_t   fBeamParticle[8]; // Name of beam particle
