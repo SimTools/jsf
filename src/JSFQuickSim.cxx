@@ -529,21 +529,34 @@ Bool_t JSFQuickSimBuf::MakeJSFLTKCLTracks()
      }
      for(Int_t i=0;i<nelm;i++){
        gJSFLCFULL->TBGET(1,bankname[ib],neary[i], nw, data, iret);
-       if( nw > 300 ) { 
+       if( nw > 300 ) {
 	Warning("MakeJSFLTKCLTrack",
        " Too many CDC track associated to the Combined track. nw=%d",  nw);
        }
+       else if( iret < 1 ) {
+	Warning("MakeJSFLTKCLTrack",
+       " TBGET iret !=1 && != 2 iret=%d",  iret);
+       }	 
        tracks.Add(new JSFLTKCLTrack(bank[ib], data));
        nt++;
      }
   }
   Int_t nent=tracks.GetEntries();
   if( nt != nent ) {
-    printf("In JSFQuickSimBuf::MakeLTKCLTracks ..\n");
+    printf("In JSFQuickSimBuf::MakeLTKCLTracks ..");
     printf("nt(%d) and Number of entries in tracks (%d) is different\n",nt,nent);
+  }
+  else if ( nent > 400 ) {
+    printf("Warning JSFQuickSimBuf::MakeLTKCLTracks ..");
+    printf("Number of entries in LTKCLTrack(%d) exceed 400\n",nent);
   }
 
   SetNTracks(nt);
+
+  if( fNTracks > 400 ) {
+    printf("Warning JSFQuickSimBuf::MakeLTKCLTracks ..");
+    printf("Number of entries in LTKCLTrack(%d) B exceed 400\n",nent);
+  }    
 
   return kTRUE;
 }
@@ -556,7 +569,7 @@ Bool_t JSFQuickSimBuf::MakeCALHits()
 
   TClonesArray &emc=*(GetEMCHits());
   Int_t nemc=0;
-  Int_t nelm, neary[kMaxCalHits];
+  Int_t nelm, neary[2*kMaxCalHits];  // reserve enough space for neary
   Int_t iwrk[50]; 
   Int_t i,nw,iret;
 
@@ -708,8 +721,19 @@ Bool_t JSFQuickSimBuf::MakeCDCTracks()
      for(Int_t j=0;j<ct->GetNCDC();j++){
        
        Int_t icdc=ct->GetIDCDC(j);
-       JSFCDCTrack *t=(JSFCDCTrack*)cdc.UncheckedAt(icdc-1);
-       ct->SetCDC(icdc, t);
+       if( icdc > ncdc ) {
+	 printf("Error in JSFQuickSim::MakeCDCTracks  .. ");
+	 printf("index to CDC track(%d) is larger than number of CDC tracks(%d)\n",icdc,ncdc);
+	 printf("ncmb=%d  NCDC=%d\n",ncmb,ct->GetNCDC());
+       }
+       else if ( icdc <= 0 ) {
+	 printf("Error in JSFQuickSim::MakeCDCTracks  .. ");
+	 printf("LTKCLTrack's index to CDC track(%d) is less than 1\n",icdc);
+       }	 
+       else {
+	 JSFCDCTrack *t=(JSFCDCTrack*)cdc.UncheckedAt(icdc-1);
+	 ct->SetCDC(icdc, t);
+       }
      }
   }
 
@@ -933,6 +957,11 @@ void JSFQuickSimBuf::AppendLTKCLTracks(JSFQuickSimBuf *src, Int_t numgp, JSFGene
   //(1) Copy all VTX Hits
   //  fLinkedTrack is updated later/
   Int_t nvtxsrc=src->GetNVTXHits();
+  if( nvtxsrc > kMaxVTXHits ) {
+    printf("JSFQuickSimBuf::AppendLTKCLTracks..");
+    printf("Number of VTXHits(%d) exceeds size of VTXHits buffer(%d)\n",nvtxsrc,kMaxVTXHits);
+    nvtxsrc=kMaxVTXHits;
+  }
   TClonesArray *vtx=src->GetVTXHits();
   for(Int_t i=0;i<nvtxsrc;i++){
     JSFVTXHit *v=(JSFVTXHit*)vtx->UncheckedAt(i);
@@ -944,6 +973,12 @@ void JSFQuickSimBuf::AppendLTKCLTracks(JSFQuickSimBuf *src, Int_t numgp, JSFGene
 
   //(2) Copy CDCTracks object
   Int_t ncdcsrc=src->GetNCDCTracks();
+  if( ncdcsrc > kMaxCDCTracks ) {
+    printf("JSFQuickSimBuf::AppendLTKCLTracks..");
+    printf("Number of CDCTracks(%d) exceeds size of CDCTrackBuf(%d)\n",ncdcsrc,kMaxCDCTracks);
+    ncdcsrc=kMaxCDCTracks;
+  }
+
   TClonesArray *cdc=src->GetCDCTracks();
   for(Int_t i=0;i<ncdcsrc;i++){
     JSFCDCTrack *t=(JSFCDCTrack*)cdc->UncheckedAt(i);
