@@ -1,3 +1,4 @@
+//*LastUpdate :  jsf-1-4  15-Feburary-1999  By A.Miyamoto
 //*LastUpdate :  0.02/01  10-September-1998  By A.Miyamoto
 //*-- Author  : A.Miyamoto  10-September-1998
 
@@ -6,6 +7,12 @@
 // JSFSpring
 //
 //   Create parto lists
+//
+//  For example of how to use JSFSpring and JSFBases, please see
+//  begin_html <a href="http://www-jlc.kek.jp/subg/offl/jsf/docs/bsgiude/index.html">a html </a> end_html or 
+//  begin_html <a href="http://www-jlc.kek.jp/subg/offl/jsf/docs/bsgiude.ps">a postscript</a> end_html documents. 
+// 
+//$Id$
 //
 ////////////////////////////////////////////////////////////////////////
 

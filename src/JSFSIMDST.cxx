@@ -11,6 +11,9 @@
 // (3) For user program which uses SIMDST format data, 
 //     provide interface with JSFQuickSim class
 // Thus this class does not output ROOT event tree.
+//
+// For the data format of SIMDST data, pelase see  begin_html <a href="http://acfahep.kek.jp/subg/sim/simdst/simdst.ps.gz">a postscript document</a> end_html,
+// or  begin_html <a href="http://acfahep.kek.jp/subg/sim/simdst/simdst/index.html">a html document</a> end_html.
 // 
 // Three void functions are prepared to control write/read fortran data.
 //   If WriteData() function is called, fortran data is written.
