@@ -326,8 +326,8 @@ void GetArguments()
     } 
     elseif( strncmp(ap->Argv(i),"--runno=",8) == 0 ){
       strcpy(str,(ap->Argv(i)+8)); 
-      sscanf(str,"%g",&gRunNo);
-      printf(" Run no is %g \n",gRunNo);
+      sscanf(str,"%d",&gRunNo);
+      printf(" Run no is %d \n",gRunNo);
     } 
     elseif( strncmp(ap->Argv(i),"--macro=",8) == 0 ){
       strcpy(str,(ap->Argv(i)+8)); 
