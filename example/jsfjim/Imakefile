@@ -3,7 +3,7 @@
 #
 #(History)
 #  29-May-1999 A.Miyamoto  Original version
-#
+# 
 #$Id$
 #
 #---------------------------------------------------
@@ -23,7 +23,7 @@ ANALLIB = -Wl,-Bdynamic $(JSFLIBS) $(EXTRALDOPT) \
 
 CERNLIB = $(shell cernlib jetset74 geant321 mathlib pawlib graflib grafX11 packlib kernlib)
 
-JIMLDLIBS = -L$(JSFROOT)/example/readjim -lreadjim \
+JIMLDLIBS = -L$(JSFROOT)/lib -lJSFReadJIMBank -lJSFGUI \
 	-L$(JLCSIMROOT)/lib -ljim -ljimlib -lct -lvx -lcal \
 	-ljlclib -lzbs -ljlcutil -lcal 
 
@@ -112,4 +112,3 @@ jsfmain.o: jsfmain.cxx
 
 
 
-	
