@@ -97,6 +97,7 @@ int Initialize()
       ofile= new TFile(gOutputFileName,"RECREATE");
       file = new TFile(gInputFileName);  // Input file
       jsf->SetIOFiles();
+      jsf->SetOutput(*ofile);
       simdst = new JSFSIMDST();
       simdst->SetFile(ofile);
       simdst->NoReadWrite(); // Does not output SIMDST data
