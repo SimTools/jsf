@@ -52,8 +52,8 @@ HDRS	      = JSFReadJIMBank.h \
 
 all::  jsf
 
-jsf: $(OBJS) jsfmain.o
-	$(LD) jsfmain.o $(BLOCKDATA) $(OBJS) \
+jsf: $(OBJS) $(JSFROOT)/src/jsfmain.o
+	$(LD) $(JSFROOT)/src/jsfmain.o $(BLOCKDATA) $(OBJS) \
 	$(LDFLAGS) -o jsf 
 
 
