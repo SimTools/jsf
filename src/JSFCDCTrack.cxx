@@ -1,11 +1,3 @@
-//*LastUpdate : jsf-1-14  1-Fburary-2000  A.Miyamoto
-//*LastUpdate : jsf-1-11  11-July-1999  A.Miyamoto
-//*LastUpdate : jsf-1-9  17-May-1999  A.Miyamoto
-//*LastUpdate : jsf-1-8  2-May-1999  A.Miyamoto
-//*LastUpdate : jsf-1-4  7-Feburary-1999  A.Miyamoto
-//*-- Author  : Akiya Miyamoto  7-Feburary-1999  A.Miyamoto
-
-
 ////////////////////////////////////////////////////////////////////////
 //
 //  JSFCDCTracks
@@ -475,56 +467,120 @@ Bool_t JSFCDCTrack::MovePivotToIP(JSFQuickSimParam *spar)
   //   (4) Move pivot to IP.
   // Geometry information is obtained from JSFQuickSimParam
   
-  JSFHelicalTrack *helix=new JSFHelicalTrack(GetHelix());
-  JSFHelixParameter hp=helix->GetHelixParameter();
+  // First make sure input parameter is correct.
+
+  JSFHelixParameter hp=GetHelix();
   Double_t pnorm=TMath::Sqrt(1.0+hp.tanl*hp.tanl);
   Double_t rnow=TMath::Sqrt(hp.pivot.x*hp.pivot.x+hp.pivot.y*hp.pivot.y);
+  Float_t field=spar->GetBField();
+
+  // Make sure Pivot is near 1st layer of VTX and dr is small enough
+  if( rnow > spar->GetVTXRadius(2) - 0.01 ) { 
+    printf("Warning in JSFCDCTrack::MovePivotToIP() ..");
+    printf("Pivot is far away of 1st layer of VTX.  Move to the 1st layer of VTX first.\n");
+    printf(" Radius of pivot is %g",rnow);
+    printf(" radius of 1st VTX layer is %g\n",spar->GetVTXRadius(1));
+    return kFALSE; 
+  }
+  else if(  TMath::Abs(hp.dr) > 0.01 || TMath::Abs(rnow - spar->GetVTXRadius(1)) > 0.001 ) {
+    //    printf("Warning in JSFCDCTrack::MovePivotToIP() ..");
+    //    printf("Pivot is moved to the first layer of VTX since it is not on yet.");
+    //    printf(" or dr is too large.\n");
+    //    printf(" dr=%g",hp.dr);
+    //    printf(" rnow=%g\n",rnow);
+    JSFHelicalTrack ht=GetHelicalTrack();
+    ht.SetBfield(field);
+    JSF3DV pos=ht.GetCoordinate(0.0);
+    JSFRPhiZ ref(pos);
+    ref.r=spar->GetVTXRadius(1);
+    Double_t defang=0.0;
+    Bool_t st=ht.IntersectWithCylinder(ref, defang);
+    if( !st ) { return kFALSE; }
+    JSF3DV piv=ht.GetCoordinate(defang);
+    Float_t pivot[3]={piv.x, piv.y, piv.z};
+    MovePivot(pivot, field);
+
+    hp=GetHelix();
+    pnorm=TMath::Sqrt(1.0+hp.tanl*hp.tanl);
+    rnow=TMath::Sqrt(hp.pivot.x*hp.pivot.x+hp.pivot.y*hp.pivot.y);
+    //    printf("After modification rnow=%g",rnow);
+    //    printf(" pivot is %g,%g\n",hp.pivot.x,hp.pivot.y);
+    //    Print();
+
+  }
+
   Double_t costh=(-hp.pivot.x*TMath::Sin(hp.phi0) + 
 		  hp.pivot.y*TMath::Cos(hp.phi0)) / (rnow*pnorm) ;
   if( costh < 0.0 ) {
+    /*
 	printf("Warning in JSFCDCTrack::MovePivotToIP()...vtx1");
 	printf(" costh=%g <=0, though it should be positive\n",costh);
 	printf("Abs(costh) is used instead..\n");	
+	printf(" rnow=%g  pnorm=%g\n",rnow, pnorm);
+        printf(" pivot=(%g,%g) (direction x, direction y)=(%g,%g)\n",hp.pivot.x,
+               hp.pivot.y,-TMath::Sin(hp.phi0), TMath::Cos(hp.phi0));
+	JSFHelicalTrack ht=GetHelicalTrack();
+	ht.SetBfield(field);
+        JSF3DV pnow=ht.GetMomentum(0.0);
+        JSF3DV xnow=ht.GetCoordinate(0.0);
+        printf("Momentum=(%g,%g,%g)",pnow.x,pnow.y,pnow.z);
+        printf("Position=(%g,%g,%g)",xnow.x,xnow.y,xnow.z);
+	printf("Radius=%g",TMath::Sqrt(xnow.x*xnow.x + xnow.y*xnow.y));
+        printf("\n");
+	ht.Print();
+    */
 	costh= -costh;
   }
+  if( costh < 0.001 ) { costh=0.001; }  // Too small costh is unnatural 
   Float_t rad1=spar->GetVTXThickness(1)/costh;
   AddMSError(rad1);  // Include MS at the first layer of VXT
 
-  Float_t field=spar->GetBField();
-  helix->SetBfield(field);
+  JSFHelicalTrack helix=GetHelicalTrack();
+  helix.SetBfield(field);
   Double_t rcyl=spar->GetVTXRadius(0);
   Double_t zcyl=spar->GetVTXZplus(0);
   Double_t phi0, phi1;
   Int_t maxloop=5;
-  Int_t ncros=helix->OriginToCylinder(rcyl, zcyl, phi0, phi1, maxloop);
+  Int_t ncros=helix.OriginToCylinder(rcyl, zcyl, phi0, phi1, maxloop);
   if( ncros != 0 ) {
-    printf("Eror in JSFCDCTrack::MovePivotToIP(...)  .. Track does not intersect");
+    printf("Warning in JSFCDCTrack::MovePivotToIP(...)  .. Track does not intersect");
     printf(" with beam pipe.\n");
     printf("Track parameter is not changed.\n");
+        JSF3DV pnow=helix.GetMomentum(0.0);
+        JSF3DV xnow=helix.GetCoordinate(0.0);
+        printf("Momentum=(%g,%g,%g)",pnow.x,pnow.y,pnow.z);
+        printf("Position=(%g,%g,%g)",xnow.x,xnow.y,xnow.z);
+	printf("Radius of position =%g",TMath::Sqrt(xnow.x*xnow.x + xnow.y*xnow.y));
+        printf("\n");
+	helix.Print();
+
     return kFALSE;
   }
   //
-  JSF3DV piv=helix->GetCoordinate(phi1);
+  JSF3DV piv=helix.GetCoordinate(phi1);
   Float_t pivot[3]={piv.x, piv.y, piv.z};
   // Move to Beam pipe.
   MovePivot(pivot, field);
 
-  hp=helix->GetHelixParameter();
+  
+  //  hp=helix.GetHelixParameter();
+  hp=GetHelix();
   pnorm=TMath::Sqrt(1.0+hp.tanl*hp.tanl);
   costh=(-pivot[0]*TMath::Sin(hp.phi0)+pivot[1]*TMath::Cos(hp.phi0))
                 / (rcyl*pnorm) ;
   if( costh < 0.0 ) {
+    /*
 	printf("Warning in JSFCDCTrack::MovePivotToIP()...ip");
 	printf(" costh=%g <=0, though it should be positive\n",costh);
 	printf("Abs(costh) is used instead..\n");	
+    */
 	costh= -costh;
   }
+  if( costh < 0.001 ) { costh=0.001; }  // Too small costh is unnatural 
   Float_t rad0=spar->GetVTXThickness(0)/costh;
   AddMSError(rad0);
   Float_t ip[3]={0.0, 0.0, 0.0};
   MovePivot(ip, field);
-
-  delete helix;
 
   return kTRUE;
 

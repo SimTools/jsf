@@ -11,7 +11,7 @@
 //                                                                      //
 //////////////////////////////////////////////////////////////////////////
 
-
+#include <stdlib.h>
 #include "TObject.h"
 #include "TClonesArray.h"
 #include "TMath.h"
@@ -151,6 +151,7 @@ public:
     fBfield=field; fAlpha=kGiga/kLightVelocity*100.0/(fBfield/10.0); }
 
   inline JSF3DV GetCoordinate(Double_t phi){
+    if( !TestBfield() ) { exit(0) ; }
      Double_t r=fAlpha/fHelix.kappa;
      Double_t x=fHelix.pivot.x + fHelix.dr*TMath::Cos(fHelix.phi0)
                +r*(TMath::Cos(fHelix.phi0)- TMath::Cos(fHelix.phi0+phi));
@@ -167,6 +168,7 @@ public:
   }
 
   inline JSF2DV GetCenter(){
+    if( !TestBfield() ) { exit(0)  ; }
      Double_t r=fAlpha/fHelix.kappa;
      Double_t x=fHelix.pivot.x + (fHelix.dr+r)*TMath::Cos(fHelix.phi0);
      Double_t y=fHelix.pivot.y + (fHelix.dr+r)*TMath::Sin(fHelix.phi0);
@@ -179,7 +181,10 @@ public:
      return xp;
   }
 
-  inline Double_t GetRadius(){ return fAlpha/fHelix.kappa; }
+  inline Double_t GetRadius(){ 
+    if( !TestBfield() ) { exit(0) ; }
+    return fAlpha/fHelix.kappa; 
+  }
   inline Double_t GetCharge(){ return TMath::Sign(1.0,fHelix.kappa); }
 
   inline JSF3DV GetMomentum(Double_t phi){
