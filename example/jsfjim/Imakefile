@@ -1,0 +1,108 @@
+#---------------------------------------------------
+#  Imakefile to build JSFJIM application
+#
+#(History)
+#  29-May-1999 A.Miyamoto  Original version
+#
+#$Id$
+#
+#---------------------------------------------------
+
+#include    "config/lclib.tmpl"
+#include    "conf/makejsf.tmpl"
+#include    "jim.rules"
+
+JSFLIBS       = -Wl,-L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim
+
+ANALLIB = $(JSFLIBS) $(EXTRALDOPT) \
+	-L$(LCLIBDIR) -lGENUTIL -lLUHADR -lTAUOLA \
+        -lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
+        -lHELASV204 -lFORTLIB -lCOM -lCLI \
+        $(EXTRALIBS) $(JIMLDLIBS) \
+	-L$(ROOTSYS)/lib  -lEGPythia -lEG -ljetset74
+
+JIMLDLIBS = -L$(JSFROOT)/example/readjim -lreadjim \
+	-L$(JLCSIMROOT)/lib -lct -lvx -lcal -ljim  -ljlclib -lzbs -ljlcutil \
+	-lcal \
+	-L$(CERN_ROOT)/lib -lgeant321 -lmathlib -lpawlib -lgraflib \
+	-lgrafX11 -lpacklib -lkernlib
+
+JIMOBJS =$(JLCSIMROOT)/lib/libjim.a
+
+#
+# ----------------------------------
+#
+
+JIMLIBJIM = $(JLCSIMROOT)/lib/libjim.a
+JIMMAIN = $(JLCSIMROOT)/jim/src/jim.o
+
+
+#-------------------------------------------------------------
+
+EXTRACXXOPT   = -I$(JSFROOT)/example/readjim
+
+INCPATH	      = -I$(JLCSIMROOT)/util/inc -I$(JLCSIMROOT)/include/jlc \
+		-I$(JLCSIMROOT)/include
+ 
+FCFLAGS	      = $(FFLAGS)
+
+FCINCLUDES = -I./ -I$(JLCSIMROOT)/include -I$(JLCSIMROOT)/include/jlc \
+		 -I$(JLCSIMROOT)/jim/inc
+
+OBJS          = JSFJIM.$(ObjSuf) \
+		jimsub.o  jsfjimrun.o $(JIMFOBJS) \
+		libJSFJIM.$(ObjSuf)
+
+JIMFOBJS       = jmbfhd.o guout.o
+
+SRC           = JSFJIM.$(SrcSuf)
+
+HDRS	      = JSFJIM.h 
+
+#ifdef hitachiArchitecture
+EXTRALDOPT = -L/lib/pa1.1 -lm
+#endif
+
+#----------------------------------------------------------------
+
+all:: jsfjim
+
+
+jsfjim: $(OBJS) jsfjim.o $(JIMOBJS)
+	$(LD) jsfjim.o $(OBJS) $(LDFLAGS) -o jsfjim \
+	-Wl,-y,guout_,-y,jmbfhd_
+
+jim: $(JIMOBJS) jimsub.o
+	$(FC) -o jim jimsub.o $(JIMMAIN) $(JIMLDLIBS) \
+	-L/usr/X11R6/lib -ljetset74 -lm -lX11 \
+	$(EXTRALDOPT)
+
+
+$(JIMOBJS):
+	@echo "Creating a jim library in $(JLCSIMROOT)/lib "
+	( cd $(JLCSIMROOT)/jim/src  ; \
+	  ar cr libjim.a *.o ; \
+	  ar d libjim.a jim.o ; \
+	  mv libjim.a ../../lib )
+
+clean:: 
+	@rm -f $(OBJS) core *.so 
+	@rm -f libJSFJIM.$(SrcSuf) libJSFJIM.h
+
+depend:: 
+	makedepend -I$(ROOTSYS)/include $(SRC)
+
+distclean::
+	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h *~ *.o
+	@rm -f *.bak libJSFJIM.* *.bnk
+	@rm -f jsfjim *.root Makefile 
+
+###
+
+libJSFJIM.$(SrcSuf): $(HDRS) JSFJIMLinkDef.h
+		@echo "Generating dictionary ..."
+		rootcint -f libJSFJIM.$(SrcSuf) \
+	 	-c -I$(JSFROOT)/include -I$(JSFROOT)/example/readjim $(HDRS) \
+		JSFJIMLinkDef.h
+
+
