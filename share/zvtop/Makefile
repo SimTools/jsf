@@ -20,5 +20,7 @@ cleanall: src/Makefile example/Makefile
 	( cd src ; make cleanall ; rm -f Makefile )
 	( cd example/ ; make cleanall ; rm -f Makefile )
 
+distclean: cleanall
+
 web:
 	( cd src ; xmkmf -a ; make web )
