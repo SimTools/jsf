@@ -108,6 +108,7 @@ public:
   inline Float_t GetPTM2(){return fPTM2; }
   inline Int_t GetNVRT(){ return fNVRT; }
   inline Int_t GetNTRK(){ return fNTRK; }
+  inline Int_t GetNISO(){ return fNISO; }
 
   inline Float_t GetChisquare(){ return fChisq; }
   inline Float_t GetProbability(){ return fProb; }
