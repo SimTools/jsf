@@ -26,6 +26,10 @@ tools:
 gui:
 	( cd gui ; xmkmf -a ; make all ; make install )
 
+opts: 
+	( cd opts ; make install )
+
+
 %:
 	for i in $(SUBDIRS); do \
 	(cd $$i; make $@ ) ; done

@@ -5,6 +5,7 @@
 all: src/Makefile example/Makefile
 	( cd src ; make ; make install )
 	( cd example ; make )
+install: all
 
 src/Makefile: src/Imakefile
 	( cd src; xmkmf -a )
