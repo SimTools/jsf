@@ -9,15 +9,16 @@ Int_t LoadLibraries()
   gSystem->Load("libJSFTools.so");
   gSystem->Load("libJSFQuickSim.so");
 
-  gSystem->Load("libEG.so");
   if ( pyversion == 6 ) {
     gSystem->Load("libPythia6.so");
-    gSystem->Load("libEGPythia6.so");
     gSystem->Load("libJSFPythia6.so");
+    gSystem->Load("libEG.so");
+    gSystem->Load("libEGPythia6.so");
   }
   else {
-    gSystem->Load("libEGPythia.so");
     gSystem->Load("libJSFPythia5.so");
+    gSystem->Load("libEG.so");
+    gSystem->Load("libEGPythia.so");
   }
 
   printf("Libraries loaded\n");

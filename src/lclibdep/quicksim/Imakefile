@@ -43,7 +43,7 @@ HDR	      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRC)) \
 
 LIBS     = -L$(LCLIBROOT)/lib $(EXTRALDOPT) \
         -lSIMJLC -lLTKCL -lLCFULL -lTBS \
-        -lFORTLIB \
+        -lGENUTIL -lFORTLIB \
         $(EXTRALIBS) -lg2c /* -lnsl */
 
 
