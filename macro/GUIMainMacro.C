@@ -61,7 +61,7 @@ class JSFJ4;
   Int_t gReturnCode; // Return code from event analysis 
 
   enum EJSFGUIEventType { kPythia=0, kDebug=1, kBasesSpring=2,
-                        kReadParton=3, kReadHepevt=4, kNoGenerator=5  , kHerwig=6 };
+                        kReadParton=3, kReadHepevt=4, kNoGenerator=6  , kHerwig=5 };
 
   Bool_t gHasUserMonitor=kFALSE;
 
