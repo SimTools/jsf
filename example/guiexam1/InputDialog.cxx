@@ -46,7 +46,7 @@
 enum EInputDialog {
   B_OK=1,
   B_CANCEL=2,
-  B_TEXT_ENTRY,
+  B_TEXT_ENTRY
 };
 
 

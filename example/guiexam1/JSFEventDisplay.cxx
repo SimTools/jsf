@@ -556,7 +556,7 @@ void  JSFEventDisplay::DisplayGeneratorParticles()
 	 Double_t zend=zp[0] + pv(3)*vlen;
 	 if( TMath::Abs(zend) < zcyl ) { xp[1]=xend.x ; yp[1]=xend.y ; zp[1]=zend; }
 	 else {
-	   zp[1]= TMath::Sign(zcyl,pv(3));
+	   zp[1]= TMath::Sign(zcyl,(Double_t)pv(3));
 	   vlen = ( zp[1]-zp[0] )/pv(3);
 	   xp[1]=xp[0]+pv(1)*vlen;
 	   yp[1]=yp[0]+pv(2)*vlen;

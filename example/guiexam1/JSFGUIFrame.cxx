@@ -750,11 +750,7 @@ Bool_t JSFGUIFrame::ProcessMessage(Long_t msg, Long_t parm1, Long_t)
 	          case M_HELP_EVENTDISP:
 		     new TGMsgBox(fClient->GetRoot(), this,
                                   "About Event Display", 
-	  "Momentum View shows LTKCL track momentum. 
-Track color shows track type.
-In All view,  red beam pipe is +Z, 
-blue is -Z, cyan is +X
-and purple is +Y directions",
+	  "Momentum View shows LTKCL track momentum. \nTrack color shows track type.\nIn All view,  red beam pipe is +Z, \nblue is -Z, cyan is +X\nand purple is +Y directions",
                                   icontype, buttons, &retval);
 		     break;
 

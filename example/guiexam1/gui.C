@@ -6,7 +6,12 @@
   gROOT->LoadMacro("MainMacro.C");
 
   if( strncmp(gSystem->HostName(),"ccjlc",5)  != 0 ) {
-    gSystem->Load("libJSFGUI.so");
+    if( strcmp(gSystem->Getenv("OSTYPE"),"hpux") ==0 ) {
+      gSystem->Load("libJSFGUI.sl");
+    }
+    else {
+      gSystem->Load("libJSFGUI.so");
+    }
   }
   JSFGUIFrame *gui;
 
