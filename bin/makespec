@@ -1,4 +1,4 @@
-#!/bin/csh
+#!/bin/csh -f
 # ###################################################
 #
 # This script stores system information in config file.
