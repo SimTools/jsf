@@ -86,6 +86,13 @@ void UserSetOptions()
 
 }
 
+//_________________________________________________________
+void UserTerminate()
+{
+  // This function is called at the end of job.
+
+}
+
 
 
 

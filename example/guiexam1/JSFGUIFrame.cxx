@@ -3,8 +3,10 @@
 //*-- Author  : A.Miyamoto  20-September-1998
 
 /*
-  1-May-1999 A.Miyamoto   Add Start borwser and Open JIM file menu
   19-Apr-1999 A.Miyamoto  A bug in JSFGUIFrame::ToRelativePath is fixed.
+  1-May-1999 A.Miyamoto   Add Start borwser and Open JIM file menu
+  16-May-1999 A.Miyamoto  Does not call GetArguments macro.
+                          It is now called from MainMacro.C
 */
 
 ///////////////////////////////////////////////////////////////////
@@ -926,7 +928,11 @@ void JSFGUIFrame::ToRelativePath(const Char_t *fnin,
 
   //  Int_t lfn=strlen(fnin);
   Int_t ldir=strlen(dirnowi);
+#ifdef R__ACC
+  Char_t dirnow[512];
+#else
   Char_t dirnow[ldir+2];
+#endif
   strcpy(dirnow, dirnowi);
   if( dirnowi[ldir] != '/' ) { strcat(dirnow, "/"); }
   
