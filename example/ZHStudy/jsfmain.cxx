@@ -37,7 +37,9 @@ extern "C" void G__cpp_setuplibJSFLCFULL();
 extern "C" void G__cpp_setuplibJSFQuickSim();
 
 #if defined(_HIUX_SOURCE)
+#include "Pcommon.h"
 extern "C" void hf_fint(char *option); /* to initialize fortran environment */
+extern "C" void G__cpp_setupG__Pythia();
 #endif
 
 extern void InitGui();
@@ -55,6 +57,7 @@ int main(int argc, char **argv)
 #endif
 #if defined(_HIUX_SOURCE)
    hf_fint((char *)NULL);
+   LUJETS.n=0;  // Needs explicit initialize
 #endif
 
    TRint *theApp = new TRint(appname, &argc, argv, 0, 0);
@@ -72,7 +75,10 @@ int main(int argc, char **argv)
 void dummysub()
 {
    G__cpp_setuplibJSF();
-   G__cpp_setuplibJSFLCFULL();
+   G__cpp_setuplibJSFLCFULL(); 
    G__cpp_setuplibJSFQuickSim();
+#if defined(_HIUX_SOURCE)
+   G__cpp_setupG__Pythia();
+#endif
 }
 
