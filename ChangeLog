@@ -1,4 +1,15 @@
 -------------------------------------------------------------------------------
+2000/08/07  Akiya Miyamoto
+-------------------------------------------------------------------------------
+(1) A new parameter, JSF.SharedLibraries, is prepared.
+    The shared libraries assigned to this variable is loaded dynamically,
+    when JSFSteer object is created.
+(2) example/readjim and example/jsfjim are modified so that it can read
+   the jlcsim data of the latest version.  THe event display program for
+   jim data is also available except EndCap Calorimeter.
+
+
+-------------------------------------------------------------------------------
 2000/07/13  Keisuke Fujii
 -------------------------------------------------------------------------------
 (1) Modified src/{JSFBases.h,JSFBases.cxx,JSFSpring.cxx} 
