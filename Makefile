@@ -4,10 +4,11 @@ help:
 	@echo "How to use makefile "
 	@echo " make help      ; display this message "
 	@echo " make install   ; create library and binaries in example directory"
+	@echo " make web   ; make files in html directory."
 	@echo " make clean     ; remove all .o files "
 	@echo " make distclean ; delete everything except source files."
 	@echo " "
-	@echo " Don't forget to setenv ROOTSYS and JSFROOT prior to do make install"
+	@echo " Don't forget to setenv as described in HowToInstall prior to do make install"
 
 
 install : lib html include
@@ -22,6 +23,15 @@ clean:
 	( cd example/FFbarSpring ; make clean )
 	( cd example/CCDAnal  ; make clean )
 	( cd example/ZHStudy  ; make clean )
+
+web:
+	( cd example/CCDAnal ; ./ccd -q -b html.C ; \
+		cd $(JSFROOT)/html ; mv USER_Index.html CCDAnal_Index.html)
+	( cd example/FFbarSpring ; ./jsf -q -b html.C ; \
+		cd $(JSFROOT)/html ; mv USER_Index.html FFbarSpring_Index.html)
+	( cd src ; ../bin/jsf -q -b html.C ; \
+		cd $(JSFROOT)/html ; mv USER_Index.html JSFMain_Index.html)
+	( perl bin/webindx > html/JSF_Index.html )
 
 lib: 
 	mkdir lib
@@ -40,3 +50,5 @@ distclean:
 	( cd html ; rm -f *.html *.h *.ps *~ ; rm -rf src )
 	( rm -r lib ; rmdir html )
 	( cd macro ; rm -f jsf.root , PYTHIA.SEED )
+
+
