@@ -102,7 +102,8 @@ Bool_t JSFQuickSim::TBPUTGeneratorParticles()
   // First search Generator class
 
   Float_t data[20];
-  for(Int_t i=0;i<20;i++){ data[i]=0.0;}
+  Int_t i;
+  for(i=0;i<20;i++){ data[i]=0.0;}
   JSFGenerator *gen=(JSFGenerator*)gJSF->FindModule("JSFGenerator");
   JSFGeneratorBuf *gevt=(JSFGeneratorBuf*)gen->EventBuf();
   TClonesArray *pa=gevt->GetParticles();
@@ -468,7 +469,8 @@ void JSFQuickSimParam::SetSmearParam()
   smrvgo_.dzeevx   =  fDZEEVX   ; // Z   pitch (cm)                        
   
   //  fVTX Layer info
-  for(Int_t i=0;i<=fNSMPVX;i++){
+  Int_t i;
+  for(i=0;i<=fNSMPVX;i++){
     smrvgo_.rcyvx[i]    = fVTXLayer[i][0] ; // radius (cm)                   
     smrvgo_.zcyvx[i][0] = fVTXLayer[i][1] ; // Z-(cm)                        
     smrvgo_.zcyvx[i][1] = fVTXLayer[i][2] ; // Z+(cm)                        

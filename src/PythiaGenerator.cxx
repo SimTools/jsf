@@ -88,7 +88,8 @@ Bool_t PythiaGenerator::Process(Int_t ev)
    Int_t ks,kf,kh,kfa;
    Float_t charge, xctau, life, mass;
    Int_t idhist[4001];
-   for(Int_t i=0;i<4001;i++){ idhist[i]=0 ; }
+   Int_t i;
+   for(i=0;i<4001;i++){ idhist[i]=0 ; }
    Int_t  ndaughter, firstdaughter, mother ;
 
    for(i=n0+1;i<=np;i++) {
