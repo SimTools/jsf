@@ -10,7 +10,7 @@
   for(Int_t i=1;i<=maxevt;i++){
     if( !jsf->GetEvent(i) ) break;
 
-    JSFQuickSim *sim=jsf->FindModule("JSFQuickSim");
+    JSFQuickSim *sim=(JSFQuickSim*)jsf->FindModule("JSFQuickSim");
     JSFQuickSimBuf *sbuf=(JSFQuickSimBuf*)sim->EventBuf();
   
     JSFHadronizer *had=(JSFHadronizer*)jsf->FindModule("JSFHadronizer");
