@@ -113,7 +113,9 @@ JSFReturnCode_t JSFReadMEGenerator::SetHEPEUP(JSFHEPEUP &hepeup)
       else {      iret=hepeup.ReadFile(*fEventInput);    }
       fReadEvents++;
     }
-    cout << "JSFReadMEGenerator skipped first " << fReadEvents-1 << " events " << endl;
+    if( fFirstEvent > 1 ) {
+      cout << "JSFReadMEGenerator skipped first " << fReadEvents-1 << " events " << endl;
+    }
   }
   else {
     if( IsGZipped() ) {  iret=hepeup.ReadFile(*fgzfile);     }

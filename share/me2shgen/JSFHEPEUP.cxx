@@ -19,11 +19,19 @@
 #include "JSFHEPEUP.h"
 
 #include "TString.h"
+#ifdef __USEISOCXX__
 #include <iostream>
 #include <fstream>
+#else
+#include <fstream>
+#include <iostream.h>
+#endif
+
 #include <sstream>
-#include "JSFReadGZippedFile.h"
+#include <string>
 using namespace std;
+
+#include "JSFReadGZippedFile.h"
 
 // --- HEPEUP Common
 static const Int_t kMAXNUP=500;
@@ -372,8 +380,9 @@ Bool_t JSFHEPEUP::ReadFile(JSFReadGZippedFile &gzfile)
     return kFALSE;
   }
 
-  istringstream istr;
-  istr.str(instr);
+    
+  string input(instr);
+  istringstream istr(input);
   istr >> fNUP >> fIDPRUP >> fXWGTUP >> fSCALUP >> fAQEDUP >> fAQCDUP ;
 
   if( fNUP > noldup ) {
@@ -397,12 +406,12 @@ Bool_t JSFHEPEUP::ReadFile(JSFReadGZippedFile &gzfile)
 
   for(Int_t i=0;i<fNUP;i++) {
     Int_t ir=gzfile.GetLine(instr, 1024);
-    if( ir <= 0 || gzfile.IsEOF() ) {
+     if( ir <= 0 || gzfile.IsEOF() ) {
       fNUP=0;
       return kFALSE;
     }
-    istringstream istr;
-    istr.str(instr);
+    string input2(instr);
+    stringstream istr(input2);
     istr >>  fIDUP[i] >> fISTUP[i] >> fMOTHUP[2*i] >> fMOTHUP[2*i+1] 
        >> fICOLUP[2*i] >> fICOLUP[2*i+1] 
        >> fPUP[5*i] >> fPUP[5*i+1] >> fPUP[5*i+2] >> fPUP[5*i+3] >> fPUP[5*i+4] 
