@@ -1,0 +1,51 @@
+This directory contains source codes to run Jupiter Geant4 simulation in 
+JSF framework and examples.
+
+------------------------------------------------------------
+How to build libraries.
+------------------------------------------------------------
+This package is based on Geant4.4.1 and the latest Jupiter 
+( as of 31-July-2002 ).
+
+To compile/link libraries,
+(1) define environment parameters required by Geant4.
+    (a) Imakefile(Makefile) of jsfj4 assumes all Geant4 includes 
+	are in $(G4INSALL)/include and libraries in 
+	$(G4INSTALL)/lib/$(G4SYSTEM)
+    (b) Geant4 library must be provided as shared libraries.
+
+(2) define JUPITERROOT, which is required by Jupiter.
+
+(3) In this directory ($JSFROOT/example/jsfj4) do,
+   $ xmkmf -a
+   $ make
+   $ make install
+   
+   Then, the shared library, libJSFJ4.so, is installed in $(JSFROOT)/lib
+ 
+
+------------------------------------------------------------
+How to run
+------------------------------------------------------------
+A sample script to run jsf is  runexample
+
+
+------------------------------------------------------------
+How to access data
+------------------------------------------------------------
+Jupiter data stored in jsfj4 are,
+PrimaryVertices, VTXHits, and CDCHits. They are objects of
+JSFJ4PrimaryVertices, JSFJ4VVTXHits, and JSFJ4CDCHits.
+JSFJ4PrimaryVertices includes pointers to JSFJ4PrimaryParticles.
+
+Example to access are,
+  JSFJ4 *jsfj4=gJSF->FindModule("JSFJ4");
+  JSFJ4Buf *jsfj4buf=(JSFJ4Buf*)jsfj4->EventBuf();
+  TObjArray *vtxhits=(TObjArray*)jsfj4buf->GetComponent("VTXHits");
+
+  for(Int_t iv=0;iv<vtxhits->GetEntries();iv++){
+     JSFJ4VTXHit *v=(JSFJ4VTXHit*)vtxhits->UncheckedAt(iv);
+     .........
+  }
+
+Other example can be found in UserAnalysis.C
