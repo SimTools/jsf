@@ -37,7 +37,7 @@ HDR	      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRC)) \
 
 LIBS	      =	-L$(LCLIBROOT)/lib -lLUHADR -lTAUOLA \
 		$(ROOTLIBS) $(ROOTGLIBS) \
-		-L/cern/pro/lib -ljetset74  -lpdflib804 -lg2c -lnsl
+		-L/cern/pro/lib -ljetset74  -lpdflib804 -lg2c /* -lnsl */
 
 CXXFLAGS     += -D__PYTHIA_VERSION__=5 
 
