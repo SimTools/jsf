@@ -17,18 +17,26 @@ install : lib html include
 	( cd example/FFbarSpring ; xmkmf ; make )
 	( cd example/CCDAnal ; xmkmf ; make )
 	( cd example/ZHStudy ; xmkmf ; make )
+	( cd example/ww ; xmkmf ; make )
+	( cd example/guiexam1 ; xmkmf ; make )
 
 clean: 
 	( cd src ; make clean )
 	( cd example/FFbarSpring ; make clean )
 	( cd example/CCDAnal  ; make clean )
 	( cd example/ZHStudy  ; make clean )
+	( cd example/ww ; make clean )
+	( cd example/guiexam1 ; make clean )
 
 web:
 	( cd example/CCDAnal ; ./ccd -q -b html.C ; \
 		cd $(JSFROOT)/html ; mv USER_Index.html CCDAnal_Index.html)
 	( cd example/FFbarSpring ; ./jsf -q -b html.C ; \
 		cd $(JSFROOT)/html ; mv USER_Index.html FFbarSpring_Index.html)
+	( cd example/ww ; ./jsf -q -b html.C ; \
+		cd $(JSFROOT)/html ; mv USER_Index.html ww_Index.html)
+	( cd example/guiexam1 ; $(JSFROOT)/bin/jsf -q -b html.C ; \
+		cd $(JSFROOT)/html ; mv USER_Index.html guiexam1_Index.html)
 	( cd src ; ../bin/jsf -q -b html.C ; \
 		cd $(JSFROOT)/html ; mv USER_Index.html JSFMain_Index.html)
 	( perl bin/webindx > html/JSF_Index.html )
@@ -47,6 +55,8 @@ distclean:
 	( cd example/FFbarSpring ; make distclean )
 	( cd example/CCDAnal ; make distclean )
 	( cd example/ZHStudy ; make distclean )
+	( cd example/ww ; make distclean )
+	( cd example/guiexa1 ; make distclean )
 	( cd html ; rm -f *.html *.h *.ps *~ ; rm -rf src )
 	( rm -r lib ; rmdir html )
 	( cd macro ; rm -f jsf.root , PYTHIA.SEED )
