@@ -5,7 +5,7 @@
 
 set typeos=`uname`
 if ( $typeos == "HI-UX" ) then
-   set destdir="/:/w/30/miyamoto/simdst/sample"
+   set destdir="/:/ea0/simdst/hiux"
 else
    set destdir="/home/miyamoto/simdst/i386"
 endif
@@ -13,5 +13,6 @@ if( `logname` != "miyamoto" ) destdir="./"
 
 set dstr=`date +%y%m%d`
 ./allrun $destdir >&! $destdir/jobout.allrun.$dstr &
+
 
 exit

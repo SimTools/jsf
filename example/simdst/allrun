@@ -34,3 +34,10 @@ $exec -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=e simdst.C
 $exec -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=mu simdst.C
 $exec -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=tau simdst.C
 date
+
+if ( $destdir="/:/ea0/simdst/hiux" ) then
+  cd /:/ea0/simdst/hiux
+  chmod 444 *.dat
+  chmod 444 *.param
+
+endif
