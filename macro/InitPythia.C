@@ -84,6 +84,14 @@ void InitPythia()
     if( izdcy > 10 && izdcy < 16 ) tpy->SetMDME(153+izdcy,1,1);
   }
 
+  //*******************************************
+  //* Set Other options
+  //*******************************************
+
+  if( jsf->Env()->GetValue("JSFGUI.Pythia.Geant3Decay",0) == 1 ) {
+    tpy->SetMSTJ(22,2);
+  }
+
 }
 
 
