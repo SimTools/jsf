@@ -20,11 +20,23 @@ To-Do ( listed in arbitrary order ) -- Help wanted
 11) Prepare interface to read generator data with only parton information
     such as Grace.
 	
+
+	
+**********************************************************
+jsf-1-10  Modification toward jsf-1-10 A.Miyamoto
+**********************************************************
+-----------------------	
+25-June-1999 A.Miyamoto
+-----------------------	
+(1) Installed on RH6.0 using ROOT 2.22/06.
+    bin/makespec is modified to create include/JSFConfig.h, where system information are
+    stored.  Now JSFConfig.h can be used both in source files and Imakefiles.
+(2) Due to change in ROOT 2.22, Imakefiles are modified slightly.
+	
 	
 **********************************************************
 jsf-1-9  28-May-1999 A.Miyamoto
 **********************************************************
-
 -----------------------	
 27-May-1999 A.Miyamoto
 -----------------------	
