@@ -25,17 +25,18 @@
 class JSFHadronizer : public JSFFULLGenerator {
 protected:
    JSFSpring  *fSpring;
+   Bool_t      fCopySpringClassDataToBank; // 
 public:
 public:
    JSFHadronizer(const char *name="JSFHadronizer", 
 		 const char *title="JSFHadronizer");
-//   JSFHadronizer(const char *name, const char *title, JSFSpring *spring);
-//   virtual      ~JSFGenerator();
-//   virtual void  Clear(Option_t *option ="");
-//   virtual void  PrintInfo(){}
 
    virtual Bool_t Initialize();
    virtual Bool_t Process(Int_t event);
+
+   void SetCopySpringClassDataToBank(Bool_t flag){
+     fCopySpringClassDataToBank= flag ;}
+   Bool_t GetCopySpringClassDataToBank(){return fCopySpringClassDataToBank ; }
 //   virtual void  BeginRun(Int_t nrun);
 
 
@@ -44,3 +45,5 @@ public:
 
 
 #endif
+
+

@@ -46,6 +46,8 @@ JSFHadronizer::JSFHadronizer(const char *name, const char *title)
 //  data is hadronized.
 
   fSpring=0;
+  fCopySpringClassDataToBank=kTRUE;
+
   TList *list=gJSF->Modules();
   TIter  next(list);
   JSFModule *module;
@@ -101,7 +103,7 @@ Bool_t JSFHadronizer::Process(Int_t ev)
  
   JSFFULLGenerator::Process(ev);
 
-  TBPUT(fSpring);
+  if( fCopySpringClassDataToBank ) TBPUT(fSpring);
 
   Int_t idrec=1;
   Int_t level=1;

@@ -1,9 +1,9 @@
 #---------------------------------------------------
 
 #include    "../conf/makejsf.tmpl"
-CERNLIBS      = -L/cern/pro/lib -ljetset74 -lpythia
+CERNLIBS      = -L/cern/pro/lib -ljetset74 -lpythia -lpacklib
 #if defined(hitachiArchitecture)
-CERNLIBS      = -L/cern/97a_nog/lib -ljetset74
+CERNLIBS      = -L/cern/97a_nog/lib -ljetset74 -lpacklib
 #endif
 
 ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
@@ -15,12 +15,15 @@ ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
 
 ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
 
-LCLIB 	  = $(LCDIR)/lib
+LCLIBDIR      = $(LCDIR)/lib
 
-ANALLIB   =  -L$(LCLIB) -lLCFULL -lGENUTIL -lLUHADR -lTAUOLA \
-	    -lLTKCL -lHELASV204 -lBASESV5.1 -lSIMJLC -lFORTLIB  \
-	    -lTBS -lLCFULL -lGENUTIL -lLUHADR  -lCOM -lCLI \
-	    -lFORTLIB -lTBS
+ANALLIB = -L$(LCLIBDIR) -lGENUTIL -lLUHADR -lTAUOLA \
+        -lSIMJLC -lLTKCL \
+        -lLCFULL -lBASESV5.1 -lTBS \
+        -lHELASV204 -lFORTLIB \
+        -lCOM -lCLI \
+        $(EXTRALIBS)
+
 
 FFLAGS = -I$(LCDIR)/simjlc/src -I$(LCDIR)/util/fortlib/src 
 
@@ -117,3 +120,4 @@ libJSFLCFULL.$(SrcSuf): $(HDRJSFLCFULL)
 
 .$(SrcSuf).$(ObjSuf):
 	$(CXX) $(CXXFLAGS) -c $<
+
