@@ -97,6 +97,8 @@ DebugGenerator::DebugGenerator(const char *name, const char *title)
 DebugGenerator::~DebugGenerator()
 {
   if( fHistograms ) delete fHistograms;
+  if( hNparticle ) delete hNparticle;
+  if( hPabs ) delete hPabs;
 }
 
 //_____________________________________________________________________________

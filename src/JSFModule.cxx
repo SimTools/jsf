@@ -175,7 +175,7 @@ void JSFModule::ConfDirectory()
    else {
      //     TList *dlist=gDirectory->GetListOfKeys();
      //if ( dlist->FindObject(name) == NULL) gDirectory->mkdir(name);
-     gDirectory->cd(name);
+     // gDirectory->cd(name);
    }
 }
 
@@ -225,6 +225,7 @@ void JSFModule::MakeBranch(TTree *tree)
      Char_t *name = new Char_t [lc+10];
      sprintf(name,"%s-EventBuf",GetName());
      fBranch = tree->Branch(name, fEventBuf->ClassName() ,&fEventBuf, bsize, split);
+     delete name;
    }
 }
 
@@ -241,6 +242,7 @@ void JSFModule::SetBranch(TTree *tree)
      sprintf(name,"%s-EventBuf",GetName());
      fBranch=tree->GetBranch(name);
      fBranch->SetAddress(&fEventBuf);
+     delete name;
    }
 }
 
@@ -271,6 +273,7 @@ void JSFEventBuf::SetHeader()
   TDatime *dtime=new TDatime();
   fDate=dtime->GetDate(); 
   fTime=dtime->GetTime(); 
+  delete dtime;
 }
 
 
