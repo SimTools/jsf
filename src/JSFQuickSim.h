@@ -50,11 +50,11 @@ private:
    Int_t            fNEMCHits  ;  // Number of EMC hit cells
    Int_t            fNHDCHits  ;  // Number of HDC hit cells
 
-   TClonesArray    *fTracks    ;  //-> Pointers to Particles
-   TClonesArray    *fCDCTracks ;  //-> Pointer to CDC Tracks
-   TClonesArray    *fVTXHits   ;  //-> Pointers to VTX Hits
-   TClonesArray    *fEMCHits   ;  //-> Pointers to EMC Hit cells 
-   TClonesArray    *fHDCHits   ;  //-> Pointers to EMC Hit cells 
+   TObjArray       *fTracks    ;  // -> Pointers to Particles
+   TClonesArray    *fCDCTracks ;  // -> Pointer to CDC Tracks
+   TClonesArray    *fVTXHits   ;  // -> Pointers to VTX Hits
+   TClonesArray    *fEMCHits   ;  // -> Pointers to EMC Hit cells 
+   TClonesArray    *fHDCHits   ;  // -> Pointers to EMC Hit cells 
 
    Int_t      fCDCTrackIsCDCVTX; //! 0 when CDC track is not CDC+VTX combined track.
 
@@ -80,7 +80,8 @@ public:
   void SetNTracks(Int_t nt){ fNTracks=nt;}
   Int_t GetNtracks(){ return fNTracks; } // kept for backward compatibility
   Int_t GetNTracks(){ return fNTracks; }
-  TClonesArray *GetTracks(){ return fTracks; }
+  //   TClonesArray *GetTracks(){ return fTracks; }
+  TObjArray *GetTracks(){ return fTracks; }
 
   void SetNCDCTracks(Int_t nt){ fNCDCTracks=nt;}
   Int_t GetNCDCTracks(){ return fNCDCTracks; }
@@ -102,9 +103,7 @@ public:
   void Delete(const Option_t *opt="");
   void Append(JSFQuickSimBuf *src, Int_t numgp=0);
 
-  
-
-  ClassDef(JSFQuickSimBuf, 2) // QuickSim event buffer class.
+  ClassDef(JSFQuickSimBuf, 3) // QuickSim event buffer class.
 
 };
 

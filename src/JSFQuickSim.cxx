@@ -117,6 +117,8 @@ typedef struct {
 extern COMMON_PRJUNK prjunk_;
 // *****************************************************
 
+// TClonesArray *JSFQuickSimBuf::fTracks=0;
+
 
 //_____________________________________________________________________________
 JSFQuickSim::JSFQuickSim(const Char_t *name, const Char_t *title, const Char_t *opt)
@@ -137,7 +139,7 @@ JSFQuickSimBuf::JSFQuickSimBuf(const char *name, const char *title, JSFQuickSim 
        : JSFEventBuf(name,title, sim)
 {
   fNTracks=0;
-  fTracks= new TClonesArray("JSFLTKCLTrack", 1000);
+  fTracks = new TObjArray(1000);
 
   fNCDCTracks=0;
   fCDCTracks= new TClonesArray("JSFCDCTrack", kMaxCDCTracks);
@@ -153,6 +155,7 @@ JSFQuickSimBuf::JSFQuickSimBuf(const char *name, const char *title, JSFQuickSim 
 
   fCDCTrackIsCDCVTX = gJSF->Env()->GetValue("JSFQuickSim.CDCTrackIsCDCVTX",1);
 
+
 }
 
 //_____________________________________________________________________________
@@ -160,17 +163,23 @@ JSFQuickSim::~JSFQuickSim()
 {
   if( fParam ) delete fParam;
   if( fEventBuf  ) delete fEventBuf;
+
 }
 
 //_____________________________________________________________________________
 JSFQuickSimBuf::~JSFQuickSimBuf()
 {
-  Clear();
-  if(fTracks)    delete fTracks;
+  //  Clear();
   if(fCDCTracks) delete fCDCTracks;
   if(fVTXHits)   delete fVTXHits;
   if(fEMCHits)   delete fEMCHits;
   if(fHDCHits)   delete fHDCHits;
+
+  if(fTracks)    { 
+     fTracks->Delete();
+     delete fTracks;
+  }
+
 }
 
 //_____________________________________________________________________________
@@ -404,7 +413,7 @@ Bool_t JSFQuickSimBuf::MakeEventBuf()
    if( !MakeCALHits() ) return kFALSE;
    if( !MakeCDCTracks() ) return kFALSE;
    if( !MakeVTXHits() ) return kFALSE;
-   
+
    MakeJSFLTKCLTrackPointers();
 
    return kTRUE;
@@ -473,8 +482,9 @@ Bool_t JSFQuickSimBuf::MakeJSFLTKCLTracks()
 {
   // Copy Production:Combined track banks into JSFLTKCLTrack class
 
-  TClonesArray &tracks=*(GetTracks());
-  tracks.Delete();
+  // TClonesArray &tracks=*(GetTracks());
+  TObjArray &tracks=*(GetTracks());
+  if( tracks.GetEntries() > 0 ) {  tracks.Delete(); }
   Int_t nt=0;
 
   Char_t *bankname[64]={ "Production:Combined_Gamma_Track",
@@ -493,7 +503,9 @@ Bool_t JSFQuickSimBuf::MakeJSFLTKCLTracks()
 	Warning("MakeJSFLTKCLTrack",
        " Too many CDC track associated to the Combined track. nw=%d",  nw);
        }
-       new(tracks[nt++])  JSFLTKCLTrack(bank[ib], data);
+       //       new(tracks[nt++])  JSFLTKCLTrack(bank[ib], data);
+       tracks.Add(new JSFLTKCLTrack(bank[ib], data));
+       nt++;
      }
   }
   SetNTracks(nt);
@@ -722,7 +734,6 @@ void JSFQuickSimBuf::SetPointers()
     t->AddVTXHit(vh);
   }
 
-
 }
 
 
@@ -839,10 +850,11 @@ void JSFQuickSimBuf::AppendLTKCLTracks(JSFQuickSimBuf *src, Int_t numgp)
 #else
   Int_t indlt[nltsrc];
 #endif
-  TClonesArray *tracks=src->GetTracks(); 
+  //  TClonesArray *tracks=src->GetTracks(); 
+  TObjArray *tracks=src->GetTracks(); 
   for(Int_t i=0;i<nltsrc;i++){
     JSFLTKCLTrack *t=(JSFLTKCLTrack*)tracks->UncheckedAt(i);
-    new((*fTracks)[fNTracks]) JSFLTKCLTrack(*t);
+    fTracks->Add(new JSFLTKCLTrack(*t));
     indlt[i]=fNTracks;
     fNTracks++;
   }

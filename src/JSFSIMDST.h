@@ -62,7 +62,7 @@ protected:
   Int_t fNGeneratorParticles;       //! Number of generator particle
   TClonesArray *fGeneratorParticles; //! Pointer to the generator particle buffer.
   Int_t fNCombinedTracks;         //! Number of combined tracks.
-  TClonesArray *fCombinedTracks; //!  Pointer to the Combined track
+  TObjArray *fCombinedTracks; //!  Pointer to the Combined track
   
   Int_t fNCDCTracks;        //! Number of CDC Tracks.
   TClonesArray *fCDCTracks; //! Pointer to the CDC tracks.
@@ -104,7 +104,7 @@ public:
   Int_t GetNGeneratorParticles(){ return fNGeneratorParticles; }
   TClonesArray *GetGeneratorParticles(){ return fGeneratorParticles;}
   Int_t GetNLTKCLTracks(){ return fNCombinedTracks;}
-  TClonesArray *GetLTKCLTracks(){ return fCombinedTracks;}
+  TObjArray *GetLTKCLTracks(){ return fCombinedTracks;}
   Int_t GetNCDCTracks(){ return fNCDCTracks;}
   TClonesArray *GetCDCTracks(){ return fCDCTracks;}
   Int_t GetNVTXHits(){ return fNVTXHits;}

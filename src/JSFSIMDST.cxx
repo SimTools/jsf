@@ -526,7 +526,7 @@ void JSFSIMDSTBuf::SetClonesArray()
   // Set pointers for TClonesArray;
 
       fGeneratorParticles= new TClonesArray("JSFGeneratorParticle", kGenMax);
-      fCombinedTracks = new TClonesArray("JSFLTKCLTrack", kTrkMax);
+      fCombinedTracks = new TObjArray(kTrkMax);
       fCDCTracks= new TClonesArray("JSFCDCTrack", kTrkMax);
       fVTXHits= new TClonesArray("JSFVTXHit", kVTXBufSize);
       fEMCHits= new TClonesArray("JSFEMCHit", kClsMax);
@@ -654,7 +654,7 @@ Bool_t JSFSIMDSTBuf::UnpackDST(Int_t nev)
   // ***************************************
   // Put LTKCLTrack class
   // ***************************************
-  TClonesArray &cta = *(fCombinedTracks);
+  TObjArray &cta = *(fCombinedTracks);
   for(i=0;i<fNCombinedTracks;i++){
     new(cta[i]) JSFLTKCLTrack(&cmbt[i][0]);
     lt=(JSFLTKCLTrack*)cta.UncheckedAt(i);

@@ -1,3 +1,4 @@
+
 #ifndef __JSFLTKCLTrack__
 #define __JSFLTKCLTrack__
 
@@ -58,7 +59,7 @@ protected:
   void SetEMGen(JSFGeneratorParticle *emg){ fEMGen.Add(emg); }
 
 public:
-  JSFLTKCLTrack() {}
+  JSFLTKCLTrack();
   virtual ~JSFLTKCLTrack();
 
   //  JSFLTKCLTrack(EJSFLTKCLTrackBank bank, TVector& P, Real_t ecl,
