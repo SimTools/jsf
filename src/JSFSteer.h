@@ -87,6 +87,7 @@ public:
   void SetOutput(TFile& file){ fOFile = &file ; return ; }
   TFile *GetOutput(){ return fOFile; }
   TFile *GetInput(){ return fIFile; }
+  virtual void SetIOFiles();
 
   virtual void  SetRunNumber(Int_t run=1) {           fRun=run;  }
   virtual void  SetEventNumber(Int_t event=1) {fEvent=event;}
