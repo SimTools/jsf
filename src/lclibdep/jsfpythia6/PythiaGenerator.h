@@ -34,8 +34,8 @@ private:
   Double_t  fRRPY[100]; // 			     
 #else
   TPythia  *fPythia  ; //! Pointer to the pythia class
-  Int_t    fMRLU[6];   // Random seed at the begining of event
-  Float_t  fRRLU[100]; // 			     
+  Int_t    fMRPY[6];   // Random seed at the begining of event
+  Float_t  fRRPY[100]; // 			     
 #endif
   Char_t   fFrame[8]; // Name of beam particle
   Char_t   fBeamParticle[16]; // Name of beam particle

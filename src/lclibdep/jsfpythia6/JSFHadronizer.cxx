@@ -6,6 +6,14 @@
 //  create JSFGeneratorParticle class.
 //  
 //$Id$  
+//
+//
+// (Note)
+// 2005/02/28 K.Fujii	pythia calls via fPythia currently broken,
+// 			use direct calls.
+//			TLorentzVector::Boost does not work, 
+//			possibly precision problem, use ubstfd/bk.
+//
 //////////////////////////////////////////////////////////////////
 
 
@@ -14,57 +22,56 @@
 #include "JSFLCFULL.h"  
 #include "JSFHadronizer.h"
 
-#if __PYTHIA_VERSION__ >= 6 
+#if __PYTHIA_VERSION__ <= 5 
+#define pyjoin lujoin
+#define pyshow lushow
+#define pyprep luprep
+#define pychge luchge
+#define pylist lulist
+#define pycomp lucomp
+#define pyexec luexec
+
+#define pydat1 ludat1
+#define pydat2 ludat2
+#define pydat3 ludat3
+#define pydatr ludatr
+#define pyjets lujets
+#define MRPY   MRLU
+#define RRPY   RRLU
+#endif
+
 extern "C" {
-extern void pydata_();
-extern void tauint_(int *inut, int *iout, int *jak1, 
+extern void  pydata_();
+extern void  tauint_(int *inut, int *iout, int *jak1, 
 		     int *jak2, int *itdkrc, int *keya1, float *xk0dec);
-//extern void lutuhl_(int *one, int *ihlon);
-extern void taudec_(int *kto, int *npnt, float *heltau, float p4tau[4]);
-extern void pyjoin_(int *njoin, int ijoin[]);
-extern void pyshow_(int *ip1, int *ip2, double *qmax);
-extern void pyprep_(int *ip);
-extern int  pychge_(int *kf);
-extern double pymass_(int *kf);
-extern void pylist_(int *flag);
-extern void pyhepc_(int *flag);
-extern int  pycomp_(int *kf);
-extern void pyexec_();
-extern void pyhepc2_(int *flag, int *n, int *npad, int k[5][4000],
+extern void  taudec_(int *kto, int *npnt, float *heltau, float p4tau[4]);
+
+extern void  pyjoin_(int *njoin, int ijoin[]);
+extern void  pyshow_(int *ip1, int *ip2, double *qmax);
+extern void  pyprep_(int *ip);
+extern int   pychge_(int *kf);
+extern void  pylist_(int *flag);
+extern int   pycomp_(int *kf);
+extern void  pyexec_();
+
+#if __PYTHIA_VERSION__ >= 6 
+extern void  pyhepc2_(int *flag, int *n, int *npad, int k[5][4000],
                                 double p[5][4000], double v[5][4000],
                                 int mstu[200], double paru[200],
                                 int mstj[200], double parj[200],
                                 int kchg[4][500], double pmas[4][500],
                                 double parf[2000], double vckm[4][4]);
-
-extern void ubstfd_(float pb[4], float pr[4], float pa[4]);
-extern void ubstbk_(float pb[4], float pr[4], float pa[4]);
-};
 #else
-extern "C" {
-extern void  pydata_();
-extern void  tauint_(int *inut, int *iout, int *jak1, 
-		     int *jak2, int *itdkrc, int *keya1, float *xk0dec);
-//extern void  lutuhl_(int *one, int *ihlon);
-extern void  taudec_(int *kto, int *npnt, float *heltau, float p4tau[4]);
-extern void  lujoin_(int *njoin, int ijoin[]);
-extern void  lushow_(int *ip1, int *ip2, double *qmax);
-extern void  luprep_(int *ip);
-extern int   luchge_(int *kf);
-extern void  lulist_(int *flag);
 extern void  luhepc2_(int *flag, int *n, int k[5][4000], float p[5][4000], 
                                                          float v[5][4000],
                                  int mstu[200], float paru[200],
                                  int mstj[200], float parj[200],
                                  int kchg[3][500], float pmas[4][500],
                                  float parf[2000], float vckm[4][4]);
-extern void  luexec_();
-extern int   lucomp_(int *kf);
-//extern void  lugive_(char* opt);
+#endif
 extern void  ubstfd_(float pb[4], float pr[4], float pa[4]);
 extern void  ubstbk_(float pb[4], float pr[4], float pa[4]);
 };
-#endif
 
 
 Int_t JAK1, JAK2, ITDKRC, KEYA1;
@@ -72,38 +79,7 @@ Float_t XK0DEC;
 
 ClassImp(JSFHadronizer)
 
-#if __PYTHIA_VERSION__ >= 6
-typedef struct {
-  Int_t    MSTU[200]; 
-  Double_t PARU[200];
-  Int_t    MSTJ[200]; 
-  Double_t PARJ[200];
-} COMMON_PYDAT1;
-extern COMMON_PYDAT1 pydat1_;
-
-typedef struct {
-  Int_t    KCHG[4][500]; 
-  Double_t PMAS[4][500];
-  Double_t PARF[2000];
-  Double_t VCKM[4][4];
-} COMMON_PYDAT2;
-extern COMMON_PYDAT2 pydat2_;
-
-typedef struct {  // Common for JETSET random variables
-  Int_t mrpy[6];
-  Float_t rrpy[100];
-} COMMON_PYDATR;
-extern COMMON_PYDATR pydatr_;
-
-typedef struct {
-  Int_t    N;
-  Int_t    NPAD;
-  Int_t    K[5][4000];
-  Double_t P[5][4000];
-  Double_t V[5][4000];
-} COMMON_PYJETS;
-extern COMMON_PYJETS pyjets_;
-#else
+#if __PYTHIA_VERSION__ <= 5
 #if 0
 typedef struct { //  Flag for parton shower on/off
   Int_t NDoPartonShower;
@@ -116,51 +92,41 @@ typedef struct {
   Float_t PARU[200];
   Int_t   MSTJ[200]; 
   Float_t PARJ[200];
-} COMMON_LUDAT1;
-extern COMMON_LUDAT1 ludat1_;
+} Pydat1_t;
 
 typedef struct {
   Int_t   KCHG[3][500]; 
   Float_t PMAS[4][500];
   Float_t PARF[2000];
   Float_t VCKM[4][4];
-} COMMON_LUDAT2;
-extern COMMON_LUDAT2 ludat2_;
+} Pydat2_t;
 
 typedef struct {
-  Int_t mdcy[3][500], mdme[2][2000];
-  Float_t brat[2000];
-  Int_t kfdp[5][2000];
-} COMMON_LUDAT3;
-extern COMMON_LUDAT3 ludat3_;
+  Int_t   MDCY[3][500];
+  Int_t   MDME[2][2000];
+  Float_t BRAT[2000];
+  Int_t   KFDP[5][2000];
+} Pydat3_t;
 
 typedef struct {  // Common for JETSET random variables
-  Int_t mrlu[6];
-  Float_t rrlu[100];
-} COMMON_LUDATR;
-extern COMMON_LUDATR ludatr_;
+  Int_t   MRPY[6];
+  Float_t RRPY[100];
+} Pydatr_t;
 
 typedef struct {
   Int_t   N;
   Int_t   K[5][4000];
   Float_t P[5][4000];
   Float_t V[5][4000];
-} COMMON_LUJETS;
-extern COMMON_LUJETS lujets_;
+} Pyjets_t;
 
-typedef struct {
-        Int_t    nevhep;
-        Int_t    nhep;
-        Int_t    isthep[4000];
-        Int_t    idhep[4000];
-        Int_t    jmohep[4000][2];
-        Int_t    jdahep[4000][2];
-        Double_t phep[4000][5];
-        Double_t vhep[4000][4];
-} COMMON_HEPEVT;
-
-extern COMMON_HEPEVT hepevt_;
 #endif
+
+extern Pydat1_t pydat1_;
+extern Pydat2_t pydat2_;
+extern Pydat3_t pydat3_;
+extern Pydatr_t pydatr_;
+extern Pyjets_t pyjets_;
 
 /*
 #ifndef __LCLIBRAN_USE_RANMAR__ 
@@ -209,17 +175,11 @@ JSFHadronizer::JSFHadronizer(const char *name, const char *title)
 
   fDebug = gJSF->Env()->GetValue("JSFHadronizer.DebugFlag",0);
 
-#if __PYTHIA_VERSION__ >= 6
   fDoesShower = gJSF->Env()->GetValue("JSFHadronizer.PartonShower",1);
-  fPythia = new TPythia6();
-#else
-#if 0
-  lufragflag_.NDoPartonShower = gJSF->Env()->GetValue("JSFHadronizer.PartonShower",1);
-#else
-  fDoesShower = gJSF->Env()->GetValue("JSFHadronizer.PartonShower",1);
-#endif
-#endif
 
+#if __PYTHIA_VERSION__ >= 6
+  fPythia = new TPythia6();
+#endif
 }
 
 //_____________________________________________________________________________
@@ -242,15 +202,15 @@ Bool_t JSFHadronizer::Initialize()
    Int_t iout=6;
    tauint_(&inut, &iout, &JAK1, &JAK2, &ITDKRC,  &KEYA1, &XK0DEC);
 
-#if __PYTHIA_VERSION__ >= 6
+#ifdef __USE_TPYTHIA__
    fPythia->SetMDCY(23,1,0);
    fPythia->SetMDCY(24,1,0);
    fPythia->SetMDCY(33,1,0);
 #else
    // Int_t one=1;
-   ludat3_.mdcy[0][22]=0;
-   ludat3_.mdcy[0][23]=0;
-   ludat3_.mdcy[0][32]=0;
+   pydat3_.MDCY[0][22]=0;
+   pydat3_.MDCY[0][23]=0;
+   pydat3_.MDCY[0][32]=0;
 #endif
 
    return kTRUE ;
@@ -268,13 +228,8 @@ Bool_t JSFHadronizer::Process(Int_t ev)
   JSFFULLGenerator::Process(ev);
 
   Int_t i;
-#if __PYTHIA_VERSION__ >= 6
-  for(i=0;i<6;i++){ fMRPY[i]=pydatr_.mrpy[i];}
-  for(i=0;i<100;i++){ fRRPY[i]=pydatr_.rrpy[i];}
-#else
-  for(i=0;i<6;i++){ fMRLU[i]=ludatr_.mrlu[i];}
-  for(i=0;i<100;i++){ fRRLU[i]=ludatr_.rrlu[i];}
-#endif
+  for(i=0;i<6;i++){ fMRPY[i]=pydatr_.MRPY[i];}
+  for(i=0;i<100;i++){ fRRPY[i]=pydatr_.RRPY[i];}
 /*
 #ifndef __LCLIBRAN_USE_RANMAR__
   for(i=0;i<98;i++){ fRASET1U[i]=raset1_.u[i];}
@@ -284,25 +239,7 @@ Bool_t JSFHadronizer::Process(Int_t ev)
 
   Int_t iret;
 
-#if __PYTHIA_VERSION__ >= 6
   Hadronize(fSpring, iret);
-#else
-#if 0
-  if( fCopySpringClassDataToBank ) TBPUT(fSpring);
-  Int_t idrec=1;
-  Int_t level=1;
-  Int_t idebug=0;
-  luhadr_(&idrec, &level, &idebug, &iret);
-  TBGET();  // Put hadronized results into Generator class.
-  // Remove Generator banks, since they are not necessary anymore.
-  gJSFLCFULL->TBDELB(1,"Spring:Parton_List",iret);
-  gJSFLCFULL->TBDELB(1,"Spring:Header",iret);
-  gJSFLCFULL->TBDELB(1,"Generator:Particle_List",iret);
-  gJSFLCFULL->TBDELB(1,"Generator:Header",iret);
-#else
-  Hadronize(fSpring, iret);
-#endif
-#endif
 
   if ( iret < 0 ) return kFALSE;
 
@@ -317,13 +254,8 @@ Bool_t JSFHadronizer::Process(Int_t ev)
 Bool_t JSFHadronizer::EndRun()
 {
   Int_t i;
-#if __PYTHIA_VERSION__ >= 6 
-  for(i=0;i<6;i++){ fMRPY[i]=pydatr_.mrpy[i];}
-  for(i=0;i<100;i++){ fRRPY[i]=pydatr_.rrpy[i];}
-#else
-  for(i=0;i<6;i++){ fMRLU[i]=ludatr_.mrlu[i];}
-  for(i=0;i<100;i++){ fRRLU[i]=ludatr_.rrlu[i];}
-#endif
+  for(i=0;i<6;i++){ fMRPY[i]=pydatr_.MRPY[i];}
+  for(i=0;i<100;i++){ fRRPY[i]=pydatr_.RRPY[i];}
 /*
 #ifndef __LCLIBRAN_USE_RANMAR__
   for(i=0;i<98;i++){ fRASET1U[i]=raset1_.u[i];}
@@ -366,13 +298,8 @@ void JSFHadronizer::Streamer(TBuffer &R__b)
        return;
      }
      JSFFULLGenerator::Streamer(R__b);
-#if __PYTHIA_VERSION__ >= 6
      R__b.ReadStaticArray(fMRPY);
      R__b.ReadStaticArray(fRRPY);
-#else
-     R__b.ReadStaticArray(fMRLU);
-     R__b.ReadStaticArray(fRRLU);
-#endif
 #ifndef __LCLIBRAN_USE_RANMAR__
      R__b.ReadStaticArray(fRASET1U);
      R__b.ReadStaticArray(fRASET1IJ97);
@@ -394,13 +321,8 @@ void JSFHadronizer::Streamer(TBuffer &R__b)
    if (R__b.IsReading()) {
       Version_t R__v = R__b.ReadVersion(); if (R__v) { }
       JSFFULLGenerator::Streamer(R__b);
-#if __PYTHIA_VERSION__ >= 6
       R__b.ReadStaticArray(fMRPY);
       R__b.ReadStaticArray(fRRPY);
-#else
-      R__b.ReadStaticArray(fMRLU);
-      R__b.ReadStaticArray(fRRLU);
-#endif
 #ifndef __LCLIBRAN_USE_RANMAR__
       R__b.ReadStaticArray(fRASET1U);
       R__b.ReadStaticArray(fRASET1IJ97);
@@ -408,13 +330,8 @@ void JSFHadronizer::Streamer(TBuffer &R__b)
    } else {
       R__b.WriteVersion(JSFHadronizer::IsA());
       JSFFULLGenerator::Streamer(R__b);
-#if __PYTHIA_VERSION__ >= 6
       R__b.WriteArray(fMRPY, 6);
       R__b.WriteArray(fRRPY, 100);
-#else
-      R__b.WriteArray(fMRLU, 6);
-      R__b.WriteArray(fRRLU, 100);
-#endif
 #ifndef __LCLIBRAN_USE_RANMAR__
       R__b.WriteArray(fRASET1U, 98);
       R__b.WriteArray(fRASET1IJ97, 2);
@@ -422,8 +339,6 @@ void JSFHadronizer::Streamer(TBuffer &R__b)
    }
 }
 #endif
-
-//#if __PYTHIA_VERSION__ >= 6
 
 // ____________________________________________________________
 void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
@@ -1014,10 +929,10 @@ C*    95/02/10  K.Fujii		New version for JETSET7.3.
 C*
 CC**********************************************************************
 */
-#if __PYTHIA_VERSION__ >= 6
+#ifdef __USE_TPYTHIA__
   Pyjets_t *pyjets=fPythia->GetPyjets();
 #else
-  COMMON_LUJETS *pyjets = &lujets_;
+  Pyjets_t *pyjets = &pyjets_;
 #endif
 
   //C--
@@ -1066,33 +981,22 @@ CC**********************************************************************
       Float_t pol=inlist[0][6]*fIHLON;
       Float_t tinlst[10];
       for(Int_t i=0;i<10;i++){ tinlst[i]=(Float_t)inlist[0][i]; }
-#if 0
-cerr << "&hepevt = " << &hepevt_ << endl;
-cerr << "&hepevt_.nhep = " << &hepevt_.nhep << endl;
-#endif
+
       taudec_(&kto,&one, &pol, &tinlst[1]);
 #if __PYTHIA_VERSION__ >= 6
-#if 0
-      pyhepc_(&two);
-#else
       pyhepc2_(&two, 
                &pyjets_.N, &pyjets_.NPAD, pyjets_.K, pyjets_.P, pyjets_.V,
                 pydat1_.MSTU, pydat1_.PARU, pydat1_.MSTJ, pydat1_.PARJ,
                 pydat2_.KCHG, pydat2_.PMAS, pydat2_.PARF, pydat2_.VCKM);
-#endif
 #else
       luhepc2_(&two, 
-               &lujets_.N, lujets_.K, lujets_.P, lujets_.V,
-                ludat1_.MSTU, ludat1_.PARU, ludat1_.MSTJ, ludat1_.PARJ,
-                ludat2_.KCHG, ludat2_.PMAS, ludat2_.PARF, ludat2_.VCKM);
+               &pyjets_.N, pyjets_.K, pyjets_.P, pyjets_.V,
+                pydat1_.MSTU, pydat1_.PARU, pydat1_.MSTJ, pydat1_.PARJ,
+                pydat2_.KCHG, pydat2_.PMAS, pydat2_.PARF, pydat2_.VCKM);
 #endif
       if( fDebug > 0 ) {
 	printf(" Tau decay .. \n");
-#if __PYTHIA_VERSION__ >= 6
 	pylist_(&one);
-#else
-	lulist_(&one);
-#endif
       }
     }
     //C--
@@ -1168,11 +1072,8 @@ cerr << "&hepevt_.nhep = " << &hepevt_.nhep << endl;
     //C--
     //C  Do LUJOIN.
     //C--
-#if __PYTHIA_VERSION__ >= 6
     pyjoin_(&njoin, ijoin);
-#else
-    lujoin_(&njoin, ijoin);
-#endif
+
     if( fDebug > 0 ) {
       printf(" After join  njoin=%d  ijoin=",njoin);
       for(Int_t k=0;k>njoin;k++){
@@ -1193,13 +1094,10 @@ cerr << "&hepevt_.nhep = " << &hepevt_.nhep << endl;
 	  - TMath::Power(pyjets->P[2][ip1-1]+pyjets->P[2][ip2-1],2);
 	qmx = TMath::Sqrt(qmx)-pyjets->P[4][ip1-1]-pyjets->P[4][ip2-1];
 	qmx = TMath::Max(qmx, 1.);
-#if __PYTHIA_VERSION__ >= 6
-	pyshow_(&ip1, &ip2, &qmx);
-#else
-	lushow_(&ip1, &ip2, &qmx);
-#endif
 
-#if __PYTHIA_VERSION__ >= 6
+	pyshow_(&ip1, &ip2, &qmx);
+
+#ifdef __USE_TPYTHIA__
 	if( fPythia->GetMSTU(23) != 0 || fPythia->GetMSTU(24) != 0 
 	    || fPythia->GetMSTU(28) != 0 ) {
 	  printf(" Warning .. JSFHadronizer::Fragmentation\n");
@@ -1249,29 +1147,19 @@ cerr << "&hepevt_.nhep = " << &hepevt_.nhep << endl;
       }
     } // end of loop   for(Int_t i=1;i<=nin;i++){
     Int_t one=1;
-#if __PYTHIA_VERSION__ >= 6 
+
     pyprep_(&one);
-#else
-    luprep_(&one);
-#endif
   }
   //C--
   //C  Do LUEXEC for fragmentation.
   //C-
-#if __PYTHIA_VERSION__ >= 6 
   pyexec_();
-#else
-  luexec_();
-#endif
+
   if( fDebug > 0 ) {
     printf(" After pyexec...\n");
-#if __PYTHIA_VERSION__ >= 6 
     pylist_(&one);
-#else
-    lulist_(&one);
-#endif
   }
-#if __PYTHIA_VERSION__ >= 6
+#ifdef __USE_TPYTHIA__
   if( fPythia->GetMSTU(23) != 0 || fPythia->GetMSTU(24) != 0 
       || fPythia->GetMSTU(28) != 0 ) {
     printf(" Warning .. JSFHadronizer::Fragmentation\n");
@@ -1286,16 +1174,16 @@ cerr << "&hepevt_.nhep = " << &hepevt_.nhep << endl;
     return; 
   }
 #else
-  if( ludat1_.MSTU[22] != 0 || ludat1_.MSTU[23] != 0 
-      || ludat1_.MSTU[27] != 0 ) {
+  if( pydat1_.MSTU[22] != 0 || pydat1_.MSTU[23] != 0 
+      || pydat1_.MSTU[27] != 0 ) {
     printf(" Warning .. JSFHadronizer::Fragmentation\n");
     printf(" Possible error in LUEXEC detected.");
     printf(" MSTU(23)=%d MSTU(24)=%d MSTU(28)=%d",
-	   ludat1_.MSTU[22], ludat1_.MSTU[23], ludat1_.MSTU[27]),
+	   pydat1_.MSTU[22], pydat1_.MSTU[23], pydat1_.MSTU[27]),
     printf(" This event will be skipped.\n");
-    ludat1_.MSTU[22] = 0;
-    ludat1_.MSTU[23] = 0;
-    ludat1_.MSTU[27] = 0;
+    pydat1_.MSTU[22] = 0;
+    pydat1_.MSTU[23] = 0;
+    pydat1_.MSTU[27] = 0;
     //nret=-1;
     return; 
   }
@@ -1329,11 +1217,7 @@ cerr << "&hepevt_.nhep = " << &hepevt_.nhep << endl;
       printf("Output buffer overflowed. Trancated");
       printf(" nout=%d\n",nout);
       //Int_t two=2;
-#if __PYTHIA_VERSION__ >= 6
       pylist_(&two);
-#else
-      lulist_(&two);
-#endif
       nout=mxxout;
       goto label900;
     }
@@ -1348,19 +1232,13 @@ cerr << "&hepevt_.nhep = " << &hepevt_.nhep << endl;
       xctau=0.0;
     }
     else {
-#if __PYTHIA_VERSION__ >= 6
       chrg = ((Double_t)pychge_(&kf))/3.0;
-#if 0
+#ifdef __USE_TPYTHIA__
       Int_t kc=fPythia->Pycomp(kf);
       xctau=fPythia->GetPMAS(kc,4)*0.1;
 #else
       Int_t kc = pycomp_(&kf);
       xctau    = pydat2_.PMAS[3][kc-1]*0.1;
-#endif
-#else
-      chrg = ((Double_t)luchge_(&kf))/3.0;
-      Int_t kc = lucomp_(&kf);
-      xctau    = ludat2_.PMAS[3][kc-1]*0.1;
 #endif
     }
     //C--         
@@ -1395,6 +1273,4 @@ cerr << "&hepevt_.nhep = " << &hepevt_.nhep << endl;
     printf(" End of JSFHadronizer::Fragmentation  nout=%d\n",nout);
   }
   return ;
-
 }
-//#endif

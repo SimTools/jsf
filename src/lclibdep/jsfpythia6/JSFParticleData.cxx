@@ -8,27 +8,31 @@
 //
 //////////////////////////////////////////////////////////////////
 
-#ifdef __USEISOCXX__
 #include <iostream>
-#else
-#include <iostream.h>
-#endif
 
 #include "JSFParticleData.h"
 
+#if __PYTHIA_VERSION__ >= 6
+#include "TPythia6.h"
+#else
+#define pychge luchge
+#define pycomp lucomp
+#endif
 
 extern "C" {
   extern int pychge_(int *kf);
   extern int pycomp_(int *kf);
 };
 
-struct COMMON_PYDAT2_t {
-  int KCHG[4][500];
-  double PMAS[4][500];
-  double PARF[2000];
-  double VCKM[4][4];
-};
-extern COMMON_PYDAT2_t pydat2_;
+#if __PYTHIA_VERSION__ <= 5
+typedef struct {
+  int   KCHG[3][500]; 
+  float PMAS[4][500];
+  float PARF[2000];
+  float VCKM[4][4];
+} Pydat2_t;
+#endif
+extern Pydat2_t pydat2_;
 
 
 using namespace std;

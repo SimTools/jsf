@@ -36,13 +36,10 @@ protected:
    Bool_t      fCopySpringClassDataToBank; //! 
    Int_t    fIHLON;     // Tau polarization switch
    Int_t    fDebug;     //! Debug flag
-#if __PYTHIA_VERSION__ >= 6 
    Int_t    fMRPY[6];   // random seed for Jetset
-   Float_t  fRRPY[100];  //
+   Float_t  fRRPY[100]; //
+#if __PYTHIA_VERSION__ >= 6
    TPythia6   *fPythia; //
-#else
-   Int_t    fMRLU[6];   // random seed for Jetset
-   Float_t  fRRLU[100];  //
 #endif
    Bool_t   fDoesShower;  // Does shower, if TRUE.
 #ifndef __LCLIBRAN_USE_RANMAR__

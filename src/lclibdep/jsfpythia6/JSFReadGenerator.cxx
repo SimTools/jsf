@@ -36,11 +36,7 @@
 //
 //////////////////////////////////////////////////////////////////
 
-#ifdef __USEISOCXX__
 #include <iostream>
-#else
-#include <iostream.h>
-#endif
 
 // #include "TPythia6.h"
 #include "JSFSteer.h"
@@ -52,6 +48,15 @@
 ClassImp(JSFReadGenerator)
 ClassImp(JSFReadGeneratorBuf)
 
+#if __PYTHIA_VERSION__ <= 5
+#define pychge luchge
+#define pycomp lucomp
+
+#define pydat2 ludat2
+#endif
+
+#endif
+
 extern "C" {
 extern void readgenopen_(Int_t *unit, Char_t *name, Int_t len);
 extern void readgenclose_(Int_t *unit);
@@ -61,26 +66,20 @@ extern void readgenhepevt_(Int_t *iunit,
         Int_t jmohep[][2], Int_t jdahep[][2],
 	Double_t phep[][5], Double_t vhep[][4], Int_t *nret);
 
-#if __PYTHIA_VERSION__ >= 6 
-  extern Int_t pychge_(Int_t *kf);
-  extern int pycomp_(int *kf);
-#else
-  extern Int_t luchge_(Int_t *kf);
-  extern Float_t ulctau_(Int_t *kf);
+extern int pychge_(Int_t *kf);
+extern int pycomp_(int *kf);
 #endif
-
 };
 
-#if __PYTHIA_VERSION__ >= 6 
-struct COMMON_PYDAT2_t {
-  int KCHG[4][500];
-  double PMAS[4][500];
-  double PARF[2000];
-  double VCKM[4][4];
-};
-
-extern COMMON_PYDAT2_t pydat2_;
+#if __PYTHIA_VERSION__ <= 5
+typedef struct {
+  Int_t   KCHG[3][500]; 
+  Float_t PMAS[4][500];
+  Float_t PARF[2000];
+  Float_t VCKM[4][4];
+} Pydat2_t;
 #endif
+extern Pydat2_t pydat2_;
 
 using namespace std;
 
@@ -299,14 +298,9 @@ Bool_t JSFReadGeneratorBuf::ReadOneRecord()
     Int_t firstdaughter=map[i].dau1st;
     Int_t ndaughter=map[i].ndau;
 
-#if __PYTHIA_VERSION__ >= 6
     Float_t charge=((Float_t)pychge_(&id))/3.0;
     Int_t kc=pycomp_(&id);
     Float_t xctau=pydat2_.PMAS[3][kc-1]*0.1;
-#else
-    Float_t charge=((Float_t)luchge_(&id))/3.0;
-    Float_t xctau=((Float_t)ulctau_(&id));
-#endif
     Float_t dl=0.0;
     //    if( mother < 0 ) xctau=0.0;
 
