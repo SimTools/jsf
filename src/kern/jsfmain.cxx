@@ -19,11 +19,20 @@
 
 #include "TRint.h"
 
+#if defined(__DARWIN__)
+void dummysub();
+extern "C" void G__cpp_setuplibJSF();
+#endif
+
 //______________________________________________________________________________
 int main(int argc, char **argv)
 {
    // Create an interactive ROOT application
    TRint *theApp = new TRint("Rint", &argc, argv);
+
+#if defined(__DARWIN__)
+   dummysub();
+#endif
 
    // and enter the event loop...
    theApp->Run();
@@ -32,3 +41,13 @@ int main(int argc, char **argv)
 
    return 0;
 }
+
+#if defined(__DARWIN__)
+// 
+//  Put here to load objects from archived library.
+void dummysub()
+{
+   G__cpp_setuplibJSF();
+}
+#endif
+
