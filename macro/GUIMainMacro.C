@@ -47,7 +47,7 @@
 class JSFJ4;
 class JSFMEGenerator;
 
-  TFile *ofile;
+  TFile *ofile; // Output file
   JSFSteer *jsf;
   JSFLCFULL *full;
   JSFQuickSim *sim=0;
@@ -68,7 +68,7 @@ class JSFMEGenerator;
   Bool_t gHasUserMonitor=kFALSE;
 
 //______________________________________________
-int Initialize()
+int Initialize(Char_t *fin="undef")
 {
   //
   // Initialization of JSF modules.
@@ -81,8 +81,13 @@ int Initialize()
   if( gROOT->GetGlobalFunction("UserMonitor",0,kTRUE) ) {
     gHasUserMonitor=kTRUE;
   }
-
-  Char_t *inputFileName=jsf->Env()->GetValue("JSFGUI.InputFileName","");
+ 
+  Char_t *inputFileName="";
+  if ( strcmp(fin,"undef") == 0 ) {
+    inputFileName=jsf->Env()->GetValue("JSFGUI.InputFileName","");
+  }
+  else { inputFileName=fin;
+  }
   Char_t *outputFileName=jsf->Env()->GetValue("JSFGUI.OutputFileName",
 					      "jsf.root");
   Int_t irunmode=jsf->Env()->GetValue("JSFGUI.RunMode",1);
@@ -305,7 +310,6 @@ void InitGenSim()
     InitHerwig();         // Set Herwig parameters.
   }
 
-
 }
 
 //______________________________________________
@@ -385,7 +389,19 @@ void ResetHist()
 //_________________________________________________________
 void BatchRun()
 {
+  if ( strcmp(jsf->Env()->
+	      GetValue("JSFGUI.InputFileName.F1","undef"),"undef")==0 ) {
+    Batch_MultiRun();
+  }
+  else {
+    Batch_MultiInputs();
+  }
 
+}
+
+//_________________________________________________________
+void Batch_MultiRun()
+{
   Initialize();
   Int_t firstrun=jsf->Env()->GetValue("JSFGUI.RunNo",1);
   Int_t lastrun=jsf->Env()->GetValue("JSFGUI.LastRun",-1);
@@ -423,6 +439,80 @@ void BatchRun()
 
 }
 
+//_________________________________________________________
+void Batch_MultiInputs()
+{
+  // Script to process multiple input files as a single input file
+  vector<string> *inputs=SetInputFiles();
+  string fn=(*inputs)[0];
+
+  Initialize(fn.data());
+  Int_t irun=jsf->Env()->GetValue("JSFGUI.RunNo",1);
+  Int_t ninputs=inputs->size();
+  Int_t ifile=0;
+
+  Int_t irun;
+  Bool_t flag=kTRUE;
+  JSFSteer::EJSFReturnCode iret=jsf->kJSFOK;
+  jsf->BeginRun(irun);
+
+  Int_t nread=0;
+  Int_t ievt=jsf->Env()->GetValue("JSFGUI.FirstEvent",1);
+  while( ievt < jsf->Env()->GetValue("JSFGUI.NEventsAnalize",1000) ) {
+      GetEvent(++nread);
+      iret=jsf->GetReturnCode();
+      if( iret == jsf->kJSFOK ) {
+	ievt ++ ;
+      }
+      else if( iret & jsf->kJSFEOF ) {
+        cout << "End-of-file of" << fn << " detected ";
+        cout << " after reading " << nread-1 << " events " << endl;
+        ifile++;
+        if( ifile >= ninputs ) break;
+	fn=(*inputs)[ifile];
+        TFile *nfile=new TFile(fn.data());
+        jsf->SetInput(*nfile);
+	nread=0;
+      }
+      else if( iret & jsf->kJSFFALSE ) {
+	printf("End of event loop due to error at event# %d\n",ievt);
+	break;
+      }
+      else if( iret & (jsf->kJSFDoEndRun|jsf->kJSFTerminate|jsf->kJSFQuit)) {
+	flag=jsf->EndRun();
+	break;
+      }
+  }
+
+  JobEnd();
+
+  cout << "JSFGUI Batch Multi-File process completed" << endl;
+  cout << "Read " << ievt-1 << " events ";
+  cout << " from " << ifile << " files " << endl;
+
+}
 
 
+//_________________________________________________________
+vector<string> *SetInputFiles()
+{
+  Int_t maxinp=jsf->Env()->GetValue("JSFGUI.MaxInputFiles",3000);
+  vector<string> *inp=new vector<string>();
+  Char_t     wrkstr[128];
+  Int_t nundef=0;
+  for(Int_t i=0;i<maxinp;i++){
+    sprintf(wrkstr,"JSFGUI.InputFileName.F%d",i+1);
+    Char_t *fn=jsf->Env()->GetValue(wrkstr,"undef");
+    if( strcmp(fn,"undef") != 0 ) {
+      inp->push_back(string(fn));
+    }
+    else {
+      nundef++;
+      if ( nundef > 10 ) break;
+    }
+  }
+  return inp;
+}
+
+  
 
