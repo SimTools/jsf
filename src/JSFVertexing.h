@@ -36,12 +36,12 @@
 class JSFVertexing : public TObject 
 {
  protected:
+  Int_t     fEntries; // Number of entries
   Double_t     fV[3]; // Vertex coordinate (cm)
   Double_t  fQuality; // Quality of vertex (Z difference in cm)
-  TClonesArray   *fT; // Helical Track to form vertex
   Double_t    fChisq; // Chisq of vertex fit
-  Int_t     fEntries; // Number of entries
   Double_t  fPairEpsilon; // epsilon value used for pair finder.
+  TClonesArray   *fT; // Helical Track to form vertex
 
  public:
   JSFVertexing();
@@ -68,7 +68,7 @@ class JSFVertexing : public TObject
   void SetPairEpsilon(Double_t eps){ fPairEpsilon=eps;}
   Double_t GetPairEpsilon(){ return fPairEpsilon;}
 
-  ClassDef(JSFVertexing, 1) // Do Vertexing of helix tracks.
+  ClassDef(JSFVertexing, 2) // Do Vertexing of helix tracks.
 
 };
 

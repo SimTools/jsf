@@ -300,4 +300,78 @@ void DebugGenerator::PrintParam()
   return;
 }
 
+#if __ROOT_FULLVERSION__ >= 30000
+//____________________________________________________________________________
+void DebugGenerator::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class DebugGenerator.
+
+   if (R__b.IsReading()) {
+     UInt_t R__s, R__c;
+     Version_t R__v=R__b.ReadVersion(&R__s, &R__c);
+     if( R__v > 1 ) {
+       DebugGenerator::Class()->ReadBuffer(R__b, this, R__v, R__s, R__c);
+       return;
+     }
+     JSFGenerator::Streamer(R__b);
+     R__b >> fRandomSeed;
+     R__b >> fNgen;
+     R__b.ReadStaticArray(fP);
+     R__b.ReadStaticArray(fCosth);
+     R__b.ReadStaticArray(fAzimA);
+     R__b.ReadStaticArray(fR);
+     R__b.ReadStaticArray(fPhi);
+     R__b.ReadStaticArray(fZ);
+     R__b >> fNspecies;
+     R__b.ReadStaticArray(fID);
+     R__b.ReadStaticArray(fMasses);
+     R__b.ReadStaticArray(fCharges);
+     R__b.CheckByteCount(R__s, R__c, DebugGenerator::IsA());
+
+   } else {
+     DebugGenerator::Class()->WriteBuffer(R__b, this);
+   }
+}
+
+#else
+
+//______________________________________________________________________________
+void DebugGenerator::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class DebugGenerator.
+
+   if (R__b.IsReading()) {
+      Version_t R__v = R__b.ReadVersion(); if (R__v) { }
+      JSFGenerator::Streamer(R__b);
+      R__b >> fRandomSeed;
+      R__b >> fNgen;
+      R__b.ReadStaticArray(fP);
+      R__b.ReadStaticArray(fCosth);
+      R__b.ReadStaticArray(fAzimA);
+      R__b.ReadStaticArray(fR);
+      R__b.ReadStaticArray(fPhi);
+      R__b.ReadStaticArray(fZ);
+      R__b >> fNspecies;
+      R__b.ReadStaticArray(fID);
+      R__b.ReadStaticArray(fMasses);
+      R__b.ReadStaticArray(fCharges);
+   } else {
+      R__b.WriteVersion(DebugGenerator::IsA());
+      JSFGenerator::Streamer(R__b);
+      R__b << fRandomSeed;
+      R__b << fNgen;
+      R__b.WriteArray(fP, 2);
+      R__b.WriteArray(fCosth, 2);
+      R__b.WriteArray(fAzimA, 2);
+      R__b.WriteArray(fR, 2);
+      R__b.WriteArray(fPhi, 2);
+      R__b.WriteArray(fZ, 2);
+      R__b << fNspecies;
+      R__b.WriteArray(fID, 10);
+      R__b.WriteArray(fMasses, 10);
+      R__b.WriteArray(fCharges, 10);
+   }
+}
+
+#endif
 

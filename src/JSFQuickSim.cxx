@@ -808,7 +808,41 @@ void JSFQuickSimBuf::AppendLTKCLTracks(JSFQuickSimBuf *src, Int_t numgp)
 }
 
       
+#if __ROOT_FULLVERSION__ >= 30000
+//______________________________________________________________________________
+void JSFQuickSimBuf::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFQuickSimBuf.
 
+   if (R__b.IsReading()) {
+     UInt_t R__s, R__c;
+     Version_t R__v = R__b.ReadVersion(&R__s, &R__c);
+     if( R__v > 1 ) {
+       JSFQuickSimBuf::Class()->ReadBuffer(R__b, this, R__v, R__s, R__c);
+     }
+     else {
+       //=== process old versions before automatic schema evolution
+       JSFEventBuf::Streamer(R__b);
+       R__b >> fNTracks;
+       fTracks->Streamer(R__b);
+       R__b >> fNCDCTracks;
+       fCDCTracks->Streamer(R__b);
+       R__b >> fNVTXHits;
+       fVTXHits->Streamer(R__b);
+       R__b >> fNEMCHits;
+       fEMCHits->Streamer(R__b);
+       R__b >> fNHDCHits;
+       fHDCHits->Streamer(R__b);
+       R__b.CheckByteCount(R__s, R__c, JSFQuickSimBuf::IsA());
+       //=== end of old versions
+     }
+     SetPointers();
+   } else {
+     JSFQuickSimBuf::Class()->WriteBuffer(R__b, this);
+   }
+}
+
+#else
 //______________________________________________________________________________
 void JSFQuickSimBuf::Streamer(TBuffer &R__b)
 {
@@ -844,3 +878,4 @@ void JSFQuickSimBuf::Streamer(TBuffer &R__b)
    }
 }
 
+#endif

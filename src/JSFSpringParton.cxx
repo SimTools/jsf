@@ -78,5 +78,73 @@ JSFSpringParton::JSFSpringParton(Float_t data[])
    fShowerInfo=(Int_t)data[18];
 }
 
+#if __ROOT_FULLVERSION >= 30000
+//_____________________________________________________________________________
+void JSFSpringParton::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFSpringParton.
 
+   if (R__b.IsReading()) {
+     UInt_t R__s, R__c;
+     Version_t R__v=R__b.ReadVersion(&R__s, &R__c);
+     if( R__v > 1 ) {
+       JSFSpringParton::Class()->ReadBuffer(R__b, this, R__v, R__s, R__c);
+       return;
+     }
+     TObject::Streamer(R__b);
+     R__b >> fSer;
+     R__b >> fID;
+     R__b >> fMass;
+     R__b >> fCharge;
+     R__b.ReadStaticArray(fP);
+     R__b >> fNdaughter;
+     R__b >> fFirstDaughter;
+     R__b >> fMother;
+     R__b >> fHelicity;
+     R__b >> fColorID;
+     R__b >> fShowerInfo;
+     R__b.CheckByteCount(R__s, R__c, JSFSpringParton::IsA());
 
+   } else {
+     JSFSpringParton::Class()->WriteBuffer(R__b, this);
+   }
+}
+#else
+
+//______________________________________________________________________________
+void JSFSpringParton::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFSpringParton.
+
+   if (R__b.IsReading()) {
+      Version_t R__v = R__b.ReadVersion(); if (R__v) { }
+      TObject::Streamer(R__b);
+      R__b >> fSer;
+      R__b >> fID;
+      R__b >> fMass;
+      R__b >> fCharge;
+      R__b.ReadStaticArray(fP);
+      R__b >> fNdaughter;
+      R__b >> fFirstDaughter;
+      R__b >> fMother;
+      R__b >> fHelicity;
+      R__b >> fColorID;
+      R__b >> fShowerInfo;
+   } else {
+      R__b.WriteVersion(JSFSpringParton::IsA());
+      TObject::Streamer(R__b);
+      R__b << fSer;
+      R__b << fID;
+      R__b << fMass;
+      R__b << fCharge;
+      R__b.WriteArray(fP, 4);
+      R__b << fNdaughter;
+      R__b << fFirstDaughter;
+      R__b << fMother;
+      R__b << fHelicity;
+      R__b << fColorID;
+      R__b << fShowerInfo;
+   }
+}
+
+#endif

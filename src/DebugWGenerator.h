@@ -58,7 +58,7 @@ public:
    void SetRangePhi(Float_t min, Float_t max){ fRphi[0]=min ; fRphi[1]=max; }
 
 
-   ClassDef(DebugWGenerator,1)  // DebugWGenerator class
+   ClassDef(DebugWGenerator,2)  // DebugWGenerator class
 
 };
 

@@ -45,16 +45,18 @@ class JSFQuickSim;
 class JSFQuickSimBuf : public JSFEventBuf {
 private:
    Int_t            fNTracks   ;  // Number of particles 
-   TClonesArray    *fTracks    ;  // Pointers to Particles
    Int_t            fNCDCTracks;  // Number of CDC tracks.
-   TClonesArray    *fCDCTracks ;  // Pointer to CDC Tracks
    Int_t            fNVTXHits  ;  // Number of VTXHits
-   TClonesArray    *fVTXHits   ;  // Pointers to VTX Hits
    Int_t            fNEMCHits  ;  // Number of EMC hit cells
-   TClonesArray    *fEMCHits   ;  // Pointers to EMC Hit cells 
    Int_t            fNHDCHits  ;  // Number of HDC hit cells
-   TClonesArray    *fHDCHits   ;  // Pointers to EMC Hit cells 
-   Int_t fCDCTrackIsCDCVTX; //! 0 when CDC track is not CDC+VTX combined track.
+
+   TClonesArray    *fTracks    ;  //-> Pointers to Particles
+   TClonesArray    *fCDCTracks ;  //-> Pointer to CDC Tracks
+   TClonesArray    *fVTXHits   ;  //-> Pointers to VTX Hits
+   TClonesArray    *fEMCHits   ;  //-> Pointers to EMC Hit cells 
+   TClonesArray    *fHDCHits   ;  //-> Pointers to EMC Hit cells 
+
+   Int_t      fCDCTrackIsCDCVTX; //! 0 when CDC track is not CDC+VTX combined track.
 
    void SetPointers() ; // Set pointers among Hits/Track classes.
 
@@ -99,7 +101,7 @@ public:
   void Append(JSFQuickSimBuf *src, Int_t numgp=0);
 
 
-  ClassDef(JSFQuickSimBuf, 1) // QuickSim event buffer class.
+  ClassDef(JSFQuickSimBuf, 2) // QuickSim event buffer class.
 
 };
 

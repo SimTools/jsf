@@ -227,3 +227,92 @@ Bool_t JSFJIMParam::GetHDPosition(Int_t cell, Float_t pos[3], Float_t width[3])
 
 }
 
+#if __ROOT_FULLVERSION__ >= 30000
+//______________________________________________________________________________
+void JSFJIMParam::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFJIMParam.
+
+   if (R__b.IsReading()) {
+     UInt_t R__s, R__c;
+     Version_t R__v=R__b.ReadVersion(&R__s, &R__c);
+     if( R__v > 1 ) {
+       JSFJIMParam::Class()->ReadBuffer(R__b, this, R__v, R__s, R__c);
+       return;
+     }
+     JSFQuickSimParam::Streamer(R__b);
+     R__b.ReadStaticArray(fBCPAR0I);
+     R__b.ReadStaticArray(fBCPAR0R);
+     R__b.ReadStaticArray(fREM1BC);
+     R__b.ReadStaticArray(fZEM1BC);
+     R__b.ReadStaticArray(fPEM1BC);
+     R__b.ReadStaticArray(fRHD1BC);
+     R__b.ReadStaticArray(fZHD1BC);
+     R__b.ReadStaticArray(fPHD1BC);
+     R__b.ReadStaticArray(fECPAR0I);
+     R__b.ReadStaticArray(fECPAR0R);
+     R__b.ReadStaticArray(fNDPEC);
+     R__b.ReadStaticArray(fREM1EC);
+     R__b.ReadStaticArray(fZEM1EC);
+     R__b.ReadStaticArray(fPEM1EC);
+     R__b.ReadStaticArray(fRHD1EC);
+     R__b.ReadStaticArray(fZHD1EC);
+     R__b.ReadStaticArray(fPHD1EC);
+     R__b.CheckByteCount(R__s, R__c, JSFJIMParam::IsA());
+   } 
+   else {
+     JSFJIMParam::Class()->WriteBuffer(R__b, this);
+   }
+}
+
+#else
+//______________________________________________________________________________
+void JSFJIMParam::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFJIMParam.
+
+   if (R__b.IsReading()) {
+      Version_t R__v = R__b.ReadVersion(); if (R__v) { }
+      JSFQuickSimParam::Streamer(R__b);
+      R__b.ReadStaticArray(fBCPAR0I);
+      R__b.ReadStaticArray(fBCPAR0R);
+      R__b.ReadStaticArray(fREM1BC);
+      R__b.ReadStaticArray(fZEM1BC);
+      R__b.ReadStaticArray(fPEM1BC);
+      R__b.ReadStaticArray(fRHD1BC);
+      R__b.ReadStaticArray(fZHD1BC);
+      R__b.ReadStaticArray(fPHD1BC);
+      R__b.ReadStaticArray(fECPAR0I);
+      R__b.ReadStaticArray(fECPAR0R);
+      R__b.ReadStaticArray(fNDPEC);
+      R__b.ReadStaticArray(fREM1EC);
+      R__b.ReadStaticArray(fZEM1EC);
+      R__b.ReadStaticArray(fPEM1EC);
+      R__b.ReadStaticArray(fRHD1EC);
+      R__b.ReadStaticArray(fZHD1EC);
+      R__b.ReadStaticArray(fPHD1EC);
+   } else {
+      R__b.WriteVersion(JSFJIMParam::IsA());
+      JSFQuickSimParam::Streamer(R__b);
+      R__b.WriteArray(fBCPAR0I, 15);
+      R__b.WriteArray(fBCPAR0R, 15);
+      R__b.WriteArray(fREM1BC, 200);
+      R__b.WriteArray(fZEM1BC, 200);
+      R__b.WriteArray(fPEM1BC, 200);
+      R__b.WriteArray(fRHD1BC, 200);
+      R__b.WriteArray(fZHD1BC, 200);
+      R__b.WriteArray(fPHD1BC, 200);
+      R__b.WriteArray(fECPAR0I, 4);
+      R__b.WriteArray(fECPAR0R, 14);
+      R__b.WriteArray(fNDPEC, 200);
+      R__b.WriteArray(fREM1EC, 200);
+      R__b.WriteArray(fZEM1EC, 200);
+      R__b.WriteArray(fPEM1EC, 4000);
+      R__b.WriteArray(fRHD1EC, 200);
+      R__b.WriteArray(fZHD1EC, 200);
+      R__b.WriteArray(fPHD1EC, 1000);
+   }
+}
+
+
+#endif

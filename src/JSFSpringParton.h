@@ -87,7 +87,7 @@ public:
 
   virtual ~JSFSpringParton() {}
 
-  ClassDef(JSFSpringParton,1)  //A JSFSpringParton segment
+  ClassDef(JSFSpringParton,2)  //A JSFSpringParton segment
 };
 
 #endif

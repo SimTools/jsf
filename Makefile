@@ -62,7 +62,7 @@ distclean:
 	( cd example/ZHStudy ; make distclean )
 	( cd example/ww ; make distclean )
 	( cd example/guiexam1 ; make distclean )
-	( cd html ; rm -f *.html *.h *.ps *~ ; rm -rf src )
+	( cd html ; rm -f *.html *.h *.ps *~ ; rm -rf src ; rm -rf exam* )
 	( rm -r lib ; rmdir html )
 	( cd macro ; rm -f jsf.root , PYTHIA.SEED )
 	( cd example/CCDAnal ; make distclean )

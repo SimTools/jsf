@@ -51,7 +51,7 @@ public:
 
    void Append(JSFGeneratorBuf *src);
 
-   ClassDef(JSFGeneratorBuf, 1) // JSF Generator Buffer class.
+   ClassDef(JSFGeneratorBuf, 2) // JSF Generator Buffer class.
 };
    
 

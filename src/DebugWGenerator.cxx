@@ -116,6 +116,34 @@ Bool_t DebugWGenerator::Process(Int_t ev)
   return kTRUE;
 }
 
+#if __ROOT_FULLVERSION__ >= 30000
+//_____________________________________________________________________________
+void DebugWGenerator::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFSpring.
+
+   if (R__b.IsReading()) {
+     UInt_t R__s, R__c;
+     Version_t R__v=R__b.ReadVersion(&R__s, &R__c);
+     if( R__v > 1 ) {
+       DebugWGenerator::Class()->ReadBuffer(R__b, this, R__v, R__s, R__c);
+       return;
+     }
+     JSFModule::Streamer(R__b);
+     R__b >> fWmass ;  // W boson mass
+     R__b >> fWwidth;  // W boson width
+     R__b.ReadStaticArray(fRp);
+     R__b.ReadStaticArray(fRcosth);
+     R__b.ReadStaticArray(fRphi);
+     R__b.CheckByteCount(R__s, R__c, DebugWGenerator::IsA());
+
+   } else {
+     DebugWGenerator::Class()->WriteBuffer(R__b, this);
+   }
+
+}
+
+#else
 //_____________________________________________________________________________
 void DebugWGenerator::Streamer(TBuffer &R__b)
 {
@@ -139,4 +167,7 @@ void DebugWGenerator::Streamer(TBuffer &R__b)
       R__b.WriteArray(fRphi,2);
    }
 }
+
+
+#endif
 

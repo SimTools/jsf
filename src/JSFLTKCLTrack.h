@@ -76,7 +76,7 @@ public:
   TVector GetPV(){ TVector p(4) ; 
           p(0)=fP[0] ; p(1) =fP[1] ; p(2)=fP[2] ; p(3)=fP[3] ; return p ; }
 
-  ClassDef(JSFLTKCLTrack,1)  //A JSFLTKCLTrack
+  ClassDef(JSFLTKCLTrack,2)  //A JSFLTKCLTrack
 };
 
 #endif

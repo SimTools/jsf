@@ -86,7 +86,7 @@ public:
 
   virtual ~JSFGeneratorParticle() {}
 
-  ClassDef(JSFGeneratorParticle, 2)  //A JSFGeneratorParticle segment
+  ClassDef(JSFGeneratorParticle, 3)  //A JSFGeneratorParticle segment
 };
 
 //**********************

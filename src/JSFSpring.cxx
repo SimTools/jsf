@@ -54,6 +54,11 @@ JSFSpring::JSFSpring(const char *name, const char *title, JSFBases *bases)
    if( bases ) {
      SetBases( bases );
    }
+
+  // Allocate IO variables
+  fioNTAB=NTAB;
+  fSeedIV=new Long_t [NTAB];
+
 }
 
 //_____________________________________________________________________________
@@ -63,9 +68,9 @@ JSFSpring::~JSFSpring()
     delete fBases; 
     fBases=NULL;
   }
+  delete fSeedIV;
 
 }
-
 
 //_____________________________________________________________________________
 void JSFSpring::ReadBases(const char *name)
@@ -237,6 +242,62 @@ Bool_t JSFSpringBuf::SetPartons()
   return kTRUE;
 }
 
+#if __ROOT_FULLVERSION__ >= 30000
+//_____________________________________________________________________________
+void JSFSpring::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFSpring.
+
+   Char_t cmdstr[300];
+   if (R__b.IsReading()) {
+     UInt_t R__s, R__c;
+     Version_t R__v=R__b.ReadVersion(&R__s, &R__c);
+     if( R__v < 3 ) { 
+	printf("JSFSpring::Streamer .. Old version data.  Can not read.\n");
+        return;
+     }
+     else if(  R__v > 3 ) {
+       JSFSpring::Class()->ReadBuffer(R__b, this, R__v, R__s, R__c);
+       if( !fBases ) {
+	 sprintf(cmdstr,"bases=new %s(\"%s\",\"%s\") ; \n\
+         bases->SetSpring((Int_t)%d);", fBasesClassName.Data(), 
+		fBasesObjectName.Data(), fBasesObjectTitle.Data(),(Int_t)this);
+	 gROOT->ProcessLine(cmdstr);
+       }
+       return;
+     }
+     // process old version data.
+     JSFModule::Streamer(R__b);
+
+     Int_t lc;
+     Char_t cname[100], name[100], title[100];
+     lc=R__b.ReadStaticArray(cname);
+     lc=R__b.ReadStaticArray(name);
+     lc=R__b.ReadStaticArray(title);
+     if( !fBases ) {
+       sprintf(cmdstr,"bases=new %s(\"%s\",\"%s\") ; \n\
+        bases->SetSpring((Int_t)%d);", cname, name, title,(Int_t)this);
+       gROOT->ProcessLine(cmdstr);
+     }
+
+     R__b >> fSeed;
+     R__b >> fSeedIY;
+     R__b.ReadStaticArray(fSeedIV);
+     R__b.CheckByteCount(R__s, R__c, JSFSpring::IsA());
+
+     
+   } 
+   // Write Streamer
+   else {
+     fBasesClassName=fBases->ClassName();
+     fBasesObjectName=fBases->GetName();
+     fBasesObjectTitle=fBases->GetTitle();
+
+     JSFSpring::Class()->WriteBuffer(R__b, this);
+   }
+}
+
+#else
 //_____________________________________________________________________________
 void JSFSpring::Streamer(TBuffer &R__b)
 {
@@ -283,3 +344,4 @@ void JSFSpring::Streamer(TBuffer &R__b)
    }
 }
 
+#endif

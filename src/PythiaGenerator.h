@@ -30,9 +30,9 @@ private:
   Float_t  fRRLU[100]; // 			     
 // Following data are filled only at the end of run, or data is read.
   Int_t    fNUMSUB   ; // Number of defined subprocesses + 1 (for total)
-  Int_t    *fISUB    ; //! ISUB of subprocesses whose MSUB=1. (0=total, 1 to fNUMSUB )
-  Int_t    *fNGEN    ; //! Number of generated subprocesses. (0=total, 1 to fNUMSUB )
-  Double_t *fXSEC    ; //! Integrated cross sections (0=total, 1 to fNUMSUB)
+  Int_t    *fISUB    ; //[fNUMSUB] ISUB of subprocesses whose MSUB=1. (0=total, 1 to fNUMSUB )
+  Int_t    *fNGEN    ; //[fNUMSUB] Number of generated subprocesses. (0=total, 1 to fNUMSUB )
+  Double_t *fXSEC    ; //[fNUMSUB] Integrated cross sections (0=total, 1 to fNUMSUB)
   Float_t   fEventWeight ; //! Weight of current event.    
 
 public:
@@ -60,7 +60,7 @@ public:
   void SetEventWeight(Float_t weight){ fEventWeight=weight; }
   Float_t GetEventWeight(){ return fEventWeight; }
 
-  ClassDef(PythiaGenerator, 1)  // Pythia Generator
+  ClassDef(PythiaGenerator, 2)  // Pythia Generator
 
 };
 

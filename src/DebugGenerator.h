@@ -79,7 +79,7 @@ public:
    void PrintParam();
 
 
-   ClassDef(DebugGenerator,1)  // Debug structure
+   ClassDef(DebugGenerator,2)  // Debug structure
 };
 
 

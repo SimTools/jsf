@@ -84,17 +84,17 @@ class JSFQuickSimParam : public TNamed {
 protected:
    Char_t  fParamFile[256] ; // Where to get simulator parameter.
    Int_t fSeed ;    // Seed of random variable;
+   Int_t   fNSMPVX   ; // Number of VTX layer.
+   Int_t   fNERRVX;          // VTX Error flag. 
+   Int_t   fNUMVTX;          // Number of VTX layer
    Float_t fBfield; // Bfield (kgauss).
    Float_t fTrack[8]; // Parameter for tracking device.
    Float_t fEMCal[11]; // Parameter for tracking device.
    Float_t fHDCal[11]; // Parameter for tracking device.
-   Int_t   fNSMPVX   ; // Number of VTX layer.
    Float_t fDPHIVX   ; // VTX-phi pitch (cm)                        
    Float_t fDZEEVX   ; // VTX-Z   pitch (cm)                        
    Float_t fVTXLayer[22][4]; // VTX Layer
    Float_t fVTXError[5];     // VTX resolution parameter
-   Int_t   fNERRVX;          // VTX Error flag. 
-   Int_t   fNUMVTX;          // Number of VTX layer
    Float_t fCLSPAR[4][5]   ; // Clustering parameter.
    Float_t fCMBCUT[3] ; // ADXEVT, ENSGEM, ENSGHD for CMBCUT
 
@@ -155,7 +155,7 @@ public:
    Float_t GetCMBCUT(Int_t ipar){ return fCMBCUT[ipar]; }
 
 
-   ClassDef(JSFQuickSimParam,3) // JSFQuickSim Parameters
+   ClassDef(JSFQuickSimParam,4) // JSFQuickSim Parameters
 };
  
 #endif

@@ -1,6 +1,4 @@
-//*LastUpdate:  jsf-1-14 29-January-2000  by A.Miyamoto
-//*LastUpdate:  jsf-1-11 23-July-1999  by A.Miyamoto
-//*LastUpdate:  v0.3.04 09/24/1998  by A.Miyamoto
+//*LastUpdate:  jsf-1-17 6-Jan-2001  by A.Miyamoto
 //*-- Author :  Akiya Miyamoto  09/24/1998
 
 //////////////////////////////////////////////////////////////////
@@ -19,19 +17,17 @@
 #include <TTree.h>
 #include <TChain.h>
 #include <TDatime.h>
-
+#include <TString.h>
 #include "JSFEnv.h"
 
 class JSFModule;
 
 class JSFSteerConf : public TNamed {
 protected:
+  Int_t     fSize;     //! size of fClasses, fNames array
   Int_t     fNmodule;  // Number of modules;
-  Char_t   **fClasses; // Names of module Clases 
-  Char_t   **fNames;   // Module names.
-  Bool_t    *IsWriting;// kTRUE, when corresponding module is writting 
-  Char_t     *fOutfile; // Name of output file.
-  Char_t     *fInfile;  // Name of input file.
+  TString   *fClasses; //[fNmodule]  Names of module Clases 
+  TString   *fNames;   //[fNmodule]  Module names.
 public:
   JSFSteerConf(const char *name="JSFSteerConf", 
                const char *title="JSF Configuration");
@@ -40,8 +36,9 @@ public:
   void Initialize(TList *module); // Mkae fClasses, fNames from fModules
 
   friend class JSFSteer;
-
-  ClassDef(JSFSteerConf,1) // Stores JSF Module info at Initialize()
+  ClassDef(JSFSteerConf,2) // Stores JSF Module info at Initialize()
+    //  Version 1: up to JSF 1.16
+    //  Version 2: up to JFF 1.17
 };
 
 //********************************************************************
@@ -105,7 +102,7 @@ public:
   TTree     *ITree() {return fITree;}
   TTree     *OTree() {return fOTree;}
   TList     *Modules()  {return fModules;}
-  JSFModule *FindModule(Text_t *classname,const Option_t *opt="");
+  JSFModule *FindModule(const Text_t *classname,const Option_t *opt="");
   JSFEnv    *Env(){ return fEnv;}
 
   Int_t     GetVersion(){ return fVersion;}

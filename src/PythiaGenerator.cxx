@@ -283,6 +283,81 @@ Bool_t PythiaGenerator::GetLastRunInfo()
   printf("values from a file.\n");
   return kTRUE;
 }
+//------------------------------------------------------
+void pyevwt_(float *wtxs)
+{
+  // This routine is called when MSTP(142) != 0
+  // User should prepare a macro, SetPythiaWeight(), to calculate the weight.
+  // A sample SetPythiaWeight() is as follows.
+  //  void SetPythiaWeight()
+  //  {
+  //      PythiaGenerator *py=(PythiaGenerator*)jsf->FindModule("PythiaGenerator");
+  //      Float_t weight=1.0;
+  //      switch (py->GetPythia()->GetMINT(1)) {  // Decide weight according to the ISUB
+  //        case 1:   weight=0.1;  break ;  
+  //        case 22:   weight=0.5;  break ;   
+  //      }
+  //      py->SetEventWeight(weight);   
+  //      ...........
+  //      return;
+  //   }   
+  // According to the p.142 of Pythia Manual, the weight should be calculated
+  // by using variables MINT and VINT in PYINT1 common block.
+  // When the weight is calculated, set its value by PythiaGenerator::SetEventWeight() 
+  // function.
+
+  if( gROOT->GetGlobalFunction("SetPythiaWeight",0,kTRUE) ) 
+    gROOT->ProcessLine("SetPythiaWeight();");
+  else {
+    printf("Error .. PYEVWT is called, but SetPythiaWeight macro is not exist.\n");
+    printf("Use default event weight of 1.\n");
+    lPythiaGenerator->SetEventWeight(1.0);
+  }
+  *wtxs=lPythiaGenerator->GetEventWeight();
+}
+
+#if __ROOT_FULLVERSION__ >= 30000
+//______________________________________________________________________________
+void PythiaGenerator::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class PythiaGenerator.
+
+   if (R__b.IsReading()) {
+     UInt_t R__s, R__c;
+     Version_t R__v=R__b.ReadVersion(&R__s, &R__c);
+     if( R__v > 1 ) {
+       PythiaGenerator::Class()->ReadBuffer(R__b, this, R__v, R__s, R__c);
+       return;
+     }
+     // process old version data.
+      JSFGenerator::Streamer(R__b);
+      R__b >> fEcm;
+      R__b.ReadStaticArray(fFrame);
+      R__b.ReadStaticArray(fBeamParticle);
+      R__b.ReadStaticArray(fTargetParticle);
+      R__b.ReadStaticArray(fMRLU);
+      R__b.ReadStaticArray(fRRLU);
+      R__b >> fNUMSUB;
+
+      if( fISUB ) { delete fISUB; } ; 
+      fISUB = new Int_t[fNUMSUB];
+      R__b.ReadStaticArray(fISUB);
+
+      if( fNGEN ) { delete fNGEN; } ; 
+      fNGEN = new Int_t[fNUMSUB];
+      R__b.ReadStaticArray(fNGEN);
+
+      if( fXSEC ) { delete fXSEC; } ; 
+      fXSEC = new Double_t[fNUMSUB];
+      R__b.ReadStaticArray(fXSEC);
+      R__b.CheckByteCount(R__s, R__c, PythiaGenerator::IsA());
+
+   } else {
+     PythiaGenerator::Class()->WriteBuffer(R__b, this);
+   }
+}
+
+#else
 
 //______________________________________________________________________________
 void PythiaGenerator::Streamer(TBuffer &R__b)
@@ -329,35 +404,4 @@ void PythiaGenerator::Streamer(TBuffer &R__b)
    }
 }
 
-//------------------------------------------------------
-void pyevwt_(float *wtxs)
-{
-  // This routine is called when MSTP(142) != 0
-  // User should prepare a macro, SetPythiaWeight(), to calculate the weight.
-  // A sample SetPythiaWeight() is as follows.
-  //  void SetPythiaWeight()
-  //  {
-  //      PythiaGenerator *py=(PythiaGenerator*)jsf->FindModule("PythiaGenerator");
-  //      Float_t weight=1.0;
-  //      switch (py->GetPythia()->GetMINT(1)) {  // Decide weight according to the ISUB
-  //        case 1:   weight=0.1;  break ;  
-  //        case 22:   weight=0.5;  break ;   
-  //      }
-  //      py->SetEventWeight(weight);   
-  //      ...........
-  //      return;
-  //   }   
-  // According to the p.142 of Pythia Manual, the weight should be calculated
-  // by using variables MINT and VINT in PYINT1 common block.
-  // When the weight is calculated, set its value by PythiaGenerator::SetEventWeight() 
-  // function.
-
-  if( gROOT->GetGlobalFunction("SetPythiaWeight",0,kTRUE) ) 
-    gROOT->ProcessLine("SetPythiaWeight();");
-  else {
-    printf("Error .. PYEVWT is called, but SetPythiaWeight macro is not exist.\n");
-    printf("Use default event weight of 1.\n");
-    lPythiaGenerator->SetEventWeight(1.0);
-  }
-  *wtxs=lPythiaGenerator->GetEventWeight();
-}
+#endif

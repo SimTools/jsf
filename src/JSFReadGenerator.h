@@ -58,7 +58,7 @@ public:
    void SetUnit(Int_t nunit){ fUnit=nunit; }
    void SetDataFileName(Char_t *name){ strcpy(fDataFileName, name);}
 
-   ClassDef(JSFReadGenerator,1)  // To read Generator data
+   ClassDef(JSFReadGenerator,2)  // To read Generator data
 };
 
 

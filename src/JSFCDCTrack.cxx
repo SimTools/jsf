@@ -525,6 +525,44 @@ Bool_t JSFCDCTrack::MovePivotToIP(JSFQuickSimParam *spar)
   return kTRUE;
 
 }
+
+#if __ROOT_FULLVERSION__ >= 30000
+//____________________________________________________________________________
+void JSFCDCTrack::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFCDCTrack.
+
+   if (R__b.IsReading()) {
+     UInt_t R__s, R__c;
+     Version_t R__v = R__b.ReadVersion(&R__s, &R__c);
+     if( R__v > 1 ) {
+       JSFCDCTrack::Class()->ReadBuffer(R__b, this, R__v, R__s, R__c);
+     }
+     else {
+       //=== Process old versionsbefore automatic schema evolution
+       TObject::Streamer(R__b);
+       R__b.ReadStaticArray(fP);
+       R__b >> fE;
+       R__b.ReadStaticArray(fX);
+       R__b >> fCharge;
+       R__b >> fGenID;
+       R__b.ReadStaticArray(fHelix);
+       R__b.ReadStaticArray(fPivot);
+       R__b.ReadStaticArray(fError);
+       R__b >> fNDF;
+       R__b.ReadStaticArray(fPosAtEMC);
+       R__b.ReadStaticArray(fEPosAtEMC);
+       R__b.CheckByteCount(R__s, R__c, JSFCDCTrack::IsA());
+     }
+     //      R__b >> fNVTX;
+     fNVTX=0; // fNVTX is set to zero untill VTX address is set in SetPointers()
+   } else {
+     JSFCDCTrack::Class()->WriteBuffer(R__b, this);
+   }
+}
+
+
+#else
 //____________________________________________________________________________
 void JSFCDCTrack::Streamer(TBuffer &R__b)
 {
@@ -565,6 +603,7 @@ void JSFCDCTrack::Streamer(TBuffer &R__b)
 }
 
 
+#endif
 
 
 

@@ -541,6 +541,41 @@ void JSFCALGeoParam::HitCellGeom(Int_t iCellID, Float_t geo[])
 }
 
 
+#if __ROOT_FULLVERSION >= 30000
+//______________________________________________________________________________
+void JSFQuickSimParam::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFQuickSimParam.
+
+   if (R__b.IsReading()) {
+     UInt_t R__s, R__c;
+     Version_t R__v=R__b.ReadVersion(&R__s, &R__c);
+     if( R__v > 3 ) {
+       JSFQuickSimParam::Class()->ReadBuffer(R__b, this, R__v, R__s, R__c);
+       return;
+     }
+     // process old version data.
+     TNamed::Streamer(R__b);
+     R__b >> fSeed;
+     R__b >> fBfield;
+     R__b.ReadStaticArray(fTrack);
+     R__b.ReadStaticArray(fEMCal);
+     R__b.ReadStaticArray(fHDCal);
+     R__b >> fNSMPVX;
+     R__b >> fDPHIVX;
+     R__b >> fDZEEVX;
+     R__b >> fNUMVTX;
+     R__b.ReadStaticArray((float*)fVTXLayer);
+     R__b.ReadStaticArray((float*)fVTXError);
+     R__b.ReadStaticArray((float*)fCLSPAR);
+     R__b.CheckByteCount(R__s, R__c, JSFQuickSimParam::IsA());
+
+   } else {
+     JSFQuickSimParam::Class()->WriteBuffer(R__b, this);
+   }
+}
+
+#else
 
 //______________________________________________________________________________
 void JSFQuickSimParam::Streamer(TBuffer &R__b)
@@ -581,4 +616,4 @@ void JSFQuickSimParam::Streamer(TBuffer &R__b)
    }
 }
 
-
+#endif

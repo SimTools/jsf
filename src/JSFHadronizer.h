@@ -43,10 +43,8 @@ public:
    void SetCopySpringClassDataToBank(Bool_t flag){
      fCopySpringClassDataToBank= flag ;}
    Bool_t GetCopySpringClassDataToBank(){return fCopySpringClassDataToBank ; }
-//   virtual void  BeginRun(Int_t nrun);
 
-
-   ClassDef(JSFHadronizer,1)  // Debug structure
+   ClassDef(JSFHadronizer,2)  // Debug structure
 };
 
 

@@ -98,6 +98,70 @@ const Char_t *JSFLTKCLTrack::GetTypeName()
   return gTypeName[fType];
 }
 
+#if __ROOT_FULLVERSION__ >= 30000
+//______________________________________________________________________________
+void JSFLTKCLTrack::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFLTKCLTrack.
 
+   if (R__b.IsReading()) {
+     UInt_t R__s, R__c;
+     Version_t R__v = R__b.ReadVersion(&R__s, &R__c);
+     if( R__v > 1 ) {
+       JSFLTKCLTrack::Class()->ReadBuffer(R__b, this, R__v, R__s, R__c);
+       return;
+     }
+     TObject::Streamer(R__b);
+     R__b >> (Int_t&)fBank;
+     R__b.ReadStaticArray(fP);
+     R__b >> fEcl;
+     R__b >> fNEMC;
+     R__b >> fCharge;
+     R__b >> fType;
+     R__b >> fSource;
+     R__b >> fNCDC;
+     R__b >> f1stCDC;
+     R__b.CheckByteCount(R__s, R__c, JSFLTKCLTrack::IsA());
+
+   } else {
+     JSFLTKCLTrack::Class()->WriteBuffer(R__b, this);
+   }
+}
+
+#else
+
+//______________________________________________________________________________
+void JSFLTKCLTrack::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFLTKCLTrack.
+
+   if (R__b.IsReading()) {
+      Version_t R__v = R__b.ReadVersion(); if (R__v) { }
+      TObject::Streamer(R__b);
+      R__b >> (Int_t&)fBank;
+      R__b.ReadStaticArray(fP);
+      R__b >> fEcl;
+      R__b >> fNEMC;
+      R__b >> fCharge;
+      R__b >> fType;
+      R__b >> fSource;
+      R__b >> fNCDC;
+      R__b >> f1stCDC;
+   } else {
+      R__b.WriteVersion(JSFLTKCLTrack::IsA());
+      TObject::Streamer(R__b);
+      R__b << (Int_t)fBank;
+      R__b.WriteArray(fP, 4);
+      R__b << fEcl;
+      R__b << fNEMC;
+      R__b << fCharge;
+      R__b << fType;
+      R__b << fSource;
+      R__b << fNCDC;
+      R__b << f1stCDC;
+   }
+}
+
+#endif
 
 

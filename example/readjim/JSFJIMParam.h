@@ -114,7 +114,7 @@ public:
    }
 
 
-   ClassDef(JSFJIMParam,1) // JSFJIMParam
+   ClassDef(JSFJIMParam,2) // JSFJIMParam
 };
  
 #endif

@@ -106,4 +106,61 @@ void JSFGeneratorBuf::Append(JSFGeneratorBuf *src)
   fNparticles+=nsrc;
 
 }
+#if __ROOT_FULLVERSION__ >= 30000
+//______________________________________________________________________________
+void JSFGeneratorBuf::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFGeneratorBuf.
+
+   if (R__b.IsReading()) {
+     UInt_t R__s, R__c;
+     Version_t R__v=R__b.ReadVersion(&R__s, &R__c);
+     if( R__v > 1 ) {
+       JSFGeneratorBuf::Class()->ReadBuffer(R__b, this, R__v, R__s, R__c);
+       return;
+     }
+
+     JSFEventBuf::Streamer(R__b);
+     R__b >> fStartSeed;
+     R__b >> fEcm;
+     R__b >> fNparticles;
+     fParticles->Streamer(R__b);
+     R__b.CheckByteCount(R__s, R__c, JSFGeneratorBuf::IsA());
+   } else {
+     JSFGeneratorBuf::Class()->WriteBuffer(R__b, this);
+   }
+}
+
+#else
+
+//______________________________________________________________________________
+void JSFGeneratorBuf::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFGeneratorBuf.
+
+   if (R__b.IsReading()) {
+      Version_t R__v = R__b.ReadVersion(); if (R__v) { }
+      JSFEventBuf::Streamer(R__b);
+      R__b >> fStartSeed;
+      R__b >> fEcm;
+      R__b >> fNparticles;
+      fParticles->Streamer(R__b);
+   } else {
+      R__b.WriteVersion(JSFGeneratorBuf::IsA());
+      JSFEventBuf::Streamer(R__b);
+      R__b << fStartSeed;
+      R__b << fEcm;
+      R__b << fNparticles;
+      fParticles->Streamer(R__b);
+   }
+}
+
+#endif
+
+
+
+
+
+
+
 

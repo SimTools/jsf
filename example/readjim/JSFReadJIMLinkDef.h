@@ -4,11 +4,11 @@
 #pragma link off all classes;
 #pragma link off all functions;
 
-#pragma link C++ class JSFReadJIMBank;
-#pragma link C++ class JSFReadJIMBankBuf;
-#pragma link C++ class JSFJIMParam;
+#pragma link C++ class JSFReadJIMBank+;
+#pragma link C++ class JSFReadJIMBankBuf+;
+#pragma link C++ class JSFJIMParam-;
 
 #pragma link C++ class JSFJLCSIM;
-#pragma link C++ class JSFJIMEventDisplay;
+#pragma link C++ class JSFJIMEventDisplay+;
 
 #endif

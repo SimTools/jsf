@@ -177,3 +177,53 @@ Bool_t JSFHadronizer::GetLastRunInfo()
   return kTRUE;
 }
 
+#if __ROOT_FULLVERSION__ >=30000
+//___________________________________________________________________________
+void JSFHadronizer::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFHadronizer.
+
+   if (R__b.IsReading()) {
+     UInt_t R__s, R__c;
+     Version_t R__v=R__b.ReadVersion(&R__s, &R__c);
+     if( R__v > 1 ) {
+       JSFHadronizer::Class()->ReadBuffer(R__b, this, R__v, R__s, R__c);
+       return;
+     }
+     JSFFULLGenerator::Streamer(R__b);
+     R__b.ReadStaticArray(fMRLU);
+     R__b.ReadStaticArray(fRRLU);
+     R__b.ReadStaticArray(fRASET1U);
+     R__b.ReadStaticArray(fRASET1IJ97);
+     R__b.CheckByteCount(R__s, R__c, JSFHadronizer::IsA());
+
+   } else {
+     JSFHadronizer::Class()->WriteBuffer(R__b, this);
+   }
+
+}
+
+#else
+//______________________________________________________________________________
+void JSFHadronizer::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFHadronizer.
+
+   if (R__b.IsReading()) {
+      Version_t R__v = R__b.ReadVersion(); if (R__v) { }
+      JSFFULLGenerator::Streamer(R__b);
+      R__b.ReadStaticArray(fMRLU);
+      R__b.ReadStaticArray(fRRLU);
+      R__b.ReadStaticArray(fRASET1U);
+      R__b.ReadStaticArray(fRASET1IJ97);
+   } else {
+      R__b.WriteVersion(JSFHadronizer::IsA());
+      JSFFULLGenerator::Streamer(R__b);
+      R__b.WriteArray(fMRLU, 6);
+      R__b.WriteArray(fRRLU, 100);
+      R__b.WriteArray(fRASET1U, 98);
+      R__b.WriteArray(fRASET1IJ97, 2);
+   }
+}
+#endif
+

@@ -18,6 +18,7 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
+#include <TClass.h>
 #include "JSFVertexing.h"
 
 ClassImp(JSFVertexing)
@@ -268,4 +269,64 @@ CC********************************************************************CC
   return fQuality; 
 }
 
+#if __ROOT_FULLVERSION__ >= 30000
+//______________________________________________________________________________
+void JSFVertexing::Streamer(TBuffer &R__b)
+{
+  // Stream an object of class JSFVertexing.
+
+  if (R__b.IsReading()) {
+    UInt_t R__s, R__c;
+    Version_t R__v = R__b.ReadVersion(&R__s, &R__c);
+    if( R__v > 1 ) {
+      JSFVertexing::Class()->ReadBuffer(R__b, this, R__v, R__s, R__c);
+      return;
+    }
+
+    TObject::Streamer(R__b);
+    R__b.ReadStaticArray(fV);
+    R__b >> fQuality;
+    fT->Streamer(R__b);
+    R__b >> fChisq;
+    R__b >> fEntries;
+    R__b >> fPairEpsilon;
+    R__b.CheckByteCount(R__s, R__c, JSFVertexing::IsA());
+    
+  } 
+  else {
+    JSFVertexing::Class()->WriteBuffer(R__b, this);
+  }
+
+}
+
+#else
+
+
+//______________________________________________________________________________
+void JSFVertexing::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFVertexing.
+
+   if (R__b.IsReading()) {
+      Version_t R__v = R__b.ReadVersion(); if (R__v) { }
+      TObject::Streamer(R__b);
+      R__b.ReadStaticArray(fV);
+      R__b >> fQuality;
+      fT->Streamer(R__b);
+      R__b >> fChisq;
+      R__b >> fEntries;
+      R__b >> fPairEpsilon;
+   } else {
+      R__b.WriteVersion(JSFVertexing::IsA());
+      TObject::Streamer(R__b);
+      R__b.WriteArray(fV, 3);
+      R__b << fQuality;
+      fT->Streamer(R__b);
+      R__b << fChisq;
+      R__b << fEntries;
+      R__b << fPairEpsilon;
+   }
+}
+
+#endif
 

@@ -1,16 +1,5 @@
-//*LastUpdate:  jsf-1-12 31-July-1999  by A.Miyamoto
-//*LastUpdate:  jsf-1-11 28-July-1999  by A.Miyamoto
-//*LastUpdate:  jsf-1-9 28-May-1999  by A.Miyamoto
-//*LastUpdate:  jsf-1-7-2 16-April-1999  by A.Miyamoto
-//*LastUpdate:  jsf-1-5 21-Feburary-1999  by A.Miyamoto
-//*LastUpdate:  jsf-1-4 14-Feburary-1999  by A.Miyamoto
-//*LastUpdate:  v0.3.08 09/29/1998  by A.Miyamoto
+//*LastUpdate:  jsf-1-17 6-Jan-2001  by A.Miyamoto
 //*-- Author :  Akiya Miyamoto  09/24/1998
-
-/*  Update history
-  26-August-1999  A.Miyamoto  Use JSFEnv instead of TEnv. 
-                              Suppress output of readin module name.
-*/
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -88,6 +77,9 @@
 //      }
 //
 //$Id$
+//(Update)
+//  6-Jan-2001  A.Miyamoto Use Root.3.00 IO functions
+//                         Class JSFSteerConf was modified.
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -101,6 +93,7 @@
 #include <TApplication.h>
 #include <TFile.h>
 #include <TKey.h>
+#include <TString.h>
 
 #include "JSFSteer.h"
 #include "JSFConfig.h"
@@ -672,7 +665,7 @@ Bool_t JSFSteer::SetupTree()
     sprintf(kname, "%s;%d",gJSFEventKey->GetName(),gJSFEventKey->GetCycle());
     fITree=(TTree*)fIFile->Get(kname);
   }
-
+  
 
   fReadin=new JSFSteer("ReadinJSF");
   fReadin->fConf->Read("JSF");
@@ -687,11 +680,11 @@ Bool_t JSFSteer::SetupTree()
   Char_t temp[200];
   for(Int_t i=0;i<fReadin->fConf->fNmodule;i++){
     sprintf(temp,"%s mod%d(\"%s\",\"Readin module\")",
-	    fReadin->fConf->fClasses[i],i,fReadin->fConf->fNames[i]);
+	    fReadin->fConf->fClasses[i].Data(),i,fReadin->fConf->fNames[i].Data());
     //    printf(" temp=%s\n",temp);
     gROOT->ProcessLine(temp);
 
-    JSFModule *module = FindModule(fReadin->fConf->fClasses[i]);
+    JSFModule *module = FindModule(fReadin->fConf->fClasses[i].Data());
 
     module->SetBranch(fITree);
 
@@ -765,11 +758,11 @@ void JSFSteer::SetInput(TFile &file)
   Char_t temp[200];
   for(Int_t i=0;i<fReadin->fConf->fNmodule;i++){
     sprintf(temp,"%s mod%d(\"%s\",\"Readin module\")",
-	    fReadin->fConf->fClasses[i],i,fReadin->fConf->fNames[i]);
+	    fReadin->fConf->fClasses[i].Data(),i,fReadin->fConf->fNames[i].Data());
     //    printf(" temp=%s\n",temp);
     //    gROOT->ProcessLine(temp);
 
-    JSFModule *module = FindModule(fReadin->fConf->fClasses[i]);
+    JSFModule *module = FindModule(fReadin->fConf->fClasses[i].Data());
 
     module->SetBranch(fITree);
     module->SetFile(fIFile);
@@ -797,7 +790,7 @@ void JSFSteer::MakeConfDir()
 }
 
 //_____________________________________________________________________________
-JSFModule *JSFSteer::FindModule(Text_t *classname, const Char_t *opt)
+JSFModule *JSFSteer::FindModule(const Text_t *classname, const Char_t *opt)
 {
   // Find JSF Module, which is inherited by "classname".
 
@@ -821,16 +814,17 @@ JSFSteerConf::JSFSteerConf(const char *name, const char*title)
 {
   //  A class to save JSFSteer information;
   //  class name, name, and title of defined modules are saved.
-  fClasses=0;
-  fNames=0;
+  fSize=50;
+  fClasses=new TString [fSize];
+  fNames=new TString [fSize];
   fNmodule = 0;
 }
 
 //_____________________________________________________________________________
 JSFSteerConf::~JSFSteerConf()
 {
-  if (!fClasses) delete fClasses;
-  if (!fNames) delete fNames;
+  delete [] fClasses;
+  delete [] fNames;
 }
 
 //_____________________________________________________________________________
@@ -844,24 +838,49 @@ void JSFSteerConf::Initialize(TList *mlist)
   while (( module = (JSFModule*)next()))
         {if(module->IsWritable() && module->GetMakeBranch())fNmodule++; }
 
-  fClasses = new Char_t* [fNmodule];
-  fNames   = new Char_t* [fNmodule];
   next.Reset();
-  Int_t lc;
   Int_t im=0;
   while (( module = (JSFModule*)next())) {
     if(module->IsWritable() && module->GetMakeBranch()){
-      lc=strlen(module->GetName());
-      fNames[im]=new Char_t[lc+1];
-      strcpy(fNames[im], module->GetName());
-      lc=strlen(module->ClassName());
-      fClasses[im]=new Char_t[lc+1];
-      strcpy(fClasses[im], module->ClassName());
+      fNames[im]=module->GetName();
+      fClasses[im]=module->ClassName();
       im++;
     }
   }
 
 }
+
+#if __ROOT_FULLVERSION__ >= 30000
+//______________________________________________________________________________
+void JSFSteerConf::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFSteerConf.
+
+   if (R__b.IsReading()) {
+     UInt_t R__s, R__c;
+     Version_t R__v = R__b.ReadVersion(&R__s, &R__c); 
+     if( R__v > 1 ) {
+       JSFSteerConf::Class()->ReadBuffer(R__b, this, R__v, R__s, R__c);
+       return;
+     }
+     // Process OLD version data
+      R__b >> fNmodule;
+      Char_t temp[200];
+      Int_t lc;
+      for(Int_t i=0;i<fNmodule;i++){
+	lc=R__b.ReadStaticArray(temp);
+	fClasses[i]=temp;
+	lc=R__b.ReadStaticArray(temp);
+	fNames[i]=temp;
+      }
+      R__b.CheckByteCount(R__s, R__c, JSFSteerConf::IsA());
+   } 
+   else {
+     JSFSteerConf::Class()->WriteBuffer(R__b, this);
+   }
+}
+
+#else
 
 //______________________________________________________________________________
 void JSFSteerConf::Streamer(TBuffer &R__b)
@@ -872,19 +891,14 @@ void JSFSteerConf::Streamer(TBuffer &R__b)
       Version_t R__v = R__b.ReadVersion(); if (R__v) { }
       TNamed::Streamer(R__b);
       R__b >> fNmodule;
-      fClasses = new Char_t* [fNmodule];
-      fNames   = new Char_t* [fNmodule];
       Char_t temp[200];
       Int_t lc;
       for(Int_t i=0;i<fNmodule;i++){
 	lc=R__b.ReadStaticArray(temp);
-	temp[lc]=(Char_t)NULL;
-	fClasses[i]=new Char_t[lc+1];
-	strcpy(fClasses[i],temp);
+	fClasses[i]=temp;
+
 	lc=R__b.ReadStaticArray(temp);
-	temp[lc]=(Char_t)NULL;
-	fNames[i]=new Char_t[lc+1];
-	strcpy(fNames[i],temp);
+	fNames[i]=temp;
       }
 
    } else {
@@ -894,11 +908,13 @@ void JSFSteerConf::Streamer(TBuffer &R__b)
       //  Write class and name information
       Int_t lc;
       for(Int_t i=0;i<fNmodule;i++){
-	lc=strlen(fClasses[i])+1;
-	R__b.WriteArray(fClasses[i],lc);
-	lc=strlen(fNames[i])+1;
-	R__b.WriteArray(fNames[i],lc);
+	lc=strlen(fClasses[i].Data())+1;
+	R__b.WriteArray(fClasses[i].Data(),lc);
+	lc=strlen(fNames[i].Data())+1;
+	R__b.WriteArray(fNames[i].Data(),lc);
       }
    }
 }
 
+
+#endif

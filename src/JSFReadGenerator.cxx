@@ -280,3 +280,47 @@ Bool_t JSFReadGeneratorBuf::ReadOneRecord()
   return kTRUE;
 }
 
+#if __ROOT_FULLVERSION >= 30000
+//______________________________________________________________________________
+void JSFReadGenerator::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFReadGenerator.
+
+   if (R__b.IsReading()) {
+     UInt_t R__s, R__c;
+     Version_t R__v=R__b.ReadVersion(&R__s, &R__c);
+     if( R__v > 1 ) {
+       JSFReadGenerator::Class()->ReadBuffer(R__b, this, R__v, R__s, R__c);
+       return;
+     }
+     JSFGenerator::Streamer(R__b);
+     R__b >> fUnit;
+     R__b.ReadStaticArray(fFormat);
+     R__b.CheckByteCount(R__s, R__c, JSFReadGenerator::IsA());
+
+   } else {
+     JSFReadGenerator::Class()->WriteBuffer(R__b, this);
+   }
+
+}
+
+#else
+//______________________________________________________________________________
+void JSFReadGenerator::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFReadGenerator.
+
+   if (R__b.IsReading()) {
+      Version_t R__v = R__b.ReadVersion(); if (R__v) { }
+      JSFGenerator::Streamer(R__b);
+      R__b >> fUnit;
+      R__b.ReadStaticArray(fFormat);
+   } else {
+      R__b.WriteVersion(JSFReadGenerator::IsA());
+      JSFGenerator::Streamer(R__b);
+      R__b << fUnit;
+      R__b.WriteArray(fFormat, 32);
+   }
+}
+
+#endif

@@ -11,6 +11,7 @@
 
 #include "TObject.h"
 #include "TClonesArray.h"
+#include "TString.h"
 
 #ifndef __JSFModule__
 #include "JSFModule.h"
@@ -49,15 +50,24 @@ class JSFSpring : public JSFModule {
 protected:
    JSFBases *fBases;  //! Pointer to bases class
    Bool_t    fDoBases; //! Do bases at beginrun, or read bases data
+
+#if __ROOT_FULLVERSION__ >= 30000
+   TString    fBasesClassName;//
+   TString    fBasesObjectName;//
+   TString    fBasesObjectTitle;//
+#endif
+
    Int_t      fMXTRY; // Max number of try in the Spring step.
 
-   Long_t     fSeed; //!
-   Long_t     fSeedIY; //!
-   Long_t     fSeedIV[NTAB]; //!
-   Bool_t     fSetSeed; //! true to copy fSeedRdm and fSeedIa1 to bases common.
+   Int_t      fioNTAB; //
+   Long_t     fSeed;   //
+   Long_t     fSeedIY; //
+   Long_t     *fSeedIV; //[fioNTAB]
 
+   Bool_t     fSetSeed; //! true to copy fSeedRdm and fSeedIa1 to bases common.
    Bool_t     fPrintHist; //! Print histogram
    Bool_t     fPrintInfo; //! Print information
+
 public:
    JSFSpring(const char *name="JSFSpring", 
 	     const char *title="JSF Spring", 
@@ -85,7 +95,7 @@ public:
    void SetPrintHist(Bool_t flag){ fPrintHist=flag; }
 
    
-    ClassDef(JSFSpring,3)  // JSFSpring module
+    ClassDef(JSFSpring,4)  // JSFSpring module
 };
 
 
