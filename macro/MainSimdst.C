@@ -31,10 +31,10 @@ int MainSimdst(Int_t maxevt)
   simdst->SetParamFileName(oparam);
 
   
-  full->SetMakeBranch(kFALSE);   // suppress output of EventBuf 
+  //  full->SetMakeBranch(kFALSE);   // suppress output of EventBuf 
   //  py->SetMakeBranch(kFALSE);     // suppress output of EventBuf 
   //  sim->SetMakeBranch(kFALSE);    // suppress output of EventBuf
-  simdst->SetMakeBranch(kFALSE);     // suppress output of EventBuf
+  //  simdst->SetMakeBranch(kFALSE);     // suppress output of EventBuf
  
   py->SetEcm(fEcm);             // Center of mass energy (GeV)
   InitPythia();         // Set Pythia parameters.
