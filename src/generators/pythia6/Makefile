@@ -18,8 +18,9 @@ ifeq ($(UNAME),Darwin)
 FFLAGS    = -O0 -g -fno-second-underscore
 CFLAGS    =
 LD        = $(FC)
-LDFLAGS   = -r -flat_namespace -nostdlib -undefined suppress
-SharedLib = libPythia6.a
+LDFLAGS   = -dynamiclib -flat_namespace -single_module -undefined suppress
+SharedLib = libPythia6.dylib
+BUNDLE    = $(subst .dylib,.so,$(SharedLib))
 INSTALL   = install -c
 else
 FFLAGS    = -O2 -g -fPIC -fno-second-underscore
@@ -49,11 +50,17 @@ srclist: $(PYTHIANAME).f
 lib: srclist $(OBJS)
 	@rm -f $(SharedLib)
 	$(LD) $(LDFLAGS) -o $(SharedLib) $(OBJS) 
+ifeq ($(UNAME),Darwin)
+	$(LD) -bundle -flat_namespace -undefined suppress -o $(BUNDLE) $(OBJS)
+endif
 
 install: $(SharedLib)
 	$(INSTALL) $(SharedLib) ../../../lib/$(SharedLib)
 	mkdir -p ../../../include
 	$(INSTALL) -m 644 pythia6.inc ../../../include/pythia6.inc
+ifeq ($(UNAME),Darwin)
+	$(INSTALL) $(BUNDLE) ../../../lib/$(BUNDLE)
+endif
 
 uninstall:
 	rm -f ../../../lib/$(SharedLib)
@@ -78,7 +85,7 @@ clean:
 	rm -f $(SRCS) srclist
 
 distclean: clean
-	rm -f pythia_test libPythia6.so
+	rm -f pythia_test libPythia6.so libPythia6.dylib
 
 ifeq ($(UNAME),Darwin)
 PYSIGH.o: PYSIGH.f
