@@ -5,7 +5,11 @@ XCOMM #---------------------------------------------------
 #include "config/lclib.tmpl"
 #include "conf/makejsf.tmpl"
 
+#ifdef __LCLIBRAN_USE_RANMAR__
+CERNLIBS      = $(shell cernlib jetset74 mathlib)
+#else
 CERNLIBS      = $(shell cernlib jetset74)
+#endif
 
 #if defined(MacOSXArchitecture) || defined(DarwinArchitecture)
 ROOTLIBS     += -lEGPythia -lEG $(CERNLIBS)
