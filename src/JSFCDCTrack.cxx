@@ -49,6 +49,12 @@ JSFCDCTrack::JSFCDCTrack(Int_t itrkp[])
   fP[0]=trk[0];  fP[1]=trk[1];  fP[2]=trk[2];
   fE=trk[3];
   fX[0]=trk[4]; fX[1]=trk[5]; fX[2]=trk[6];
+
+  //  if( TMath::Abs(trk[6]) > 500.0 ) {
+  //    printf(" Strange track in CDCTrack bank... closest approach is x,y,z=%g,%g,%g\n",
+  //	   trk[4],trk[5],trk[6]);
+  //  }
+
   fCharge = itrkp[8];
   Int_t i;
   for(i=0;i<5;i++){ fHelix[i]=trk[10+i] ;}
@@ -415,10 +421,13 @@ void JSFCDCTrack::MovePivot(Float_t pivot[], Float_t bfield)
 }
 
 //______________________________________________________________________________
-void JSFCDCTrack::AddMSError(Float_t xrad)
+void JSFCDCTrack::AddMSError(Float_t xrad, Float_t deltakappa)
 {
   // Increase the error matrix to include the effect of 
   // the multiple scattering in the matterinal of radiation length xrad.
+  //
+  // deltakappa is subtracted from Kappa of helix parameter for 
+  // energy loss correction
 
   Double_t tnlsq=fHelix[4]*fHelix[4];
   Double_t tnlsqone=1.0+tnlsq;
@@ -434,6 +443,8 @@ void JSFCDCTrack::AddMSError(Float_t xrad)
   fError[14]= fError[14]+sigmsq*tnlsqone*tnlsqone;
 
   //C .. E(2,2)=EDAT(3), E(3,3)=Edat(6), E(3,5)=Edat(13), E(5,5)=Edat(15)
+
+  fHelix[2]-=deltakappa;
 
 }
 

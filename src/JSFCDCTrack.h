@@ -70,7 +70,7 @@ public:
   void SetPositionAtEMC(Float_t pos[]);
   void ExtrapolateErrorAtEMC(Float_t helix[], Float_t x[], Float_t dx[]);
   void MovePivot(Float_t pivot[], Float_t bfield);
-  void AddMSError(Float_t xrad);
+  void AddMSError(Float_t xrad, Float_t deltakappa=0.0);
   Bool_t MovePivotToIP(JSFQuickSimParam *spar);
 
   Int_t GetCharge(){ return fCharge;}
