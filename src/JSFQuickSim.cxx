@@ -428,8 +428,46 @@ Bool_t JSFQuickSimBuf::MakeEventBuf()
 
    MakeJSFLTKCLTrackPointers();
 
+   SetTrackNSig();   
+
    return kTRUE;
 }
+
+//_____________________________________________________________________________
+void JSFQuickSimBuf::SetTrackNSig()
+{
+
+  JSFQuickSimParam *spar=((JSFQuickSim*)Module())->Param();
+  Float_t trk[30];
+  Double_t err[15];
+
+  TIter next(fTracks);
+  JSFLTKCLTrack *t;
+  
+  while( (t=(JSFLTKCLTrack*)next())) {
+    if( t->GetNCDC() < 1 ) continue;
+    JSFCDCTrack ct(*(t->GetCDC()));
+    if( ct.GetNVTX() < 3 ) continue;
+    JSFHelicalTrack ht=ct.GetHelicalTrack();
+    ht.SetBfield(spar->GetBField());
+    JSF3DV pos=ht.GetCoordinate(0.0);
+    Float_t rini = TMath::Sqrt(pos.x*pos.x + pos.y*pos.y);
+    if( rini > spar->GetVTXRadius(2)-0.01 ) continue;
+
+    Bool_t ret=ct.MovePivotToIP(spar);
+    if( ret ) {
+      ct.GetErrorMatrix(err);
+      ct.GetTrackParameter(trk);
+      t->fVTXDR=trk[9];
+      t->fVTXDZ=trk[12];
+      t->fVTXDDR=TMath::Sqrt(err[0]);
+      t->fVTXDDZ=TMath::Sqrt(err[9]);
+      t->fVTXNSig=TMath::Sqrt(trk[9]*trk[9]/err[0] + trk[12]*trk[12]/err[9]);
+    }      
+  }
+
+}
+
 
 //_____________________________________________________________________________
 Bool_t JSFQuickSimBuf::MakeJSFLTKCLTrackPointers()

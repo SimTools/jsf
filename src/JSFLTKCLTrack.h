@@ -1,4 +1,3 @@
-
 #ifndef __JSFLTKCLTrack__
 #define __JSFLTKCLTrack__
 
@@ -52,6 +51,12 @@ protected:
   Int_t     f1stCDC;  // Element number of corresponding CDC:Track_Parameter or Index of CDC tracks.
   JSFCDCTrack *fCDC;  //! Address of corresponding CDC track.
 
+  Float_t   fVTXDR;   // Track distance to IP in XY plane.
+  Float_t   fVTXDZ;   // Track distance to IP in Z direction
+  Float_t   fVTXDDR;  // Error of fVTXDR 
+  Float_t   fVTXDDZ;  // Error of fVTXDZ
+  Float_t   fVTXNSig; // Sqrt( (VTXDR/VTXDDR)^2 + (VTXDZ/VTXDDZ)^2 ), Siginificance
+
   Int_t     *fIDCDC;   //[fNCDC]  saves CDC tracks contributing to this LTKCLTrack
   TObjArray  *fCDCs;   //! Associated CDC tracks
   TObjArray  *fEMGen;  //!  Generator particles contributing to the EM cluster.  
@@ -63,6 +68,7 @@ protected:
   inline void SetCDCR(Int_t ind, JSFCDCTrack *t){ f1stCDC=ind; fCDC=t; }; 
   inline void SetEMGen(JSFGeneratorParticle *emg){ fEMGen->Add(emg); }
   inline void SetNEMGen(Int_t nemc){ fNEMGen=nemc; }
+
 
 public:
   JSFLTKCLTrack();
@@ -95,6 +101,11 @@ public:
   Int_t    Get1stCDC(){ return f1stCDC;}
   JSFCDCTrack *GetCDC(){ return fCDC;}
 
+  inline Float_t GetVTXDR(){ return fVTXDR; }
+  inline Float_t GetVTXDZ(){ return fVTXDZ; }
+  inline Float_t GetVTXDDR(){ return fVTXDDR; }
+  inline Float_t GetVTXDDZ(){ return fVTXDDZ; }
+  inline Float_t GetVTXNSig(){ return fVTXNSig; }
 
   inline Int_t GetEMGenEntries(){ return 
 			    ( fEMGen == NULL ? 0 : fEMGen->GetEntries() ) ; }
@@ -116,7 +127,7 @@ public:
   TVector GetPV(){ TVector p(4) ; 
           p(0)=fP[0] ; p(1) =fP[1] ; p(2)=fP[2] ; p(3)=fP[3] ; return p ; }
 
-  ClassDef(JSFLTKCLTrack,4)  //A JSFLTKCLTrack
+  ClassDef(JSFLTKCLTrack,5)  //A JSFLTKCLTrack
 };
 
 #endif

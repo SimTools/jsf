@@ -45,6 +45,13 @@ JSFLTKCLTrack::JSFLTKCLTrack()
   fIDCDC=NULL;
   fIDEMGen=NULL;
   fNEMGen=0;
+
+  fVTXDR=0.0;
+  fVTXDZ=0.0;
+  fVTXDDR=1.E10;
+  fVTXDDZ=1.E10;
+  fVTXNSig=0.0;
+
 }
 //_____________________________________________________________________________
 JSFLTKCLTrack::~JSFLTKCLTrack()
@@ -87,6 +94,12 @@ JSFLTKCLTrack::JSFLTKCLTrack(EJSFLTKCLTrackBank bank, Float_t data[])
     fCDC=NULL;
     fCDCs=new TObjArray();
     fEMGen=new TObjArray();
+
+    fVTXDR=0.0;
+    fVTXDZ=0.0;
+    fVTXDDR=1.E10;
+    fVTXDDZ=1.E10;
+    fVTXNSig=0.0;
 }
 
 //_____________________________________________________________________________
@@ -107,6 +120,12 @@ JSFLTKCLTrack::JSFLTKCLTrack(Float_t data[])
     fIDCDC=NULL;
     fIDEMGen=NULL;
     fNEMGen=0;
+
+    fVTXDR=0.0;
+    fVTXDZ=0.0;
+    fVTXDDR=1.E10;
+    fVTXDDZ=1.E10;
+    fVTXNSig=0.0;
 }
 //_____________________________________________________________________________
 JSFLTKCLTrack::JSFLTKCLTrack(JSFLTKCLTrack& t)
@@ -149,6 +168,11 @@ JSFLTKCLTrack::JSFLTKCLTrack(JSFLTKCLTrack& t)
     fIDEMGen=NULL;
     fNEMGen=0;
   }
+  fVTXDR=t.fVTXDR;;
+  fVTXDZ=t.fVTXDZ;
+  fVTXDDR=t.fVTXDDR;
+  fVTXDDZ=t.fVTXDDZ;
+  fVTXNSig=t.fVTXNSig;
 }
 
 //_____________________________________________________________________________

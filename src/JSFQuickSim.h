@@ -71,6 +71,7 @@ private:
 
    void AppendCALHits(JSFQuickSimBuf *src);
    void AppendLTKCLTracks(JSFQuickSimBuf *src, Int_t numgp, JSFGeneratorBuf *gbuf);
+   void SetTrackNSig();
 
 public:
    JSFQuickSimBuf();
