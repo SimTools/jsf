@@ -30,6 +30,7 @@
 #include "J4RunAction.hh"
 #include "J4EventAction.hh"
 #include "J4TrackingAction.hh"
+#include "J4SteppingAction.hh"
 #include "TBookKeeper.hh"
 
 // #ifdef G4VIS_USE
@@ -38,12 +39,13 @@
 
 //#include "CLHEP/Random/Random.h"
 
+
 #include "J4IR.hh"
 #include "J4BD.hh"
 #include "J4VTX.hh"
 #include "J4IT.hh"
-#include "J4CDC.hh"
 #include "J4CAL.hh"
+#include "J4SOL.hh"
 
 TBookKeeper* TBookKeeper::fgBookKeeper = new TBookKeeper();
 
@@ -53,15 +55,23 @@ TBookKeeper* TBookKeeper::fgBookKeeper = new TBookKeeper();
 #include "JSFJ4TOutput.h"
 #include "JSFJ4VTXHit.h"
 #include "JSFJ4ITHit.h"
-#include "JSFJ4CDCHit.h"
 #include "JSFJ4CALHit.h"
 
 #include "J4VTXPixelHit.hh"
 #include "J4VTXLayerHit.hh"
 #include "J4ITLayerHit.hh"
-#include "J4CDCDriftRegionHit.hh"
 #include "J4CALHit.hh"
 #include "JSFJ4PrimaryGeneratorAction.h"
+
+#ifndef USE__J4CT
+#include "J4CDC.hh"
+#include "J4CDCDriftRegionHit.hh"
+#include "JSFJ4CDCHit.h"
+#else
+#include "J4CTLayerHit.hh"
+#include "J4CT.hh"
+#include "JSFJ4CTHit.h"
+#endif
 
 ClassImp(JSFJ4)
 ClassImp(JSFJ4Buf)
@@ -83,7 +93,8 @@ JSFJ4Outputs_t gJSFJ4Outputs;
 
 //_____________________________________________________________________________
 JSFJ4::JSFJ4(const char *name, const char *title)
-  : JSFModule(name,title), fpDetector(0)
+  : JSFModule(name,title), fNcall(0), fNgood(0), fRunManager(0), fVisManager(0), fUImanager(0),
+    fUseJupiterGenerator(kTRUE), fInitMacro(""), fpDetector(0)
 {
 
   fEventBuf=new JSFJ4Buf("JSFJ4Buf", "JSFJ4 event data", this);
@@ -151,6 +162,7 @@ void JSFJ4::BuildJupiter()
     gJSFJ4Outputs["IT"]=new JSFJ4TOutput<JSFJ4ITHit,J4ITLayerHit>(ithits);
   }
 
+#ifndef USE__J4CT
   //* cdc
   if( gJSF->Env()->GetValue("JSFJ4.HasCDC",1) == 1 ) {
     J4CDC *pCDC = new J4CDC();
@@ -162,6 +174,20 @@ void JSFJ4::BuildJupiter()
     gJSFJ4Outputs["CDC"]=new JSFJ4TOutput<JSFJ4CDCHit,J4CDCDriftRegionHit>(cdchits);
   }
 
+#else
+
+  // Use CT instead of CDC
+  if( gJSF->Env()->GetValue("JSFJ4.HasCDC",1) == 1 ) {
+    J4CT *pCT = new J4CT();
+    pCT->SetMother(fpDetector->GetEXPHall());
+    fpDetector->AddComponent(pCT);
+
+    TObjArray *cdchits=buf->AddComponent("CDCHits");
+    gJSFJ4Detectors["CT"]=(J4Object*)pCT;
+    gJSFJ4Outputs["CT"]=new JSFJ4TOutput<JSFJ4CTHit,J4CTLayerHit>(cdchits);
+  }
+#endif
+
   //* calorimeter
   if( gJSF->Env()->GetValue("JSFJ4.HasCAL",1) == 1 ) {
     J4CAL *pCAL = new J4CAL();
@@ -171,6 +197,13 @@ void JSFJ4::BuildJupiter()
     TObjArray *calhits=buf->AddComponent("CALHits");
     gJSFJ4Detectors["CAL"]=(J4Object*)pCAL;
     gJSFJ4Outputs["CAL"]=new JSFJ4TOutput<JSFJ4CALHit,J4CALHit>(calhits);
+  }
+
+  //* Solenoid
+  if( gJSF->Env()->GetValue("JSFJ4.HasSolenoid",1) == 1 ) {
+    J4SOL *pSOL = new J4SOL();
+    pSOL->SetMother(fpDetector->GetEXPHall());
+    fpDetector->AddComponent(pSOL);
   }
 
   //*--------------------------------------------
@@ -198,9 +231,10 @@ void JSFJ4::BuildJupiter()
   fRunManager->SetUserAction(primaryGenerator);
 
   //* user action classes... (optional)
-  fRunManager-> SetUserAction(new J4RunAction);
+  fRunManager-> SetUserAction(new J4RunAction(gJSF->Env()->GetValue("JSFJ4.JupiterOut","hit.dat")));
   fRunManager-> SetUserAction(new J4EventAction);
   fRunManager-> SetUserAction(new J4TrackingAction);
+  fRunManager-> SetUserAction(new J4SteppingAction);
 
   fVisManager=0;
 // #ifdef G4VIS_USE
@@ -250,6 +284,7 @@ Bool_t JSFJ4::Initialize()
   	((J4IT*)((*idet).second))->J4VDetectorComponent::SwitchOn();
   }
 
+#ifndef USE__J4CT
   idet=gJSFJ4Detectors.find("CDC");
   if( idet != gJSFJ4Detectors.end() ) {
     ((J4CDC*)((*idet).second))->J4VDetectorComponent::SwitchOn();
@@ -267,6 +302,12 @@ Bool_t JSFJ4::Initialize()
     }
 */
   }
+#else
+  idet=gJSFJ4Detectors.find("CT");
+  if( idet != gJSFJ4Detectors.end() ) {
+    ((J4CT*)((*idet).second))->J4VDetectorComponent::SwitchOn();
+  }
+#endif
 
   idet=gJSFJ4Detectors.find("CAL");
   if( idet != gJSFJ4Detectors.end() ) {
