@@ -52,6 +52,7 @@ c      SAVE IFEVTI
          IFEVTI = 1
 
          CFILE = FNEVTI(IFEVTI)
+         print *,' File is ',CFILE,'...',' IFEVTI=',IFEVTI
          INQUIRE(FILE=CFILE(:LNBLNK(CFILE)),
      &        EXIST=LEXIST)
 

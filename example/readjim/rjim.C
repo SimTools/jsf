@@ -15,7 +15,8 @@ int rjim()
 
   jsf   = new JSFSteer();
   rjim  = new JSFReadJIMBank();
-  rjim->SetDataFileName("jetset_qq_fast.bnk");  
+  //  rjim->SetDataFileName("jetset_qq_fast.bnk");  
+  rjim->SetDataFileName("debug.bnk");  
   jsf->Initialize();
 
   Int_t maxevt=200;

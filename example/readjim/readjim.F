@@ -69,7 +69,8 @@ C .. Varaibales in jlunit.inc
 C      CALL FFKEY('EVTV',IVEVTI,1,'INTEGER')
 C      CALL FFKEY('EVTI',CFEVTI,32,'MIXED')
 C      CFEVTI = 'jetset_qq_fast.bnk'
-      CFEVTI = FNAME
+      
+      CFEVTI = FNAME(1:LEN(FNAME))
       NFEVTB = 0
       CFEVTB = ' '
 C      CALL FFKEY('EVTB',CFEVTB,32,'MIXED')
