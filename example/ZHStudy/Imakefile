@@ -5,7 +5,11 @@
 
 #include    "conf/makejsf.tmpl"
 
+#ifdef __LCLIBRAN_USE_RANMAR__
+CERNLIBS      = $(shell cernlib jetset74 packlib mathlib)
+#else
 CERNLIBS      = $(shell cernlib jetset74 packlib)
+#endif
 
 #if defined(MacOSXArchitecture) || defined(DarwinArchitecture)
 ROOTLIBS     += -lEGPythia -lEG $(CERNLIBS)
