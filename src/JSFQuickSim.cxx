@@ -274,8 +274,8 @@ JSFQuickSimParam::JSFQuickSimParam()
 
 
    // VTX 
-  fNERRVX   =     1    ; // VTX Space point error flag
-  fNSMPVX   =     3    ; // # sampling layers + 1 = NSMPVX        
+  fNERRVX   =     2    ; // VTX Space point error flag
+  fNSMPVX   =     5    ; // # sampling layers + 1 = NSMPVX        
   fDPHIVX   =   25.E-4 ; // phi pitch (cm)                        
   fDZEEVX   =   25.E-4 ; // Z   pitch (cm)                        
   
@@ -285,20 +285,30 @@ JSFQuickSimParam::JSFQuickSimParam()
   fVTXLayer[0][2]  =   100.   ; // Z+(cm)                        
   fVTXLayer[0][3]  =   0.003  ; // thickness in radiation length 
   //  Layer #1
-  fVTXLayer[1][0]  =    2.5  ; // radius (cm)                   s
-  fVTXLayer[1][1]  =   -7.5  ; // Z-(cm)                        
-  fVTXLayer[1][2]  =    7.5  ; // Z+(cm)                        
+  fVTXLayer[1][0]  =    2.4  ; // radius (cm)                   s
+  fVTXLayer[1][1]  =   -5.0  ; // Z-(cm)                        
+  fVTXLayer[1][2]  =    5.0  ; // Z+(cm)                        
   fVTXLayer[1][3]  =  0.003  ; // thickness in radiation length 
   //  Layer #2
-  fVTXLayer[2][0]  =    7.5  ; // radius (cm)                   
-  fVTXLayer[2][1]  =  -22.5  ; // -Z-(cm)                        
-  fVTXLayer[2][2]  =   22.5  ; // Z+(cm)                        
+  fVTXLayer[2][0]  =    3.6  ; // radius (cm)                   
+  fVTXLayer[2][1]  =   -7.5  ; // -Z-(cm)                        
+  fVTXLayer[2][2]  =    7.5  ; // Z+(cm)                        
   fVTXLayer[2][3]  =  0.003  ; // thickness in radiation length 
+  //  Layer #3
+  fVTXLayer[3][0]  =    4.8  ; // radius (cm)                   
+  fVTXLayer[3][1]  =  -10.0  ; // -Z-(cm)                        
+  fVTXLayer[3][2]  =   10.0  ; // Z+(cm)                        
+  fVTXLayer[3][3]  =  0.003  ; // thickness in radiation length 
+  //  Layer #4
+  fVTXLayer[4][0]  =    6.0  ; // radius (cm)                   
+  fVTXLayer[4][1]  =  -12.5  ; // -Z-(cm)                        
+  fVTXLayer[4][2]  =   12.5  ; // Z+(cm)                        
+  fVTXLayer[4][3]  =  0.003  ; // thickness in radiation length 
   // layer #NSMPVX (CDC inner cylinder)
-  fVTXLayer[3][0]  =    25.  ; // radius (cm)                   
-  fVTXLayer[3][1]  =  -230.  ; // Z-(cm)                        
-  fVTXLayer[3][2]  =   230.  ; // Z+(cm)                        
-  fVTXLayer[3][3]  =   0.01  ; // thickness in radiation length 
+  fVTXLayer[5][0]  =    25  ; // radius (cm)                   
+  fVTXLayer[5][1]  =  -230.  ; // Z-(cm)                        
+  fVTXLayer[5][2]  =   230.  ; // Z+(cm)                        
+  fVTXLayer[5][3]  =   0.01  ; // thickness in radiation length 
 
   fVTXError[0] = 4.E-4 ;
   fVTXError[1] = 4.E-4 ;
@@ -319,6 +329,7 @@ JSFQuickSimParam::JSFQuickSimParam()
   }
 
   // Load parameters
+
   printf(" Parameter file is %s\n",gJSF->Env()->GetValue("JSFQuickSim.ParameterFile","Undefined"));
   sscanf(gJSF->Env()->GetValue("JSFQuickSim.ParameterFile","Undefined"),
 	 "%s",fParamFile);
