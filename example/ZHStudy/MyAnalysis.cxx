@@ -69,7 +69,7 @@ Bool_t MyAnalysis::Process(Int_t nev)
    JSFQuickSim *sim=(JSFQuickSim*)gJSF->FindModule("JSFQuickSim");
    JSFQuickSimBuf *evt=(JSFQuickSimBuf*)sim->EventBuf();
    Int_t nt=evt->GetNTracks();
-   TClonesArray *tracks=evt->GetTracks();
+   TObjArray *tracks=evt->GetTracks();
 
    // Accumulate 4 momentum of the event
 
