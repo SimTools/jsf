@@ -63,3 +63,7 @@ zvtop3.o : zvtop3.F zvtopoption.inc
 zvres3.o : zvres3.F zvtopoption.inc
 zvsig3.o : zvsig3.F zvtopoption.inc
 
+web:
+	jsf -q -b html.C
+
+
