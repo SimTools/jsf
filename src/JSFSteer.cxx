@@ -1,3 +1,4 @@
+//*LastUpdate:  jsf-1-5 21-Feburary-1999  by A.Miyamoto
 //*LastUpdate:  jsf-1-4 14-Feburary-1999  by A.Miyamoto
 //*LastUpdate:  v0.3.08 09/29/1998  by A.Miyamoto
 //*-- Author :  Akiya Miyamoto  09/24/1998
@@ -144,17 +145,8 @@ JSFSteer::JSFSteer(const char *name, const char *title)
     }
     fEnv=new TEnv(envfile);  // Create pointer to env file.
 
-    // Set fIFile, fOFile according to the status of gFile
-    fIFile=0;
-    fOFile=0;
-    
-    if( gFile && gFile->IsOpen() ) {
-      if( strcmp(gFile->GetOption(),"READ")==0 ) fIFile=gFile;
-      else if ( strcmp(gFile->GetOption(),"CREATE")==0 ) fOFile=gFile;
-      else if ( strcmp(gFile->GetOption(),"UPDATE")==0) { 
-	fIFile=gFile ; fOFile=gFile ;
-      }
-    }
+    SetIOFiles();
+
   }
 }
 
@@ -170,6 +162,26 @@ JSFSteer::~JSFSteer()
     while( (module = (JSFModule*)next()) ) { delete module; }
   }
   if (!fConf) delete fConf;
+}
+
+//---------------------------------------------------------------------------
+void JSFSteer::SetIOFiles()
+{
+//  Set Flags for file IO, should be called after Input/Output file is assigned.
+//  
+
+    // Set fIFile, fOFile according to the status of gFile
+    fIFile=0;
+    fOFile=0;
+    
+    if( gFile && gFile->IsOpen() ) {
+      if( strcmp(gFile->GetOption(),"READ")==0 ) fIFile=gFile;
+      else if ( strcmp(gFile->GetOption(),"CREATE")==0 ) fOFile=gFile;
+      else if ( strcmp(gFile->GetOption(),"UPDATE")==0) { 
+	fIFile=gFile ; fOFile=gFile ;
+      }
+    }
+
 }
 
 
