@@ -3,13 +3,12 @@
 #include "conf/makejsf.tmpl"
 
 OBJS = simdstprint.o
+OBJHEPEVT = makehepevt.o
 
 #if __PYTHIA_VERSION__ >= 6
-OBJHEPEVT = makehepevt6.o
 INCPATH   = -I../../include
 LIBS      = -L$(JSFROOT)/lib -lPythia6
 #else
-OBJHEPEVT = makehepevt.o
 INCPATH   = -I$(CERN_ROOT)/include
 LIBS      = -L$(CERN_ROOT)/lib -ljetset74
 #endif

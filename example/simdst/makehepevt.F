@@ -9,6 +9,8 @@ C*  7-April-1999 Akiya Miyamoto  Original version.
 C*
 C*******************************************************************
 
+
+#ifndef PYTHIA6
 #include "jetset74/pysubs.inc"
 #include "jetset74/hepevt.inc"
 
@@ -43,4 +45,42 @@ cc      call pystat(2)
       call pystat(1)
       stop
       end
+
+#else
+
+#include "pythia6.inc"
+
+      external pydata
+
+      NEV=10
+      msel=1
+
+      ecm=300.0
+      call pyinit('CMS', 'e-', 'e+', ecm)
+c      call pystat(2)
+
+      iu=1
+      open(iu,file="genevent.dat",form="unformatted",
+     >     status="unknown")
+
+      do 100 i = 1, nev
+         call pyevnt
+         call pyhepc(1)
+         print *,' nevhep, nhep=',nevhep, nhep
+
+         iendi=1296651082
+         nvers=1
+
+         call writehepevt(iu,iendi, nvers, nevhep,
+     >    nhep, isthep, idhep, jmohep, jdahep,
+     >    phep, vhep)
+      
+ 100  continue
+
+      close(iu)
+      call pystat(1)
+      stop
+      end
+
+#endif
 
