@@ -1,0 +1,53 @@
+#---------------------------------------------------
+
+#include "conf/makejsf.tmpl"
+
+CERNLIBS  = $(shell cernlib jetset74 packlib)
+
+ROOTLIBS  += -lEGPythia -lEG $(CERNLIBS)
+
+LCLIB 	  = $(LCDIR)/lib
+
+ANALLIB   = $(JSFLIBS) \
+	    -L$(LCLIBROOT)/lib -lGENUTIL -lLUHADR -lTAUOLA \
+            -lSIMJLC -lLTKCL -lLCFULL -lTBS \
+            -lHELASV204 -lFORTLIB -lCOM -lCLI 
+
+#-------------------------------------------------------------
+
+
+SONAME     = <<Spring>>
+SOLIBNAME  = lib$(SONAME)
+SOLIB      = $(SOLIBNAME).$(DllSuf)
+
+SRC        = $(SONAME).$(SrcSuf) 
+
+HDRS 	   = $(subst .$(SrcSuf),.h,$(SRC))
+
+OBJS 	   = $(subst .$(SrcSuf),.$(ObjSuf),$(SRC)) \
+	     $(SOLIBNAME).$(ObjSuf)
+
+
+
+# --------------------------------------------------
+all::  $(SOLIB)
+
+$(SOLIB): $(OBJS)
+	$(LD) $(SOFLAGS) $(OBJS) -o $(SOLIB)
+
+depend:: $(SRC) $(HDRS)
+	for i in $(SRC); do \
+	rmkdepend -a -- $(DEPENDFILES) -- $$i; done
+
+distclean::
+	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h *.~ *.o
+	@rm -f PYTHIA.SEED *.bak
+	@rm -f jsf *.root Makefile 
+
+###
+
+$(SOLIBNAME).$(SrcSuf): $(HDRS) LinkDef.h
+		@echo "Generating dictionary ..."
+		rootcint -f $(SOLIBNAME).$(SrcSuf) \
+		-c -I$(JSFROOT)/include $(HDRS) LinkDef.h
+

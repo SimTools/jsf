@@ -1,0 +1,24 @@
+Files in this directory is created automatically as a template files 
+for Bases/Spring program by a script, buildjsf.  
+
+If you have selected INCLUDE SAMPLE option, sample program can be 
+created and executed as follows.
+
+To create executable, do
+
+$ xmkmf -a
+$ make
+
+This will create ROOT application, jsf, in this directory.  Example 
+to run applications are,
+
+$ jsf bases.C   --> Bases calculation.
+$ jsf gui.C     --> Start interactive session of event generation 
+			and simulation
+$ jsf -b -q --maxevt=1000 gui.C
+	        --> Run 1000 events of batch job.
+$ jsf sim.C     --> JSF quicksim using bases results.
+$ jsf read.C    --> Read data 
+$ jsf anal.C    --> JSF quick sim and analysis. 
+
+
