@@ -9,7 +9,7 @@
 
 class PythiaGenerator;
 
-Int_t maxevt=100000;              // Number of events to generate
+Int_t maxevt=1000;              // Number of events to generate
 Char_t *outputfile="zhsim.root"; // Output file name
 
 Float_t fEcm=300.0;              // Center of mass energy
