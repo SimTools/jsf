@@ -33,8 +33,9 @@ AIXFLAGS += $(KFLIBROOT)/lib/libAnlib.so $(JSFLIBS) -L$(LCLIBDIR) \
 
 all:: install
 
-install:: libJSFJETNET.$(DllSuf)
+install:: libJSFJETNET.$(DllSuf) JSFJETNET.h
 	cp libJSFJETNET.$(DllSuf) $(JSFROOT)/lib
+	cp JSFJETNET.h $(JSFROOT)/include 
 
 libJSFJETNET.$(DllSuf): $(OBJS) $(FOBJS)
 	$(LD) $(SOFLAGS) $(OBJS) $(FOBJS) -o libJSFJETNET.$(DllSuf) $(ADDOBJ) \
