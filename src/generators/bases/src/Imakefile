@@ -19,12 +19,13 @@ HDRS	= BasesSpring.h bases_scat.h  bs_hist.h hist_bin.h \
 	bases_hist.h bases_xhist.h bs_variable.h hist_buff.h \
 	bases_ran1.h
 
-LIBBASES = libBasesSpring.$(DylibSuf)
+LIBBASES = libBasesSpring.$(DllSuf)
 
 all:: $(LIBBASES) install
 
 $(LIBBASES): $(OBJS)
-	$(LD) $(DYLIBFLAGS) $(OBJS) -o $(LIBBASES)
+	$(LD) $(SOFLAGS) $(OBJS) -o $(LIBBASES)
+#	$(LD) $(DYLIBFLAGS) $(OBJS) -o $(LIBBASES)
 #	$(LD) $(DYLDFLAGS) $(OBJS) -o $(LIBBASES)  $(DYLDEXTRALIBS)
 
 install:: $(LIBBASES)
