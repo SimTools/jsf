@@ -15,7 +15,11 @@
 
 #include    "conf/makejsf.tmpl"
 
-NAME		= JSFPythia6
+ifeq (x$(PYTHIAVERSION),x)
+PYTHIAVERSION   = 6
+endif
+
+NAME		= JSFPythia$(PYTHIAVERSION)
 LIBNAME		= lib$(NAME)
 JSFINSTALLDIR   = ../../..
 INC		= $(JSFINSTALLDIR)/include 
@@ -24,7 +28,7 @@ INC		= $(JSFINSTALLDIR)/include
 /*  Source files, headers, and objects to build				*/
 /*----------------------------------------------------------------------*/
 
-SRC		= JSFHadronizer.$(SrcSuf) \ 
+SRC		= JSFHadronizer.$(SrcSuf) \
 		JSFMergeEvent.$(SrcSuf) \
 		PythiaGenerator.$(SrcSuf)
 
@@ -34,11 +38,22 @@ OBJ	      = $(subst .$(SrcSuf),.$(ObjSuf),$(SRC)) \
 		$(LIBNAME).$(ObjSuf)
 
 HDR	      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRC)) \
-		$(NAME)LinkDef.h
+		LinkDef.h
 
+ifeq ($(PYTHIAVERSION),6)
 LIBS	      = -L$(LCLIBROOT)/lib -lTAUOLA -lFORTLIB
+else
+LIBS          = -L$(LCLIBROOT)/lib -lFORTLIB \
+                $(ROOTLIBS) $(ROOTGLIBS) \
+                -L/cern/pro/lib -ljetset74  -lpdflib804 -lg2c /* -lnsl */
+endif
 
-CXXFLAGS     += -D__PYTHIA_VERSION__=6 
+ifeq ($(shell uname),Darwin)
+CXX := $(subst -O,,$(CXX))
+endif
+
+CXXFLAGS     += -D__PYTHIA_VERSION__=$(PYTHIAVERSION)
+
 /*----------------------------------------------------------------------*/
 /*  Make targets							*/
 /*----------------------------------------------------------------------*/
@@ -52,10 +67,11 @@ $(LIBNAME).$(DllSuf): $(OBJ)
 install:: $(LIBNAME).$(DllSuf)
 	mkdir -p $(JSFINSTALLDIR)/lib $(JSFINCDIR)
 	install -p -m 755 $(LIBNAME).$(DllSuf) $(JSFLIBDIR)
+	install -p -m 644 JSFHadronizer.h $(JSFINCDIR)
 
 uninstall::
 	rm -f $(JSFINSTALLDIR)/$(LIBNAME).$(DllSuf)
-#	( cd $(JSFINSTALLDIR) && rm -f $(HDR) )
+	rm -f $(JSFINCDIR)/JSFHadronizer.h
 
 clean:: 
 	@rm -f $(OBJS) core *.so *~
