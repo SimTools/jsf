@@ -5,7 +5,7 @@
 /* (Update)								*/
 /*  4-Feb-2000 A.Miyamoto Include libJSFDMatrix, create shared library  */
 /*          								*/
-/*$Id:      								*/
+/*$Id$      								*/
 /*       								*/
 /************************************************************************/
 
@@ -17,14 +17,11 @@
 
 NAME		= JSFTools
 LIBNAME		= lib$(NAME)
-JSFINSTALLDIR   = ../..
-INC		= $(JSFINSTALLDIR)/include 
 
 /*----------------------------------------------------------------------*/
 /*  Source files, headers, and objects to build				*/
 /*----------------------------------------------------------------------*/
 
-		
 SRC	      = JSFVTXHit.$(SrcSuf) JSFCALHit.$(SrcSuf) \
 		JSFHelicalTrack.$(SrcSuf) \
 		JSFVirtualFit.$(SrcSuf) JSFGeoCFit.$(SrcSuf) \
@@ -47,13 +44,13 @@ $(LIBNAME).$(DllSuf): $(OBJ)
 	$(LD) $(SOFLAGS)  $(OBJ) -o $(LIBNAME).$(DllSuf)
 
 install:: $(LIBNAME).$(DllSuf)
-	mkdir -p $(JSFINSTALLDIR)/lib $(JSFINSTALLDIR)/include
-	install -p -m 755 $(LIBNAME).$(DllSuf) $(JSFINSTALLDIR)/lib
-	install -p -m 644 $(HDR) $(JSFINSTALLDIR)/include	
+	mkdir -p $(JSFLIBDIR) $(JSFINCDIR)
+	install -p -m 755 $(LIBNAME).$(DllSuf) $(JSFLIBDIR)
+	install -p -m 644 $(HDR) $(JSFINCDIR)
 
 uninstall::
-	rm -f $(JSFINSTALLDIR)/$(LIBNAME).$(DllSuf)
-	( cd $(JSFINSTALLDIR) && rm -f $(HDR) )
+	rm -f $(JSFLIBDIR)/$(LIBNAME).$(DllSuf)
+	( cd $(JSFINCDIR) && rm -f $(HDR) )
 
 clean:: 
 	@rm -f $(OBJS) core *.so *~
@@ -61,7 +58,8 @@ clean::
 
 depend:: $(SRC) $(HDR)
 	for i in $(SRC); do \
-	rmkdepend -a -- $(DEPENDFILES) -- $$i; done
+	rmkdepend -a -- $(DEPENDFILES) $(shell jsf-config --includes) \
+	-- $$i; done
 
 distclean:: clean
 	@rm -f $(OBJ) core *~ *.o
@@ -72,6 +70,7 @@ web:
 
 $(LIBNAME).$(SrcSuf): $(HDR)
 		@echo "Generating dictionary ..."
-		rootcint -f $(LIBNAME).$(SrcSuf) -c -I. -I$(JSFINSTALLDIR)/include \
+		rootcint -f $(LIBNAME).$(SrcSuf) -c \
+		$(shell jsf-config --includes) \
 		$(RCINTDEFINES) $(HDR)
 
