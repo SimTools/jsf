@@ -1,0 +1,4 @@
+#!/bin/csh
+
+jsf -conf=demo.conf demo.C
+
