@@ -34,7 +34,7 @@ depend:: $(SRCS) $(HDRS)
 	rmkdepend -a -- $(DEPENDFILES) -- $$i; done
 
 lib$(PROGNAME).$(SrcSuf): $(HDRS) $(PROGNAME)LinkDef.h
-	rootcint -f $@ -c -I$(JSFROOT)/include \
+	rootcint -f $@ -c $(shell jsf-config --includes) \
 	$(HDRS) $(PROGNAME)LinkDef.h
 
 clean::
