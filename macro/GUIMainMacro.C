@@ -107,7 +107,7 @@ int Initialize()
     case 4:
       ofile = new TFile(outputFileName,"RECREATE");
       jsf->SetIOFiles();
-      simdst= new ReadJIMBank();
+      simdst= new JSFReadJIMBank();
       simdst->SetDataFileName(inputFileName);  // Input file
       break;
     case 5:
