@@ -146,11 +146,9 @@ JSFSteer *JSFSteer::Instance()
   if (!myself ) {
 	myself=new JSFSteer();
   }
-  cout << "gJSF=" << gJSF << endl;
   if( ! gJSF ) {
     gJSF=myself;  // Just for safety
   }
-  cout << "gJSF=" << gJSF << endl;
   return myself;
 }
 
@@ -214,7 +212,7 @@ JSFSteer::JSFSteer(const char *name, const char *title)
       gStopwatch->Start();
     }
   
-    gROOT->LoadMacro("LoadLibraries.C");
+    gROOT->LoadMacro(fEnv->GetValue("JSF.LoadLibraryMacro","LoadLibraries.C"));
     gROOT->ProcessLine("LoadLibraries();");
  
     SetIOFiles();
@@ -231,32 +229,8 @@ void JSFSteer::LoadSharedLibraries()
 //  
 
    Char_t shlibs[2056];
-/*
-   const char *liblist;
-   liblist = fEnv->GetValue("JSF.DefaultLibraries","defaultlib.list");
-   char *fnl = gSystem->Which(TROOT::GetMacroPath(), liblist, kReadPermission);
-   ifstream file(fnl, ios::in);
-   if ( !file.good() ) {
-      Error("JSFSteer::LoadSharedLibraries","Error to open %s",fnl);
-      exit(0);
-   }
-   char currentline[2056];
-   char *s=0;
-   while(1) {
-     file.getline(currentline,2056);
-     int ic=0;
-     if( file.eof() ) break;
-     s = currentline ;
-     if ( *s == '#' || *s == ' ' ) continue;
-     if ( strlen(currentline) < 2 ) continue;
-     while( s && (*s == ' ' || *s == '\t' ) ) s++;
-     gSystem->Load(currentline);
-     cerr << currentline << " loaded "<< endl;
-   }
-*/
 
   sscanf(fEnv->GetValue("JSF.SharedLibraries","undef"),"%s",shlibs);
-  cerr << " sharedlib =" << shlibs << endl;
   if( strcmp("undef",shlibs) == 0 ) return ;
   Int_t lsh=strlen(shlibs);
   Char_t fn[256];
@@ -337,8 +311,6 @@ void JSFSteer::SetIOFiles()
     fOFile=0;
     
     if( gFile && gFile->IsOpen() ) {
-    cerr << "SetIOFiles is called option is " ;
-    cerr << gFile->GetOption() << endl;
       if( strcmp(gFile->GetOption(),"READ")==0 ) fIFile=gFile;
       else if ( strcmp(gFile->GetOption(),"CREATE")==0 ) fOFile=gFile;
       else if ( strcmp(gFile->GetOption(),"UPDATE")==0) { 
