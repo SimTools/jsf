@@ -46,6 +46,7 @@ OBJJSFLCFULL  = JSFBases.$(ObjSuf) \
 		DebugGenerator.$(ObjSuf) DebugWGenerator.$(ObjSuf) \
 		PythiaGenerator.$(ObjSuf) \
 		JSFReadGenerator.$(ObjSuf) readgenutil.o \
+		JSFReadParton.$(ObjSuf) readparton.o \
 		libJSFLCFULL.$(ObjSuf)
 
 OBJJSFQUICKSIM= JSFQuickSimParam.$(ObjSuf) JSFQuickSim.$(ObjSuf) \
@@ -59,6 +60,7 @@ SRCJSF        = JSFSteer.$(SrcSuf) JSFModule.$(SrcSuf) \
 
 SRCJSFLCFULL    = JSFBases.$(SrcSuf) \
 		JSFSpringParton.$(SrcSuf) JSFSpring.$(SrcSuf) \
+		JSFReadParton.$(SrcSuf) \
 		JSFGeneratorParticle.$(SrcSuf) JSFGenerator.$(SrcSuf) \
 		JSFFULLGenerator.$(SrcSuf) JSFHadronizer.$(SrcSuf) \
 		JSFLCFULL.$(SrcSuf) \
@@ -83,7 +85,7 @@ HDRJSFLCFULL  = JSFBases.h \
 		JSFFULLGenerator.h JSFHadronizer.h \
 		JSFLCFULL.h \
 		DebugGenerator.h DebugWGenerator.h \
-		JSFReadGenerator.h \
+		JSFReadGenerator.h JSFReadParton.h \
 		PythiaGenerator.h JSFLCFULLLinkDef.h
 
 HDRJSFQUICKSIM= JSFVTXHit.h JSFCALHit.h \
@@ -145,4 +147,8 @@ libJSFQuickSim.$(SrcSuf): $(HDRJSFQUICKSIM)
 		@echo "Generating dictionary ..."
 		rootcint -f libJSFQuickSim.$(SrcSuf) -c $(HDRJSFQUICKSIM)
 #---------------------------------------------------
+
+
+
+
 

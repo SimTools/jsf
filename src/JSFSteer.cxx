@@ -313,6 +313,8 @@ Bool_t JSFSteer::BeginRun(Int_t nrun)
   Char_t keyname[32];
   sprintf(keyname,"begin%5.5d",fRun);
 
+  printf(" In beginRun .. keyname=%s \n",keyname);
+
    // If Output file is writable, make tree for them
    if( fOFile && fOFile->IsOpen() && fOFile->IsWritable() ) {
       fOFile->cd("/conf");
@@ -325,6 +327,7 @@ Bool_t JSFSteer::BeginRun(Int_t nrun)
   while (( module = (JSFModule*)next())) {
     module->SetModuleStatus(kBeginRun);
     module->SetRunNumber(fRun);
+    printf(" module file is %s\n",module->GetFile()->GetName());
     module->GetFile()->cd(keyname);
     if( !module->BeginRun(fRun) ) return kFALSE ;
   }

@@ -8,6 +8,8 @@
 #pragma link C++ class JSFSpringBuf;
 #pragma link C++ class JSFSpringParton;
 #pragma link C++ class JSFBases-;
+#pragma link C++ class JSFReadParton;
+#pragma link C++ class JSFReadPartonBuf;
 
 #pragma link C++ class JSFGenerator;
 #pragma link C++ class JSFGeneratorBuf;
