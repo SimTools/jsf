@@ -116,7 +116,11 @@ Bool_t CCDRawData::BeginRun(Int_t nrun)
    }
 
   Int_t ln=strlen(fRFNFormat);
+#ifdef R__ACC
+  Char_t infile[256];
+#else 
   Char_t infile[ln+10];
+#endif
   sprintf(infile,fRFNFormat,nrun);
 	
   printf(" Going to open a file %s \n",infile);
@@ -133,7 +137,14 @@ Bool_t CCDRawData::BeginRun(Int_t nrun)
     return kFALSE;
   }
 
+#ifdef R__ACC
+  Int_t data[720000];
+  if( hd[kReclength] > 720000 ) {
+    printf(" Data size(%d) exceeds predefined buffer size(720000)\n",hd[kReclength]);
+  }
+#else
   Int_t data[hd[kReclength]];
+#endif
   Int_t kr=hd[kReclength]-6;
   lw=fread(data,4,kr,fd);
   fBeginBuf->UnPack(hd, (Char_t*)&data[0]);

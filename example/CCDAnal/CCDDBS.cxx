@@ -187,7 +187,11 @@ void CCDDarkData::LoadFile(const Char_t *file)
   struct darkinfo {
     int offset, nh, nv ; 
   };
+#ifdef R__ACC
+  darkinfo di[10];
+#else
   darkinfo di[fNCCD];
+#endif
   int nw=3*fNCCD;
   lw=fread(di, 4, nw, fd);
 

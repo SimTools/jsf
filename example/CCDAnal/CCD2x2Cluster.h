@@ -26,9 +26,9 @@ class CCD2x2ClusterBuf;
 
 //** Single Cluster format 
 
-static const kCCDMaxClusterSize = 5;
-static const kCCDMaxNumber = 4;
-static const kCCDMaxNumberOfCluster = 500;
+static const Int_t kCCDMaxClusterSize = 5;
+static const Int_t kCCDMaxNumber = 4;
+static const Int_t kCCDMaxNumberOfCluster = 500;
 
 class CCDCluster : public TObject {
  protected:
