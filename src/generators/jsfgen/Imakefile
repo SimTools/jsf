@@ -13,7 +13,7 @@
 /*  Some macros specific to jsf	building				*/
 /*----------------------------------------------------------------------*/
 
-#include    "../../../conf/makejsf.tmpl"
+#include    "conf/makejsf.tmpl"
 
 NAME		= JSFGenerator
 LIBNAME		= lib$(NAME)
@@ -75,6 +75,7 @@ web:
 
 $(LIBNAME).$(SrcSuf): $(HDR)
 		@echo "Generating dictionary ..."
-		rootcint -f $(LIBNAME).$(SrcSuf) -c -I. -I$(JSFINSTALLDIR)/include \
+		rootcint -f $(LIBNAME).$(SrcSuf) -c \
+		$(shell jsf-config --includes) \
 		$(RCINTDEFINES) $(HDR)
 
