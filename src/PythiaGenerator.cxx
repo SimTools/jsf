@@ -73,8 +73,13 @@ PythiaGenerator::PythiaGenerator(const Char_t *name,
 
 
   fNUMSUB=0;
+  fISUB=NULL;
   fNGEN=NULL;
   fXSEC=NULL;
+
+  fEventWeight=1.0;
+  for(Int_t i=0;i<6;i++){ fMRLU[i]=0; }
+  for(Int_t i=0;i<100;i++){ fRRLU[i]=0.0; }
 
   fPythia = new TPythia();
   lPythiaGenerator = this;
