@@ -121,6 +121,7 @@ public:
   Bool_t IntersectWithCylinder(JSFRPhiZ ref, JSFRPhiZ &p);
   Bool_t IntersectWithCylinder(JSFRPhiZ ref, Double_t &ang);
   void FirstDerivative(Double_t ang, Double_t *dXdHelix);
+  void AddMSError(Float_t xrad, Float_t deltakappa=0.0);
 
 //  void FitCylinderGeometry(Int_t npnt, JSFHitCylinder *hits, Double_t bf);
   void SetTrackByFitToCyl(Int_t npnt, JSFHitCylinder *hits, Double_t bf);

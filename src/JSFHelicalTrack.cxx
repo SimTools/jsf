@@ -877,3 +877,31 @@ CC********************************************************************CC
 }
 
 
+//______________________________________________________________________________
+void JSFHelicalTrack::AddMSError(Float_t xrad, Float_t deltakappa)
+{
+  // Increase the error matrix to include the effect of 
+  // the multiple scattering in the matterinal of radiation length xrad.
+  //
+  // deltakappa is subtracted from Kappa of helix parameter for 
+  // energy loss correction
+
+
+  Double_t tnlsq=fHelix.tanl*fHelix.tanl;
+  Double_t tnlsqone=1.0+tnlsq;
+  Double_t pt=1.0/TMath::Abs(fHelix.kappa);
+  Double_t p =pt*TMath::Sqrt(tnlsqone);
+  Double_t radx=xrad;
+  Double_t sigms=0.0141*(1.0+TMath::Log10(radx)/9.0)*TMath::Sqrt(radx)/p;
+  Double_t sigmsq=sigms*sigms;
+
+  fError.data[2]  +=  sigmsq*tnlsqone;
+  fError.data[5]  += sigmsq*(fHelix.kappa*fHelix.kappa*tnlsq);
+  fError.data[12] += sigmsq*fHelix.kappa*fHelix.kappa*tnlsqone;
+  fError.data[14] += sigmsq*tnlsqone*tnlsqone;
+
+  //C .. E(2,2)=EDAT(3), E(3,3)=Edat(6), E(3,5)=Edat(13), E(5,5)=Edat(15)
+
+  fHelix.kappa -= deltakappa;
+
+}
