@@ -1,6 +1,6 @@
 ********************************************************
-gui.C and MainMacro.C in this directory were moved to 
-$JSFROOT/macro.  
+gui.C, MainMacro.C, UserAnalysis.C in this directory were moved to 
+$JSFROOT/macro.  MainMacro.C is renamed to GUIMainMacro.C
 
 Akiya Miyamoto
 27-July-1999
