@@ -73,7 +73,7 @@ public:
    inline Float_t GetEMPbThick(){ return fBCPAR0R[5]; }
    inline Float_t GetHDScitiThick(){ return fBCPAR0R[6]; }
    inline Float_t GetHDPlasticThcik(){ return fBCPAR0R[7]; }
-   inline Float_t GetHDPbThcik(){ return fBCPAR0R[8]; }
+   inline Float_t GetHDPbThick(){ return fBCPAR0R[8]; }
    inline Float_t GetSHMSciThick(){ return fBCPAR0R[9]; }
    inline Float_t GetSHMPlasticThick(){ return fBCPAR0R[10]; }
    inline Float_t GetPhiTiltAngle(){ return fBCPAR0R[11]; }
