@@ -35,7 +35,13 @@ echo -n "JSF version .."
 cat $JSFROOT/conf/jsf.version | grep -v XCOMM >> $specfile
 
 echo -n "Root version .."
-root -q -b $jsfroot/macro/printversion.C | grep "ROOT_" >> $specfile
+if ( $systype == "AIX" ) then
+  root -q -b $jsfroot/macro/printversion.C >&! tmp.$$
+  grep "ROOT_" tmp.$$ >> $specfile
+  rm -f tmp.$$ 
+else
+  root -q -b $jsfroot/macro/printversion.C | grep "ROOT_" >> $specfile
+endif
 
 #######################
 #  Directories for DEPEND files
@@ -62,6 +68,9 @@ echo -n "#define __UNAME_SYSNAME__ " >> $specfile
 uname -s >> $specfile
 
 if ( !(`which g77 | grep -c g77 `)  ) goto exitmsg
+if ( $systype == "AIX" ) then 
+  goto lastput
+endif
 
 echo -n "g77 version .. "
 set g77versionstr = `g77 -v |& grep release | grep gcc | cut -d"(" -f2 | cut -d")" -f1`
@@ -89,6 +98,8 @@ else if( $g77version == 1 && $g77mversion == 0 ) then
 endif
 echo -n "#define __G77EGCS_LIBNAME__ " >> $specfile
 echo $g77lib  >> $specfile
+
+lastput:
 
 echo "#endif" >> $specfile
 echo "#endif" >> $specfile
