@@ -77,16 +77,13 @@ Bool_t JSFReadJIMBank::BeginRun(Int_t nrun)
     readjiminit_(&fUnit, fDataFileName, lenf);
     printf("%s is opened.\n",fDataFileName);
   }
-  Int_t ierr;
+  static Int_t ierr;
   jlread0_(&ierr);
-
-  printf(" jlread0  ierr=%d\n",ierr);
 
   if( !fDoesParameterInitialized ) {
     fDoesParameterInitialized=kTRUE;
     fParam->ReadParameter();
   }
-
 
   return kTRUE;
 }
@@ -104,7 +101,7 @@ Bool_t JSFReadJIMBank::Process(Int_t nev)
 {
 //
 
-  Int_t ierr;
+  static Int_t ierr;
   jlread1_(&ierr);
 
   if( ierr == 1 ) {
@@ -147,7 +144,7 @@ Bool_t JSFReadJIMBankBuf::UnpackDST(Int_t nev)
   //     &nret, lenproduc);
 
 
-  Int_t nret;
+  static Int_t nret;
 
   readjimread_(&nret);
 
@@ -235,7 +232,6 @@ Bool_t JSFReadJIMBankBuf::UnpackDST(Int_t nev)
   // Put CDCTrack class
   // ***************************************
   fNCDCTracks = trbuff_.ntrk;
-
   JSFLTKCLTrack *lt=NULL;
   JSFCDCTrack   *ct=NULL;
   JSFVTXHit     *vh=NULL;
@@ -311,7 +307,6 @@ Bool_t JSFReadJIMBankBuf::UnpackDST(Int_t nev)
       lt->SetCDC(icdc, ct);
     }
   }
-
   return kTRUE;
 
 }

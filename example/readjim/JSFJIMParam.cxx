@@ -33,8 +33,8 @@ void JSFJIMParam::ReadParameter()
   // Read detector parameter for JIM from JIM data buffer.
 
   const Int_t maxbuf=1000;
-  Int_t idat[300];
-  Int_t len=0;
+  static Int_t idat[300];
+  static Int_t len=0;
 
   JSFJLCSIM::KZGET("MCBCPAR",0, len, idat);
   for(Int_t i=0;i<15;i++){ fBCPAR0I[i]=idat[i]; }
@@ -74,22 +74,31 @@ void JSFJIMParam::ReadParameter()
   for(Int_t i=0;i<10;i++){ fECPAR0R[i]=rtmp[i]; }
 
   //  printf(" NDREC=%d\n",fECPAR0I[1]);
-  //printf(" RI1EC, RO1EC=%g %g\n",fECPAR0R[0],fECPAR0R[1]);
+  //  printf(" RI1EC, RO1EC=%g %g\n",fECPAR0R[0],fECPAR0R[1]);
 
   JSFJLCSIM::KZGET("MCECPAR",1,len,fNDPEC);
-  //printf(" fNDPEC=%d\n",len);
+  //  printf(" fNDPEC=%d\n",len);
+
   JSFJLCSIM::KZGET("MCECPAR",2,len,(Int_t*)fREM1EC);
-  //printf(" fREM1EC=%d\n",len);
+  //  printf(" fREM1EC=%d\n",len);
   JSFJLCSIM::KZGET("MCECPAR",3,len,(Int_t*)fZEM1EC);
-  //printf(" fZEM1EC=%d\n",len);
+  //  printf(" fZEM1EC=%d\n",len);
+
   JSFJLCSIM::KZGET("MCECPAR",4,len,(Int_t*)fPEM1EC);
-  //printf(" fPEM1EC=%d\n",len);
+  if( len >= kCALEPMAX ) { 
+    printf("Error .. MCECPAR segment 4 data size(%d) greater than buffer size, %d\n",len,kCALEPMAX);
+  } 
+  //  printf(" fPEM1EC=%d\n",len);
   JSFJLCSIM::KZGET("MCECPAR",5,len,(Int_t*)fRHD1EC);
-  //printf(" fRHD1EC=%d\n",len);
+  //  printf(" fRHD1EC=%d\n",len);
   JSFJLCSIM::KZGET("MCECPAR",6,len,(Int_t*)fZHD1EC);
-  //printf(" fZHD1EC=%d\n",len);
+  //  printf(" fZHD1EC=%d\n",len);
   JSFJLCSIM::KZGET("MCECPAR",7,len,(Int_t*)fPHD1EC);
-  //printf(" fPHD1EC=%d\n",len);
+  if( len >= kCALHPMAX ) { 
+    printf("Error .. MCECPAR segment 7 data size(%d) greater than buffer size, %d\n",len,kCALHPMAX);
+  } 
+  //  printf(" fPHD1EC=%d\n",len);
+
 
   fTrack[0]=45.0;
   fTrack[1]=155.0;
@@ -296,21 +305,21 @@ void JSFJIMParam::Streamer(TBuffer &R__b)
       JSFQuickSimParam::Streamer(R__b);
       R__b.WriteArray(fBCPAR0I, 15);
       R__b.WriteArray(fBCPAR0R, 15);
-      R__b.WriteArray(fREM1BC, 200);
-      R__b.WriteArray(fZEM1BC, 200);
-      R__b.WriteArray(fPEM1BC, 200);
-      R__b.WriteArray(fRHD1BC, 200);
-      R__b.WriteArray(fZHD1BC, 200);
-      R__b.WriteArray(fPHD1BC, 200);
+      R__b.WriteArray(fREM1BC, kCALPMAX);
+      R__b.WriteArray(fZEM1BC, kCALPMAX);
+      R__b.WriteArray(fPEM1BC, kCALPMAX);
+      R__b.WriteArray(fRHD1BC, kCALPMAX);
+      R__b.WriteArray(fZHD1BC, kCALPMAX);
+      R__b.WriteArray(fPHD1BC, kCALPMAX);
       R__b.WriteArray(fECPAR0I, 4);
       R__b.WriteArray(fECPAR0R, 14);
-      R__b.WriteArray(fNDPEC, 200);
-      R__b.WriteArray(fREM1EC, 200);
-      R__b.WriteArray(fZEM1EC, 200);
-      R__b.WriteArray(fPEM1EC, 4000);
-      R__b.WriteArray(fRHD1EC, 200);
-      R__b.WriteArray(fZHD1EC, 200);
-      R__b.WriteArray(fPHD1EC, 1000);
+      R__b.WriteArray(fNDPEC, kCALPMAX);
+      R__b.WriteArray(fREM1EC, kCALPMAX);
+      R__b.WriteArray(fZEM1EC, kCALPMAX);
+      R__b.WriteArray(fPEM1EC, kCALEPMAX);
+      R__b.WriteArray(fRHD1EC, kCALPMAX);
+      R__b.WriteArray(fZHD1EC, kCALPMAX);
+      R__b.WriteArray(fPHD1EC, kCALHPMAX);
    }
 }
 

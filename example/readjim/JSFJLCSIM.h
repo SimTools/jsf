@@ -18,12 +18,12 @@ class JSFJLCSIM
   JSFJLCSIM(){}
   virtual ~JSFJLCSIM(){}
 
-  static void KZGET(char *cname, int iseg, int &leng, int idat[]);  
-  static void KZGET2(char *cname, int iseg, int isseg, 
+  static void KZGET(const char *cname, const int iseg, int &leng, int idat[]);  
+  static void KZGET2(const char *cname, const int iseg, const int isseg, 
 		     int &leng, int idat[]);  
   static void KZGETH(int idat[]);  
-  static void KZGETV(char *cname, int &ivers);  
-  static void KZBLOC(char *name, Int_t &lbank);
+  static void KZGETV(const char *cname, int &ivers);  
+  static void KZBLOC(const char *name, Int_t &lbank);
 
   ClassDef(JSFJLCSIM,0)  // Interfaces to JLCSIM routines.
 };

@@ -17,27 +17,27 @@
 ClassImp(JSFJLCSIM)
 
 extern "C" {
-extern void kzget_(char *cname, int *iseg, int *leng, int idat[],  int lenb);
-extern void kzget2_(char *cname, int *iseg, int *isseg, 
+extern void kzget_(const char *cname, const int *iseg, int *leng, int idat[],  const int lenb);
+extern void kzget2_(const char *cname, const int *iseg, const int *isseg, 
 		    int *leng, int idat[],  int lenb);
 extern void kzgeth_(int idat[]);
-extern void kzgetv_(char *cname,  int *ivers,  int lenb);
-extern void kzbloc_(char *cname,  int *lbank,  int lenb);
+extern void kzgetv_(const char *cname,  int *ivers,  int lenb);
+extern void kzbloc_(const char *cname,  int *lbank,  int lenb);
 };
 
 
 // ---------------------------------------------------------------
-void JSFJLCSIM::KZGET(char *cname, int iseg, int &leng, int idat[])
+void JSFJLCSIM::KZGET(const char *cname, const int iseg, int &leng, int idat[])
 {
-  int lenb=strlen(cname);
+  static int lenb=strlen(cname);
   kzget_(cname, &iseg, &leng, idat, lenb);
   return ;
 }
 
 // ---------------------------------------------------------------
-void JSFJLCSIM::KZGET2(char *cname, int iseg, int isseg, int &leng, int idat[])
+void JSFJLCSIM::KZGET2(const char *cname, const int iseg, const int isseg, int &leng, int idat[])
 {
-  int lenb=strlen(cname);
+  static int lenb=strlen(cname);
   kzget2_(cname, &iseg, &isseg, &leng, idat, lenb);
   return ;
 }
@@ -50,17 +50,17 @@ void JSFJLCSIM::KZGETH(int idat[])
 }
 
 // ---------------------------------------------------------------
-void JSFJLCSIM::KZGETV(char *cname, int &ivers)
+void JSFJLCSIM::KZGETV(const char *cname, int &ivers)
 {
-  int lenb=strlen(cname);
+  static int lenb=strlen(cname);
   kzgetv_(cname, &ivers, lenb);
   return ;
 }
 
 // ---------------------------------------------------------------
-void JSFJLCSIM::KZBLOC(char *cname, int &lbank)
+void JSFJLCSIM::KZBLOC(const char *cname, int &lbank)
 {
-  int lenb=strlen(cname);
+  static int lenb=strlen(cname);
   kzbloc_(cname, &lbank, lenb);
   return ;
 }

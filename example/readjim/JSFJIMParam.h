@@ -16,6 +16,8 @@
 #endif
 
 static const Int_t kCALPMAX=200 ;
+static const Int_t kCALEPMAX=8000 ;
+static const Int_t kCALHPMAX=2000 ;
 
 // ******* JSFQuickSimParam *************************************
 class JSFJIMParam : public JSFQuickSimParam {
@@ -35,10 +37,10 @@ protected:
   Int_t   fNDPEC[kCALPMAX] ;// number of phi-division of each ring.
   Float_t fREM1EC[kCALPMAX] ; // r position of each EM cell (cm)
   Float_t fZEM1EC[kCALPMAX] ; // z position of each EM cell (cm)
-  Float_t fPEM1EC[4000] ; // phi position of each EM cell (rad)
+  Float_t fPEM1EC[kCALEPMAX] ; // phi position of each EM cell (rad)
   Float_t fRHD1EC[kCALPMAX] ; // r position of each HD cell (cm)
   Float_t fZHD1EC[kCALPMAX] ; // z position of each HD cell (cm)
-  Float_t fPHD1EC[1000] ; // phi position of each HD cell (rad)
+  Float_t fPHD1EC[kCALHPMAX] ; // phi position of each HD cell (rad)
 
 public:
    JSFJIMParam();
@@ -114,7 +116,7 @@ public:
    }
 
 
-   ClassDef(JSFJIMParam,2) // JSFJIMParam
+   ClassDef(JSFJIMParam,3) // JSFJIMParam
 };
  
 #endif

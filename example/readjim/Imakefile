@@ -18,11 +18,6 @@ ROOTLIBS     += -lEGPythia -lEG $(CERNLIBS)
 
 LCLIBDIR      = $(LCLIBROOT)/lib
 
-#ifdef hitachiArchitecture
-EXTRALDOPT = -Wl,-a,default 
-CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lkernlib -lpacklib
-#endif
-
 ANALLIB = $(JSFLIBS) $(EXTRALDOPT) -lJSFReadJIMBank -lJSFGUI \
 	-L$(JLCSIMROOT)/lib -lct -ljlclib -lvx -lcal -lzbs -ljlcutil \
 	-L$(LCLIBDIR) -lGENUTIL -lLUHADR -lTAUOLA \
@@ -55,16 +50,36 @@ HDRS          = $(subst .$(SrcSuf),.h,$(SRC))
 SOLIBNAME     = libJSFReadJIMBank
 
 
-all::  lib jsfrjim
+#if defined(AIXArchitecture)
+CERNLIBS      = $(shell cernlib jetset74 packlib mathlib grafX11 )
+
+all::  jsfrjim
+AIXSOLIBS = -L$(JLCSIMROOT)/lib -lct -ljlclib -lvx -lcal -lzbs -ljlcutil \
+	 -brtl -bshared -L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFGUI \
+	$(shell root-config --glibs) \
+	-L$(LCLIBROOT)/lib -lLUHADR \
+	-L/cern/pro/lib -ljetset74 -lpacklib -lmathlib -lgrafX11 \
+	-lX11 -lXm -lXt -lm -lodm -lC -lxlf90
 
 jsfrjim: $(OBJS) $(JSFROOT)/src/jsfmain.o JSFReadJIMCommonSize.h
-	$(LD) $(JSFROOT)/src/jsfmain.o $(BLOCKDATA) \
-	$(LDFLAGS) -o ../../bin/jsfrjim 
+	$(CXX) $(JSFROOT)/src/jsfmain.o $(BLOCKDATA) $(OBJS) \
+	$(AIXSOLIBS)  \
+	-o ../../bin/jsfrjim 
+#else
+all::  lib jsfrjim
 
 lib: $(OBJS)
-	$(LD) $(SOFLAGS) $(OBJS) -o ../../lib/$(SOLIBNAME).$(DllSuf)
+	rm -f ../../lib/$(SOLIBNAME).$(DllSuf)
+	$(LD) $(SOFLAGS) $(OBJS) -o ../../lib/$(SOLIBNAME).$(DllSuf) $(AIXSOLIBS)
 
-#	ar cr libreadjim.a $(OBJS) $(JIMOBJ)
+jsfrjim: $(OBJS) $(JSFROOT)/src/jsfmain.o JSFReadJIMCommonSize.h
+	$(CXX) $(JSFROOT)/src/jsfmain.o $(BLOCKDATA) \
+	-L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFReadJIMBank \
+	$(shell root-config --glibs) \
+	-o ../../bin/jsfrjim 
+
+#endif
+
 
 clean:: 
 	@rm -f $(OBJS) core *~
