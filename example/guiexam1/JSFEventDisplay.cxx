@@ -607,7 +607,7 @@ void JSFEventDisplay::DisplayCDCTracks()
 void  JSFEventDisplay::DisplayLTKCLMomentum()
 {
    JSFSIMDSTBuf *sdb=(JSFSIMDSTBuf*)simdst->EventBuf();
-   TClonesArray *lts=sdb->GetLTKCLTracks(); 
+   TObjArray *lts=sdb->GetLTKCLTracks(); 
    Int_t i;
 
    //  First scan to get pmax;

@@ -39,6 +39,7 @@ typedef enum {kCombinedGammaTrack, kCombinedLeptonTrack,
 class JSFLTKCLTrack : public TObject {
 friend class JSFQuickSimBuf;
 friend class JSFSIMDSTBuf;
+friend class JSFReadJIMBankBuf;
 protected:
   EJSFLTKCLTrackBank  fBank; // The original bank name
   Double_t    fP[4];    // four momentum (E,Px,Py,Pz), GeV
