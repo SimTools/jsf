@@ -23,7 +23,15 @@ Int_t gui()
   if( gClient == 0 ) {
     BatchRun();
   }
-  else  gui=new JSFGUIFrame(gClient->GetRoot(), 400, 220);
+  else  {
+    if( gROOT->GetClass("JSFJIMEventDisplay") ) {
+      gui=new JSFGUIFrame(gClient->GetRoot(), 400, 220,
+			  kTRUE,new JSFJIMEventDisplay() );
+    }
+    else {
+      gui=new JSFGUIFrame(gClient->GetRoot(), 400, 220);
+    }
+  }
 
 //********************************************
 //*  Start execution
