@@ -278,9 +278,9 @@ Bool_t GetEvent(Int_t ev)
 		    jsf->kJSFDoEndRun|jsf->kJSFTerminate|jsf->kJSFQuit) )) {
       UserAnalysis();
 
-      if( (iret&jsf->kJSFDrawEvent) && (gui != 0) ) gui->DisplayEventData();
+      if( !(iret&jsf->kJSFNotShowDisplay) && (gui != 0) ) gui->DisplayEventData();
 
-      if( (iret&jsf->kJSFDrawHist) && (gui != 0) ) gui->DrawHist();
+      if( !(iret&jsf->kJSFNotShowHistogram) && (gui != 0) ) gui->DrawHist();
 
     }    
 
@@ -288,7 +288,6 @@ Bool_t GetEvent(Int_t ev)
       UserMonitor();
     }
 
-    //    if( irunmode==1 || irunmode = 4 ) {
     if( jsf->GetOutput() ) {
       if( !(iret & jsf->kJSFNoOutput) ) jsf->FillTree();
       jsf->Clear();
