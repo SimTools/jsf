@@ -119,6 +119,8 @@ depend:: $(SRCS) $(HDRS)
 	for i in $(SRCS) ; do \
 	( rmkdepend -f- -- $(DEPENDS) -- $$i >> makefile.depend ) ; done
 
+web:
+	jsf -b -q html.C
 
 include makefile.depend
 
