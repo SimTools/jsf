@@ -157,8 +157,6 @@ void JSFHEPRUP::Save(void *address)
 
   COMMON_HEPRUP_t *heprup=(COMMON_HEPRUP_t*)address;
 
-  cout << "Save HEPRUP at " << (UInt_t)heprup << endl;
-
   for(Int_t i=0;i<2;i++){
     heprup->IDBMUP[i] = fIDBMUP[i] ;
     heprup->EBMUP[i]  = fEBMUP[i]  ;
@@ -174,15 +172,6 @@ void JSFHEPRUP::Save(void *address)
     heprup->XMAXUP[i] = fXMAXUP[i] ;
     heprup->LPRUP[i]  = fLPRUP[i]  ;
   }
-
-  cout << "HEPRUP.Save is called" << endl;
-  cout << "nrup=" << heprup->NPRUP << endl;
-  cout << "nrup=" << heprup->XSECUP[0] << endl;
-  cout << "nrup=" << heprup->XSECUP[1] << endl;
-  cout << "nrup=" << heprup->XSECUP[2] << endl;
-  Print();
-
-  cout << "End of HEPRUP->SAVE" << endl;
 
 }
 

@@ -26,7 +26,7 @@ install:: lib$(PROGNAME).$(DllSuf)
 	install lib$(PROGNAME).$(DllSuf) $(JSFROOT)/lib
 
 lib$(PROGNAME).$(DllSuf): $(OBJS)
-	$(LD) $(DYLIBFLAGS) $(OBJS) -o lib$(PROGNAME).$(DllSuf) 
+	$(LD) $(DYLIBFLAGS) $(OBJS) -lz -o lib$(PROGNAME).$(DllSuf) 
 
 depend:: $(SRCS) $(HDRS)
 	for i in $(SRCS); do \

@@ -44,6 +44,8 @@ protected:
   JSFReadGZippedFile *fgzfile; //!
 
   Bool_t    fIsGZipped;   //!
+  Int_t     fReadEvents;  //
+  Int_t     fFirstEvent; //
 
 public:
    JSFReadMEGenerator(const char *name="JSFReadMEGenerator", 

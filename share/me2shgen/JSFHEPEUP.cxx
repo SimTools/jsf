@@ -363,7 +363,7 @@ Bool_t JSFHEPEUP::ReadFile(JSFReadGZippedFile &gzfile)
 
   Int_t noldup = sizeof(fIDUP)/4;
 
-  char instr[1024];
+  char instr[4096];
 
   Int_t ir=gzfile.GetLine(instr, 1024);
 
@@ -401,6 +401,7 @@ Bool_t JSFHEPEUP::ReadFile(JSFReadGZippedFile &gzfile)
       fNUP=0;
       return kFALSE;
     }
+    istringstream istr;
     istr.str(instr);
     istr >>  fIDUP[i] >> fISTUP[i] >> fMOTHUP[2*i] >> fMOTHUP[2*i+1] 
        >> fICOLUP[2*i] >> fICOLUP[2*i+1] 
