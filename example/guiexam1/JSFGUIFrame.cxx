@@ -56,6 +56,9 @@
 ///////////////////////////////////////////////////////////////////
 
 #include <stdlib.h>
+#ifdef __USEISOCXX__
+using namespace std;
+#endif
 
 #include <TBrowser.h>
 #include "JSFSteer.h"
@@ -64,8 +67,6 @@
 #include "JSFEnvGUIFrame.h"
 #include "JSFDemoDisplay.h"
 #include "JSFDialogMessage.h"
-
-using namespace std;
 
 TBrowser *gbrows;
 
