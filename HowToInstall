@@ -1,11 +1,16 @@
 How to install
 
 1) Do
+	setenv CERN_ROOT <<cern directory>>
+	setenv LCLIBROOT <<lclib directory>>
 	setenv ROOT <<root directort>>
 	setenv JSFROOT <<jsf directort>>
 	set path=($JSFROOT/bin $ROOTSYS/bin $path)
+	setenv IMAKEINCLUDE "-I$JSFROOT -I$LCLIBROOT"
 
-2) cd to src, and xmkmf ; make  -> this will create lib/libJSF.a and bin/jsf
-3) cd example ; xmkmf ; make    -> this will create sample program.
+
+2) do 
+	cd $JSFROOT
+	make install
 
 that's it.

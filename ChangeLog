@@ -24,6 +24,21 @@ jsf-1-4  progress since  5-January-1999 A.Miyamoto
     JSFSIMDST.  A Library for Quick Simulator is created as libJSFQuickSIM.a,
     which includes JSFQuickSim and JSFLTKCLTrack also.
     A class, JSFQuickSimData class 
+(5) remove -g option in makejsf.tmpl.
+(6) in src/jsfmain.cxx, include dummy routine to call setupJSF... routines,
+    otherwise Classes such as JSFSTEER are not loaded properly on Linux.
+    When -g option is included there was not this kind of problem.
+(7) JSFCALGeoParam class is added to JSFQuickSim.h.
+(8) Instead of output detector data of the simulator into a single branch,
+    LTKCLTracks/CDCTracks and VTX/EMC/HDC hits classes are written into
+    separate branch.
+(9) Add Float_t data argument type in JSFLCFULL::TBGET.
+(10) In conf/makejsf.tmpl, remove LCDIR difinition.  Now it must be defined
+     as an environment variable.
+(11) src/JSFQuickSim.h  A function GetNtrack() is renamed to GetNTrack(),
+     for the compatibility with other functions, GETCDCTracks, etc.
+(12) example/ZHStudy : Imakefile is changed to use LCDIR variable.
+     Do ln -s example/ZHStudy/jsfmain.cxx jsfmain.cxx
 	
 **********************************************************
 jsf-1-3   5-January-1999 A.Miyamoto
