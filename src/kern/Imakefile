@@ -1,0 +1,81 @@
+/************************************************************************/
+/*									*/
+/* Imakefile to build JSF libraries and application			*/
+/*									*/
+/* (Update)								*/
+/*  4-Feb-2000 A.Miyamoto Include libJSFDMatrix, create shared library  */
+/*          								*/
+/*$Id:      								*/
+/*       								*/
+/************************************************************************/
+
+/*----------------------------------------------------------------------*/
+/*  Some macros specific to jsf	building				*/
+/*----------------------------------------------------------------------*/
+
+#include    "../../conf/makejsf.tmpl"
+
+/*----------------------------------------------------------------------*/
+/*  Source files, headers, and objects to build				*/
+/*----------------------------------------------------------------------*/
+
+SRCJSF	      = JSFSteer.$(SrcSuf) JSFModule.$(SrcSuf) \
+		JSFDBS.$(SrcSuf) JSFUtil.$(SrcSuf) \
+		JSFEnv.$(SrcSuf) 
+
+OBJJSF        = $(subst .$(SrcSuf),.$(ObjSuf),$(SRCJSF)) \
+		libJSF.$(ObjSuf)
+
+HDRJSF	      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRCJSF)) \
+		JSFBasicClasses.h JSFLinkDef.h
+
+/*----------------------------------------------------------------------*/
+/*  Make targets							*/
+/*----------------------------------------------------------------------*/
+
+all::  libJSF.$(DllSuf) jsf
+
+libJSF.$(DllSuf): $(OBJJSF)
+	@echo "Linking $@ "
+	$(LD) $(SOFLAGS)  $(OBJJSF) -o $@
+
+install:: JSFDefines.h $(HDRJSF)
+	mkdir -p $(JSFLIBDIR)
+	install -p -m 644 $(HDRJSF) $(JSFINCDIR)
+	install -p -m 644  JSFDefines.h $(JSFINCDIR)
+	install -p -m 755 libJSF.$(DllSuf) $(JSFLIBDIR)
+	install -p -m 755 jsf $(JSFBINDIR)
+
+jsf: jsfmain.o 
+	$(CXX) jsfmain.o -L.  -lJSF \
+	$(ROOTLIBS) $(ROOTGLIBS) \
+	-o $@ $(DYLDEXTRALIBS)
+
+jsfstatic: jsfmain.o 
+	$(CXX) -static jsfmain.o -L./  -lJSF \
+	$(ROOTLIBS) $(ROOTGLIBS) \
+	-o $@ $(DYLDEXTRALIBS)
+
+
+clean:: 
+	@rm -f $(OBJS) core *.so *~
+	@rm -f libJSF.$(SrcSuf) libJSF.h 
+
+depend:: $(SRC) $(HDR)
+	for i in $(SRC); do \
+	rmkdepend -a -- $(DEPENDFILES) -- $$i; done
+
+distclean:: clean
+	@rm -f $(OBJS) core *~ *.o
+	@rm -f jsf *.root Makefile JSFConfig.h
+
+web:
+	../bin/jsf -q -b html.C
+
+
+libJSF.$(SrcSuf): $(HDRJSF)
+		@echo "Generating dictionary ..."
+		rootcint  -f libJSF.$(SrcSuf) -c -I$(JSFROOT)/include \
+		$(RCINTDEFINES) $(HDRJSF)
+
+
