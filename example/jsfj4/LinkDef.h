@@ -13,6 +13,10 @@
 #pragma link C++ class JSFJ4CDCHit+;
 #pragma link C++ class JSFJ4CALHit+;
 
+#ifdef USE__J4CT
+#pragma link C++ class JSFJ4CTHit+;
+#endif
+
 #pragma link C++ class JSFJ4PrimaryParticle+;
 #pragma link C++ class JSFJ4PrimaryVertex+;
 

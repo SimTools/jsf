@@ -19,6 +19,7 @@
 #include "conf/makejsf.tmpl"
 #include "config/lclib.tmpl"
 
+
 LIBNAME = libJSFJ4
 
 SRC     = JSFJ4.$(SrcSuf) \
@@ -49,7 +50,8 @@ JUPITERINCLUDE = -I$(JUPITERROOT)/sources/kern/include \
 	-I$(JUPITERROOT)/sources/cdc/include \
 	-I$(JUPITERROOT)/sources/cal/include \
 	-I$(JUPITERROOT)/sources/ir/include \
-	-I$(JUPITERROOT)/sources/bd/include
+	-I$(JUPITERROOT)/sources/bd/include \
+	-I$(JUPITERROOT)/sources/sol/include
 
 CXXFLAGS += -I./include $(JUPITERINCLUDE) \
 	-I$(G4INCLUDE) \
@@ -60,8 +62,19 @@ CXXFLAGS += -I./include $(JUPITERINCLUDE) \
 CXXFLAGS += -DG4USE_STD_NAMESPACE
 #endif
 
-JUPITERLIB = -L$(JUPITERROOT)/lib/$(G4SYSTEM) -lJ4bd \
+JUPITERLIB = -L$(JUPITERROOT)/lib/$(G4SYSTEM) -lJ4bd -lJ4sol \
 	-lJ4cal -lJ4cdc -lJ4ir -lJ4it -lJ4vtx -lJ4kern
+
+ROOTCINTOPT =
+XCOMM define USE__J4CT
+#undef USE__J4CT
+#ifdef USE__J4CT
+CXXFLAGS += -DUSE__J4CT
+JUPITERINCLUDE += -I$(JUPITERROOT)/sources/ct/include
+JUPITERLIB += -lJ4ct 
+SRC  += JSFJ4CTHit.$(SrcSuf)
+ROOTCINTOPT += -DUSE__J4CT
+#endif
 
 G4LIBS := -L$(G4INSTALL)/lib/$(G4SYSTEM) \
 	-lG4RayTracer -lG4FR -lG4visHepRep -lG4OpenGL \
@@ -117,6 +130,6 @@ distclean:: clean
 	rm jsf.root Makefile 
 
 $(LIBNAME).$(SrcSuf): $(HDRS) LinkDef.h
-	rootcint -f $@ -c -I$(JSFROOT)/include \
+	rootcint -f $@ -c $(ROOTCINTOPT) -I$(JSFROOT)/include \
 	-I$(JUPITERINCLUDE) \
 	$(HDRS) LinkDef.h 
