@@ -1,3 +1,4 @@
+//*LastUpdate :  jsf-1-13 25-January-2000  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-12 3-September-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-9  16-May-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-8  19-April-1999  By Akiya Miyamoto
@@ -71,34 +72,7 @@
 
 #include <stdlib.h>
 
-#include <TROOT.h>
-#include <TApplication.h>
-
 #include <TBrowser.h>
-
-#include <TGListBox.h>
-#include <TGClient.h>
-#include <TGFrame.h>
-#include <TGIcon.h>
-#include <TGLabel.h>
-#include <TGButton.h>
-#include <TGTextEntry.h>
-#include <TGWidget.h>
-#include <TGMsgBox.h>
-#include <TGMenu.h>
-#include <TGCanvas.h>
-#include <TGComboBox.h>
-#include <TGTab.h>
-#include <TGSlider.h>
-#include <TGDoubleSlider.h>
-#include <TGFileDialog.h>
-#include <TRootEmbeddedCanvas.h>
-#include <TCanvas.h>
-#include <TH1.h>
-#include <TH2.h>
-#include <TRandom.h>
-#include <TSystem.h>
-
 #include "JSFSteer.h"
 #include "JSFGUIFrame.h"
 #include "InputDialog.h"
@@ -256,7 +230,7 @@ const char *filetypes[] = { "ROOT files",    "*.root",
                             "All files",     "*",
                             0,               0 };
 
-// ClassImp(JSFGUIFrame)
+ ClassImp(JSFGUIFrame)
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -886,9 +860,11 @@ void JSFGUIFrame::DrawHist()
 {
 
    if( !fShowHist )  return;
-   if( fNoOfAnalizedEvents < 0 ) gROOT->ProcessLine("DrawHist();");
+   Char_t cmd[20];
+   sprintf(cmd," DrawHist() ");
+   if( fNoOfAnalizedEvents < 0 ) gROOT->ProcessLine(cmd);
    else if( fNoOfAnalizedEvents%fShowHistFrequency  == 0 ) { 
-            gROOT->ProcessLine("DrawHist();");
+            gROOT->ProcessLine(cmd);
    }
 }
 
@@ -902,10 +878,10 @@ void JSFGUIFrame::GotoEventAction()
        fMenuFile->DisableEntry(M_FILE_OPEN);
        fMenuFile->DisableEntry(M_FILE_OPENOUTPUT);
        fInitialized=kTRUE;
-       gROOT->ProcessLine("Initialize();");
+       gROOT->ProcessLine("Int_t jr=Initialize();");
        Update();
   }
-  sprintf(cmd,"GetEvent(%s);", fTGotoEvent->GetBuffer()->GetString());
+  sprintf(cmd,"Bool_t ir=GetEvent(%s);", fTGotoEvent->GetBuffer()->GetString());
   gROOT->ProcessLine(cmd);
   sprintf(evtmsg,"  Event Number: %d\n",gJSF->GetEventNumber());
   fLEventNumber->SetText(new TGString(evtmsg));
@@ -926,7 +902,7 @@ void JSFGUIFrame::AnalizeEventAction()
        fMenuFile->DisableEntry(M_FILE_OPEN);
        fMenuFile->DisableEntry(M_FILE_OPENOUTPUT);
        fInitialized=kTRUE;
-       gROOT->ProcessLine("Initialize();");
+       gROOT->ProcessLine("Int_t jr=Initialize();");
   }
   Update();
   Int_t i;
@@ -936,7 +912,7 @@ void JSFGUIFrame::AnalizeEventAction()
   Int_t last=iFirstEvent+iNEventsAnalize-1;
   for(i=iFirstEvent;i<=last;i++){
     fNoOfAnalizedEvents++;
-    sprintf(cmd,"GetEvent(%d);",i);
+    sprintf(cmd,"Bool_t ir=GetEvent(%d);",i);
     gROOT->ProcessLine(cmd);
 
     switch (fReturnCode) {
@@ -959,6 +935,7 @@ void JSFGUIFrame::AnalizeEventAction()
   }
   fNoOfAnalizedEvents=-999;  
   DrawHist();
+
 }
 
 
@@ -972,7 +949,7 @@ void JSFGUIFrame::RunDemo()
        fMenuFile->DisableEntry(M_FILE_OPEN);
        fMenuFile->DisableEntry(M_FILE_OPENOUTPUT);
        fInitialized=kTRUE;
-       gROOT->ProcessLine("Initialize();");
+       gROOT->ProcessLine("Int_t jr=Initialize();");
        Update();
   }
 
@@ -1040,7 +1017,7 @@ void JSFGUIFrame::DoButtonAction(Long_t parm1)
        fMenuFile->DisableEntry(M_FILE_OPEN);
        fMenuFile->DisableEntry(M_FILE_OPENOUTPUT);
        fInitialized=kTRUE;
-       gROOT->ProcessLine("Initialize();");
+       gROOT->ProcessLine("Int_t jr=Initialize();");
        Update();
        break;
 
@@ -1049,10 +1026,13 @@ void JSFGUIFrame::DoButtonAction(Long_t parm1)
 	 fMenuFile->DisableEntry(M_FILE_OPEN);
 	 fMenuFile->DisableEntry(M_FILE_OPENOUTPUT);
 	 fInitialized=kTRUE;
-	 gROOT->ProcessLine("Initialize();");
+	 sprintf(evtmsg,"Int_t jr=Initialize();");
+	 gROOT->ProcessLine(evtmsg);
 	 Update();
        }
-       gROOT->ProcessLine("GetNext();");
+       //       sprintf(evtmsg,"GetNext();");
+       sprintf(evtmsg,"Bool_t ir=GetNext();");
+       gROOT->ProcessLine(evtmsg);
        sprintf(evtmsg,"  Event Number: %d\n",gJSF->GetEventNumber());
        tgmsg=new TGString(evtmsg);	
        fLEventNumber->SetText(tgmsg);
@@ -1065,7 +1045,7 @@ void JSFGUIFrame::DoButtonAction(Long_t parm1)
 		      icontype, buttons, &retval);
 	 break;
        }
-       gROOT->ProcessLine("GetPrevious();");
+       gROOT->ProcessLine("Bool_t ir=GetPrevious();");
        sprintf(evtmsg,"  Event Number: %d\n",gJSF->GetEventNumber());
        tgmsg=new TGString(evtmsg);
        fLEventNumber->SetText(tgmsg);
