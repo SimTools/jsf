@@ -57,6 +57,7 @@ class JSFPythiaHadronizer : public JSFSHGenerator
   virtual Bool_t EndRun();
   
   inline TPythia6 *GetPythia(){ return fPythia; }
+  inline Int_t GetHEPEUPFormat(){ return fHEPEUPFormat; }
 
   ClassDef(JSFPythiaHadronizer,1) // JSF Pythia Shower/Hadronizer
 
