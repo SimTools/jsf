@@ -1,0 +1,11 @@
+
+#include "config/lclib.tmpl"
+
+OBJS = simdstprint.o
+
+all:: sdprint
+
+sdprint: $(OBJS)
+	$(FC) $(OBJS) -Wl,-L$(JSFROOT)/lib -lJSFQuickSim \
+	-o sdprint
+
