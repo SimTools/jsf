@@ -11,7 +11,7 @@ c
       integer*2  igendat(4,ngensize)
       real*4  cmbt(8,ntrksize)
       real*8  trkd(15,ntrksize)
-      integer*4  emh(2,nemhsize), hdh(2,nhdhsize)
+      integer*4  emh(3,nemhsize), hdh(3,nhdhsize)
       integer*4 nvtx(ntrksize)
       real*8   vtxd(5,nvtxbuf)
       integer*4   ivtx(2,nvtxbuf)
@@ -35,8 +35,8 @@ c
 
          print *,' head(1:2)=',head(1),head(2)
          print *,' igendat=',((igendat(kk,k),kk=1,4),k=1,min(3,ngen))
-         print *,' emh=',(emh(1,k),emh(2,k),k=1,min(10,nemh))
-         print *,' hdh=',(hdh(1,k),hdh(2,k),k=1,min(10,nhdh))
+         print *,' emh=',(emh(1,k),emh(2,k),emh(3,k),k=1,min(10,nemh))
+         print *,' hdh=',(hdh(1,k),hdh(2,k),hdh(3,k),k=1,min(10,nhdh))
          print *,' nvtx=',(nvtx(k),k=1,ntrk)
          print *,' ipvtx=',(ivtx(1,k),ivtx(2,k),
      >                     k=1,npvtx)
