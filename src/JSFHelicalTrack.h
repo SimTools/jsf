@@ -212,9 +212,23 @@ public:
 
   THelix *GetTHelix(Double_t rcyl, Double_t zcyl);
 
+  inline JSFHelicalTrack & operator = (const JSFHelicalTrack &);
+
   ClassDef(JSFHelicalTrack, 1)   // JSFHelicalTrack Class.
 
 };
+
+inline JSFHelicalTrack & JSFHelicalTrack::operator = (const JSFHelicalTrack & p) {
+  fHelix=p.fHelix ;
+  fError=p.fError ;
+  fWithError=p.fWithError ;
+  fChisq=p.fChisq;
+  fCL=p.fCL  ; 
+  fNDF=p.fNDF ;
+  fBfield=p.fBfield;
+  fAlpha=p.fAlpha;
+  return *this;
+}
 
 #endif
 
