@@ -43,6 +43,7 @@ for( $i=0;$i<=$#htmlf;$i++){
 	if( $i == 2 && $array[1] =~ /^FFbar*/ ) { print ; }
 	if( $i == 3 && $array[1] =~ /^WW*/ ) { print ; }
 	if( $i == 4 && $array[1] =~ /^JSFE*/ ) { print ; }
+	if( $i == 4 && $array[1] =~ /^JSFGUI*/ ) { print ; }
     }
     else { print ; }
 
