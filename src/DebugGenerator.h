@@ -19,7 +19,7 @@
 
 
 class DebugGenerator : public JSFGenerator {
-private:
+protected:
   Int_t            fSpec;   //! Species counter
 
   Int_t     fRandomSeed;  // random seed.
@@ -67,6 +67,14 @@ public:
 
    void SetSpecies(Int_t ID, Double_t charge, Double_t mass)
        { fNspecies=0 ; AddSpecies(ID, charge, mass) ; }
+
+   Int_t GetNgen(){ return fNgen; }
+   Double_t *GetP(){ return fP; }
+   Double_t *GetCosth(){ return fCosth; }
+   Double_t *GetAzimuthAngle(){ return fAzimA; }
+   Double_t *GetVTXR(){ return fR; }
+   Double_t *GetVTXPhi(){ return fPhi; }
+   Double_t *GetVTXZ(){ return fZ; }
 
    void PrintParam();
 
