@@ -228,7 +228,7 @@ CXXFLAGS      = $(EXTRACXXOPT) \
                 -I$(JSFROOT)/include $(shell root-config --cflags) \
 		-I/usr/vacpp/include -brtl -bshared
 SOFLAGS       = -p 0
-LDFLAGS       = $(ANALLIB) $(GLIBS) -lxlf90
+LDFLAGS       = -brtl -bshared $(ANALLIB) $(GLIBS) -lxlf90
 ROOTLIBS     := $(shell root-config --nonew --libs)
 ROOTGLIBS    := $(shell root-config --nonew --glibs)
 LIBS          = $(ROOTLIBS) -lxlf90
