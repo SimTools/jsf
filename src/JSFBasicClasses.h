@@ -5,7 +5,7 @@
 //                                                                      //
 // JSFBasicClasses                                                      //
 //                                                                      //
-//$Id: 
+//$Id$ 
 //                                                                      //
 //////////////////////////////////////////////////////////////////////////
 
@@ -30,7 +30,14 @@ class JSF2DV {
     inline JSF2DV operator - (JSF2DV v) { return JSF2DV( x-v.x, y-v.y); }
     inline Double_t operator * (JSF2DV v) { return ( x*v.x+y*v.y); }
     inline JSF2DV operator * (Double_t f){ return JSF2DV( f*x, f*y) ; }
+    inline Bool_t operator == (const JSF2DV &v) const{
+      return (v.x==x && v.y==y) ? kTRUE : kFALSE;
+    }
+
     void Print(){ printf("%g,%g",x,y);}
+    inline Double_t X ()   const { return x; };
+    inline Double_t Y ()   const { return y; };
+    inline void Set(Double_t X, Double_t Y){x=X; y=Y;}
 };
 
 //***************************************************************************
@@ -57,6 +64,7 @@ public:
   inline JSF3DV_f operator * (Float_t f){ return JSF3DV_f( f*x, f*y, f*z) ; }
   void Print(){ printf("%g,%g,%g",x,y,z);}
 
+
 };
 
 class JSF3DV {
@@ -75,6 +83,14 @@ public:
   inline Double_t operator * (JSF3DV v) { return ( x*v.x+y*v.y+z*v.z); }
   inline JSF3DV operator * (Double_t f){ return JSF3DV( f*x, f*y, f*z) ; }
   void Print(){ printf("%g,%g,%g",x,y,z);}
+  inline Double_t X ()   const { return x; };
+  inline Double_t Y ()   const { return y; };
+  inline Double_t Z ()   const { return z; };
+  inline void Set(Double_t X, Double_t Y, Double_t Z){x=X;y=Y;z=Z;}
+  inline Bool_t operator == (const JSF3DV &v) const{
+      return (v.x==x && v.y==y && v.z==z) ? kTRUE : kFALSE;
+    }
+
 
 } ;
 
