@@ -17,6 +17,7 @@
 //*
 //*(User functions called from this macro)
 //*  Initialize() calls  UserSetOptions(), UserInitialize(), UserModuleDefine()
+//*                      UserAnotherModules()
 //*  GetEvent(..) calls  UserAnalysis()
 //*  JobEnd()     calls  UserTerminate()
 //*  ResetHist()  calls  UserInitialize()
@@ -25,6 +26,7 @@
 //*  These user functions are defined in a macro file, UserAnalysis.C. 
 //*  UserSetOptions() and UserTerminate() is not called when they are defined.
 //*  UserModuleDefine() is called only when RunMode=0.
+//*  UserAnotherModules() is to define aditional modules after standard module definition.
 //* 
 //*(Author)
 //*  Akiya Miyamoto, KEK, 8-March-1999  
@@ -35,6 +37,8 @@
 //*                  Add new options to get random seed from a file.
 //*  Akiya Miyamoto, KEK, 25-January-2000
 //*                  Include the use of JSFGUIMergeEvent
+//*  Akiya Miyamoto, KEK, 14-July-2000
+//*                  Include a call UserAnotherModules
 //* 
 //$Id$
 //
@@ -120,6 +124,8 @@ int Initialize()
       return -1;
   }
 
+  if( gROOT->GetGlobalFunction("UserAnotherModules",0,kTRUE) ) UserAnotherModules();
+
   // ****************************
   // Does Initialize of each JSF Modules.
   // ****************************
@@ -194,11 +200,15 @@ void InitGenSim()
       break;
   }
 
-  //  if( jsf->Env()->GetValue("JSFGUI.SimulationType",1) == 1 ) {
+  if( jsf->Env()->GetValue("JSFGUI.SimulationType",1) == 1 ) {
     sim    = new JSFQuickSim();
     simdst = new JSFSIMDST();
     simdst->SetQuickSimParam(sim->Param());
-    //}
+  }
+  else if( jsf->Env()->GetValue("JSFGUI.SimulationType",1) > 1 ) {
+    printf("JSFGUI.SimualtionType > 1 is not supported yet.\n");
+  }
+  //}
     //else {
     //simdst = new JSFJIM();
     //}
@@ -210,14 +220,14 @@ void InitGenSim()
   }
 
 
-  if( jsf->Env()->GetValue("JSFGUI.SIMDST.Output",0) == 0 ) 
+  if( jsf->Env()->GetValue("JSFGUI.SIMDST.Output",0) == 0 && simdst ) 
     simdst->NoReadWrite();
 
 
   if( jsf->Env()->GetValue("JSFGUI.OutputEventData",0) == 0  ) {
     full->SetMakeBranch(kFALSE);  
     if(sim) sim->SetMakeBranch(kFALSE);   
-    simdst->SetMakeBranch(kFALSE);
+    if(simdst) simdst->SetMakeBranch(kFALSE);
     gen->SetMakeBranch(kFALSE); 
     if( hdr ) hdr->SetMakeBranch(kFALSE);
   }
@@ -235,9 +245,12 @@ void InitGenSim()
 Bool_t GetEvent(Int_t ev)
 {
 
-    Int_t irunmode=jsf->Env()->GetValue("JSFGUI.RunMode",1);
+  //    Int_t irunmode=jsf->Env()->GetValue("JSFGUI.RunMode",1);
+  //  if( irunmode==2 && !jsf->GetEvent(ev) ) { return kFALSE; }
 
-    if( irunmode==2 && !jsf->GetEvent(ev) ) { return kFALSE; }
+  if( jsf->GetInput() ) {
+    if( jsf->GetEvent(ev) ) { return kFALSE; }
+  }
 
     Bool_t flag=jsf->Process(ev);
     Int_t iret=jsf->GetReturnCode();
@@ -249,7 +262,8 @@ Bool_t GetEvent(Int_t ev)
     UserAnalysis();
     if( gui != 0 ) gui->DrawHist();
     
-    if( irunmode==1 || irunmode = 4 ) {
+    //    if( irunmode==1 || irunmode = 4 ) {
+    if( jsf->GetOutput() ) {
       if( !(iret & jsf->kJSFNoOutput) ) jsf->FillTree();
       jsf->Clear();
     }
