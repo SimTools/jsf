@@ -71,11 +71,11 @@ distclean::
 
 ###
 
-libJSFReadJIMBank.$(SrcSuf): $(HDRS) LinkDef.h
+libJSFReadJIMBank.$(SrcSuf): $(HDRS) JSFReadJIMLinkDef.h
 		@echo "Generating dictionary ..."
 		rootcint -f libJSFReadJIMBank.$(SrcSuf) \
 	 	-c -I$(JSFROOT)/include $(HDRS) \
-		LinkDef.h
+		JSFReadJIMLinkDef.h
 
 #---------------------------------------------------
 
