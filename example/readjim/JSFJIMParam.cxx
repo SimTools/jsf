@@ -38,8 +38,9 @@ void JSFJIMParam::ReadParameter()
 
   //  kzget_(Char_t *cname, Int_t *isegm, Int_t *ndata, Int_t idata[], lcname);
  
-  Int_t isegm=0;
-  Int_t ndata; Int_t idata[100];
+  printf("Dummy function JSFJIMParam::ReadParameter was called.\n");
+  //  Int_t isegm=0;
+  // Int_t ndata; Int_t idata[100];
 
   /*
   FILE *fd;

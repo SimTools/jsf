@@ -40,18 +40,18 @@ INC           = $(JSFROOT)/include
 
 INCPATH	      = -I./ -I$(JLCSIMROOT)/util/inc -I$(JLCSIMROOT)/include/jlc \
 		-I$(JLCSIMROOT)/jimlib/inc
-FCFLAGS	      = $(FFLAGS)
+
+SRC           = JSFReadJIMBank.$(SrcSuf) \
+		JSFJIMParam.$(SrcSuf) \
+		JSFJLCSIM.$(SrcSuf)
 
 OBJS          = JSFReadJIMBank.$(ObjSuf) \
 		JSFJIMParam.$(ObjSuf) \
+		JSFJLCSIM.$(ObjSuf) \
 		readjim.o $(JIMOBJ) \
 		libJSFReadJIMBank.$(ObjSuf)
 
-SRC           = JSFReadJIMBank.$(SrcSuf) \
-		JSFJIMParam.$(SrcSuf)
-
-HDRS	      = JSFReadJIMBank.h \
-		JSFJIMParam.h
+HDRS          = $(subst .$(SrcSuf),.h,$(SRC))
 
 SOLIBNAME     = libJSFReadJIMBank
 

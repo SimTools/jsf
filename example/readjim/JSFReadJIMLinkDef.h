@@ -8,4 +8,6 @@
 #pragma link C++ class JSFReadJIMBankBuf;
 #pragma link C++ class JSFJIMParam;
 
+#pragma link C++ class JSFJLCSIM;
+
 #endif
