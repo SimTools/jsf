@@ -134,7 +134,7 @@ Bool_t PythiaGenerator::Process(Int_t ev)
      }
      new(tracks[nout-1]) 
        JSFGeneratorParticle(nout, kf,(Double_t)mass,(Double_t)charge, pv, xv , 
-	    ndaughter, firstdaughter, mother, (Double_t)life, (Double_t)xctau ) ;
+	    ndaughter, firstdaughter, mother, (Double_t)xctau, (Double_t)life ) ;
 
    }
   buf->SetNparticles(nout);

@@ -37,7 +37,7 @@ JSFLTKCLTrack::JSFLTKCLTrack(EJSFLTKCLTrackBank bank, Float_t data[])
 {
     fBank=bank;
     fP[1]=data[0] ;  fP[2]=data[1] ;  fP[3]=data[2] ;  fP[0]=data[3] ; 
-    fEcl=data[4]  ;  fNEMC=(Int_t)data[5]; 
+    fEcl=data[4]  ;  fNEMC=(Int_t)data[6]; 
     fCharge=(Int_t)data[8]; fType=(Int_t)data[9];
     fSource=(Int_t)data[10]; fNCDC=(Int_t)data[11];
     if( fNCDC > 0 ) f1stCDC=(Int_t)data[12];
