@@ -35,7 +35,12 @@
 //  
 //////////////////////////////////////////////////////////////////
 
+#ifdef __USEISOCXX__
 #include <iostream>
+#else
+#include <iostream.h>
+#endif
+
 #include "JSFConfig.h"
 
 #include <TRandom.h>

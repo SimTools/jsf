@@ -7,8 +7,13 @@
 //$Id$
 ////////////////////////////////////////////////////////////////////////
 
+#ifdef __USEISOCXX__
 #include <iostream>
 using  namespace std;
+#else
+#include <iostream.h>
+using  namespace std;
+#endif
 
 #include "JSFSteer.h"
 #include "JSFGenerator.h"
