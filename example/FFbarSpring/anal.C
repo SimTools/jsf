@@ -46,7 +46,7 @@ int hist(Int_t id)
     // Histogram COmbined_Hadron_Track's momentum
     JSFQuickSimBuf *qbuf=sim->EventBuf();
     TClonesArray *ta=qbuf->GetTracks();
-    for(i=0;i<qbuf->GetNtracks();i++){
+    for(i=0;i<qbuf->GetNTracks();i++){
       JSFLTKCLTrack *t=ta->At(i);
       hE->Fill(t->GetE());
     }
