@@ -29,7 +29,7 @@ foreach $file (@ARGV) {
    while (<FILE>) {
       if (/^       *SUBROUTINE/) {
          $name = $_;
-         $name =~ s/^\s*SUBROUTINE\s*([^(\s]*)\s*.*/\1/;
+         $name =~ s/^\s*SUBROUTINE\s*([^( ]*)\s*.*/\1/;
          chomp($name);
          print TMPFILE;
       } elsif (/^       *FUNCTION/) {
