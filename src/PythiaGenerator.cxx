@@ -84,6 +84,8 @@ ClassImp(PythiaGenerator)
 
 PythiaGenerator *lPythiaGenerator=NULL;
 
+using namespace std;
+
 #if __PYTHIA_VERSION__ >= 6
 //_____________________________________________________________________________
 Float_t ulctau_(Int_t *kf){
