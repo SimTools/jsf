@@ -135,10 +135,10 @@ libjsfdmatrix: ../lib/libJSFDMatrix.$(DllSuf)
 	$(LD) $(SOFLAGS)  $(OBJJSFDMATRIX) -o $@
 
 
-jsf: $(OBJS) jsfmain.o ../lib/libJSFGUI.so
+jsf: $(OBJS) jsfmain.o 
 	$(LD) jsfmain.o $(BLOCKDATA) \
 	-L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim -lJSFDMatrix \
-	-lBasesSpring -lJSFGUI $(LDFLAGS) \
+	-lBasesSpring $(LDFLAGS) \
 	 -o jsf
 	@cp -p jsf ../bin
 	@rm -f jsf
