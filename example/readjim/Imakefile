@@ -23,7 +23,7 @@ EXTRALDOPT = -Wl,-a,default
 CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lkernlib -lpacklib
 #endif
 
-ANALLIB = $(JSFLIBS) $(EXTRALDOPT) \
+ANALLIB = $(JSFLIBS) $(EXTRALDOPT) -lJSFReadJIMBank \
 	-L$(JLCSIMROOT)/lib -lct -ljlclib -lvx -lcal -lzbs -ljlcutil \
 	-L$(LCLIBDIR) -lGENUTIL -lLUHADR -lTAUOLA \
         -lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
@@ -37,18 +37,16 @@ JIMOBJ  = jlread.o \
 
 #-------------------------------------------------------------
 
-INC           = $(JSFROOT)/include 
+CXXFLAGS     += -I$(JSFROOT)/example/guiexam1
 
 INCPATH	      = -I./ -I$(JLCSIMROOT)/util/inc -I$(JLCSIMROOT)/include/jlc \
-		-I$(JLCSIMROOT)/jimlib/inc
+		-I$(JLCSIMROOT)/jimlib/inc 
 
 SRC           = JSFReadJIMBank.$(SrcSuf) \
 		JSFJIMParam.$(SrcSuf) \
-		JSFJLCSIM.$(SrcSuf)
+		JSFJLCSIM.$(SrcSuf) JSFJIMEventDisplay.$(SrcSuf)
 
-OBJS          = JSFReadJIMBank.$(ObjSuf) \
-		JSFJIMParam.$(ObjSuf) \
-		JSFJLCSIM.$(ObjSuf) \
+OBJS          = $(subst .$(SrcSuf),.$(ObjSuf),$(SRC)) \
 		readjim.o $(JIMOBJ) \
 		libJSFReadJIMBank.$(ObjSuf)
 
@@ -57,14 +55,16 @@ HDRS          = $(subst .$(SrcSuf),.h,$(SRC))
 SOLIBNAME     = libJSFReadJIMBank
 
 
-all::  jsfrjim lib
+all::  lib jsfrjim
 
 jsfrjim: $(OBJS) $(JSFROOT)/src/jsfmain.o JSFReadJIMCommonSize.h
-	$(LD) $(JSFROOT)/src/jsfmain.o $(BLOCKDATA) $(OBJS) \
+	$(LD) $(JSFROOT)/src/jsfmain.o $(BLOCKDATA) \
 	$(LDFLAGS) -o ../../bin/jsfrjim 
 
 lib: $(OBJS)
-	ar cr libreadjim.a $(OBJS) $(JIMOBJ)
+	$(LD) $(SOFLAGS) $(OBJS) -o ../../lib/$(SOLIBNAME).$(DllSuf)
+
+#	ar cr libreadjim.a $(OBJS) $(JIMOBJ)
 
 clean:: 
 	@rm -f $(OBJS) core *~
@@ -87,7 +87,8 @@ distclean::
 $(SOLIBNAME).$(SrcSuf): $(HDRS) JSFReadJIMLinkDef.h
 		@echo "Generating dictionary ..."
 		rootcint -f $(SOLIBNAME).$(SrcSuf) \
-	 	-c -I$(JSFROOT)/include $(HDRS) \
+	 	-c -I$(JSFROOT)/example/guiexam1 \
+	 	-I$(JSFROOT)/include $(HDRS) \
 		JSFReadJIMLinkDef.h
 
 

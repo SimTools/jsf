@@ -9,5 +9,6 @@
 #pragma link C++ class JSFJIMParam;
 
 #pragma link C++ class JSFJLCSIM;
+#pragma link C++ class JSFJIMEventDisplay;
 
 #endif
