@@ -35,11 +35,7 @@
 //  
 //////////////////////////////////////////////////////////////////
 
-#ifdef __USEISOCXX__
 #include <iostream>
-#else
-#include <iostream.h>
-#endif
 
 #include "JSFConfig.h"
 
@@ -54,54 +50,55 @@
 
 #if __PYTHIA_VERSION__ >= 6 
 #include <TMCParticle6.h>
-extern "C" {
-extern Int_t pychge_(Int_t *kf);
-extern void pyevwt_(Float_t *wtxs);
-extern void eprobx_(Double_t *x, Int_t *itype, Double_t *ebeam);
-extern void pyrobo_(Int_t *imi, Int_t *ima, Double_t *the, Double_t *phi,
-                    Double_t *bex, Double_t *bey, Double_t *bez);
-extern int pycomp_(int *kf);
-
-typedef struct {
-  //C...Particle properties + some flavour parameters.
-  //      COMMON/PYDAT2/KCHG(500,4),PMAS(500,4),PARF(2000),VCKM(4,4)
-  Int_t kchg[4][500];
-  Double_t pmas[4][500];
-  Double_t parf[2000];
-  Double_t vckm[4][4];
-} COMMON_PYDAT2;
-
-extern COMMON_PYDAT2 pydat2_;
-Float_t ulctau_(Int_t *kf);
-
-};
-
 #else
 #include <TMCParticle.h>
-extern "C" {
-extern Int_t luchge_(Int_t *kf);
-extern Float_t ulctau_(Int_t *kf);
-extern void pyevwt_(Float_t *wtxs);
-extern Float_t rlu_(Int_t *idummy);
-extern void eprobx_(Double_t *x, Int_t *itype, Double_t *ebeam);
-};
 #endif
+
+#if __PYTHIA_VERSION__ <= 5
+#define pychge_ luchge_
+#define pycomp_ lucomp_
+
+#define pydat2_ ludat2_
+
+#define MRPY   MRLU
+#define RRPY   RRLU
+#define GetMRPY GetMRLU
+#define GetRRPY GetRRLU
+#define SetMRPY SetMRLU
+#define SetRRPY SetRRLU
+#endif
+
+extern "C" {
+extern Int_t pychge_(Int_t *kf);
+extern int   pycomp_(int *kf);
+extern void  pyevwt_(Float_t *wtxs);
+extern void  eprobx_(Double_t *x, Int_t *itype, Double_t *ebeam);
+
+#if __PYTHIA_VERSION__ >= 6 
+extern void  pyrobo_(Int_t *imi, Int_t *ima, Double_t *the, Double_t *phi,
+                    Double_t *bex, Double_t *bey, Double_t *bez);
+#else
+extern Float_t rlu_(Int_t *idummy);
+#endif
+};
+
+#if __PYTHIA_VERSION__ <= 5
+typedef struct {
+  Int_t   KCHG[3][500]; 
+  Float_t PMAS[4][500];
+  Float_t PARF[2000];
+  Float_t VCKM[4][4];
+} Pydat2_t;
+#endif
+extern Pydat2_t pydat2_;
+
+
 
 ClassImp(PythiaGenerator)
 
 PythiaGenerator *lPythiaGenerator=NULL;
 
 using namespace std;
-
-#if __PYTHIA_VERSION__ >= 6
-//_____________________________________________________________________________
-Float_t ulctau_(Int_t *kf){
-
-  Int_t kc=pycomp_(kf);
-  Double_t xctau=pydat2_.pmas[3][kc-1]*0.1;
-  return (Float_t)xctau;
-}
-#endif
 
 //_____________________________________________________________________________
 PythiaGenerator::PythiaGenerator(const Char_t *name, 
@@ -136,13 +133,11 @@ PythiaGenerator::PythiaGenerator(const Char_t *name,
   fNBSGen=0;
   fNBSGood=0;
 
-#if __PYTHIA_VERSION__ >= 6 
   for(Int_t i=0;i<6;i++){ fMRPY[i]=0; }
   for(Int_t i=0;i<100;i++){ fRRPY[i]=0.0; }
+#if __PYTHIA_VERSION__ >= 6 
   fPythia = new TPythia6();
 #else
-  for(Int_t i=0;i<6;i++){ fMRLU[i]=0; }
-  for(Int_t i=0;i<100;i++){ fRRLU[i]=0.0; }
   fPythia = new TPythia();
 #endif
 
@@ -226,13 +221,8 @@ Bool_t PythiaGenerator::EndRun()
 
    // Save random seed
    Int_t i;
-#if __PYTHIA_VERSION__ >= 6 
    for(i=0;i<6;i++){ fMRPY[i]=fPythia->GetMRPY(i+1); }
    for(i=0;i<100;i++){ fRRPY[i]=fPythia->GetRRPY(i+1); }
-#else
-   for(i=0;i<6;i++){ fMRLU[i]=fPythia->GetMRLU(i+1); }
-   for(i=0;i<100;i++){ fRRLU[i]=fPythia->GetRRLU(i+1); }
-#endif
 
    // Save PYINT5 information.
    Int_t ns[201];
@@ -278,13 +268,8 @@ Bool_t PythiaGenerator::Process(Int_t ev)
   if( !JSFGenerator::Process(ev) ) return kFALSE;
 
   Int_t i;
-#if __PYTHIA_VERSION__ >= 6 
   for(i=0;i<6;i++){ fMRPY[i]=fPythia->GetMRPY(i+1); }
   for(i=0;i<100;i++){ fRRPY[i]=fPythia->GetRRPY(i+1); }
-#else
-  for(i=0;i<6;i++){ fMRLU[i]=fPythia->GetMRLU(i+1); }
-  for(i=0;i<100;i++){ fRRLU[i]=fPythia->GetRRLU(i+1); }
-#endif
 
   JSFGeneratorBuf *buf=(JSFGeneratorBuf*)EventBuf();
   Double_t ecm=GetEcm();
@@ -325,11 +310,7 @@ Bool_t PythiaGenerator::Process(Int_t ev)
     fPythia->GenerateEvent();
 
     if( fPythia->GetMSTI(61) == 1 ) {
-#ifdef __USEISOCXX__
       std::cout << " MSTI 61 is 1" << std::endl;
-#else
-      cout << " MSTI 61 is 1" << endl;
-#endif
       goto loop2;
     }
 
@@ -380,13 +361,14 @@ Bool_t PythiaGenerator::Process(Int_t ev)
      pv(2)=p->GetPy();
      pv(3)=p->GetPz();
      xv(0)=0.0; xv(1)=0.0 ; xv(2)=0.0 ; xv(3)=0.0 ; 
-#if __PYTHIA_VERSION__ >= 6 
+#ifdef __USE_TPYTHIA__
      charge=((Float_t)pychge_(&kf))/3.0;
      Int_t kc=fPythia->Pycomp(kf);
      xctau=fPythia->GetPMAS(kc,4)*0.1;
 #else
-     charge=((Float_t)luchge_(&kf))/3.0;
-     xctau=((Float_t)ulctau_(&kf));
+     charge=((Float_t)pychge_(&kf))/3.0;
+     Int_t kc=pycomp_(&kf);
+     xctau=pydat2_.PMAS[3][kc-1]*0.1;
 #endif
      mass=p->GetMass();
      ndaughter=0;
@@ -422,23 +404,38 @@ Bool_t PythiaGenerator::Terminate()
   if( !JSFGenerator::Terminate() ) return kFALSE;
 
   if( fBeamStrahlung != 0 ) {
-#ifdef __USEISOCXX__
     std::cout << " *********************** " << std::endl;
     std::cout << " Number of call to BSGenerator =" << fNBSGen << std::endl;
     std::cout << " Number of good BSGencall      =" << fNBSGood << std::endl;    
     std::cout << " Fraction :                    =" << 
       (Double_t)fNBSGood/(Double_t)fNBSGen << std::endl;
-#else
-    cout << " *********************** " << endl;
-    cout << " Number of call to BSGenerator =" << fNBSGen << endl;
-    cout << " Number of good BSGencall      =" << fNBSGood << endl;    
-    cout << " Fraction :                    =" << 
-      (Double_t)fNBSGood/(Double_t)fNBSGen << endl;
-#endif
   }
 
   return kTRUE;
 }
+
+// ---------------------------------------------------------------
+const Char_t *PythiaGenerator::GetEventTypeString()
+{ 
+  Int_t itype=fPythia->GetMSTI(1);
+  
+  static  Char_t *processname[400]={0};
+  processname[1]="e^{+}e^{-} #rightarrow #gamma/Z^{0} ";
+  processname[22]="e^{+}e^{-} #rightarrow Z^{0} Z^{0}";
+  processname[24]="e^{+}e^{-} #rightarrow Z^{0} H^{0}";
+  processname[25]="e^{+}e^{-} #rightarrow W^{+} W^{-}";
+  processname[36]="e^{+}e^{-} #rightarrow e #nu W";
+  processname[103]="e^{+}e^{-} #rightarrow e^{+}e{-} H^{0} (#gamma #gamma #rightarrow H^{0}";
+  processname[123]="e^{+}e^{-} #rightarrow e^{+}e^{-} H0 (ZZ fusion)";
+  processname[124]="e^{+}e^{-} #rightarrow #nu#bar{#nu} H0 (WW fusion)";
+  
+  if( processname[itype] != 0 ) return processname[itype];
+  
+  static Char_t rtstr[64];
+  sprintf(rtstr,"Process id=%d",itype);
+  return rtstr;
+}
+
 
 #ifdef __LCLIBRAN_USE_RANMAR__
 // ---------------------------------------------------------------
@@ -460,18 +457,10 @@ void PythiaGenerator::WriteRandomSeed(Char_t *fw)
   fprintf(fd,"0 %d\n",gJSF->GetEventNumber());
 
   for(Int_t i=0;i<6;i++){
-#if __PYTHIA_VERSION__ >= 6 
     fprintf(fd,"%d\n",(UInt_t)fPythia->GetMRPY(i+1));
-#else
-    fprintf(fd,"%d\n",(UInt_t)fPythia->GetMRLU(i+1));
-#endif
   }
   for(Int_t i=0;i<100;i++){
-#if __PYTHIA_VERSION__ >= 6 
     Float_t val=fPythia->GetRRPY(i+1);
-#else
-    Float_t val=fPythia->GetRRLU(i+1);
-#endif
     UInt_t *uval=(UInt_t*)&val;
     fprintf(fd,"%d\n",*uval);
   }
@@ -502,21 +491,13 @@ void PythiaGenerator::ReadRandomSeed(Char_t *fr)
   Int_t ival;
   for(Int_t i=0;i<6;i++){
     fscanf(fd,"%d",(UInt_t*)&ival);
-#if __PYTHIA_VERSION__ >= 6 
     fPythia->SetMRPY(i+1,ival);
-#else
-    fPythia->SetMRLU(i+1,ival);
-#endif
   }
   for(Int_t i=0;i<100;i++){
     UInt_t uval;
     fscanf(fd,"%d",&uval);
     Float_t *val=(Float_t*)&uval;
-#if __PYTHIA_VERSION__ >= 6 
     fPythia->SetRRPY(i+1,*val);
-#else
-    fPythia->SetRRLU(i+1,*val);
-#endif
   }
   fclose(fd);
   printf(" Random seed for event#%d of PythiaGenerator is obtained from a file %s\n",ievt,fn);
@@ -527,11 +508,7 @@ void PythiaGenerator::PrintRandomSeed(Int_t num)
 { 
   printf(" Pythia-Seed:");
   for(Int_t i=0;i<num;i++){
-#if __PYTHIA_VERSION__ >= 6 
     Float_t val=fPythia->GetRRPY(i+1);
-#else
-    Float_t val=fPythia->GetRRLU(i+1);
-#endif
     UInt_t *uval=(UInt_t*)&val;
     printf("%d ",*uval);
   }
@@ -553,13 +530,8 @@ Bool_t PythiaGenerator::GetLastRunInfo()
   }
 
   Int_t i;
-#if __PYTHIA_VERSION__ >= 6 
   for(i=0;i<6;i++){ fPythia->SetMRPY(i+1, fMRPY[i]); }
   for(i=0;i<100;i++){ fPythia->SetRRPY(i+1, fRRPY[i]); }
-#else
-  for(i=0;i<6;i++){ fPythia->SetMRLU(i+1, fMRLU[i]); }
-  for(i=0;i<100;i++){ fPythia->SetRRLU(i+1, fRRLU[i]); }
-#endif
   
   printf("Random seeds for PythiaGenerator were reset by ");
   printf("values from a file.\n");
@@ -617,13 +589,8 @@ void PythiaGenerator::Streamer(TBuffer &R__b)
       R__b.ReadStaticArray(fFrame);
       R__b.ReadStaticArray(fBeamParticle);
       R__b.ReadStaticArray(fTargetParticle);
-#if __PYTHIA_VERSION__ >= 6
       R__b.ReadStaticArray(fMRPY);
       R__b.ReadStaticArray(fRRPY);
-#else
-      R__b.ReadStaticArray(fMRLU);
-      R__b.ReadStaticArray(fRRLU);
-#endif
       R__b >> fNUMSUB;
 
       if( fISUB ) { delete fISUB; } ; 
@@ -658,13 +625,8 @@ void PythiaGenerator::Streamer(TBuffer &R__b)
       R__b.ReadStaticArray(fFrame);
       R__b.ReadStaticArray(fBeamParticle);
       R__b.ReadStaticArray(fTargetParticle);
-#if __PYTHIA_VERSION__ >= 6 
       R__b.ReadStaticArray(fMRPY);
       R__b.ReadStaticArray(fRRPY);
-#else
-      R__b.ReadStaticArray(fMRLU);
-      R__b.ReadStaticArray(fRRLU);
-#endif
       R__b >> fNUMSUB;
 
       if( fISUB ) { delete fISUB; } ; 
@@ -686,13 +648,8 @@ void PythiaGenerator::Streamer(TBuffer &R__b)
       R__b.WriteArray(fFrame, 8);
       R__b.WriteArray(fBeamParticle, 16);
       R__b.WriteArray(fTargetParticle, 16);
-#if __PYTHIA_VERSION__ >= 6 
       R__b.WriteArray(fMRPY, 6);
       R__b.WriteArray(fRRPY, 100);
-#else
-      R__b.WriteArray(fMRLU, 6);
-      R__b.WriteArray(fRRLU, 100);
-#endif
       R__b << fNUMSUB;
       R__b.WriteArray(fISUB, fNUMSUB);
       R__b.WriteArray(fNGEN, fNUMSUB);

@@ -35,11 +35,15 @@ OBJ	      = $(subst .$(SrcSuf),.$(ObjSuf),$(SRC)) \
 HDR	      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRC)) \
 		$(NAME)LinkDef.h
 
-LIBS	      =	-L$(LCLIBROOT)/lib -lLUHADR -lTAUOLA -lFORTLIB \
+LIBS	      =	-L$(LCLIBROOT)/lib -lFORTLIB \
 		$(ROOTLIBS) $(ROOTGLIBS) \
 		-L/cern/pro/lib -ljetset74  -lpdflib804 -lg2c /* -lnsl */
 
 CXXFLAGS     += -D__PYTHIA_VERSION__=5 
+
+ifeq ($(shell uname),Darwin)
+CXX := $(subst -O,,$(CXX))
+endif
 
 /*----------------------------------------------------------------------*/
 /*  Make targets							*/
