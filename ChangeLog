@@ -36,6 +36,13 @@ To-Do ( listed in arbitrary order ) -- Help wanted
 **********************************************************
 jsf-1-12  Modification toward jsf-1-12 A.Miyamoto
 **********************************************************
+-----------------------
+30-August-1999 A.Miyamoto
+-----------------------
+(1) example/guiexam1/InitPythia.C is moved to macro directory.
+(2) Add menu to control Pythia processes in JSF control pannel.
+(3) Several bugs in GUIMainFrame.C are removed.
+
 -----------------------	
 26-August-1999 A.Miyamoto
 -----------------------	
