@@ -1,5 +1,17 @@
 
 ----------------------------------------------------------------------------
+4-Jan-2001 Akiya Miyamoto
+----------------------------------------------------------------------------
+A bug in JIM data calculation used for JIM event display was fixed.
+
+----------------------------------------------------------------------------
+1-Jan-2001 Akiya Miyamoto
+----------------------------------------------------------------------------
+(1) Changes for ROOT 3.00
+    a) __ROOT_FULLVERSION__ is defined 	
+    b) Use TMatrixD instead of JSFDMatrix
+	
+----------------------------------------------------------------------------
 5-October-2000 Akiya Miyamoto
 ----------------------------------------------------------------------------
 (1) Add new member functions, AddMSError and Average in JSFHelicalTrack class
