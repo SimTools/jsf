@@ -1,0 +1,14 @@
+This directory contains a sample script to create an input file 
+for Jupiter simulator.  
+
+To run program, do
+
+$  jsf -b -q --maxevt=100 gui.C
+
+This will create a file, pythia.data, which contains a 100 events 
+of e+e- -> Z/gamma -> mu+ mu- ( gamma ) events created by 
+Pythia generator.  Process and decay mode of Z is specified 
+in a file, jsf.conf.  You can specify any process according to the 
+jsf input convension.  The file, pythia.data, can be used as an input HEPEVT
+format data of Jupiter.
+

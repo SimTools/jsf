@@ -1,0 +1,16 @@
+#
+#
+#$Id$
+#
+
+#include "../../conf/makejsf.tmpl"
+
+OBJS   = k0evt.o
+LIB    = ../../src/generators/jsfgen/readgenutil.o -L$(JSFROOT)/lib -lPythia6
+FFLAGS = -I$(JSFROOT)/include 
+
+all:: k0evt
+
+k0evt: $(OBJS)
+	$(FC) $(OBJS) $(LIB) -o k0evt
+

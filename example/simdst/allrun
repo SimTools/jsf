@@ -1,0 +1,43 @@
+#!/bin/csh -v
+#
+#  Shell script to create all sample SIMDST data
+#  To run this script, do
+#
+#     allrun output-directory
+#  
+#  Data are written in output-directory.
+#
+#  Akiya Miyamoto, KEK, 15-Feburary-1999
+#
+
+uname -mrsv
+date
+
+
+set destdir=./
+if ( $#argv == 1 ) then
+   set destdir=$argv[1]
+endif
+echo "Output directory is $destdir"
+
+set exec=$JSFROOT/bin/jsf
+
+$exec -b -q --destdir=$destdir --maxevt=10 simdst.C
+$exec -b -q --destdir=$destdir --maxevt=100 simdst.C
+$exec -b -q --destdir=$destdir --maxevt=1000 simdst.C
+
+$exec -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=u simdst.C
+$exec -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=d simdst.C
+$exec -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=c simdst.C
+$exec -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=b simdst.C
+$exec -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=e simdst.C
+$exec -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=mu simdst.C
+$exec -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=tau simdst.C
+date
+
+if ( $destdir == "/:/ea0/simdst/hiux" ) then
+  cd /:/ea0/simdst/hiux
+  chmod 444 *.dat
+  chmod 444 *.param
+
+endif
