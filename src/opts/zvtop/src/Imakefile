@@ -1,6 +1,6 @@
 
-#include "conf/makejsf.tmpl"
-#include "config/lclib.tmpl"
+#include "conf/lcbase.tmpl"
+#include "conf/lclib.tmpl"
 
 SRC     = JSFZVTOP3.$(SrcSuf) JSFVirtualVertex.$(SrcSuf) \
 	  JSFGeneratorVertex.$(SrcSuf)
@@ -11,36 +11,29 @@ OBJS    = $(subst .$(SrcSuf),.$(ObjSuf),$(SRC)) \
 FOBJS   = zvsig3.o zvres3.o zvtop3.o \
 	zvkin.o zvgst.o zvtrk.o zvptm.o zurotem.o
 
+INCPATH = -I$(ANLIBROOT)/include -I$(SATELLITESROOT)/include \
+	$(shell jsf-config --includes ) \
+	$(shell root-config --cflags)
 
 HDRS    = $(subst .$(SrcSuf),.h,$(SRC))
 
 
-CERNLIBS      = $(shell cernlib jetset74 packlib)
-ROOTLIBS     += -lEGPythia -lEG $(CERNLIBS)
-LCLIBDIR      = $(LCLIBROOT)/lib
+# LCLIBDIR      = $(LCLIBROOT)/lib
 
-CXXFLAGS += -I$(KFLIBROOT)/Anlib/src -I$(JSFROOT)/example/guiexam1
-EXTRALDOPT += -L$(JSFROOT)/example/guiexam1 -lJSFGUI
+#CXXFLAGS += -I$(KFLIBROOT)/Anlib/src -I$(JSFROOT)/example/guiexam1
+CXXFLAGS   += $(INCPATH)
+# EXTRALDOPT += -L$(JSFROOT)/example/guiexam1 -lJSFGUI
 
 FFLAGS += -I$(LCLIBROOT)/simjlc/src \
 	  -I$(LCLIBROOT)/util/fortlib/src
 
 ADDOBJ = $(LCLIBROOT)/util/fortlib/src/uconfl.o
 
-#ifdef AIXArchitecture
-AIXFLAGS += $(KFLIBROOT)/lib/libAnlib.so $(JSFLIBS) -L$(LCLIBDIR) \
-	-L/dfs/g/jlc/soft/root/pro/lib -lCore -lCint -lHist -lGraf \
-	-lTree -lRint -lMatrix -lPhysics -lxlf90 -lm \
-	-L/cern/pro/lib -lkernlib
-#endif
-
 all:: install
 
 install:: libJSFZVTOP3.$(DllSuf)
-	cp libJSFZVTOP3.$(DllSuf) $(JSFROOT)/lib
-	cp JSFVirtualVertex.h $(JSFROOT)/include
-	cp JSFGeneratorVertex.h $(JSFROOT)/include
-	cp JSFZVTOP3.h $(JSFROOT)/include
+	install -cp -m 755 libJSFZVTOP3.$(DllSuf) $(JSFLIBDIR)
+	install -cp -m 644 $(HDRS) $(JSFINCDIR)
 
 libJSFZVTOP3.$(DllSuf): $(OBJS) $(FOBJS)
 	$(LD) $(SOFLAGS) $(OBJS) $(FOBJS) -o libJSFZVTOP3.$(DllSuf) $(ADDOBJ) \
@@ -48,11 +41,11 @@ libJSFZVTOP3.$(DllSuf): $(OBJS) $(FOBJS)
 
 depend:: $(SRC) $(HDR)
 	for i in $(SRC); do \
-	rmkdepend -a -- $(DEPENDFILES) -I$(KFLIBROOT)/Anlib/src -- $$i; done
+	rmkdepend -a -- $(INCPATH) $(shell cxxdepends) -- $$i; done
 
 
 libJSFZVTOP3.$(SrcSuf): $(HDRS) JSFZVTOP3LinkDef.h
-	rootcint -f $@ -c -I$(JSFROOT)/include -I$(KFLIBROOT)/Anlib/src \
+	rootcint -f $@ -c $(INCPATH) \
 	$(HDRS) JSFZVTOP3LinkDef.h 
 
 clean::

@@ -20,7 +20,7 @@
 #include "JSFVertexing.h"
 #include "JSFGeoCFit.h"
 #include "ANL4DVector.h"
-#include "PythiaGenerator.h"
+#include "JSFGenerator.h"
 
 using namespace std;
 
@@ -120,9 +120,9 @@ Bool_t JSFVTXAnalysis::Process(Int_t nev)
    gvtx.DebugPrint();
 
 
-   PythiaGenerator *pyg=(PythiaGenerator*)gJSF->FindModule("PythiaGenerator");
-   pyg->GetPythia()->Lulist(1);
- 
+   //PythiaGenerator *pyg=(PythiaGenerator*)gJSF->FindModule("PythiaGenerator");
+   //   pyg->GetPythia()->Lulist(1);
+
    printf("\n\n");
    TIter next(&gvtx);
    JSFGeneratorVertex *v;
