@@ -56,20 +56,24 @@ extern void simdstwrite_(Int_t *iunit,
 	Int_t *endian, Char_t *produc,
 	Int_t *ivers, Int_t *ngen, Int_t *ncmb, 
         Int_t *ntrk, Int_t *nemh, Int_t *nhdh,
-	Float_t head[], Float_t gendat[][], Short_t igendat[][],
-        Float_t cmbt[][], Float_t trkf[][],
-	Double_t trkd[][], Int_t emh[][], Int_t hdh[][],
-	Int_t nvtx[], Int_t *npvtx, Double_t vtxd[][], Int_t ivtx[][],
-	Int_t lenproduc);
+	Float_t head[], Float_t gendat[][kGenSize], 
+        Short_t igendat[][kIGenSize],
+        Float_t cmbt[][kCmbtSize], Float_t trkf[][kTrkfSize],
+	Double_t trkd[][kTrkdSize], 
+        Int_t emh[][kClsSize], Int_t hdh[][kClsSize],
+	Int_t nvtx[], Int_t *npvtx, Double_t vtxd[][kVTXHSize], 
+        Int_t ivtx[][kVTXIDSize], Int_t lenproduc);
 extern void simdstread_(Int_t *iunit, 
 	Int_t *endian, Char_t *produc,
 	Int_t *ivers, Int_t *ngen, Int_t *ncmb, 
         Int_t *ntrk, Int_t *nemh, Int_t *nhdh,
-	Float_t head[], Float_t gendat[][], Short_t igendat[][],
-        Float_t cmbt[][], Float_t trkf[][],
-	Double_t trkd[][], Int_t emh[][], Int_t hdh[][],
-	Int_t nvtx[], Int_t *npvtx, Double_t vtxd[][], Int_t ivtx[][],
-	Int_t *nret, Int_t lenproduc);
+	Float_t head[], Float_t gendat[][kGenSize], 
+	Short_t igendat[][kIGenSize],
+        Float_t cmbt[][kCmbtSize], Float_t trkf[][kTrkfSize],
+	Double_t trkd[][kTrkdSize], 
+	Int_t emh[][kClsSize], Int_t hdh[][kClsSize],
+	Int_t nvtx[], Int_t *npvtx, Double_t vtxd[][kVTXHSize], 
+	Int_t ivtx[][kVTXIDSize], Int_t *nret, Int_t lenproduc);
 
 extern Float_t ulctau_(Int_t *kf);
 
@@ -305,9 +309,15 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
     return kFALSE;
   }
   Int_t ngen=0 ;
+#ifdef R__ACC
+  Float_t gendat[kGenMax][kGenSize];
+  Short_t igendat[kGenMax][kIGenSize];
+#else
   Float_t gendat[nobuf][kGenSize];
   Short_t igendat[nobuf][kIGenSize];
-  for(Int_t j=0;j<nobuf;j++){
+#endif
+  Int_t j;
+  for(j=0;j<nobuf;j++){
     JSFGeneratorParticle *p=(JSFGeneratorParticle*)fGeneratorParticles->At(j);
     genidTOtrkid[p->fSer]=-1;
     //    if( p->fNdaughter != 0 ) continue;
@@ -336,16 +346,23 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
   // Information(JSFLTKCLTrack class).
   // ************************************************************
   
+#ifdef R__ACC
+  Float_t cmbt[kTrkMax][kCmbtSize];
+  Float_t trkf[kTrkMax][kTrkfSize];
+  Double_t trkd[kTrkMax][kTrkdSize];
+  Int_t    nvtxh[kTrkMax];
+  Double_t vtxd[kVTXBufSize][kVTXHSize];
+  Int_t idvtx[kVTXBufSize][kVTXIDSize];
+#else
   Float_t cmbt[fNCombinedTracks][kCmbtSize];
   Float_t trkf[fNCDCTracks][kTrkfSize];
   Double_t trkd[fNCDCTracks][kTrkdSize];
   Int_t    nvtxh[fNCDCTracks];
-  const Int_t kVTXHSize=5;
-  const Int_t kVTXIDSize=2;
   Double_t vtxd[fNVTXHits][kVTXHSize];
   Int_t idvtx[fNVTXHits][kVTXIDSize];
+#endif
 
-  Int_t i,j;
+  Int_t i;
   Int_t ncdc=0;
   Int_t nvtx=0;
   for(i=0;i<fNCombinedTracks;i++){
@@ -394,14 +411,20 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
   // Make EMC/HDC Hit Cell info.
   // ***************************************
 
+#ifdef R__ACC
+  Int_t emh[kClsMax][kClsSize];
+  Int_t hdh[kClsMax][kClsSize];
+#else
   Int_t emh[fNEMCHits][kClsSize];
+  Int_t hdh[fNHDCHits][kClsSize];
+#endif
+
   for(i=0;i<fNEMCHits;i++){
      JSFEMCHit *h=(JSFEMCHit*)fEMCHits->UncheckedAt(i);
      emh[i][0]=h->GetIEnergy();
      emh[i][1]=h->GetCellID();
   }
 
-  Int_t hdh[fNHDCHits][kClsSize];
   for(i=0;i<fNHDCHits;i++){
      JSFHDCHit *h=(JSFHDCHit*)fHDCHits->UncheckedAt(i);
      hdh[i][0]=h->GetIEnergy();
