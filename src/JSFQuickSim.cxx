@@ -805,7 +805,7 @@ void JSFQuickSimBuf::MakeBranch(TTree *tree)
   //  Make branch for each detector data.
 
   Int_t split=0;
-  Int_t bsize=50000;
+  Int_t bsize=4000;
   tree->Branch("LTKCLTracks", fTracks->ClassName() ,
               &fTracks, bsize, split);
   tree->Branch("CDCTracks", fCDCTracks->ClassName() ,
@@ -830,6 +830,7 @@ void JSFQuickSim::SetBranch(TTree *tree)
      sprintf(name,"%s",fEventBuf->GetName());
      fBranch=tree->GetBranch(name);
      fBranch->SetAddress(&fEventBuf);
+     printf(" Branch address is set at %d\n",(Int_t)fBranch);
      ((JSFQuickSimBuf*)fEventBuf)->SetBranch(tree);
    }
 }

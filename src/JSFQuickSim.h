@@ -173,7 +173,7 @@ public:
 class JSFQuickSim : public JSFModule {
 protected:
    JSFQuickSimParam  *fParam ; //! Parameters for JSFQuickSim
-   TBranch           *fBranch; //! For Simulator data.
+//   TBranch           *fBranch; //! For Simulator data.
 public:
    JSFQuickSim(const char *name="JSFQuickSim", 
 	       const char *title="JSF Quick Simulator");
