@@ -20,8 +20,6 @@ OBJS += THerwig.$(ObjSuf) HerwigGenerator.$(ObjSuf) libTHerwig.$(ObjSuf)
 
 CLEANOBJS = $(subst herwig6500.o, ,$(OBJS))
 
-DEPENDS = $(DEPENDFLAGS) $(shell jsf-config --includes) \
-	$(shell cxxdepends)
 
 all: depend HERWIG65.INC herwig65_test.f lib
 
@@ -68,19 +66,19 @@ distclean: clean uninstall
 	rm -f HERWIG65.INC herwig65_test.f
 
 libTHerwig.cxx: $(HDRS) THerwigLinkDef.h
-	rootcint -f $@ -c $(shell jsf-config --includes) \
+	rootcint -f $@ -c $(DICTINCLUDES) \
 	$(HDRS) THerwigLinkDef.h
 
 depend:: $(SRCS) $(HDRS)
 	rm -f makefile.depend
 	touch makefile.depend
 	for i in $(SRCS) ; do \
-	( rmkdepend -f- -- $(DEPENDS) -- $$i >> makefile.depend ) ; done
+	( rmkdepend -f- -- $(RMKDEPENDFILES) -- $$i >> makefile.depend ) ; done
 
 web:
 	jsf -b -q html.C
 
-include makefile.depend
+-include makefile.depend
 
 
 
