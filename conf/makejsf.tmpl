@@ -24,7 +24,7 @@ XCOMM # -----------------------------------------------------
 CXXFLAGS      = -O2 -Wall  -fno-rtti -fno-exceptions -fPIC \
 		-I$(JSFROOT)/include -I$(ROOTSYS)/include
 SOFLAGS       = -shared -Wl,-soname,$(SONAME).so 
-LCDIR         = /proj/phys/lclib/97a
+LCDIR         = /proj/phys/lclib/pro
 LDFLAGS       = $(ANALLIB) $(GLIBS)
 LIBS          = $(ROOTLIBS) -lm -ldl -rdynamic
 GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -L/usr/X11R6/lib \
@@ -40,7 +40,7 @@ CXXFLAGS      = -O2 -Wall  -fno-rtti -fno-exceptions -fPIC \
 		-I$(JSFROOT)/include -I$(ROOTSYS)/include
 SOEXT         = sl
 SOFLAGS       = -shared -Wl,-soname,$(SONAME).so 
-LCDIR         = /proj/phys/lclib/97a
+LCDIR         = /proj/phys/lclib/pro
 LDFLAGS       = $(ANALLIB) $(GLIBS)
 LIBS          = $(ROOTLIBS) -lm -ldl -rdynamic
 GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -L/usr/X11R6/lib \
