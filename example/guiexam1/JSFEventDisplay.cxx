@@ -419,6 +419,7 @@ void JSFEventDisplay::DisplayCDCTracks()
    JSFSIMDSTBuf *sdb=(JSFSIMDSTBuf*)simdst->EventBuf();
    TClonesArray *cdc=sdb->GetCDCTracks(); 
    Int_t i;
+
    JSFQuickSim *sim=(JSFQuickSim*)gJSF->FindModule("JSFQuickSim");
    JSFQuickSimParam *par=(JSFQuickSimParam*)sim->Param();
    for(i=0;i<sdb->GetNCDCTracks();i++){
@@ -450,18 +451,19 @@ void JSFEventDisplay::DisplayCDCTracks()
 	 zcyl = par->GetVTXZplus(par->GetVTXNLayer()-1)+0.2;
        }
      }
-     //     printf(" rcyl=%g zcyl=%g \n",rcyl,zcyl);
+     // printf(" rcyl=%g zcyl=%g \n",rcyl,zcyl);
      JSFHelicalTrack ht=t->GetHelicalTrack();
      ht.SetBfield(par->GetBField());
      Double_t phi0, phi1;
      ht.OriginToCylinder(rcyl, zcyl, phi0, phi1);
-     //printf(" phi0=%g phi1=%g \n",phi0,phi1);
+     // printf(" phi0=%g phi1=%g \n",phi0,phi1);
 
-       // JSF3DV bgn=ht.GetCoordinate(phi0);
      JSF3DV end=ht.GetCoordinate(phi1);
      zlast = end.z;     if( zlast > 0.0 ) { range[0]=hx[2] ; range[1]=zlast ;}
      else {  range[1]=hx[2] ; range[0]=zlast; }
-     thelix=new THelix(hx, hp, w);
+
+     thelix=new THelix();
+     thelix->SetHelix(hx, hp, w, range, kHelixZ);
      thelix->SetLineColor(fCDCTrack->fColor);
      thelix->SetRange(range);
      thelix->Draw();

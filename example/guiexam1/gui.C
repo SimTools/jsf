@@ -5,7 +5,9 @@
 
   gROOT->LoadMacro("MainMacro.C");
 
-  gSystem->Load("libJSFGUI.so");
+  if( strncmp(gSystem->HostName(),"ccjlc",5)  != 0 ) {
+    gSystem->Load("libJSFGUI.so");
+  }
   JSFGUIFrame *gui;
 
   jsf  = new JSFSteer();

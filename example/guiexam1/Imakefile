@@ -35,10 +35,46 @@ HDRJSFGUI     = InputDialog.h \
 
 SONAME        = libJSFGUI
 
-all::  libgui
 
+#ifdef hitachiArchitecture
+
+CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74
+JSFLIBS       = -Wl,-L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim
+
+ROOTLIBS      = -L$(ROOTSYS)/lib \
+		-lEGPythia -lEG $(CERNLIBS) \
+		-lNew -lBase -lCint -lClib -lCont -lFunc \
+                -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
+                -lPostscript -lProof -lTree -lUnix -lZip
+
+ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
+
+LCLIBDIR      = $(LCLIBROOT)/lib
+
+#ifdef hitachiArchitecture
+EXTRALDOPT = -Wl,-a,default 
+#endif
+
+ANALLIB = $(JSFLIBS) $(EXTRALDOPT) \
+	-L$(LCLIBDIR) -lGENUTIL -lLUHADR -lTAUOLA \
+        -lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
+        -lHELASV204 -lFORTLIB -lCOM -lCLI \
+        $(EXTRALIBS)
+
+#endif	
+
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#ifdef hitachiArchitecture
+all::  jsf
+jsf: jsfmain.o $(OBJJSFGUI)
+	$(LD) jsfmain.o $(BLOCKDATA) $(OBJJSFGUI) \
+	$(LDFLAGS) -o jsf 
+#else
+all::  libgui
 libgui: $(OBJJSFGUI)
-	$(LD) $(SOFLAGS) $(OBJJSFGUI) -o  $(SONAME).so
+	$(LD) $(SOFLAGS) $(OBJJSFGUI) -o  $(SONAME).$(SOEXT)
+#endif
 
 clean:: 
 	@rm -f $(OBJS) core *.so *~

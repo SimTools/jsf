@@ -34,6 +34,15 @@ int Initialize()
       simdst = new JSFSIMDST();
       simdst->SetFile(ofile);
       break;
+    case 3:
+      ofile= new TFile(gui->GetOutputFileName(),"RECREATE");
+      jsf->SetIOFiles();
+      simdst = new JSFSIMDST();
+      simdst->ReadData();
+      simdst->SetDataFileName(gui->GetInputFileName());
+//      simdst->SetParamFileName("/:/ea0/simdst/hiux/zh300gev.1kev.param");
+//      simdst->SetFile(ofile);
+      break;
     default:
       printf("Run mode %d is not supported\n",runmode);
       return -1;
