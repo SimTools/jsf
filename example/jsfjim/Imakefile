@@ -18,18 +18,18 @@ ANALLIB = $(JSFLIBS) $(EXTRALDOPT) \
 	-L$(LCLIBDIR) -lGENUTIL -lLUHADR \
         -lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
         -lHELASV204 -lFORTLIB -lCOM -lCLI \
-        $(EXTRALIBS) $(JIMLDLIBS) \
-	-L$(ROOTSYS)/lib  -lEGPythia -lEG -ljetset74
+        $(EXTRALIBS) $(JIMLDLIBS) 
 
 # -lTAUOLA : subroutine ginit in libTAUOLA.a conflcts with ginit in 
 # libgeant321.a, so removed.
 
+CERNLIB = $(shell cernlib jetset74 geant321 mathlib pawlib graflib grafX11 packlib kernlib)
+
 JIMLDLIBS = -L$(JSFROOT)/example/readjim -lreadjim \
 	-L$(JLCSIMROOT)/lib -lct -lvx -lcal -ljim  -ljlclib -lzbs -ljlcutil \
-	-lcal \
-	-L$(CERN_ROOT)/lib -lgeant321 \
-	-lmathlib -lpawlib -lgraflib \
-	-lgrafX11 -lpacklib -lkernlib 
+	-lcal 
+
+ROOTLIBS += -lEGPythia -lEG $(CERNLIB)
 
 JIMOBJS =$(JLCSIMROOT)/lib/libjim.a
 
