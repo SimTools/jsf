@@ -62,7 +62,7 @@ public:
   int GetValue(const char *name, int dflt);
   void SetValue(const char *name, const char *value, 
 		EEnvLevel lbl=kEnvChange, const char *t=0);
-  JSFEnvRec *Lookup(const char *name);
+  JSFEnvRec *LookUp(const char *name);
   Char_t *GetEnvFileName(){ return fEnvFileName; }
   void GetArguments();
   void ReadFile(const char *fname, EEnvLevel l);

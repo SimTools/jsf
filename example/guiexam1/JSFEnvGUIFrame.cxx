@@ -180,7 +180,7 @@ defined in JSFROOT directory) and [C] is modified parameter.",
 		break;
 	      }
 	      else if( id==0 ) {
-		JSFEnvRec *er=gJSF->Env()->Lookup("HEADER");
+		JSFEnvRec *er=gJSF->Env()->LookUp("HEADER");
 	 	Char_t *msg=er->GetHelpMessage();
 		new TGMsgBox(fClient->GetRoot(), this, "JSF Message", msg,
 			      kMBIconExclamation, buttons, &retval);

@@ -97,7 +97,7 @@ void JSFEnv::ReadFile(const char *n, EEnvLevel l)
     if( istat == kNewParameter && defined ) {
       JSFEnvRec *er;
       if(nadd == 0 && strcmp(name,"HEADER") != 0 ) {
-	er=Lookup("HEADER");
+	er=LookUp("HEADER");
 	if( er==0 ) {
 	  if( nadd == 0 ) fObtained->AddFirst(new JSFEnvRec("HEADER", "HEADER", 
 		  "HEADER", level, "First Dummy Entry"));
@@ -106,7 +106,7 @@ void JSFEnv::ReadFile(const char *n, EEnvLevel l)
 	  nadd++;
 	}
       }
-      er=Lookup(name);
+      er=LookUp(name);
       if( er!= 0 ) fObtained->Remove(er);
       if( nadd == 0 ) 
 	fObtained->AddFirst(new JSFEnvRec(name, type, value, level, help, arg));
@@ -204,7 +204,7 @@ void JSFEnv::ReadFile(const char *n, EEnvLevel l)
   }
 
   if( defined ) {
-    JSFEnvRec *er=Lookup(name);
+    JSFEnvRec *er=LookUp(name);
     if( er!= 0 ) { fObtained->Remove(er); }
     if( nadd == 0 ) 
       fObtained->AddFirst(new JSFEnvRec(name, type, value, level, help, arg));
@@ -254,14 +254,14 @@ void JSFEnv::SetValue(const char *name, const char *value,
 
   // Find JSFEnvRec and update it.
 
-  JSFEnvRec *er=Lookup(name);
+  JSFEnvRec *er=LookUp(name);
   if( er!= 0 ) er->ChangeValue(value, kEnvChange);
   else fObtained->AddAt(new JSFEnvRec(name, "", value, kEnvChange),1);
   return;
 }
 
 //__________________________________________________________
-JSFEnvRec *JSFEnv::Lookup(const char *name)
+JSFEnvRec *JSFEnv::LookUp(const char *name)
 {
   // Find JSFEnvRec.
 
