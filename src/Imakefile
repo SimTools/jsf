@@ -5,7 +5,7 @@
 /* (Update)								*/
 /*  4-Feb-2000 A.Miyamoto Include libJSFDMatrix, create shared library  */
 /*          								*/
-/*$Id$
+/*$Id:      								*/
 /*       								*/
 /************************************************************************/
 
@@ -17,9 +17,9 @@
 #include    "../conf/makejsf.tmpl"
 
 #ifdef __LCLIBRAN_USE_RANMAR__
-CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lpacklib -lmathlib
+CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 $(PDFLIB) -lpacklib -lmathlib
 #else
-CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lpacklib
+CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 $(PDFLIB) -lpacklib
 #endif
 
 #if defined(MacOSXArchitecture) || defined(DarwinArchitecture)
