@@ -12,10 +12,10 @@
 /gun/energy 1 GeV
 #
 # // set direction
-/gun/direction 0. 0.  1.
+/gun/direction 1.0 0. 0.
 #
 # // set vertex position
-/gun/position 0. 0. -2.5 m
+/gun/position 0. 0. 0. m
 
 # /gun/particle mu-
 /jupiter/generator ParticleGun

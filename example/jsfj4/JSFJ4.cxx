@@ -32,9 +32,9 @@
 #include "J4TrackingAction.hh"
 #include "TBookKeeper.hh"
 
-#ifdef G4VIS_USE
-#include "J4VisManager.hh"
-#endif
+// #ifdef G4VIS_USE
+// #include "J4VisManager.hh"
+// #endif
 
 //#include "CLHEP/Random/Random.h"
 
@@ -190,12 +190,12 @@ void JSFJ4::BuildJupiter()
   fRunManager-> SetUserAction(new J4TrackingAction);
 
   fVisManager=0;
-#ifdef G4VIS_USE
+// #ifdef G4VIS_USE
   // initialize visualization package
-  fVisManager= new J4VisManager;
-  fVisManager-> Initialize();
-  G4cout << endl;
-#endif
+//  fVisManager= new J4VisManager;
+//  fVisManager-> Initialize();
+//  G4cout << endl;
+// #endif
 
   istrstream sin(gJSF->Env()->GetValue("JSFJ4.MacroFile","run.mac"));
   fInitMacro.ReadLine(sin);
@@ -235,7 +235,7 @@ Bool_t JSFJ4::Initialize()
   idet=gJSFJ4Detectors.find("CDC");
   if( idet != gJSFJ4Detectors.end() ) {
     ((J4CDC*)((*idet).second))->J4VDetectorComponent::SwitchOn();
-
+/*
     // Then, SwitchOff only SenseWires.
     for (G4int i=0; i<10; i++) {
       for (G4int j=0; j<5; j++) {
@@ -247,8 +247,8 @@ Bool_t JSFJ4::Initialize()
         J4VDetectorComponent::GetComponentPtrByName(name)->SwitchOff();
       }
     }
+*/
   }
-
 
   G4String command = "/control/execute ";
   G4String filename = fInitMacro.Data();
