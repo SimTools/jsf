@@ -177,12 +177,12 @@ void JSFJ4::BuildJupiter()
 #else
 
   // Use CT instead of CDC
-  if( gJSF->Env()->GetValue("JSFJ4.HasCDC",1) == 1 ) {
+  if( gJSF->Env()->GetValue("JSFJ4.HasCT",1) == 1 ) {
     J4CT *pCT = new J4CT();
     pCT->SetMother(fpDetector->GetEXPHall());
     fpDetector->AddComponent(pCT);
 
-    TObjArray *cdchits=buf->AddComponent("CDCHits");
+    TObjArray *cdchits=buf->AddComponent("CTHits");
     gJSFJ4Detectors["CT"]=(J4Object*)pCT;
     gJSFJ4Outputs["CT"]=new JSFJ4TOutput<JSFJ4CTHit,J4CTLayerHit>(cdchits);
   }
@@ -231,7 +231,7 @@ void JSFJ4::BuildJupiter()
   fRunManager->SetUserAction(primaryGenerator);
 
   //* user action classes... (optional)
-  fRunManager-> SetUserAction(new J4RunAction(gJSF->Env()->GetValue("JSFJ4.JupiterOut","hit.dat")));
+  fRunManager-> SetUserAction(new J4RunAction(gJSF->Env()->GetValue("JSFJ4.JupiterOut","/dev/null")));
   fRunManager-> SetUserAction(new J4EventAction);
   fRunManager-> SetUserAction(new J4TrackingAction);
   fRunManager-> SetUserAction(new J4SteppingAction);
