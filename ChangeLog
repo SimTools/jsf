@@ -15,6 +15,7 @@ To-Do ( listed in arbitrary order ) -- Help wanted
 7) Move example/guiexam1/MainMacro.C to macro directory for use as
    standard macro.
 8) Output of a root file should be turned off in some case.
+      --> done in jsf-1-10, in the case of example/guiexam1/gui.C
 9) Prepare an example macro to read multiple root file randomly/sequentially.
 10) Prepare an example to use rootd.
 11) Prepare interface to read generator data with only parton information
@@ -25,6 +26,14 @@ To-Do ( listed in arbitrary order ) -- Help wanted
 **********************************************************
 jsf-1-10  Modification toward jsf-1-10 A.Miyamoto
 **********************************************************
+-----------------------	
+15-July-1999 A.Miyamoto
+-----------------------	
+(1) example/jsfjim is aded.
+(2) example/guiexam1/MainMacro.C is modified to suppress QuickSimulator
+    data output by switch.  To do it,
+       jsf --EventDataOff  gui.C
+
 -----------------------	
 25-June-1999 A.Miyamoto
 -----------------------	
