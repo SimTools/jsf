@@ -41,10 +41,10 @@ CCD2x2Cluster::CCD2x2Cluster(const char *name, const char *title)
 //  
    fEventBuf=new CCD2x2ClusterBuf(this);
 
-   fThreshold[0]=gJSF->Env()->GetValue("CCD2x2Cluster.Threshold0",5.0);
-   fThreshold[1]=gJSF->Env()->GetValue("CCD2x2Cluster.Threshold1",5.0);
-   fThreshold[2]=gJSF->Env()->GetValue("CCD2x2Cluster.Threshold2",5.0);
-   fThreshold[3]=gJSF->Env()->GetValue("CCD2x2Cluster.Threshold3",5.0);
+   sscanf(gJSF->Env()->GetValue("CCD2x2Cluster.Threshold0","5.0"),"%g",&fThreshold[0]);
+   sscanf(gJSF->Env()->GetValue("CCD2x2Cluster.Threshold1","5.0"),"%g",&fThreshold[1]);
+   sscanf(gJSF->Env()->GetValue("CCD2x2Cluster.Threshold2","5.0"),"%g",&fThreshold[2]);
+   sscanf(gJSF->Env()->GetValue("CCD2x2Cluster.Threshold3","5.0"),"%g",&fThreshold[3]);
 
    fDoHist=gJSF->Env()->GetValue("CCD2x2Cluster.DoHist",kFALSE);
    fShowHist=gJSF->Env()->GetValue("CCD2x2Cluster.ShowHist",kFALSE);

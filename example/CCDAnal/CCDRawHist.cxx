@@ -40,13 +40,13 @@ Bool_t CCDRawHist::Initialize()
     gFile->cd("/");
 
     hPh0=new TH1F("hPh0","CCD0 pulse height ",
-		hdef1[0].nbin,hdef1[0].xmin,hdef1[0].xmax);
+		(Int_t)hdef1[0].nbin,hdef1[0].xmin,hdef1[0].xmax);
     hPh1=new TH1F("hPh1","CCD1 pulse height ",
-		hdef1[1].nbin,hdef1[1].xmin,hdef1[1].xmax);
+		(Int_t)hdef1[1].nbin,hdef1[1].xmin,hdef1[1].xmax);
     hPh2=new TH1F("hPh2","CCD2 pulse height ",
-		hdef1[2].nbin,hdef1[2].xmin,hdef1[2].xmax);
+		(Int_t)hdef1[2].nbin,hdef1[2].xmin,hdef1[2].xmax);
     hPh3=new TH1F("hPh3","CCD3 pulse height ",
-		hdef1[3].nbin,hdef1[3].xmin,hdef1[3].xmax);
+		(Int_t)hdef1[3].nbin,hdef1[3].xmin,hdef1[3].xmax);
 
     hc1=new TCanvas("hc1","Canvas 1",20, 20, 800, 800);
     hc1->Divide(2,2);
