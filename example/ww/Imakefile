@@ -39,7 +39,7 @@ SOLIBNAME     = libWWSpring
 all::  jsf
 
 jsf: $(OBJS) jsfmain.o $(FOBJS)
-	$(LD) jsfmain.o $(FOBJS) $(BLOCKDATA) $(OBJS) $(LDFLAGS) -o jsf
+	$(CXX) jsfmain.o $(FOBJS) $(BLOCKDATA) $(OBJS) $(LDFLAGS) -o jsf
 
 clean:: 
 	@rm -f $(OBJS) core *.so $(SOLIBNAME).*
