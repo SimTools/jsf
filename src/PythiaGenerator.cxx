@@ -5,6 +5,8 @@
 //*-- Author  : A.Miyamoto  9-November-1998
 
 /*
+ 15-May-1999 A.Miyamoto  Lifetime of particles in documentation line is set 
+                         to 0, otherwise initial mu and tau are swimed.
  16-Apr-1999 A.Miyamoto  A bug(mother of particle was not set) was fixed.
   9-Apr-1999 A.Miyamoto  A bug to pickup stable particle from LUJETS is fixed.
   8-Apr-1999 A.Miyamoto  Save all particles in LUJETS common to 
@@ -146,6 +148,7 @@ Bool_t PythiaGenerator::Process(Int_t ev)
        ndaughter = 1;
        mother = -kh;
        firstdaughter=fPythia->GetMSTI(4)+1;  
+       xctau=0.0;
      }
      else if( ks != 1 ) {
        firstdaughter=p->GetFirstChild();

@@ -6,6 +6,8 @@
 2-May-1999 A.Miyamoto  Bug in MovePivot is fixed.
 5-May-1999 A.Miyamoto  Add MovePivotToIP(...) and AddMSError(...)
 14-May-1999 A.Miyamoto Avoid negative costh in MovePivotToIP.
+17-May-1999 A.Miyamoto Put "delete helix" in MovePivotToIP to avoid memory leak
+                     problem.  Thanks Hyunwoo Kim for pointed out the problem.
 */
 
 ////////////////////////////////////////////////////////////////////////

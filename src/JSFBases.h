@@ -154,6 +154,8 @@ public:
    void Xhfill(Int_t id, Double_t x, Double_t val);
    void Dhfill(Int_t id, Double_t x, Double_t y, Double_t val);
 
+   void Xhsave(Int_t lunit, Int_t id);
+
    
    void SetACC1(const Double_t acc1){ fACC1=acc1; return; }
    void SetACC2(const Double_t acc2){ fACC2=acc2; return; }

@@ -5,6 +5,7 @@
 /*
   8-Apr-1999 A.Miyamoto  forgetted Int_t is inserted in const of 
              function Streamer.
+ 17-May-1999 A.Miyamoto  Add Xhsave function.
 */
 
 //////////////////////////////////////////////////////////////////
@@ -51,6 +52,7 @@ extern void dhinit_(int *id, double *xl, double *xu, int *nxbin,
 		    double *yl, double *yu, int *nybin, char *title, int len);
 extern void xhfill_(int *id, double *x, double *val);
 extern void dhfill_(int *id, double *x, double *y, double *val);
+extern void xhsave_(int *lunit, Int_t *id);
 };
 
 
@@ -119,6 +121,12 @@ void JSFBases::Xhfill(Int_t id, Double_t x, Double_t val)
 void JSFBases::Dhfill(Int_t id, Double_t x, Double_t y, Double_t val)
 {
   dhfill_(&id, &x, &y, &val);
+}
+
+//_____________________________________________________________________________
+void JSFBases::Xhsave(Int_t lunit, Int_t id)
+{
+  xhsave_(&lunit, &id);
 }
 
 //_____________________________________________________________________________
