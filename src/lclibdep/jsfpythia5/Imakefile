@@ -35,7 +35,7 @@ OBJ	      = $(subst .$(SrcSuf),.$(ObjSuf),$(SRC)) \
 HDR	      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRC)) \
 		$(NAME)LinkDef.h
 
-LIBS	      =	-L$(LCLIBROOT)/lib -lLUHADR -lTAUOLA \
+LIBS	      =	-L$(LCLIBROOT)/lib -lLUHADR -lTAUOLA -lFORTLIB \
 		$(ROOTLIBS) $(ROOTGLIBS) \
 		-L/cern/pro/lib -ljetset74  -lpdflib804 -lg2c /* -lnsl */
 
