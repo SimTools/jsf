@@ -92,6 +92,9 @@ void InitPythia()
     tpy->SetMSTJ(22,2);
   }
 
+
+  if( gROOT->GetGlobalFunction("UserInitPythia",0,kTRUE) ) UserInitPythia();
+
 }
 
 
