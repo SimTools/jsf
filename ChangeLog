@@ -22,10 +22,13 @@ jsf-1-5  Progress since 16-Feburary-1999 A.Miyamoto
   to set address of float/int variable to pointer of Double variable.  
   It abend at that point. So program is changed so as not to use such 
   statement in case of R__ACC is defined.
+(4) Add JSFBasicClasses.h to define frequently used basic classes.
+(5) Add HitPostion fnction in JSFCALGeoParm class.
+(6) Separate JSFQuickSim to JSFQuickSim and JSFQuickSimParam	
 
 	
 **********************************************************
-jsf-1-4  5-January-1999 A.Miyamoto
+jsf-1-4  16-Feburary-1999 A.Miyamoto
 **********************************************************
 (1) Save Ecm properly in PythiaGenerator.cxx
 (2) A bug in JSFQuickSim.cxx.  fHDCal was not set.
