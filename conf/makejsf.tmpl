@@ -11,6 +11,7 @@ XCOMM #
 XCOMM #(History) 
 XCOMM #  29-May-1999 Add EXTRACXXOPT in CXXFLAGS
 XCOMM #              Define .cxx compile rule here.    
+XCOMM #  4-Feb-2000 soname option in SOFLAGS for Linux is removed.
 XCOMM # 
 XCOMM # $Id$
 XCOMM # 
@@ -48,11 +49,11 @@ XCOMM # -----------------------------------------------------
 SOEXT         = so
 LIBF2C	      = -l$(G77EGCS_LIBNAME)
 FC	      = g77
-CXX           = g++ -O2
+CXX           = g++ -O2 -g
 CXXFLAGS      = -Wall -fPIC \
 		$(EXTRACXXOPT) \
 		-I$(JSFROOT)/include -I$(ROOTSYS)/include
-SOFLAGS       = -shared -Wl,-soname,$(SONAME) -rdynamic
+SOFLAGS       = -shared -rdynamic
 LDFLAGS       = $(ANALLIB) $(GLIBS) -rdynamic
 LIBS          = $(ROOTLIBS) -lm -ldl
 GLIBS         = $(ROOTLIBS) $(ROOTGLIBS) -L/usr/X11R6/lib \
