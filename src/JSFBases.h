@@ -94,6 +94,7 @@ class JSFBases: public BasesSpring, public TNamed
     void   DefineVariable( double &v, double low, double high, int wld, int grd );
     void   DefineVariable( int ndim, int nwild, 
                                     double x_l[], double x_u[], int jg[] );
+    virtual void Userin() {};
 //  For integration  and evet generation
     void   Bases( );
     void   Spring( int mxtry );

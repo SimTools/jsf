@@ -89,6 +89,7 @@ void JSFSpring::ReadBases(const char *name)
     printf(" taken from a file.\n");
   } 
 
+  fBases->Userin();
 }
 
 //_____________________________________________________________________________

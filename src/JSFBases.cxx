@@ -156,6 +156,7 @@ void JSFBases::DefineVariable( int ndim, int nwild,
 void JSFBases::Bases( ) 
 { 
   fIsSpring=kFALSE;
+  Userin();
   BasesSpring::Bases(); 
 }
 
