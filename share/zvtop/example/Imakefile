@@ -29,10 +29,18 @@ FFLAGS += -I$(LCLIBROOT)/simjlc/src \
 
 ADDOBJ = $(LCLIBROOT)/util/fortlib/src/uconfl.o
 
+#ifdef AIXArchitecture
+AIXFLAGS += $(KFLIBROOT)/lib/libAnlib.so $(JSFLIBS) -lJSFZVTOP3 -L$(LCLIBDIR) \
+	-L/dfs/g/jlc/soft/root/pro/lib -lCore -lCint -lHist -lGraf \
+	-lTree -lRint -lMatrix -lPhysics -lxlf90 -lm \
+	-L/cern/pro/lib -lkernlib
+#endif
+
 all:: libJSFVTXAnalysis.$(DllSuf)
 
 libJSFVTXAnalysis.$(DllSuf): $(OBJS)
-	$(LD) $(SOFLAGS) $(OBJS) -o libJSFVTXAnalysis.$(DllSuf)
+	$(LD) $(SOFLAGS) $(OBJS) -o libJSFVTXAnalysis.$(DllSuf) \
+	$(AIXFLAGS)
 
 depend:: $(SRC) $(HDR)
 	for i in $(SRC); do \
