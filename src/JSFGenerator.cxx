@@ -1,14 +1,3 @@
-//*LastUpdate :  JSF-1-11  29-July-1999 Akiya Miyamoto
-//*LastUpdate :  0.02/02  11-September-1998  By A.Miyamoto
-//*-- Author  : A.Miyamoto  11-September-1998
-
-/*
-  29-July-1999 A.Miyamoto  Add opt option in constructor.
-  30-July-1999 A.Miyamoto  Do not use gParticles for TClonesArray.
-                           It is not good if there are more than one generator object.
-			   Add Apend();
-*/
-
 ////////////////////////////////////////////////////////////////////////
 //
 // JSFGenerator
@@ -17,6 +6,9 @@
 //
 //$Id$
 ////////////////////////////////////////////////////////////////////////
+
+#include <iostream>
+using  namespace std;
 
 #include "JSFSteer.h"
 #include "JSFGenerator.h"
@@ -161,6 +153,146 @@ void JSFGeneratorBuf::Print(const Option_t *opt)
 
 }
 
+//______________________________________________________________________________
+Int_t JSFGenerator::HepevtToGeneratorParticles(COMMON_HEPEVT_t *hepevt)
+{
+// Converts particles information of TParticle format (HEPEVT) to
+// JSFGeneratorParticles format
+// 
+
+  const Int_t kNMXHEP=__HEPEVT_NMXHEP__;
+
+  Int_t nhep=hepevt->NHEP;
+
+  cout << " nhep= " << nhep << endl;
+
+  // ***************************************
+  // Scan data and reassign mother-daughter map
+  // ***************************************
+  
+  Int_t i=0;
+  struct modau {
+    Int_t mother;
+    Int_t ndau;
+    Int_t dau1st;
+    Int_t nser;
+  } map[kNMXHEP];
+  Int_t nser=0;
+  Int_t n1stfinal=0;
+  Int_t n1stdoc=0;
+  Int_t jlist[kNMXHEP];
+
+  for(i=0;i<nhep;i++){
+
+    map[i].nser=0;
+    if( hepevt->ISTHEP[i] == 0 ) continue;
+
+    nser++;
+    jlist[nser]=i;
+
+    Int_t thestatus= hepevt->ISTHEP[i];
+
+    switch ( thestatus ) {
+      case 1:
+        map[i].ndau=0;
+        map[i].dau1st=0;
+	if( hepevt->JMOHEP[i][0] <= 0 ) map[i].mother=0;
+        else map[i].mother=map[hepevt->JMOHEP[i][0]-1].nser; // modified by I.Nakamura
+        map[i].nser=nser;
+	if( n1stfinal == 0 ) n1stfinal=nser;
+	if( map[i].mother == 0 ) map[i].mother=n1stdoc;
+	break;
+      case 2:
+        map[i].ndau=hepevt->JDAHEP[i][1] - hepevt->JDAHEP[i][2] + 1;
+        map[i].dau1st=-2;
+	if(  hepevt->JMOHEP[i][0] <= 0 ) map[i].mother=0;
+        else map[i].mother=map[hepevt->JMOHEP[i][0]-1].nser; // modified by I.Nakamura
+        map[i].nser=nser;
+	if( n1stfinal == 0 ) n1stfinal=nser;
+	if( map[i].mother == 0 ) map[i].mother=n1stdoc;
+	break;
+      case 3:
+	if( n1stdoc == 0 ) n1stdoc=nser;
+        map[i].ndau=1;
+        map[i].dau1st=-3;
+        map[i].mother=-3;
+        map[i].nser=nser;
+	break;
+      default:
+        map[i].ndau=1;
+        map[i].dau1st=-4;
+        map[i].mother=-hepevt->ISTHEP[i];
+        map[i].nser=nser;
+    }
+  }
+
+  for(i=0;i<nhep;i++){
+    if( map[i].nser == 0 ) continue;
+    switch (map[i].dau1st){
+      case -2:
+	map[i].dau1st=map[hepevt->JDAHEP[i][0]-1].nser; // modified by I.Nakamura
+	break;
+      case -3:
+      case -4:
+	map[i].dau1st=n1stfinal;
+	break;
+    }
+  }
+
+  // ***************************************
+  // Fill GeneratorParticle Array
+  // ***************************************
+  
+  JSFGeneratorBuf *buf=(JSFGeneratorBuf*)EventBuf();
+  TClonesArray &ps=*(buf->GetParticles());
+  ps.Clear();
+
+  TVector px(4);
+  TVector vp(4);
+  Int_t iser=0;
+  Int_t is;
+  for(is=1;is<=nser;is++){
+    i=jlist[is];
+
+    if( hepevt->ISTHEP[i] == 0 ) continue;
+
+    Int_t id=hepevt->IDHEP[i];
+    Float_t mass, charge, xctau;
+    GetChargeCtau(id, charge, xctau);
+    Int_t mother=map[i].mother;
+    Int_t firstdaughter=map[i].dau1st;
+    Int_t ndaughter=map[i].ndau;
+
+    Float_t dl=0.0;
+    //    if( mother < 0 ) xctau=0.0;
+    mass = hepevt->PHEP[i][4];
+
+    px(0)=hepevt->PHEP[i][3]; px(1)=hepevt->PHEP[i][0]; 
+    px(2)=hepevt->PHEP[i][1]; px(2)=hepevt->PHEP[i][2]; 
+
+    vp(0)=hepevt->VHEP[i][3]; vp(1)=hepevt->VHEP[i][0]; 
+    vp(2)=hepevt->VHEP[i][1]; vp(2)=hepevt->VHEP[i][2]; 
+    
+    iser++;
+    new(ps[is-1]) JSFGeneratorParticle(iser, id, mass, charge,
+	              px, vp, ndaughter, firstdaughter, mother,
+		      xctau, dl);
+  }
+
+  buf->SetNparticles(iser);
+
+  return kTRUE;
+}
+
+//______________________________________________________________________________
+void JSFGenerator::GetChargeCtau(Int_t i, Float_t &charge, Float_t &ctau)
+{
+  // Returns charge of i-th particle in HEPEVT buffer
+  // i=(0,n-1) 
+  printf("Error .. Dummy JSFGenerator::GetChargeCtau( , ,) was called.\n");
+  printf("Implement the function for %s\n",GetName());
+
+}
 
 #if __ROOT_FULLVERSION__ >= 30000
 //______________________________________________________________________________

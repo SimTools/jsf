@@ -15,6 +15,7 @@
 #include "TH1.h"
 #include "TMath.h"
 #include "TDatime.h"
+#include "TParticle.h"
 
 #ifndef __JSFModule__
 #include "JSFModule.h"
@@ -22,6 +23,8 @@
 #ifndef __JSFGeneratorParticle__
 #include "JSFGeneratorParticle.h"
 #endif
+
+#include "HEPEVT.h"
 
 class JSFGeneratorParticle;
 class JSFGenerator;
@@ -67,6 +70,9 @@ public:
    virtual      ~JSFGenerator();
 
    virtual Bool_t Process(Int_t event);
+   virtual Int_t  HepevtToGeneratorParticles(COMMON_HEPEVT_t *hepevt);
+   virtual void   GetChargeCtau(Int_t ipdg, Float_t &charge, Float_t &ctau);
+
 //   virtual void  BeginRun(Int_t nrun);
 
     ClassDef(JSFGenerator,1)  // JSF Generator class.

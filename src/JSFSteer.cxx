@@ -216,15 +216,15 @@ JSFSteer::~JSFSteer()
 {
 //  Terminate JSF, if fIsTerminated=kFALSE, then delete fModules
 //  
-  if (!fModules) { 
+  if (fModules) { 
     if( !fIsTerminated ) Terminate(); 
     TIter next(fModules);
     JSFModule *module; 
-    while( (module = (JSFModule*)next()) ) { delete module; }
+    while( (module = (JSFModule*)next()) ) { 
+      delete module; }
   }
-  if (!fConf) { delete fConf; }
-  if (!fEventTrees) { delete fEventTrees; }
-
+  if (fConf) { delete fConf; }
+  if (fEventTrees) { delete fEventTrees; }
 
 }
 
@@ -791,6 +791,8 @@ Bool_t JSFSteer::Terminate()
 #endif
 
   }
+
+  fIsTerminated = kTRUE;
 
   return kTRUE;
 }
