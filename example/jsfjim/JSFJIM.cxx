@@ -1,3 +1,4 @@
+//*LastUpdate :  jsf-1-14  29-January-2000  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-12  30-August-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-10  29-May-1999  By Akiya Miyamoto
 //*-- Author  : Akiya Miyamoto  29-May-1999
@@ -66,6 +67,13 @@ JSFJIM::JSFJIM(const char *name, const char *title, Bool_t constbuf)
 			       "JSFJIM event buffer",this);
   strcpy(fInputFile,gJSF->Env()->GetValue("JSFJIM.InputFile","input.dat"));
   fUnit=4;
+}
+
+
+// ---------------------------------------------------------------
+JSFJIM::~JSFJIM()
+{
+  if( fEventBuf ) delete fEventBuf;
 }
 
 

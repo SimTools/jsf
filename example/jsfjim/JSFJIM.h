@@ -22,7 +22,7 @@ public:
   JSFJIM(const char *name="JSFJIM", 
 		  const char *title="Run JIM in JSF",
                  Bool_t constbuf=kTRUE);
-  virtual ~JSFJIM(){}
+  virtual ~JSFJIM();
 
   virtual Bool_t Initialize();
   virtual Bool_t Process(Int_t ev=1);
