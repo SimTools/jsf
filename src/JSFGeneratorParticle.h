@@ -69,6 +69,16 @@ public:
   Float_t GetCosth(){ return fP[3]/GetPabs() ;}
 
 
+  Int_t   GetSerial(){ return fSer;}
+  Int_t   GetID(){ return fID;}
+  Float_t GetCharge(){ return fCharge;}
+  Float_t GetMass(){ return fMass;}
+  Int_t GetNDaughter(){ return (Int_t)fNdaughter;}
+  Int_t GetFirstDaughter(){ return (Int_t)fFirstDaughter;}
+  Int_t GetMother(){ return (Int_t)fMother; }
+  Float_t GetLifeTime(){ return fLifeTime; }
+  Float_t GetDecayLength(){ return fDecayLength;}
+
   TVector GetPV(){ TVector p(4) ; 
           p(0)=fP[0] ; p(1) =fP[1] ; p(2)=fP[2] ; p(3)=fP[3] ; return p ; }
   TVector GetXV(){ TVector x(4) ; 

@@ -95,7 +95,7 @@ public:
   Float_t GetEventNumber(){ return fHead[0];}
   Float_t GetEcm(){ return fHead[1];}
 
-  Int_t GetNGeneraorParticles(){ return fNGeneratorParticles; }
+  Int_t GetNGeneratorParticles(){ return fNGeneratorParticles; }
   TClonesArray *GetGeneratorParticles(){ return fGeneratorParticles;}
   Int_t GetNLTKCLTracks(){ return fNCombinedTracks;}
   TClonesArray *GetLTKCLTracks(){ return fCombinedTracks;}
