@@ -1,4 +1,15 @@
 -------------------------------------------------------------------------------
+2000/07/04  Akiya Miyamoto
+-------------------------------------------------------------------------------
+(1) Add bin/cxxdepends to make a list of dependant directories for rmkdepend.
+(2) JSFBases.cxx/h and BasesSpring.cxx is updated to (a) allow H1FILL/H2FILL 
+   call more than once in a bases function, (b) Output 2D bases histogram 
+   properly in spring data.
+(3) Add member functions such as to get track chisquare in 
+   JSFGeoCFit.h and JSFVirtualFit.h 
+	
+	
+-------------------------------------------------------------------------------
 2000/06/25  K.Fujii
 -------------------------------------------------------------------------------
 (1) Use rmkdepend instead of makedepend
