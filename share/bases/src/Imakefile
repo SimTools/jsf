@@ -18,7 +18,7 @@ HDRS	= BasesSpring.h bases_scat.h  bs_hist.h hist_bin.h \
 	bases_hist.h bases_xhist.h bs_variable.h hist_buff.h \
 	bases_ran1.h
 
-LIBBASES = libBasesSpring.so
+LIBBASES = libBasesSpring.$(SOEXT)
 
 all:: $(LIBBASES) install
 
