@@ -1,4 +1,10 @@
 #---------------------------------------------------
+#
+# Imakefile for readjim
+# create a library, libreadjim.a
+#
+# $Id$
+#---------------------------------------------------
 
 #include    "config/lclib.tmpl"
 #include    "conf/makejsf.tmpl"
@@ -17,7 +23,7 @@ LCLIBDIR      = $(LCLIBROOT)/lib
 
 #ifdef hitachiArchitecture
 EXTRALDOPT = -Wl,-a,default 
-CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lkernlib
+CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lkernlib -lpacklib
 #endif
 
 ANALLIB = $(JSFLIBS) $(EXTRALDOPT) \
@@ -50,12 +56,14 @@ HDRS	      = JSFReadJIMBank.h \
 		JSFJIMParam.h
 
 
-all::  jsf
+all::  jsf lib
 
 jsf: $(OBJS) $(JSFROOT)/src/jsfmain.o
 	$(LD) $(JSFROOT)/src/jsfmain.o $(BLOCKDATA) $(OBJS) \
 	$(LDFLAGS) -o jsf 
 
+lib: $(OBJS)
+	ar cr libreadjim.a $(OBJS) $(JIMOBJ)
 
 clean:: 
 	@rm -f $(OBJS) core *.so 
@@ -76,11 +84,4 @@ libJSFReadJIMBank.$(SrcSuf): $(HDRS) JSFReadJIMLinkDef.h
 		rootcint -f libJSFReadJIMBank.$(SrcSuf) \
 	 	-c -I$(JSFROOT)/include $(HDRS) \
 		JSFReadJIMLinkDef.h
-
-#---------------------------------------------------
-
-.SUFFIXES: .$(SrcSuf)
-
-.$(SrcSuf).$(ObjSuf):
-	$(CXX) $(CXXFLAGS) -c $<
 
