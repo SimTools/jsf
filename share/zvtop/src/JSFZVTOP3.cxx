@@ -462,7 +462,13 @@ void JSFZVTOP3::MakeVertices(TObjArray *tracks)
        ct->MovePivot(pntip,bf);
      }
      else {
-       ct->MovePivotToIP(fpar);
+       Float_t pv[3];
+       ct->GetPivot(pv);
+       // If current pivot position is more than 1 cm away from IP,
+       // move it to IP.
+       if( pv[0]*pv[0]+pv[1]*pv[1]+pv[2]*pv[2] > 1.0 ) {
+	 ct->MovePivotToIP(fpar);
+       }
      }
 
      ct->GetErrorMatrix(err);
