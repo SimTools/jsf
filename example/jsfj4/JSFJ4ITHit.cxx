@@ -28,7 +28,7 @@ JSFJ4ITHit::JSFJ4ITHit(J4ITLayerHit *ahit)
   fTrackID=ahit->GetTrackID();
   fMotherTrackID=ahit->GetMotherTrackID();
   fParticleID=ahit->GetPDGEncoding();
-  fLayerID=0;
+  fLayerID=ahit->GetComponent()->GetMyID();
   fLadderID=0;
   fSensorID=0;
   fPixelThetaID=0;
