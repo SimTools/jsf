@@ -1,6 +1,11 @@
+//*LastUpdate :  jsf-1-7  8-April-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-6  30-March-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-5  1-March-1999  By Akiya Miyamoto
 //*-- Author  : A.Miyamoto  1-March-1999
+
+/*
+ 8-Apr-1999 A.Miyamoto  Detector parameter is same as detect7.com
+*/
 
 
 ///////////////////////////////////////////////////////////////////
@@ -41,13 +46,13 @@ JSFQuickSimParam::JSFQuickSimParam()
   prfeld_.ropt=3.03045206e-3 ;
 
   //  Tracker
-  fTrack[0]  = 30.0   ; //inner radius(cm)  
+  fTrack[0]  = 45.0   ; //inner radius(cm)  
   fTrack[1]  = 230.   ; // outer radius(cm)
   fTrack[2]  = -230.  ; // Z-(cm) 
   fTrack[3]  = 230.   ; // Z+(cm)
   fTrack[4]  = 100    ; // # sampling points   
   fTrack[5]  = 10     ; // cut on # sampling points   
-  fTrack[6]  = 1.E-2  ; // sigma_(r-phi)
+  fTrack[6]  = 0.85E-2  ; // sigma_(r-phi)
   fTrack[7]  = 3.E-1  ; // sigma_Z 
 
   // EM calorimeter
@@ -85,10 +90,10 @@ JSFQuickSimParam::JSFQuickSimParam()
   fDZEEVX   =   25.E-4 ; // Z   pitch (cm)                        
   
   //  Beam pipe
-  fVTXLayer[0][0]  =     1.   ; // radius (cm)                   
+  fVTXLayer[0][0]  =     2.   ; // radius (cm)                   
   fVTXLayer[0][1]  =  -100.   ; // Z-(cm)                        
   fVTXLayer[0][2]  =   100.   ; // Z+(cm)                        
-  fVTXLayer[0][3]  =   0.003  ; // thickness in radiation length 
+  fVTXLayer[0][3]  =   0.0015 ; // thickness in radiation length 
   //  Layer #1
   fVTXLayer[1][0]  =    2.4  ; // radius (cm)                   s
   fVTXLayer[1][1]  =   -5.0  ; // Z-(cm)                        
@@ -110,16 +115,16 @@ JSFQuickSimParam::JSFQuickSimParam()
   fVTXLayer[4][2]  =   12.5  ; // Z+(cm)                        
   fVTXLayer[4][3]  =  0.003  ; // thickness in radiation length 
   // layer #NSMPVX (CDC inner cylinder)
-  fVTXLayer[5][0]  =    25  ; // radius (cm)                   
+  fVTXLayer[5][0]  =    40  ; // radius (cm)                   
   fVTXLayer[5][1]  =  -230.  ; // Z-(cm)                        
   fVTXLayer[5][2]  =   230.  ; // Z+(cm)                        
   fVTXLayer[5][3]  =   0.01  ; // thickness in radiation length 
 
   fVTXError[0] = 4.E-4 ;
   fVTXError[1] = 4.E-4 ;
-  fVTXError[2] = 4.E-4 ;
-  fVTXError[3] = 4.E-4 ;
-  fVTXError[4] = 4.E-4 ;
+  fVTXError[2] = 40.E-4 ;
+  fVTXError[3] = 40.E-4 ;
+  fVTXError[4] = 40.E-4 ;
 
   //  Parameters for Clustering.
   Float_t clp[4][5] ={ { 100., 0.40, 0.20, 1.00, 0.3 },
