@@ -94,6 +94,10 @@ C      = -1 at the end of run
 C*********************************************************************
       subroutine jsfjimopen(iu,fname,iret)
       character*(*) fname
+
+	external msgdat
+	external kzdata
+
       integer*4 iu,iret
 
       open(iu,file=fname,err=100)
@@ -111,3 +115,22 @@ C********************************************************************
       return
       end
 
+C********************************************************************
+C* Dummy subroutines to use tauola with jsfjim
+C********************************************************************
+      SUBROUTINE TAUINT(NINP,NOUT,NJAK1,NJAK2,NTDKRC,NKEYA1,YK0DEC)
+
+      common /raset1/U(97),C,I97,J97
+      print *,'Fatal error.'
+      print *,'Dummy subroutine TAUINT in jsfjimrun.F was called.'
+      stop
+      end
+
+C********************************************************************
+      SUBROUTINE TAUDEC(KTO,NPNT,HELTAU,P4TAU)
+      INTEGER*4  KTO, NPNT
+      REAL*4     HELTAU, P4TAU(4)
+      print *,'Fatal error.'
+      print *,'Dummy subroutine TAUDEC in jsfjimrun.F was called.'
+      stop
+      end
