@@ -197,6 +197,8 @@ Bool_t JSFHadronizer::Process(Int_t ev)
   gJSFLCFULL->TBDELB(1,"Generator:Header",iret);
 #endif
 
+  if ( iret < 0 ) return kFALSE;
+
   if( fDebug > 0 ) {
     printf(" End of JSFHadronizer::Process()\n");
   }
