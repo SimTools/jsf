@@ -45,13 +45,13 @@ ANALLIB +=  -L$(JSFROOT)/lib -lBasesSpring
 all:: $(INTGEN) $(INT) $(GEN)
 
 $(INTGEN): $(IGOBJS)
-	$(LD) -o $(INTGEN) $(IGOBJS) $(LDFLAGS) 
+	$(CXX) -o $(INTGEN) $(IGOBJS) $(LDFLAGS) 
 
 $(INT): $(IOBJS)
-	$(LD) -o $(INT) $(IOBJS) $(LDFLAGS)
+	$(CXX) -o $(INT) $(IOBJS) $(LDFLAGS)
 
 $(GEN): $(GOBJS)
-	$(LD) -o $(GEN) $(GOBJS) $(LDFLAGS)
+	$(CXX) -o $(GEN) $(GOBJS) $(LDFLAGS)
 
 depend:: $(SRCS) $(HDRS)
 	for i in $(SRCS); do \
