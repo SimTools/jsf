@@ -1,6 +1,11 @@
+//*LastUpdate :  jsf-1-7-2  16-April-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-7  6-April-1999  By Akiya Miyamoto
 //*-- Author  : Akiya Miyamoto  6-April-1999
 
+/*
+16-April-1999  A.Miyamoto  Put bug fixes written by I.Nakamura 
+                           in ReadOneRecord()
+*/
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -118,8 +123,9 @@ Bool_t JSFReadGeneratorBuf::ReadOneRecord()
 // Read Generator data and saved to the class.
 
 // Due to imcompatibility in JSFGeneratorParticle class and HEPEVT,
-// (1) second mother information is not saved.
-
+// second mother information is not saved.
+//
+// 
 
   const Int_t kNMXHEP=2000;
   Int_t endian, nevhep, nhep;
@@ -174,11 +180,18 @@ Bool_t JSFReadGeneratorBuf::ReadOneRecord()
 
     nser++;
     jlist[nser]=i;
+    if( jmohep[i][0] < 1 && (isthep[i]==1 || isthep[i]==2 )) {
+      printf("Fatal error in JSFReadGenerator::ReadOneRecord().\n");
+      printf("jmohep should not be 0 when isthep=1 or 2 but \n");
+      printf("jmohep[%d][0]=%d, isthep[%d]=%d\n",i,jmohep[i][0],i,isthep[i]);
+      return kFALSE;
+    }
+
     switch ( isthep[i] ) {
       case 1:
         map[i].ndau=0;
         map[i].dau1st=0;
-        map[i].mother=map[jmohep[i][0]].nser;
+        map[i].mother=map[jmohep[i][0]-1].nser; // modified by I.Nakamura
         map[i].nser=nser;
 	if( n1stfinal == 0 ) n1stfinal=nser;
 	if( map[i].mother == 0 ) map[i].mother=n1stdoc;
@@ -186,7 +199,7 @@ Bool_t JSFReadGeneratorBuf::ReadOneRecord()
       case 2:
         map[i].ndau=jdahep[i][1]-jdahep[i][0]+1;
         map[i].dau1st=-2;
-        map[i].mother=map[jmohep[i][0]].nser;
+        map[i].mother=map[jmohep[i][0]-1].nser; // modified by I.Nakamura
         map[i].nser=nser;
 	if( n1stfinal == 0 ) n1stfinal=nser;
 	if( map[i].mother == 0 ) map[i].mother=n1stdoc;
@@ -210,7 +223,7 @@ Bool_t JSFReadGeneratorBuf::ReadOneRecord()
     if( map[i].nser == 0 ) continue;
     switch (map[i].dau1st){
       case -2:
-	map[i].dau1st=map[jdahep[i][0]].nser;
+	map[i].dau1st=map[jdahep[i][0]-1].nser; // modified by I.Nakamura
 	break;
       case -3:
       case -4:
@@ -235,7 +248,6 @@ Bool_t JSFReadGeneratorBuf::ReadOneRecord()
     if( isthep[i] == 0 ) continue;
 
     Int_t id=idhep[i];
-    Int_t status=isthep[i];
     Float_t mass=phep[i][4];
     Int_t mother=map[i].mother;
     Int_t firstdaughter=map[i].dau1st;
