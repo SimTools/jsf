@@ -78,14 +78,15 @@ void JSFFULLGenerator::TBGET()
   Int_t nelm, neary[1000];
   Int_t iret, nw;
   Float_t data[20];
+  Int_t   idata[20];
   JSFLCFULL *lcfull;
   lcfull=gJSFLCFULL;
   JSFGeneratorBuf *buf=(JSFGeneratorBuf*) EventBuf();
 
   // Save Header information
-  lcfull->TBGET(1,"Generator:Header",1,nw,(Int_t*)data,iret);
-  buf->SetStartSeed((Int_t)data[4]);
-  buf->SetEcm(((Double_t)data[6])*0.001);
+  lcfull->TBGET(1,"Generator:Header",1,nw,idata,iret);
+  buf->SetStartSeed(idata[4]);
+  buf->SetEcm(idata[6]*0.002);
 
   // Save Particle information
   lcfull->TBNOEL(1,"Generator:Particle_List",nelm, neary);

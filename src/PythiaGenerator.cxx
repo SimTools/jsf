@@ -313,7 +313,7 @@ Bool_t PythiaGenerator::Process(Int_t ev)
     fPythia->GenerateEvent();
 
     if( fPythia->GetMSTI(61) == 1 ) {
-      cout << " MSTI 61 is 1" << endl;
+      std::cout << " MSTI 61 is 1" << std::endl;
       goto loop2;
     }
 
@@ -406,11 +406,11 @@ Bool_t PythiaGenerator::Terminate()
   if( !JSFGenerator::Terminate() ) return kFALSE;
 
   if( fBeamStrahlung != 0 ) {
-    cout << " *********************** " << endl;
-    cout << " Number of call to BSGenerator =" << fNBSGen << endl;
-    cout << " Number of good BSGencall      =" << fNBSGood << endl;    
-    cout << " Fraction :                    =" << 
-      (Double_t)fNBSGood/(Double_t)fNBSGen << endl;
+    std::cout << " *********************** " << std::endl;
+    std::cout << " Number of call to BSGenerator =" << fNBSGen << std::endl;
+    std::cout << " Number of good BSGencall      =" << fNBSGood << std::endl;    
+    std::cout << " Fraction :                    =" << 
+      (Double_t)fNBSGood/(Double_t)fNBSGen << std::endl;
   }
 
   return kTRUE;
