@@ -10,11 +10,18 @@
 #
 # ###################################################
 
+set systype=`uname -s`
+echo -n "OS of this system is $systype".
+if ( $systype != "Linux" ) then
+    echo ""
+    exit 0
+endif
+
 if ( !($?JSFROOT) )   goto message
 if ( !(`which g77 | grep -c g77 `)  ) goto message 
 if ( !(`which root | grep -c root `)  ) goto message 
 
-echo -n "Creating system information ."
+echo -n "  Creating system information ."
 set specfile=$JSFROOT/conf/spec
 
 echo "XCOMM #" >&! $specfile
