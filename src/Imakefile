@@ -114,6 +114,9 @@ all::  libjsf libjsflcfull libjsfquicksim libjsfdmatrix jsf
 all::  libjsf libjsflcfull libjsfquicksim jsf
 #endif
 #if defined(AIXArchitecture)
+
+CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lpacklib -lmathlib
+
 AIXSOLIBS += -L$(LCLIBDIR) -lGENUTIL -lLUHADR -lTAUOLA \
 	-lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
 	-lHELASV204 -lFORTLIB -lCOM -lCLI \
