@@ -124,7 +124,7 @@ public:
   void AddMSError(Float_t xrad, Float_t deltakappa=0.0);
 
 //  void FitCylinderGeometry(Int_t npnt, JSFHitCylinder *hits, Double_t bf);
-  void SetTrackByFitToCyl(Int_t npnt, JSFHitCylinder *hits, Double_t bf);
+  void SetTrackByFitToCyl(Int_t npnt, JSFHitCylinder *hits, Double_t bf, Bool_t ipConstraint=kFALSE);
   void SetHelix(JSF3DV p1, JSF3DV p2, JSF3DV p3, Double_t bfield);
 
   Int_t OriginToCylinder(Double_t Rcyl, Double_t Zcyl, 
@@ -133,6 +133,7 @@ public:
 
   void ChangeSign();
   void MovePivot(JSF3DV pivot);
+  void Average(JSFHelicalTrack ht);
 
   inline JSFHelixParameter GetHelixParameter(){return fHelix; }
   inline Double_t *GetHelixErrorMatrix(){return fError.data; }

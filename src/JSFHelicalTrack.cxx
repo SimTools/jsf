@@ -1,3 +1,4 @@
+//*LastUpdate : jsf-1-16  4-October-2000  A.Miyamoto
 //*LastUpdate : jsf-1-12  16-October-1999  A.Miyamoto
 //*LastUpdate : jsf-1-11  26-July-1999  A.Miyamoto
 //*LastUpdate : jsf-1-5  1-March-1999  A.Miyamoto
@@ -12,6 +13,9 @@
 //(Update)
 //  16-October-1999  In SetHelixByFitToCyl, trial helix is determined
 //                   by using first, center, and last space points
+//   3-October-1999  Chisq was actually chi^4 so modified.
+//   4-October-2000  Add a member, AddMSError.
+//                   In SetTrackByFitToCyl,  pivot is determined by the first SP.
 //$Id$ 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -23,6 +27,12 @@
 #include "JSFDMatrix.h"
 
 ClassImp(JSFHelicalTrack)
+
+
+extern "C" {
+  void utrkao_(Int_t *ntrk, Int_t *lntrk, Float_t hlxin[][],
+	       Float_t newhlx[], Float_t *chisq, Float_t pchi2[], Int_t *iret);
+};
 
 extern void JSFHTFitFuncCylinderGeometry(
        Int_t &npar, Double_t *dChisqdX, Double_t &f, Double_t *par, Int_t flag);
@@ -444,7 +454,8 @@ void JSFHelicalTrack::FirstDerivative(Double_t ang, Double_t *dXdHelix)
 
 
 //_____________________________________________________________________
-void JSFHelicalTrack::SetTrackByFitToCyl(Int_t npnt, JSFHitCylinder *hits, Double_t bf)
+void JSFHelicalTrack::SetTrackByFitToCyl(Int_t npnt, JSFHitCylinder *hits, Double_t bf,
+					 Bool_t ipConstraint)
 {
   //  Make a helix fit to the hit points. Hit points are measurements of
   // cylindrical geometry.  They are given by a cylindrical coordinate of (phi, z)
@@ -454,6 +465,7 @@ void JSFHelicalTrack::SetTrackByFitToCyl(Int_t npnt, JSFHitCylinder *hits, Doubl
   //  npnt : number of hit points. 
   //  hits : space points.
   //  bf   : solenoid magnetic field (kgauss)
+  //  ipConstraint : When true, forced track to pass through IP.
   //(Output)
   //  Result is given in a class data member.
   //(Notes) 
@@ -475,29 +487,35 @@ void JSFHelicalTrack::SetTrackByFitToCyl(Int_t npnt, JSFHitCylinder *hits, Doubl
   }
 
   // Set trial helix.
-  JSF3DV p1=pSP[nSP].sp.XYZ();
+  JSF3DV p3=pSP[nSP-1].sp.XYZ();
   JSF3DV p2=pSP[nSP/2].sp.XYZ();
-  JSF3DV p3=pSP[0].sp.XYZ();
+  JSF3DV p1=pSP[0].sp.XYZ();
 
+  if( ipConstraint ) { p1=JSF3DV(0.0, 0.0,0.0); }
+  
   SetHelix(p1, p2, p3, bf);
-  //  p1.Print(); p2.Print(); p3.Print();
-  //Print();
+  //   p1.Print(); p2.Print(); p3.Print();
+  //   printf("\n");
 
   // Setup Minuit
 
-  TMinuit *pMinuit = new TMinuit(5);  //initialize TMinuit with a maximum of 5 params
-  pMinuit->SetFCN(JSFHTFitFuncCylinderGeometry);
+  TMinuit pMinuit(5);  //initialize TMinuit with a maximum of 5 params
+  pMinuit.SetFCN(JSFHTFitFuncCylinderGeometry);
 
   Double_t arglist[10];
   Int_t ierflg = 0;
 
   arglist[0] = -1;
-  pMinuit->mnexcm("SET PRINTOUT", arglist ,1,ierflg);
+  pMinuit.mnexcm("SET PRINTOUT", arglist ,1,ierflg);
 
   arglist[0] = 1;
-  pMinuit->mnexcm("SET ERR", arglist ,1,ierflg);
+  pMinuit.mnexcm("SET ERR", arglist ,1,ierflg);
 
 // Set starting values and step sizes for parameters
+  if( ipConstraint ) {
+    fHelix.dr=0.0;
+    fHelix.dz=0.0;
+  }
   static Double_t vstart[5];
   vstart[0]=fHelix.dr;
   vstart[1]=fHelix.phi0;
@@ -505,11 +523,11 @@ void JSFHelicalTrack::SetTrackByFitToCyl(Int_t npnt, JSFHitCylinder *hits, Doubl
   vstart[3]=fHelix.dz;
   vstart[4]=fHelix.tanl;
   static Double_t step[5] = {1.0E-3 , 1.0E-3 , 1.E-3 , 1.E-3, 1.E-3};
-  pMinuit->mnparm(0, "dr", vstart[0], step[0], 0,0,ierflg);
-  pMinuit->mnparm(1, "phi0", vstart[1], step[1], 0,0,ierflg);
-  pMinuit->mnparm(2, "kappa", vstart[2], step[2], 0,0,ierflg);
-  pMinuit->mnparm(3, "dz", vstart[3], step[3], 0,0,ierflg);
-  pMinuit->mnparm(4, "tanl", vstart[4], step[4], 0,0,ierflg);
+  pMinuit.mnparm(0, "dr", vstart[0], step[0], 0,0,ierflg);
+  pMinuit.mnparm(1, "phi0", vstart[1], step[1], 0,0,ierflg);
+  pMinuit.mnparm(2, "kappa", vstart[2], step[2], 0,0,ierflg);
+  pMinuit.mnparm(3, "dz", vstart[3], step[3], 0,0,ierflg);
+  pMinuit.mnparm(4, "tanl", vstart[4], step[4], 0,0,ierflg);
 
   //   "set gradient 1" Use first derivative of fcn.
   //   "set gradient "  Use first derivative, confirmming values.
@@ -518,19 +536,29 @@ void JSFHelicalTrack::SetTrackByFitToCyl(Int_t npnt, JSFHitCylinder *hits, Doubl
 
   // Call FCN with flag=1 to initialize parameter
    arglist[0] = 1 ;  // iflag
-   pMinuit->mnexcm("CALL", arglist ,1,ierflg);
+   pMinuit.mnexcm("CALL", arglist ,1,ierflg);
+
+   if( ipConstraint ) {
+     arglist[0] = 1 ;  // iflag
+     pMinuit.mnexcm("FIX", arglist ,1,ierflg);
+     arglist[0] = 4 ;  // iflag
+     pMinuit.mnexcm("FIX", arglist ,1,ierflg);
+   }
 
 // Now ready for minimization step
   arglist[0] = 500;  // Max. call
   arglist[1] = 1.;   // tolerance
-  pMinuit->mnexcm("MIGRAD", arglist ,2,ierflg);
+  pMinuit.mnexcm("SIMPLEX", arglist ,2,ierflg);
+  arglist[0] = 500;  // Max. call
+  arglist[1] = 1.;   // tolerance
+  pMinuit.mnexcm("MIGRAD", arglist ,2,ierflg);
 
   // Call  FCN with flag=3 at termination
    arglist[0] = 3 ;  // iflag
-   pMinuit->mnexcm("CALL", arglist ,1,ierflg);
+   pMinuit.mnexcm("CALL", arglist ,1,ierflg);
 
    Double_t emat[5][5];
-   pMinuit->mnemat(&emat[0][0], 5);
+   pMinuit.mnemat(&emat[0][0], 5);
    Int_t i=0; Int_t j=0; Int_t ip=0;
    for(i=0;i<5;i++){ for(j=0;j<=i;j++){ fError.data[ip]=emat[i][j]; ip++; } }
 
@@ -540,7 +568,6 @@ void JSFHelicalTrack::SetTrackByFitToCyl(Int_t npnt, JSFHitCylinder *hits, Doubl
    //printf(" ndf=%d chisq=%g cl=%g\n",fNDF, fChisq, fCL);
 
    fWithError=kTRUE;
-   delete pMinuit;
 }
 
 
@@ -560,11 +587,18 @@ void JSFHTFitFuncCylinderGeometry(
   //  dChisqdX : First derivative of Chisq by helix parameter, valid only when flag=2.
   //  f        : Chisq.
 
+  static Double_t ssxi2i[200];
+  static Double_t ssz2i[200];
+
   static Double_t *sxi2i;
   static Double_t *sz2i;
   if( flag == 1 ) {
-    sxi2i=new Double_t[nSP];
-    sz2i=new Double_t[nSP];
+    sxi2i=&ssxi2i[0];
+    sz2i=&ssz2i[0];
+    if( nSP > 200 ) {
+      sxi2i=new Double_t[nSP];
+      sz2i=new Double_t[nSP];
+    }
     for(Int_t l=0;l<nSP;l++){
       sxi2i[l]=1./(pSP[l].dphi*pSP[l].dphi);
       sz2i[l]=1./(pSP[l].dz*pSP[l].dz);
@@ -579,8 +613,8 @@ void JSFHTFitFuncCylinderGeometry(
    Double_t delta;
    pFitHelix->SetHelix(par);
    JSFRPhiZ p;
-   Double_t dxdhlx[3][5]; 
-   Double_t dXidHlx[5];
+   //   Double_t dxdhlx[3][5]; 
+   //   Double_t dXidHlx[5];
 
    //  Loop over hit points to calculate chisq and firs derivative
    for (l=0;l<nSP;l++) {
@@ -597,8 +631,9 @@ void JSFHTFitFuncCylinderGeometry(
      Double_t dxi=pSP[l].sp.r*(p.phi-pSP[l].sp.phi);
      Double_t dz=p.z-pSP[l].sp.z;
      delta=dxi*dxi*sxi2i[l] + dz*dz*sz2i[l] ;
-     chisq += delta*delta;
-     
+     chisq += delta;
+
+     /*
      if( flag == 2 ) {
 	pFitHelix->FirstDerivative(fang, &dxdhlx[0][0]);
 	Double_t cs=xyz.x/p.r;
@@ -612,13 +647,16 @@ void JSFHTFitFuncCylinderGeometry(
 	dChisqdX[3]+= 2*dz*sz2i[l]*dxdhlx[2][3];
 	dChisqdX[4]+= 2*dz*sz2i[l]*dxdhlx[2][4];
      }
+     */
    }
    f = chisq;
    pFitChisq=chisq;
 
    if( flag == 3 ) {
-     delete sxi2i;
-     delete sz2i;
+     if( nSP > 200 ) {
+       delete sxi2i;
+       delete sz2i;
+     }
    }
 
    //   printf(" chisq=%g\n",chisq);
@@ -897,7 +935,7 @@ void JSFHelicalTrack::AddMSError(Float_t xrad, Float_t deltakappa)
 
   fError.data[2]  +=  sigmsq*tnlsqone;
   fError.data[5]  += sigmsq*(fHelix.kappa*fHelix.kappa*tnlsq);
-  fError.data[12] += sigmsq*fHelix.kappa*fHelix.kappa*tnlsqone;
+  fError.data[12] += sigmsq*fHelix.kappa*fHelix.tanl*tnlsqone;
   fError.data[14] += sigmsq*tnlsqone*tnlsqone;
 
   //C .. E(2,2)=EDAT(3), E(3,3)=Edat(6), E(3,5)=Edat(13), E(5,5)=Edat(15)
@@ -905,3 +943,63 @@ void JSFHelicalTrack::AddMSError(Float_t xrad, Float_t deltakappa)
   fHelix.kappa -= deltakappa;
 
 }
+
+//___________________________________________________________________________
+void JSFHelicalTrack::Average(JSFHelicalTrack ht)
+{
+  //(Function)
+  //   Average this HelicalTrack and ht.  
+  //   This helical track parameter is updated.
+
+  Float_t hlxin[2][38];
+
+  hlxin[0][0]=fHelix.dr;
+  hlxin[0][1]=fHelix.phi0;
+  hlxin[0][2]=fHelix.kappa;
+  hlxin[0][3]=fHelix.dz;
+  hlxin[0][4]=fHelix.tanl;
+  hlxin[0][5]=fHelix.pivot.x;
+  hlxin[0][6]=fHelix.pivot.y;
+  hlxin[0][7]=fHelix.pivot.z;
+  Double_t *dat=(Double_t*)&hlxin[0][8];
+  for(Int_t k=0;k<15;k++){ dat[k]=fError.data[k]; }
+
+  hlxin[1][0]=ht.GetHelixParameter().dr;
+  hlxin[1][1]=ht.GetHelixParameter().phi0;
+  hlxin[1][2]=ht.GetHelixParameter().kappa;
+  hlxin[1][3]=ht.GetHelixParameter().dz;
+  hlxin[1][4]=ht.GetHelixParameter().tanl;
+  hlxin[1][5]=ht.GetHelixParameter().pivot.x;
+  hlxin[1][6]=ht.GetHelixParameter().pivot.y;
+  hlxin[1][7]=ht.GetHelixParameter().pivot.z;
+  dat=(Double_t*)&hlxin[1][8];
+  Double_t *em=ht.GetHelixErrorMatrix();
+  for(Int_t k=0;k<15;k++){ dat[k]=em[k]; }
+
+  Float_t newhlx[38];
+  for(Int_t k=0;k<10;k++){ newhlx[k]=hlxin[0][k]; }
+
+  Int_t ntrk=2;
+  Int_t lntrk=38;
+  Float_t chisq=0;
+  Float_t pchi2[2];
+  Int_t iret;
+  utrkao_(&ntrk, &lntrk, hlxin, newhlx, &chisq, pchi2, &iret);
+
+  fHelix.dr     =newhlx[0];
+  fHelix.phi0   =newhlx[1];
+  fHelix.kappa  =newhlx[2];
+  fHelix.dz     =newhlx[3];
+  fHelix.tanl   =newhlx[4];
+  fHelix.pivot.x=newhlx[5];
+  fHelix.pivot.y=newhlx[6];
+  fHelix.pivot.z=newhlx[7];
+  dat=(Double_t*)&newhlx[8];
+  for(Int_t k=0;k<15;k++){ fError.data[k]=dat[k]; }
+
+  fChisq=chisq;
+  fNDF+=ht.GetNDF();
+  fCL=JSFUtil::ConfidenceLevel(fNDF, fChisq);
+  
+}
+
