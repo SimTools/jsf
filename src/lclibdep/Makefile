@@ -3,7 +3,7 @@ SHELL   = /bin/bash
 MFLAGS	=
 CURRDIR	= .
 
-HASPYTHIA5 = $(shell jsf-config --has_pythia5)
+HASPYTHIA5 = # $(shell jsf-config --has_pythia5)
 
 SUBDIRS = quicksim jsfpythia6 $(HASPYTHIA5)
 
