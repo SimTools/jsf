@@ -51,10 +51,15 @@ public:
   JSFGeneratorParticle(Float_t data[]);
   JSFGeneratorParticle(JSFGeneratorParticle& g);
 
-  Float_t GetPx(){ return fP[1] ;}
-  Float_t GetPy(){ return fP[2] ;}
-  Float_t GetPz(){ return fP[3] ;}
-  Float_t GetE(){  return fP[0] ;}
+  inline Float_t GetPx(){ return fP[1] ;}
+  inline Float_t GetPy(){ return fP[2] ;}
+  inline Float_t GetPz(){ return fP[3] ;}
+  inline Float_t GetE(){  return fP[0] ;}
+  inline Float_t GetX(){ return fX[1] ;}
+  inline Float_t GetY(){ return fX[2] ;}
+  inline Float_t GetZ(){ return fX[3] ;}
+  inline Float_t GetT(){  return fX[0] ;}
+
   inline Float_t GetPabs(){ 
     return TMath::Sqrt( fP[1]*fP[1]+fP[2]*fP[2]+fP[3]*fP[3]);}
   inline Float_t GetAzimthAngle(){ return TMath::ATan2( fP[2], fP[1]);}

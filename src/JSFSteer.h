@@ -82,7 +82,7 @@ public:
   JSFSteerConf *fConf;       //! Pointer to module information.
 
   enum  EJSFReturnCode {kJSFOK=0x00, kJSFSkipRestModules=0x01, kJSFNoOutput=0x02,
-        kJSFEOF=0x04, kJSFDoEndtRun=0x08, kJSFTerminate=0x10,
+        kJSFEOF=0x04, kJSFDoEndRun=0x08, kJSFTerminate=0x10,
         kJSFQuit=0x20, kJSFDrawEvent=0x40, kJSFDrawHist=0x80, kJSFFALSE=0x8000} ;
 
 
