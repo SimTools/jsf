@@ -1,0 +1,43 @@
+#include "../../conf/makejsf.tmpl"
+
+PROGRAM       = FFbarSpring
+
+SOLIBNAME     = lib$(PROGRAM)
+
+OBJS          = $(PROGRAM).$(ObjSuf) $(SOLIBNAME).$(ObjSuf)
+
+SRC           = $(PROGRAM).$(SrcSuf) 
+
+HDRS	      = $(PROGRAM).h
+
+WEBDIR        = $(JSFROOT)/html/example/$(PROGRAM)
+
+
+all::  lib
+lib: $(OBJS)
+	$(LD) $(SOFLAGS) $(OBJS) -o  $(SOLIBNAME).$(DllSuf) $(AIXLIBS)
+
+clean:: 
+	@rm -f $(OBJS) core *.so $(SOLIBNAME).$(SrcSuf) $(SOLIBNAME).h
+
+depend:: $(SRC) $(HDRS)
+	for i in $(SRC); do \
+	rmkdepend -a -- $(DEPENDFILES) -- $$i; done
+
+distclean::
+	@rm -f $(OBJS) core *.so $(SOLIBNAME).$(SrcSuf) $(SOLIBNAME).h *.~ *.o
+	@rm -f PYTHIA.SEED *.bak
+	@rm -f jsf *.root Makefile jsfmain.cxx
+
+web:	lib  $(WEBDIR)
+	jsf -q -b html.C 
+
+$(WEBDIR):
+	mkdir $(WEBDIR)
+
+$(SOLIBNAME).$(SrcSuf): $(HDRS) LinkDef.h
+		@echo "Generating dictionary ..."
+		rootcint -f $(SOLIBNAME).$(SrcSuf) \
+	 	-c -I$(JSFROOT)/include $(HDRS) LinkDef.h
+
+

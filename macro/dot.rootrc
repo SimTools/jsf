@@ -1,0 +1,13 @@
+#  
+# 
+# To use JSF's macro without specify full path name, put following lines
+# in your .rootrc file at home directory ( ~/.rootrc ).
+# If you don't have a file, ~/.rootrc, just copy this file.
+# An example of .rootrc file will be found in $ROOTSYS/tutorial/.rootrc.
+#
+#$id$
+#
+
+# Put JSF's macro directory in MacroPath
+Unix.*.Root.MacroPath:      .:$(ROOTSYS)/macros:$(JSFROOT)/macro
+WinNT.*.Root.MacroPath:     ./;$(ROOTSYS)/macros;$(JSFROOT)/macro
