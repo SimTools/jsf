@@ -129,9 +129,13 @@ Bool_t JSFJIMParam::GetEMPosition(Int_t cell, Float_t pos[3], Float_t width[3])
     width[0]=0;
     if( iph > 2 ) { width[1]=fPEM1BC[iph]-fPEM1BC[iph-1]; }
     else { width[1]=fPEM1BC[iph+1]-fPEM1BC[iph]; }
+
+    if( width[1] >  TMath::Pi() ) { width[1] -= 2*TMath::Pi(); }
+    if( width[1] < -TMath::Pi() ) { width[1] += 2*TMath::Pi(); }
     
     width[1]=TMath::Abs(width[1]);
 
+    ith--;
     if( ith > 2 ) { width[2]=fZEM1BC[ith]-fZEM1BC[ith-1]; }
     else { width[2]=fZEM1BC[ith+1]-fZEM1BC[ith]; }
     width[2]=TMath::Abs(width[2]);
@@ -139,6 +143,7 @@ Bool_t JSFJIMParam::GetEMPosition(Int_t cell, Float_t pos[3], Float_t width[3])
   // In the case of Endcap calorimeter
   else {
     ith*=iz;
+    ith--;
     iph*=iz;
     pos[0]=fREM1EC[ith-1];
     pos[2]=iz*fZEM1EC[ith-1];
@@ -146,6 +151,8 @@ Bool_t JSFJIMParam::GetEMPosition(Int_t cell, Float_t pos[3], Float_t width[3])
     width[2]=0;
     if( iph > 2 ) { width[1]=fPEM1EC[iph]-fPEM1EC[iph-1]; }
     else { width[1]=fPEM1EC[iph+1]-fPEM1EC[iph]; }
+    if( width[1] >  TMath::Pi() ) { width[1] -= 2*TMath::Pi(); }
+    if( width[1] < -TMath::Pi() ) { width[1] += 2*TMath::Pi(); }
     
     width[1]=TMath::Abs(width[1]);
 
@@ -186,7 +193,10 @@ Bool_t JSFJIMParam::GetHDPosition(Int_t cell, Float_t pos[3], Float_t width[3])
     width[0]=0;
     if( iph > 2 ) { width[1]=fPHD1BC[iph]-fPHD1BC[iph-1]; }
     else { width[1]=fPHD1BC[iph+1]-fPHD1BC[iph]; }
+    if( width[1] >  TMath::Pi() ) { width[1] -= 2*TMath::Pi(); }
+    if( width[1] < -TMath::Pi() ) { width[1] += 2*TMath::Pi(); }
 
+    ith--;
     if( ith > 2 ) { width[2]=fZHD1BC[ith]-fZHD1BC[ith-1]; }
     else { width[2]=fZHD1BC[ith+1]-fZHD1BC[ith]; }
   }
@@ -194,6 +204,7 @@ Bool_t JSFJIMParam::GetHDPosition(Int_t cell, Float_t pos[3], Float_t width[3])
   // In the case of Endcap calorimeter
   else {
     ith*=iz;
+    ith--;
     iph*=iz;
     pos[0]=fRHD1EC[ith-1];
     pos[2]=iz*fZHD1EC[ith-1];
@@ -202,6 +213,8 @@ Bool_t JSFJIMParam::GetHDPosition(Int_t cell, Float_t pos[3], Float_t width[3])
     if( iph > 2 ) { width[1]=fPHD1EC[iph]-fPHD1EC[iph-1]; }
     else { width[1]=fPHD1EC[iph+1]-fPHD1EC[iph]; }
     
+    if( width[1] >  TMath::Pi() ) { width[1] -= 2*TMath::Pi(); }
+    if( width[1] < -TMath::Pi() ) { width[1] += 2*TMath::Pi(); }
     width[1]=TMath::Abs(width[1]);
 
     if( ith > 2 ) { width[0]=fRHD1EC[ith]-fRHD1EC[ith-1]; }
