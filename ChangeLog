@@ -6,14 +6,16 @@ Change Log and some future plan.
 To-Do ( listed in arbitrary order ) -- Help wanted
 **********************************************************
 1) More event generator  --> This will come soon.
+      --> Available as physsim 
 2) Re-write QuickSimulator by C++ 
 3) Include interface to JIM --> This needs further test.
-3.1) Run JIM in JSF
+3.1) Run JIM in JSF --> Prepared in example/jsfjim in jsf-1-10
 4) Prepare to generate event with background events and hits.
 5) jsf.conf editor. Which is executable from GUI
 6) Integrate Bases/Spring generator in GUI pannel ( easy selection of process)
 7) Move example/guiexam1/MainMacro.C to macro directory for use as
    standard macro.
+      --> done in jsf-1-11 	
 8) Output of a root file should be turned off in some case.
       --> done in jsf-1-10, in the case of example/guiexam1/gui.C
 9) Prepare an example macro to read multiple root file randomly/sequentially.
@@ -28,12 +30,24 @@ To-Do ( listed in arbitrary order ) -- Help wanted
 jsf-1-11  Modification toward jsf-1-11 A.Miyamoto
 **********************************************************
 -----------------------	
+28-July-1999 A.Miyamoto
+-----------------------	
+(1) JSFReadParton class is added.
+(2) Move example/guiexam1/UserAnalysis.C to macro/UserAnalysis.C 
+    and prepare macro/dot.rootrc as an example of ~/.rootrc
+(3) Add JSFQuickSim.CDCTrackIsCDCVTX environment paramter. 
+    If it is not 1, CDC Track Parameter is used instead of
+    CDC_VTX track parameter.
+	
+-----------------------	
 27-July-1999 A.Miyamoto
 -----------------------	
 (1) JSFHelicalTrack class is enriched to include the helix fit using
     Minuit.  The fit function can be used to the detector of cylindircal
     geometry.
 (2) example/gui.C and example/MainMacro.C are moved to macro directory
+(3) Add JSFReadParton class to read parton data from a file for 
+    subsequent hadronize by JSFHadronizer class.	
 
 -----------------------	
 24-July-1999 A.Miyamoto
