@@ -70,13 +70,11 @@ all::  lib jsfrjim
 
 lib: $(OBJS)
 	rm -f ../../lib/$(SOLIBNAME).$(DllSuf)
-	$(LD) $(SOFLAGS) $(OBJS) -o ../../lib/$(SOLIBNAME).$(DllSuf) $(AIXSOLIBS)
+	$(LD) $(SOFLAGS) $(OBJS) -o ../../lib/$(SOLIBNAME).$(DllSuf) 
 
 jsfrjim: $(OBJS) $(JSFROOT)/src/jsfmain.o JSFReadJIMCommonSize.h
 	$(CXX) $(JSFROOT)/src/jsfmain.o $(BLOCKDATA) \
-	-L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFReadJIMBank \
-	$(shell root-config --glibs) \
-	-o ../../bin/jsfrjim 
+	$(LDFLAGS) -o ../../bin/jsfrjim 
 
 #endif
 
