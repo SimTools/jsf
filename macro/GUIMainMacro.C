@@ -133,7 +133,8 @@ int Initialize()
     jsf->GetLastRunInfo(flast);       // Get seed of last run. 
     flast->Close(); 
   }
-  
+
+  if( jsf->GetOutput() ) { jsf->GetOutput()->cd(); }
   UserInitialize();
 
   jsf->BeginRun(gRunNo);   // Set run number.
@@ -270,6 +271,7 @@ Bool_t SetOptionsForBatch()
 //_________________________________________________________
 void ResetHist()
 {
+  if( jsf->GetOutput() ) { jsf->GetOutput()->cd(); }
   UserInitialize();
 }
 
