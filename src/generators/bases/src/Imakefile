@@ -42,12 +42,16 @@ endif
 install:: $(LIBBASES)
 	mkdir -p $(JSFINSTALLDIR)/lib
 	install -p -m 755 $(LIBBASES)   $(JSFINSTALLDIR)/lib
+ifeq ($(UNAME),Darwin)
 	install -p -m 755 $(DYLIBBASES) $(JSFINSTALLDIR)/lib
+endif
 	install -p -m 644 $(HDRS) $(JSFINSTALLDIR)/include
 
 uninstall:: 
 	rm -f $(JSFINSTALLDIR)/lib/$(LIBBASES)
+ifeq ($(UNAME),Darwin)
 	rm -f $(JSFINSTALLDIR)/lib/$(DYLIBBASES)
+endif
 	( cd $(JSFINSTALLDIR)/include && rm -f $(HDRS) )
 
 depend:: $(SRCS) $(HDRS)
