@@ -364,13 +364,8 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
     return kFALSE;
   }
   Int_t ngen=0 ;
-#if defined(R__ACC) || defined(_AIX)
   Float_t gendat[kGenMax][kGenSize];
   Int_t igendat[kGenMax][kIGenSize];
-#else
-  Float_t gendat[nobuf][kGenSize];
-  Int_t igendat[nobuf][kIGenSize];
-#endif
   Int_t j;
   for(j=0;j<nobuf;j++){
     JSFGeneratorParticle *p=(JSFGeneratorParticle*)fGeneratorParticles->At(j);
@@ -401,62 +396,53 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
   // Information(JSFLTKCLTrack class).
   // ************************************************************
   
-#if defined(R__ACC) || defined(_AIX)
   Float_t cmbt[kTrkMax][kCmbtSize];
   Float_t trkf[kTrkMax][kTrkfSize];
   Double_t trkd[kTrkMax][kTrkdSize];
   Int_t    nvtxh[kTrkMax];
   Double_t vtxd[kVTXBufSize][kVTXHSize];
   Int_t idvtx[kVTXBufSize][kVTXIDSize];
-#else
-  Float_t cmbt[fNCombinedTracks][kCmbtSize];
-  Float_t trkf[fNCDCTracks][kTrkfSize];
-  Double_t trkd[fNCDCTracks][kTrkdSize];
-  Int_t    nvtxh[fNCDCTracks];
-  Double_t vtxd[fNVTXHits][kVTXHSize];
-  Int_t idvtx[fNVTXHits][kVTXIDSize];
-#endif
 
   Int_t i;
   Int_t ncdc=0;
   Int_t nvtx=0;
+  for(int i=0;i<fNCDCTracks;i++){
+    JSFCDCTrack *ct=(JSFCDCTrack*)fCDCTracks->UncheckedAt(i);
+    ct->GetTrackParameter(&trkf[i][0]);
+    ct->GetErrorMatrix(&trkd[i][0]);
+    nvtxh[i]=ct->GetNVTX();
+
+    // ***************************************
+    // Make an array for vertex 
+    // ***************************************
+    JSFVTXHit *v;
+
+    for(j=0;j<nvtxh[i];j++){
+      v=ct->GetVTXHit(j);
+      vtxd[nvtx][0]=v->GetR();
+      vtxd[nvtx][1]=v->GetPhi();
+      vtxd[nvtx][2]=v->GetZ();
+      vtxd[nvtx][3]=v->GetDphi();
+      vtxd[nvtx][4]=v->GetDz();
+      idvtx[nvtx][0]=ncdc+1;
+      idvtx[nvtx][1]=v->GetLayerNumber();
+      nvtx++;
+    }
+  }
+  ncdc=fNCDCTracks ;
+
   for(i=0;i<fNCombinedTracks;i++){
      JSFLTKCLTrack *t=(JSFLTKCLTrack*)fCombinedTracks->UncheckedAt(i);
      cmbt[i][0]=t->GetPx();  cmbt[i][1]=t->GetPy();  
-     cmbt[i][2]=t->GetPz(); cmbt[i][3]=t->GetE(); 
-     cmbt[i][4]=t->GetCharge(); cmbt[i][5]=t->GetType(); cmbt[i][6]=0;
-     cmbt[i][7]=0; 
+     cmbt[i][2]=t->GetPz();  cmbt[i][3]=t->GetE(); 
+     cmbt[i][4]=t->GetCharge(); cmbt[i][5]=t->GetType(); 
+     cmbt[i][6]=0;      cmbt[i][7]=0; 
      if( t->GetNCDC() <= 0 ) continue ;
      if( t->GetType() == 1 || t->GetType() == 3 ) continue;
-
-       cmbt[i][7]=ncdc+1;
-       JSFCDCTrack *ct=t->GetCDC();
-       ct->GetTrackParameter(&trkf[ncdc][0]);
-       ct->GetErrorMatrix(&trkd[ncdc][0]);
-       nvtxh[ncdc]=ct->GetNVTX();
-
-       // ***************************************
-       // Make an array for vertex 
-       // ***************************************
-       JSFVTXHit *v;
-       for(j=0;j<nvtxh[ncdc];j++){
-	 v=ct->GetVTXHit(j);
-	 vtxd[nvtx][0]=v->GetR();
-	 vtxd[nvtx][1]=v->GetPhi();
-	 vtxd[nvtx][2]=v->GetZ();
-	 vtxd[nvtx][3]=v->GetDphi();
-	 vtxd[nvtx][4]=v->GetDz();
-	 idvtx[nvtx][0]=ncdc+1;
-	 idvtx[nvtx][1]=v->GetLayerNumber();
-	 nvtx++;
-       }
-
-       ncdc++ ;
+     Int_t k=fCDCTracks->IndexOf(t->GetCDC());
+     cmbt[i][7]=k+1;
   }
-  if( ncdc != fNCDCTracks ) {
-    printf("In JSFSIMDST::PackDST  ncdc(%d)",ncdc);
-    printf(" and fNCDCTracks (%d) is inconsistent.\n",fNCDCTracks);
-  }
+
   if( nvtx != fNVTXHits ) {
     printf("In JSFSIMDST::PackDST nvtx(%d)",nvtx);
     printf(" and fNVTXHits (%d) is inconsistent.\n",fNVTXHits);
@@ -466,13 +452,8 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
   // Make EMC/HDC Hit Cell info.
   // ***************************************
 
-#if defined(R__ACC) || defined(_AIX)
   Int_t emh[kClsMax][kClsSize];
   Int_t hdh[kClsMax][kClsSize];
-#else
-  Int_t emh[fNEMCHits][kClsSize];
-  Int_t hdh[fNHDCHits][kClsSize];
-#endif
   Int_t smh[kSMHMax][kClsSize];
 
   for(i=0;i<fNEMCHits;i++){
@@ -488,7 +469,6 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
      hdh[i][1]=(Int_t)(h->GetHDEnergy()*1000.0);
      hdh[i][2]=h->GetCellID();
   }
-
 
   Int_t  lenproduc=4;
 
