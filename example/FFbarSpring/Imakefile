@@ -1,7 +1,7 @@
 #---------------------------------------------------
 
 #include "conf/makejsf.tmpl"
-CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74
+CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lpacklib
 
 ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
 		-lEGPythia -lEG \
