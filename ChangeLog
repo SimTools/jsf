@@ -21,6 +21,9 @@ jsf-1-8  9-April-1999 A.Miyamoto
 1) Add JSFCDCTrack::MovePivotToIP and AddMSError 
    fix bugs in JSFCDCTrack::MovePivot
 
+2) create example/readjim directory and put files to read jim data
+   
+	
 -----------------------	
 1-May-1999 A.Miyamoto
 -----------------------	
