@@ -53,12 +53,6 @@ bool JSFJ4RunManager::SimulateOneEvent(int ievent)
 {
   //
 
-  cout << " Start JSFJ4RunManager ... SimulateOneEvent ievent=" << ievent << endl;
-
-//  G4StateManager *stateManager = G4StateManager::GetStateManager();
-
-//  stateManager->SetNewState(G4State_EventProc);
-
   G4int ie=ievent-1;
   fCurrentEvent = GenerateEvent(ie);
 
@@ -68,9 +62,6 @@ bool JSFJ4RunManager::SimulateOneEvent(int ievent)
 
   ((JSFJ4PrimaryGeneratorAction*)GetUserPrimaryGeneratorAction())->SavePrimaries(fCurrentEvent);
 
-  //  if( ievent < fNSelectEvent ) G4UImanager::GetUIpointer()->ApplyCommand(msg);
-
-//  stateManager->SetNewState(G4State_GeomClosed);
   StackPreviousEvent(fCurrentEvent);
   currentEvent = 0;
   if(runAborted) {
