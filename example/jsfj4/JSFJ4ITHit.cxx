@@ -1,71 +1,56 @@
 ///////////////////////////////////////////////////////////////////
 //
-//  VTX Hit class in ROOT
+//  IT Hit class in ROOT
 //
 //$Id$
 //
 //////////////////////////////////////////////////////////////////
 
 
-#include "J4VTXPixelHit.hh"
-#include "J4VTXLayerHit.hh"
-#include "JSFJ4VTXHit.h"
+#include "J4ITLayerHit.hh"
+#include "JSFJ4ITHit.h"
 using namespace std;
 
-ClassImp(JSFJ4VTXHit)
+ClassImp(JSFJ4ITHit)
 
 // ------------------------------------------------------------------
-JSFJ4VTXHit::JSFJ4VTXHit():
-  fTrackID(0), fParticleID(0), fLayerID(0), fLadderID(0), fSensorID(0),
+JSFJ4ITHit::JSFJ4ITHit():
+  fTrackID(0), fMotherTrackID(0), fParticleID(0), 
+  fLayerID(0), fLadderID(0), fSensorID(0),
   fPixelThetaID(0), fPixelPhiID(0), fMomentum(0.0, 0.0, 0.0), 
-  fInPosition(0.0, 0.0, 0.0), fEnergyDeposit(0.0)
+  fPosition(0.0, 0.0, 0.0), fEnergyDeposit(0.0)
 {
 }
 
 // ------------------------------------------------------------------
-JSFJ4VTXHit::JSFJ4VTXHit(J4VTXPixelHit *ahit)
+JSFJ4ITHit::JSFJ4ITHit(J4ITLayerHit *ahit)
 {
   fTrackID=ahit->GetTrackID();
+  fMotherTrackID=ahit->GetMotherTrackID();
   fParticleID=ahit->GetPDGEncoding();
-  fLayerID=ahit->GetLayerID();
-  fLadderID=ahit->GetLadderID();
-  fSensorID=ahit->GetSensorID();
-  fPixelThetaID=ahit->GetPixThetaID();
-  fPixelPhiID=ahit->GetPixPhiID();
- 
-  fMomentum=TVector3(ahit->GetPMomentum().x()/GeV, ahit->GetPMomentum().y()/GeV, ahit->GetPMomentum().z()/GeV);
-  fInPosition=TVector3(ahit->GetInPosition().x()/cm, ahit->GetInPosition().y()/cm, ahit->GetInPosition().z()/cm);
-  fEnergyDeposit=ahit->GetEDeposit()/eV;
-
-}
-
-// ------------------------------------------------------------------
-JSFJ4VTXHit::JSFJ4VTXHit(J4VTXLayerHit *ahit)
-{
-  fTrackID=ahit->GetTrackID();
-  fParticleID=ahit->GetPDGEncoding();
-  fLayerID=ahit->GetLayerID();
+  fLayerID=0;
   fLadderID=0;
   fSensorID=0;
   fPixelThetaID=0;
   fPixelPhiID=0;
  
   fMomentum=TVector3(ahit->GetMomentum().x()/GeV, ahit->GetMomentum().y()/GeV, ahit->GetMomentum().z()/GeV);
-  fInPosition=TVector3(ahit->GetInPosition().x()/cm, ahit->GetInPosition().y()/cm, ahit->GetInPosition().z()/cm);
+  fPosition=TVector3(ahit->GetPrePosition().x()/cm, ahit->GetPrePosition().y()/cm, ahit->GetPrePosition().z()/cm);
   fEnergyDeposit=ahit->GetEnergyDeposit()/eV;
 
 }
 
 // ------------------------------------------------------------------
-JSFJ4VTXHit::~JSFJ4VTXHit()
+JSFJ4ITHit::~JSFJ4ITHit()
 {
 }
 
 // ------------------------------------------------------------------
-void JSFJ4VTXHit::Print()
+void JSFJ4ITHit::Print()
 {
 
   cout << "Track id is " << GetTrackID() ;
+  cout << "MotherTrack ID is " << GetMotherTrackID() ;
   cout << "PDG ID is " << GetParticleID() ;
   cout << " Layer id is " << GetLayerID();
   cout << " Ladder id is " << GetLadderID();
@@ -77,9 +62,9 @@ void JSFJ4VTXHit::Print()
   cout << "," << GetMomentum().Y();
   cout << "," << GetMomentum().Z();
 
-  cout << " InPostion(cm) is " << GetInPosition().X();
-  cout << "," << GetInPosition().Y();
-  cout << "," << GetInPosition().Z();
+  cout << " InPostion(cm) is " << GetPosition().X();
+  cout << "," << GetPosition().Y();
+  cout << "," << GetPosition().Z();
   //  cout << " OutPostion(cm) is " <<GetOutPosition()/cm;
   cout << endl;
 

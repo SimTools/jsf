@@ -26,10 +26,10 @@ Int_t readj4()
     cout << " jsfj4=" << jsfj4 << endl;
     jsfj4buf=(JSFJ4Buf*)jsfj4->EventBuf();
     cout << " jsfj4buf=" << jsfj4buf << endl;
-    /*
     TObjArray *vtxhits=jsfj4buf->GetComponent("VTXHits");
     Int_t nhits= vtxhits->GetEntries() ;
     cout << " Number of vtxhits is " << nhits << endl;
+    /*
     for(Int_t ih=0;ih<nhits;ih++){
       JSFJ4VTXHit *ph=(JSFJ4VTXHit*)vtxhits->At(ih);
       

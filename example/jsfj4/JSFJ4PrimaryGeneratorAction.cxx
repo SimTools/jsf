@@ -43,11 +43,17 @@ void JSFJ4PrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent)
 void JSFJ4PrimaryGeneratorAction::SavePrimaries(G4Event *anEvent)
 {
 
+  cout << " start JSFJ4PrimaryGeneratorAction::SavePrimaries" << endl;
+
   GetEventBuf()->Print();
 
   TObjArray    *vertices=(TObjArray*)GetEventBuf()->GetComponent("PrimaryVertices");
 
   vertices->Clear();   vertices->Compress();
+
+  cout << "Number of primary particles are " << 
+    anEvent->GetNumberOfPrimaryVertex() << endl;
+
   Int_t iserv=0;
   for(Int_t iv=0;iv<anEvent->GetNumberOfPrimaryVertex();iv++){
     G4PrimaryVertex *v4=anEvent->GetPrimaryVertex(iv);

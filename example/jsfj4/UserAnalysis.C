@@ -17,7 +17,7 @@ class JSFJ4;
 
 TCanvas *cHist;
 
-TH1F *hNCDC, *hNVTX;
+TH1F *hNCDC, *hNVTX, *hNIT, hNCAL;
 
 //_________________________________________________________
 void UserInitialize()
@@ -26,8 +26,10 @@ void UserInitialize()
   //  "reset hist" action is selected in the gui menu.
   //  This is used to define/reset histograms.
 
-  hNCDC=new TH1F("hNCDC", "No. of CDC Hits", 100, 0, 500);
+  hNCDC=new TH1F("hNCDC", "No. of CDC Hits", 100, 0, 200);
   hNVTX=new TH1F("hNVTX", "No. of VTX Hits", 100, 0, 100);
+  hNIT=new TH1F("hNIT", "No. of IT Hits", 100, 0, 100);
+  hNCAL=new TH1F("hNCAL", "No. of CAL Hits", 100, 0, 200);
 
 }
 
@@ -42,28 +44,67 @@ void UserAnalysis()
 
   JSFJ4    *jsfj4=(JSFJ4*)gJSF->FindModule("JSFJ4");
   JSFJ4Buf *jsfj4buf=(JSFJ4Buf*)jsfj4->EventBuf();
+
   TObjArray *vtxhits=jsfj4buf->GetComponent("VTXHits");
   if ( vtxhits ) { 
     Int_t  nvtx= vtxhits->GetEntries() ;
+    //    cout << " Number of entries in VTX is " << nvtx << endl;
     hNVTX->Fill(nvtx);
-  }
-  TObjArray *cdchits=jsfj4buf->GetComponent("CDCHits");
-  //  cout << " cdchits is " << (Uint_t)cdchits << endl;
-  if( cdchits ) {
-    cout << " Number of entries in CDC is " << cdchits->GetEntries() << endl;
-    Int_t ncdc= cdchits->GetEntries() ;
-    hNCDC->Fill(ncdc);
-    cout << "ncdc =" << ncdc << endl;
     /*
+    for(Int_t ih=0;ih<vtxhits->GetEntries();ih++){
+      JSFJ4VTXHit *vh=(JSFJ4VTXHit*)vtxhits->At(ih);
+      vh->Print();
+    }
+    */
+  }
+
+
+  TObjArray *ithits=jsfj4buf->GetComponent("ITHits");
+  if( ithits ) {
+    //    cout << " Number of entries in IT is " << ithits->GetEntries() << endl;
+    Int_t nit= ithits->GetEntries() ;
+    hNIT->Fill(nit);
+    /*
+    cout << "nit =" << nit << endl;
+    for(Int_t ih=0;ih<ithits->GetEntries();ih++){
+      JSFJ4ITHit *ith=(JSFJ4ITHit*)ithits->At(ih);
+      ith->Print();
+    }
+    */
+
+  }
+
+  TObjArray *cdchits=jsfj4buf->GetComponent("CDCHits");
+  if ( cdchits ) { 
+    Int_t  ncdc= cdchits->GetEntries() ;
+    hNCDC->Fill(ncdc);
+    /*
+    cout << " Number of entries in CDC is " << ncdc << endl;
     for(Int_t ih=0;ih<cdchits->GetEntries();ih++){
       JSFJ4CDCHit *ch=(JSFJ4CDCHit*)cdchits->At(ih);
       ch->Print();
     }
     */
   }
+
+
+  TObjArray *calhits=jsfj4buf->GetComponent("CALHits");
+  if ( calhits ) { 
+    Int_t  ncal= calhits->GetEntries() ;
+    hNCAL->Fill(ncal);
+    /*
+    cout << " Number of entries in CAL is " << ncal << endl;
+    for(Int_t ih=0;ih<calhits->GetEntries();ih++){
+      JSFJ4CALHit *calh=(JSFJ4CALHit*)calhits->At(ih);
+      calh->Print();
+    }
+    */
+  }
+
   //
   TObjArray *vertices=jsfj4buf->GetComponent("PrimaryVertices");
   if( vertices ) {
+    /*
     cout << " Number of Vertex is " << vertices->GetEntries() << endl;
     for(Int_t iv=0;iv<vertices->GetEntries();iv++){
       JSFJ4PrimaryVertex *v=(JSFJ4PrimaryVertex*)vertices->UncheckedAt(iv);
@@ -71,6 +112,7 @@ void UserAnalysis()
       //      v->Print();
       //      cout << " number of particles is " << v->GetParticles()->GetEntries() << endl;
     }
+    */
   }
   
   

@@ -52,9 +52,15 @@ TBookKeeper* TBookKeeper::fgBookKeeper = new TBookKeeper();
 
 #include "JSFJ4TOutput.h"
 #include "JSFJ4VTXHit.h"
-#include "J4VTXPixelHit.hh"
+#include "JSFJ4ITHit.h"
 #include "JSFJ4CDCHit.h"
+#include "JSFJ4CALHit.h"
+
+#include "J4VTXPixelHit.hh"
+#include "J4VTXLayerHit.hh"
+#include "J4ITLayerHit.hh"
 #include "J4CDCDriftRegionHit.hh"
+#include "J4CALHit.hh"
 #include "JSFJ4PrimaryGeneratorAction.h"
 
 ClassImp(JSFJ4)
@@ -109,14 +115,14 @@ void JSFJ4::BuildJupiter()
 
   if( gJSF->Env()->GetValue("JSFJ4.HasIR",1) == 1 ) {
     J4IR *pIR = new J4IR();
-    pIR->SetMother(fpDetector->GetExpHall());
+    pIR->SetMother(fpDetector->GetEXPHall());
     fpDetector->AddComponent(pIR);
     gJSFJ4Detectors["IR"]=(J4Object*)pIR;
   }
 
   if( gJSF->Env()->GetValue("JSFJ4.HasBD",1) == 1 ) {
     J4BD *pBD = new J4BD();
-    pBD->SetMother(fpDetector->GetExpHall());
+    pBD->SetMother(fpDetector->GetEXPHall());
     fpDetector->AddComponent(pBD);
     gJSFJ4Detectors["BD"]=(J4Object*)pBD;
   }
@@ -124,27 +130,31 @@ void JSFJ4::BuildJupiter()
   //* vtx
   if( gJSF->Env()->GetValue("JSFJ4.HasVTX",1) == 1 ) {
     J4VTX *pVTX = new J4VTX();
-    pVTX->SetMother(fpDetector->GetExpHall());
+    pVTX->SetMother(fpDetector->GetEXPHall());
     fpDetector->AddComponent(pVTX);
 
     TObjArray *vtxhits=buf->AddComponent("VTXHits");
     gJSFJ4Detectors["VTX"]=(J4Object*)pVTX;
-    gJSFJ4Outputs["VTX"]=new JSFJ4TOutput<JSFJ4VTXHit,J4VTXPixelHit>(vtxhits);
+    //    gJSFJ4Outputs["VTX"]=new JSFJ4TOutput<JSFJ4VTXHit,J4VTXPixelHit>(vtxhits);
+    gJSFJ4Outputs["VTX"]=new JSFJ4TOutput<JSFJ4VTXHit,J4VTXLayerHit>(vtxhits);
   }
 
   //* intermediate tracker
 
   if( gJSF->Env()->GetValue("JSFJ4.HasIT",1) == 1 ) {
     J4IT *pIT = new J4IT();
-    pIT->SetMother(fpDetector->GetExpHall());
+    pIT->SetMother(fpDetector->GetEXPHall());
     fpDetector->AddComponent(pIT);
+
+    TObjArray *ithits=buf->AddComponent("ITHits");
     gJSFJ4Detectors["IT"]=(J4Object*)pIT;
+    gJSFJ4Outputs["IT"]=new JSFJ4TOutput<JSFJ4ITHit,J4ITLayerHit>(ithits);
   }
 
   //* cdc
   if( gJSF->Env()->GetValue("JSFJ4.HasCDC",1) == 1 ) {
     J4CDC *pCDC = new J4CDC();
-    pCDC->SetMother(fpDetector->GetExpHall());
+    pCDC->SetMother(fpDetector->GetEXPHall());
     fpDetector->AddComponent(pCDC);
 
     TObjArray *cdchits=buf->AddComponent("CDCHits");
@@ -155,9 +165,12 @@ void JSFJ4::BuildJupiter()
   //* calorimeter
   if( gJSF->Env()->GetValue("JSFJ4.HasCAL",1) == 1 ) {
     J4CAL *pCAL = new J4CAL();
-    pCAL->SetMother(fpDetector->GetExpHall());
+    pCAL->SetMother(fpDetector->GetEXPHall());
     fpDetector->AddComponent(pCAL);
+
+    TObjArray *calhits=buf->AddComponent("CALHits");
     gJSFJ4Detectors["CAL"]=(J4Object*)pCAL;
+    gJSFJ4Outputs["CAL"]=new JSFJ4TOutput<JSFJ4CALHit,J4CALHit>(calhits);
   }
 
   //*--------------------------------------------
@@ -232,6 +245,11 @@ Bool_t JSFJ4::Initialize()
   	((J4VTX*)((*idet).second))->J4VDetectorComponent::SwitchOn();
   }
 
+  idet=gJSFJ4Detectors.find("IT");
+  if( idet != gJSFJ4Detectors.end() ) {
+  	((J4IT*)((*idet).second))->J4VDetectorComponent::SwitchOn();
+  }
+
   idet=gJSFJ4Detectors.find("CDC");
   if( idet != gJSFJ4Detectors.end() ) {
     ((J4CDC*)((*idet).second))->J4VDetectorComponent::SwitchOn();
@@ -248,6 +266,11 @@ Bool_t JSFJ4::Initialize()
       }
     }
 */
+  }
+
+  idet=gJSFJ4Detectors.find("CAL");
+  if( idet != gJSFJ4Detectors.end() ) {
+  	((J4CAL*)((*idet).second))->J4VDetectorComponent::SwitchOn();
   }
 
   G4String command = "/control/execute ";

@@ -9,7 +9,7 @@
 # // set particle
 #
 # // set kinetic energy
-/gun/energy 1 GeV
+/gun/energy 500 GeV
 #
 # // set direction
 /gun/direction 1.0 0. 0.

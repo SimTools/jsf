@@ -7,8 +7,12 @@
 #pragma link C++ class JSFJ4+;
 #pragma link C++ class JSFJ4Buf+;
 #pragma link C++ class JSFJ4BufferMap+;
+
 #pragma link C++ class JSFJ4VTXHit+;
+#pragma link C++ class JSFJ4ITHit+;
 #pragma link C++ class JSFJ4CDCHit+;
+#pragma link C++ class JSFJ4CALHit+;
+
 #pragma link C++ class JSFJ4PrimaryParticle+;
 #pragma link C++ class JSFJ4PrimaryVertex+;
 

@@ -23,6 +23,7 @@ LIBNAME = libJSFJ4
 
 SRC     = JSFJ4.$(SrcSuf) \
 	JSFJ4VTXHit.$(SrcSuf) JSFJ4CDCHit.$(SrcSuf) \
+	JSFJ4ITHit.$(SrcSuf) JSFJ4CALHit.$(SrcSuf) \
 	JSFJ4PrimaryParticle.$(SrcSuf) JSFJ4PrimaryVertex.$(SrcSuf)
 
 OBJS    = $(subst .$(SrcSuf),.$(ObjSuf),$(SRC)) \
@@ -79,6 +80,7 @@ G4LIBS := -L$(G4INSTALL)/lib/$(G4SYSTEM) \
 	-lG4leptons -lG4procman -lG4volumes -lG4digits -lG4geomver \
 	-lG4track -lG4UIcommon -lG4partman -lG4specsolids -lG4csg \
 	-lG4hepnumerics -lG4magneticfield -lG4geometrymng \
+	-lG4emlowenergy \
 	-lG4geombias -lG4transportation -lG4track \
 	-lG4materials -lG4intercoms -lG4graphics_reps -lG4globman \
 	-lGLU -lGL -lXm -lXpm -lXaw -lXmu -lXt \
