@@ -7,11 +7,11 @@
 //
 // e+e- -> w+w-
 //
+//$Id$
+//
 //////////////////////////////////////////////////////////////////////////
 
-#include "TNamed.h"
-#include "TMath.h"
-#include "TDatime.h"
+#include "JSFConfig.h"
 
 #ifndef __JSFModule__
 #include "JSFModule.h"
@@ -23,18 +23,6 @@
 #include "JSFSpring.h"
 #endif
 
-
-// =====================================================================
-//  COMMONs for WW calculation, see WWZPRM.inc for more details.
-// =====================================================================
-typedef struct {
-  Double_t rs, emins, eplus, ebeam, xg[25], ahmas, ahwid ;
-  Int_t    nbson, nfbmas;
-  Double_t pgen[10][4];
-  Int_t    ngdcy[4], nbsspr, nbtype;
-} COMMON_WWZPRM;             //  Common /WWZPRM/
-
-extern COMMON_WWZPRM wwzprm_;
 
 class WWBases  : public JSFBases {
 protected:

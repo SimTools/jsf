@@ -5,18 +5,18 @@ XCOMM #---------------------------------------------------
 #include "config/lclib.tmpl"
 #include "conf/makejsf.tmpl"
 
-CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lpacklib
+CERNLIBS      = $(shell cernlib jetset74)
 
 ROOTLIBS     += -lEGPythia -lEG -Wl,-u,pytest_ $(CERNLIBS)
 
-ANALLIB   = -L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim \
+ANALLIB   = $(JSFLIBS) \
 	    -L$(LCLIBROOT)/lib -lLCFULL -lGENUTIL -lLUHADR -lTAUOLA \
-	    -lLTKCL -lHELASV204 -lBASESV5.1 -lSIMJLC -lFORTLIB  \
+	    -lLTKCL -lHELASV204 -lSIMJLC -lFORTLIB  \
 	    -lTBS -lLCFULL -lGENUTIL -lCOM -lCLI  \
 	    -lHPKTOHBK -lFORTLIB -lTBS 
 
 INCPATH = -I$(LCLIBROOT)/simjlc/src -I$(LCLIBROOT)/util/fortlib/src 
-
+INCPATH += -I$(JSFROOT)/include
 
 
 XCOMM #-------------------------------------------------------------

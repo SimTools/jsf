@@ -1,3 +1,4 @@
+#include "JSFConfig.h"
 C*****************************************************************
 C*
 C*
@@ -301,6 +302,7 @@ C ---------------------------------------------------------------------
 C (8) Histograming.
 C ---------------------------------------------------------------------
 C
+#if __JSF_VERSION__ == 1 && __JSF_MINORVERSION__ <= 13
       DO 800 I = 1, 14
         CALL XHFILL(I,X(I),FUNC)
 800   CONTINUE
@@ -314,9 +316,11 @@ C
       XRSCOL = RSCOL/EBEAM*0.5
       CALL XHFILL( 19,DBLE(XRSCOL), FUNC )
 
+#endif
  
       RETURN
       END
+#if __JSF_VERSION__ == 1 && __JSF_MINORVERSION__ <= 13
 C***********************************************************************
 C*                                                                     *
 C*===================                                                  *
@@ -362,3 +366,4 @@ C
 C
       RETURN
       END
+#endif

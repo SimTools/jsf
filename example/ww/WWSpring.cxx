@@ -1,3 +1,4 @@
+//*LastUpdate:  jsf-1-14 29-Feburary-2000 Akiya Miyamoto
 //*LastUpdate:  v.01.01 12-December-1998 Akiya Miyamoto
 //*-- Author :  12-December-1998  Akiya Miyamoto
 
@@ -27,6 +28,8 @@
 //
 //      NDIM  = 14
 //      NGDIM = 10
+//
+//$Id$
 //////////////////////////////////////////////////////////////////
 
 #include "JSFModule.h"
@@ -41,8 +44,38 @@ ClassImp(WWSpring)
 ClassImp(WWSpringBuf)
 ClassImp(WWBases)
 
+// Variable conversion.
+#if __JSF_VERSION__ == 1 && __JSF_MINORVERSION__ <= 13
+
+#else
+#define fNDIM  ndim 
+#define fNWILD nwild
+#define fXL    xl
+#define fXU    xu
+#define fNCALL ncall
+#define fACC1  acc1
+#define fACC2  acc2
+#define fITMX1 itmx1
+#define fITMX2 itmx2
+#endif
+
+// =====================================================================
+//  COMMONs for WW calculation, see WWZPRM.inc for more details.
+// =====================================================================
+typedef struct {
+  Double_t rs, emins, eplus, ebeam, xg[25], ahmas, ahwid ;
+  Int_t    nbson, nfbmas;
+  Double_t pgen[10][4];
+  Int_t    ngdcy[4], nbsspr, nbtype;
+} COMMON_WWZPRM;             //  Common /WWZPRM/
+
+extern COMMON_WWZPRM wwzprm_;
+
+
 extern "C" {
+#if __JSF_VERSION__ == 1 && __JSF_MINORVERSION__ <= 13
 extern void usrout_();
+#endif
 extern Double_t func_(double x[]);
 extern void spevnt_(Int_t *nret);
 };
@@ -91,14 +124,14 @@ WWBases::WWBases(const char *name, const char *title)
 //  Constructor of bases.  Default parameter should be initialized here
 //
 
-   fACC1  = 0.4 ;   // precision at 1st step.
-   fACC2  = 0.2 ;   // precision at 2nd step.
-   fITMX1 = 10 ;  // max number of iteration at 1st step.
-   fITMX2 = 10 ;  // max number of iteration at 1st step.
+   fACC1  = 0.04 ;   // precision at 1st step.
+   fACC2  = 0.01 ;   // precision at 2nd step.
+   fITMX1 = 100 ;  // max number of iteration at 1st step.
+   fITMX2 = 100 ;  // max number of iteration at 1st step.
    fNCALL = 100000 ;
-
    fNDIM =14 ;
    fNWILD=10;
+
 // Get parameters from jsf.conf, if specified.
   Char_t pname[40];
   for(Int_t i=0;i<fNDIM;i++){
@@ -114,8 +147,13 @@ WWBases::WWBases(const char *name, const char *title)
   sscanf(gJSF->Env()->GetValue("WWBases.NBSON","0"),"%d",&fNBSON);
   sscanf(gJSF->Env()->GetValue("WWBases.NBTYPE","0"),"%d",&fNBTYPE);
 
+#if __JSF_VERSION__ == 1 && __JSF_MINORVERSION__ <= 13
   fPrintInfo = gJSF->Env()->GetValue("WWBases.PrintInfo",kTRUE);
   fPrintHist = gJSF->Env()->GetValue("WWBases.PrintHist",kTRUE);
+#else
+  Userin();
+#endif
+
 
 }
 
@@ -149,6 +187,26 @@ Double_t WWBases::Func(Double_t x[])
 //  Bases Integrand
 //
   double val=func_(x);
+
+
+#if __JSF_VERSION__ >= 1 ||  __JSF_MINORVERSION__ > 13
+  Char_t hn[8];
+  for(Int_t i=0;i<14;i++) {
+    sprintf(hn,"x%2.2d",i+1);
+    H1Fill(hn,x[i],val);
+  }
+  /*
+      CALL XHFILL( 15,DFLOAT(NDMOD(1)), FUNC )
+      CALL XHFILL( 16,DFLOAT(NDMOD(2)), FUNC )
+      XMWM = UH4MAS( PFMOM(0,1), PFMOM(0,2) )
+      XMWP = UH4MAS( PFMOM(0,3), PFMOM(0,4) )
+      CALL XHFILL( 17, DBLE(XMWM), FUNC )
+      CALL XHFILL( 18, DBLE(XMWP), FUNC )
+      XRSCOL = RSCOL/EBEAM*0.5
+      CALL XHFILL( 19,DBLE(XRSCOL), FUNC )
+  */
+#endif
+
   return val;
 
 }
@@ -159,7 +217,9 @@ void WWBases::Userin()
 //
 //   Initialize User parameters for Bases
 //
+#if __JSF_VERSION__ == 1 && __JSF_MINORVERSION__ <= 13
   JSFBases::Userin();  // Call JSFBases::Userin() for standard setup.
+#endif
 
   // Copy class data member into common /wwzprm/
   wwzprm_.ebeam  = fEbeam   ;
@@ -172,6 +232,7 @@ void WWBases::Userin()
 
   // Define histograms
 
+#if __JSF_VERSION__ == 1 && __JSF_MINORVERSION__ <= 13
   Xhinit(1, 0.0,  1.0,  2,  "ds/hel");
   Xhinit(2, fXL[1], fXU[1], 50, "ds/d(W-mass)");
   Xhinit(3, fXL[2], fXU[2], 50, "ds/d(W+mass)");
@@ -192,6 +253,30 @@ void WWBases::Userin()
   Xhinit(17, 0.0, fEbeam, 50, "W- invariant mass ");
   Xhinit(18, 0.0, fEbeam, 50, "W+ invariant mass ");
   Xhinit(19, 0.0, 1.0,    50,  "Effective root-S ");
+#else
+  H1Init("x01","ds/hel", 2, 0.0,  1.0 );
+  H1Init("x02", "ds/d(W-mass)", 50, fXL[1], fXU[1] );
+  H1Init("x03", "ds/d(W+mass)", 50, fXL[2], fXU[2]);
+  H1Init("x04", " ds/dcosth(W-)", 50, fXL[3], fXU[3]);
+  H1Init("x05", " ds/dcosth(f) of W-", 50, fXL[4], fXU[4]);
+  H1Init("x06", " ds/dcosth(f) of W+", 50, fXL[5], fXU[5]);
+  H1Init("x07", " ds/dX(Brems) ", 50, fXL[6], fXU[6]);
+  H1Init("x08", " ds/dX(Beamst(E-)", 50, fXL[7], fXU[7]);
+  H1Init("x09", " ds/dX(Beamst(E+)", 50, fXL[8], fXU[8]);
+  H1Init("x10", " ds/dphi of W-", 50, fXL[9], fXU[9]);
+  H1Init("x11", " ds/dphi of f of W-", 50, fXL[10], fXU[10]);
+  H1Init("x12", " ds/dphi of f of W+", 50, fXL[11], fXU[11]);
+  H1Init("x13", " ds/ddecay mode of W-", 50, fXL[12], fXU[12]);
+  H1Init("x14", " ds/ddecay mode of W+", 50, fXL[13], fXU[13]);
+  //
+  /*
+  H1Init("x15", "Decay mode of W- ", 12, 1.0, 12.0);
+  H1Init("x16", "Decay mode of W+ ", 12, 1.0, 12.0);
+  H1Init("x17", "W- invariant mass ", 50, 0.0, fEbeam);
+  H1Init("x18", "W+ invariant mass ", 50, 0.0, fEbeam);
+  H1Init("x19",  "Effective root-S ", 50, 0.0, 1.0);
+  */
+#endif
 
   return ;
 }
@@ -199,7 +284,17 @@ void WWBases::Userin()
 //_____________________________________________________________________________
 void WWBases::Userout()
 {
+#if __JSF_VERSION__ == 1 && __JSF_MINORVERSION__ <= 13
   usrout_();
+#else
+  printf("End of Bases of ee --> WW process\n");
+  printf("NBSON(Beamstruhlung)     =%d\n",fNBSON);
+  printf("NBTYPE(BeamstruhlungType =%d\n",fNBTYPE);
+  printf("Ebeam                    =%g (GeV)\n",fEbeam);
+  printf("Total Cross section      =%g +- %g (fb)\n",GetEstimate(),GetError());
+  printf("Number of iteration      =%d\n",GetNoOfIterate());  
+#endif
+
 }
 
 

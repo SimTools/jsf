@@ -1,3 +1,11 @@
+// An example script to run quick simulator of WW process
+//
+//$Id$
+//
+
+#include "../../include/JSFConfig.h"
+
+Int_t sim()
 {
   gROOT->Reset();
   TFile file("wwsim.root","RECREATE");  // Output file
@@ -7,7 +15,11 @@
   spring = new WWSpring();
   spring->ReadBases("bases.root");
  
+#if __JSF_VERSION__ == 1 && __JSF_MINORVERSION__ <= 13
   printf(" Ebeam is %g\n",((WWBases*)spring->Bases())->GetEbeam());
+#else
+  printf(" Ebeam is %g\n",((WWBases*)spring->GetBases())->GetEbeam());
+#endif
 
   hdr=new JSFHadronizer();
   sim=new JSFQuickSim();

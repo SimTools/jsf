@@ -214,7 +214,11 @@ C             1=e-, 2=neubar, 3=W+, 4=f, 5=fbar
 C
 C
       IF( NBSON .EQ. 2 .OR. NBSON .EQ.3 ) THEN
+#ifdef __JSF_VERSION__ == 1 && __JSF_MINORVERSION__ <= 13
         XDIR   = DRN(ISEED)
+#else
+        XDIR   = ran(iseed)
+#endif
         S      = 4.*EMINS*EPLUS
         BEEE   = 2.*ALPHA0/PI*( ALOG(S/(AMEL*AMEL)) - 1. )
         BEEINV = 1./BEEE
