@@ -41,8 +41,8 @@ PROGRAM       = $(SONAME).$(DllSuf)
 all::  jsf
 
 jsf: $(OBJS) jsfmain.o $(FOBJS)
-	$(LD) jsfmain.o $(FOBJS) $(BLOCKDATA) $(OBJS) $(LDFLAGS) -o jsf \
-	-Wl,-y,func_
+	$(LD) jsfmain.o $(FOBJS) $(BLOCKDATA) $(OBJS) $(LDFLAGS) -o jsf 
+
 
 clean:: 
 	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h
