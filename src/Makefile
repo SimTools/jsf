@@ -3,11 +3,11 @@ SHELL   = /bin/bash
 MFLAGS	=
 CURRDIR	= .
 
-SUBDIRS = kern generators quicksim gui
+SUBDIRS = kern generators lclibdep tools gui
 
-.PHONY: all kern generators quicksim gui
+.PHONY: all kern generators lclibdep tools gui
 	
-all: kern generators quicksim gui
+all: kern generators lclibdep tools  gui
 
 install: all
 
@@ -17,8 +17,11 @@ kern:
 generators:
 	( cd generators ; make all ; make install )
 
-quicksim:
-	( cd quicksim ; make all ; make install )
+lclibdep:
+	( cd lclibdep ; make all ; make install )
+
+tools:
+	( cd tools ; make all ; make install )
 
 gui:
 	( cd gui && xmkmf -a && make all && make install )
