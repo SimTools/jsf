@@ -1,0 +1,10 @@
+#ifndef __HEPEVT_NMXHEP__
+#define __HEPEVT_NMXHEP__ 4000
+
+typedef struct {
+  int NEVHEP,NHEP,ISTHEP[__HEPEVT_NMXHEP__],IDHEP[__HEPEVT_NMXHEP__];
+  int JMOHEP[__HEPEVT_NMXHEP__][2],JDAHEP[__HEPEVT_NMXHEP__][2];
+  double PHEP[__HEPEVT_NMXHEP__][5],VHEP[__HEPEVT_NMXHEP__][4];
+} COMMON_HEPEVT_t ;
+
+#endif
