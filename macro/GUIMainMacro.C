@@ -369,8 +369,9 @@ Bool_t GetPrevious()
 //______________________________________________
 void JobEnd()
 {
+  Bool_t flag=gROOT->GetGlobalFunction("UserTerminate",0,kTRUE) ;
   jsf->Terminate();
-  if( gROOT->GetGlobalFunction("UserTerminate",0,kTRUE) ) UserTerminate();
+  if( flag ) {  UserTerminate(); }
   if( ofile ) ofile->Write();
 }
 

@@ -157,19 +157,19 @@ void SetPythiaDecayMode()
       else if( izdcy == -3 ) {
 	Int_t izlist2[2]={9, 11};
 	for(Int_t i=0;i<2;i++){ 
-	  Int_t ip=izlist[i];
+	  Int_t ip=izlist2[i];
 	  tpy->SetMDME(mdcy2+ip-1, 1, 1); }
       }
       else if( izdcy == -4 ) {
-	Int_t izlist[3]={9, 11, 13};
+	Int_t izlist3[3]={9, 11, 13};
 	for(Int_t i=0;i<3;i++){ 
-	  Int_t ip=izlist[i];
+	  Int_t ip=izlist3[i];
 	  tpy->SetMDME(mdcy2+ip-1, 1, 1); }
       }
       else if( izdcy == -5 ) {
-	Int_t izlist[3]={10, 12, 14};
+	Int_t izlist4[3]={10, 12, 14};
 	for(Int_t i=0;i<3;i++){ 
-	  Int_t ip=izlist[i];
+	  Int_t ip=izlist4[i];
 	  tpy->SetMDME(mdcy2+ip-1, 1, 1); 
 	}
       }
@@ -211,13 +211,13 @@ void SetPythiaDecayMode()
 	}
       }
       else if( iwdcy == -3 ) {
-	Int_t idlist[2]={17, 18};
+	Int_t iwlist[2]={17, 18};
 	for(Int_t i=0;i<2;i++){ 
 	  Int_t ip=iwlist[i];
 	  tpy->SetMDME(mdcy2+ip-1, 1, 1); }
       }
       else if( iwdcy == -4 ) {
-	Int_t idlist[3]={17, 18, 19};
+	Int_t iwlist[3]={17, 18, 19};
 	for(Int_t i=0;i<3;i++){ 
 	  Int_t ip=iwlist[i];
 	  tpy->SetMDME(mdcy2+ip-1, 1, 1); }
