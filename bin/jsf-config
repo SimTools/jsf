@@ -4,7 +4,7 @@ has_pythia5()
 {
 
   if [ -x $ROOTSYS/lib/libEGPythia.so ] ; then 
-	echo "JSFPythia5"
+	echo "jsfpythia5"
   fi
 
 }

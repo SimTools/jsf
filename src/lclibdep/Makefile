@@ -3,7 +3,9 @@ SHELL   = /bin/bash
 MFLAGS	=
 CURRDIR	= .
 
-SUBDIRS = quicksim jsfpythia6 jsfpythia5
+HASPYTHIA5 = $(shell jsf-config --has_pythia5)
+
+SUBDIRS = quicksim jsfpythia6 $(HASPYTHIA5)
 
 all: install
 install:
