@@ -78,6 +78,7 @@ protected:
 
   void SetClonesArray(); // Set TClonesArray pointers.
 
+
 public:
   JSFSIMDSTBuf(const char *name="JSFSIMDSTBuf", 
 	     const char *title="JSF SimDST event buffer",
@@ -107,6 +108,10 @@ public:
   TClonesArray *GetEMCHits(){ return fEMCHits;}
   Int_t GetNHDCHits(){ return fNHDCHits;}
   TClonesArray *GetHDCHits(){ return fHDCHits;}
+
+  void AddVTXHit(Double_t r, Double_t phi, Double_t z, Double_t dphi,
+	    Double_t dz, Int_t layer, Int_t trackid=0, Int_t gentrack=0);
+
  
   ClassDef(JSFSIMDSTBuf,1)  // JSSF SimDST event buffer
 };
@@ -118,6 +123,7 @@ protected:
   Char_t fDataFileName[256]; //! File name of output file.
   Char_t fParamFileName[256];   //! Simulator parameter file name.
   Int_t  fReadWrite;  // =0 no read/write =1 to write data, =2 to read 
+  JSFQuickSimParam  *fParam ; //! Parameters for JSFQuickSim
 public:
   JSFSIMDST(const char *name="JSFSIMDST", 
 		  const char *title="Read/Write SIMDST data");
@@ -129,6 +135,9 @@ public:
   virtual Bool_t BeginRun(Int_t nrun=0);
   virtual Bool_t Process(Int_t ev=1);
   virtual Bool_t EndRun();
+
+  JSFQuickSimParam *Param(){ return fParam; }
+  void SetQuickSimParam(JSFQuickSimParam *par){ fParam=par; }
 
   Int_t  GetUnit(){ return fUnit;}
   Char_t *GetDataFileName(){ return fDataFileName; }

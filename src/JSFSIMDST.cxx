@@ -104,7 +104,7 @@ JSFSIMDST::JSFSIMDST(const char *name, const char *title)
   sscanf(gJSF->Env()->GetValue("JSFSIMDST.DataReadWrite","1"),"%d",&fReadWrite);
 
   SetMakeBranch(kFALSE);
-
+  fParam=NULL;
 }
 
 
@@ -590,5 +590,24 @@ JSFSIMDSTBuf::JSFSIMDSTBuf(const char *name, const char *title,	JSFModule *modul
   fEndian = 1296651082;
   fVersion = 201;
   strcpy(fProduc,"QIK ");
+
+}
+
+
+
+// ---------------------------------------------------------------
+void JSFSIMDSTBuf::AddVTXHit(Double_t r, Double_t phi, Double_t z, 
+      Double_t dphi, Double_t dz, Int_t layer, Int_t trackid, Int_t gentrack)
+{
+  TClonesArray &vhits = *(fVTXHits);
+  new(vhits[fNVTXHits]) JSFVTXHit(r, phi, z, dphi, dz, 
+				    layer, trackid, gentrack);
+  if( trackid > 0 ) {
+    JSFVTXHit *vh=(JSFVTXHit*)fVTXHits->UncheckedAt(fNVTXHits);
+    JSFCDCTrack *ct=(JSFCDCTrack*)fCDCTracks->UncheckedAt(trackid);
+    ct->AddVTXHit(vh);
+  }
+
+  fNVTXHits++;
 
 }
