@@ -1,3 +1,4 @@
+//*LastUpdate:  jsf-1-11 28-July-1999  by A.Miyamoto
 //*LastUpdate:  jsf-1-9 28-May-1999  by A.Miyamoto
 //*LastUpdate:  jsf-1-7-2 16-April-1999  by A.Miyamoto
 //*LastUpdate:  jsf-1-5 21-Feburary-1999  by A.Miyamoto
@@ -169,9 +170,31 @@ JSFSteer::~JSFSteer()
 //---------------------------------------------------------------------------
 void JSFSteer::SetIOFiles()
 {
-//  Set Flags for file IO, should be called after Input/Output file is assigned.
-//  
-
+  //  Set Flags for file IO, should be called after Input/Output file is assigned.
+  //  This function is from the constructor of JSFSteer.
+  //  If file is opened ( checked by gFile->IsOpen() ), variables fIFile and 
+  //  fOFile are set according to the open mode.  
+  //  fIFile=gFile, if TFile option is READ, fOFile=gFile, is CREATED,
+  //  and fIFile=fOFile=gFile, if UPDATE.
+  //  After JSFSteer object is created, fIFile and fOFile can be reset by using
+  //  SetInput and SetOutput member function of JSFSteer class.
+  //
+  //  JSFModule class has fFile data member.  fFile=fIFile, if the module is 
+  //  executed in input mode. fFile=fOFile, if the module is executed output mode.
+  //  If the JSF module object is created in a user macro, it is in output mode.
+  //  If the JSF is executed in read-root-file mode, the JSF module objects are
+  //  created by JSFSteer though it is created explicitly in the user macro.
+  //  This is necessary to store data in a file to memory.  Such objects are 
+  //  shown in the job lists with a title "Readin module".  The Readin modules
+  //  are executed in input mode. 
+  //
+  //  When Initialize/BeginRun/EndRun/Terminate function of user module is 
+  //  called, corresponding functions in JSFSteer change directory to 
+  //  conf/init, conf/beginNNNNN, conf/endNNNNN, conf/term, respectively.
+  //  If the module is Readin Module, conf directory is in fIfile.
+  //  If not, it is in fOFile.  The process function of JSFSteer class does not
+  //  call process function of the Readin module.
+ 
     // Set fIFile, fOFile according to the status of gFile
     fIFile=0;
     fOFile=0;
@@ -239,7 +262,9 @@ Bool_t JSFSteer::Process(Int_t i)
 
 // Loop over all module to process event data
 
-   if( fOFile ) fOFile->cd();
+   if( fOFile ) {
+     fOFile->cd();
+   }
    TIter next(fModules);
    JSFModule *module;
    while (( module = (JSFModule*)next())) {
@@ -272,6 +297,15 @@ Bool_t JSFSteer::Initialize()
 
    // Setup branches for 
 
+   if( fIFile == NULL && fOFile == NULL ) {
+     printf("Fatal error in JSFSteer::Initialize() .. Neither input file ");
+     printf("nor output file is defined.\n");
+     printf("Put the statement as follows before JSFSteer object is created.\n");
+     printf("    file=new TFile(\"filename\",\"RECREATE\"); \n");
+     printf("This will open output file.\n");
+     gSystem->Exit(16);
+   }
+
    // If Input file is opened, setup tree to read
    if( fIFile && fIFile->IsOpen() ) { if( !SetupTree() ) return kFALSE; } 
 
@@ -289,7 +323,6 @@ Bool_t JSFSteer::Initialize()
    JSFModule *module;
    while ((module = (JSFModule*)next())) {
      module->SetModuleStatus(kInitialize);
-     //     module->GetFile()->cd("/conf/init");
      module->GetFile()->cd();
      if( !module->Initialize() )  return kFALSE; 
    }
@@ -304,16 +337,39 @@ Bool_t JSFSteer::BeginRun(Int_t nrun)
   // 
   //  Calls JSFModule::BeginRun
   // 
+  //  If fIFile == NULL, input, nrun, is used for run number.
+  //  If fIFile != NULL, run number is obtained from a file, fIFile.
+  //  If conf directory in fIFile contains more than two run, 
+  //  run number of smallest run number is selected.
 
-  fRun=nrun;
+  // TDirectory *curdir=gDirectory;
+
+  Char_t keyname[32];
+  if( fIFile != NULL ) {
+    fIFile->cd("/conf");
+    Int_t lrun=99999999;
+    TList *dlist=gDirectory->GetListOfKeys();
+    TListIter nkey(dlist);
+    TKey  *key;
+    Int_t irun;
+    while ((key = (TKey*)nkey())) {
+       Char_t tname[20];
+       strncpy(tname,key->GetName(),strlen(key->GetName()));
+       if( strncmp(tname,"begin",5) == 0 ) {
+	  sscanf(tname+5,"%d",&irun);
+	  if( irun < lrun ) { lrun = irun; }
+       }
+    }
+    fRun = lrun;
+  }
+  else {
+    fRun = nrun;
+  }
   fLastRun = fRun;
   fRunEnded = kFALSE ;
 //  Make a begin-Run directory in the output file
 
-  Char_t keyname[32];
   sprintf(keyname,"begin%5.5d",fRun);
-
-  printf(" In beginRun .. keyname=%s \n",keyname);
 
    // If Output file is writable, make tree for them
    if( fOFile && fOFile->IsOpen() && fOFile->IsWritable() ) {
@@ -327,7 +383,6 @@ Bool_t JSFSteer::BeginRun(Int_t nrun)
   while (( module = (JSFModule*)next())) {
     module->SetModuleStatus(kBeginRun);
     module->SetRunNumber(fRun);
-    printf(" module file is %s\n",module->GetFile()->GetName());
     module->GetFile()->cd(keyname);
     if( !module->BeginRun(fRun) ) return kFALSE ;
   }

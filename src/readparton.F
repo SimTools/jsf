@@ -59,11 +59,17 @@ c     nret = -2 for read error.
  200     continue
          read(iunit,'(A)',end=300,err=900) input
          if(input(1:1).eq.'#') go to 200
+         if( input(1:30).eq.'                              ') go to 200
+         read(input,*)  nv
+         print *,' nv =',nv
+         if( nv .eq. 0 ) go to 200
          read(input,*)  nvers, nevent, npart
          do 250 j=1, npart
  220        continue
             read(iunit,'(A)',end=300,err=900) input
-            if( input.eq.'#') go to 220
+            if( input(1:1).eq.'#') go to 220
+            if( input(1:30).eq.'                              ')
+     >        go to 220
             read(input,*)
      >      (idat(i,j),i=1,7),(rdat(k,j),k=1,6)
  250     continue

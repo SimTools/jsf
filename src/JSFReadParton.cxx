@@ -41,7 +41,9 @@
 //        (3,i) : Px (GeV)
 //        (4,i) : Py (GeV)
 //        (5,i) : Pz (GeV)
-//        (6,i) : E(GeV)
+//        (6,i) : E(GeV)  
+//
+//   If RDAT(6,i) is negative, it is calculated by this class using mass and P.
 //
 //   For more information about IDAT, please see
 //   begin_html <a href="http://www-jlc.kek.jp/subg/offl/lib/docs/luhadr/node8.html">How to prepare Psring:Parton_List</a> end_html.
@@ -55,6 +57,9 @@
 // 200 CONTINUE
 //
 // 300 continue  ! end of data  
+//
+//   Comment lines can be inserted anywhere.  It is identified by a character "#"
+//   at first column.
 // 
 //$Id$
 //
@@ -145,6 +150,10 @@ Bool_t JSFReadPartonBuf::SetPartons()
     p(1)=rdat[i][2];
     p(2)=rdat[i][3];
     p(3)=rdat[i][4];
+    if( rdat[i][5] < 0.0 ) {
+      rdat[i][5]=TMath::Sqrt(rdat[i][0]*rdat[i][0] + rdat[i][2]*rdat[i][2]
+			   + rdat[i][3]*rdat[i][3] + rdat[i][4]*rdat[i][4]);
+    }
     p(0)=rdat[i][5];
     new(partons[i]) JSFSpringParton(i+1, idat[i][0], rdat[i][0], rdat[i][1],
 		    p, idat[i][1], idat[i][2], idat[i][3], 
