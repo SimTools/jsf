@@ -54,6 +54,7 @@ private:
    TClonesArray    *fEMCHits   ;  // Pointers to EMC Hit cells 
    Int_t            fNHDCHits  ;  // Number of HDC hit cells
    TClonesArray    *fHDCHits   ;  // Pointers to EMC Hit cells 
+   Int_t fCDCTrackIsCDCVTX; //! 0 when CDC track is not CDC+VTX combined track.
 
    void SetPointers() ; // Set pointers among Hits/Track classes.
 

@@ -1,3 +1,4 @@
+//*LastUpdate :  jsf-1-11  28-July-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-9  30-March-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-6  30-March-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-5  26-Feburary-1999  By Akiya Miyamoto
@@ -145,6 +146,8 @@ JSFQuickSimBuf::JSFQuickSimBuf(const char *name, const char *title, JSFQuickSim 
   fNHDCHits=0 ;
   if( !gHDCHits ) gHDCHits= new TClonesArray("JSFHDCHit", kMaxCalHits);
   fHDCHits=gHDCHits;
+
+  fCDCTrackIsCDCVTX = gJSF->Env()->GetValue("JSFQuickSim.CDCTrackIsCDCVTX",1);
 
 }
 
@@ -490,7 +493,8 @@ Bool_t JSFQuickSimBuf::MakeCDCTracks()
   Int_t itrkp[100]; 
   Char_t *bankname="";
   Int_t nerrvx=((JSFQuickSim*)Module())->Param()->GetVTXNERRVX() ;
-  if( nerrvx == 3 ) bankname="Production:CDC_VTX;Track_Parameter";
+  if( nerrvx == 3 && fCDCTrackIsCDCVTX == 1 ) 
+        bankname="Production:CDC_VTX;Track_Parameter";
   else  bankname="Production:CDC;Track_Parameter";
 
   for(i=0;i<ncmb;i++){
@@ -506,7 +510,7 @@ Bool_t JSFQuickSimBuf::MakeCDCTracks()
        printf("\n");
        return kFALSE;
      }
-     if( nerrvx == 3 ) {
+     if( nerrvx == 3  && fCDCTrackIsCDCVTX == 1 ) {
        Char_t *bnkcdc="Production:CDC;Track_Parameter";
        Int_t nwt;  Int_t itrkpp[200];
        gJSFLCFULL->TBGET(1,bnkcdc,icdc,nwt,itrkpp,iret);
