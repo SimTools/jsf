@@ -32,7 +32,7 @@ all: depend $(LIBNAME).$(DllSuf)
 
 $(SharedLib): $(OBJS) 
 	@rm -f $(SharedLib)
-	$(LD) $(OBJS) -o $(SharedLib) $(LDFLAGS) $(LCIOLIBS)
+	$(LD) $(OBJS) -o $(SharedLib) $(SOFLAGS) $(LCIOLIBS)
 
 depend: $(SRC) $(HDR)
 	for i in $(SRC); do \
@@ -52,6 +52,7 @@ uninstall:
 
 clean:
 	rm -f *.o core *~
+	rm -f makefile.depend
 
 distclean: clean
 	rm -f $(SharedLib) $(LIBNAME).*

@@ -28,7 +28,7 @@ all: depend $(SharedLib)
 
 $(SharedLib): $(OBJS) 
 	@rm -f $(SharedLib)
-	$(LD) $(OBJS) -o $(SharedLib) $(LDFLAGS) $(LIBS) 
+	$(LD) $(OBJS) -o $(SharedLib) $(SOFLAGS) $(LIBS) 
 
 install: $(SharedLib)
 	$(INSTALL) -m 755 $(SharedLib) $(JSFLIBDIR)
@@ -40,7 +40,6 @@ uninstall:
 
 clean:
 	rm -f makefile.depend
-	touch makefile.depend
 	rm -f $(CLEANOBJS) $(LIBNAME).* *.o
 
 distclean: clean uninstall

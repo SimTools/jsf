@@ -21,20 +21,33 @@ HDRS	= BasesSpring.h bases_scat.h  bs_hist.h hist_bin.h \
 
 LIBBASES = libBasesSpring.$(DllSuf)
 
-all:: $(LIBBASES) install
+UNAME = $(shell uname)
+
+ifeq ($(UNAME),Darwin)
+DYLIBBASES = $(subst .$(DllSuf),.$(DylibSuf),$(LIBBASES))
+else
+DYLIBBASES =
+endif
+
+all:: $(LIBBASES) $(DYLIBBASES) install
 
 $(LIBBASES): $(OBJS)
 	$(LD) $(SOFLAGS) $(OBJS) -o $(LIBBASES)
-#	$(LD) $(DYLIBFLAGS) $(OBJS) -o $(LIBBASES)
-#	$(LD) $(DYLDFLAGS) $(OBJS) -o $(LIBBASES)  $(DYLDEXTRALIBS)
+
+ifeq ($(UNAME),Darwin)
+$(DYLIBBASES): $(OBJS)
+	$(LD) $(DYLIBFLAGS) $(OBJS) -o $(DYLIBBASES) $(DYLDEXTRALIBS)
+endif
 
 install:: $(LIBBASES)
 	mkdir -p $(JSFINSTALLDIR)/lib
-	install -p -m 755 $(LIBBASES) $(JSFINSTALLDIR)/lib
+	install -p -m 755 $(LIBBASES)   $(JSFINSTALLDIR)/lib
+	install -p -m 755 $(DYLIBBASES) $(JSFINSTALLDIR)/lib
 	install -p -m 644 $(HDRS) $(JSFINSTALLDIR)/include
 
 uninstall:: 
 	rm -f $(JSFINSTALLDIR)/lib/$(LIBBASES)
+	rm -f $(JSFINSTALLDIR)/lib/$(DYLIBBASES)
 	( cd $(JSFINSTALLDIR)/include && rm -f $(HDRS) )
 
 depend:: $(SRCS) $(HDRS)
@@ -42,7 +55,7 @@ depend:: $(SRCS) $(HDRS)
         rmkdepend -a -- $(DEPENDFILES) -- $$i; done
 
 clean::
-	rm -f *.o *.so
+	rm -f *.o *.$(DylibSuf) *.$(DllSuf)
 
 distclean:: clean
 	rm Makefile
