@@ -1,15 +1,9 @@
 XCOMM #---------------------------------------------------
-XCOMM # $id$
+XCOMM #$Id$
 XCOMM #---------------------------------------------------
 
 #include "config/lclib.tmpl"
 #include "conf/makejsf.tmpl"
-
-#ifdef __LCLIBRAN_USE_RANMAR__
-CERNLIBS      = $(shell cernlib jetset74 mathlib)
-#else
-CERNLIBS      = $(shell cernlib jetset74)
-#endif
 
 #if defined(MacOSXArchitecture) || defined(DarwinArchitecture)
 ROOTLIBS     += -lEGPythia -lEG $(CERNLIBS)
@@ -48,8 +42,9 @@ jsf: $(OBJS) jsfmain.o $(FOBJS)
 clean:: 
 	@rm -f $(OBJS) core *.so $(SOLIBNAME).*
 
-depend:: 
-	makedepend -I$(ROOTSYS)/include $(SRC)
+depend:: $(SRC) $(HDR)
+	for i in $(SRC); do \
+	rmkdepend -a -- $(DEPENDFILES) -- $$i; done
 
 distclean::
 	@rm -f $(OBJS) core *.so $(SOLIBNAME).* *~ *.o
