@@ -157,7 +157,11 @@ public:
      Double_t y=fHelix.pivot.y + fHelix.dr*TMath::Sin(fHelix.phi0)
                +r*(TMath::Sin(fHelix.phi0)- TMath::Sin(fHelix.phi0+phi));
      Double_t z=fHelix.pivot.z + fHelix.dz - r*fHelix.tanl*phi;
+#if defined(__DARWIN__)
+     JSF3DV xp;
+#else
      static JSF3DV xp;
+#endif
      xp=JSF3DV(x,y,z);
      return xp;
   }
@@ -166,7 +170,11 @@ public:
      Double_t r=fAlpha/fHelix.kappa;
      Double_t x=fHelix.pivot.x + (fHelix.dr+r)*TMath::Cos(fHelix.phi0);
      Double_t y=fHelix.pivot.y + (fHelix.dr+r)*TMath::Sin(fHelix.phi0);
+#if defined(__DARWIN__)
+     JSF2DV xp;
+#else
      static JSF2DV xp;
+#endif
      xp=JSF2DV(x,y);
      return xp;
   }
@@ -176,7 +184,11 @@ public:
 
   inline JSF3DV GetMomentum(Double_t phi){
     Double_t kinv=1.0/TMath::Abs(fHelix.kappa);
+#if defined(__DARWIN__)
+    JSF3DV xv;
+#else
     static JSF3DV xv;
+#endif
     xv=JSF3DV( -kinv*TMath::Sin(fHelix.phi0+phi),
 		    kinv*TMath::Cos(fHelix.phi0+phi),
 		    kinv*fHelix.tanl);

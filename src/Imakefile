@@ -18,7 +18,11 @@
 
 CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lpacklib
 
+#if defined(MacOSXArchitecture) || defined(DarwinArchitecture)
+ROOTLIBS     += -lEGPythia -lEG $(CERNLIBS)
+#else
 ROOTLIBS     += -lEGPythia -lEG -Wl,-u,pytest_ $(CERNLIBS)
+#endif
 
 LCLIBDIR      = $(LCLIBROOT)/lib
 
@@ -112,26 +116,28 @@ all::  libjsf libjsflcfull libjsfquicksim libjsfdmatrix jsf
 all::  libjsf libjsflcfull libjsfquicksim jsf
 #endif
 
-libjsf: ../lib/libJSF.$(DllSuf)
-../lib/libJSF.$(DllSuf): $(OBJJSF)
+libjsf: ../lib/libJSF.$(DylibSuf)
+../lib/libJSF.$(DylibSuf): $(OBJJSF)
 	@echo "Linking $@ "
-	$(LD) $(SOFLAGS)  $(OBJJSF) -o libJSF.$(DllSuf)
-	@mv libJSF.$(DllSuf) ../lib
+	$(LD) $(DYLIBFLAGS)  $(OBJJSF) -o libJSF.$(DylibSuf)
+	@mv libJSF.$(DylibSuf) ../lib
 
-libjsflcfull: ../lib/libJSFLCFULL.$(DllSuf) ../lib/libJSFLCFULL.a
-../lib/libJSFLCFULL.$(DllSuf):   $(OBJJSFLCFULL)
+libjsflcfull: ../lib/libJSFLCFULL.$(DylibSuf) ../lib/libJSFLCFULL.a
+../lib/libJSFLCFULL.$(DylibSuf):   $(OBJJSFLCFULL)
 	@echo "Linking $@ "
-	$(LD) $(SOFLAGS)  $(OBJJSFLCFULL) -o $@
+	$(LD) $(DYLIBFLAGS)  $(OBJJSFLCFULL) -o libJSFLCFULL.$(DylibSuf)
+	@mv libJSFLCFULL.$(DylibSuf) ../lib
 
 ../lib/libJSFLCFULL.a:   $(OBJJSFLCFULL)
 	@echo "Linking $@"
 	@/bin/rm -f $@
 	ar -r $@ $(OBJJSFLCFULL)
 
-libjsfquicksim:     ../lib/libJSFQuickSim.$(DllSuf) ../lib/libJSFQuickSim.a
-../lib/libJSFQuickSim.$(DllSuf):     $(OBJJSFQUICKSIM)
+libjsfquicksim:     ../lib/libJSFQuickSim.$(DylibSuf) ../lib/libJSFQuickSim.a
+../lib/libJSFQuickSim.$(DylibSuf):     $(OBJJSFQUICKSIM)
 	@echo "Linking $@"
-	$(LD) $(SOFLAGS)  $(OBJJSFQUICKSIM) -o $@
+	$(LD) $(DYLIBFLAGS)  $(OBJJSFQUICKSIM) -o libJSFQuickSim.$(DylibSuf)
+	@mv libJSFQuickSim.$(DylibSuf) ../lib
 
 ../lib/libJSFQuickSim.a:     $(OBJJSFQUICKSIM)
 	@echo "Linking $@"
@@ -139,16 +145,16 @@ libjsfquicksim:     ../lib/libJSFQuickSim.$(DllSuf) ../lib/libJSFQuickSim.a
 	ar -r $@ $(OBJJSFQUICKSIM) 
 
 #if __ROOT_FULLVERSION__ < 30000
-libjsfdmatrix: ../lib/libJSFDMatrix.$(DllSuf)
-../lib/libJSFDMatrix.$(DllSuf): $(OBJJSFDMATRIX)
+libjsfdmatrix: ../lib/libJSFDMatrix.$(DylibSuf)
+../lib/libJSFDMatrix.$(DylibSuf): $(OBJJSFDMATRIX)
 	@echo "Linking $@"
-	$(LD) $(SOFLAGS)  $(OBJJSFDMATRIX) -o $@
+	$(LD) $(DYLDFLAGS)  $(OBJJSFDMATRIX) -o $@
 #endif
 
 jsf: $(OBJS) jsfmain.o
 	$(LD) jsfmain.o $(BLOCKDATA) \
 	$(JSFLIBS) $(LDFLAGS) \
-	 -o jsf
+	 -o jsf $(DYLDEXTRALIBS)
 	@cp -p jsf ../bin
 	@rm -f jsf
 	@echo jsf was installed in ../bin/jsf

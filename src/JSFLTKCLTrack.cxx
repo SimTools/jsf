@@ -39,7 +39,11 @@ ClassImp(JSFLTKCLTrack)
 
 
 //_____________________________________________________________________________
+#ifdef __DARWIN__
+JSFLTKCLTrack::JSFLTKCLTrack(Int_t bank, TVector& P, Float_t ecl,
+#else
 JSFLTKCLTrack::JSFLTKCLTrack(EJSFLTKCLTrackBank bank, TVector& P, Float_t ecl,
+#endif
          Int_t nemc, Int_t charge, Int_t type, Int_t source, 
  	 Int_t ncdc, Int_t first)
 { 
@@ -51,7 +55,11 @@ JSFLTKCLTrack::JSFLTKCLTrack(EJSFLTKCLTrackBank bank, TVector& P, Float_t ecl,
 }
 
 //_____________________________________________________________________________
+#ifdef __DARWIN__
+JSFLTKCLTrack::JSFLTKCLTrack(Int_t bank, Float_t data[])
+#else
 JSFLTKCLTrack::JSFLTKCLTrack(EJSFLTKCLTrackBank bank, Float_t data[])
+#endif
 {
     fBank=bank;
     fP[1]=data[0] ;  fP[2]=data[1] ;  fP[3]=data[2] ;  fP[0]=data[3] ; 

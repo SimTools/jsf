@@ -18,12 +18,13 @@ HDRS	= BasesSpring.h bases_scat.h  bs_hist.h hist_bin.h \
 	bases_hist.h bases_xhist.h bs_variable.h hist_buff.h \
 	bases_ran1.h
 
-LIBBASES = libBasesSpring.$(SOEXT)
+LIBBASES = libBasesSpring.$(DylibSuf)
 
 all:: $(LIBBASES) install
 
 $(LIBBASES): $(OBJS)
-	$(LD) $(SOFLAGS) $(OBJS) -o $(LIBBASES)
+	$(LD) $(DYLIBFLAGS) $(OBJS) -o $(LIBBASES)
+#	$(LD) $(DYLDFLAGS) $(OBJS) -o $(LIBBASES)  $(DYLDEXTRALIBS)
 
 install:: $(LIBBASES)
 	mkdir -p $(JSFROOT)/lib
@@ -39,6 +40,6 @@ depend:: $(SRCS) $(HDRS)
 clean::
 	\rm -f *.o
 
-cleanall:: clean
+distclean:: clean
 	rm Makefile
 

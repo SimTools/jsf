@@ -187,7 +187,11 @@ JSFSpringBuf::JSFSpringBuf(const char *name, const char *title,
   : JSFEventBuf(name, title, (JSFModule*)spring)
 {
    fNparton = 0 ;
+#ifndef __DARWIN__ 
    if( !fPartons ) fPartons = new TClonesArray("JSFSpringParton",100);
+#else
+   fPartons = new TClonesArray("JSFSpringParton",100);
+#endif
 }
 
 
@@ -197,6 +201,7 @@ JSFSpringBuf::~JSFSpringBuf()
 {
    Clear();
    if( fPartons ) delete fPartons;
+   fPartons = 0;
 }
 
 

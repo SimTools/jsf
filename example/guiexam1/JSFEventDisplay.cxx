@@ -83,9 +83,11 @@ ClassImp(JSFEDHelix)
 
 JSFSIMDST *simdst=0;
 TPolyMarker3D *pm=0;
-TMarker3DBox *box3d;
-TPolyLine3D *pl;
-TNode *gvAll, *gvVTX, *gvMomentum;
+TMarker3DBox *box3d=0;
+TPolyLine3D *pl=0;
+TNode *gvAll=0;
+TNode *gvVTX=0;
+TNode *gvMomentum=0;
 Bool_t  gGeometryIsInitialized;
 
 //---------------------------------------------------------------------------
@@ -296,7 +298,7 @@ void JSFEventDisplay::DisplayEventData()
     fCanvasDirectory=gDirectory;
   } 
   else {
-    fCanvas->Clear();
+    fCanvas->Clear("d");
     Clear();
   }
   TDirectory *olddir=gDirectory;

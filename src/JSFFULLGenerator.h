@@ -21,7 +21,7 @@
 
 class JSFFULLGenerator : public JSFGenerator {
 public:
-   JSFSpring *fSpring;
+   JSFSpring *fSpring;	//!
 public:
    JSFFULLGenerator(const char *name="JSFFULLGenerator", 
                     const char *title="JSFFULLGenerator");

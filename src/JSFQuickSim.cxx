@@ -403,7 +403,11 @@ Bool_t JSFQuickSimBuf::MakeJSFLTKCLTracks()
   Char_t *bankname[64]={ "Production:Combined_Gamma_Track",
 			 "Production:Combined_Lepton_Track",
 			 "Production:Combined_Hadron_Track"};
+#ifdef __DARWIN__
+  Int_t bank[3]={kCombinedGammaTrack, kCombinedLeptonTrack, 
+#else
   EJSFLTKCLTrackBank bank[3]={kCombinedGammaTrack, kCombinedLeptonTrack, 
+#endif
 			      kCombinedHadronTrack};
 
   Float_t data[100];  
@@ -624,7 +628,14 @@ void JSFQuickSimBuf::SetPointers()
   for(i=0;i<fNTracks;i++){
     JSFLTKCLTrack *lt=(JSFLTKCLTrack*)fTracks->UncheckedAt(i);
     Int_t icdc=lt->Get1stCDC();
+#ifdef __DARWIN__
+    if (icdc < 0) {
+	lt->SetCDC(icdc,0);
+	continue;
+    }
+#else
     if( icdc < 0 ) continue;
+#endif
     JSFCDCTrack *t=(JSFCDCTrack*)fCDCTracks->UncheckedAt(icdc);
     lt->SetCDC(icdc, t);
   }

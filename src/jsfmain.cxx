@@ -45,6 +45,11 @@ extern "C" void hf_fint(char *option); /* to initialize fortran environment */
 extern "C" void G__cpp_setupG__Pythia();
 #endif
 
+#if defined(__DARWIN__)
+extern "C" void G__cpp_setupG__Pythia();
+extern "C" void pydata_();
+#endif
+
 #if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 23
 TROOT root("Rint","The ROOT Interactive Interface");
 #else
@@ -85,8 +90,11 @@ void dummysub()
    G__cpp_setuplibJSF();
    G__cpp_setuplibJSFLCFULL(); 
    G__cpp_setuplibJSFQuickSim();
-#if defined(_HIUX_SOURCE)
+#if defined(_HIUX_SOURCE) || defined(__DARWIN__)
    G__cpp_setupG__Pythia();
+#if defined(__DARWIN__)
+   pydata_();
+#endif
 #endif
 }
 

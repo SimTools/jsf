@@ -29,9 +29,9 @@ echo -n "  Creating system information ."
 set specfile=$jsfroot/src/JSFConfig.h
 
 echo "#ifndef __JSFCONFIG__" >! $specfile
-echo "#define __JSFCONFIG__\n" >> $specfile
+echo "#define __JSFCONFIG__" >> $specfile
 
-echo -n "\nJSF version .."
+echo -n "JSF version .."
 cat $JSFROOT/conf/jsf.version | grep -v XCOMM >> $specfile
 
 echo -n "Root version .."
@@ -55,7 +55,7 @@ echo "  " >> $specfile
 ##########################
 #
 ##########################
-echo "\n#ifndef __CINT__" >> $specfile
+echo "#ifndef __CINT__" >> $specfile
 echo -n "#define __UNAME_MACHINE__ " >> $specfile
 uname -m >> $specfile
 echo -n "#define __UNAME_SYSNAME__ " >> $specfile
@@ -91,7 +91,7 @@ echo -n "#define __G77EGCS_LIBNAME__ " >> $specfile
 echo $g77lib  >> $specfile
 
 echo "#endif" >> $specfile
-echo "\n#endif" >> $specfile
+echo "#endif" >> $specfile
 
 
 exitmsg:

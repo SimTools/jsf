@@ -45,7 +45,11 @@ JSFGeneratorBuf::JSFGeneratorBuf(const char *name, const char *title, JSFGenerat
 //   Create one JSFGenerator object
 //
   fNparticles=0;
+#ifdef __DARWIN__
+  fParticles= new TClonesArray("JSFGeneratorParticle", 1000);
+#else
   if( !fParticles ) fParticles= new TClonesArray("JSFGeneratorParticle", 1000);
+#endif
   fEcm=0;
   fStartSeed=0;
 }
