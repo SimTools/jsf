@@ -16,6 +16,7 @@
 #include "TH1.h"
 #include "TMath.h"
 #include "TVector.h"
+#include "TLorentzVector.h"
 
 class JSFGeneratorParticle : public TObject {
 
@@ -75,11 +76,28 @@ public:
   TVector GetXV(){ TVector x(4) ; 
           x(0)=fX[0] ; x(1) =fX[1] ; x(2)=fX[2] ; x(3)=fX[3] ; return x ; }
 
+  inline TVector3 GetXV3() const;
+  // return 3D vector of vertex
+
+  inline TLorentzVector GetLorentz() const;
+  // return LorentzVector
+
   virtual void ls(Option_t* option="");
 
   virtual ~JSFGeneratorParticle() {}
 
   ClassDef(JSFGeneratorParticle, 2)  //A JSFGeneratorParticle segment
 };
+
+//**********************
+
+  inline TLorentzVector JSFGeneratorParticle::GetLorentz() const {
+    return TLorentzVector(fP[1], fP[2], fP[3],fP[0]); 
+  }
+
+  inline TVector3 JSFGeneratorParticle::GetXV3() const { 
+    return TVector3(fX[1], fX[2], fX[3]);
+  }
+
 
 #endif
