@@ -37,10 +37,8 @@ FFbarSpring::FFbarSpring(const char *name, const char *title,
 //_____________________________________________________________________________
 FFbarSpring::~FFbarSpring()
 {
-  if( !fEventBuf ) delete fEventBuf;
+  if( fEventBuf ) { delete fEventBuf; fEventBuf=NULL ; }
 }
-
-
 
 //_____________________________________________________________________________
 Bool_t FFbarSpringBuf::SetPartons()
@@ -160,4 +158,8 @@ void FFbarBases::Userin()
 void FFbarBases::Userout()
 {
 }
+
+
+
+
 
