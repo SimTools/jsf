@@ -137,7 +137,8 @@ CXXFLAGS      = -pipe -Wall -fsigned-char \
 		$(EXTRACXXOPT) $(RCINTDEFINES) \
 		-I$(JSFROOT)/include $(shell root-config --cflags)
 # DYLIBFLAGS    = -dylib -r -nostartfiles -nodefaultlibs
-DYLIBFLAGS    = -dylib -r -nostdlib
+# DYLIBFLAGS    = -dylib -r -nostdlib
+DYLIBFLAGS    = -dynamiclib -flat_namespace -undefined suppress
 # DYLDFLAGS     = -dynamiclib -undefined suppress -nostdlib -bind_at_load
 DYLDFLAGS     = -dynamiclib -flat_namespace -undefined suppress
 SOFLAGS       = -bundle -flat_namespace -undefined suppress
