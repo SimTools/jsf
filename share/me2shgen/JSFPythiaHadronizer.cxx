@@ -12,7 +12,7 @@
 #include "JSFConfig.h"
 #include "JSFPythiaHadronizer.h"
 #include "TPythia6.h"
-#include "TMCParticle.h"
+#include "TMCParticle6.h"
 #include "JSFMEGenerator.h"
 #include "TPythia6Calls.h"
 
