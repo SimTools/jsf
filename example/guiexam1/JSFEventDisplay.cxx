@@ -310,9 +310,17 @@ void JSFEventDisplay::DisplayEventData()
   Int_t ierr;
   fView->SetView(fViewAngle[0], fViewAngle[1], fViewAngle[2], ierr);
   fView->SetRange(&fViewRange[fDisplayType][0], &fViewRange[fDisplayType][3]);
-  if( !simdst ) simdst=(JSFSIMDST*)gJSF->FindModule("JSFSIMDST");
+  if( !simdst ) simdst=(JSFSIMDST*)gJSF->FindModule("JSFSIMDST","quiet");
+
+#if 1
+  if (gJSF->Env()->GetValue("JSFGUI.SIMDSTConversion",1) == 0) {
+     if( fCanvasDirectory != olddir ) olddir->cd();
+     return;
+  }
+#endif
 
   if( fDrawGeometry ) DrawGeometry(fDisplayType);
+
   switch (fDisplayType) {
     case 0:
       if( fLTKCLTrack->fShow ) DisplayLTKCLMomentum();
