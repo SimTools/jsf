@@ -3,7 +3,12 @@ Change Log
 **********************************************************
 
 **********************************************************
-jsf-0.4.4   20-October-1998  
+jsf-1-0   20-November-1998  A.Miyamoto
+**********************************************************
+First public release.  May still have a lot of problem.
+	
+**********************************************************
+jsf-0.4.4   20-October-1998   A.Miyamoto
 **********************************************************
 1) Put jsf-0.4.3 into cvs respository with a revision 0-4-3 and changed 
    Makefiles and Imakefiles for easy compilation and likn of 
@@ -16,18 +21,18 @@ jsf-0.4.4   20-October-1998
 6) Add an example of e+e- -> zh analysis
 	
 **********************************************************
-jsf-0.4.3   19-October-1998  
+jsf-0.4.3   19-October-1998   A.Miyamoto
 **********************************************************
 1) Prepare example for CCD beam data analysis.
    To develop , JSFSteer and JSFModule were changed to.
 2) JSFDBS is newly created to use data base.
 
 **********************************************************
-jsf-0.4.2   8-October-1998  
+jsf-0.4.2   8-October-1998   A.Miyamoto
 **********************************************************
 1) Made a few modifications to run on HI-UX
 	
 **********************************************************
-jsf-0.4.1   6-October-1998  
+jsf-0.4.1   6-October-1998   A.Miyamoto
 **********************************************************
 Log start
