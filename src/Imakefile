@@ -184,7 +184,7 @@ libjsfdmatrix: ../lib/libJSFDMatrix.$(DylibSuf)
 
 jsf: $(OBJS) jsfmain.o
 	$(CXX) jsfmain.o $(BLOCKDATA) \
-	$(JSFLIBS) $(LDFLAGS) -brtl -bshared \
+	$(JSFLIBS) $(LDFLAGS) \
 	 -o jsf $(DYLDEXTRALIBS)
 	@cp -p jsf ../bin
 	@rm -f jsf

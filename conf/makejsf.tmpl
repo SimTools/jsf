@@ -39,7 +39,7 @@ ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
                 $(ROOT222LIBS) -lPostscript -lProof -lTree -lUnix -lZip -lRint
 ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
 #else
-ROOTLIBS      = $(shell root-config --libs)
+ROOTLIBS      = $(shell root-config --libs) -lMinuit
 ROOTGLIBS     = $(shell root-config --glibs)
 #endif
 
