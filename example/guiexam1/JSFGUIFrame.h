@@ -87,6 +87,7 @@ private:
    TGPopupMenu        *fMenuGInfo[6], *fMenuGenPara;
    // Int_t fRunMode; // =1, Gen Event, =2 Read File, =3 Read SIMDST
    TGPopupMenu        *fMenuUser;
+   TGPopupMenu        *fPythiaEvtype;
 
    TGCompositeFrame   *fStartAnal;
    TGTextEntry        *fTFromEvent, *fTToEvent;

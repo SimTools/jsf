@@ -151,9 +151,19 @@ enum EJSFGUICommandIdentifiers {
    M_ANAL_MACRONAME=506,
    M__ANAL_END=507,
 
-   M__CONT_BEGIN=640,
+   M__CONT_BEGIN=600,
 
-   M_CONT_RT_DEMO=660,
+   M_GEN_PYEV_ZH=621,
+   M_GEN_PYEV_GGH=622,
+   M_GEN_PYEV_EEH=623,
+   M_GEN_PYEV_NNH=624,
+   M_GEN_PYEV_GAMMAZ=625,
+   M_GEN_PYEV_ZZ=626,
+   M_GEN_PYEV_WW=627,
+   M_GEN_PYEV_ENW=628,
+   M_GEN_PYEV_TWOPHOTON=629,
+   M_GEN_PYEV_DECAY_Z=630,
+
    M_CONT_RT_GENEVENT=661,
    M_CONT_RT_READROOT=662,
    M_CONT_RT_READSIMDST=663,
@@ -169,6 +179,7 @@ enum EJSFGUICommandIdentifiers {
    M_GEN_ECM=702,
    M_GEN_INITPYTHIA=703,
    M_GEN_PYTHIA_PRSTAT=704,
+   M_GEN_PYTHIA_HMASS=705,
    
    M_GEN_PYTHIA=721,
    M_GEN_DEBUG=722, 
@@ -327,8 +338,6 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h, Bool_t demo)
    fMenuRunMode = new TGPopupMenu(fClient->GetRoot());
    fMenuRunMode->AddLabel("Run Mode");
    fMenuRunMode->AddSeparator();
-   fMenuRunMode->AddEntry("&Start demo now", M_CONT_RT_DEMO);
-   fMenuRunMode->AddSeparator();
    fMenuRunMode->AddEntry("&Generate Event", M_CONT_RT_GENEVENT);
    fMenuRunMode->AddEntry("&Read Root File", M_CONT_RT_READROOT);
    fMenuRunMode->AddEntry("&Read SIMDST File", M_CONT_RT_READSIMDST);
@@ -337,6 +346,21 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h, Bool_t demo)
    
 
    //  Generator Control menu
+   fPythiaEvtype=new TGPopupMenu(fClient->GetRoot());
+   fPythiaEvtype->AddLabel("Pythia Event Type");
+   fPythiaEvtype->AddSeparator();
+   fPythiaEvtype->AddEntry("ZH",M_GEN_PYEV_ZH);
+   fPythiaEvtype->AddEntry("gamma_gamma_H",M_GEN_PYEV_GGH);
+   fPythiaEvtype->AddEntry("eeH",M_GEN_PYEV_EEH);
+   fPythiaEvtype->AddEntry("nnH",M_GEN_PYEV_NNH);
+   fPythiaEvtype->AddEntry("gamma/Z",M_GEN_PYEV_GAMMAZ);
+   fPythiaEvtype->AddEntry("ZZ",M_GEN_PYEV_ZZ);
+   fPythiaEvtype->AddEntry("WW",M_GEN_PYEV_WW);
+   fPythiaEvtype->AddEntry("enW",M_GEN_PYEV_WW);
+   fPythiaEvtype->AddEntry("twophoton",M_GEN_PYEV_TWOPHOTON);
+   fPythiaEvtype->AddSeparator();
+   fPythiaEvtype->AddEntry("Z decay mode",M_GEN_PYEV_DECAY_Z);
+   
    fMenuGenType=new TGPopupMenu(fClient->GetRoot());
    for(i=0;i<M_GEN_LAST-M_GEN_PYTHIA;i++) {
      fMenuGInfo[i]=new TGPopupMenu(fClient->GetRoot());
@@ -347,6 +371,8 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h, Bool_t demo)
    fMenuGInfo[0]->AddEntry("CM Energy",M_GEN_ECM);
    fMenuGInfo[0]->AddEntry("InitPythiaMacro",M_GEN_INITPYTHIA);
    fMenuGInfo[0]->AddEntry("PRSTAT argument",M_GEN_PYTHIA_PRSTAT);
+   fMenuGInfo[0]->AddPopup("Event type ...",fPythiaEvtype);
+   fMenuGInfo[0]->AddEntry("Mass of Higgs",M_GEN_PYTHIA_HMASS);
 
    fMenuGInfo[1]->AddLabel("Parameters");
    fMenuGInfo[1]->AddSeparator();
@@ -638,17 +664,24 @@ void JSFGUIFrame::Update()
   //**************************************************
 
   Int_t irunmode=GetRunMode();
-  for(i=M_CONT_RT_DEMO;i<M_CONT_RT_LAST;i++){
-    fMenuRunMode->UnCheckEntry(i);
+  for(i=M_CONT_RT_GENEVENT;i<M_CONT_RT_LAST;i++){
+    if( i != M_CONT_RT_GENEVENT+irunmode-1 ) {
+      fMenuRunMode->UnCheckEntry(i);
+      if(fInitialized) fMenuRunMode->DisableEntry(i);
+    }
+    else {
+      fMenuRunMode->CheckEntry(i);
+      fMenuRunMode->EnableEntry(i);
+    }
   }
-  fMenuRunMode->CheckEntry(M_CONT_RT_DEMO+irunmode);
 
   for(i=M_GEN_PYTHIA;i<M_GEN_LAST;i++) {
-    if( irunmode == 1 ) fMenuGen->EnableEntry(i);
+    if( irunmode == 1 && !fInitialized ) fMenuGen->EnableEntry(i);
     else fMenuGen->DisableEntry(i);
     fMenuGen->UnCheckEntry(i);
   }
   fMenuGen->CheckEntry(M_GEN_PYTHIA+GetEventType());
+  if( fInitialized ) fMenuGen->EnableEntry(M_GEN_PYTHIA+GetEventType());
 
   if( gJSF->Env()->GetValue("JSFGUI.LastRun",0) == 0 ) {
     fMenuGen->UnCheckEntry(M_GEN_LASTRUN);
@@ -658,7 +691,18 @@ void JSFGUIFrame::Update()
     fMenuGen->CheckEntry(M_GEN_LASTRUN);
     fMenuGenType->EnableEntry(M_GEN_LASTRUNFILE);
   }
-    
+
+
+  static const Int_t nproc=9;
+  Char_t *pname[nproc]={"ZH","gammagammaH", "eeH","nnH",
+			"gammaZ", "ZZ","WW","enW","twophoton"};
+  Char_t wrkstr[64];
+  for(i=M_GEN_PYEV_ZH;i<=M_GEN_PYEV_TWOPHOTON;i++){
+    sprintf(wrkstr,"JSFGUI.Pythia.Process.%s",pname[i-M_GEN_PYEV_ZH]);
+    if( gJSF->Env()->GetValue(wrkstr,0) ) fPythiaEvtype->CheckEntry(i);
+    else  fPythiaEvtype->UnCheckEntry(i);
+  }
+   
   Int_t imrg=gJSF->Env()->GetValue("JSFGUI.MergeEvent",0);
   if( imrg ) {
     fMenuGen->CheckEntry(M_GEN_MERGE);
@@ -832,6 +876,7 @@ void JSFGUIFrame::GotoEventAction()
        fMenuFile->DisableEntry(M_FILE_OPENOUTPUT);
        fInitialized=kTRUE;
        gROOT->ProcessLine("Initialize();");
+       Update();
   }
   sprintf(cmd,"GetEvent(%s);", fTGotoEvent->GetBuffer()->GetString());
   gROOT->ProcessLine(cmd);
@@ -855,6 +900,7 @@ void JSFGUIFrame::AnalizeEventAction()
        fMenuFile->DisableEntry(M_FILE_OPENOUTPUT);
        fInitialized=kTRUE;
        gROOT->ProcessLine("Initialize();");
+       Update();
   }
   Int_t i;
   Int_t iFirstEvent, iNEventsAnalize;
@@ -903,6 +949,7 @@ void JSFGUIFrame::RunDemo()
        fMenuFile->DisableEntry(M_FILE_OPENOUTPUT);
        fInitialized=kTRUE;
        gROOT->ProcessLine("Initialize();");
+       Update();
   }
 
   fDemo->SetTimer();
@@ -970,6 +1017,7 @@ void JSFGUIFrame::DoButtonAction(Long_t parm1)
        fMenuFile->DisableEntry(M_FILE_OPENOUTPUT);
        fInitialized=kTRUE;
        gROOT->ProcessLine("Initialize();");
+       Update();
        break;
 
      case B_NEXT_EVENT: 
@@ -978,6 +1026,7 @@ void JSFGUIFrame::DoButtonAction(Long_t parm1)
 	 fMenuFile->DisableEntry(M_FILE_OPENOUTPUT);
 	 fInitialized=kTRUE;
 	 gROOT->ProcessLine("Initialize();");
+	 Update();
        }
        gROOT->ProcessLine("GetNext();");
        sprintf(evtmsg,"  Event Number: %d\n",gJSF->GetEventNumber());
@@ -1201,7 +1250,7 @@ void JSFGUIFrame::DoRunmodeMenuAction(Long_t parm1, Bool_t prompt)
   Int_t retval=0;
   Int_t buttons=0;
 
-  static const Int_t maxmenu=27;
+  static const Int_t maxmenu=29;
   Char_t *value[maxmenu][3]={
     {"JSFGUI.ECM","300",
 "JSFGUI.ECM:
@@ -1300,13 +1349,25 @@ If it's \"Undefined\" ot not specified, a file,
 $LCLIBROOT/simjlc/parm/detect7.com is used."}, //26-4
     {"JSFGUI.RunNo","1",
 "JSFGUI.RunNo:
-Run number "} // 27-2
+Run number "}, // 27-2
+    {"JSFGUI.Pythia.Decay.Z","0",
+"JSFGUI.Pythia.Decay.Z:
+Decay mode of Z
+-1 = Disable all Z decay
+ 0 = Enable all Z decay
+ n = Enable only one decay node of Z,
+   1=d-quark, 2=u-quark, 3=s-quark, 4=c-quark, 5=b-quark,
+  11=e, 12=nu_e, 13=mu, 14=nu_mu, 15=tau, 16=nu_tau"},  // 28-7
+    {"JSFGUI.Pythia.Higgsmass","120.0",
+"JSFGUI.Pythia.Higgsmass:
+Mass of Higgs used by Pythia.
+(note) Branching ratio of Higgs is not correct."}//29-3 						
 };
 
 
-  Int_t nline[maxmenu]={2,3,4, // 3
+  Int_t nline[maxmenu]={2,3,4, //  3
 			  2,2,2,2,2, 3,4,2,2,2,  2,2,  // 12
-			  3,4,2,2,2, 3,3,3,5,4, 4,2 }; //12
+			  3,4,2,2,2, 3,3,3,5,4, 4,2,7,3 }; //13
 
   Int_t id[maxmenu]={M_GEN_ECM,M_GEN_INITPYTHIA,
    M_GEN_PYTHIA_PRSTAT, M_GEN_DEBUG_RANDOM,
@@ -1318,7 +1379,10 @@ Run number "} // 27-2
    M_GEN_RPARTON_DATAFILE,M_GEN_RPARTON_FORMAT,
    M_GEN_RDGEN_DATAFILE,M_GEN_RDGEN_FORMAT,
    M_GEN_MERGE_DATAFILE,M_GEN_MERGE_LUMPERTRAIN,M_GEN_MERGE_SEED,
-   M_SIM_QUICKSIM_PARAM, M_GUI_RUNNO};
+   M_SIM_QUICKSIM_PARAM, M_GUI_RUNNO, M_GEN_PYEV_DECAY_Z,M_GEN_PYTHIA_HMASS};
+   
+
+
 
   Int_t i;
 
@@ -1327,18 +1391,19 @@ Run number "} // 27-2
   const char *ftypes2[] = { "JSF Configuration files",    "*.conf",
 				"All files","*",
 				0,               0 };
+
+  static const Int_t nproc=9;
+  Char_t *pname[nproc]={"ZH","gammagammaH", "eeH","nnH",
+			"gammaZ", "ZZ","WW","enW","twophoton"};
+
   switch(parm1) {
-    case M_CONT_RT_DEMO: 
-//       SetRunMode(parm1-M_CONT_RT_DEMO);
-       RunDemo();
-       break;
 
     case M_CONT_RT_GENEVENT: 
     case M_CONT_RT_READROOT: 
     case M_CONT_RT_READSIMDST: 
     case M_CONT_RT_READJIM: 
     case M_CONT_RT_USERDEFINE: 
-       SetRunMode(parm1-M_CONT_RT_DEMO);
+       SetRunMode(parm1-M_CONT_RT_GENEVENT+1);
        break;
 
     case M_GEN_PYTHIA:
@@ -1440,6 +1505,24 @@ Run number "} // 27-2
     case M_CONT_PARAM_EDIT:
        new JSFEnvGUIFrame(gClient->GetRoot(), 400, 200);
        break;
+
+    case M_GEN_PYEV_ZH:
+    case M_GEN_PYEV_GGH:
+    case M_GEN_PYEV_EEH:
+    case M_GEN_PYEV_NNH:
+    case M_GEN_PYEV_GAMMAZ:
+    case M_GEN_PYEV_ZZ:
+    case M_GEN_PYEV_WW:
+    case M_GEN_PYEV_ENW:
+    case M_GEN_PYEV_TWOPHOTON:
+      sprintf(wrkstr,"JSFGUI.Pythia.Process.%s",pname[parm1-M_GEN_PYEV_ZH]);
+      if( fPythiaEvtype->IsEntryChecked(parm1) ) {
+        gJSF->Env()->SetValue(wrkstr,"0");
+      }
+      else {
+        gJSF->Env()->SetValue(wrkstr,"1");
+      }
+      break;
 
     default:
       if( prompt ) {
