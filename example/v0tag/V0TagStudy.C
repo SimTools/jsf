@@ -1,16 +1,24 @@
 //****************************************************
 //*
-//*  UserAnalysis routine for btag study
-//*
-//*  This file is in /home/miyamoto/work/btag/v0tag/V0TagStudy.C
+//*  This file is in V0TagStudy.C
 //*  To run this program, do
 //*     $ jsf gui.C
-//*  Input data of this program is
-//*     jlclogin:/work/jlc/miyamoto/k0evt.dat
-//*  This data is created by a program, 
-//*     jlclogin:/home/miyamoto/work/hepevt/k0evt.F
+//*  Input data of this program is k0evt.dat, which is
+//*  created by the program, k0evt.F
+//*  Other settings will be found in jsf.conf.
+//*  See also Readme file in this directory.
 //*
-//*  22-Feburary-2000 Akiya Miyamoto
+//*  results of this script will be found in 
+//*  http://www-jlc.kek.jp/subg/offl/jsf/doc/vertexing/index.html
+
+//*(Require)
+//*  PythiaUtilities.C is reauired, which is in 
+//*  $JSFROOT/macro dirctory.
+//*
+//*(Author)
+//*  29-Feburary-2000 Akiya Miyamoto
+//*
+//*$ID$
 //*
 //****************************************************
 
