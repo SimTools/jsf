@@ -70,7 +70,7 @@ void JSFJIMParam::ReadParameter()
   
   JSFJLCSIM::KZGET("MCECPAR",0, len, idat);
   for(Int_t i=0;i<2;i++){ fECPAR0I[i]=idat[i]; }
-  rtmp=(Float_t*)(idat+3);
+  rtmp=(Float_t*)(idat+2);
   for(Int_t i=0;i<10;i++){ fECPAR0R[i]=rtmp[i]; }
 
   //  printf(" NDREC=%d\n",fECPAR0I[1]);

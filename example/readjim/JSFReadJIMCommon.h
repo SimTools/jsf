@@ -28,6 +28,7 @@ typedef struct {
                Int_t nvtx[kJTrkMax];
   Int_t nemh ; Int_t emh[kJEClsMax][kJClsSize];
   Int_t nhdh ; Int_t hdh[kJHClsMax][kJClsSize];
+  Int_t nsmh ; Int_t smh[kJSClsMax][kJSClsSize];
   Int_t nsih ; Float_t vtxd[kJVTXBufSize][kVTXHSize] ; 
   Int_t idvtx[kJVTXBufSize][kVTXIDSize];
 } COMMON_TRBUFF;

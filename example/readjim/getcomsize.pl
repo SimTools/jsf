@@ -98,8 +98,8 @@ print "const Int_t kJClsSize=$npecls\;\n";
 print "const Int_t kJVTXBufSize=$mxsih\;\n";
 
 if ( $trbuffvers >= 204 ) {
-  print "const Int_t kJSCLSMax=$mxscls\;\n";
-  print "const Int_t kJSCLSSize=$npscls\;\n";
+  print "const Int_t kJSClsMax=$mxscls\;\n";
+  print "const Int_t kJSClsSize=$npscls\;\n";
 }
 print "//* Created from $infile on $nowstring\n";
 
