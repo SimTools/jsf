@@ -9,12 +9,12 @@
 //$Id$
 ///////////////////////////////////////////////////////////////////////
 
-#include <TNamed.h>
+#include <TObject.h>
 
 #include "JSFConfig.h"
 #include "JSFGenerator.h"
 
-class JSFGeneratedProcessType : public TNamed {
+class JSFGeneratedProcessType : public TObject {
  private:
   Int_t    fNd; // Number of final state d-quark
   Int_t    fNu; // Number of final state u-quark

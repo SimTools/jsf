@@ -28,7 +28,8 @@
 ClassImp(JSFGeneratedProcessType)
 
 //_____________________________________________________________________________
-JSFGeneratedProcessType::JSFGeneratedProcessType(TClonesArray *particles)
+JSFGeneratedProcessType::JSFGeneratedProcessType(TClonesArray *particles):
+    TObject()
 {
   Reset();
   fGen=particles;
@@ -71,7 +72,7 @@ void JSFGeneratedProcessType::AnalizeEvent(TClonesArray *particles)
 
   Bool_t flag=kFALSE;
   for(Int_t i=3;i<fGen->GetEntries();i++){
-    JSFGeneratorParticle *gp=(JSFGeneratorParticle*)particles->UncheckedAt(i);
+    JSFGeneratorParticle *gp=(JSFGeneratorParticle*)fGen->UncheckedAt(i);
     Int_t mother=gp->GetMother();
     if( mother > 0 ) break;
     if( mother == 0 ) { flag = kTRUE; }
