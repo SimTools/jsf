@@ -868,6 +868,7 @@ void JSFSteerConf::Streamer(TBuffer &R__b)
        return;
      }
      // Process OLD version data
+      TNamed::Streamer(R__b);
       R__b >> fNmodule;
       Char_t temp[200];
       Int_t lc;
