@@ -33,6 +33,7 @@
 //  
 //////////////////////////////////////////////////////////////////
 
+#include "JSFConfig.h"
 #include "PythiaGenerator.h"
 #include "JSFSteer.h"
 #include "TEnv.h"
@@ -110,7 +111,12 @@ Bool_t PythiaGenerator::Process(Int_t ev)
    TVector pv(4);
    TVector xv(4);
 
+#if __ROOT_VERSION__ <= 2 &&  __ROOT_MINORVERSION__ <= 21 
    Int_t np=fPythia->GetNumberOfPrimaries();
+#else
+   Int_t np=fPythia->GetNumberOfParticles();
+#endif
+
    TObjArray *pa=fPythia->GetPrimaries();
 
    Int_t nout=0;
