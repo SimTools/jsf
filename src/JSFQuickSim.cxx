@@ -659,6 +659,36 @@ Bool_t JSFQuickSimBuf::MakeCDCTracks()
         bankname="Production:CDC_VTX;Track_Parameter";
   else  bankname="Production:CDC;Track_Parameter";
 
+  //
+  Int_t nelm, neary[500];
+  gJSFLCFULL->TBNOEL(1, bankname, nelm,neary);
+  for(i=0;i<nelm;i++){
+    Int_t id=i+1;
+    gJSFLCFULL->TBGET(1,bankname,id, nw, itrkp,iret);
+    if( iret < 0 ) {
+      printf("Error to TBGET %s ..",bankname);
+      printf("Element# %d  IRET=%d",id,iret);
+      printf("\n");
+      return kFALSE;
+    }
+    if( nerrvx == 3  && fCDCTrackIsCDCVTX == 1 ) {
+      Char_t *bnkcdc="Production:CDC;Track_Parameter";
+      Int_t nwt;  Int_t itrkpp[200];
+      gJSFLCFULL->TBGET(1,bnkcdc,id,nwt,itrkpp,iret);
+      itrkp[55]=itrkpp[55];
+      itrkp[56]=itrkpp[56];
+    }
+
+    new(cdc[i]) JSFCDCTrack( itrkp );
+    JSFCDCTrack *t=(JSFCDCTrack*)cdc.UncheckedAt(i);
+    Int_t *ncel=(Int_t*)&prjunk_.RTKBNK[i][59];
+    if( *ncel > 0 ) {
+      t->SetPositionAtEMC( &prjunk_.RTKBNK[i][60] );
+    }
+  }
+  ncdc=nelm;
+  SetNCDCTracks(ncdc);
+
   for(i=0;i<ncmb;i++){
      JSFLTKCLTrack *ct=(JSFLTKCLTrack*)fTracks->UncheckedAt(i);
      if( ct->GetNCDC() <= 0 ) continue;
@@ -667,33 +697,10 @@ Bool_t JSFQuickSimBuf::MakeCDCTracks()
      for(Int_t j=0;j<ct->GetNCDC();j++){
        
        Int_t icdc=ct->GetIDCDC(j);
-
-       gJSFLCFULL->TBGET(1,bankname,icdc, nw, itrkp,iret);
-       if( iret < 0 ) {
-	 printf("Error to TBGET %s ..",bankname);
-	 printf("Element# %d  IRET=%d",icdc,iret);
-	 printf("\n");
-	 return kFALSE;
-       }
-       if( nerrvx == 3  && fCDCTrackIsCDCVTX == 1 ) {
-	 Char_t *bnkcdc="Production:CDC;Track_Parameter";
-	 Int_t nwt;  Int_t itrkpp[200];
-	 gJSFLCFULL->TBGET(1,bnkcdc,icdc,nwt,itrkpp,iret);
-	 itrkp[55]=itrkpp[55];
-	 itrkp[56]=itrkpp[56];
-       }
-       new(cdc[ncdc]) JSFCDCTrack( itrkp );
-       JSFCDCTrack *t=(JSFCDCTrack*)cdc.UncheckedAt(ncdc);
-       Int_t *ncel=(Int_t*)&prjunk_.RTKBNK[icdc-1][59];
-       if( *ncel > 0 ) {
-	 t->SetPositionAtEMC( &prjunk_.RTKBNK[icdc-1][60] );
-       }
-       ct->SetCDC(ncdc+1, t);
-
-       ncdc++;
+       JSFCDCTrack *t=(JSFCDCTrack*)cdc.UncheckedAt(icdc-1);
+       ct->SetCDC(icdc, t);
      }
   }
-  SetNCDCTracks(ncdc);
 
   return kTRUE;
 }
