@@ -9,7 +9,7 @@
 
 #include "J4VTXPixelHit.hh"
 #include "JSFJ4VTXHit.h"
-
+using namespace std;
 
 ClassImp(JSFJ4VTXHit)
 

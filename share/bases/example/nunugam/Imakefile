@@ -62,6 +62,6 @@ clean::
 	rm -f *.o
 
 cleanall:: clean
-	\rm -f bases basesspring spring
+	rm -f bases basesspring spring
 	rm Makefile
 

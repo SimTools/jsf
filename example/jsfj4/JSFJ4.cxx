@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
 //
 //  Geant4 execution in JSF framework
 //
@@ -7,9 +7,12 @@
 //
 //////////////////////////////////////////////////////////////////
 
-
-#include <strstream.h>
-
+#include "JSFConfig.h"
+#if __JSF_GNUC_VERSION__ >= 3
+#   include <sstream>
+#else
+#   include <strstream.h>
+#endif
 
 #include "JSFJ4RunManager.h"
 #include "G4UImanager.hh"
@@ -58,10 +61,17 @@ ClassImp(JSFJ4)
 ClassImp(JSFJ4Buf)
 ClassImp(JSFJ4BufferMap)
 
+#if __JSF_GNUC_VERSION__ >= 3
+using namespace std;
+#include <map>
+typedef map<char*, J4Object*> JSFJ4Detectors_t;  // Used to swich on/off detectors
+typedef map<char*, J4Output*> JSFJ4Outputs_t;    // used to manage output
+#else
 #include <hash_map>
-
 typedef hash_map<char*, J4Object*> JSFJ4Detectors_t;  // Used to swich on/off detectors
 typedef hash_map<char*, J4Output*> JSFJ4Outputs_t;    // used to manage output
+#endif
+
 JSFJ4Detectors_t gJSFJ4Detectors;
 JSFJ4Outputs_t gJSFJ4Outputs;
 
@@ -331,7 +341,7 @@ TObjArray *JSFJ4Buf::AddComponent(Char_t *name)
   return data->GetObjArray();
 }
 
-
+ 
 // ______________________________________________________________________________
 TObjArray *JSFJ4Buf::GetComponent(Char_t *name) const
 {
@@ -346,7 +356,7 @@ TObjArray *JSFJ4Buf::GetComponent(Char_t *name) const
 }
 
 // ______________________________________________________________________________
-void JSFJ4Buf::Print(Option_t *opt="")
+void JSFJ4Buf::Print(Option_t *opt)
 {
   cout << "List of JSFJ4 data" << endl;
   for(Int_t i=0;i<fEvent.GetEntries();i++){

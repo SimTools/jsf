@@ -11,6 +11,7 @@
 #include "JSFJ4PrimaryVertex.h"
 #include "G4PrimaryParticle.hh"
 #include "G4PrimaryVertex.hh"
+using namespace std;
 
 
 ClassImp(JSFJ4PrimaryVertex)

@@ -30,7 +30,8 @@ set_g77info()
 {
   specfile=$1
   echo -n "g77 version .. "
-  g77 -v > tmp-g77.$$ 2>&1 
+  g77 -v > tmp-g77.$$ 2>&1
+
   g77versionstr=`cat tmp-g77.$$ | grep release | grep gcc | cut -d"(" -f2 | cut -d")" -f1`
 
   g77version=`echo $g77versionstr | cut -d" " -f1 | cut -d"-" -f2 | cut -d"." -f1 `
@@ -82,11 +83,54 @@ check_pythia()
   return 0
 }
 
+# ########################################################################
+#
+# Get GCC version number
+#
+# ########################################################################
+
+gcppversion()
+{
+
+cat > temp.cxx <<EOF
+#include <stdio.h>
+main()
+{
+ char *date=__DATE__;
+ char *time=__TIME__;
+ printf("#define __JSF_CONFIG_DATE__ \"%s\"\n",date);
+ printf("#define __JSF_CONFIG_TIME__ \"%s\"\n",time);
+
+ int gnuc=__GNUC__;
+ int gnuc_minor=__GNUC_MINOR__;
+ int gnuc_patch=__GNUC_PATCHLEVEL__;
+ printf("#define __JSF_GNUC_VERSION__    %d\n",gnuc);
+ printf("#define __JSF_GNUC_MINOR__      %d\n",gnuc_minor);
+ printf("#define __JSF_GNUC_PATCHLEVEL__ %d\n",gnuc_patch);
+
+ char *version=__VERSION__;
+ printf("#define __JSF_GNUC_VERSION_STRING__  \"%s\"\n",version);
+
+}
+EOF
+
+g++ temp.cxx
+./a.out
+
+rm -f temp.cxx a.out
+
+}
+
+
+
+
 # ############################################
 #
 # Main shell
 #
 # ############################################
+
+LANG=C
 
 echo "Configuration parameters are obtained from ../conf/configure.in"
 . ../conf/configure.in
@@ -116,8 +160,6 @@ check_pythia
 echo -n "Creating system information ."
 specfile=$jsfroot/src/JSFConfig.h
 rm -f $specfile
-
-
 
 echo "#ifndef __JSFCONFIG__" > $specfile
 echo "#define __JSFCONFIG__" >> $specfile
@@ -171,6 +213,14 @@ fi
 # jlcsim
 if [ -e $JLCSIMROOT/lib/libjimlib.a ] ; then
     echo "#define __JLCSIM_INSTALLED__ 1"  >> $specfile
+fi
+
+############################################3
+# Set gcc version information
+############################################3
+if [ -f `which g++` ] ; then
+  echo -n "g++ version .. "
+  gcppversion >> $specfile
 fi
 
 

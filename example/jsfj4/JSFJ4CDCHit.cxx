@@ -9,7 +9,7 @@
 #include "G4Tubs.hh"
 #include "J4CDCDriftRegionHit.hh"
 #include "JSFJ4CDCHit.h"
-
+using namespace std;
 
 ClassImp(JSFJ4CDCHit)
 

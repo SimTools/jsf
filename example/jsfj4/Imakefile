@@ -37,7 +37,7 @@ HDRS    = $(subst .$(SrcSuf),.h,$(SRC))
 
 .SUFFIXES: .cc
 .cc.o :
-	$(CXX) -c $(CPPFLAGS) $*.cc -o $*.o
+	$(CXX) -c $(CPPFLAGS) $*.cc -o $*.o.
 
 # CPPFLAGS =  -Wall -ansi -pedantic -pipe -fno-for-scope -DGNU_GCC
 CPPFLAGS =  -Wall  -pipe  -DGNU_GCC $(CXXFLAGS)
@@ -50,12 +50,17 @@ JUPITERINCLUDE = -I$(JUPITERROOT)/sources/kern/include \
 	-I$(JUPITERROOT)/sources/ir/include \
 	-I$(JUPITERROOT)/sources/bd/include
 
-CXXFLAGS += -I./include $(JUPITERINCLUDE) -I$(G4INCLUDE) \
+CXXFLAGS += -I./include $(JUPITERINCLUDE) \
+	-I$(G4INCLUDE) \
 	-DG4VIS_USE -DG4UI_USE_XM -DG4VIS_USE_OPENGLX \
 	-DG4VIS_USE_OPENGLXM
 
+#if __JSF_GNUC_VERSION__ >= 3
+CXXFLAGS += -DG4USE_STD_NAMESPACE
+#endif
+
 JUPITERLIB = -L$(JUPITERROOT)/lib/$(G4SYSTEM) -lJ4bd \
-	-lJ4cal -lJ4cdc -lJ4ir -lJ4it -lJ4vtx -lJupiter
+	-lJ4cal -lJ4cdc -lJ4ir -lJ4it -lJ4vtx -lJ4kern
 
 G4LIBS := -L$(G4INSTALL)/lib/$(G4SYSTEM) \
 	-lG4RayTracer -lG4FR -lG4visHepRep -lG4OpenGL \

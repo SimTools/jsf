@@ -9,7 +9,7 @@
 
 #include "JSFJ4PrimaryParticle.h"
 #include "G4PrimaryParticle.hh"
-
+using namespace std;
 
 ClassImp(JSFJ4PrimaryParticle)
 

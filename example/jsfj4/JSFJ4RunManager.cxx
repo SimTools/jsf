@@ -14,6 +14,7 @@
 #include "G4UImanager.hh"
 #include "G4Event.hh"
 
+using namespace std;
 
 #include "JSFJ4RunManager.h"
 #include "JSFJ4PrimaryGeneratorAction.h"

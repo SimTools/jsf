@@ -14,6 +14,7 @@
 #include "G4PrimaryParticle.hh"
 #include "G4PrimaryVertex.hh"
 
+using namespace std;
 
 #include "JSFJ4PrimaryGeneratorAction.h"  
 #include "JSFSteer.h" 
