@@ -1,6 +1,0 @@
-LIST
-TRIG 30
-GEN  'SINGLE'
-GENP  10.0 13.0 45.0 135.0
-EVTO 'single.bnk'
-END
