@@ -1,0 +1,11 @@
+#!/usr/local/bin/perl
+#
+#  Convert .C to .cxx in current directory
+
+foreach $f (`ls *.C` ) {
+  chop $f;
+  $f =~ s/\.C$//;
+  $cmd= "mv $f.C $f.cxx" ;
+  system($cmd);
+}
+
