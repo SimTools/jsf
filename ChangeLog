@@ -3,17 +3,26 @@ Change Log and some future plan.
 **********************************************************
 	
 **********************************************************
-To-Do  -- Help wanted
+To-Do ( listed in arbitrary order ) -- Help wanted
 **********************************************************
-0) More event generator  --> K.Fujii is working on this.
-1) Re-write QuickSimulator by C++ 
-2) Include interface to JIM
-3) Prepare to generate event with background events and hits.
-
+1) More event generator  --> This will come soon.
+2) Re-write QuickSimulator by C++ 
+3) Include interface to JIM --> This needs further test.
+3.1) Run JIM in JSF
+4) Prepare to generate event with background events and hits.
+5) jsf.conf editor. Which is executable from GUI
+6) Integrate Bases/Spring generator in GUI pannel ( easy selection of process)
+7) Move example/guiexam1/MainMacro.C to macro directory for use as
+   standard macro.
+8) Output of a root file should be turned off in some case.
+9) Prepare an example macro to read multiple root file randomly/sequentially.
+10) Prepare an example to use rootd.
+11) Prepare interface to read generator data with only parton information
+    such as Grace.
 	
 	
 **********************************************************
-jsf-1-8  9-April-1999 A.Miyamoto
+jsf-1-9  28-May-1999 A.Miyamoto
 **********************************************************
 
 -----------------------	
@@ -48,6 +57,12 @@ jsf-1-8  9-April-1999 A.Miyamoto
 -----------------------	
 1) JSFLCFULL.cxx/h : 	Defines macro to call JCLUST, THRUST, etc.
 
+
+	
+**********************************************************
+jsf-1-8  9-April-1999 A.Miyamoto
+**********************************************************
+	
 -----------------------	
 7-May-1999 A.Miyamoto
 -----------------------	
