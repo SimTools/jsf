@@ -41,8 +41,9 @@ clean::
 	@rm -f $(OBJS) core *.so 
 	@rm -f libMyAnalysis.$(SrcSuf) libMyAnalysis.h
 
-depend:: 
-	makedepend -I$(ROOTSYS)/include $(SRC)
+depend:: $(SRC) $(HDRS)
+	for i in $(SRC); do \
+	rmkdepend -a -- $(DEPENDFILES) -- $$i; done
 
 distclean::
 	@rm -f $(OBJS) core *.so *~ *.o
