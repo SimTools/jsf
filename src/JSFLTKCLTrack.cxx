@@ -74,7 +74,7 @@ JSFLTKCLTrack::JSFLTKCLTrack(Float_t data[])
     f1stCDC=-1;
     fEcl=0;
     fNEMC=0;
-    if( fType !=1 || fType != 3 ) f1stCDC=data[7];
+    if( fType !=1 || fType != 3 ) f1stCDC=(Int_t)data[7];
 
 }
 

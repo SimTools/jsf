@@ -18,39 +18,39 @@
 class JSFGeneratorParticle : public TObject {
 
 public:
-  Int_t  fSer;        // particle serial number ( 1 to n )
-  Int_t  fID;         // Particle ID a la PDG.
-  Double_t  fMass;    // Particle mass (GeV);
-  Double_t  fCharge;  // Charge
-  Double_t    fP[4];    // four momentum (E,Px,Py,Pz), GeV
-  Double_t    fX[4];    // (t,x,y,z) (cm and nsec)
-  Int_t     fNdaughter;     // Number of daughter particles ( =0 for stable )
-  Int_t     fFirstDaughter; // Serial number of 1st daughter
-  Int_t     fMother;  // Serial number of mother particle ( =0 for initial)
-  Double_t  fLifeTime; // Particle life time ( c x nsec, =0 for stable, cm)
-  Double_t  fDecayLength;  // Decay length (cm, =0 for stable)
+  Short_t  fSer;        // particle serial number ( 1 to n )
+  Short_t  fID;         // Particle ID a la PDG.
+  Float_t  fMass;    // Particle mass (GeV);
+  Float_t  fCharge;  // Charge
+  Float_t    fP[4];    // four momentum (E,Px,Py,Pz), GeV
+  Float_t    fX[4];    // (t,x,y,z) (cm and nsec)
+  Short_t     fNdaughter;     // Number of daughter particles ( =0 for stable )
+  Short_t     fFirstDaughter; // Serial number of 1st daughter
+  Short_t     fMother;  // Serial number of mother particle ( =0 for initial)
+  Float_t  fLifeTime; // Particle life time ( c x nsec, =0 for stable, cm)
+  Float_t  fDecayLength;  // Decay length (cm, =0 for stable)
 
 public:
   JSFGeneratorParticle() {}
 
-  JSFGeneratorParticle(Int_t Ser, Int_t ID, Double_t Mass, Double_t Charge,
+  JSFGeneratorParticle(Int_t Ser, Int_t ID, Float_t Mass, Float_t Charge,
          TVector& P, TVector& X,
 	 Int_t Ndaughter, Int_t FirstDaughter, Int_t Mother,
-         Double_t LifeTime, Double_t DecayLength){
+         Float_t LifeTime, Float_t DecayLength){
          fSer = Ser ; fID=ID; fMass=Mass; fCharge=Charge;
 	 for(Int_t i=0;i<4;i++){ fP[i]=P(i) ; fX[i]=X(i) ; }
 	 fNdaughter=Ndaughter ; fFirstDaughter=FirstDaughter ;
 	 fMother=Mother; fLifeTime=LifeTime ; fDecayLength=DecayLength; }
 
 
-  JSFGeneratorParticle(Int_t Ser, Int_t ID, Double_t Mass, Double_t Charge,
+  JSFGeneratorParticle(Int_t Ser, Int_t ID, Float_t Mass, Float_t Charge,
 		       TVector& P, TVector& X ) {
          fSer = Ser ; fID=ID; fMass=Mass; fCharge=Charge;
 	 for(Int_t i=0;i<4;i++){ fP[i]=P(i) ; fX[i]=X(i) ; }
 	 fNdaughter=0; fFirstDaughter=0;
 	 fMother=0; fLifeTime=0.0; fDecayLength=0.0; }
 
-  JSFGeneratorParticle(Int_t Ser, Int_t ID, Double_t Mass, Double_t Charge,
+  JSFGeneratorParticle(Int_t Ser, Int_t ID, Float_t Mass, Float_t Charge,
 		       TVector& P ) {
          fSer = Ser ; fID=ID; fMass=Mass; fCharge=Charge;
 	 for(Int_t i=0;i<4;i++){ fP[i]=P(i) ; fX[i]=0.0 ; }
@@ -59,14 +59,14 @@ public:
 
   JSFGeneratorParticle(Float_t data[]);
 
-  Double_t GetPx(){ return fP[1] ;}
-  Double_t GetPy(){ return fP[2] ;}
-  Double_t GetPz(){ return fP[3] ;}
-  Double_t GetE(){  return fP[0] ;}
-  Double_t GetPabs(){ return TMath::Sqrt( fP[1]*fP[1]+fP[2]*fP[2]+fP[3]*fP[3]);}
-  Double_t GetAzimthAngle(){ return TMath::ATan2( fP[2], fP[1]);}
-  Double_t GetPt(){ return TMath::Sqrt( fP[1]*fP[1]+fP[2]*fP[2]);}
-  Double_t GetCosth(){ return fP[3]/GetPabs() ;}
+  Float_t GetPx(){ return fP[1] ;}
+  Float_t GetPy(){ return fP[2] ;}
+  Float_t GetPz(){ return fP[3] ;}
+  Float_t GetE(){  return fP[0] ;}
+  Float_t GetPabs(){ return TMath::Sqrt( fP[1]*fP[1]+fP[2]*fP[2]+fP[3]*fP[3]);}
+  Float_t GetAzimthAngle(){ return TMath::ATan2( fP[2], fP[1]);}
+  Float_t GetPt(){ return TMath::Sqrt( fP[1]*fP[1]+fP[2]*fP[2]);}
+  Float_t GetCosth(){ return fP[3]/GetPabs() ;}
 
 
   TVector GetPV(){ TVector p(4) ; 

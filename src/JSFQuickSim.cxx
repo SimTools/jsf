@@ -814,8 +814,8 @@ Int_t JSFQuickSimParam::GetVTXLayerNumber(Float_t radius)
        return i;
    }
    return 0;
-}
 
+}
 
 //____________________________________________________________________________
 void JSFQuickSim::MakeBranch(TTree *tree)
@@ -825,7 +825,7 @@ void JSFQuickSim::MakeBranch(TTree *tree)
    fTree=tree;
    if( fEventBuf && fMakeBranch ) {
      Int_t split=0;
-     Int_t bsize=4000;
+     Int_t bsize=50000;
      tree->Branch(fEventBuf->GetName(), fEventBuf->ClassName() ,
 		  &fEventBuf, bsize, split);
    }
