@@ -18,8 +18,9 @@ generators:
 	( cd generators ; make install )
 
 lclibdep:
+ifdef LCLIBROOT
 	( cd lclibdep ; make install )
-
+endif
 tools:
 	( cd tools ; xmkmf -a ; make all ; make install )
 
