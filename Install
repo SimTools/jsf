@@ -5,6 +5,7 @@ How to install
    - lcbase
      ( lcbase package contains configuration information 
        and imake template file common to LC studies )
+   - LEDA   analysis library for LC studies
    - LCLIB  for quick simulator and related utilities
 
    Optional softwares
@@ -16,20 +17,17 @@ How to install
             Pythia5
 
 1) Before bulding program
+   For bash 
      export ROOTSYS=<<root directory>>
      export LCBASEDIR=<<lcbase directory>>
-     export LCLIBROOT=<<LCLIB directory>>
+     export LEDAROOT=<<LEDA ROOT directory>>
+     export LCLIBROOT=<<LCLIB directory>> 
+		 (LCLIBROOT is optional, if you do not use quick simulator)
      export JSFROOT=<<JSF root directory>>
 
-     
-
-
-	setenv CERN_ROOT <<cern directory>>
-	setenv LCLIBROOT <<lclib directory>>
-	setenv ROOTSYS <<root directort>>
-	setenv JSFROOT <<jsf directort>>
-	set path=(. $JSFROOT/bin $ROOTSYS/bin $path)
-	setenv IMAKEINCLUDE "-I$JSFROOT -I$LCLIBROOT"
+     export PATH=$LCBASEDIR/bin:$LEDAROOT/bin:$JSFROOT/bin:$ROOTSYS/bin:$PATH
+     export LD_LIBRARY_PATH=$LEDAROOT/lib:$JSFROOT/lib:$ROOTSYS/lib:$LD_LIBRARY_PATH
+     export IMAKEINCLUDE="-I$LCBASEDIR"
 
 2) do 
 	cd $JSFROOT
