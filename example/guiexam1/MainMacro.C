@@ -50,7 +50,7 @@
   Int_t gReturnCode; // Return code from event analysis 
   Int_t gFirstEvent;   // Start event number to process in batch
   Int_t gNAnalizeEvent;  // Number of event to process in batch
-
+  Bool_t gEventDataOff=kFALSE; // When TRUE, no event dta is written.
   enum EventType { kPythia=0, kDebug=1, kReadGen=2};
 
 
@@ -155,10 +155,13 @@ void InitGenSim()
    // If these comments are removed, corresponding information
    // is not saved in the ROOT tree.
    //
-   //  full->SetMakeBranch(kFALSE);   // suppress output of EventBuf 
-   //  py->SetMakeBranch(kFALSE);     // suppress output of EventBuf 
-   //  sim->SetMakeBranch(kFALSE);    // suppress output of EventBuf
-   //  simdst->SetMakeBranch(kTRUE);     // suppress output of EventBuf
+
+   if( gEventDataOff ) {
+     full->SetMakeBranch(kFALSE);   // suppress output of EventBuf 
+     py->SetMakeBranch(kFALSE);     // suppress output of EventBuf 
+     sim->SetMakeBranch(kFALSE);    // suppress output of EventBuf
+     simdst->SetMakeBranch(kFALSE); // suppress output of EventBuf
+   }
  
    if( eventtype == kPythia ) { 
      py->SetEcm(ecm);             // Center of mass energy (GeV)
@@ -312,6 +315,10 @@ void GetArguments()
       strcpy(gMacroFileName,str);
       printf(" User Macro filename is %s\n");
     } 
+    elseif( strcmp(ap->Argv(i),"--EventDataOff") == 0 ){
+      gEventDataOff=kTRUE;
+      printf(" Event data is not written to the root file.\n");
+    } 
     elseif( strcmp(ap->Argv(i),"--help") ==0 ) {
       printf("Macro : gui.C\n");
       printf("  This macro is for batch and/or interactive execution of jsf.\n");
@@ -322,6 +329,7 @@ void GetArguments()
       printf("   --maxevt=N  : Number of event is set to N \n");
       printf("   --1stevt=N  : First event number to analize \n");
       printf("   --ecm=Ecm   : Set center of mass energy.\n");
+      printf("   --EventDataOff : Does not output event data to the root file.\n");
       ap->Terminate();
     }
   }
