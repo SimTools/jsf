@@ -5,8 +5,13 @@
 // by GUIMainMacro.C, using a value defined by JSFGUI.ECM parameter.
 //$Id$
 // *****************************************
+
+
 void InitPythia()
 {
+
+  PythiaGenerator *py=(PythiaGenerator*)jsf->FindModule("PythiaGenerator");
+
   TPythia *tpy=py->GetPythia();
 
   //****************************
