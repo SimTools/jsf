@@ -21,19 +21,22 @@ OBJJSFGUI     = InputDialog.$(ObjSuf) \
 		JSFEventDisplay.$(ObjSuf) \
 		JSFGUIFrame.$(ObjSuf) \
 		JSFGUIAnalysis.$(ObjSuf) \
+		JSFEnvGUIFrame.$(ObjSuf) \
+		JSFDemoDisplay.$(ObjSuf) \
 		libJSFGUI.$(ObjSuf)
 
 OBJS          = $(OBJJSFGUI)
 
-SRCJSFGUI     = InputDialog.$(SrcSuf) \
-		JSFEventDisplay.$(SrcSuf) \
+SRCJSFGUI     = InputDialog.$(SrcSuf) JSFDemoDisplay.$(SrcSuf) \
+		JSFEventDisplay.$(SrcSuf) JSFEnvGUIFrame.$(SrcSuf) \
 		JSFGUIFrame.$(SrcSuf) JSFGUIAnalysis.$(SrcSuf)
 
 SRC 	      = $(SRCJSFGUI)
 
 HDRJSFGUI     = InputDialog.h \
-		JSFEventDisplay.h \
+		JSFEventDisplay.h JSFDemoDisplay.h \
 		JSFGUIFrame.h JSFGUIAnalysis.h \
+		JSFEnvGUIFrame.h \
 		JSFGUILinkDef.h
 
 SOLIBNAME     = libJSFGUI
@@ -92,15 +95,20 @@ clean::
 	@rm -f libJSFGUI.$(SrcSuf) libJSFGUI.h
 
 depend:: 
-	makedepend -I$(ROOTSYS)/include -I$(JSFROOT)/include $(SRC)
+	makedepend -I$(ROOTSYS)/include -I$(JSFROOT)/include \
+	$(SRC) $(HDRJSFGUI)
 
 distclean:: clean
 	@rm -f $(OBJS) core *.so *.~ *.o *.root *.dat Makefile
+
+web:	
+	jsf -q -b html.C 
 
 ###
 
 libJSFGUI.$(SrcSuf): $(HDRJSFGUI)
 		@echo "Generating dictionary ..."
-		rootcint -f libJSFGUI.$(SrcSuf) -c $(HDRJSFGUI)
+		rootcint -f libJSFGUI.$(SrcSuf) \
+	 	-c -I$(JSFROOT)/include $(HDRS) $(HDRJSFGUI)
 
 #

@@ -35,34 +35,46 @@
 #include <TGDoubleSlider.h>
 #include <TGFileDialog.h>
 
+#include <TClonesArray.h>
 
 class JSFEDProperty : public TObject {
 public:
+  Char_t fName[24]; // Name of detector.
   Bool_t fShow;   // Display the object or not.    
   Int_t  fColor;  // color code.
   Int_t  fType;   // Marker type or line type.
-  Float_t  fSize; // Marker size.
+  Float_t  fSize; // Marker size./ line size.
 public:
   JSFEDProperty(){}
   JSFEDProperty(Char_t *name, Int_t show=1, Int_t col=1, 
                 Int_t type=1, Float_t size=1);
-  ~JSFEDProperty(){}
+  virtual ~JSFEDProperty(){}
+  void Update(TGPopupMenu *menu=NULL, Int_t menuid=0);
+  void ToggleShow();
   ClassDef(JSFEDProperty, 1)   // A class to display event
 };
 
 
+class JSFGUIFrame;
+
 // **************************************************************
 class JSFEventDisplay : public TObject {
 friend class JSFGUIFrame ;
-private:
+protected:
 
   TDirectory *fCanvasDirectory;
   TCanvas *fCanvas;
   TView   *fView;
   TList   *fWidgets;
+  TList   *fSignals;
+
+  TClonesArray *fHelixes;
+  Int_t fNHelix;
 
   Int_t  fViewNo;
-  Float_t fViewRange[6];
+  Float_t fViewAngle[3];
+  Float_t fViewRange[3][6];
+  Int_t   fCanvasSize[2];
   Bool_t  fDrawAtNewEvent;
   Int_t   fDisplayType; 
   Int_t   fLTKCLTrackColor[14];
@@ -80,11 +92,13 @@ private:
   JSFEDProperty *fVTXHit;     //!
   JSFEDProperty *fEMCHit;     //!
   JSFEDProperty *fHDCHit;     //!
+  JSFGUIFrame   *fGUIMain;    //!
 
 public:
-  JSFEventDisplay();
-  ~JSFEventDisplay();
+  JSFEventDisplay(JSFGUIFrame *gui=NULL);
+  virtual ~JSFEventDisplay();
 
+  void Clear();
   void DisplayEventData();
   void DisplayLTKCLMomentum();
 
@@ -98,10 +112,14 @@ public:
   void DisplayEMCHits();
   void DisplayHDCHits();
 
-  void GetViewRange(Float_t range[]){
-      Int_t i; for(i=0;i<6;i++){ range[i]=fViewRange[i]; } }
+  //  void GetViewRange(Float_t range[]){
+  //    Int_t i; for(i=0;i<6;i++){ range[i]=fViewRange[i]; } }
   TCanvas *GetCanvas(){ return fCanvas; }
   Bool_t  DrawAtNewEvent(){ return fDrawAtNewEvent; }  
+
+  void Update();
+  void SetGUIMain(JSFGUIFrame *gui){ fGUIMain = gui ; }
+  JSFGUIFrame *GetGUIMain(){ return fGUIMain; }
 
   ClassDef(JSFEventDisplay, 1)   // A class to display event
 

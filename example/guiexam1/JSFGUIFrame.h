@@ -30,7 +30,19 @@
 #include <TH2.h>
 #include <TRandom.h>
 #include <TSystem.h>
-#include <TEnv.h>
+
+#ifndef __JSFEnv__
+#include "JSFEnv.h"
+#endif
+
+#ifndef __JSFSteer__
+#include "JSFSteer.h"
+#endif
+
+
+#ifndef __JSFDemoDisplay__
+#include "JSFDemoDisplay.h"
+#endif
 
 #ifndef __JSFEventDisplay__
 #include "JSFEventDisplay.h"
@@ -40,8 +52,8 @@
 #include "JSFGUIAnalysis.h"
 #endif
 
-enum EventType { kPythia=0, kDebug=1};
-
+enum EJSFGUIEventType { kPythia=0, kDebug=1, kBasesSpring=2,
+                        kReadParton=3, kReadHepevt=4 };
 
 class JSFGUIFrame : public TGMainFrame {
 
@@ -70,20 +82,22 @@ private:
    TGPopupMenu        *fMenuOnOffSignals;
    TGLayoutHints      *fMenuBarLayout, *fMenuBarItemLayout, *fMenuBarHelpLayout;
 
-   TGPopupMenu        *fMenuGen, *fMenuGenType;
-
-   Int_t fRunMode; // =1, Gen Event, =2 Read File, =3 Read SIMDST
-
+   TGPopupMenu        *fMenuRunMode, *fMenuControl;
+   TGPopupMenu        *fMenuGen, *fMenuGenType, *fMenuSimType;
+   TGPopupMenu        *fMenuGInfo[6], *fMenuGenPara;
+   // Int_t fRunMode; // =1, Gen Event, =2 Read File, =3 Read SIMDST
+   TGPopupMenu        *fMenuUser;
 
    TGCompositeFrame   *fStartAnal;
    TGTextEntry        *fTFromEvent, *fTToEvent;
    TGTextButton       *fBStartAnal;
    TGLabel            *fLSAFromEvent, *fLSAToEvent;
 
-   Char_t fInputFileName[256];
-   Char_t fOutputFileName[256];
+   //   Char_t fInputFileName[256];
+   //   Char_t fOutputFileName[256];
 
    JSFEventDisplay *fED;
+   JSFDemoDisplay  *fDemo;
    JSFGUIAnalysis  *fAnal;
    Bool_t           fInitialized;
 
@@ -91,53 +105,79 @@ private:
    Char_t fMacroGetNext[64];
    Char_t fMacroGetPrev[64];
 
-   Char_t fMacroFileName[256];
+   // Char_t fMacroFileName[256];
    Bool_t fShowHist;
    Int_t  fShowHistFrequency;
-   Int_t  fFirstEvent;
-   Int_t  fNEventsAnalize;
+   //Int_t  fFirstEvent;
+   //Int_t  fNEventsAnalize;
    Int_t  fReturnCode;
    Int_t  fNoOfAnalizedEvents;
 
 
-   Char_t fInitPythiaMacro[256];
-   Float_t fEcm;
-   Int_t   fEventType;
+   TGTextBuffer *fTB1;
+
+   void DoButtonAction(Long_t parm1);
+   void DoFileMenuAction(Long_t parm1, Bool_t prompt=kTRUE);
+   void DoDispMenuAction(Long_t parm1, Bool_t prompt=kTRUE);
+   void DoAnalMenuAction(Long_t parm1, Bool_t prompt=kTRUE);
+   void DoRunmodeMenuAction(Long_t parm1, Bool_t prompt=kTRUE);
 
 public:
-   JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h);
+   JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h, Bool_t demo=kFALSE);
    virtual ~JSFGUIFrame();
    virtual void CloseWindow();
    virtual Bool_t ProcessMessage(Long_t msg, Long_t parm1, Long_t);
    void ToRelativePath(const Char_t *fnin,const Char_t *dirnow, Char_t *fnout);
 
-   Char_t *GetInputFileName(){ return fInputFileName; }
-   Char_t *GetOutputFileName(){ return fOutputFileName; }
-   Int_t GetRunMode(){ return fRunMode; }
-   Int_t GetEventType(){ return fEventType; }
-   Float_t GetEcm(){ return fEcm;}
-   Char_t *GetInitPythiaMacro(){ return fInitPythiaMacro; }
-
-   void SetEcm(Float_t ecm){ fEcm=ecm; }
-   void SetRunMode(Int_t runmode){ fRunMode=runmode; }
-   void SetEventType(Int_t eventtype){ fEventType=eventtype; }
-   
-
+   void Update();
 
    void DisplayEventData();
    void DrawHist();
-   JSFEventDisplay *GetEventDisplay(){ return fED; }
 
    void GotoEventAction();
    void AnalizeEventAction();
+   void RunDemo();
 
-   Char_t *GetMacroFileName(){ return fMacroFileName; }
-   void SetFirstEvent(Int_t n){ fFirstEvent=n; }
-   void SetNEventsAnalize(Int_t n){ fNEventsAnalize=n; }
-   Int_t GetFirstEvent(){ return fFirstEvent; }
-   Int_t GetNEventsAnalize(){ return fNEventsAnalize; }
+   JSFEventDisplay *GetEventDisplay(){ return fED; }
+
+   TGPopupMenu *GetUserMenu(){ return fMenuUser; }
+
+   inline const Char_t *GetInputFileName(){ 
+     return gJSF->Env()->GetValue("JSFGUI.InputFileName",""); }
+   inline const Char_t *GetOutputFileName(){ 
+     return gJSF->Env()->GetValue("JSFGUI.OutputFileName","jsf.root"); }
+   inline Int_t GetRunMode(){ 
+     return gJSF->Env()->GetValue("JSFGUI.RunMode",1);}
+   inline Int_t GetEventType(){ 
+     return gJSF->Env()->GetValue("JSFGUI.EventType",kPythia);}
+   inline Float_t GetEcm(){ 
+     return atof(gJSF->Env()->GetValue("JSFGUI.ECM","300.0")); }
+   inline const Char_t *GetInitPythiaMacro(){ 
+     return gJSF->Env()->GetValue("JSFGUI.InitPythiaMacro","InitPythia.C");}
+   inline const Char_t *GetMacroFileName(){ 
+     return gJSF->Env()->GetValue("JSFGUI.MacroFileName","UserAnalysis.C");}
+   inline Int_t GetFirstEvent(){ 
+     return gJSF->Env()->GetValue("JSFGUI.FirstEvent",1);}
+   inline Int_t GetNEventsAnalize(){ 
+     return gJSF->Env()->GetValue("JSFGUI.NEventAnalize",10);}
+
+   void SetEcm(Float_t ecm){ 
+     Char_t str[24];       sprintf(str,"%g",ecm);
+     gJSF->Env()->SetValue("JSFGUI.ECM",str);}
+   void SetRunMode(Int_t runmode){ 
+     Char_t str[12];       sprintf(str,"%d",runmode);
+     gJSF->Env()->SetValue("JSFGUI.RunMode",str);}
+   void SetEventType(Int_t eventtype){ 
+     Char_t str[12];       sprintf(str,"%d",eventtype);
+     gJSF->Env()->SetValue("JSFGUI.EventType",str);}
+   void SetFirstEvent(Int_t n){ 
+     Char_t str[12];       sprintf(str,"%d",n);
+     gJSF->Env()->SetValue("JSFGUI.FirstEvent",str);}
+   void SetNEventsAnalize(Int_t n){ 
+     Char_t str[12];       sprintf(str,"%d",n);
+     gJSF->Env()->SetValue("JSFGUI.NEventAnalize",str);}
    void SetReturnCode(Int_t ir){ fReturnCode=ir;}
-
+   
 };
 
 

@@ -9,9 +9,11 @@
 #pragma link C++ class JSFGUIFrame;
 #pragma link C++ class InputDialog;
 #pragma link C++ class JSFGUIAnalysis;
+#pragma link C++ class JSFEnvGUIFrame;
 
 #pragma link C++ class JSFEventDisplay;
 #pragma link C++ class JSFEDProperty;
-#pragma link C++ class JSFEDSetOptions;
+#pragma link C++ class JSFDemoDisplay;
+// #pragma link C++ class JSFEDSetOptions;
 
 #endif

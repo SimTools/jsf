@@ -14,6 +14,23 @@
 //   =0 for Momentum Display, 
 //   =1 for event display (All)
 //   =2 for event display near VTX.
+//   
+// Parameters ;  name: default #  description 
+// ~~~~~~~~~~~~
+//  JSFEventDisplay.[name].Show: 
+/*
+  Char_t arg[128], args[128];
+  sprintf(arg,"JSFEventDisplay.%s.Show",name);
+  fShow=gJSF->Env()->GetValue(arg,show);
+  sprintf(arg,"JSFEventDisplay.%s.Color",name);
+  sprintf(args,"%d",color);
+  sscanf(gJSF->Env()->GetValue(arg,args),"%d",&fColor);
+  sprintf(arg,"JSFEventDisplay.%s.Type",name);
+  fType=gJSF->Env()->GetValue(arg,type);
+  sprintf(arg,"JSFEventDisplay.%s.Size",name);
+  sprintf(args,"%g",size);
+  sscanf(gJSF->Env()->GetValue(arg,args),"%g",&fSize);
+*/
 //
 //$Id$
 //
@@ -58,9 +75,8 @@ enum EJSFEDCommandIdentifiers {
 ClassImp(JSFEventDisplay)
 ClassImp(JSFEDProperty)
 
-JSFSIMDST *simdst;
-TPolyMarker3D *pm;
-THelix *thelix;
+JSFSIMDST *simdst=0;
+TPolyMarker3D *pm=0;
 TMarker3DBox *box3d;
 TPolyLine3D *pl;
 TNode *gvAll, *gvVTX, *gvMomentum;
@@ -70,6 +86,7 @@ Bool_t  gGeometryIsInitialized;
 JSFEDProperty::JSFEDProperty(Char_t *name, 
 			     Int_t show, Int_t color, Int_t type, Float_t size )
 {
+  strncpy(fName, name,24);
   Char_t arg[128], args[128];
   sprintf(arg,"JSFEventDisplay.%s.Show",name);
   fShow=gJSF->Env()->GetValue(arg,show);
@@ -83,18 +100,103 @@ JSFEDProperty::JSFEDProperty(Char_t *name,
   sscanf(gJSF->Env()->GetValue(arg,args),"%g",&fSize);
 }
 
+
+
 //---------------------------------------------------------------------------
-JSFEventDisplay::JSFEventDisplay()
+void JSFEDProperty::Update(TGPopupMenu *menu, Int_t menuid)
+{
+  Char_t arg[128], args[128];
+  sprintf(arg,"JSFEventDisplay.%s.Show",fName);
+  Int_t itmp=fShow;
+  fShow=gJSF->Env()->GetValue(arg,itmp);
+  sprintf(arg,"JSFEventDisplay.%s.Color",fName);
+  sprintf(args,"%d",fColor);
+  sscanf(gJSF->Env()->GetValue(arg,args),"%d",&fColor);
+  sprintf(arg,"JSFEventDisplay.%s.Type",fName);
+  itmp=fType;
+  fType=gJSF->Env()->GetValue(arg,itmp);
+  sprintf(arg,"JSFEventDisplay.%s.Size",fName);
+  sprintf(args,"%g",fSize);
+  sscanf(gJSF->Env()->GetValue(arg,args),"%g",&fSize);
+
+  if( menu ) {
+    if( fShow ) menu->CheckEntry(menuid);
+    else menu->UnCheckEntry(menuid);
+  }
+
+}
+
+
+//---------------------------------------------------------------------------
+void JSFEDProperty::ToggleShow()
+{
+  Char_t arg[128];
+  sprintf(arg,"JSFEventDisplay.%s.Show",fName);
+  if( fShow ) {
+    gJSF->Env()->SetValue(arg,"0");
+    fShow=kFALSE;
+  }
+  else {
+    gJSF->Env()->SetValue(arg,"1");
+    fShow=kTRUE;
+  }
+
+}
+
+//---------------------------------------------------------------------------
+JSFEventDisplay::JSFEventDisplay(JSFGUIFrame *gui)
 {
    // A class to display event data
+  
+  fGenNeutral=new JSFEDProperty("GenNeutral",1,6);
+  fGenCharged=new JSFEDProperty("GenCharged",1,7);
+  fLTKCLTrack=new JSFEDProperty("LTKCLTrack",1,0);
+  fCDCTrack  =new JSFEDProperty("CDCTrack",1,5);
+  fVTXHit    =new JSFEDProperty("VTXHit",1,2,8,0.5);
+  fEMCHit    =new JSFEDProperty("EMCHit",1,2);
+  fHDCHit    =new JSFEDProperty("HDCHit",1,3);
+
+  fHelixes = new TClonesArray("THelix",1000);
+
+  Update();
+
+  fView=NULL;
+  fCanvas=NULL;
+  fGUIMain=gui;
+
+  fWidgets = new TList();
+
+  gGeometryIsInitialized=kFALSE;
+
+}
+
+
+//---------------------------------------------------------------------------
+void JSFEventDisplay::Update()
+{
 
   fViewNo=gJSF->Env()->GetValue("JSFEventDisplay.ViewNo",1);
-  sscanf(gJSF->Env()->GetValue("JSFEventDisplay.ViewRange",
-       "-10,-10,-10,10,10,10"),"%g,%g,%g,%g,%g,%g",
-       &fViewRange[0], &fViewRange[1], &fViewRange[2],
-       &fViewRange[3], &fViewRange[4], &fViewRange[5]);
+  sscanf(gJSF->Env()->GetValue("JSFEventDisplay.ViewAngle",
+       "0.0 80.0 80.0"),"%g %g %g",
+	 &fViewAngle[0], &fViewAngle[1], &fViewAngle[2]);
+  sscanf(gJSF->Env()->GetValue("JSFEventDisplay.ViewRange1",
+       "-100.0 -100.0 -100.0 100.0 100.0 100.0"),"%g %g %g %g %g %g",
+       &fViewRange[1][0], &fViewRange[1][1], &fViewRange[1][2],
+       &fViewRange[1][3], &fViewRange[1][4], &fViewRange[1][5]);
+  sscanf(gJSF->Env()->GetValue("JSFEventDisplay.ViewRange2",
+       "-300.0 -300.0 -300.0 300.0 300.0 300.0"),"%g %g %g %g %g %g",
+       &fViewRange[1][0], &fViewRange[1][1], &fViewRange[1][2],
+       &fViewRange[1][3], &fViewRange[1][4], &fViewRange[1][5]);
+  sscanf(gJSF->Env()->GetValue("JSFEventDisplay.ViewRange3",
+       "-10.0 -10.0 -10.0 10.0 10.0 10.0"),"%g %g %g %g %g %g",
+       &fViewRange[2][0], &fViewRange[2][1], &fViewRange[2][2],
+       &fViewRange[2][3], &fViewRange[2][4], &fViewRange[2][5]);
+  sscanf(gJSF->Env()->GetValue("JSFEventDisplay.CanvasSize","600 600"),"%d %d",
+	 &fCanvasSize[0], &fCanvasSize[1]);
   fDrawAtNewEvent=gJSF->Env()->GetValue("JSFEventDisplay.DrawAtNewEvent",1);
   fDrawGeometry=gJSF->Env()->GetValue("JSFEventDisplay.DrawGeometry",1);
+  fDisplayType=gJSF->Env()->GetValue("JSFEventDisplay.DisplayType",1);
+
   Int_t i;
   for(i=0;i<14;i++){ fLTKCLTrackColor[i]=1; }
   fLTKCLTrackColor[11]=
@@ -114,29 +216,11 @@ JSFEventDisplay::JSFEventDisplay()
   fLTKCLTrackColor[6]=
       gJSF->Env()->GetValue("JSFEventDisplay.LTKCLTrackColor.Unclassified",5);
 
-  fDisplayType=gJSF->Env()->GetValue("JSFEventDisplay.DisplayType",1);
-
   sscanf(gJSF->Env()->GetValue("JSFEventDisplay.Bfield","20.0"),"%g",&fBfield);
   sscanf(gJSF->Env()->GetValue("JSFEventDisplay.VTXViewRadius","10.0"),"%g",&fVTXViewRadius);
   
-  fGenNeutral=new JSFEDProperty("GenNeutral",1,6);
-  fGenCharged=new JSFEDProperty("GenCharged",1,7);
-  fLTKCLTrack=new JSFEDProperty("LTKCLTrack",1,0);
-  fCDCTrack  =new JSFEDProperty("CDCTrack",1,5);
-  fVTXHit    =new JSFEDProperty("VTXHit",1,2,8,0.5);
-  fEMCHit    =new JSFEDProperty("EMCHit",1,2);
-  fHDCHit    =new JSFEDProperty("HDCHit",1,3);
-
   sscanf(gJSF->Env()->GetValue("JSFEventDisplay.HDCScale","1.0"),"%g",&fHDCScale);
   sscanf(gJSF->Env()->GetValue("JSFEventDisplay.EMCScale","1.0"),"%g",&fEMCScale);
-
-
-
-  fView=NULL;
-  fCanvas=NULL;
-
-  gGeometryIsInitialized=kFALSE;
-
 
 }
 
@@ -144,6 +228,7 @@ JSFEventDisplay::JSFEventDisplay()
 //---------------------------------------------------------------------------
 JSFEventDisplay::~JSFEventDisplay()
 {
+  Clear();
   if( !fGenNeutral ) delete fGenNeutral;
   if( !fGenCharged ) delete fGenCharged;
   if( !fLTKCLTrack ) delete fLTKCLTrack;
@@ -154,6 +239,15 @@ JSFEventDisplay::~JSFEventDisplay()
   if( !fView       ) delete fView;
   if( !fCanvas     ) delete fCanvas;
   fWidgets->Delete();
+  delete fWidgets;
+}
+
+//---------------------------------------------------------------------------
+void JSFEventDisplay::Clear()
+{
+  fSignals->Delete();
+  delete fSignals;
+  fNHelix=0;
 
 }
 
@@ -166,18 +260,27 @@ void JSFEventDisplay::DisplayEventData()
   if( !fDrawAtNewEvent ) return;
 
   if( !fCanvas ) {
-    fCanvas = new TCanvas("EventDisplay");
-    fView   = new TView(fViewNo);
-    fView->SetRange(&fViewRange[0], &fViewRange[3]);
+    fCanvas = new TCanvas("EventDisplay","EventDisplay",fCanvasSize[0],fCanvasSize[1]);
     fCanvasDirectory=gDirectory;
   } 
+  else {
+    fCanvas->Clear();
+    Clear();
+  }
   TDirectory *olddir=gDirectory;
   if( fCanvasDirectory != gDirectory ) fCanvasDirectory->cd();
 
-  simdst=(JSFSIMDST*)gJSF->FindModule("JSFSIMDST");
+  fSignals = new TList();
+
+  TView *evview  = new TView(fViewNo);
+  fSignals->Add(evview);
+  Int_t ierr;
+  evview->SetView(fViewAngle[0], fViewAngle[1], fViewAngle[2], ierr);
+  evview->SetRange(&fViewRange[fDisplayType][0], &fViewRange[fDisplayType][3]);
+
+  if( !simdst ) simdst=(JSFSIMDST*)gJSF->FindModule("JSFSIMDST");
 
   if( fDrawGeometry ) DrawGeometry(fDisplayType);
-
 
   switch (fDisplayType) {
     case 0:
@@ -190,7 +293,7 @@ void JSFEventDisplay::DisplayEventData()
       //      if( fLTKCLTrack->fShow )   DisplayLTKCLTracks();
       if( fVTXHit->fShow )     DisplayVTXHits();
       if( fGenCharged->fShow || fGenNeutral->fShow) 
-	DisplayGeneratorParticles();
+      	DisplayGeneratorParticles();
       break;
     case 2:
       if( fCDCTrack->fShow )   DisplayCDCTracks();
@@ -200,7 +303,6 @@ void JSFEventDisplay::DisplayEventData()
   }
 
   fCanvas->Update();
-
   if( fCanvasDirectory != olddir ) olddir->cd();
 
 
@@ -215,13 +317,13 @@ void JSFEventDisplay::DrawGeometry(Int_t type)
  
   switch (type) {
     case 0:
-      gvMomentum->Draw();
+      gvMomentum->Draw("same");
       break;
     case 1:
-      gvAll->Draw();
+      gvAll->Draw("same");
       break;
     case 2:
-      gvVTX->Draw();
+      gvVTX->Draw("same");
       break;
   }
 
@@ -234,7 +336,6 @@ void JSFEventDisplay::InitializeGeometry()
   if( gJSF == 0 ) { printf("JSFSteer is not defined yet.\n"); return; }
   JSFQuickSimParam *p=(JSFQuickSimParam*)simdst->Param();
 
-  fWidgets = new TList();
 
   TRotMatrix *rotx=new TRotMatrix("XDIR", "XDIR", 0.0, 0.0, 90.0, 90.0, 90.0, 0.0);
   TRotMatrix *roty=new TRotMatrix("YDIR", "YDIR", 90.0, 0.0, 0.0, 0.0, 90.0, 90.0);
@@ -256,12 +357,13 @@ void JSFEventDisplay::InitializeGeometry()
   TNode *vAll3=new TNode("ALLVIEW3","ALLVIEW3","BEAMPIPE",0,0,-zshift,"");
   TNode *vAll4=new TNode("ALLVIEW4","ALLVIEW4","PIPE",10.0,0,2*zshift,"XDIR");
   TNode *vAll5=new TNode("ALLVIEW5","ALLVIEW5","PIPE",0.0, 10.0,2*zshift,"YDIR");
+  fWidgets->Add(gvAll) ; fWidgets->Add(vAll2); fWidgets->Add(vAll3);
+  fWidgets->Add(vAll4) ; fWidgets->Add(vAll5);
 
   vAll2->SetLineColor(2);
   vAll3->SetLineColor(4);
   vAll4->SetLineColor(7);
   vAll5->SetLineColor(6);
-
 
   //  View for vertex view
   Int_t nl=p->GetVTXNLayer();
@@ -281,6 +383,7 @@ void JSFEventDisplay::InitializeGeometry()
   vVTXin->SetLineColor(1);
   vVTXxa->SetLineColor(7);
   vVTXya->SetLineColor(6);
+  fWidgets->Add(gvVTX) ; fWidgets->Add(vVTXxa); fWidgets->Add(vVTXya);
 
   //  TTUBE *momframe=new TTUBE("MOMV", "MOMV","void", 0.0, 1.0, 0.5);
   TSPHE *momframe=new TSPHE("MOMV", "MOMV","void", 0.99, 1.0, 0.0, 180.0, 0.0, 360.0);
@@ -294,7 +397,8 @@ void JSFEventDisplay::InitializeGeometry()
   gvMomentum->SetLineColor(43);
   vMomxa->SetLineColor(7);
   vMomya->SetLineColor(6);
-
+  fWidgets->Add(momframe) ; fWidgets->Add(momaxis); fWidgets->Add(gvMomentum);
+  fWidgets->Add(vMomxa) ; fWidgets->Add(vMomya);
 
   gGeometryIsInitialized=kTRUE;
 }
@@ -347,7 +451,9 @@ void JSFEventDisplay::DisplayEMCHits()
      
      box3d=new TMarker3DBox(x, y, z, dx, dy, dz, 0, ang);
      box3d->SetLineColor(fEMCHit->fColor);
+     box3d->SetLineWidth((Width_t)fEMCHit->fSize);
      box3d->Draw();
+     fSignals->Add(box3d);
   } 
 
 
@@ -401,7 +507,9 @@ void JSFEventDisplay::DisplayHDCHits()
      }
      box3d=new TMarker3DBox(x, y, z, dx, dy, dz, 0, ang);
      box3d->SetLineColor(fHDCHit->fColor);
+     box3d->SetLineWidth((Width_t)fHDCHit->fSize);
      box3d->Draw();
+     fSignals->Add(box3d);
   } 
 
 }
@@ -413,8 +521,12 @@ void JSFEventDisplay::DisplayCDCTracks()
    JSFSIMDSTBuf *sdb=(JSFSIMDSTBuf*)simdst->EventBuf();
    TClonesArray *cdc=sdb->GetCDCTracks(); 
    Int_t i;
+   TClonesArray &helixes=*fHelixes;
+   Int_t nh=fNHelix;
 
    JSFQuickSimParam *par=(JSFQuickSimParam*)simdst->Param();
+
+
    for(i=0;i<sdb->GetNCDCTracks();i++){
      JSFCDCTrack *t=(JSFCDCTrack*)cdc->UncheckedAt(i);
      Double_t hp[3], hx[3];
@@ -455,12 +567,16 @@ void JSFEventDisplay::DisplayCDCTracks()
      zlast = end.z;     if( zlast > 0.0 ) { range[0]=hx[2] ; range[1]=zlast ;}
      else {  range[1]=hx[2] ; range[0]=zlast; }
 
-     thelix=new THelix();
-     thelix->SetHelix(hx, hp, w, range, kHelixZ);
+     new(helixes[nh]) THelix();
+     THelix *thelix=(THelix*)fHelixes->UncheckedAt(nh);
+     nh++;
      thelix->SetLineColor(fCDCTrack->fColor);
+     thelix->SetLineWidth((Width_t)(fCDCTrack->fSize));
+     thelix->SetHelix(hx, hp, w, range, kHelixZ, 0);
      thelix->SetRange(range);
      thelix->Draw();
    }
+   fNHelix=nh;
 }
 
 //_____________________________________________________
@@ -490,14 +606,8 @@ void  JSFEventDisplay::DisplayLTKCLMomentum()
      pl=new TPolyLine3D(2,xp,yp,zp);
      pl->SetLineColor(col);
      pl->Draw();
+     fSignals->Add(pl);
    }
-   //   c1->Update();
-   //
-   //  Draw the geometry using the x3d viewver.
-   //  Note that this viewver may also be invoked from the "View" menu in
-   //  the canvas tool bar
-   //   c1->x3d();
-
 }
 
 //_____________________________________________________
@@ -509,6 +619,8 @@ void  JSFEventDisplay::DisplayGeneratorParticles()
    JSFQuickSimParam *par=simdst->Param();
 
    Int_t i;
+   TClonesArray &helixes=*fHelixes;
+   Int_t nh=fNHelix;
    //   printf(" There are %d Generator particles\n",sdb->GetNGeneratorParticles());
    Float_t xp[2],yp[2],zp[2];
    TVector pv(4); TVector xv(4); TVector xvd(4);
@@ -556,6 +668,7 @@ void  JSFEventDisplay::DisplayGeneratorParticles()
 	 pl=new TPolyLine3D(2,xp,yp,zp);
          pl->SetLineColor(fGenNeutral->fColor);
          pl->Draw();
+	 fSignals->Add(pl);
        }
      }
      else if( fGenCharged->fShow ) {
@@ -579,7 +692,9 @@ void  JSFEventDisplay::DisplayGeneratorParticles()
        ht.OriginToCylinder(rcyl, zcyl, phi0, phi1, 3, hx[0], hx[1]);
        JSF3DV tend=ht.GetCoordinate(phi1);
 
-       thelix=new THelix();
+       new(helixes[nh]) THelix();
+       THelix *thelix=(THelix*)fHelixes->UncheckedAt(nh);
+       nh++;
 
        EHelixRangeType iht=kHelixZ;
        if( TMath::Abs(gt->GetPz()) < 0.0001 ) { 
@@ -608,12 +723,7 @@ void  JSFEventDisplay::DisplayGeneratorParticles()
        thelix->Draw();
      }
    }
-   //  c1->Update();
-   //
-   //  Draw the geometry using the x3d viewver.
-   //  Note that this viewver may also be invoked from the "View" menu in
-   //  the canvas tool bar
-   //   c1->x3d();
+   fNHelix=nh;
 
 }
 
@@ -627,8 +737,9 @@ void  JSFEventDisplay::DisplayVTXHits()
    JSFVTXHit *vh;
    Int_t nvtx=sdb->GetNVTXHits();
 
-   if( !pm ) { delete pm;}
+   //   if( pm ) { delete pm;}
    pm=new TPolyMarker3D(nvtx);
+   fSignals->Add(pm);
    for(i=0;i<nvtx;i++){
      vh=(JSFVTXHit*)vtx->UncheckedAt(i);
      Float_t r=vh->GetR();
@@ -639,10 +750,12 @@ void  JSFEventDisplay::DisplayVTXHits()
      //     pm->SetPoint(i,x,y,z);
      Float_t angle=phi/TMath::Pi()*180.0;
      box3d=new TMarker3DBox(x, y, z,0.002,0.002,0.002,0,angle);
+     fSignals->Add(box3d);
      if( vh->GetGeneratorTrack() != 0 ){
        box3d->SetLineColor(fVTXHit->fColor);
        box3d->Draw();
        box3d=new TMarker3DBox(x, y, z,0.002,0.02,0.02,0,angle);
+       fSignals->Add(box3d);
        box3d->SetLineColor(fVTXHit->fColor);
        box3d->Draw();
      }
@@ -651,17 +764,6 @@ void  JSFEventDisplay::DisplayVTXHits()
        box3d->Draw();
      }
    }
-   //   pm->SetMarkerSize(fVTXHit->fSize);
-   //pm->SetMarkerColor(fVTXHit->fColor);
-   //pm->SetMarkerStyle(fVTXHit->fType);
-   //pm->Draw();
-
-   //  c1->Update();
-   //
-   //  Draw the geometry using the x3d viewver.
-   //  Note that this viewver may also be invoked from the "View" menu in
-   //  the canvas tool bar
-   //   c1->x3d();
 
 }
 

@@ -1,3 +1,4 @@
+//*LastUpdate :  jsf-1-12 31-July-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-9  16-May-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-8  19-April-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-5  20-Feburary-1999  By Akiya Miyamoto
@@ -8,6 +9,7 @@
   1-May-1999 A.Miyamoto   Add Start borwser and Open JIM file menu
   16-May-1999 A.Miyamoto  Does not call GetArguments macro.
                           It is now called from MainMacro.C
+  31-July-1999 A.Miyamoto Add comments.
 */
 
 ///////////////////////////////////////////////////////////////////
@@ -22,6 +24,46 @@
 //   GetPrevious() when Previous button is pressed.
 //   GetEvent(Int_t event) when Goto event button is pressed.
 //   
+// Parameters ;  name: default #  description 
+// ~~~~~~~~~~~~
+//  JSFGUI.RunMode: 1
+//                 # 1 = Generate event.
+//                 # 2 = Read root file.
+//                 # 3 = Read SIMDST fortran binary file.
+//                 # 4 = Read JIM data.
+//  JSFGUI.MacroFileName: UserAnalysis.C
+//                 # File name for UserAnalysis macro
+//  JSFGUI.ShowHist: 0 
+//                 # 0 = Does not draw histogram at event event.
+//                 # 1 = Draw histogram.  A function, DrawHist() is called.
+//                 #     It must be defined in the UserAnalysis macro.
+//  JSFGUI.ShowHistFrequency: 1
+//                 # At every ShowHistFrequency events, histogram is drown.
+//  JSFGUI.FirstEvent: 1
+//                 # Event number where to start analysis.  This number is shown in 
+//                 # "From event no." field of JSF control pannel.
+//  JSFGUI.NEventAnalize: 10
+//                 # Number of event to analize.  The number is shown in the JSF control
+//                 # pannel. 
+//  JSFGUI.EventType: 1
+//                 # Valid when run mode=1 and specifies the type of event generator.
+//                 # 0 = Pythia Generator
+//                 # 1 = Debug generator
+//                 # 2 = Bases/Spring generator          ( not available yet)
+//                 # 3 = Read parton data and simulate.  ( not available yet)
+//                 # 4 = Read hepevt data                ( not available yet)
+//  JSFUI.SimulationType : 1                             ( not available yet)
+//                 # 1 = Quick Simulator                
+//                 # 2 = JLCSIM/JIM Simulator
+//  JSFGUI.ECM: 300
+//                 # Center of mass system for PythiaGenerator in GeV unit.
+//  JSFGUI.InitPythia: InitPythia.C
+//                 # Name of a macro filewhich is used to initialize Pythia.
+//  JSFGUI.InputFileName: 
+//                 # Input file name
+//  JSFGUI.OutputFileName: jsf.root
+//                 # Output file name,
+//
 //$Id$
 //
 ///////////////////////////////////////////////////////////////////
@@ -56,33 +98,34 @@
 #include <TH2.h>
 #include <TRandom.h>
 #include <TSystem.h>
-#include <TEnv.h>
 
 #include "JSFSteer.h"
 #include "JSFGUIFrame.h"
 #include "InputDialog.h"
+#include "JSFEnvGUIFrame.h"
+#include "JSFDemoDisplay.h"
 
 TBrowser *gbrows;
 
-enum ETestCommandIdentifiers {
-   M_FILE_GENEVENT=101,
-   M_FILE_READROOT=102,
-   M_FILE_READSIMDST=103,
-   M_FILE_READJIM=104,
-
-   M_FILE_OPEN=105,
-   M_FILE_OPENOUTPUT=106,
-   M_FILE_SAVE=107,
-   M_FILE_SAVEAS=108,
+enum EJSFGUICommandIdentifiers {
+   M__FILE_BEGIN=100,
+   M_FILE_OPEN=125,
+   M_FILE_OPENOUTPUT=126,
+   M_FILE_SAVE=127,
+   M_FILE_SAVEAS=128,
+   M_FILE_SETPARAM=129,
 
    M_FILE_STARTBROWSER=150,
    M_FILE_EXIT=151,
- 
+
+   M__FILE_END=160,
+
    M_HELP_CONTENTS=200,
    M_HELP_SEARCH=201,
    M_HELP_ABOUT=203,
    M_HELP_EVENTDISP=204,
 
+   M__DISP_BEGIN=299,
    M_DISP_REDRAW=300,
    M_DISP_MOMENTUM=301,
    M_DISP_ALL=302,
@@ -97,21 +140,83 @@ enum ETestCommandIdentifiers {
    M_ONOFF_VTXHIT=325,
    M_ONOFF_EMCHIT=326,
    M_ONOFF_HDCHIT=327,
+   M__DISP_END=330,
 
-
+   M__ANAL_BEGIN=500,
    M_ANAL_SHOWHIST=501,
    M_ANAL_SHOWFREQ=502,
    M_ANAL_RESETHIST=503,
    M_ANAL_DRAWHIST=504,
    M_ANAL_RELOAD=505,
    M_ANAL_MACRONAME=506,
+   M__ANAL_END=507,
+
+   M__CONT_BEGIN=640,
+
+   M_CONT_RT_DEMO=660,
+   M_CONT_RT_GENEVENT=661,
+   M_CONT_RT_READROOT=662,
+   M_CONT_RT_READSIMDST=663,
+   M_CONT_RT_READJIM=664,
+   M_CONT_RT_USERDEFINE=665,
+   M_CONT_RT_LAST=666,
+   
+   M_CONT_PARAM_SAVE=683,
+   M_CONT_PARAM_SAVEAS=684,
+   M_CONT_PARAM_EDIT=685,
 
    M_GEN_EVENTTYPE=701,
    M_GEN_ECM=702,
    M_GEN_INITPYTHIA=703,
+   M_GEN_PYTHIA_PRSTAT=704,
    
    M_GEN_PYTHIA=721,
    M_GEN_DEBUG=722, 
+   M_GEN_SPRING=723,
+   M_GEN_RPARTON=724,
+   M_GEN_RHEPEVT=725,
+   M_GEN_MERGE=726,
+   M_GEN_LASTRUN=727,
+   M_GEN_LAST=728,
+
+   M_GEN_LASTRUNFILE=729,
+
+   M_GEN_DEBUG_RANDOM=741,
+   M_GEN_DEBUG_NPARTICLE=742,
+   M_GEN_DEBUG_PRANGE=743,
+   M_GEN_DEBUG_COSTHRANGE=744,
+   M_GEN_DEBUG_AZIMUTHRANGE=745,
+   M_GEN_DEBUG_VTXRRANGE=746,
+   M_GEN_DEBUG_VTXPHIRANGE=747,
+   M_GEN_DEBUG_VTXZRANGE=748,
+   M_GEN_DEBUG_NSPECIE=749,
+   M_GEN_DEBUG_SPECIES1=750,
+   M_GEN_DEBUG_SPECIES2=751,
+   M_GEN_DEBUG_SPECIES3=753,
+
+   M_GEN_SPRING_SO=761,
+   M_GEN_SPRING_MODULE_NAME=762,
+   M_GEN_BASES_FILE=763,
+
+   M_GEN_RPARTON_DATAFILE=781,
+   M_GEN_RPARTON_FORMAT=782,
+
+   M_GEN_RDGEN_DATAFILE=801,
+   M_GEN_RDGEN_FORMAT=802,
+
+   M_GEN_MERGE_DATAFILE=821,
+   M_GEN_MERGE_LUMPERTRAIN=822,
+   M_GEN_MERGE_SEED=823,
+
+   M_SIM_QUICKSIM=841,
+   M_SIM_JIM=842,
+   M_SIM_QUICKSIM_PARAM=843,
+
+   M_GUI_RUNNO=861,
+   M_GUI_SIMDSTOUT=862,
+   M_GUI_OUTEVENTDATA=863,
+
+   M__CONT_END=880,
 
    B_BEGIN=1,
    B_NEXT_EVENT=2,
@@ -141,15 +246,24 @@ const char *filetypes[] = { "ROOT files",    "*.root",
 
 ///////////////////////////////////////////////////////////////////////
 
-JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h)
+JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h, Bool_t demo)
       : TGMainFrame(p, w, h)
 {
    // Create test main frame. A TGMainFrame is a top level window.
 
-   fED=new JSFEventDisplay();
+  if( demo ) {
+    fDemo=new JSFDemoDisplay(this);
+    fED=fDemo;
+  }
+  else {
+    fED=new JSFEventDisplay(this);
+    fDemo=0;
+  }
+
    fInitialized=kFALSE;
    fNoOfAnalizedEvents=-999;
    gbrows=NULL;
+   Int_t i;
 
    // Create menubar and popup menus. The hint objects are used to place
    // and group the different menu widgets with respect to eachother.
@@ -159,20 +273,13 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h)
    fMenuBarHelpLayout = new TGLayoutHints(kLHintsTop | kLHintsRight);
 
    fMenuFile = new TGPopupMenu(fClient->GetRoot());
-   fMenuFile->AddLabel("Run Type and Files");
-   fMenuFile->AddEntry("&Generate Event", M_FILE_GENEVENT);
-   fMenuFile->AddEntry("&Read Root File", M_FILE_READROOT);
-   fMenuFile->AddEntry("&Read SIMDST File", M_FILE_READSIMDST);
-   fMenuFile->AddEntry("&Read JIM Bank File", M_FILE_READJIM);
+   fMenuFile->AddLabel("Files");
    fMenuFile->AddSeparator();
    fMenuFile->AddEntry("&Open Input...", M_FILE_OPEN);
    fMenuFile->AddEntry("&Open Output...", M_FILE_OPENOUTPUT);
    fMenuFile->AddEntry("&Start Browser...", M_FILE_STARTBROWSER);
    fMenuFile->AddSeparator();
    fMenuFile->AddEntry("E&xit", M_FILE_EXIT);
-
-   fRunMode=gJSF->Env()->GetValue("JSFGUI.RunMode",1);
-   fMenuFile->CheckEntry(M_FILE_GENEVENT+fRunMode-1);
 
    fMenuOnOffSignals = new TGPopupMenu(fClient->GetRoot());
    fMenuOnOffSignals->AddLabel("On/Off ...");
@@ -184,15 +291,6 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h)
    fMenuOnOffSignals->AddEntry("VTX Hits",M_ONOFF_VTXHIT);
    fMenuOnOffSignals->AddEntry("EMC Hits",M_ONOFF_EMCHIT);
    fMenuOnOffSignals->AddEntry("HDC Hits",M_ONOFF_HDCHIT);
-
-   if( fED->fDrawGeometry ) fMenuOnOffSignals->CheckEntry(M_ONOFF_GEOMETRY);
-   if( fED->fGenNeutral->fShow ) fMenuOnOffSignals->CheckEntry(M_ONOFF_GENNEUTRAL);
-   if( fED->fGenCharged->fShow ) fMenuOnOffSignals->CheckEntry(M_ONOFF_GENTRACK);
-   if( fED->fLTKCLTrack->fShow ) fMenuOnOffSignals->CheckEntry(M_ONOFF_LTKCLTRACK);
-   if( fED->fCDCTrack->fShow ) fMenuOnOffSignals->CheckEntry(M_ONOFF_CDCTRACK);
-   if( fED->fVTXHit->fShow ) fMenuOnOffSignals->CheckEntry(M_ONOFF_VTXHIT);
-   if( fED->fEMCHit->fShow ) fMenuOnOffSignals->CheckEntry(M_ONOFF_EMCHIT);
-   if( fED->fHDCHit->fShow ) fMenuOnOffSignals->CheckEntry(M_ONOFF_HDCHIT);
 
    fMenuDisplay = new TGPopupMenu(fClient->GetRoot());
    fMenuDisplay->AddLabel("Event Display...");
@@ -206,8 +304,6 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h)
    fMenuDisplay->AddSeparator();
    fMenuDisplay->AddPopup("Show Signal...", fMenuOnOffSignals);
 
-   if( fED->fDrawAtNewEvent) fMenuDisplay->CheckEntry(M_DISP_EVENT);
-   fMenuDisplay->CheckEntry(fED->fDisplayType+301);
    
    // Analysis 
    fMenuAnal = new TGPopupMenu(fClient->GetRoot());
@@ -221,208 +317,236 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h)
    fMenuAnal->AddEntry("Reload Macro",M_ANAL_RELOAD);
    fMenuAnal->AddEntry("Macro Name...",M_ANAL_MACRONAME);
 
-   sscanf(gJSF->Env()->GetValue("JSFGUI.MacroFileName","UserAnalysis.C"),
-	  "%s",fMacroFileName);
-   fShowHist=gJSF->Env()->GetValue("JSFGUI.ShowHist",1);
-   fShowHistFrequency=gJSF->Env()->GetValue("JSFGUI.ShowHistFrequency",1);
-   fFirstEvent=gJSF->Env()->GetValue("JSFGUI.FirstEvent",1);
-   fNEventsAnalize=gJSF->Env()->GetValue("JSFGUI.NEventAnalize",10);
-   if( fShowHist ) fMenuAnal->CheckEntry(M_ANAL_SHOWHIST);
-
 
    // Help menu
    fMenuHelp = new TGPopupMenu(fClient->GetRoot());
    fMenuHelp->AddEntry("&About", M_HELP_ABOUT);
-   fMenuAnal->AddSeparator();
+   fMenuHelp->AddSeparator();
    fMenuHelp->AddEntry("&Event Display", M_HELP_EVENTDISP);
 
-   
-   fEventType=gJSF->Env()->GetValue("JSFGUI.EventType",kPythia);
-   sscanf(gJSF->Env()->GetValue("JSFGUI.ECM","300.0"),"%g",&fEcm);
-   sscanf(gJSF->Env()->GetValue("JSFGUI.InitPythiaMacro","InitPythia.C"),
-	  "%s",fInitPythiaMacro);
+   fMenuRunMode = new TGPopupMenu(fClient->GetRoot());
+   fMenuRunMode->AddLabel("Run Mode");
+   fMenuRunMode->AddSeparator();
+   fMenuRunMode->AddEntry("&Start demo now", M_CONT_RT_DEMO);
+   fMenuRunMode->AddSeparator();
+   fMenuRunMode->AddEntry("&Generate Event", M_CONT_RT_GENEVENT);
+   fMenuRunMode->AddEntry("&Read Root File", M_CONT_RT_READROOT);
+   fMenuRunMode->AddEntry("&Read SIMDST File", M_CONT_RT_READSIMDST);
+   fMenuRunMode->AddEntry("&Read JIM Bank File", M_CONT_RT_READJIM);
+   fMenuRunMode->AddEntry("&User defined", M_CONT_RT_USERDEFINE);
    
 
    //  Generator Control menu
    fMenuGenType=new TGPopupMenu(fClient->GetRoot());
-   fMenuGenType->AddLabel("Generator Type..");
-   fMenuGenType->AddEntry("Pythia",M_GEN_PYTHIA);
-   fMenuGenType->AddEntry("Debug",M_GEN_DEBUG);
-   fMenuGenType->CheckEntry(M_GEN_PYTHIA+fEventType);
+   for(i=0;i<M_GEN_LAST-M_GEN_PYTHIA;i++) {
+     fMenuGInfo[i]=new TGPopupMenu(fClient->GetRoot());
+   }
 
+   fMenuGInfo[0]->AddLabel("Parameters");
+   fMenuGInfo[0]->AddSeparator();
+   fMenuGInfo[0]->AddEntry("CM Energy",M_GEN_ECM);
+   fMenuGInfo[0]->AddEntry("InitPythiaMacro",M_GEN_INITPYTHIA);
+   fMenuGInfo[0]->AddEntry("PRSTAT argument",M_GEN_PYTHIA_PRSTAT);
+
+   fMenuGInfo[1]->AddLabel("Parameters");
+   fMenuGInfo[1]->AddSeparator();
+   fMenuGInfo[1]->AddEntry("Random Seed",M_GEN_DEBUG_RANDOM);
+   fMenuGInfo[1]->AddEntry("# of particles",M_GEN_DEBUG_NPARTICLE);
+   fMenuGInfo[1]->AddEntry("Momentum",M_GEN_DEBUG_PRANGE);
+   fMenuGInfo[1]->AddEntry("Costh",M_GEN_DEBUG_COSTHRANGE);
+   fMenuGInfo[1]->AddEntry("Azimuthal angle",M_GEN_DEBUG_AZIMUTHRANGE);
+   fMenuGInfo[1]->AddEntry("Vertex radius",M_GEN_DEBUG_VTXRRANGE);
+   fMenuGInfo[1]->AddEntry("Vertex phi",M_GEN_DEBUG_VTXPHIRANGE);
+   fMenuGInfo[1]->AddEntry("Vertex Z",M_GEN_DEBUG_VTXZRANGE);
+   fMenuGInfo[1]->AddEntry("# of species",M_GEN_DEBUG_NSPECIE);
+   fMenuGInfo[1]->AddEntry("Property of 1st specie",M_GEN_DEBUG_SPECIES1);
+   fMenuGInfo[1]->AddEntry("Property of 2nd specie",M_GEN_DEBUG_SPECIES2);
+   fMenuGInfo[1]->AddEntry("Property of 3rd specie",M_GEN_DEBUG_SPECIES3);
+
+
+   fMenuGInfo[2]->AddLabel("Parameters");
+   fMenuGInfo[2]->AddSeparator();
+   fMenuGInfo[2]->AddEntry("Spring Module name",M_GEN_SPRING_MODULE_NAME);
+   fMenuGInfo[2]->AddEntry("Shared Library name",M_GEN_SPRING_SO);
+   fMenuGInfo[2]->AddEntry("Bases File name",M_GEN_BASES_FILE);
+
+   fMenuGInfo[3]->AddLabel("Parameters");
+   fMenuGInfo[3]->AddSeparator();
+   fMenuGInfo[3]->AddEntry("Input data file",M_GEN_RPARTON_DATAFILE);
+   fMenuGInfo[3]->AddEntry("Format",M_GEN_RPARTON_FORMAT);
+
+   fMenuGInfo[4]->AddLabel("Parameters");
+   fMenuGInfo[4]->AddSeparator();
+   fMenuGInfo[4]->AddEntry("Input data file",M_GEN_RDGEN_DATAFILE);
+   fMenuGInfo[4]->AddEntry("Format",M_GEN_RDGEN_FORMAT);
+
+   fMenuGInfo[5]->AddLabel("Parameters");
+   fMenuGInfo[5]->AddSeparator();
+   fMenuGInfo[5]->AddEntry("Data file",M_GEN_MERGE_DATAFILE);
+   fMenuGInfo[5]->AddEntry("Luminosity/Train",M_GEN_MERGE_LUMPERTRAIN);
+   fMenuGInfo[5]->AddEntry("Random seed",M_GEN_MERGE_SEED);
+
+   fMenuGenType->AddLabel("Generator Parameters");
+   fMenuGenType->AddSeparator();
+   fMenuGenType->AddPopup("Pythia ...",fMenuGInfo[0]);
+   fMenuGenType->AddPopup("Debug ...",fMenuGInfo[1]);
+   fMenuGenType->AddPopup("Bases/Spring ...",fMenuGInfo[2]);
+   fMenuGenType->AddPopup("Read parton  ...",fMenuGInfo[3]);
+   fMenuGenType->AddPopup("Read HEPEVT ...",fMenuGInfo[4]);
+   fMenuGenType->AddSeparator();
+   fMenuGenType->AddPopup("Event Merge ...",fMenuGInfo[5]);
+   fMenuGenType->AddEntry("Last run file",M_GEN_LASTRUNFILE);
+   fMenuGenType->AddSeparator();
+   fMenuGenType->AddEntry("Run number",M_GUI_RUNNO);
+   fMenuGenType->AddEntry("Output SIMDST data",M_GUI_SIMDSTOUT);
+   fMenuGenType->AddEntry("Output Event data",M_GUI_OUTEVENTDATA);
+   
    fMenuGen=new TGPopupMenu(fClient->GetRoot());
-   fMenuGen->AddLabel("Generator Conttrol");
-   fMenuGen->AddPopup("Event Type",fMenuGenType);
-   fMenuGen->AddEntry("CM Energy",M_GEN_ECM);
-   fMenuGen->AddEntry("InitPythiaMacro",M_GEN_INITPYTHIA);
+   fMenuGen->AddLabel("Type of Generator");
+   fMenuGen->AddSeparator();
+   fMenuGen->AddEntry("Pythia",M_GEN_PYTHIA);
+   fMenuGen->AddEntry("Debug",M_GEN_DEBUG);
+   fMenuGen->AddEntry("Bases/Spring",M_GEN_SPRING);
+   fMenuGen->AddEntry("Read Parton Data",M_GEN_RPARTON);
+   fMenuGen->AddEntry("Read HEPEVT Data",M_GEN_RHEPEVT);
+   fMenuGen->AddSeparator();
+   fMenuGen->AddEntry("Merge Event",M_GEN_MERGE);
+   fMenuGen->AddEntry("Use last run seed",M_GEN_LASTRUN);
 
-   // Menu button messages are handled by the main frame (i.e. "this")
-   // ProcessMessage() method.
+   fMenuSimType=new TGPopupMenu(fClient->GetRoot());
+   fMenuSimType->AddLabel("Simulator type and Parameters");
+   fMenuSimType->AddSeparator();
+   fMenuSimType->AddEntry("Use QuickSim",M_SIM_QUICKSIM);
+   fMenuSimType->AddEntry("Use JIM Sim.",M_SIM_JIM);
+   fMenuSimType->AddSeparator();
+   fMenuSimType->AddEntry("QuickSim Parameter file...",M_SIM_QUICKSIM_PARAM);
+
+
+   fMenuControl=new TGPopupMenu(fClient->GetRoot());
+   fMenuControl->AddLabel("Parameter control");
+   fMenuControl->AddSeparator();
+   fMenuControl->AddPopup("Run Mode ...",fMenuRunMode);
+   fMenuControl->AddPopup("Generator type ...",fMenuGen);
+   fMenuControl->AddPopup("Generator parameters ...",fMenuGenType);
+   fMenuControl->AddSeparator();
+   fMenuControl->AddPopup("Simulator type ...",fMenuSimType);
+   fMenuControl->AddSeparator();
+   fMenuControl->AddEntry("Save parameters",M_CONT_PARAM_SAVE);
+   fMenuControl->AddEntry("Save as  ...",M_CONT_PARAM_SAVEAS);
+   fMenuControl->AddEntry("Other parameters ...",M_CONT_PARAM_EDIT);
+   
    fMenuFile->Associate(this);
-   fMenuGen->Associate(this);
+   fMenuControl->Associate(this);
    fMenuDisplay->Associate(this);
    fMenuAnal->Associate(this);
    fMenuHelp->Associate(this);
 
-
    fMenuBar = new TGMenuBar(this, 1, 1, kHorizontalFrame);
    fMenuBar->AddPopup("&File", fMenuFile, fMenuBarItemLayout);
-   // fMenuBar->AddPopup("&Options", fMenuOption, fMenuBarItemLayout);
-   fMenuBar->AddPopup("&Generator", fMenuGen, fMenuBarItemLayout);
+
+   fMenuBar->AddPopup("&Controls", fMenuControl, fMenuBarItemLayout);
    fMenuBar->AddPopup("&Analysis", fMenuAnal, fMenuBarItemLayout);
    fMenuBar->AddPopup("&Event Display", fMenuDisplay, fMenuBarItemLayout);
    fMenuBar->AddPopup("&Help", fMenuHelp, fMenuBarHelpLayout);
 
+   // Add user Menu
+   if( gJSF->Env()->GetValue("JSFGUI.UserMenu",0) ) {
+     gROOT->LoadMacro(gJSF->Env()->GetValue("JSFGUI.UserMenuMacro","UserMenuMacro.C"));
+     fMenuUser = new TGPopupMenu(fClient->GetRoot());
+     Char_t cmd[256];
+     sprintf(cmd,"UserMenu((TGPopupMenu*)0x%x);",(UInt_t)fMenuUser);
+     gROOT->ProcessLine(cmd);
+     fMenuUser->Associate(this);
+     fMenuBar->AddPopup("UserMenu", fMenuUser, fMenuBarItemLayout);
+   }
+
    AddFrame(fMenuBar, fMenuBarLayout);
 
    // Create frame to display file information.
+   TGLayoutHints *lhTopLeft=new TGLayoutHints(kLHintsTop|kLHintsLeft,2,0,2,2);
+   TGLayoutHints *lhTopExpandX=new TGLayoutHints(kLHintsTop|kLHintsExpandX,2,0,2,2);
+
+   Char_t blank[110];
+   sprintf(blank,"%-100s","  ");
    fFileFrame = new TGCompositeFrame(this, 2, 2, kHorizontalFrame);
    fLFile = new TGLabel(fFileFrame," Input File: ");
-   fFileFrame->AddFrame(fLFile, 
-			 new TGLayoutHints(kLHintsTop|kLHintsLeft,2,0,2,2));
-
-   sscanf(gJSF->Env()->GetValue("JSFGUI.InputFileName",""),
-	  "%s",fInputFileName);
-   if( strlen(fInputFileName) >= 60 ){
-     printf("Input file name, %s, is too long.\n",fInputFileName);
-     printf("It is trancated when displayed.\n");
-   }
-   Char_t infn[101], infn2[101];
-   Int_t  lfn2=strlen(fInputFileName);
-   Int_t  lfn=TMath::Min(100,lfn2);
-   
-   strncpy(infn,fInputFileName,lfn);
-   infn[lfn]=0;
-   sprintf(infn2,"%-100s",infn);
-   fLFileN = new TGLabel(fFileFrame,infn2);
+   fFileFrame->AddFrame(fLFile, lhTopLeft);
+   fLFileN = new TGLabel(fFileFrame,blank);
    fLFileN->SetWidth(400);
-   if( lfn2 <= 0 ) {
-     fMenuFile->DisableEntry(M_FILE_READROOT);
-     fMenuFile->DisableEntry(M_FILE_READSIMDST);
-     fMenuFile->DisableEntry(M_FILE_READJIM);
-   }
-
-   fFileFrame->AddFrame(fLFileN, 
-			 new TGLayoutHints(kLHintsTop|kLHintsLeft,2,0,2,2));
-   AddFrame(fFileFrame, new TGLayoutHints(kLHintsTop|kLHintsExpandX,
-					   2, 2, 1, 0) );
-
+   fFileFrame->AddFrame(fLFileN, lhTopExpandX); 
+   AddFrame(fFileFrame, lhTopExpandX);
 
    // To display output file name
 
    fFileOFrame = new TGCompositeFrame(this, 2, 2, kHorizontalFrame);
-   fLOFile = new TGLabel(fFileOFrame," Output File: ");
-   fFileOFrame->AddFrame(fLOFile, 
-			 new TGLayoutHints(kLHintsTop|kLHintsLeft,2,0,2,2));
-
-   sscanf(gJSF->Env()->GetValue("JSFGUI.OutputFileName","jsf.root"),
-	  "%s",fOutputFileName);
-   if( strlen(fOutputFileName) >= 60 ){
-     printf("Output file name, %s, is too long.\n",fOutputFileName);
-     printf("It is trancated when displayed.\n");
-   }
-   lfn2=strlen(fOutputFileName);
-   lfn=TMath::Min(100,lfn2);
-   
-   strncpy(infn,fOutputFileName,lfn);
-   infn[lfn]=0;
-   sprintf(infn2,"%-100s",infn);
-   fLOFileN = new TGLabel(fFileOFrame,infn2);
+   fLOFile = new TGLabel(fFileOFrame," Output File : ");
+   fFileOFrame->AddFrame(fLOFile, lhTopLeft);
+   fLOFileN = new TGLabel(fFileOFrame,blank);
    fLOFileN->SetWidth(400);
-   //   if( lfn2 <= 0 ) {
-   //  fMenuFile->DisableEntry(M_FILE_READROOT);
-   //  fMenuFile->DisableEntry(M_FILE_READSIMDST);
-   // }
-
-   fFileOFrame->AddFrame(fLOFileN, 
-			 new TGLayoutHints(kLHintsTop|kLHintsLeft,2,0,2,2));
-   AddFrame(fFileOFrame, new TGLayoutHints(kLHintsTop|kLHintsExpandX,
-					   2, 2, 1, 0) );
+   fFileOFrame->AddFrame(fLOFileN, lhTopExpandX);
+   AddFrame(fFileOFrame, lhTopExpandX);
 
    //
    fBeginFrame = new TGCompositeFrame(this, 10, 10, kHorizontalFrame);
    fBBegin = new TGTextButton(fBeginFrame,"Initialize",B_BEGIN);
    fBBegin->Associate(this);
-   fBeginFrame->AddFrame(fBBegin,
-			 new TGLayoutHints(kLHintsTop|kLHintsLeft,2,0,2,2));
-   AddFrame(fBeginFrame, new TGLayoutHints(kLHintsTop|kLHintsExpandX,
-					   10, 10, 1, 0) );
+   fBeginFrame->AddFrame(fBBegin, lhTopLeft);
+   AddFrame(fBeginFrame, lhTopExpandX);
 
    //
+   TGLayoutHints *lhTopRight= new TGLayoutHints(kLHintsTop|kLHintsRight,2,0,2,2);
    fEventFrame = new TGCompositeFrame(this, 10, 10, kHorizontalFrame );
-
    fBNextEvent = new TGTextButton(fEventFrame, "Next Event", B_NEXT_EVENT);
    fBNextEvent->Associate(this);
-   fEventFrame->AddFrame(fBNextEvent, 
-			 new TGLayoutHints(kLHintsTop|kLHintsRight,2,0,2,2));
+   fEventFrame->AddFrame(fBNextEvent, lhTopRight);
 
-   fBPreviousEvent = new TGTextButton(fEventFrame, "Previous Event",
-				                   B_PREVIOUS_EVENT);
+   fBPreviousEvent = new TGTextButton(fEventFrame, "Previous Event", B_PREVIOUS_EVENT);
    fBPreviousEvent->Associate(this);
-   fEventFrame->AddFrame(fBPreviousEvent, 
-			 new TGLayoutHints(kLHintsTop|kLHintsLeft,2,0,2,2));
+   fEventFrame->AddFrame(fBPreviousEvent, lhTopLeft);
 
    fLEventNumber = new TGLabel(fEventFrame, "  Event Number: 0         ");
-   //   fLEventNumber->SetWidth(200);
-   //   fLEventNumber->SetHeight(20);
-   //   fLEventNumber->SetBackgroundColor(1);
-   fEventFrame->AddFrame(fLEventNumber, 
-			 new TGLayoutHints(kLHintsTop|kLHintsLeft,2,2,2,2));
-
-   AddFrame(fEventFrame, new TGLayoutHints(kLHintsTop|kLHintsExpandX,
-					   10, 10, 1, 0) );
+   fEventFrame->AddFrame(fLEventNumber, lhTopLeft);
+   AddFrame(fEventFrame, lhTopExpandX);
 
    // Jump to the event
    fEventGoto  = new TGCompositeFrame(this, 60, 20, kHorizontalFrame);
    fBGotoEvent = new TGTextButton(fEventGoto,"Jump to Event No. ",B_GOTO_EVENT);
-   fEventGoto->AddFrame(fBGotoEvent, 
-         new TGLayoutHints(kLHintsTop|kLHintsLeft, 4, 4, 2, 2) );
+   fEventGoto->AddFrame(fBGotoEvent, lhTopLeft);
    fBGotoEvent->Associate(this);
 
    fTGotoEvent = new TGTextEntry(fEventGoto, new TGTextBuffer(20),T_GOTO_EVENT);
    fTGotoEvent->Resize(50, fTGotoEvent->GetDefaultHeight());
-   fEventGoto->AddFrame(fTGotoEvent, 
-	new TGLayoutHints(kLHintsTop | kLHintsLeft, 4, 4, 2, 2));
+   fEventGoto->AddFrame(fTGotoEvent, lhTopLeft);
    fTGotoEvent->Associate(this);
-   AddFrame(fEventGoto, new TGLayoutHints(kLHintsTop | kLHintsLeft,
-            10, 10, 1, 0));
+   AddFrame(fEventGoto, lhTopLeft);
 
    // Scan event
    fStartAnal = new TGCompositeFrame(this, 60, 20, kHorizontalFrame);
    fBStartAnal= new TGTextButton(fStartAnal, "Start analize  ",B_START_ANAL);
-   fStartAnal->AddFrame(fBStartAnal, 
-         new TGLayoutHints(kLHintsTop|kLHintsLeft, 4, 4, 2, 2) );
+   fStartAnal->AddFrame(fBStartAnal, lhTopLeft);
    fBStartAnal->Associate(this);
 
-   Char_t str[20];
-   sprintf(str,"%d",fNEventsAnalize);
-   TGTextBuffer *tb2=new TGTextBuffer(20);
-   tb2->AddText(0,str);
-   fTToEvent = new TGTextEntry(fStartAnal, tb2, T_ANAL_END);
+   TGTextBuffer *tb1=new TGTextBuffer(20);
+   tb1->AddText(0," ");
+   fTToEvent = new TGTextEntry(fStartAnal, tb1, T_ANAL_END);
    fTToEvent->Resize(50, fTToEvent->GetDefaultHeight());
-   fStartAnal->AddFrame(fTToEvent, 
-	new TGLayoutHints(kLHintsTop | kLHintsLeft, 4, 4, 2, 2));
+   fStartAnal->AddFrame(fTToEvent, lhTopLeft);
    fTToEvent->Associate(this);
 
    fLSAFromEvent = new TGLabel(fStartAnal,"Events   from Event No. ");
-   fStartAnal->AddFrame(fLSAFromEvent, 
-			 new TGLayoutHints(kLHintsTop|kLHintsLeft,2,0,2,2));
+   fStartAnal->AddFrame(fLSAFromEvent, lhTopLeft);
 
-   sprintf(str,"%d",fFirstEvent);
-   TGTextBuffer *tb=new TGTextBuffer(20);
-   tb->AddText(0,str);
-   fTFromEvent = new TGTextEntry(fStartAnal, tb ,T_ANAL_START);
+   TGTextBuffer *tb2=new TGTextBuffer(20);
+   tb2->AddText(0," ");
+   fTFromEvent = new TGTextEntry(fStartAnal, tb2,T_ANAL_START);
    fTFromEvent->Resize(50, fTFromEvent->GetDefaultHeight());
-   fStartAnal->AddFrame(fTFromEvent, 
-	new TGLayoutHints(kLHintsTop | kLHintsLeft, 4, 4, 2, 2));
+   fStartAnal->AddFrame(fTFromEvent, lhTopLeft);
    fTFromEvent->Associate(this);
 
-   //   fLSAToEvent = new TGLabel(fStartAnal,"   No. of Events to analize: ");
-   // fStartAnal->AddFrame(fLSAToEvent, 
-   //			 new TGLayoutHints(kLHintsTop|kLHintsLeft,2,0,2,2));
 
-   AddFrame(fStartAnal, new TGLayoutHints(kLHintsTop | kLHintsLeft,
-            10, 10, 1, 0));
+   AddFrame(fStartAnal, lhTopLeft);
+
+   Update();
 
    SetWindowName("JSF Control Panel");
    MapSubwindows();
@@ -433,7 +557,6 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h)
    Layout();
    MapWindow();
 
-
 }
 
 //____________________________________________________________________
@@ -441,14 +564,148 @@ JSFGUIFrame::~JSFGUIFrame()
 {
    // Delete all created widgets.
 
-   delete fMenuBarLayout;
-   delete fMenuBarItemLayout;
-   delete fMenuBarHelpLayout;
+  if( fMenuUser ) {
+    gROOT->ProcessLine("UserMenuDelete();");
+    delete fMenuUser;
+  }
+  
+  delete fMenuBarLayout;
+  delete fMenuBarItemLayout;
+  delete fMenuBarHelpLayout;
 
-   delete fMenuFile;
-   delete fMenuDisplay;
-   delete fMenuAnal;
-   delete fMenuHelp;
+  delete fMenuFile;
+  delete fMenuDisplay;
+  delete fMenuAnal;
+  delete fMenuHelp;
+}
+ 
+//__________________________________________________________________
+void JSFGUIFrame::Update()
+{
+  // Update parameters of JSF Control Panel
+
+  Char_t str[30];
+  Int_t i;
+
+  //*****************
+  Int_t firstEvent=GetFirstEvent();
+  sprintf(str,"%d",firstEvent);
+  TGTextBuffer *tb=fTFromEvent->GetBuffer();
+  tb->Clear();
+  tb->AddText(0,str);
+  fTFromEvent->UnmapWindow();
+  fTFromEvent->MapWindow();
+
+  //*****************
+  Int_t nEventsAnalize=GetNEventsAnalize();
+  sprintf(str,"%d",nEventsAnalize);
+  tb=fTToEvent->GetBuffer();
+  tb->Clear();  tb->AddText(0,str);
+  fTToEvent->UnmapWindow();  fTToEvent->MapWindow();
+
+
+  //*****************
+  fED->Update();
+  if( fED->fDrawGeometry ) fMenuOnOffSignals->CheckEntry(M_ONOFF_GEOMETRY);
+  else fMenuOnOffSignals->UnCheckEntry(M_ONOFF_GEOMETRY);
+
+  if( fED->fDrawAtNewEvent) fMenuDisplay->CheckEntry(M_DISP_EVENT);
+  else fMenuDisplay->UnCheckEntry(M_DISP_EVENT);
+
+  if( fED->fDrawGeometry) fMenuDisplay->CheckEntry(M_ONOFF_GEOMETRY);
+  else fMenuDisplay->UnCheckEntry(M_ONOFF_GEOMETRY);
+
+  for(i=M_DISP_MOMENTUM;i<=M_DISP_VTX;i++){ fMenuDisplay->UnCheckEntry(i); }
+  fMenuDisplay->CheckEntry(fED->fDisplayType+M_DISP_MOMENTUM);
+
+  fED->fGenNeutral->Update(fMenuOnOffSignals, M_ONOFF_GENNEUTRAL);
+  fED->fGenCharged->Update(fMenuOnOffSignals, M_ONOFF_GENTRACK);
+  fED->fLTKCLTrack->Update(fMenuOnOffSignals, M_ONOFF_LTKCLTRACK);
+  fED->fCDCTrack->Update(fMenuOnOffSignals, M_ONOFF_CDCTRACK);
+  fED->fVTXHit->Update(fMenuOnOffSignals, M_ONOFF_VTXHIT);
+  fED->fEMCHit->Update(fMenuOnOffSignals, M_ONOFF_EMCHIT);
+  fED->fHDCHit->Update(fMenuOnOffSignals, M_ONOFF_HDCHIT);
+
+
+  //**************************************************
+  fShowHist = gJSF->Env()->GetValue("JSFGUI.ShowHist",1); 
+  if( fShowHist ) fMenuAnal->CheckEntry(M_ANAL_SHOWHIST);
+  else fMenuAnal->UnCheckEntry(M_ANAL_SHOWHIST);
+  fShowHistFrequency=gJSF->Env()->GetValue("JSFGUI.ShowHistFrequency",10);
+
+  //**************************************************
+  // Control Parameters
+  //**************************************************
+
+  Int_t irunmode=GetRunMode();
+  for(i=M_CONT_RT_DEMO;i<M_CONT_RT_LAST;i++){
+    fMenuRunMode->UnCheckEntry(i);
+  }
+  fMenuRunMode->CheckEntry(M_CONT_RT_DEMO+irunmode);
+
+  for(i=M_GEN_PYTHIA;i<M_GEN_LAST;i++) {
+    if( irunmode == 1 ) fMenuGen->EnableEntry(i);
+    else fMenuGen->DisableEntry(i);
+    fMenuGen->UnCheckEntry(i);
+  }
+  fMenuGen->CheckEntry(M_GEN_PYTHIA+GetEventType());
+
+  if( gJSF->Env()->GetValue("JSFGUI.LastRun",0) == 0 ) {
+    fMenuGen->UnCheckEntry(M_GEN_LASTRUN);
+    fMenuGenType->DisableEntry(M_GEN_LASTRUNFILE);
+  }
+  else {
+    fMenuGen->CheckEntry(M_GEN_LASTRUN);
+    fMenuGenType->EnableEntry(M_GEN_LASTRUNFILE);
+  }
+    
+  Int_t imrg=gJSF->Env()->GetValue("JSFGUI.MergeEvent",0);
+  if( imrg ) {
+    fMenuGen->CheckEntry(M_GEN_MERGE);
+    fMenuGenType->EnableEntry(M_GEN_MERGE_DATAFILE);
+  }
+  else {
+    fMenuGen->UnCheckEntry(M_GEN_MERGE);
+    fMenuGenType->DisableEntry(M_GEN_MERGE_DATAFILE);
+  }
+
+  if( gJSF->Env()->GetValue("JSFGUI.SIMDST.Output",0) ) 
+    fMenuGenType->CheckEntry(M_GUI_SIMDSTOUT);
+  else     fMenuGenType->UnCheckEntry(M_GUI_SIMDSTOUT);
+
+  if( gJSF->Env()->GetValue("JSFGUI.OutputEventData",0) ) 
+    fMenuGenType->CheckEntry(M_GUI_OUTEVENTDATA);
+  else     fMenuGenType->UnCheckEntry(M_GUI_OUTEVENTDATA);
+
+
+  fMenuSimType->UnCheckEntry(M_SIM_QUICKSIM);
+  fMenuSimType->UnCheckEntry(M_SIM_JIM);
+  Int_t isim=gJSF->Env()->GetValue("JSFGUI.SimulationType",1);
+  fMenuSimType->CheckEntry(M_SIM_QUICKSIM+isim-1);
+
+
+  //***********************
+  Char_t wrk[120];
+  strncpy(wrk,GetInputFileName(),100);
+  if( strcmp(fLFileN->GetText()->GetString(), wrk) != 0 ) {
+    fLFileN->SetText(new TGString(wrk));
+    fLFileN->SetTextJustify(kTextLeft);
+    fLFileN->SetWidth(400);
+  }
+
+  strncpy(wrk,GetOutputFileName(),100);
+  if( strcmp(fLOFileN->GetText()->GetString(), wrk) != 0 ) {
+    fLOFileN->SetText(new TGString(wrk));
+    fLOFileN->SetTextJustify(kTextLeft);
+    fLOFileN->SetWidth(400);
+  }
+
+
+  //***********************
+  if( fMenuUser ) {
+    sprintf(wrk,"UserMenuUpdate((TGPopupMenu*)0x%x);",(UInt_t)fMenuUser);
+    gROOT->ProcessLine(wrk);
+  }
 }
 
 //__________________________________________________________________
@@ -463,352 +720,65 @@ void JSFGUIFrame::CloseWindow()
    gApplication->Terminate(0);
 }
 
+
 //_________________________________________________________________
 Bool_t JSFGUIFrame::ProcessMessage(Long_t msg, Long_t parm1, Long_t)
 {
    // Handle messages send to the TestMainFrame object. E.g. all menu button
    // messages.
 
-
+   Char_t wrkstr[256];
    EMsgBoxIcon icontype = kMBIconExclamation;
    Int_t retval;
    Int_t buttons=0;
-   Char_t evtmsg[40];
-   Char_t workstr[256];
-   TGString *tgmsg;
-   InputDialog *dialog;
-   Int_t i;
-   Char_t defval[20], retstr[120];
+
    switch (GET_MSG(msg)) {
 
       case kC_COMMAND:
          switch (GET_SUBMSG(msg)) {
 
             case kCM_BUTTON:
-               //printf("Button was pressed, id = %ld\n", parm1);
-	      switch (parm1) {
-	        case B_BEGIN: 
-		  if( fInitialized ) {
-  	            new TGMsgBox(fClient->GetRoot(), this,  "JSF Message", 
-				 "JSF is already initialized",
-                                  icontype, buttons, &retval);
-		    break;
-                  } 
-                  fMenuFile->DisableEntry(M_FILE_OPEN);
-                  fMenuFile->DisableEntry(M_FILE_OPENOUTPUT);
-		  fInitialized=kTRUE;
-		  gROOT->ProcessLine("Initialize();");
-		  break;
-
-	        case B_NEXT_EVENT: 
-		  if( !fInitialized ) {
-		    fMenuFile->DisableEntry(M_FILE_OPEN);
-                    fMenuFile->DisableEntry(M_FILE_OPENOUTPUT);
-		    fInitialized=kTRUE;
-		    gROOT->ProcessLine("Initialize();");
-                  }
-		  gROOT->ProcessLine("GetNext();");
-		  sprintf(evtmsg,"  Event Number: %d\n",gJSF->GetEventNumber());
-		  tgmsg=new TGString(evtmsg);	
-		  fLEventNumber->SetText(tgmsg);
-		  break;
-
-	        case B_PREVIOUS_EVENT: 
-		  if( !fInitialized ) {
-  	            new TGMsgBox(fClient->GetRoot(), this,  "JSF Message", 
-			 "JSF is not initialized\nPress initialize button first",
-                                  icontype, buttons, &retval);
-		    break;
-                  }
-		  gROOT->ProcessLine("GetPrevious();");
-		  sprintf(evtmsg,"  Event Number: %d\n",gJSF->GetEventNumber());
-		  tgmsg=new TGString(evtmsg);
-		  fLEventNumber->SetText(tgmsg);
-		  break;
-	        case B_GOTO_EVENT: 
-		  GotoEventAction();
-		  break;
-	        case B_START_ANAL: 
-		  AnalizeEventAction();
-		  break;
-	      }
-	      break;
+		DoButtonAction(parm1);
+		if( parm1 >= 8000 ) fDemo->ProcessButton(parm1);
+		break;
 
             case kCM_MENUSELECT:
-               //printf("Pointer over menu entry, id=%ld\n", parm1);
-               break;
+                break;
 
             case kCM_MENU:
-               switch (parm1) {
-	         case M_FILE_GENEVENT: 
-	         case M_FILE_READROOT: 
-	         case M_FILE_READSIMDST: 
-	         case M_FILE_READJIM: 
-		   for(i=M_FILE_GENEVENT;i<=M_FILE_READJIM;i++){
-                     fMenuFile->UnCheckEntry(i);
-		   }
-		   fMenuFile->CheckEntry(parm1);
-		   fRunMode=parm1-M_FILE_GENEVENT+1;
-		   break;
-
-                  case M_FILE_OPEN:
-                     {
-                        TGFileInfo fi;
-                        fi.fFileTypes = (char **)filetypes;
-			Char_t dirnam[256];
-			strcpy(dirnam,gSystem->WorkingDirectory());
-			new TGFileDialog(fClient->GetRoot(), this, kFDOpen,&fi);
-			sprintf(workstr,"%s/%s",
-				gSystem->WorkingDirectory(),fi.fFilename);
-			ToRelativePath(workstr, dirnam, fInputFileName);
-			tgmsg=new TGString(fInputFileName);
-			fLFileN->SetText(tgmsg);
-			fLFileN->SetTextJustify(kTextLeft);
-			gSystem->ChangeDirectory(dirnam);
-			fMenuFile->EnableEntry(M_FILE_READROOT);
-			fMenuFile->EnableEntry(M_FILE_READSIMDST);
-			fMenuFile->EnableEntry(M_FILE_READJIM);
-
-			Int_t lfn=strlen(fInputFileName);
-			if( strcmp(&fInputFileName[lfn-4],"root") == 0 ){
-			  fMenuFile->CheckEntry(M_FILE_READROOT);
-			  fMenuFile->UnCheckEntry(M_FILE_READJIM);
-			  fMenuFile->UnCheckEntry(M_FILE_READSIMDST);
-			  fMenuFile->UnCheckEntry(M_FILE_GENEVENT);
-			  fRunMode=2;
-			}
-			else if( strcmp(&fInputFileName[lfn-3],"dat") == 0 ){
-			  fMenuFile->CheckEntry(M_FILE_READSIMDST);
-			  fMenuFile->UnCheckEntry(M_FILE_READROOT);
-			  fMenuFile->UnCheckEntry(M_FILE_READJIM);
-			  fMenuFile->UnCheckEntry(M_FILE_GENEVENT);
-			  fRunMode=3;
-			}
-			else if( strcmp(&fInputFileName[lfn-3],"bnk") == 0 ){
-			  fMenuFile->CheckEntry(M_FILE_READJIM);
-			  fMenuFile->UnCheckEntry(M_FILE_READROOT);
-			  fMenuFile->UnCheckEntry(M_FILE_READSIMDST);
-			  fMenuFile->UnCheckEntry(M_FILE_GENEVENT);
-			  fRunMode=4;
-			}
-
-
-			break;
-
-                     }
-                     break;
-
-                  case M_FILE_OPENOUTPUT:
-                     {
-                        TGFileInfo fi;
-                        fi.fFileTypes = (char **)filetypes;
-			Char_t dirnam[256];
-			strcpy(dirnam,gSystem->WorkingDirectory());
-			new TGFileDialog(fClient->GetRoot(), this, kFDSave,&fi);
-			sprintf(workstr,"%s/%s",
-				gSystem->WorkingDirectory(),fi.fFilename);
-			ToRelativePath(workstr,dirnam,fOutputFileName);
-			tgmsg=new TGString(fOutputFileName);
-			fLOFileN->SetText(tgmsg);
-			fLOFileN->SetTextJustify(kTextLeft);
-			gSystem->ChangeDirectory(dirnam);
-                     }
-                     break;
-
-                  case M_FILE_STARTBROWSER:
-		    if( !gbrows ) gbrows=new TBrowser("Browser");
-                    break;
-
-                  case M_FILE_EXIT:
-		    gROOT->ProcessLine("JobEnd();");
-		    CloseWindow();   // this also terminates theApp
-                    break;
-
-                  case M_DISP_REDRAW:
-		     fED->DisplayEventData();
-                     break;
-
-                  case M_DISP_MOMENTUM:
-                  case M_DISP_ALL:
-                  case M_DISP_VTX:
-		     fMenuDisplay->UnCheckEntry(fED->fDisplayType+301);
-		     fMenuDisplay->CheckEntry(parm1);
-		     fED->fDisplayType=parm1-301;
-                     break;
-
-	          case M_DISP_EVENT:
-		     if( fED->fDrawAtNewEvent ) {  
-		       fMenuDisplay->UnCheckEntry(M_DISP_EVENT);
-		       fED->fDrawAtNewEvent=kFALSE;
-                     }
-		     else {
-		       fMenuDisplay->CheckEntry(M_DISP_EVENT);
-		       fED->fDrawAtNewEvent=kTRUE;
-                     }
-
-
-  	          case M_ONOFF_GEOMETRY:
-		    if( fED->fDrawGeometry ) {
-		      fMenuOnOffSignals->UnCheckEntry(parm1);
-		      fED->fDrawGeometry=kFALSE;
-		    } 
-		    else {
-		      fMenuOnOffSignals->CheckEntry(parm1);
-		      fED->fDrawGeometry=kTRUE;
-		    }
-		    break;
-
-
-  	          case M_ONOFF_GENNEUTRAL:
-		    if( fED->fGenNeutral->fShow ) {
-		      fMenuOnOffSignals->UnCheckEntry(parm1);
-		      fED->fGenNeutral->fShow=kFALSE;
-		    } 
-		    else {
-		      fMenuOnOffSignals->CheckEntry(parm1);
-		      fED->fGenNeutral->fShow=kTRUE;
-		    }
-		    break;
-
-
-  	          case M_ONOFF_GENTRACK:
-		    if( fED->fGenCharged->fShow ) {
-		      fMenuOnOffSignals->UnCheckEntry(parm1);
-		      fED->fGenCharged->fShow=kFALSE;
-		    } 
-		    else {
-		      fMenuOnOffSignals->CheckEntry(parm1);
-		      fED->fGenCharged->fShow=kTRUE;
-		    }
-		    break;
-
-  	          case M_ONOFF_LTKCLTRACK:
-		    if( fED->fLTKCLTrack->fShow ) {
-		      fMenuOnOffSignals->UnCheckEntry(parm1);
-		      fED->fLTKCLTrack->fShow=kFALSE;
-		    } 
-		    else {
-		      fMenuOnOffSignals->CheckEntry(parm1);
-		      fED->fLTKCLTrack->fShow=kTRUE;
-		    }
-		    break;
-
-  	          case M_ONOFF_CDCTRACK:
-		    if( fED->fCDCTrack->fShow ) {
-		      fMenuOnOffSignals->UnCheckEntry(parm1);
-		      fED->fCDCTrack->fShow=kFALSE;
-		    } 
-		    else {
-		      fMenuOnOffSignals->CheckEntry(parm1);
-		      fED->fCDCTrack->fShow=kTRUE;
-		    }
-		    break;
-
-  	          case M_ONOFF_VTXHIT:
-		    if( fED->fVTXHit->fShow ) {
-		      fMenuOnOffSignals->UnCheckEntry(parm1);
-		      fED->fVTXHit->fShow=kFALSE;
-		    } 
-		    else {
-		      fMenuOnOffSignals->CheckEntry(parm1);
-		      fED->fVTXHit->fShow=kTRUE;
-		    }
-		    break;
-
-  	          case M_ONOFF_EMCHIT:
-		    if( fED->fEMCHit->fShow ) {
-		      fMenuOnOffSignals->UnCheckEntry(parm1);
-		      fED->fEMCHit->fShow=kFALSE;
-		    } 
-		    else {
-		      fMenuOnOffSignals->CheckEntry(parm1);
-		      fED->fEMCHit->fShow=kTRUE;
-		    }
-		    break;
-
-  	          case M_ONOFF_HDCHIT:
-		    if( fED->fHDCHit->fShow ) {
-		      fMenuOnOffSignals->UnCheckEntry(parm1);
-		      fED->fHDCHit->fShow=kFALSE;
-		    } 
-		    else {
-		      fMenuOnOffSignals->CheckEntry(parm1);
-		      fED->fHDCHit->fShow=kTRUE;
-		    }
-		    break;
-
-
-	          case M_ANAL_SHOWHIST:
-		    if( fShowHist ) {
-		      fMenuAnal->UnCheckEntry(M_ANAL_SHOWHIST);
-		      fShowHist=kFALSE;
-		    }
-		    else {
-		      fMenuAnal->CheckEntry(M_ANAL_SHOWHIST);
-		      fShowHist=kTRUE;
-		    }
-		    break;
-
-	          case M_ANAL_SHOWFREQ:
-		    sprintf(defval,"%d",fShowHistFrequency);
-		    dialog = new InputDialog("Histgram dispplay rate",defval,retstr);
-		    sscanf(retstr,"%d",&fShowHistFrequency);
-		    break;
-
-	          case M_ANAL_DRAWHIST:
- 		    gROOT->ProcessLine("DrawHist();");
-		    break;
-
-	          case M_ANAL_RESETHIST:
- 		    gROOT->ProcessLine("ResetHist();");
-		    break;
-
-	          case M_ANAL_MACRONAME:
-		    dialog= new InputDialog("User Analysis Macro file name", 
-					    fMacroFileName, fMacroFileName);
-		    break;
-
- 	          case M_ANAL_RELOAD:
-		    gROOT->LoadMacro(fMacroFileName);
-		    break;
-
-	          case M_GEN_ECM:
-		    sprintf(defval,"%g",fEcm);
-		    dialog = new InputDialog("CM Energy(GeV)",defval,retstr);
-		    sscanf(retstr,"%g",&fEcm);
-		    break;
-
-	         case M_GEN_INITPYTHIA:
-		    dialog = new InputDialog("InitPythia Macro file name",
-					     fInitPythiaMacro,retstr);
-		    sscanf(retstr,"%s",fInitPythiaMacro);
-		    break;
-
-	          case M_GEN_PYTHIA:
-	          case M_GEN_DEBUG:
-		     fMenuGenType->UnCheckEntry(M_GEN_PYTHIA+fEventType);
-		     fMenuGenType->CheckEntry(parm1);
-		     fEventType=parm1-M_GEN_PYTHIA;
-
-		     printf(" new Event type is %d\n",fEventType);
-
-                     break;
-
-	          case M_HELP_ABOUT:
-		     new TGMsgBox(fClient->GetRoot(), this,
-                                  "About JSF Control Panel", 
-"Welcome to JSF Control Panel.\nYou can display event from this panel,\nor start event simulation.",
-                                  icontype, buttons, &retval);
-	          case M_HELP_EVENTDISP:
-		     new TGMsgBox(fClient->GetRoot(), this,
-                                  "About Event Display", 
-	  "Momentum View shows LTKCL track momentum. \nTrack color shows track type.\nIn All view,  red beam pipe is +Z, \nblue is -Z, cyan is +X\nand purple is +Y directions",
-                                  icontype, buttons, &retval);
-		     break;
-
-                  default:
-                     break;
-               }
+	      if( parm1 > M__FILE_BEGIN && parm1 < M__FILE_END ) {
+		   DoFileMenuAction(parm1);  
+	      }
+	      else if( parm1 > M__CONT_BEGIN && parm1 < M__CONT_END ) {
+		   DoRunmodeMenuAction(parm1);
+	      }
+	      else if( parm1 > M__ANAL_BEGIN && parm1 < M__ANAL_END ) {
+		   DoAnalMenuAction(parm1);
+	      }
+	      else if( parm1 > M__DISP_BEGIN && parm1 < M__DISP_END ) {
+		   DoDispMenuAction(parm1);  
+	      }
+	      else if( parm1 == M_HELP_ABOUT ) {
+		     new TGMsgBox(fClient->GetRoot(),this,"About JSF Control Panel", 
+"Welcome to JSF Control Panel.
+You can display event from this panel,
+or start event simulation.",      icontype, buttons, &retval);
+	      }
+	      else if( parm1 == M_HELP_EVENTDISP) {
+		     new TGMsgBox(fClient->GetRoot(), this, "About Event Display", 
+"Momentum View shows LTKCL track momentum. 
+Track color shows track type.In All view,  
+red beam pipe is +Z, blue is -Z, 
+cyan is +Xand purple is +Y directions",    icontype, buttons, &retval);
+	      }
+	      else {
+		if( fMenuUser ) {
+		  sprintf(wrkstr,"UserMenuProcessMessage((TGPopupMenu*)0x%x,%ld);",
+			  (UInt_t)fMenuUser, parm1);
+		  gROOT->ProcessLine(wrkstr);
+		}
+	      }
+              break;
             default:
                break;
          }
@@ -828,6 +798,7 @@ Bool_t JSFGUIFrame::ProcessMessage(Long_t msg, Long_t parm1, Long_t)
       default:
          break;
    }
+
    return kTRUE;
 }
 
@@ -854,7 +825,6 @@ void JSFGUIFrame::DrawHist()
 void JSFGUIFrame::GotoEventAction()
 {
   Char_t evtmsg[40];
-  TGString *tgmsg;
   Char_t cmd[256];
 
   if( !fInitialized ) {
@@ -863,12 +833,10 @@ void JSFGUIFrame::GotoEventAction()
        fInitialized=kTRUE;
        gROOT->ProcessLine("Initialize();");
   }
-  sprintf(cmd,"GetEvent(%s);",
-	 fTGotoEvent->GetBuffer()->GetString());
+  sprintf(cmd,"GetEvent(%s);", fTGotoEvent->GetBuffer()->GetString());
   gROOT->ProcessLine(cmd);
   sprintf(evtmsg,"  Event Number: %d\n",gJSF->GetEventNumber());
-  tgmsg=new TGString(evtmsg);
-  fLEventNumber->SetText(tgmsg);
+  fLEventNumber->SetText(new TGString(evtmsg));
 }
 
 
@@ -876,7 +844,6 @@ void JSFGUIFrame::GotoEventAction()
 void JSFGUIFrame::AnalizeEventAction()
 {
   Char_t evtmsg[40];
-  TGString *tgmsg;
   Char_t cmd[256];
 
   EMsgBoxIcon icontype = kMBIconExclamation;
@@ -890,14 +857,18 @@ void JSFGUIFrame::AnalizeEventAction()
        gROOT->ProcessLine("Initialize();");
   }
   Int_t i;
-  sscanf(fTFromEvent->GetBuffer()->GetString(),"%d",&fFirstEvent);
-  sscanf(fTToEvent->GetBuffer()->GetString(),"%d",&fNEventsAnalize);
+  Int_t iFirstEvent, iNEventsAnalize;
+  sscanf(fTFromEvent->GetBuffer()->GetString(),"%d",&iFirstEvent);
+  sscanf(fTToEvent->GetBuffer()->GetString(),"%d",&iNEventsAnalize);
+  SetFirstEvent(iFirstEvent);
+  SetNEventsAnalize(iNEventsAnalize);
   fNoOfAnalizedEvents=0;
-  Int_t last=fFirstEvent+fNEventsAnalize-1;
-  for(i=fFirstEvent;i<=last;i++){
+  Int_t last=iFirstEvent+iNEventsAnalize-1;
+  for(i=iFirstEvent;i<=last;i++){
     fNoOfAnalizedEvents++;
     sprintf(cmd,"GetEvent(%d);",i);
     gROOT->ProcessLine(cmd);
+
     switch (fReturnCode) {
       case -2:
          new TGMsgBox(fClient->GetRoot(), this, "JSF Message", 
@@ -912,12 +883,30 @@ void JSFGUIFrame::AnalizeEventAction()
 	     break;
     }
     sprintf(evtmsg,"  Event Number: %d\n",gJSF->GetEventNumber());
-    tgmsg=new TGString(evtmsg);
-    fLEventNumber->SetText(tgmsg);
+    fLEventNumber->SetText(new TGString(evtmsg));
+
     if( fReturnCode != 0 ) break;
   }
   fNoOfAnalizedEvents=-999;  
   DrawHist();
+}
+
+
+//_________________________________________________________________
+void JSFGUIFrame::RunDemo()
+{
+
+  if( fDemo == 0 ) fDemo=new JSFDemoDisplay(this); 
+
+  if( !fInitialized ) {
+       fMenuFile->DisableEntry(M_FILE_OPEN);
+       fMenuFile->DisableEntry(M_FILE_OPENOUTPUT);
+       fInitialized=kTRUE;
+       gROOT->ProcessLine("Initialize();");
+  }
+
+  fDemo->SetTimer();
+
 }
 
 //------------------------------------------------------------
@@ -956,4 +945,516 @@ void JSFGUIFrame::ToRelativePath(const Char_t *fnin,
   k=0;
   for(i=0;i<nslash;i++){ sprintf(&fnout[k],"../"); k+=3; }
   sprintf(&fnout[k],"%s",&fnin[j+1]);
+}
+
+
+//_________________________________________________________________
+void JSFGUIFrame::DoButtonAction(Long_t parm1)
+{
+   // Process Button press event.
+
+   EMsgBoxIcon icontype = kMBIconExclamation;
+   Int_t retval;
+   Int_t buttons=0;
+   Char_t evtmsg[40];
+   TGString *tgmsg;
+   switch (parm1) {
+     case B_BEGIN: 
+       if( fInitialized ) {
+         new TGMsgBox(fClient->GetRoot(), this,  "JSF Message", 
+		      "JSF is already initialized",
+              icontype, buttons, &retval);
+	 break;
+       } 
+       fMenuFile->DisableEntry(M_FILE_OPEN);
+       fMenuFile->DisableEntry(M_FILE_OPENOUTPUT);
+       fInitialized=kTRUE;
+       gROOT->ProcessLine("Initialize();");
+       break;
+
+     case B_NEXT_EVENT: 
+       if( !fInitialized ) {
+	 fMenuFile->DisableEntry(M_FILE_OPEN);
+	 fMenuFile->DisableEntry(M_FILE_OPENOUTPUT);
+	 fInitialized=kTRUE;
+	 gROOT->ProcessLine("Initialize();");
+       }
+       gROOT->ProcessLine("GetNext();");
+       sprintf(evtmsg,"  Event Number: %d\n",gJSF->GetEventNumber());
+       tgmsg=new TGString(evtmsg);	
+       fLEventNumber->SetText(tgmsg);
+       break;
+
+     case B_PREVIOUS_EVENT: 
+       if( !fInitialized ) {
+	 new TGMsgBox(fClient->GetRoot(), this,  "JSF Message", 
+		      "JSF is not initialized\nPress initialize button first",
+		      icontype, buttons, &retval);
+	 break;
+       }
+       gROOT->ProcessLine("GetPrevious();");
+       sprintf(evtmsg,"  Event Number: %d\n",gJSF->GetEventNumber());
+       tgmsg=new TGString(evtmsg);
+       fLEventNumber->SetText(tgmsg);
+       break;
+
+     case B_GOTO_EVENT: 
+       GotoEventAction();
+       break;
+
+     case B_START_ANAL: 
+       AnalizeEventAction();
+       break;
+   
+   }
+
+}
+
+
+//_________________________________________________________________
+void JSFGUIFrame::DoFileMenuAction(Long_t parm1, Bool_t prompt)
+{
+   // Process Button press event.
+
+   Char_t workstr[256];
+   Char_t retstr[120];
+   Char_t dirnam[256];
+   switch(parm1) {
+     case M_FILE_OPEN:
+       {
+	 strcpy(retstr,GetInputFileName());
+	 if( prompt ) {
+ 	   TGFileInfo fi;
+	   fi.fFileTypes = (char **)filetypes;
+	   Char_t dirnam[256];
+	   strcpy(dirnam,gSystem->WorkingDirectory());
+	   new TGFileDialog(fClient->GetRoot(), this, kFDOpen,&fi);
+	   if( fi.fFilename != 0 ) {
+	     sprintf(workstr,"%s/%s",
+		 gSystem->WorkingDirectory(),fi.fFilename);
+	     ToRelativePath(workstr, dirnam, retstr);
+	     gJSF->Env()->SetValue("JSFGUI.InputFileName",retstr);
+	   }
+	 }
+	 gSystem->ChangeDirectory(dirnam);
+	 Int_t lfn=strlen(retstr);
+	 if( strcmp(&retstr[lfn-4],"root") == 0 ) SetRunMode(2);
+	 else if( strcmp(&retstr[lfn-3],"dat") == 0 ) SetRunMode(3);
+	 else if( strcmp(&retstr[lfn-3],"bnk") == 0 ) SetRunMode(4);
+       }
+       break;
+
+     case M_FILE_OPENOUTPUT:
+       strcpy(retstr,GetOutputFileName());
+       {
+	 TGFileInfo fi;
+	 fi.fFileTypes = (char **)filetypes;
+	 Char_t dirnam[256];
+	 strcpy(dirnam,gSystem->WorkingDirectory());
+	 new TGFileDialog(fClient->GetRoot(), this, kFDSave,&fi);
+	 if( fi.fFilename != 0 ) {
+	   sprintf(workstr,"%s/%s",
+		 gSystem->WorkingDirectory(),fi.fFilename);
+	   ToRelativePath(workstr,dirnam,retstr);
+	   gSystem->ChangeDirectory(dirnam);
+	   gJSF->Env()->SetValue("JSFGUI.OutputFileName",retstr);
+	 }
+       }
+       break;
+
+     case M_FILE_STARTBROWSER:
+       if( !gbrows ) gbrows=new TBrowser("Browser");
+       break;
+
+     case M_FILE_EXIT:
+       gROOT->ProcessLine("JobEnd();");
+       CloseWindow();   // this also terminates theApp
+       break;
+
+   }
+   Update();
+
+}
+
+
+
+//_________________________________________________________________
+void JSFGUIFrame::DoDispMenuAction(Long_t parm1, Bool_t prompt)
+{
+
+   Char_t wrk[128];
+   switch(parm1) {
+     case M_DISP_REDRAW:
+       fED->DisplayEventData();
+       break;
+
+     case M_DISP_MOMENTUM:
+     case M_DISP_ALL:
+     case M_DISP_VTX:
+       fED->fDisplayType=parm1-M_DISP_MOMENTUM;
+       sprintf(wrk,"%d",fED->fDisplayType);
+       gJSF->Env()->SetValue("JSFEventDisplay.DisplayType",wrk);
+       break;
+
+     case M_DISP_EVENT:
+       if( fED->fDrawAtNewEvent ) { fED->fDrawAtNewEvent=kFALSE; }
+       else  fED->fDrawAtNewEvent=kTRUE;
+       sprintf(wrk,"%d",(Int_t)fED->fDrawAtNewEvent);
+       gJSF->Env()->SetValue("JSFEventDisplay.DrawAtNewEvent",wrk);
+       break;
+
+     case M_ONOFF_GEOMETRY:
+       if( fED->fDrawGeometry ) { fED->fDrawGeometry=kFALSE; }
+       else { fED->fDrawGeometry=kTRUE; }
+       sprintf(wrk,"%d",(Int_t)fED->fDrawAtNewEvent);
+       gJSF->Env()->SetValue("JSFEventDisplay.DrawGeometry",wrk);
+       break;
+
+     case M_ONOFF_GENNEUTRAL:
+       fED->fGenNeutral->ToggleShow();
+       break;
+
+     case M_ONOFF_GENTRACK:
+       fED->fGenCharged->ToggleShow();
+       break;
+
+     case M_ONOFF_LTKCLTRACK:
+       fED->fLTKCLTrack->ToggleShow();
+       break;
+
+     case M_ONOFF_CDCTRACK:
+       fED->fCDCTrack->ToggleShow();
+       break;
+
+     case M_ONOFF_VTXHIT:
+       fED->fVTXHit->ToggleShow();
+       break;
+       
+     case M_ONOFF_EMCHIT:
+       fED->fEMCHit->ToggleShow();
+       break;
+
+     case M_ONOFF_HDCHIT:
+       fED->fHDCHit->ToggleShow();
+       break;
+
+   }
+   Update();
+
+}
+
+
+//_________________________________________________________________
+void JSFGUIFrame::DoAnalMenuAction(Long_t parm1, Bool_t prompt)
+{
+  //
+
+   Char_t wrkstr[256];
+   InputDialog *dialog;
+
+   switch(parm1) {
+     case M_ANAL_SHOWHIST:
+       if( fShowHist ) gJSF->Env()->SetValue("JSFGUI.ShowHist","0");
+       else gJSF->Env()->SetValue("JSFGUI.ShowHist","1");
+       break;
+
+     case M_ANAL_SHOWFREQ:
+       if( prompt ) {
+	 sprintf(wrkstr,"%d",fShowHistFrequency);
+	 dialog = new InputDialog("Histgram dispplay rate",wrkstr,wrkstr);
+	 if( wrkstr[0]!= 0 )gJSF->Env()->SetValue("JSFGUI.ShowHistFrequency",wrkstr);
+       }
+       break;
+
+     case M_ANAL_DRAWHIST:
+       gROOT->ProcessLine("DrawHist();");
+       break;
+
+     case M_ANAL_RESETHIST:
+       gROOT->ProcessLine("ResetHist();");
+       break;
+
+     case M_ANAL_MACRONAME:
+       strcpy(wrkstr,GetMacroFileName());
+       dialog= new InputDialog("User Analysis Macro file name", 
+			       wrkstr, wrkstr);
+       if( wrkstr[0]!=0 ) gJSF->Env()->SetValue("JSFGUI.MacroFileName",wrkstr);
+       break;
+
+     case M_ANAL_RELOAD:
+       gROOT->LoadMacro(GetMacroFileName());
+       break;
+
+   }
+   Update();
+
+}
+
+//_________________________________________________________________
+void JSFGUIFrame::DoRunmodeMenuAction(Long_t parm1, Bool_t prompt)
+{
+  //
+
+
+  Char_t wrkstr[256], retstr[256];
+  InputDialog *dialog;
+  Int_t retval=0;
+  Int_t buttons=0;
+
+  static const Int_t maxmenu=27;
+  Char_t *value[maxmenu][3]={
+    {"JSFGUI.ECM","300",
+"JSFGUI.ECM:
+Center of mass energy (GeV) for Pythia Generator."},  // 1
+    {"JSFGUI.InitPythiaMacro","InitPythia.C",
+"JSFGUI.InitPythiaMacro:
+A name of a macro file, which defines a function to initialize Pythia.
+A function name must be void InitPythia()"},  // 2
+    {"PythiaGenerator.PrintStat","1",
+"PythiaGenerator.PrintStat:
+NPYSTAT, the argument of Subroutine PYSTAT.
+If not 0, PYSTAT is called at the end of run as
+CALL PYSTAT(NPYSTAT)."},  // 3
+
+    {"DebugGenerator.RandomSeed","12345",
+       "DebugGenerator.RandomSeed:\nSeed of random number"}, // 4 -2 
+    {"DebugGenerator.Nparticles","4",
+       "DebugGenerator.Nparticles:\nNumber of particles per event."}, //5-2
+    {"DebugGenerator.RangeP","0.1  10.0",
+       "DebugGenerator.RangeP\nMinimum and maximum of particle's momentum in GeV."}, //6-2
+    {"DebugGenerator.RangeCosth","-1.0 1.0",
+       "DebugGenerator.RangeCosth:
+Minimum and maximum of Cosine of particle production angle."}, //7-2
+    {"DebugGenerator.RangeAzimuth","0.0, 360.0",
+     "DebugGenerator.RangeAzimuth:
+Minimum and maximum of particle's azimuthal angle."}, //8-2
+    {"DebugGenerator.RangeVTXR","0.0 0.0",
+     "DebugGenerator.RangeVTXR:
+Minimum and maximum of radius of particle's 
+vertex points in unit of cm."}, // 9- 3 
+    {"DebugGenerator.RangeVTXPhi","0.0, 360.0",
+"DebugGenerator.RangeVTXPhi:
+Minimum and maximum of azimuthal angle of particle's 
+vertex coordinate. Note that coordinate of vertex point 
+is given by cylindrical coordinate system."}, //10-4
+    {"DebugGenerator.RangeVTXZ","0.0, 0.0",
+"DebugGenerator.RangeVTXZ:
+Minimum and maximum of Z coordinate of vertex coordinate."}, //11-2
+    {"DebugGenerator.Nspecies","2",
+"DebugGenerator.Nspecies:
+Number of species of generated particles"}, //12-2
+    {"DebugGenerator.Species1","13 0.1  1.0",
+"DebugGenerator.Species1:
+ID, mass and charge of first species."}, //13-2
+    {"DebugGenerator.Species2","13 0.1  -1.0",
+"DebugGenerator.Species2:
+ID, mass and charge of first species."}, //14-2
+    {"DebugGenerator.Species3","13 0.1  -1.0",
+"DebugGenerator.Species3:
+ID, mass and charge of first species."}, //15-2
+    {"JSFGUI.Spring.SharedLibrary:","../FFbarSpring/libFFbarSpring.so",
+"JSFGUI.Spring.SharedLibrary:
+A name of shared library for event generation 
+by Bases/Spring."}, //16-3
+    {"JSFGUI.Spring.ModuleName","FFbarSpring",
+"JSFGUI.Spring.ModuleName:
+A module name of Spring.  It must be inherited
+from a class, JSFModule and defined in the
+shared library specified by JSFGUI.Spring.SharedLibrary"}, //17-4
+    {"JSFGUI.Spring.BasesFile","../FFbarSpring/bases.root",
+"JSFGUI.Spring.BasesFile:
+A file name of bases data."}, //18-2
+    {"JSFReadParton.DataFile","parton.dat",
+"JSFReadParton.DataFile:
+Input data file name of JSFReadParton class."}, //19-2
+    {"JSFReadParton.Format","1",
+"JSFReadParton.Format:
+Format of input data. 1 = ASC file, 0=Fortran binary."}, //20-2
+    {"JSFReadGenerator.DataFile","genevent.dat",
+"JSFReadGenerator.DataFile:
+Input file name for JSFReadGenerator class. This 
+class read generator data of HEPEVT format."}, //21-3
+    {"JSFReadGenerator.Format","HEPEVT",
+"JSFReadGenerator.Format:
+Data format of generator data.  Value other than HEPEVT
+is not recognized, since it is only supported now."}, //22-3
+    {"JSFMergeEvent.DataFile","simdst.root",
+"JSFMergeEvent.DataFile:
+A file name of background data which is used by 
+JSFMergeEvent class."}, //23-3
+    {"JSFMergeEvent.LumPerTrain","0.06",
+"JSFMergeEvent.LumPerTrain:
+Luminosity per bunch train in unit of  1/nb 
+(nano barn invers).  Default value of 0.06 corresponds 
+to collider luminosity of 9x10^{33} / cm^2 sec operated 
+at RF pulse frequency of 150 Hz."}, //24-5
+      {"JSFMergeEvent.RandomSeed","1990729",
+"JSFMergeEvent.RandomSeed:
+Seed of random number for JSFMergeEvent class.  Since 
+this class uses gRandom variable, it 
+will be mixed up, if gRandom is used at another place."}, //25-4
+    {"JSFQuickSim.ParameterFile","Undefined",
+"JSFQuickSim.ParameterFile:
+A file name for Quick simulator's detector parameter.
+If it's \"Undefined\" ot not specified, a file,
+$LCLIBROOT/simjlc/parm/detect7.com is used."}, //26-4
+    {"JSFGUI.RunNo","1",
+"JSFGUI.RunNo:
+Run number "} // 27-2
+};
+
+
+  Int_t nline[maxmenu]={2,3,4, // 3
+			  2,2,2,2,2, 3,4,2,2,2,  2,2,  // 12
+			  3,4,2,2,2, 3,3,3,5,4, 4,2 }; //12
+
+  Int_t id[maxmenu]={M_GEN_ECM,M_GEN_INITPYTHIA,
+   M_GEN_PYTHIA_PRSTAT, M_GEN_DEBUG_RANDOM,
+   M_GEN_DEBUG_NPARTICLE,M_GEN_DEBUG_PRANGE,M_GEN_DEBUG_COSTHRANGE,
+   M_GEN_DEBUG_AZIMUTHRANGE,M_GEN_DEBUG_VTXRRANGE,M_GEN_DEBUG_VTXPHIRANGE,
+   M_GEN_DEBUG_VTXZRANGE,M_GEN_DEBUG_NSPECIE,M_GEN_DEBUG_SPECIES1,
+   M_GEN_DEBUG_SPECIES2,M_GEN_DEBUG_SPECIES3,
+   M_GEN_SPRING_SO,M_GEN_SPRING_MODULE_NAME,M_GEN_BASES_FILE,
+   M_GEN_RPARTON_DATAFILE,M_GEN_RPARTON_FORMAT,
+   M_GEN_RDGEN_DATAFILE,M_GEN_RDGEN_FORMAT,
+   M_GEN_MERGE_DATAFILE,M_GEN_MERGE_LUMPERTRAIN,M_GEN_MERGE_SEED,
+   M_SIM_QUICKSIM_PARAM, M_GUI_RUNNO};
+
+  Int_t i;
+
+  const char *ftypes1[] = { "ROOT files",    "*.root",
+                            0,               0 };
+  const char *ftypes2[] = { "JSF Configuration files",    "*.conf",
+				"All files","*",
+				0,               0 };
+  switch(parm1) {
+    case M_CONT_RT_DEMO: 
+//       SetRunMode(parm1-M_CONT_RT_DEMO);
+       RunDemo();
+       break;
+
+    case M_CONT_RT_GENEVENT: 
+    case M_CONT_RT_READROOT: 
+    case M_CONT_RT_READSIMDST: 
+    case M_CONT_RT_READJIM: 
+    case M_CONT_RT_USERDEFINE: 
+       SetRunMode(parm1-M_CONT_RT_DEMO);
+       break;
+
+    case M_GEN_PYTHIA:
+    case M_GEN_DEBUG:
+    case M_GEN_SPRING:
+    case M_GEN_RPARTON:
+    case M_GEN_RHEPEVT:
+      SetEventType(parm1-M_GEN_PYTHIA);
+      break;
+
+    case M_GEN_LASTRUNFILE:
+      if( prompt ) {
+ 	TGFileInfo fi;
+	fi.fFileTypes = (char **)ftypes1;
+        fi.fFilename = (Char_t*)gJSF->Env()->GetValue("JSFGUI.LastRunFile","");
+	Char_t dirnam[256];
+	strcpy(dirnam,gSystem->WorkingDirectory());
+	new TGFileDialog(fClient->GetRoot(), this, kFDOpen,&fi);
+	sprintf(wrkstr,"%s/%s",gSystem->WorkingDirectory(),fi.fFilename);
+	ToRelativePath(wrkstr, dirnam, retstr);
+	if( strlen(retstr) > 0 ) gJSF->Env()->SetValue("JSFGUI.LastRunFile",retstr);
+	gSystem->ChangeDirectory(dirnam);
+      }
+      break;
+
+    case M_CONT_PARAM_SAVE:
+      gJSF->Env()->WriteFile();
+      sprintf(wrkstr,
+      "New parameters are saved in a file %s.\nPrevious file is renamed as %s.bak.",
+      gJSF->Env()->GetEnvFileName(),gJSF->Env()->GetEnvFileName());
+      new TGMsgBox(fClient->GetRoot(), this, "JSF Message",
+	  wrkstr, kMBIconExclamation, buttons, &retval);
+      break;
+
+    case M_CONT_PARAM_SAVEAS:
+      TGFileInfo fi;
+      fi.fFileTypes = (char **)ftypes2;
+      Char_t dirnam[256];
+      strcpy(dirnam,gSystem->WorkingDirectory());
+      new TGFileDialog(fClient->GetRoot(), this, kFDSave,&fi);
+      sprintf(wrkstr,"%s/%s", gSystem->WorkingDirectory(),fi.fFilename);
+      if( gJSF->Env()->WriteFile(wrkstr) ) {
+        sprintf(retstr,"Current parameters are saved in the file\n%s",wrkstr);
+        new TGMsgBox(fClient->GetRoot(), this, "JSF Message",
+	    retstr, kMBIconExclamation, buttons, &retval);
+      }
+      else { 
+	sprintf(retstr,"Unable to save parameters in the file \n%s",wrkstr);
+        new TGMsgBox(fClient->GetRoot(), this, "JSF Message",
+	    retstr, kMBIconExclamation, buttons, &retval);
+      }      
+      break;
+
+   case M_GEN_MERGE:
+      if( fMenuGen->IsEntryChecked(M_GEN_MERGE) ) {
+        gJSF->Env()->SetValue("JSFGUI.MergeEvent","0");
+      }
+      else {
+        gJSF->Env()->SetValue("JSFGUI.MergeEvent","1");
+      }
+      break;
+
+   case M_GEN_LASTRUN:
+      if( fMenuGen->IsEntryChecked(M_GEN_LASTRUN) ) {
+        gJSF->Env()->SetValue("JSFGUI.LastRun","0");
+      }
+      else {
+        gJSF->Env()->SetValue("JSFGUI.LastRun","1");
+      }
+      break;
+
+   case M_GUI_SIMDSTOUT:
+      if( fMenuGen->IsEntryChecked(M_GUI_SIMDSTOUT) ) {
+        gJSF->Env()->SetValue("JSFGUI.SIMDST.Output","0");
+      }
+      else {
+        gJSF->Env()->SetValue("JSFGUI.SIMDST.Output","1");
+      }
+      break;
+
+
+   case M_GUI_OUTEVENTDATA:
+      if( fMenuGen->IsEntryChecked(M_GUI_OUTEVENTDATA) ) {
+        gJSF->Env()->SetValue("JSFGUI.OutputEventData","0");
+      }
+      else {
+        gJSF->Env()->SetValue("JSFGUI.OutputEventData","1");
+      }
+      break;
+
+   case M_SIM_QUICKSIM:
+      gJSF->Env()->SetValue("JSFGUI.SimulationType","1");
+      break;
+
+   case M_SIM_JIM:
+      gJSF->Env()->SetValue("JSFGUI.SimulationType","2");
+      break;
+
+    case M_CONT_PARAM_EDIT:
+       new JSFEnvGUIFrame(gClient->GetRoot(), 400, 200);
+       break;
+
+    default:
+      if( prompt ) {
+	for(i=0;i<maxmenu;i++){
+	  if( id[i] == parm1 ) {
+	    strcpy(wrkstr,gJSF->Env()->GetValue(value[i][0],value[i][1]));
+	    dialog = new InputDialog(value[i][2],wrkstr,wrkstr,nline[i]);
+	    if(wrkstr[0]!=0) gJSF->Env()->SetValue(value[i][0],wrkstr);
+	    break;
+	  }
+	}
+      }
+      break;
+
+  } 
+  Update();
+
 }
