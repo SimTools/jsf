@@ -95,6 +95,7 @@
 #include "JSFSteer.h"
 #include "JSFConfig.h"
 #include "JSFModule.h"
+#include <TBenchmark.h>
 
 JSFSteer *gJSF=kFALSE;
 
@@ -105,11 +106,13 @@ static TList *gJSFEventList=0;
 static TKey  *gJSFEventKey=0;
 static TBranch *gJSFBranch=0;
 
+TStopwatch  *gStopwatch=0;
 
 //---------------------------------------------------------------------------
 JSFSteer::JSFSteer(const char *name, const char *title) 
         : TNamed(name, title)
 {
+
   //  Default constructor of JLC study framework
   fModules = 0;
   fConf    = 0;
@@ -151,9 +154,20 @@ JSFSteer::JSFSteer(const char *name, const char *title)
     fEnv=new JSFEnv(envfile);  // Create pointer to env file.
     fEventTrees=new TObjArray(); // Remember defined trees.
  
+    if( fEnv->GetValue("JSF.Benchmark",1) == 1 ) {
+      printf(" TBenchmark is initialized\n");
+      for(Int_t i=0;i<30;i++) { fCPUTime[i]=0;  fRealTime[i]=0; }
+      gStopwatch=new TStopwatch();
+      fCPUTime[0]=gStopwatch->GetCPUTime();
+      fRealTime[0]=gStopwatch->GetRealTime();
+    }
+
     SetIOFiles();
 
     LoadSharedLibraries();
+
+    
+
 
   }
 }
@@ -203,6 +217,8 @@ JSFSteer::~JSFSteer()
   }
   if (!fConf) { delete fConf; }
   if (!fEventTrees) { delete fEventTrees; }
+
+
 }
 
 //---------------------------------------------------------------------------
@@ -320,11 +336,26 @@ Bool_t JSFSteer::Process(Int_t i)
    }
    TIter next(fModules);
    JSFModule *module;
+   Int_t iloop=0;
    while (( module = (JSFModule*)next())) {
      module->SetModuleStatus(kEventLoop);
      if( module->IsWritable() ) {
-       if( !module->Process(i) ) { fReturnCode+=kJSFFALSE; return kFALSE; }
-       if( fReturnCode&kJSFSkipRestModules ) break;
+        Double_t cputime=0;
+	Double_t realtime=0;
+	if( gStopwatch ) {
+	  cputime=gStopwatch->GetCPUTime();
+	  realtime=gStopwatch->GetRealTime();
+	}
+	Bool_t rcode=module->Process(i);
+	if( gStopwatch ) {
+	  iloop++;
+	  fCPUTime[iloop] += gStopwatch->GetCPUTime()-cputime;
+	  fRealTime[iloop] += gStopwatch->GetRealTime()-realtime;
+	}
+
+        if( !rcode ) { fReturnCode+=kJSFFALSE; return kFALSE; }
+
+	if( fReturnCode&kJSFSkipRestModules ) break;
      }
    }
 
@@ -377,10 +408,24 @@ Bool_t JSFSteer::Initialize()
    TDirectory *last=gDirectory;
    TListIter next(fModules);
    JSFModule *module;
+   Int_t iloop=0;
    while ((module = (JSFModule*)next())) {
      module->SetModuleStatus(kInitialize);
      module->GetFile()->cd();
-     if( !module->Initialize() )  return kFALSE; 
+
+     Double_t cputime=0;
+     Double_t realtime=0;
+     if( gStopwatch ) {
+       cputime=gStopwatch->GetCPUTime();
+       realtime=gStopwatch->GetRealTime();
+     }
+     Bool_t rcode=module->Initialize();
+     if( gStopwatch ) {
+       iloop++;
+       fCPUTime[iloop] += gStopwatch->GetCPUTime()-cputime;
+       fRealTime[iloop] += gStopwatch->GetRealTime()-realtime;
+     }
+     if( !rcode ) return kFALSE;
    }
 
    last->cd();
@@ -436,11 +481,27 @@ Bool_t JSFSteer::BeginRun(Int_t nrun)
   sprintf(keyname,"/conf/begin%5.5d",fRun);
   TIter next(fModules);
   JSFModule *module;
+  Int_t iloop=0;
   while (( module = (JSFModule*)next())) {
     module->SetModuleStatus(kBeginRun);
     module->SetRunNumber(fRun);
     module->GetFile()->cd(keyname);
-    if( !module->BeginRun(fRun) ) return kFALSE ;
+
+    Double_t cputime=0;
+    Double_t realtime=0;
+    if( gStopwatch ) {
+       cputime=gStopwatch->GetCPUTime();
+       realtime=gStopwatch->GetRealTime();
+    }
+    Bool_t rcode=module->BeginRun(fRun);
+    if( gStopwatch ) {
+      iloop++;
+      fCPUTime[iloop] += gStopwatch->GetCPUTime()-cputime;
+      fRealTime[iloop] += gStopwatch->GetRealTime()-realtime;
+    }
+
+    if( !rcode ) return kFALSE;
+
   }
 
   if( fIFile ) fIFile->cd("/");
@@ -470,10 +531,25 @@ Bool_t JSFSteer::EndRun()
 
     TIter next(fModules);
     JSFModule *module;
+    Int_t iloop=0;
     while (( module = (JSFModule*)next())) {
         module->SetModuleStatus(kEndRun);
 	module->GetFile()->cd(keyname);
-        if( !module->EndRun() )  { fReturnCode+=kFALSE ; return kFALSE; }
+
+	Double_t cputime=0;
+	Double_t realtime=0;
+	if( gStopwatch ) {
+	  cputime=gStopwatch->GetCPUTime();
+	  realtime=gStopwatch->GetRealTime();
+	}
+	Bool_t rcode=module->EndRun();
+	if( gStopwatch ) {
+	  iloop++;
+	  fCPUTime[iloop] += gStopwatch->GetCPUTime()-cputime;
+	  fRealTime[iloop] += gStopwatch->GetRealTime()-realtime;
+	}
+
+	if( !rcode ) { fReturnCode+=kFALSE ; return kFALSE; }
     }
     if( fOFile ) fOFile->cd("/");
     return kTRUE;
@@ -576,15 +652,57 @@ Bool_t JSFSteer::Terminate()
 
   TIter next(fModules);
   JSFModule *module;
+  Int_t iloop=0;
   while (( module = (JSFModule*)next())) {
         module->SetModuleStatus(kTerminate); 
 	module->GetFile()->cd("/conf/term");
-        if( !module->Terminate() )  return kFALSE; 
+
+	Double_t cputime=0;
+	Double_t realtime=0;
+	if( gStopwatch ) {
+	  cputime=gStopwatch->GetCPUTime();
+	  realtime=gStopwatch->GetRealTime();
+	}
+	Bool_t rcode=module->Terminate();
+	if( gStopwatch ) {
+	  iloop++;
+	  fCPUTime[iloop] += gStopwatch->GetCPUTime()-cputime;
+	  fRealTime[iloop] += gStopwatch->GetRealTime()-realtime;
+	}
+        if( !rcode )  return kFALSE; 
+
   }
   if( fOFile ) fOFile->cd("/");
 
   TDatime *dtime=new TDatime();
   printf("JSF Terminated at date and time : %s\n",dtime->AsString());
+
+
+
+  if( gStopwatch ) {
+    printf("****** Summary of CPU/Real time in sec  ****************\n");
+    Double_t cpusum=0;
+    Double_t realsum=0;
+    next.Reset();
+    Int_t loop=0;
+    while (( module = (JSFModule*)next())) {
+      loop++;
+      printf("%s ",module->GetName());
+      printf(" CPU time = %g ",fCPUTime[loop]);
+      printf(" Real time = %g ",fRealTime[loop]);
+      printf("\n");
+      cpusum  += fCPUTime[loop];
+      realsum += fRealTime[loop];
+    }
+    printf("JSFSteer     CPU time = %g",gStopwatch->GetCPUTime()-fCPUTime[0]-cpusum);
+    printf("  Real time = %g \n",gStopwatch->GetRealTime()-fRealTime[0]-realsum);
+    printf(" ----------------------------------------------------\n");
+    printf("Total time ");
+    printf(" CPU time = %g ",gStopwatch->GetCPUTime()-fCPUTime[0]);
+    printf(" Real time = %g ",gStopwatch->GetRealTime()-fRealTime[0]);
+    printf("\n");
+
+  }
 
   return kTRUE;
 }

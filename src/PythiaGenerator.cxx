@@ -35,7 +35,10 @@
 //  
 //////////////////////////////////////////////////////////////////
 
+#include <iostream>
 #include "JSFConfig.h"
+
+#include <TRandom.h>
 
 #include "PythiaGenerator.h"
 #include "JSFSteer.h"
@@ -110,6 +113,8 @@ PythiaGenerator::PythiaGenerator(const Char_t *name,
   fBSname=bspname;
   sscanf(env->GetValue("JSFBeamGeneration.Width","-1.0"),"%lg",&fBSwidth);
 
+  sscanf(env->GetValue("PythiaGenerator.BSThreshold","10.0"),"%lg",&fBSThreshold);
+
   fNUMSUB=0;
   fISUB=NULL;
   fNGEN=NULL;
@@ -118,6 +123,10 @@ PythiaGenerator::PythiaGenerator(const Char_t *name,
   fEventWeight=1.0;
   fBS = 0;
   fBSFile = 0;
+
+  fNBSGen=0;
+  fNBSGood=0;
+
 #if __PYTHIA_VERSION__ >= 6 
   for(Int_t i=0;i<6;i++){ fMRPY[i]=0; }
   for(Int_t i=0;i<100;i++){ fRRPY[i]=0.0; }
@@ -169,7 +178,8 @@ Bool_t PythiaGenerator::Initialize()
     fBS->SetIBParameters( fEcm/2.0, fBSwidth , JSFBeamGenerationCain::kUniform ); 
     fBS->MakeBSMap();
     fBS->Print();
-    fEcmMax=fEcm*(1+2*fBSwidth);
+    //    fEcmMax=fEcm*(1+2*fBSwidth);
+    fEcmMax=fEcm*(1+fBSwidth);
     fPythia->Initialize(fFrame, fBeamParticle, fTargetParticle, fEcmMax);
   }
   else {
@@ -283,13 +293,28 @@ Bool_t PythiaGenerator::Process(Int_t ev)
   fPythia->GenerateEvent();
 #else
   if ( fBeamStrahlung > 0 ) {
+  loop2:
+
     Double_t eminus, eplus;
     fBS->Generate(eminus, eplus);
     Double_t rs=2*TMath::Sqrt(eminus*eplus);
     Double_t pz=eminus-eplus;
+    fNBSGen++;
+    if( rs < fBSThreshold ) goto loop2 ;
     Double_t xrs=rs/fEcmMax;
+    fNBSGood++;
+
+    fEMinus=eminus;
+    fEPlus=eplus;
+
     fPythia->SetPARP(171, xrs);
     fPythia->GenerateEvent();
+
+    if( fPythia->GetMSTI(61) == 1 ) {
+      cout << " MSTI 61 is 1" << endl;
+      goto loop2;
+    }
+
     Int_t imi=0;  Int_t  ima=0;  Double_t the=0.0;  Double_t phi=0.0;
     Double_t bex=0.0;   Double_t bey=0.0; 
     Double_t bez=pz/rs;
@@ -377,6 +402,14 @@ Bool_t PythiaGenerator::Process(Int_t ev)
 Bool_t PythiaGenerator::Terminate()
 {
   if( !JSFGenerator::Terminate() ) return kFALSE;
+
+  if( fBeamStrahlung != 0 ) {
+    cout << " *********************** " << endl;
+    cout << " Number of call to BSGenerator =" << fNBSGen << endl;
+    cout << " Number of good BSGencall      =" << fNBSGood << endl;    
+    cout << " Fraction :                    =" << 
+      (Double_t)fNBSGood/(Double_t)fNBSGen << endl;
+  }
 
   return kTRUE;
 }

@@ -55,14 +55,23 @@ private:
   TFile             *fBSFile; //! Beamstrahlung file
   JSFBeamGenerationCain  *fBS;     //  Beamstrahlung spectrum
   Double_t           fEcmMax; //! Abolutely max ECM energy
-  TString            fBSname; //  Name of BS spectrum
+  TString            fBSname; //  Name of BS spectrum 
   Double_t           fBSwidth; //  half-width of BS spectrum
+
+  Double_t           fEMinus; //!
+  Double_t           fEPlus;  //!
+  Int_t              fNBSGen; //
+  Int_t              fNBSGood; //
+  Double_t           fBSThreshold; // 
 
 public:
   PythiaGenerator(const Char_t *name="PythiaGenerator", 
 		  const Char_t *title="Pythia Event generator",
 		  const Option_t *opt="");
   virtual ~PythiaGenerator();
+
+  inline Double_t GetEMinus(){ return fEMinus; }
+  inline Double_t GetEPlus(){ return fEPlus; }
 
   virtual Bool_t Initialize();
   virtual Bool_t BeginRun(Int_t nrun);
@@ -102,7 +111,7 @@ public:
   void PrintRandomSeed(Int_t num=8);  // First num's data are printed
 #endif
 
-  ClassDef(PythiaGenerator, 4)  // Pythia Generator
+  ClassDef(PythiaGenerator, 5)  // Pythia Generator
 
 };
 

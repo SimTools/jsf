@@ -18,6 +18,7 @@
 #include <TChain.h>
 #include <TDatime.h>
 #include <TString.h>
+
 #include "JSFEnv.h"
 #include "JSFConfig.h"
 
@@ -65,6 +66,9 @@ protected:
   TBranch    *fBrJSF;      //! Branch address of JSFSteer.
   TChain     *fChain;     //! A tree of chained file.
   TObjArray  *fEventTrees;  //! Collection of event trees.
+
+  Double_t    fCPUTime[30];   //!
+  Double_t    fRealTime[30];   //!
 
 // Followings are event-by-event information
   Int_t      fVersion;      // JSFSteer version number
