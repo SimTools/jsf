@@ -77,6 +77,11 @@ void JSFSpring::ReadBases(const char *name)
   fDoBases = kFALSE;
   fBases->Read(fBases->GetName());
 
+  TDirectory *cur=gDirectory;
+  now->cd();
+  fBases->Userin();
+  cur->cd();
+
   fBases->CopyHists(f,now); // Read Hists data into Bases area
   f->Close();
   now->cd();
@@ -88,8 +93,6 @@ void JSFSpring::ReadBases(const char *name)
     printf("JSFSpring::ReadBases() .. random seed is overridden by values");
     printf(" taken from a file.\n");
   } 
-
-  fBases->Userin();
 }
 
 //_____________________________________________________________________________
