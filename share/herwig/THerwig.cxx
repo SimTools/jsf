@@ -78,8 +78,11 @@
 //C-----------------------------------------------------------------------
 ///////////////////////////////////////////////////////////////////
 
-
+#ifdef __USEISOCXX__
 #include <iostream>
+#else
+#include <iostream.h>
+#endif
 #include <strings.h>
 
 #include "TROOT.h"
