@@ -1,0 +1,20 @@
+#!/bin/csh
+#######################
+#  create a list of depend files of g++
+#$Id:
+#######################
+
+#echo $argv[1]
+
+set cxx="gcc"
+set iret=`which $cxx | grep -c /`
+if ( $iret > 0 ) then
+  set gccvers=`$cxx -v |& head -1 | cut -f4 -d" " | sed -e 's/specs$//g' `
+  set strcmd=`which strings`
+  set incdir=`$strcmd $gccvers/cpp  | grep include  | grep "/" `
+  foreach i ( $incdir )
+    if ( -e $i && $i != "/usr/include" ) then
+	echo -n " -I$i" 
+    endif
+  end
+endif
