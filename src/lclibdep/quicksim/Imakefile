@@ -41,12 +41,7 @@ OBJ	      = $(subst .$(SrcSuf),.$(ObjSuf),$(SRC)) \
 HDR	      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRC)) \
 		$(NAME)LinkDef.h
 
-#LIBS     = -L$(LCLIBDIR) $(EXTRALDOPT) -lGENUTIL \
-#        -lSIMJLC -lLTKCL -lLCFULL -lTBS \
-#        -lHELASV204 -lFORTLIB -lCOM -lCLI \
-#        $(EXTRALIBS) -lg2c -lnsl
-
-LIBS     = -L$(LCLIBDIR) $(EXTRALDOPT) \
+LIBS     = -L$(LCLIBROOT)/lib $(EXTRALDOPT) \
         -lSIMJLC -lLTKCL -lLCFULL -lTBS \
         -lFORTLIB \
         $(EXTRALIBS) -lg2c -lnsl
@@ -91,6 +86,7 @@ web:
 
 $(LIBNAME).$(SrcSuf): $(HDR)
 		@echo "Generating dictionary ..."
-		rootcint -f $(LIBNAME).$(SrcSuf) -c -I. -I$(JSFINSTALLDIR)/include \
+		rootcint -f $(LIBNAME).$(SrcSuf) -c \
+		$(shell jsf-config --includes) \
 		$(RCINTDEFINES) $(HDR)
 
