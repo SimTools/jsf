@@ -93,11 +93,12 @@ distclean:
 	rm -f *~ core jsf.conf jsf.root
 
 getdata:
-	mkdir -p data
-	cd data
-	echo "Downloading bsdata. "
-	wget http://www-jlc.kek.jp/subg/offl/jsf/lib/bsdata.tar.gz
-	tar zxvf bsdata.tar.gz
+	( mkdir -p data ; cd data ; \
+	echo "Downloading bsdata. " ; \
+	wget http://www-jlc.kek.jp/subg/offl/jsf/lib/bsdata.tar.gz ;\
+	tar zxvf bsdata.tar.gz ; \
+	rm bsdata.tar.gz \
+	)
 
 
 
