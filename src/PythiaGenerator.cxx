@@ -1,3 +1,4 @@
+//*LastUpdate :  jsf-1-12  26-August-1999  A.Miyamoto
 //*LastUpdate :  jsf-1-11  23-July-1999  A.Miyamoto
 //*LastUpdate :  jsf-1-9   15-May-1999  A.Miyamoto
 //*LastUpdate :  jsf-1-7-2  16-April-1999  A.Miyamoto
@@ -7,6 +8,9 @@
 //*-- Author  : A.Miyamoto  9-November-1998
 
 /*
+ 26-August-1999 A.Miyamoto Add pyevwt(wtxs) to provide weight for events.
+                           This is a global function, since this is to replace dummy 
+                           PYEVWT in Pythia library. (see p.142 of manual)
  23-July-1999 A.Miyamoto Add GetLastRunInfo() to save/restore random seed.
  15-May-1999 A.Miyamoto  Lifetime of particles in documentation line is set 
                          to 0, otherwise initial mu and tau are swimed.
@@ -54,6 +58,7 @@
 //////////////////////////////////////////////////////////////////
 
 #include "JSFConfig.h"
+
 #include "PythiaGenerator.h"
 #include "JSFSteer.h"
 #include "TEnv.h"
@@ -63,9 +68,12 @@
 extern "C" {
 extern Int_t luchge_(Int_t *kf);
 extern Float_t ulctau_(Int_t *kf);
+extern void pyevwt_(Float_t *wtxs);
 };
 
 ClassImp(PythiaGenerator)
+
+PythiaGenerator *lPythiaGenerator=NULL;
 
 //_____________________________________________________________________________
 PythiaGenerator::PythiaGenerator(const Char_t *name, 
@@ -85,6 +93,7 @@ PythiaGenerator::PythiaGenerator(const Char_t *name,
   fXSEC=NULL;
 
   fPythia = new TPythia();
+  lPythiaGenerator = this;
 }
 
 // ---------------------------------------------------------------
@@ -314,3 +323,35 @@ void PythiaGenerator::Streamer(TBuffer &R__b)
    }
 }
 
+//------------------------------------------------------
+void pyevwt_(float *wtxs)
+{
+  // This routine is called when MSTP(142) != 0
+  // User should prepare a macro, SetPythiaWeight(), to calculate the weight.
+  // A sample SetPythiaWeight() is as follows.
+  //  void SetPythiaWeight()
+  //  {
+  //      PythiaGenerator *py=(PythiaGenerator*)jsf->FindModule("PythiaGenerator");
+  //      Float_t weight=1.0;
+  //      switch (py->GetPythia()->GetMINT(1)) {  // Decide weight according to the ISUB
+  //        case 1:   weight=0.1;  break ;  
+  //        case 22:   weight=0.5;  break ;   
+  //      }
+  //      py->SetEventWeight(weight);   
+  //      ...........
+  //      return;
+  //   }   
+  // According to the p.142 of Pythia Manual, the weight should be calculated
+  // by using variables MINT and VINT in PYINT1 common block.
+  // When the weight is calculated, set its value by PythiaGenerator::SetEventWeight() 
+  // function.
+
+  if( gROOT->GetGlobalFunction("SetPythiaWeight",0,kTRUE) ) 
+    gROOT->ProcessLine("SetPythiaWeight();");
+  else {
+    printf("Error .. PYEVWT is called, but SetPythiaWeight macro is not exist.\n");
+    printf("Use default event weight of 1.\n");
+    lPythiaGenerator->SetEventWeight(1.0);
+  }
+  *wtxs=lPythiaGenerator->GetEventWeight();
+}
