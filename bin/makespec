@@ -218,7 +218,7 @@ fi
 ############################################3
 # Set gcc version information
 ############################################3
-if [ -f `which g++` ] ; then
+if [ -f `which g++` -a "$systype" != "AIX" ] ; then
   echo -n "g++ version .. "
   gcppversion >> $specfile
 fi
