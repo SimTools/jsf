@@ -1,3 +1,19 @@
+*********************************************************
+
+Comments about the instruction written below. 
+---------------------------
+Information below is valid, but not up-to-date for user 
+using ROOT-4.00/06, or possibly later. The binary 
+package on the ROOT web site is good and ROOT package 
+is not need to be recompiled, as long as Pythia6.2 
+or later is used. As written in the file, HowToInstall,
+(1) get file from Pythia web site and put in this directory
+(2) modify conf/configure.in accordingly
+then execute the standard make install
+
+  Written by Akiya Miyamtoo, 1-July-2004
+
+*********************************************************
 
 --------------------------
 (Purpose of this directory)
