@@ -23,7 +23,7 @@ EXTRALDOPT = -Wl,-a,default
 CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lkernlib -lpacklib
 #endif
 
-ANALLIB = $(JSFLIBS) $(EXTRALDOPT) -lJSFReadJIMBank \
+ANALLIB = $(JSFLIBS) $(EXTRALDOPT) -lJSFReadJIMBank -lJSFGUI \
 	-L$(JLCSIMROOT)/lib -lct -ljlclib -lvx -lcal -lzbs -ljlcutil \
 	-L$(LCLIBDIR) -lGENUTIL -lLUHADR -lTAUOLA \
         -lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
