@@ -58,6 +58,7 @@ Bool_t JSFSHGenerator::Process(Int_t nevent)
   JSFHEPRUP *heprup=meg->GetJSFHEPRUP();
 
   JSFSHGeneratorBuf *buf=(JSFSHGeneratorBuf*)EventBuf();
+  buf->Clear();
   buf->SetEcm(heprup->GetEBMUP(1) + heprup->GetEBMUP(2));
 
   return kTRUE;

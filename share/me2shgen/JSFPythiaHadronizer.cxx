@@ -52,9 +52,9 @@ Bool_t JSFPythiaHadronizer::Initialize()
 {
   if( !JSFSHGenerator::Initialize() ) return kFALSE;
 
-  fPythia->SetMDCY(23,1,0);
-  fPythia->SetMDCY(24,1,0);
-  fPythia->SetMDCY(33,1,0);
+  //  fPythia->SetMDCY(23,1,0);
+  //  fPythia->SetMDCY(24,1,0);
+  //  fPythia->SetMDCY(33,1,0);
 
   return kTRUE;
 }
@@ -172,6 +172,7 @@ void JSFPythiaHadronizerBuf::SetParticles(TPythia6 *fpythia)
      new(tracks[nout-1]) 
        JSFGeneratorParticle(nout, kf,mass,charge, pv, xv , 
 	    ndaughter, firstdaughter, mother, xctau, dl ) ;
+     ((JSFGeneratorParticle*)(tracks[nout-1]))->SetStatus(ks);
 
    }
   SetNparticles(nout);
