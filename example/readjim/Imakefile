@@ -72,6 +72,7 @@ lib: $(OBJS)
 
 jsfrjim: $(OBJS) $(JSFROOT)/src/jsfmain.o JSFReadJIMCommonSize.h
 	$(CXX) $(JSFROOT)/src/jsfmain.o $(BLOCKDATA) \
+	$(OBJS) \
 	$(LDFLAGS) -o ../../bin/jsfrjim 
 
 #endif
