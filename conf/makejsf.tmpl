@@ -51,6 +51,8 @@ JSFLIBS       = -L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim \
 
 DEPENDFILES   = $(CXXFLAGS) $(INCPATH)
 
+AIXLIBS       =
+
 XCOMM #---------------------------------------------------
 
 .SUFFIXES: .$(SrcSuf)
@@ -215,9 +217,31 @@ DEPENDFILES   += -I/opt/aCC/include -I/opt/aCC/include/iostream \
                 -I/usr -I/usr/include
 #endif
 
-
-#if __ROOT_FULLVERSION__ >= 22300 
-ROOTLIBS      = $(shell root-config --libs) -lMinuit
-ROOTGLIBS     = -lGui
+XCOMM # -----------------------------------------------------
+XCOMM # AIX
+XCOMM # -----------------------------------------------------
+#if defined(AIXArchitecture)
+SOEXT         = so
+LIBF2C        =
+CXX           = xlC
+CXXFLAGS      = $(EXTRACXXOPT) \
+                -I$(JSFROOT)/include $(shell root-config --cflags) \
+		-I/usr/vacpp/include -brtl -bshared
+SOFLAGS       = -p 0
+LDFLAGS       = $(ANALLIB) $(GLIBS) -lxlf90
+ROOTLIBS     := $(shell root-config --nonew --libs)
+ROOTGLIBS    := $(shell root-config --nonew --glibs)
+LIBS          = $(ROOTLIBS) -lxlf90
+GLIBS         = $(ROOTLIBS) $(ROOTGLIBS)
+BLOCKDATA     =
+LD            = /usr/vacpp/bin/makeC++SharedLib -brtl -bshared
+DEPENDFILES  += $(shell cxxdepends)
+AIXLIBS       = $(JSFLIBS) $(ROOTLIBS)
 #endif
+
+
+XCOMM #if __ROOT_FULLVERSION__ >= 22300 
+XCOMM ROOTLIBS      = $(shell root-config --libs) -lMinuit
+XCOMM ROOTGLIBS     = -lGui
+XCOMM #endif
 
