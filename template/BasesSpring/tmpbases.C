@@ -6,7 +6,7 @@
 
   jsf = new JSFSteer();    // required to read parameter from jsf.conf
   bases = new <<Bases>>();
-  bases->DoBases();
+  bases->Bases();
   bases->Write();
 
   file->Write();

@@ -32,6 +32,12 @@ const Double_t   kGev2fb=0.38927e12;
 class <<Bases>>  : public JSFBases {
 protected:
 <<+LLbar>>
+  Double_t fCosth;
+  Double_t fPhi;
+
+  Double_t fXU[2];
+  Double_t fXL[2];
+
   Int_t    fID   ; // Parton ID.
   Float_t  fEcm  ; // Center of mass energy
   Float_t  fCharge ; // Parton Charge.		 
@@ -47,13 +53,14 @@ public:
   void SetCharge( Float_t c){ fCharge=c;}
   void SetParton(Int_t id, Float_t c){ fID=id; fCharge=c;}
 
+  Double_t GetCosth(){ return fCosth; }
+  Double_t GetPhi(){ return fPhi; }
+
   Int_t GetID(){return fID;}
   Float_t GetEcm(){ return fEcm;}
   Float_t GetCharge(){ return fCharge;}
 <<-LLbar>>
-  void Userin();   // Bases user initialization
-  void Userout();  // Bases user output 
-  Double_t Func(Double_t x[]); // Bases integration function.
+  virtual Double_t Func(); // Bases integration function.
 
   ClassDef(<<Bases>>,1)  // Bases for e+e- -> l+l- process
 
@@ -64,7 +71,8 @@ class <<Spring>>;
 class <<Spring>>Buf : public JSFSpringBuf {
 public:
 <<+LLbar>>
-   Double_t fX[2];  // Two bases parameters, costh and phi.
+ Double_t fCosth;
+ Double_t fPhi;
 <<-LLbar>>
 public:
   <<Spring>>Buf(const char *name="<<Spring>>Buf", 

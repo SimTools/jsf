@@ -20,6 +20,7 @@ ClassImp(<<Spring>>Buf)
 ClassImp(<<Bases>>)
 
 
+
 //_____________________________________________________________________________
 <<Spring>>::<<Spring>>(const char *name, const char *title,
 			 <<Bases>> *bases)
@@ -47,18 +48,20 @@ Bool_t <<Spring>>Buf::SetPartons()
 {
 
   TClonesArray &partons = *fPartons;
-  <<Bases>> *bases=(<<Bases>>*)((<<Spring>>*)Module())->Bases();
+  <<Bases>> *bases=(<<Bases>>*)((<<Spring>>*)Module())->GetBases();
 
 <<+LLbar>>
   fNparton = 2;
   Double_t ecm=bases->GetEcm();
+  fCosth = bases->GetCosth();
+  fPhi   = bases->GetPhi();
 
-  Double_t sinth=TMath::Sqrt( (1.0-fX[0])*(1.0+fX[0]) ); 
+  Double_t sinth=TMath::Sqrt( (1.0-fCosth)*(1.0+fCosth) ); 
   TVector p1(4);
   TVector p2(4);
-  p1(1)=ecm*sinth*TMath::Cos(fX[1]);
-  p1(2)=ecm*sinth*TMath::Sin(fX[1]);
-  p1(3)=ecm*fX[0];
+  p1(1)=ecm*sinth*TMath::Cos(fPhi);
+  p1(2)=ecm*sinth*TMath::Sin(fPhi);
+  p1(3)=ecm*fCosth;
   p1(0)=ecm;
   
   p2(1)=-p1(1);
@@ -92,7 +95,6 @@ Bool_t <<Spring>>Buf::SetPartons()
 //
 
 <<+LLbar>>
-  fNDIM=2;
 
 // Get parameters from jsf.conf, if specified.
   
@@ -113,51 +115,39 @@ Bool_t <<Spring>>Buf::SetPartons()
   }
   fCharge=cdata[fID-1];
 
-  fPrintInfo = gJSF->Env()->GetValue("<<Bases>>.PrintInfo",kTRUE);
-  fPrintHist = gJSF->Env()->GetValue("<<Bases>>.PrintHist",kTRUE);
+  DefineVariable(fCosth, fXL[0], fXU[0], 1, 1);
+  DefineVariable(fPhi,   fXL[1], fXU[1], 0, 1);
 
+  SetNoOfSample(2000);
+  SetTuneValue( 1.5 );
+  SetIteration1( 0.05, 100);
+  SetIteration2( 0.05, 100);
+
+  H1Init("hCosth","Costh",50,fXL[0],fXU[0]);
+  H1Init("hPhi","Phi",50,fXL[1],fXU[1]);
+  
 <<-LLbar>>
 
 }
 
 //_____________________________________________________________________________
-Double_t <<Bases>>::Func(Double_t x[])
+Double_t <<Bases>>::Func()
 {
 //  Bases Integrand
 //
 
 <<+LLbar>>
-  if( !fInBases ) { 
-    ((<<Spring>>Buf*)((<<Spring>>*)fSpring->EventBuf()))->fX[0]=x[0];
-    ((<<Spring>>Buf*)((<<Spring>>*)fSpring->EventBuf()))->fX[1]=x[1];
-  }
-  Double_t val=(kAlpha*kAlpha/4.0/fEcm/fEcm)*(1.0+x[0]*x[0])*kGev2fb;
+    //  if( !fInBases ) { 
+    //    ((<<Spring>>Buf*)((<<Spring>>*)fSpring->EventBuf()))->fCosth=fCosth;
+    //    ((<<Spring>>Buf*)((<<Spring>>*)fSpring->EventBuf()))->fPhi=fPhi;
+    //  }
 
-  Xhfill(1, x[0], val);
-  Xhfill(2, x[1], val);
+  Double_t val=(kAlpha*kAlpha/4.0/fEcm/fEcm)*(1.0+fCosth*fCosth)*kGev2fb;
+
+  H1Fill("hCosth",fCosth,val);
+  H1Fill("hPhi",fPhi,val);
 
 <<-LLbar>>
   return val ;
-}
-
-//_____________________________________________________________________________
-void <<Bases>>::Userin()
-{
-//
-//   Initialize User parameters for Bases
-//
-  JSFBases::Userin();  // Call JSFBases::Userin() for standard setup.
-
-<<+LLbar>>
-  Xhinit(1, fXL[0], fXU[0], 50, "Costh");
-  Xhinit(2, fXL[1], fXU[1], 50, "Phi");
-<<-LLbar>>
-
-  return ;
-}
-
-//_____________________________________________________________________________
-void <<Bases>>::Userout()
-{
 }
 
