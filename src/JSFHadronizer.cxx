@@ -117,9 +117,9 @@ Bool_t JSFHadronizer::Process(Int_t ev)
   JSFFULLGenerator::Process(ev);
 
   for(Int_t i=0;i<6;i++){ fMRLU[i]=ludatr_.mrlu[i];}
-  for(Int_t i=0;i<100;i++){ fRRLU[i]=ludatr_.rrlu[i];}
-  for(Int_t i=0;i<98;i++){ fRASET1U[i]=raset1_.u[i];}
-  for(Int_t i=0;i<2;i++){ fRASET1IJ97[i]=raset1_.ij97[i];}
+  for(i=0;i<100;i++){ fRRLU[i]=ludatr_.rrlu[i];}
+  for(i=0;i<98;i++){ fRASET1U[i]=raset1_.u[i];}
+  for(i=0;i<2;i++){ fRASET1IJ97[i]=raset1_.ij97[i];}
 
   if( fCopySpringClassDataToBank ) TBPUT(fSpring);
 
@@ -146,9 +146,9 @@ Bool_t JSFHadronizer::EndRun()
 {
 
   for(Int_t i=0;i<6;i++){ fMRLU[i]=ludatr_.mrlu[i];}
-  for(Int_t i=0;i<100;i++){ fRRLU[i]=ludatr_.rrlu[i];}
-  for(Int_t i=0;i<98;i++){ fRASET1U[i]=raset1_.u[i];}
-  for(Int_t i=0;i<2;i++){ fRASET1IJ97[i]=raset1_.ij97[i];}
+  for(i=0;i<100;i++){ fRRLU[i]=ludatr_.rrlu[i];}
+  for(i=0;i<98;i++){ fRASET1U[i]=raset1_.u[i];}
+  for(i=0;i<2;i++){ fRASET1IJ97[i]=raset1_.ij97[i];}
 
   if( fFile->IsWritable() ) {
     if( !JSFFULLGenerator::EndRun() ) return kFALSE;

@@ -137,7 +137,7 @@ Bool_t PythiaGenerator::EndRun()
 
    // Save random seed
    for(Int_t i=0;i<6;i++){ fMRLU[i]=fPythia->GetMRLU(i+1); }
-   for(Int_t i=0;i<100;i++){ fRRLU[i]=fPythia->GetRRLU(i+1); }
+   for(i=0;i<100;i++){ fRRLU[i]=fPythia->GetRRLU(i+1); }
 
    // Save PYINT5 information.
    Int_t ns[201];
@@ -153,7 +153,7 @@ Bool_t PythiaGenerator::EndRun()
    fISUB=new Int_t[fNUMSUB];
    fNGEN=new Int_t[fNUMSUB];
    fXSEC=new Double_t[fNUMSUB];
-   for(Int_t i=0;i<fNUMSUB;i++){
+   for(i=0;i<fNUMSUB;i++){
      fISUB[i]=ns[i];
      fNGEN[i]=fPythia->GetNGEN(ns[i], 3);
      fXSEC[i]=fPythia->GetXSEC(ns[i], 3);
@@ -173,7 +173,7 @@ Bool_t PythiaGenerator::Process(Int_t ev)
   if( !JSFGenerator::Process(ev) ) return kFALSE;
 
   for(Int_t i=0;i<6;i++){ fMRLU[i]=fPythia->GetMRLU(i+1); }
-  for(Int_t i=0;i<100;i++){ fRRLU[i]=fPythia->GetRRLU(i+1); }
+  for(i=0;i<100;i++){ fRRLU[i]=fPythia->GetRRLU(i+1); }
 
   JSFGeneratorBuf *buf=(JSFGeneratorBuf*)EventBuf();
   Double_t ecm=GetEcm();
@@ -199,7 +199,6 @@ Bool_t PythiaGenerator::Process(Int_t ev)
    Int_t ks,kf,kh,kfa;
    Float_t charge, xctau, dl, mass;
    Int_t idhist[4001];
-   Int_t i;
    for(i=0;i<4001;i++){ idhist[i]=0 ; }
    Int_t  ndaughter, firstdaughter, mother ;
 
@@ -271,7 +270,7 @@ Bool_t PythiaGenerator::GetLastRunInfo()
   }
 
   for(Int_t i=0;i<6;i++){ fPythia->SetMRLU(i+1, fMRLU[i]); }
-  for(Int_t i=0;i<100;i++){ fPythia->SetRRLU(i+1, fRRLU[i]); }
+  for(i=0;i<100;i++){ fPythia->SetRRLU(i+1, fRRLU[i]); }
   
   printf("Random seeds for PythiaGenerator were reset by ");
   printf("values from a file.\n");

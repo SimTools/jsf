@@ -673,13 +673,13 @@ void JSFQuickSimBuf::AppendCALHits(JSFQuickSimBuf *src)
       indcel[i]=hemc->GetCellID();
     }                                               
     TMath::Sort(fNEMCHits, indcel, sind );
-    for(Int_t i=0;i<fNEMCHits;i++){
+    for(i=0;i<fNEMCHits;i++){
       scelid[i]=indcel[sind[i]];
       scelpnt[i]=sind[i];                // Sort CellID data.
     }
 
     Int_t nemc=fNEMCHits;
-    for(Int_t i=0;i<src->GetNEMCHits();i++){
+    for(i=0;i<src->GetNEMCHits();i++){
       JSFEMCHit *h=(JSFEMCHit*)emc->UncheckedAt(i);
       Int_t cellid=h->GetCellID();
       Int_t ifnd=TMath::BinarySearch(fNEMCHits, scelid, cellid);
@@ -708,13 +708,13 @@ void JSFQuickSimBuf::AppendCALHits(JSFQuickSimBuf *src)
       indcel[i]=hhdc->GetCellID();
     }                                               
     TMath::Sort(fNHDCHits, indcel, sind );
-    for(Int_t i=0;i<fNHDCHits;i++){
+    for(i=0;i<fNHDCHits;i++){
       scelid[i]=indcel[sind[i]];
       scelpnt[i]=sind[i];                // Sort CellID data.
     }
 
     Int_t nhdc=fNHDCHits;
-    for(Int_t i=0;i<src->GetNHDCHits();i++){
+    for(i=0;i<src->GetNHDCHits();i++){
       JSFHDCHit *h=(JSFHDCHit*)hdc->UncheckedAt(i);
       Int_t cellid=h->GetCellID();
       Int_t ifnd=TMath::BinarySearch(fNHDCHits, scelid, cellid);
@@ -743,7 +743,11 @@ void JSFQuickSimBuf::AppendLTKCLTracks(JSFQuickSimBuf *src, Int_t numgp)
   if( src->GetNTracks() <= 0 ) return ;
 
   Int_t nltsrc=src->GetNTracks();
+#if defined(_HPUX_SOURCE)
+  Int_t *indlt = new Int_t [nltsrc];
+#else
   Int_t indlt[nltsrc];
+#endif
   TClonesArray *tracks=src->GetTracks(); 
   for(Int_t i=0;i<nltsrc;i++){
     JSFLTKCLTrack *t=(JSFLTKCLTrack*)tracks->UncheckedAt(i);
@@ -792,6 +796,9 @@ void JSFQuickSimBuf::AppendLTKCLTracks(JSFQuickSimBuf *src, Int_t numgp)
       fNVTXHits++;
     }  
   }
+#if defined(_HPUX_SOURCE)
+  delete indlt;
+#endif
 }
 
       

@@ -102,10 +102,10 @@ JSFCDCTrack::JSFCDCTrack(JSFCDCTrack& t)
     fP[i]=t.fP[i] ; fX[i]=t.fX[i]; 
     fPivot[i]=t.fPivot[i] ;  fPosAtEMC[i]=t.fPosAtEMC[i];
   }
-  for(Int_t i=0;i<5;i++){ fHelix[i]=t.fHelix[i]; }
-  for(Int_t i=0;i<15;i++){ fError[i]=t.fError[i]; }
+  for(i=0;i<5;i++){ fHelix[i]=t.fHelix[i]; }
+  for(i=0;i<15;i++){ fError[i]=t.fError[i]; }
   fNVTX=t.fNVTX;
-  for(Int_t i=0;i<fNVTX;i++){ fVTXHits[i]=t.fVTXHits[i]; }
+  for(i=0;i<fNVTX;i++){ fVTXHits[i]=t.fVTXHits[i]; }
 
 }
 

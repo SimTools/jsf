@@ -109,9 +109,9 @@ JSFEnvGUIFrame::JSFEnvGUIFrame(const TGWindow *p, UInt_t w, UInt_t h)
 //___________________________________________________________________
 JSFEnvGUIFrame::~JSFEnvGUIFrame()
 {
-  delete [] fTBSelect;
+  delete fTBSelect[0]; delete fTBSelect[1];
   delete fCFSelect; 
-  delete [] fTBBottom;
+  delete fTBBottom[0]; delete fTBBottom[1]; delete fTBBottom[2];
   delete fCFBottom; 
   TGMainFrame::CloseWindow();
 }
@@ -161,10 +161,10 @@ Bool_t JSFEnvGUIFrame::ProcessMessage(Long_t msg, Long_t parm1, Long_t id0)
 		  
  	    case B_ABOUT:
 	      new TGMsgBox(fClient->GetRoot(), this, "JSF Message",
-"This panel is to set environment parameters.To change them, 
-select item and press [SET] botton.[HELP] will display help 
-of parameters. In the parameter list, the prefix [L] is local 
-(those defined in the working directory), [G] is global(those 
+"This panel is to set environment parameters.To change them, \n\
+select item and press [SET] botton.[HELP] will display help \n\
+of parameters. In the parameter list, the prefix [L] is local \n\
+(those defined in the working directory), [G] is global(those \n\
 defined in JSFROOT directory) and [C] is modified parameter.",
 		kMBIconExclamation, buttons, &retval);
 	      break;

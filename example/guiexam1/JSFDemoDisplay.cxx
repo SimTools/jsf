@@ -284,20 +284,20 @@ void JSFDemoDisplay::ProcessButton(Long_t parm1)
 
     case 8003:  // Help
       new TGMsgBox(gClient->GetRoot(), GetGUIMain(),  "JSF Message", 
-"JSF Demo
-<<Type of event>>
-Standard model processes are generated using Pythia and 
-Quick Simulator. Event rates are mixed by proper weight.
-<<Event Display>>
-Green helixes: CDC tracks
-Blue boxes: Elemag calorimeters
-Purple boxes: Hadron calorimeters
-Central red bar: e+ incident side
-Central blue bar: e- incident side
-<<Histograms>>
-Current data are added to data analized previously.  
-[Reset] button clears first two entries.
-Higgs mass: ZH->(nu ~nu)+(b ~b) are selected.
+"JSF Demo\n\
+<<Type of event>>\n\
+Standard model processes are generated using Pythia and \n\
+Quick Simulator. Event rates are mixed by proper weight.\n\
+<<Event Display>>\n\
+Green helixes: CDC tracks\n\
+Blue boxes: Elemag calorimeters\n\
+Purple boxes: Hadron calorimeters\n\
+Central red bar: e+ incident side\n\
+Central blue bar: e- incident side\n\
+<<Histograms>>\n\
+Current data are added to data analized previously.  \n\
+[Reset] button clears first two entries.\n\
+Higgs mass: ZH->(nu ~nu)+(b ~b) are selected.\n\
 ",
               icontype, buttons, &retval);
       break;

@@ -826,15 +826,15 @@ Bool_t JSFGUIFrame::ProcessMessage(Long_t msg, Long_t parm1, Long_t)
 	      }
 	      else if( parm1 == M_HELP_ABOUT ) {
 		     new TGMsgBox(fClient->GetRoot(),this,"About JSF Control Panel", 
-"Welcome to JSF Control Panel.
-You can display event from this panel,
+"Welcome to JSF Control Panel.\n\
+You can display event from this panel,\n\
 or start event simulation.",      icontype, buttons, &retval);
 	      }
 	      else if( parm1 == M_HELP_EVENTDISP) {
 		     new TGMsgBox(fClient->GetRoot(), this, "About Event Display", 
-"Momentum View shows LTKCL track momentum. 
-Track color shows track type.In All view,  
-red beam pipe is +Z, blue is -Z, 
+"Momentum View shows LTKCL track momentum. \n\
+Track color shows track type.In All view,  \n\
+red beam pipe is +Z, blue is -Z, \n\
 cyan is +Xand purple is +Y directions",    icontype, buttons, &retval);
 	      }
 	      else {
@@ -1278,16 +1278,16 @@ void JSFGUIFrame::DoRunmodeMenuAction(Long_t parm1, Bool_t prompt)
   static const Int_t maxmenu=29;
   Char_t *value[maxmenu][3]={
     {"JSFGUI.ECM","300",
-"JSFGUI.ECM:
+"JSFGUI.ECM:\n\
 Center of mass energy (GeV) for Pythia Generator."},  // 1
     {"JSFGUI.InitPythiaMacro","InitPythia.C",
-"JSFGUI.InitPythiaMacro:
-A name of a macro file, which defines a function to initialize Pythia.
+"JSFGUI.InitPythiaMacro:\n\
+A name of a macro file, which defines a function to initialize Pythia.\n\
 A function name must be void InitPythia()"},  // 2
     {"PythiaGenerator.PrintStat","1",
-"PythiaGenerator.PrintStat:
-NPYSTAT, the argument of Subroutine PYSTAT.
-If not 0, PYSTAT is called at the end of run as
+"PythiaGenerator.PrintStat:\n\
+NPYSTAT, the argument of Subroutine PYSTAT.\n\
+If not 0, PYSTAT is called at the end of run as\n\
 CALL PYSTAT(NPYSTAT)."},  // 3
 
     {"DebugGenerator.RandomSeed","12345",
@@ -1297,95 +1297,95 @@ CALL PYSTAT(NPYSTAT)."},  // 3
     {"DebugGenerator.RangeP","0.1  10.0",
        "DebugGenerator.RangeP\nMinimum and maximum of particle's momentum in GeV."}, //6-2
     {"DebugGenerator.RangeCosth","-1.0 1.0",
-       "DebugGenerator.RangeCosth:
+       "DebugGenerator.RangeCosth:\n\
 Minimum and maximum of Cosine of particle production angle."}, //7-2
     {"DebugGenerator.RangeAzimuth","0.0, 360.0",
-     "DebugGenerator.RangeAzimuth:
+     "DebugGenerator.RangeAzimuth:\n\
 Minimum and maximum of particle's azimuthal angle."}, //8-2
     {"DebugGenerator.RangeVTXR","0.0 0.0",
-     "DebugGenerator.RangeVTXR:
-Minimum and maximum of radius of particle's 
+     "DebugGenerator.RangeVTXR:\n\
+Minimum and maximum of radius of particle's \n\
 vertex points in unit of cm."}, // 9- 3 
     {"DebugGenerator.RangeVTXPhi","0.0, 360.0",
-"DebugGenerator.RangeVTXPhi:
-Minimum and maximum of azimuthal angle of particle's 
-vertex coordinate. Note that coordinate of vertex point 
+"DebugGenerator.RangeVTXPhi:\n\
+Minimum and maximum of azimuthal angle of particle's \n\
+vertex coordinate. Note that coordinate of vertex point \n\
 is given by cylindrical coordinate system."}, //10-4
     {"DebugGenerator.RangeVTXZ","0.0, 0.0",
-"DebugGenerator.RangeVTXZ:
+"DebugGenerator.RangeVTXZ:\n\
 Minimum and maximum of Z coordinate of vertex coordinate."}, //11-2
     {"DebugGenerator.Nspecies","2",
-"DebugGenerator.Nspecies:
+"DebugGenerator.Nspecies:\n\
 Number of species of generated particles"}, //12-2
     {"DebugGenerator.Species1","13 0.1  1.0",
-"DebugGenerator.Species1:
+"DebugGenerator.Species1:\n\
 ID, mass and charge of first species."}, //13-2
     {"DebugGenerator.Species2","13 0.1  -1.0",
-"DebugGenerator.Species2:
+"DebugGenerator.Species2:\n\
 ID, mass and charge of first species."}, //14-2
     {"DebugGenerator.Species3","13 0.1  -1.0",
-"DebugGenerator.Species3:
+"DebugGenerator.Species3:\n\
 ID, mass and charge of first species."}, //15-2
     {"JSFGUI.Spring.SharedLibrary:","../FFbarSpring/libFFbarSpring.so",
-"JSFGUI.Spring.SharedLibrary:
-A name of shared library for event generation 
+"JSFGUI.Spring.SharedLibrary:\n\
+A name of shared library for event generation \n\
 by Bases/Spring."}, //16-3
     {"JSFGUI.Spring.ModuleName","FFbarSpring",
-"JSFGUI.Spring.ModuleName:
-A module name of Spring.  It must be inherited
-from a class, JSFModule and defined in the
+"JSFGUI.Spring.ModuleName:\n\
+A module name of Spring.  It must be inherited\n\
+from a class, JSFModule and defined in the\n\
 shared library specified by JSFGUI.Spring.SharedLibrary"}, //17-4
     {"JSFGUI.Spring.BasesFile","../FFbarSpring/bases.root",
-"JSFGUI.Spring.BasesFile:
+"JSFGUI.Spring.BasesFile:\n\
 A file name of bases data."}, //18-2
     {"JSFReadParton.DataFile","parton.dat",
-"JSFReadParton.DataFile:
+"JSFReadParton.DataFile:\n\
 Input data file name of JSFReadParton class."}, //19-2
     {"JSFReadParton.Format","1",
-"JSFReadParton.Format:
+"JSFReadParton.Format:\n\
 Format of input data. 1 = ASC file, 0=Fortran binary."}, //20-2
     {"JSFReadGenerator.DataFile","genevent.dat",
-"JSFReadGenerator.DataFile:
-Input file name for JSFReadGenerator class. This 
+"JSFReadGenerator.DataFile:\n\
+Input file name for JSFReadGenerator class. This \n\
 class read generator data of HEPEVT format."}, //21-3
     {"JSFReadGenerator.Format","HEPEVT",
-"JSFReadGenerator.Format:
-Data format of generator data.  Value other than HEPEVT
+"JSFReadGenerator.Format:\n\
+Data format of generator data.  Value other than HEPEVT\n\
 is not recognized, since it is only supported now."}, //22-3
     {"JSFMergeEvent.DataFile","simdst.root",
-"JSFMergeEvent.DataFile:
-A file name of background data which is used by 
+"JSFMergeEvent.DataFile:\n\
+A file name of background data which is used by \n\
 JSFMergeEvent class."}, //23-3
     {"JSFMergeEvent.LumPerTrain","0.06",
-"JSFMergeEvent.LumPerTrain:
-Luminosity per bunch train in unit of  1/nb 
-(nano barn invers).  Default value of 0.06 corresponds 
-to collider luminosity of 9x10^{33} / cm^2 sec operated 
+"JSFMergeEvent.LumPerTrain:\n\
+Luminosity per bunch train in unit of  1/nb \n\
+(nano barn invers).  Default value of 0.06 corresponds \n\
+to collider luminosity of 9x10^{33} / cm^2 sec operated \n\
 at RF pulse frequency of 150 Hz."}, //24-5
       {"JSFMergeEvent.RandomSeed","1990729",
-"JSFMergeEvent.RandomSeed:
-Seed of random number for JSFMergeEvent class.  Since 
-this class uses gRandom variable, it 
+"JSFMergeEvent.RandomSeed:\n\
+Seed of random number for JSFMergeEvent class.  Since \n\
+this class uses gRandom variable, it \n\
 will be mixed up, if gRandom is used at another place."}, //25-4
     {"JSFQuickSim.ParameterFile","Undefined",
-"JSFQuickSim.ParameterFile:
-A file name for Quick simulator's detector parameter.
-If it's \"Undefined\" ot not specified, a file,
+"JSFQuickSim.ParameterFile:\n\
+A file name for Quick simulator's detector parameter.\n\
+If it's \"Undefined\" ot not specified, a file,\n\
 $LCLIBROOT/simjlc/parm/detect7.com is used."}, //26-4
     {"JSFGUI.RunNo","1",
-"JSFGUI.RunNo:
+"JSFGUI.RunNo:\n\
 Run number "}, // 27-2
     {"JSFGUI.Pythia.Decay.Z","0",
-"JSFGUI.Pythia.Decay.Z:
-Decay mode of Z
--1 = Disable all Z decay
- 0 = Enable all Z decay
- n = Enable only one decay node of Z,
-   1=d-quark, 2=u-quark, 3=s-quark, 4=c-quark, 5=b-quark,
+"JSFGUI.Pythia.Decay.Z:\n\
+Decay mode of Z\n\
+-1 = Disable all Z decay\n\
+ 0 = Enable all Z decay\n\
+ n = Enable only one decay node of Z,\n\
+   1=d-quark, 2=u-quark, 3=s-quark, 4=c-quark, 5=b-quark,\n\
   11=e, 12=nu_e, 13=mu, 14=nu_mu, 15=tau, 16=nu_tau"},  // 28-7
     {"JSFGUI.Pythia.Higgsmass","120.0",
-"JSFGUI.Pythia.Higgsmass:
-Mass of Higgs used by Pythia.
+"JSFGUI.Pythia.Higgsmass:\n\
+Mass of Higgs used by Pythia.\n\
 (note) Branching ratio of Higgs is not correct."}//29-3 						
 };
 

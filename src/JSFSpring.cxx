@@ -91,7 +91,7 @@ void JSFSpring::ReadBases(const char *name)
 
   if( fSetSeed ) {
     for(Int_t i=0;i<33;i++){ randm_.rdm[i]=fSeedRdm[i]; }
-    for(Int_t i=0;i<12;i++){ randm_.ia1[i]=fSeedIa1[i]; }
+    for(i=0;i<12;i++){ randm_.ia1[i]=fSeedIa1[i]; }
     printf("JSFSpring::ReadBases() .. random seed is overridden by values");
     printf(" taken from a file.\n");
   }
@@ -118,7 +118,7 @@ Bool_t JSFSpring::EndRun()
 {
 
   for(Int_t i=0;i<33;i++){ fSeedRdm[i]=randm_.rdm[i]; }
-  for(Int_t i=0;i<12;i++){ fSeedIa1[i]=randm_.ia1[i]; }
+  for(i=0;i<12;i++){ fSeedIa1[i]=randm_.ia1[i]; }
 
   if( fFile->IsWritable() ) {
     if( !JSFModule::EndRun() ) return kFALSE;
@@ -131,7 +131,7 @@ Bool_t JSFSpring::EndRun()
 Bool_t JSFSpring::Process(Int_t ev)
 {
   for(Int_t i=0;i<33;i++){ fSeedRdm[i]=randm_.rdm[i]; }
-  for(Int_t i=0;i<12;i++){ fSeedIa1[i]=randm_.ia1[i]; }
+  for(i=0;i<12;i++){ fSeedIa1[i]=randm_.ia1[i]; }
 
   fBases->fInBases=kFALSE;
   Int_t mxtry=fMXTRY;
@@ -229,7 +229,7 @@ void JSFSpring::Streamer(TBuffer &R__b)
       lc=R__b.ReadStaticArray(name);
       lc=R__b.ReadStaticArray(title);
       if( !fBases ) {
-	sprintf(cmdstr,"bases=new %s(\"%s\",\"%s\") ; 
+	sprintf(cmdstr,"bases=new %s(\"%s\",\"%s\") ; \n\
         bases->SetSpring((Int_t)%d);", cname, name, title,(Int_t)this);
 	gROOT->ProcessLine(cmdstr);
       }
