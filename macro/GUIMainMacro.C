@@ -505,6 +505,7 @@ vector<string> *SetInputFiles()
     Char_t *fn=jsf->Env()->GetValue(wrkstr,"undef");
     if( strcmp(fn,"undef") != 0 ) {
       inp->push_back(string(fn));
+      nundef=0;
     }
     else {
       nundef++;
