@@ -20,6 +20,6 @@ Root.Html.Author:           //*-- Author :
 #Root.Html.Copyright:        * Copyright
 Root.Html.LastUpdate:       //*LastUpdate:
 Root.Html.Description:      //____________________
-Root.Html.Root:             http://root.cern.ch/root/html
-#Root.Html.Root:           http://www-jlc.kek.jp/subg/offl/jsf/RootHtmlDoc/html
+#Root.Html.Root:             http://root.cern.ch/root/html
+Root.Html.Root:           http://www-jlc.kek.jp/subg/offl/jsf/RootHtmlDoc/html
 Root.Html.HomePage:        http://www-jlc.kek.jp/subg/offl/jsf/RootHtmlDoc/html

@@ -9,8 +9,7 @@
 //   Create parto lists
 //
 //  For example of how to use JSFSpring and JSFBases, please see
-//  begin_html <a href="http://www-jlc.kek.jp/subg/offl/jsf/docs/bsgiude/index.html">a html </a> end_html or 
-//  begin_html <a href="http://www-jlc.kek.jp/subg/offl/jsf/docs/bsgiude.ps">a postscript</a> end_html documents. 
+//  begin_html <a href="http://www-jlc.kek.jp/subg/offl/jsf/docs/bsguide/index.html">html </a> end_html or begin_html <a href="http://www-jlc.kek.jp/subg/offl/jsf/docs/bsguide.ps.gz">postscript</a> end_html documents. 
 // 
 //$Id$
 //

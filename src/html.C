@@ -32,6 +32,8 @@
    html.MakeClass("JSFQuickSim");
    html.MakeClass("JSFQuickSimParam");
    html.MakeClass("JSFQuickSimBuf");
+   html.MakeClass("JSFSIMDST");
+   html.MakeClass("JSFSIMDSTBuf");
    html.MakeClass("JSFLTKCLTrack");
    html.MakeClass("JSFCDCTrack");
    html.MakeClass("JSFVTXHit");
