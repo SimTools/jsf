@@ -183,6 +183,16 @@ void JSFQuickSimBuf::Clear(const Option_t *option)
   if(fHDCHits)   fHDCHits->Clear(option);
 }
 
+//_____________________________________________________________________________
+void JSFQuickSimBuf::Delete(const Option_t *option)
+{
+  if(fTracks)    fTracks->Delete(option);
+  if(fCDCTracks) fCDCTracks->Delete(option);
+  if(fVTXHits)   fVTXHits->Delete(option);
+  if(fEMCHits)   fEMCHits->Delete(option);
+  if(fHDCHits)   fHDCHits->Delete(option);
+}
+
 
 //_____________________________________________________________________________
 Bool_t JSFQuickSim::Initialize()
@@ -216,6 +226,7 @@ Bool_t JSFQuickSim::BeginRun(Int_t nrun)
 Bool_t JSFQuickSim::Process(Int_t ev)
 {
   // Simulate one event.
+
 
    Int_t recid=1;
    Int_t level=1;
@@ -463,6 +474,7 @@ Bool_t JSFQuickSimBuf::MakeJSFLTKCLTracks()
   // Copy Production:Combined track banks into JSFLTKCLTrack class
 
   TClonesArray &tracks=*(GetTracks());
+  tracks.Delete();
   Int_t nt=0;
 
   Char_t *bankname[64]={ "Production:Combined_Gamma_Track",

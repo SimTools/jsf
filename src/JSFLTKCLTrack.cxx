@@ -39,6 +39,15 @@ ClassImp(JSFLTKCLTrack)
 
 
 //_____________________________________________________________________________
+JSFLTKCLTrack::~JSFLTKCLTrack()
+{
+  // Load data obtained from SIMDST data.
+
+   fCDCs.Clear();
+   fEMGen.Clear();
+
+}
+//_____________________________________________________________________________
 /*
 JSFLTKCLTrack::JSFLTKCLTrack(EJSFLTKCLTrackBank bank, TVector& P, Float_t ecl,
          Int_t nemc, Int_t charge, Int_t type, Int_t source, 
@@ -98,12 +107,14 @@ JSFLTKCLTrack::JSFLTKCLTrack(JSFLTKCLTrack& t)
   fCharge=t.fCharge ;  fType=t.fType;
   fSource=t.fSource;   fNCDC=t.fNCDC;   f1stCDC=t.f1stCDC;
   fCDC=t.fCDC;
+  /*
   for(Int_t i=0;i<t.GetCDCEntries();i++){
     fCDCs.Add(t.GetCDCTrackAt(i));
   }
   for(Int_t i=0;i<t.GetEMGenEntries();i++){
     fCDCs.Add(t.GetEMGenAt(i));
   }
+  */
   for(Int_t i=0;i<t.fNCDC;i++){ fIDCDC[i]=t.fIDCDC[i]; }
 
 }

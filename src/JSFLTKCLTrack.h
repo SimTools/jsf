@@ -59,7 +59,7 @@ protected:
 
 public:
   JSFLTKCLTrack() {}
-  virtual ~JSFLTKCLTrack() {}
+  virtual ~JSFLTKCLTrack();
 
   //  JSFLTKCLTrack(EJSFLTKCLTrackBank bank, TVector& P, Real_t ecl,
   //         Int_t nemc, Int_t charge, Int_t type, Int_t source, 
@@ -97,6 +97,7 @@ public:
   inline JSFCDCTrack *GetCDCTrackAt(Int_t i){ 
     return ((JSFCDCTrack*)fCDCs.At(i)); 
   }
+
   inline Int_t GetIDCDC(Int_t i){ return fIDCDC[i]; }
 
 

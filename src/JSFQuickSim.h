@@ -99,6 +99,7 @@ public:
   TClonesArray *GetHDCHits(){ return fHDCHits; }
 
   void Clear(const Option_t *opt="");
+  void Delete(const Option_t *opt="");
   void Append(JSFQuickSimBuf *src, Int_t numgp=0);
 
   
