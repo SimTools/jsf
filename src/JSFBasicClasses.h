@@ -57,14 +57,6 @@ public:
   inline JSF3DV_f operator * (Float_t f){ return JSF3DV_f( f*x, f*y, f*z) ; }
   void Print(){ printf("%g,%g,%g",x,y,z);}
 
-  /*
-  JSFRThPhi_f RThPhi(){ JSFRThPhi_f pol; 
-    pol.r=TMath::Sqrt(x*x+y*y+z*z);
-    pol.th=TMath::ATan2(TMath::Sqrt(x*x+y*y), z);
-    pol.phi=TMath::ATan2(y,x);  
-    return pol;
-  }
-  */
 };
 
 class JSF3DV {
@@ -84,14 +76,6 @@ public:
   inline JSF3DV operator * (Double_t f){ return JSF3DV( f*x, f*y, f*z) ; }
   void Print(){ printf("%g,%g,%g",x,y,z);}
 
-/*
-  JSFRThPhi RThPhi(){ JSFRThPhi pol; 
-    pol.r=TMath::Sqrt(x*x+y*y+z*z);
-    pol.th=TMath::ATan2(TMath::Sqrt(x*x+y*y), z);
-    pol.phi=TMath::ATan2(y,x);  
-    return pol;
-  }
-  */
 } ;
 
 class JSFRPhiZ_f {
@@ -107,7 +91,7 @@ public:
   Double_t phi;
   Double_t z;
 public:
-  JSFRPhiZ(Double_t ri=0, Double_t phii=0, Double_t zi=0){ r=ri; phii=phi ; zi=z; }
+  JSFRPhiZ(Double_t ri=0, Double_t phii=0, Double_t zi=0){ r=ri; phi=phii ; z=zi; }
   JSFRPhiZ(JSF3DV xyz){
      r=TMath::Sqrt(xyz.x*xyz.x+xyz.y*xyz.y);
      phi=TMath::ATan2(xyz.y, xyz.x);
