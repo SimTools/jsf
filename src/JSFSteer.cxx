@@ -115,8 +115,8 @@ JSFSteer::JSFSteer(const char *name, const char *title)
   fModules = 0;
   fConf    = 0;
   fReadin  = 0;
-  fVersion    = 107  ;  // JSFSteer version number
-  fVersionDate  = 19990416 ; // version date.
+  fVersion    = 109  ;  // JSFSteer version number
+  fVersionDate  = 19990528 ; // version date.
   fIsInitialized = kFALSE ;
   fIsTerminated  = kFALSE ;
   fLastRun       = 0 ;
