@@ -45,6 +45,7 @@
 //*************************************************
 
 class JSFJ4;
+class JSFMEGenerator;
 
   TFile *ofile;
   JSFSteer *jsf;
@@ -53,10 +54,11 @@ class JSFJ4;
   JSFSpring *spring=0;
   JSFSIMDST  *simdst=0;
   JSFModule  *gen=0;
-  JSFHadronizer *hdr=0;
+  JSFModule  *hdr=0;
   JSFMergeEvent *merge=0;
   JSFJ4         *jsfj4=0;
   JSFJ4         *gJSFJ4=0;
+  JSFMEGenerator *megen=0;
 
   Int_t gReturnCode; // Return code from event analysis 
 
@@ -136,7 +138,6 @@ int Initialize()
   }
 
   if( gROOT->GetGlobalFunction("UserAnotherModules",0,kTRUE) ) UserAnotherModules();
-
   // ****************************
   // Does Initialize of each JSF Modules.
   // ****************************
@@ -187,8 +188,10 @@ void InitGenSim()
   JSFModule *genmod;
   Char_t classname[128];
   Char_t cmdstr[128];
+  Char_t hadronizer[128];
 
   full  = new JSFLCFULL();
+
   switch (eventtype) {
     case kPythia:
       py  = new PythiaGenerator();
@@ -202,30 +205,38 @@ void InitGenSim()
       gen=new DebugGenerator();
       break;
     case kBasesSpring:
-      gSystem->Load(jsf->Env()->GetValue("JSFGUI.Spring.SharedLibrary",
-			 "../FFbarSpring/libFFbarSpring.sl"));
-      sprintf(spname,"%s",jsf->Env()->GetValue("JSFGUI.Spring.ModuleName",
-					       "FFbarSpring"));
-
-      Char_t hadronizer[128];
+      sprintf(classname,"%s",jsf->Env()->GetValue("JSFGUI.MEGenerator","No"));
       sprintf(hadronizer,"%s",jsf->Env()->GetValue("JSFGUI.Hadronizer",
 						   "JSFHadronizer"));
-      sprintf(wrkstr,"%s *sp=new %s();",spname, spname);
-      gROOT->ProcessLine(wrkstr);
-      spring = (JSFSpring*)jsf->FindModule(spname);
+      if( strcmp(classname,"No") == 0 ) {
+	gSystem->Load(jsf->Env()->GetValue("JSFGUI.Spring.SharedLibrary",
+			 "../FFbarSpring/libFFbarSpring.sl"));
+	sprintf(spname,"%s",jsf->Env()->GetValue("JSFGUI.Spring.ModuleName",
+						 "FFbarSpring"));
+	sprintf(wrkstr,"%s *sp=new %s();",spname, spname);
+	gROOT->ProcessLine(wrkstr);
+	spring = (JSFSpring*)jsf->FindModule(spname);
+	gen=spring;
+      }
+      else {
+	sprintf(wrkstr,"%s *sp=new %s();",classname, classname);
+	gROOT->ProcessLine(wrkstr);
+	megen = (JSFMEGenerator*)jsf->FindModule(classname);
+	gen=megen;
+      }
+
       if( strcmp(hadronizer,"JSFHadronizer") == 0 ) {
-	hdr    = new JSFHadronizer();
+	hdr    = (JSFModule*)new JSFHadronizer();
       }
       else {
 	sprintf(cmdstr,"new %s();",hadronizer);
 	gROOT->ProcessLine(cmdstr);
-	hdr=gROOT->FindObject(hadronizer);
+	hdr=(JSFModule*)gROOT->FindObject(hadronizer);
       }
-      gen=spring;
       break;
     case kReadParton:
       gen =new JSFReadParton();
-      hdr =new JSFHadronizer();
+      hdr =(JSFModule*)new JSFHadronizer();
       break;
     case kReadHepevt:
       sprintf(classname,"%s",jsf->Env()->GetValue("JSFGUI.JSFReadGenerator.ClassName",
