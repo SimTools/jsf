@@ -6,3 +6,6 @@ clean:
 
 distclean:
 	( cd src ; xmkmf ; make cleanall )
+
+web:
+	( cd src ; xmkmf -a ; make web )
