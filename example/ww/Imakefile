@@ -5,7 +5,7 @@
 
 ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
 		-lEG -lEGPythia \
-		-L/cern/pro/lib -ljetset74 \
+		-L/cern/pro/lib -ljetset74 -lpacklib \
                 -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
                 -lPostscript -lProof -lTree -lUnix -lZip
 ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
