@@ -1,0 +1,7 @@
+
+This is a sample program to create an input file for JIM by JSF.
+Pythia Generator is used to create particle's four momentum.
+To run this program, use jsfjim command.  The jsf command is not
+adequate as it does not include JIM objects and jsfrjim command is 
+not adequate as it does not include PYTHIA objects.
+
