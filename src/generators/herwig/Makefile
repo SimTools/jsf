@@ -1,5 +1,5 @@
 
-include $(JSFROOT)/conf/common.gmk
+include $(LCBASEDIR)/conf/common.gmk
 
 SharedLib = libTHerwig.$(DllSuf)
 
@@ -20,9 +20,8 @@ OBJS += THerwig.$(ObjSuf) HerwigGenerator.$(ObjSuf) libTHerwig.$(ObjSuf)
 
 CLEANOBJS = $(subst herwig6500.o, ,$(OBJS))
 
-CXXFLAGS += -I./ -I$(JSFROOT)/include
-
-DEPENDS = $(DEPENDFLAGS) $(shell cxxdepends)
+DEPENDS = $(DEPENDFLAGS) $(shell jsf-config --includes) \
+	$(shell cxxdepends)
 
 all: depend HERWIG65.INC herwig65_test.f lib
 
@@ -69,7 +68,7 @@ distclean: clean uninstall
 	rm -f HERWIG65.INC herwig65_test.f
 
 libTHerwig.cxx: $(HDRS) THerwigLinkDef.h
-	rootcint -f $@ -c -I$(JSFROOT)/include \
+	rootcint -f $@ -c $(shell jsf-config --includes) \
 	$(HDRS) THerwigLinkDef.h
 
 depend:: $(SRCS) $(HDRS)
