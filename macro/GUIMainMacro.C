@@ -237,28 +237,20 @@ Bool_t GetEvent(Int_t ev)
 
     Int_t irunmode=jsf->Env()->GetValue("JSFGUI.RunMode",1);
 
-    if( irunmode==2 && !jsf->GetEvent(ev) ) {
-      gReturnCode=-2 ;
-      if( gui != 0 ) gui->SetReturnCode(gReturnCode);
-      return kFALSE;
-    }      
-    if( !jsf->Process(ev)) {
-      gReturnCode=-1;
-      if( gui != 0 ) gui->SetReturnCode(gReturnCode);
-      return kFALSE;
-    }
+    if( irunmode==2 && !jsf->GetEvent(ev) ) { return kFALSE; }
+
+    Bool_t flag=jsf->Process(ev);
+    Int_t iret=jsf->GetReturnCode();
+
+    if( iret & jsf->kJSFFALSE ) return kFALSE;
 
     if( gui != 0 ) gui->DisplayEventData();
 
     UserAnalysis();
-    gReturnCode=0;
-    if( gui != 0 ) {
-      gui->DrawHist();
-      gui->SetReturnCode(gReturnCode);
-    }
+    if( gui != 0 ) gui->DrawHist();
     
     if( irunmode==1 || irunmode = 4 ) {
-      jsf->FillTree();
+      if( iret & jsf->kJSFNoOutput) ) jsf->FillTree();
       jsf->Clear();
     }
 
@@ -314,11 +306,12 @@ void BatchRun()
 
   for(i=i1stevt;i<=i1stevt+inoevt-1;i++){
     GetEvent(i);
-    if( gReturnCode == -2 ) {
+    EJSFReturnCode iret=jsf->GetReturnCode();
+    if( iret & kJSFEOF ) {
       printf("End of event loop due to end-of-file at event# %d\n",i);
       break;
     }
-    else if( gReturnCode == -1 ) {
+    else if( iret & kJSFFALSE ) {
       printf("End of event loop due to error at event# %d\n",i);
       break;
     }
