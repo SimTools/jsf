@@ -14,6 +14,7 @@
 
 class JSFReadGZippedFile;
 
+
 //----------------------------------------------------------------
 class JSFHEPEUP : public TObject
 {
@@ -33,6 +34,8 @@ class JSFHEPEUP : public TObject
   Double_t *fPUP  ;  //[fNUP5]
   Double_t *fVTIMUP ; //[fNUP]
   Double_t *fSPINUP ; //[fNUP]
+
+  Double_t  fIncomming[4][5] ; // Information of incomming particle
 
  public:
   JSFHEPEUP(Int_t nup=0);
@@ -68,6 +71,9 @@ class JSFHEPEUP : public TObject
   inline Double_t GetVTIMUP(const Int_t i){ return fVTIMUP[i-1]; }
   inline Double_t GetSPINUP(const Int_t i){ return fSPINUP[i-1]; }
 
+  inline Double_t *GetIncomming(const Int_t i){ return &fIncomming[i][0]; }
+  inline Double_t *GetIncomming(){ return &fIncomming[0][0]; }
+
   Bool_t GetParticle(Int_t i, Int_t &idup, Int_t &istup, Int_t mother[2],
 		     Int_t colup[2], Double_t p[5], Double_t &vtimup,
 		     Double_t &spinup);
@@ -75,6 +81,11 @@ class JSFHEPEUP : public TObject
   Bool_t SetParticle(Int_t i, Int_t idup, Int_t istup, Int_t mother[2],
 		   Int_t colup[2], Double_t p[5], Double_t vtimup,
 		   Double_t spinup);
+  Bool_t AppendParticles(Int_t n, Int_t idup[], Int_t istup[], Int_t mother[][2],
+		   Int_t colup[][2], Double_t p[][5], Double_t vtimup[],
+		   Double_t spinup[]);
+  void   ResetBeamParticles(Double_t nominale[2]);
+
   inline void SetHeaders(Int_t idprup, Double_t xwgtup, 
 	   Double_t scalup, Double_t aqedup, Double_t aqcdup){
     fIDPRUP = idprup;
@@ -91,7 +102,7 @@ class JSFHEPEUP : public TObject
   Bool_t ReadFile(ifstream &in);
   Bool_t ReadFile(JSFReadGZippedFile &in);
 
-  ClassDef(JSFHEPEUP,1) // HEPEUP event data
+  ClassDef(JSFHEPEUP,2) // HEPEUP event data
 
 };
 

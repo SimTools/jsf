@@ -86,6 +86,12 @@ JSFHEPEUP::JSFHEPEUP(Int_t nup)
     fSPINUP = new Double_t[fNUP];
   }
 
+  for(Int_t i=0;i<4;i++){
+    for(Int_t j=0;j<5;j++){
+      fIncomming[i][j]=0.0;
+    }
+  }
+
 }
 
 // ---------------------------------------------------------------
@@ -152,6 +158,13 @@ JSFHEPEUP &JSFHEPEUP::operator=(const JSFHEPEUP &hepeup)
       }
 
     }
+
+    for(Int_t i=0;i<4;i++){
+      for(Int_t j=0;j<5;j++){
+	fIncomming[i][j]=hepeup.fIncomming[i][j];
+      }
+    }
+
   } 
   return *this;
  
@@ -162,6 +175,8 @@ Bool_t JSFHEPEUP::SetParticle(Int_t i, Int_t idup, Int_t istup, Int_t mother[2],
 		   Int_t colup[2], Double_t p[5], Double_t vtimup,
 		   Double_t spinup)
 {
+  // Set Particle information.  0 <= i < fNUP
+
   if( i >= fNUP ) { 
     cout << "JSFHEPEUP::SetParticle.. index i (" << i ;
     cout << ") exceeded fNUP(" << fNUP << ") " << endl;
@@ -212,6 +227,67 @@ Bool_t JSFHEPEUP::GetParticle(Int_t i, Int_t &idup, Int_t &istup,
 
 }
 		   
+// ---------------------------------------------------------------
+Bool_t JSFHEPEUP::AppendParticles(Int_t n, Int_t idup[], Int_t istup[], Int_t mother[][2],
+		   Int_t colup[][2], Double_t p[][5], Double_t vtimup[],
+		   Double_t spinup[])
+{
+  JSFHEPEUP old(*this);
+
+  if( fNUP != 0 ) {
+    delete  fIDUP;
+    delete  fISTUP;
+    delete  fMOTHUP;
+    delete  fICOLUP;
+    delete  fPUP;
+    delete  fVTIMUP;
+    delete  fSPINUP;
+    fNUP += n;
+    fIDUP   = new Int_t[fNUP];
+    fISTUP  = new Int_t[fNUP];
+    fMOTHUP = new Int_t[2*fNUP];
+    fICOLUP = new Int_t[2*fNUP];
+    fPUP    = new Double_t[5*fNUP];
+    fVTIMUP = new Double_t[fNUP];
+    fSPINUP = new Double_t[fNUP];
+  }
+
+  fNUP2   = 2*fNUP;
+  fNUP5   = 5*fNUP;
+  fIDPRUP = old.GetIDPRUP();
+  fXWGTUP = old.GetXWGTUP();
+  fSCALUP = old.GetSCALUP();
+  fAQEDUP = old.GetAQEDUP();
+  fAQCDUP = old.GetAQCDUP();
+  for(Int_t i=1;i<=old.GetNUP();i++){
+    fIDUP[i-1]=old.GetIDUP(i);
+    fISTUP[i-1]=old.GetISTUP(i);
+    fVTIMUP[i-1]=old.GetVTIMUP(i);
+    fSPINUP[i-1]=old.GetSPINUP(i);
+  }
+  for(Int_t i=0;i<2*fNUP;i++){
+    fMOTHUP[i]=old.fMOTHUP[i];
+    fICOLUP[i]=old.fICOLUP[i];
+  }
+  for(Int_t i=0;i<5*fNUP;i++){
+    fPUP[i]=old.fPUP[i];
+  }
+
+  // Add 
+
+  Int_t oldnup=old.GetNUP();
+  for(Int_t i=0;i<n;i++){
+    if( !SetParticle(oldnup+i, idup[i], istup[i], &mother[i][0],
+		     colup[i], &p[i][0], vtimup[i], spinup[i]) ) {
+      cout << "Fatal error in JSFHEPEUP." << endl;
+      exit (0);
+    }
+  }
+
+  return kTRUE;
+
+}
+
 
 // ---------------------------------------------------------------
 void JSFHEPEUP::Load(void *address)
@@ -293,6 +369,40 @@ void JSFHEPEUP::Save(void *address)
   }
 
 }
+
+// ---------------------------------------------------------------
+void  JSFHEPEUP::ResetBeamParticles(Double_t nominale[2])
+{
+  //  Squeeze first four lines to two and replace in-comming particle
+  //  with those with nominal energy.  
+  
+  for(Int_t i=0;i<4;i++){
+    for(Int_t j=0;j<5;j++){
+      Double_t *pup=GetPUP(i+1);
+      fIncomming[i][j]=pup[j];
+    }
+  }
+
+  Double_t pe[5]={0.0, 0.0, 0.0, 0.0, 0.0};
+  pe[2]=nominale[0];
+  pe[3]=nominale[0];
+  SetParticle(0, GetIDUP(1), GetISTUP(1), &fMOTHUP[0], &fICOLUP[0],
+	      pe, GetVTIMUP(1), GetSPINUP(1));
+  pe[2]=-nominale[1];
+  pe[3]=nominale[0];
+  SetParticle(1, GetIDUP(2), GetISTUP(2), &fMOTHUP[2], &fICOLUP[2],
+	      pe, GetVTIMUP(2), GetSPINUP(2));
+
+  for(Int_t i=5; i<=fNUP ; i++ ){
+    SetParticle(i-3, GetIDUP(i), GetISTUP(i), &fMOTHUP[2*(i-1)], &fICOLUP[2*(i-1)],
+	      GetPUP(i), GetVTIMUP(i), GetSPINUP(i));
+  }    
+  fNUP-=2;
+
+}
+
+
+
 
 // ---------------------------------------------------------------
 void JSFHEPEUP::Print()

@@ -39,6 +39,8 @@ JSFPythiaHadronizer::JSFPythiaHadronizer(const char *name, const char *title)
 
   fPythia = new TPythia6();
 
+  fHEPEUPFormat = gJSF->Env()->GetValue("PythiaHadronizer.HEPEUPFormat",0);
+
 }
 
 //_____________________________________________________________________________
@@ -52,9 +54,7 @@ Bool_t JSFPythiaHadronizer::Initialize()
 {
   if( !JSFSHGenerator::Initialize() ) return kFALSE;
 
-  //  fPythia->SetMDCY(23,1,0);
-  //  fPythia->SetMDCY(24,1,0);
-  //  fPythia->SetMDCY(33,1,0);
+  //  fPythia->SetMDCY(25,1,0);  // suppress higgs decay
 
   return kTRUE;
 }
@@ -91,14 +91,31 @@ Bool_t JSFPythiaHadronizer::Process(Int_t nevent)
   JSFMEGenerator *megen=(JSFMEGenerator*)gJSF->FindModule("JSFMEGenerator");
   JSFMEGeneratorBuf *mgb=(JSFMEGeneratorBuf*)megen->EventBuf();
   JSFHEPEUP *hepeup=mgb->GetJSFHEPEUP();
-  //  JSFHEPRUP *heprup=megen->GetJSFHEPRUP();
-  
+
+  if( fHEPEUPFormat == 1 ) {  // Special treatment for Higgs sub-group
+    JSFHEPRUP *heprup=megen->GetJSFHEPRUP();
+    // hepeup->Print();
+    Double_t ebeam[2];
+    ebeam[0]=heprup->GetEBMUP(1);
+    ebeam[1]=heprup->GetEBMUP(2);
+    hepeup->ResetBeamParticles(ebeam);
+    // hepeup->Print();
+  }
 
   void *address=pythia6_common_block_address_("HEPEUP",6);
 
   hepeup->Save(address);
 
   fPythia->GenerateEvent();
+
+  if( fHEPEUPFormat == 1 ) {  // Special treatment for Higgs sub-group
+    for(Int_t i=1;i<=4;i++){
+      Double_t *p=hepeup->GetIncomming(i-1);
+      for(Int_t j=1;j<=5;j++){
+	fPythia->SetP(i+2, j, p[j-1]);
+      }
+    }
+  }
 
   JSFPythiaHadronizerBuf *buf=(JSFPythiaHadronizerBuf*)EventBuf();
 

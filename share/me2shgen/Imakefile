@@ -24,6 +24,7 @@ all:: lib$(PROGNAME).$(DllSuf)
 
 install:: lib$(PROGNAME).$(DllSuf)
 	install lib$(PROGNAME).$(DllSuf) $(JSFROOT)/lib
+	install $(HDRS) $(JSFROOT)/include
 
 lib$(PROGNAME).$(DllSuf): $(OBJS)
 	$(LD) $(DYLIBFLAGS) $(OBJS) -lz -o lib$(PROGNAME).$(DllSuf) 

@@ -44,6 +44,7 @@ class JSFPythiaHadronizer : public JSFSHGenerator
    Int_t    fMRPY[6];    // random seed for Jetset
    Float_t  fRRPY[100];  //
    TPythia6 *fPythia;    //!
+   Int_t    fHEPEUPFormat; // > 0 when Non-standard HEPEUP format is used.
  public:
   JSFPythiaHadronizer(const char *name="JSFPythiaHadronizer", 
 		      const char *title="JSF Pythia Shower/Hadronizer");
