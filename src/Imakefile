@@ -56,7 +56,10 @@ SRCJSFLCFULL  = JSFBases.$(SrcSuf) \
 SRCJSFQUICKSIM= JSFQuickSimParam.$(SrcSuf) JSFQuickSim.$(SrcSuf) \
 		JSFLTKCLTrack.$(SrcSuf) JSFSIMDST.$(SrcSuf) \
 		JSFVTXHit.$(SrcSuf) JSFCALHit.$(SrcSuf) \
-		JSFHelicalTrack.$(SrcSuf) JSFCDCTrack.$(SrcSuf)
+		JSFHelicalTrack.$(SrcSuf) JSFCDCTrack.$(SrcSuf) \
+		JSFVirtualFit.$(SrcSuf) JSFGeoCFit.$(SrcSuf) \
+		JSFVertexing.$(SrcSuf)
+
 
 SRCJSFDMATRIX = JSFDMatrix.$(SrcSuf) JSFDMatrixUtils.$(SrcSuf) \
 		JSFDVector.$(SrcSuf)
