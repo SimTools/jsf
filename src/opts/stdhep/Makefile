@@ -20,7 +20,7 @@ LIBS	+= -L$(CLHEP_BASE_DIR)
 endif
 LIBS    += -lCLHEP
 
-ifdef CLHEP_INCLUDE_DIR)
+ifdef CLHEP_INCLUDE_DIR
 INCPATH  += -I$(CLHEP_INCLUDE_DIR)
 endif
 

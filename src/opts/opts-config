@@ -34,6 +34,23 @@ has_Anlib()
   exit 0
 
 }
+# ---------------------------------------------
+has_LCIO()
+{
+  if [ "X$LCIO" == "X" ] ; then
+    exit -1
+  fi
+  if [ ! -e $LCIO/lib/liblcio.a ] ; then
+    exit -1
+  fi
+  if [ ! -e $LCIO/sio/lib/libsio.a ] ; then
+    exit -1
+  fi
+
+  echo yes
+  exit 0
+
+}
 
 
 # ---------------------------------------------
@@ -51,6 +68,7 @@ do
   case "$1" in 
     --has_CLHEP) has_CLHEP ;;
     --has_Anlib) has_Anlib ;;
+    --has_LCIO)  has_LCIO ;;
     *) print_help ;;
   esac
   shift
