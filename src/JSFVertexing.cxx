@@ -29,6 +29,7 @@ JSFVertexing::JSFVertexing()
   fT=0;
   fChisq=1.E10;
   fEntries=0;
+  fPairEpsilon=1.0;
 }
 
 //________________________________________________________________________
@@ -40,6 +41,7 @@ JSFVertexing::JSFVertexing(Int_t ntracks)
   fQuality=1.E10;
   fChisq=1.E10;
   fEntries=ntracks;
+  fPairEpsilon=1.0;
   fT=new TClonesArray("JSFHelicalTrack",ntracks);
 }
 
@@ -130,7 +132,7 @@ CC********************************************************************CC
   Double_t sqa = TMath::Sqrt(a);
   Double_t radd = r1 + r2 ;
   Double_t rsub = TMath::Sqrt( r1-r2 );
-  //printf(" In UFpair.. sqa, radd, eps,dif=%g, %g, %g,%g\n",sqa,radd,eps,sqa-radd+eps);
+  //  printf(" In UFpair.. sqa, radd, eps,dif=%g, %g, %g,%g\n",sqa,radd,eps,sqa-radd+eps);
 
   if( sqa > radd+eps || sqa <= 1.e-3 || sqa < rsub-eps ) {
 // (1) No Intersection
@@ -228,6 +230,7 @@ CC********************************************************************CC
   Int_t nx;
   UCRCLX(TMath::Abs(r[0]), xc[0], TMath::Abs(r[1]), xc[1], fPairEpsilon,
 	      xx[0], xx[1], nx);
+
 //C--
 //C  If no intersection found, return with IRET = -1.
 //C--
