@@ -9,8 +9,10 @@ This directory contains
 
 Source code of Pythia was obtainied from 
 http://www.thep.lu.se/~torbjorn/Pythia.html.
-Since Pythia6.206 did not work on AIX, line number 18214
-of original code was slightly modified.
+There was a bug in the initialization of MDME(4178,1) of PYDAT3 
+common.  According to the suggestion by T.Sjosstrand, 
+pythia6202.f is modified and MDME(4178,1) is set to -1
+instead of the original value of 0.
 
 Source code of Root-Pythia interface was obtained from 
 http://root.cern.ch/
