@@ -50,6 +50,7 @@ for( $i=0;$i<=$#htmlf;$i++){
 
 	if( $i == 4 && $array[1] =~ /^JSFRead*/ ) { print ; }
 	if( $i == 4 && $array[1] =~ /^JSFJIM*/ ) { print ; }
+	if( $i == 4 && $array[1] =~ /^JSFJLCSIM*/ ) { print ; }
 	if( $i == 5 && $array[1] =~ /^JSFJIM*/ ) { print ; }
     }
     else { print ; }
