@@ -79,7 +79,7 @@ CXX           = g++ -O2
 CXXFLAGS      = -Wall -fsigned-char -fPIC \
 		$(EXTRACXXOPT) \
                 -I$(JSFROOT)/include -I$(ROOTSYS)/include
-SOFLAGS       = -shared -Wl,-soname,$(SONAME) -rdynamic
+SOFLAGS       = -shared -rdynamic
 LDFLAGS       = $(ANALLIB) $(GLIBS) -rdynamic
 LIBS          = $(ROOTLIBS) -lm -ldl
 GLIBS         = $(ROOTLIBS) $(ROOTGLIBS) -L/usr/X11R6/lib \
@@ -97,7 +97,7 @@ CXX           = g++ -O2
 CXXFLAGS      = -Wall  -fno-rtti -fno-exceptions -fPIC \
 		$(EXTRACXXOPT) \
 		-I$(JSFROOT)/include -I$(ROOTSYS)/include
-SOFLAGS       = -shared -Wl,-soname,$(SONAME) -rdynamic
+SOFLAGS       = -shared -rdynamic
 LDFLAGS       = $(ANALLIB) $(GLIBS) -rdynamic
 LIBS          = $(ROOTLIBS) -lm -ldl
 GLIBS         = $(ROOTLIBS) $(ROOTGLIBS) -L/usr/X11R6/lib \
