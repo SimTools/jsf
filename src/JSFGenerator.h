@@ -21,14 +21,11 @@
 #ifndef __JSFGeneratorParticle__
 #include "JSFGeneratorParticle.h"
 #endif
-// Define class for parameters.
-// #ifndef __JSFGeneratorParam__
-// #include "JSFGeneratorParam.h"
-// #endif
 
 class JSFGeneratorParticle;
 class JSFGenerator;
 
+//*************************************************************
 class JSFGeneratorBuf : public JSFEventBuf {
 protected:
    Int_t            fStartSeed;  // Seed value at the begining of the event
@@ -38,7 +35,7 @@ protected:
 public:
    JSFGeneratorBuf(const char *name="JSFGeneratorBuf",
 		   const char *title="JSF Generator",
-		   JSFGenerator *generator=NULL);
+		   JSFGenerator *generator=0);
    virtual ~JSFGeneratorBuf();
 
    virtual void Clear(Option_t *option="");
@@ -55,6 +52,7 @@ public:
 };
    
 
+//*************************************************************
 class JSFGenerator : public JSFModule {
 public:
    JSFGenerator(const char *name="JSFGenerator", 

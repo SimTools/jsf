@@ -1,5 +1,12 @@
+//*LastUpdate :  jsf-1-7  8-April-1999  A.Miyamoto
 //*LastUpdate :  0.04/04  9-November-1998  By A.Miyamoto
 //*-- Author  : A.Miyamoto  9-November-1998
+
+/*
+  8-Apr-1999 A.Miyamoto  Save all particles in LUJETS common to 
+                         JSFGeneratorParticle class
+*/
+
 ///////////////////////////////////////////////////////////////////
 //
 //  PythiaGenerator class
@@ -87,27 +94,22 @@ Bool_t PythiaGenerator::Process(Int_t ev)
 
    Int_t np=fPythia->GetNumberOfPrimaries();
    TObjArray *pa=fPythia->GetPrimaries();
-   Int_t n0=fPythia->GetMSTI(4);
 
    Int_t nout=0;
    Int_t ks,kf,kh,kfa;
-   Float_t charge, xctau, life, mass;
+   Float_t charge, xctau, dl, mass;
    Int_t idhist[4001];
    Int_t i;
    for(i=0;i<4001;i++){ idhist[i]=0 ; }
    Int_t  ndaughter, firstdaughter, mother ;
 
-   for(i=n0+1;i<=np;i++) {
+   for(i=1;i<=np;i++) {
      TMCParticle *p=(TMCParticle*)pa->UncheckedAt(i-1);
      ks=p->GetKS();
      kf=p->GetKF();
      kh=p->GetParent();
      idhist[i]=0;
      kfa=TMath::Abs(kf);
-     if( (kfa >= 1 && kfa <= 10) || kfa == 21 ) continue ;
-     if(  kfa >=23 && kfa <= 100 ) continue ;
-     Float_t pt2=p->GetPx()*p->GetPx() + p->GetPy()*p->GetPy(); 
-     if( pt2 < 1.e-12 ) continue ;
 
      nout++;
      idhist[i] = nout ;
@@ -123,7 +125,7 @@ Bool_t PythiaGenerator::Process(Int_t ev)
      ndaughter=0;
      firstdaughter=0;
      mother=0;
-     life=0.0;
+     dl=0.0;
      if( kh != 0 ) {
        Int_t ipar=idhist[kh];
        if( ipar > 0 ) {
@@ -135,8 +137,8 @@ Bool_t PythiaGenerator::Process(Int_t ev)
        }
      }
      new(tracks[nout-1]) 
-       JSFGeneratorParticle(nout, kf,(Double_t)mass,(Double_t)charge, pv, xv , 
-	    ndaughter, firstdaughter, mother, (Double_t)xctau, (Double_t)life ) ;
+       JSFGeneratorParticle(nout, kf,mass,charge, pv, xv , 
+	    ndaughter, firstdaughter, mother, xctau, dl ) ;
 
    }
   buf->SetNparticles(nout);

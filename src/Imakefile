@@ -41,13 +41,14 @@ OBJJSFLCFULL  = JSFBases.$(ObjSuf) \
 		JSFLCFULL.$(ObjSuf) \
 		DebugGenerator.$(ObjSuf) DebugWGenerator.$(ObjSuf) \
 		PythiaGenerator.$(ObjSuf) \
+		JSFReadGenerator.$(ObjSuf) readgenutil.o \
 		libJSFLCFULL.$(ObjSuf)
 
 OBJJSFQUICKSIM= JSFQuickSimParam.$(ObjSuf) JSFQuickSim.$(ObjSuf) \
 		JSFLTKCLTrack.$(ObjSuf) JSFSIMDST.$(ObjSuf) \
 		JSFVTXHit.$(ObjSuf) JSFCALHit.$(ObjSuf) \
 		JSFHelicalTrack.$(ObjSuf) JSFCDCTrack.$(ObjSuf) \
-		libJSFQuickSim.$(ObjSuf) simdstutil.o
+		libJSFQuickSim.$(ObjSuf) simdstutil.o 
 
 SRCJSF           = JSFSteer.$(SrcSuf) JSFModule.$(SrcSuf) 
 
@@ -56,8 +57,9 @@ SRCJSFLCFULL    = JSFBases.$(SrcSuf) \
 		JSFGeneratorParticle.$(SrcSuf) JSFGenerator.$(SrcSuf) \
 		JSFFULLGenerator.$(SrcSuf) JSFHadronizer.$(SrcSuf) \
 		JSFLCFULL.$(SrcSuf) \
+		JSFReadGenerator.$(SrcSuf) \
 		DebugGenerator.$(SrcSuf) DebugWGenerator.$(SrcSuf) \
-		PythiaGenerator.$(SrcSuf)
+		PythiaGenerator.$(SrcSuf) 
 
 SRCJSFQUICKSIM= JSFQuickSimParam.$(SrcSuf) JSFQuickSim.$(SrcSuf) \
 		JSFLTKCLTrack.$(SrcSuf) JSFSIMDST.$(SrcSuf) \
@@ -75,13 +77,14 @@ HDRJSFLCFULL  = JSFBases.h \
 		JSFFULLGenerator.h JSFHadronizer.h \
 		JSFLCFULL.h \
 		DebugGenerator.h DebugWGenerator.h \
+		JSFReadGenerator.h \
 		PythiaGenerator.h JSFLCFULLLinkDef.h
 
 HDRJSFQUICKSIM= JSFVTXHit.h JSFCALHit.h \
 		JSFHelicalTrack.h \
 		JSFCDCTrack.h JSFLTKCLTrack.h \
 		JSFQuickSimParam.h JSFQuickSim.h \
-		JSFSIMDST.h JSFQuickSimLinkDef.h 
+		JSFSIMDST.h JSFQuickSimLinkDef.h \
 
 
 all::  libjsf libjsflcfull libjsfquicksim jsf

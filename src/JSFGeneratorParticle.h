@@ -29,6 +29,7 @@ public:
   Short_t     fMother;  // Serial number of mother particle ( =0 for initial)
   Float_t  fLifeTime; // Particle life time ( c x nsec, =0 for stable, cm)
   Float_t  fDecayLength;  // Decay length (cm, =0 for stable)
+// If fDecayLength <= 0, vertex point is re-evaluated using fLifeTime.
 
 public:
   JSFGeneratorParticle() {}
@@ -36,26 +37,13 @@ public:
   JSFGeneratorParticle(Int_t Ser, Int_t ID, Float_t Mass, Float_t Charge,
          TVector& P, TVector& X,
 	 Int_t Ndaughter, Int_t FirstDaughter, Int_t Mother,
-         Float_t LifeTime, Float_t DecayLength){
-         fSer = Ser ; fID=ID; fMass=Mass; fCharge=Charge;
-	 for(Int_t i=0;i<4;i++){ fP[i]=P(i) ; fX[i]=X(i) ; }
-	 fNdaughter=Ndaughter ; fFirstDaughter=FirstDaughter ;
-	 fMother=Mother; fLifeTime=LifeTime ; fDecayLength=DecayLength; }
-
+         Float_t LifeTime, Float_t DecayLength);
 
   JSFGeneratorParticle(Int_t Ser, Int_t ID, Float_t Mass, Float_t Charge,
-		       TVector& P, TVector& X ) {
-         fSer = Ser ; fID=ID; fMass=Mass; fCharge=Charge;
-	 for(Int_t i=0;i<4;i++){ fP[i]=P(i) ; fX[i]=X(i) ; }
-	 fNdaughter=0; fFirstDaughter=0;
-	 fMother=0; fLifeTime=0.0; fDecayLength=0.0; }
+		       TVector& P, TVector& X );
 
   JSFGeneratorParticle(Int_t Ser, Int_t ID, Float_t Mass, Float_t Charge,
-		       TVector& P ) {
-         fSer = Ser ; fID=ID; fMass=Mass; fCharge=Charge;
-	 for(Int_t i=0;i<4;i++){ fP[i]=P(i) ; fX[i]=0.0 ; }
-	 fNdaughter=0; fFirstDaughter=0;
-	 fMother=0; fLifeTime=0.0; fDecayLength=0.0; }
+		       TVector& P);
 
   JSFGeneratorParticle(Float_t data[]);
 
@@ -63,11 +51,11 @@ public:
   Float_t GetPy(){ return fP[2] ;}
   Float_t GetPz(){ return fP[3] ;}
   Float_t GetE(){  return fP[0] ;}
-  Float_t GetPabs(){ return TMath::Sqrt( fP[1]*fP[1]+fP[2]*fP[2]+fP[3]*fP[3]);}
-  Float_t GetAzimthAngle(){ return TMath::ATan2( fP[2], fP[1]);}
-  Float_t GetPt(){ return TMath::Sqrt( fP[1]*fP[1]+fP[2]*fP[2]);}
-  Float_t GetCosth(){ return fP[3]/GetPabs() ;}
-
+  inline Float_t GetPabs(){ 
+    return TMath::Sqrt( fP[1]*fP[1]+fP[2]*fP[2]+fP[3]*fP[3]);}
+  inline Float_t GetAzimthAngle(){ return TMath::ATan2( fP[2], fP[1]);}
+  inline Float_t GetPt(){ return TMath::Sqrt( fP[1]*fP[1]+fP[2]*fP[2]);}
+  inline Float_t GetCosth(){ return fP[3]/GetPabs() ;}
 
   Int_t   GetSerial(){ return fSer;}
   Int_t   GetID(){ return fID;}
@@ -88,7 +76,7 @@ public:
 
   virtual ~JSFGeneratorParticle() {}
 
-  ClassDef(JSFGeneratorParticle,1)  //A JSFGeneratorParticle segment
+  ClassDef(JSFGeneratorParticle, 1)  //A JSFGeneratorParticle segment
 };
 
 #endif

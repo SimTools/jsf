@@ -33,7 +33,7 @@ JSFGenerator::JSFGenerator(const char *name, const char *title)
 
 //_____________________________________________________________________________
 JSFGeneratorBuf::JSFGeneratorBuf(const char *name, const char *title, JSFGenerator *generator)
-       : JSFEventBuf(name,title, generator)
+       : JSFEventBuf(name,title, (JSFModule*)generator)
 {
 //   Create one JSFGenerator object
 //   When the constructor is invoked for the first time, the global
