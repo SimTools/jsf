@@ -1,6 +1,11 @@
 
+
 all: include/JSFConfig.h
 	( cd src ; make all)
+	( cd include ; ln -sf $(LCBASEDIR)/include/LCBASEConfig.h .)
+	( cd include ; ln -sf $(LCBASEDIR)/include/LCBASE.inc .)
+	( cd include ; ln -sf $(LCBASEDIR)/include/LCBASEDefines.h .)
+
 
 makefiles: include/JSFConfig.h
 	( cd src ; make makefiles )
