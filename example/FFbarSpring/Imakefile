@@ -8,7 +8,7 @@ ROOTLIBS     += -lEGPythia -lEG -Wl,-u,pytest_ $(CERNLIBS)
 
 LCLIB 	  = $(LCLIBROOT)/lib
 
-ANALLIB   = -L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim \
+ANALLIB   = $(JSFLIBS) \
 	    -L$(LCLIBROOT)/lib -lGENUTIL -lLUHADR -lTAUOLA \
 	    -lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
 	    -lHELASV204 -lFORTLIB -lCOM -lCLI 
