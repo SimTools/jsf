@@ -45,7 +45,7 @@ class JSFGeneratorVertex : public JSFVirtualVertex
   inline JSFGeneratorParticle *GetParent(){ return fParentTrack; }
   inline JSFGeneratorVertex *GetParentVertex(){ return fParentVertex;}
   inline JSFGeneratorVertexing *GetVertexing(){ return fVertexing; }
-  inline GetType(){ return fType; }
+  inline Int_t GetType(){ return fType; }
   Double_t GetDecayLength(){ 
     return TMath::Sqrt(fPos[0]*fPos[0] + fPos[1]*fPos[1] + fPos[2]*fPos[2]);
   }

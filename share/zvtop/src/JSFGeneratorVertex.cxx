@@ -730,7 +730,7 @@ void JSFGeneratorVertexing::DebugPrint()
 
 
 
-  Int_t icdc, nw, iret, nelm;
+  Int_t nw, iret, nelm;
   Char_t *bnknam="Production:CDC_VTX;Track_Parameter";
   Int_t itrkp[200], neary[200];
   Int_t ktrkp[200], kw, kret;
