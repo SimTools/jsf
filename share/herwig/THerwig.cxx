@@ -12,6 +12,70 @@
 //
 // This interface is prepared by Akiya Miyamoto, KEK
 //
+//(Usage)
+// A simple usage of this class is as follows
+//{ 
+//  gSystem->Load("libEG.so");
+//  gSystem->Load("libTHerwig.so");
+//  THerwig herwig;
+//  herwig.SetBeams("PBAR","P",1000.0, 1000.0, 1500);
+//  herwig.Initialize();
+//  for(Int_t ev=1;ev<=100;ev++){
+//     herwig.GenerateEvent();
+//     cout << "Number of generated particles is " << herwig.GetNHEP() << endl;
+//  }
+//}
+//
+// Following lines are comments taken from the source file of 
+// Herwig 6.5 
+//C-----------------------------------------------------------------------
+//C                           H E R W I G
+//C
+//C            a Monte Carlo event generator for simulating
+//C        +---------------------------------------------------+
+//C        | Hadron Emission Reactions With Interfering Gluons |
+//C        +---------------------------------------------------+
+//C I.G. Knowles(*), G. Marchesini(+), M.H. Seymour($) and B.R. Webber(#)
+//C-----------------------------------------------------------------------
+//C with Minimal Supersymmetric Standard Model Matrix Elements by
+//C                S. Moretti(&,X) and K. Odagiri(^)
+//C-----------------------------------------------------------------------
+//C R parity violating Supersymmetric Decays and Matrix Elements by
+//C                          P. Richardson(#)
+//C-----------------------------------------------------------------------
+//C matrix element corrections to top decay and Drell-Yan type processes
+//C                         by G. Corcella(")
+//C-----------------------------------------------------------------------
+//C Deep Inelastic Scattering and Heavy Flavour Electroproduction by
+//C                  G. Abbiendi(@) and L. Stanco(%)
+//C-----------------------------------------------------------------------
+//C and Jet Photoproduction in Lepton-Hadron Collisions by J. Chyla(~)
+//C-----------------------------------------------------------------------
+//C(*)  Department of Physics & Astronomy, University of Edinburgh
+//C(+)  Dipartimento di Fisica, Universita di Milano-Bicocca
+//C($)  Department of Physics & Astronomy, University of Manchester
+//C(#)  Cavendish Laboratory, Cambridge
+//C(&)  Theory Division, CERN
+//C(X)  Institute of Particle Physics Phenomenology, University of Durham
+//C(^)  Theory Group, KEK
+//C(")  Max Planck Institute, Munich
+//C(@)  Dipartimento di Fisica, Universita di Bologna
+//C(%)  Dipartimento di Fisica, Universita di Padova
+//C(~)  Institute of Physics, Prague
+//C-----------------------------------------------------------------------
+//C                  Version 6.500 - 16 October 2002
+//C-----------------------------------------------------------------------
+//C Main references:
+//C
+//C    G.Corcella, I.G.Knowles, G.Marchesini, S.Moretti, K.Odagiri,
+//C    P.Richardson, M.H.Seymour and B.R.Webber, JHEP 0101 (2001) 010
+//C
+//C    G.Marchesini,  B.R.Webber,  G.Abbiendi,  I.G.Knowles,  M.H.Seymour,
+//C    and L.Stanco, Computer Physics Communications 67 (1992) 465.
+//C-----------------------------------------------------------------------
+//C Please see the official HERWIG information page:
+//C    http://hepwww.rl.ac.uk/theory/seymour/herwig/
+//C-----------------------------------------------------------------------
 ///////////////////////////////////////////////////////////////////
 
 
