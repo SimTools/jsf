@@ -1,0 +1,76 @@
+XCOMM #---------------------------------------------------
+XCOMM # Machine dependant configuration to build JSF application.
+XCOMM #---------------------------------------------------
+XCOMM # 
+DllSuf        = so
+SrcSuf        = cxx
+ObjSuf        = o
+
+CXX           = g++
+LD            = g++ 
+
+ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
+                -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
+                -lPostscript -lProof -lTree -lUnix -lZip
+ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
+
+LCLIB 	  = $(LCDIR)/lib
+
+
+XCOMM # -----------------------------------------------------
+XCOMM # Linux with egcs
+XCOMM # -----------------------------------------------------
+#if defined(LinuxArchitecture)
+CXXFLAGS      = -O2 -Wall  -fno-rtti -fno-exceptions -fPIC \
+		-I$(JSFROOT)/include -I$(ROOTSYS)/include
+SOFLAGS       = -shared -Wl,-soname,$(SONAME).so 
+LCDIR         = /proj/phys/lclib/97a
+LDFLAGS       = $(ANALLIB) $(GLIBS)
+LIBS          = $(ROOTLIBS) -lm -ldl -rdynamic
+GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -L/usr/X11R6/lib \
+		-lXpm -lX11 -lf2c -lm -ldl -rdynamic
+SOEXT         = sl
+BLOCKDATA     = 
+#endif
+XCOMM # -----------------------------------------------------
+XCOMM # For Machten gcc (This is not tested yet.)
+XCOMM # -----------------------------------------------------
+#if defined(MachTenPPCArchitecture)
+CXXFLAGS      = -O2 -Wall  -fno-rtti -fno-exceptions -fPIC \
+		-I$(JSFROOT)/include -I$(ROOTSYS)/include
+SOEXT         = sl
+SOFLAGS       = -shared -Wl,-soname,$(SONAME).so 
+LCDIR         = /proj/phys/lclib/97a
+LDFLAGS       = $(ANALLIB) $(GLIBS)
+LIBS          = $(ROOTLIBS) -lm -ldl -rdynamic
+GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -L/usr/X11R6/lib \
+		-lXpm -lX11 -lf2c -lm -ldl -rdynamic
+BLOCKDATA     = 
+#endif
+XCOMM # -----------------------------------------------------
+XCOMM # HI-UX
+XCOMM # -----------------------------------------------------
+#if defined(hitachiArchitecture)
+CXXFLAGS      = -O2 -Wall  -fno-rtti -fno-exceptions -fPIC \
+		-I$(JSFROOT)/include -I$(ROOTSYS)/include \
+		$(USEFORTRAN)
+SOFLAGS       = -nostdlib  -nostartfiles -Wl,-b,-E 
+LDFLAGS       = $(ANALLIB) -Wl,+s $(GLIBS) $(F90LIB)
+MYLDOPT       = -lmsl2 -L/lib/pa1.1 -lm
+F90LIB        =  $(MYLDOPT) -Wl,-a,archive -lhf90math -lf90 \
+		-Wl,-a,default -lc
+SOEXT         = sl
+LCDIR         = /proj.hi/phys/lclib/97a_f90
+LIBS          = $(ROOTLIBS) -lm -ldld
+GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -lXpm -lX11 -lm -ldld
+FC            = f90
+USEFORTRAN    = -D_HIUX_FORTRAN
+BLOCKDATA     = $(LCDIR)/gen/pythia55/pydata.o \
+		$(LCDIR)/gen/lund73/jetset73/ludata.o \
+		$(LCDIR)/util/lcfull/src/prblk1.o \
+		$(LCDIR)/util/fortlib/src/uconst.o \
+		$(LCDIR)/simjlc/src/smrblk.o \
+		$(LCDIR)/util/ltkcl/cmbblk.o 
+
+#endif
+

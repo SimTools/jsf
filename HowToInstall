@@ -1,0 +1,12 @@
+How to install
+
+1) Do
+	setenv ROOT <<root directort>>
+	setenv JSFROOT <<jsf directort>>
+	set path=($JSFROOT/bin $ROOTSYS/bin $path)
+
+2) Edit pathname for perl and wish specified in the bin/mkbs and bin/buildjsf .
+3) cd to src, and xmkmf ; make  -> this will create lib/libJSF.a and bin/jsf
+4) cd example ; xmkmf ; make    -> this will create sample program.
+
+that's it.

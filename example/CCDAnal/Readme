@@ -1,0 +1,39 @@
+About CCDAnal directory
+
+This directory contains source codes of CCD beam data analysis
+as an example of beam test data analysis.
+
+There are four JSF module class is defined. Their name and functions are
+
+CCDRawData       : Read CCD raw data ans store it as root class.
+CCDCorrectDark   : subtruct dark data from CCDRawData
+CCDRawHist       : Make histograms of CCD raw data.
+CCD2x2Cluster    : Does 2x2 clustering and results are saved as class.
+
+There are run dependance in the unpacking process of CCDRawData and 
+they are summarized in the CCDRawData3 class (3 means unpacking class for 
+beam test number 3).
+
+In addition there are data base class inherited from JSFDBS class.
+There are three types of dababase information; RunIndex, Pedestal,
+and DarkData.  These classes are defined in CCDDBS.h/CCDDBS.cxx.
+A macro makedbs.C was used to create the data base fiel, jsfdbs.root.
+The marco converts standard dark data into the root file.
+Index of the data base is run number.  Any infomation in the data base
+can be retrieved by specifying the run number as follows,
+  run1651 = new CCDRunIndex(1651);
+but currently only run1651 information is stored.
+
+
+As examples of usages, following macros are prepared;
+format.C     ; create formatted data, namely CCD rawdata stored in the root file.
+anal.C       ; does upto 2x2 clustering from raw data file.
+ranal.C      ; read formatted data and does analysis
+rawph.C      ; read formatted data and make pulse height histogram after pedestal subtruction
+read.C       ; just read a jsf root.file
+makedbs.C    ; create the data base.
+readdbs.C    ; read the data base record.
+
+
+
+

@@ -1,0 +1,109 @@
+#---------------------------------------------------
+
+#include    "../conf/makejsf.tmpl"
+
+ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
+                -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
+                -lPostscript -lProof -lTree -lUnix -lZip
+ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
+
+LCLIB 	  = $(LCDIR)/lib
+
+ANALLIB   =  -L$(LCLIB) -lLCFULL -lGENUTIL -lLUND73 -lPYTHIA55 -lTAUOLA \
+	    -lLTKCL -lHELASV204 -lBASESV5.1 -lSIMJLC -lFORTLIB  \
+	    -lTBS -lLCFULL -lGENUTIL -lLUND73  -lCOM -lCLI \
+	    -lFORTLIB -lTBS
+
+FFLAGS = -I$(LCDIR)/simjlc/src -I$(LCDIR)/util/fortlib/src 
+
+
+
+#-------------------------------------------------------------
+
+INC           = ../include 
+
+OBJJSF        = JSFSteer.$(ObjSuf) JSFModule.$(ObjSuf) \
+		JSFDBS.$(ObjSuf) \
+		libJSF.$(ObjSuf)
+
+OBJJSFLCFULL  = JSFBases.$(ObjSuf) \
+		JSFSpringParton.$(ObjSuf) JSFSpring.$(ObjSuf) \
+		JSFGeneratorParticle.$(ObjSuf) JSFGenerator.$(ObjSuf) \
+		JSFFULLGenerator.$(ObjSuf) JSFHadronizer.$(ObjSuf) \
+		JSFLCFULL.$(ObjSuf) \
+		JSFLTKCLTrack.$(ObjSuf) JSFQuickSim.$(ObjSuf) \
+		DebugGenerator.$(ObjSuf) PythiaGenerator.$(ObjSuf) \
+		libJSFLCFULL.$(ObjSuf)
+
+SRCJSF           = JSFSteer.$(SrcSuf) JSFModule.$(SrcSuf) 
+
+SRCJSFLCFULL    = JSFBases.$(SrcSuf) \
+		JSFSpringParton.$(SrcSuf) JSFSpring.$(SrcSuf) \
+		JSFGeneratorParticle.$(SrcSuf) JSFGenerator.$(SrcSuf) \
+		JSFFULLGenerator.$(SrcSuf) JSFHadronizer.$(SrcSuf) \
+		JSFLCFULL.$(SrcSuf) \
+		JSFLTKCLTrack.$(SrcSuf)	JSFQuickSim.$(SrcSuf) \
+		DebugGenerator.$(SrcSuf) PythiaGenerator.$(SrcSuf)
+
+SRC = $(SRCJSF) $(SRCLCFULL)
+
+HDRJSF	      = JSFDBS.h JSFModule.h JSFSteer.h JSFLinkDef.h
+
+HDRJSFLCFULL  = JSFBases.h \
+		JSFSpringParton.h JSFSpring.h \
+		JSFGeneratorParticle.h JSFGenerator.h \
+		JSFFULLGenerator.h JSFHadronizer.h \
+		JSFLCFULL.h \
+		JSFLTKCLTrack.h JSFQuickSim.h \
+		DebugGenerator.h PythiaGenerator.h JSFLCFULLLinkDef.h
+
+
+all::  libjsf libjsflcfull jsf
+
+libjsf:     $(OBJJSF)
+		@echo "Linking libJSF.a ..."
+		@/bin/rm -f libJSF.a
+		ar -r libJSF.a $(OBJJSF)
+		@cp -p libJSF.a ../lib
+
+
+libjsflcfull:     $(OBJJSFLCFULL)
+		@echo "Linking libJSFLCFULL.a ..."
+		@/bin/rm -f libJSFLCFULL.a
+		ar -r libJSFLCFULL.a $(OBJJSFLCFULL)
+		@cp -p libJSFLCFULL.a ../lib
+
+jsf: $(OBJS) jsfmain.o
+	$(LD) jsfmain.o $(BLOCKDATA) $(OBJJSF) $(OBJJSFLCFULL) \
+	 $(LDFLAGS) -o jsf
+	@cp -p jsf ../bin
+	@rm -f jsf
+	@echo jsf was installed in ../bin/jsf
+
+clean:: 
+	@rm -f $(OBJS) core *.so 
+	@rm -f libJSF.$(SrcSuf) libJSF.h
+	@rm -f libJSFLCFULL.$(SrcSuf) libJSFLCFULL.h
+
+depend:: 
+	makedepend -I$(ROOTSYS)/include $(SRC)
+
+distclean::
+	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h *.~ *.o
+	@rm -f PYTHIA.SEED *.bak
+	@rm -f jsf *.root Makefile 
+
+###
+
+libJSF.$(SrcSuf): $(HDRJSF)
+		@echo "Generating dictionary ..."
+		rootcint -f libJSF.$(SrcSuf) -c $(HDRJSF)
+libJSFLCFULL.$(SrcSuf): $(HDRJSFLCFULL)
+		@echo "Generating dictionary ..."
+		rootcint -f libJSFLCFULL.$(SrcSuf) -c $(HDRJSFLCFULL)
+#---------------------------------------------------
+
+.SUFFIXES: .$(SrcSuf)
+
+.$(SrcSuf).$(ObjSuf):
+	$(CXX) $(CXXFLAGS) -c $<

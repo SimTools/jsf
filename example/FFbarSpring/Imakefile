@@ -1,0 +1,65 @@
+#---------------------------------------------------
+
+#include "../../conf/makejsf.tmpl"
+
+ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
+                -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
+                -lPostscript -lProof -lTree -lUnix -lZip
+ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
+
+LCLIB 	  = $(LCDIR)/lib
+
+ANALLIB   = -L$(JSFROOT)/lib -lJSF -lJSFLCFULL \
+	    -L$(LCLIB) -lLCFULL -lGENUTIL -lLUND73 -lPYTHIA55 -lTAUOLA \
+	    -lLTKCL -lHELASV204 -lBASESV5.1 -lSIMJLC -lFORTLIB  \
+	    -lTBS -lLCFULL -lGENUTIL -lLUND73 -lCOM -lCLI \
+	    -lFORTLIB -lTBS 
+
+FFLAGS = -I$(LCDIR)/simjlc/src -I$(LCDIR)/util/fortlib/src 
+
+
+
+#-------------------------------------------------------------
+
+
+OBJS          = FFbarSpring.$(ObjSuf) \
+		libFFbarSpring.$(ObjSuf)
+
+SRC           = FFbarSpring.$(SrcSuf) 
+
+EVENTSO       = libFFbarSpring.$(DllSuf)
+
+HDRS	      = FFbarSpring.h
+
+SONAME        = libFFbarSpring
+PROGRAM       = $(SONAME).$(DllSuf)
+
+all::  jsf
+
+jsf: $(OBJS) jsfmain.o
+	$(LD) jsfmain.o $(BLOCKDATA) $(OBJS) $(LDFLAGS) -o jsf
+
+clean:: 
+	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h
+
+depend:: 
+	makedepend -I$(ROOTSYS)/include $(SRC)
+
+distclean::
+	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h *.~ *.o
+	@rm -f PYTHIA.SEED *.bak
+	@rm -f jsf *.root Makefile 
+
+###
+
+$(SONAME).$(SrcSuf): $(HDRS) LinkDef.h
+		@echo "Generating dictionary ..."
+		rootcint -f $(SONAME).$(SrcSuf) \
+	 	-c -I$(JSFROOT)/include $(HDRS) LinkDef.h
+
+#---------------------------------------------------
+
+.SUFFIXES: .$(SrcSuf)
+
+.$(SrcSuf).$(ObjSuf):
+	$(CXX) $(CXXFLAGS) -c $<

@@ -1,0 +1,15 @@
+(1) CCD 解析コードのスピードについて
+
+   CCD の Rawdata のPedestal subtraction をして４つの CCD について
+   Pulse Height 分布をとる場合、今までの hbook を使ったプログラムだと
+   30 分程度かかっていたが、 root を使った場合もほぼ同様である
+
+(2) ペデスタルを差っぴいたあとのデータを Float で保存すると、
+   始め、1run 950 MB だったデータが、1.42 GB 程度になった。
+   また、 Write に時間がかかって、16:13:08開始、終了18:59:18 
+   になった。Compression Factor は 1.79 バスケットサイズは 4000 
+   である。
+
+(3) CCD Data をそのままで保存した場合、10 イベントで、
+    Compression factor 2.99, 出力 8.5Mbyte/10 event
+    ただし、バスケットサイズは 1280K バイト

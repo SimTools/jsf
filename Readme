@@ -1,0 +1,59 @@
+About jsf-0.4.1
+
+6-October-1998  by Akiya Miyamoto
+
+This is version 0.4.1 of JLC Study Frame work.  
+
+(1) To get started, sample jsf application can be constructed as follows. 
+    First, set environment variables as foolows.
+	
+  on jlcofl1
+	$ setenv ROOTSYS /opt/root
+	$ setenv JSFROOT /proj/phys/lclib/jsf
+	$ set path=($path $$ROOTSYS/bin $JSFROOT/bin )
+
+  on ccjlc
+	$ setenv ROOTSYS /jlc/local/root
+	$ setenv JSFROOT /proj.hi/phys/lclib/jsf
+	$ set path=($path $$ROOTSYS/bin $JSFROOT/bin )
+
+  Then, create new directory and build application as follows.
+  	$ mkdir example
+	$ cd example
+	$ buildjsf 
+		--> A window shows up.  Set parameters and press 
+		    " Bases/Spring build application button".
+		--> Next window shows up.  Set parameters and press
+		    build application button.
+        --> Then everything is prepared in the directory.
+	    read Readme file and make programs and run it.
+
+(2) Notes about this release
+
+    JSF is still under construction. But some of designs are now
+    getting converged to some stage and it will be benefitial for 
+    the development to get feed back from users.  So we welcome 
+    any comments about this package.  However please note that any 
+    files in this  release may be changed in future without backword 
+    compatibility for improvement.
+    
+    New feature of this release are,
+    1) Include buildjsf script to help create jsf application.
+    2) jsf reads parameters using ROOT's TEnv class.  Default parameter
+       file name is , jsf.conf, but it can be changed by the command argument;
+	     jsf -conf=filename
+	where filename is the name of the parameter file name
+    3) DebugGenerator class and PythiaGenerator class is included.
+    4) JSFQuickSimBuf class is created as event tree data for JSFQuickSim class.
+       In the JSFQUickSimBuf class, JSFTKCLTrack class is defined as TClonesArray
+       to store TBS's Linked-Track-CLuster bank as a ROOT class. 
+
+(3) Future plan
+    
+     1) Prepare template for beam test data analysis ( CCD data analysys ).
+     2) Prepare interface to run JIM in root.
+     3) Allow keyboard interrupt during event loop.
+     4) GUI for setting parameters.
+
+(http://www-jlc.kek.jp/subg/offl/OOjlc/index.html)
+     
