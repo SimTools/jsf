@@ -15,17 +15,21 @@
 JSFLIBS       = -Wl,-L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim
 
 ANALLIB = $(JSFLIBS) $(EXTRALDOPT) \
-	-L$(LCLIBDIR) -lGENUTIL -lLUHADR -lTAUOLA \
+	-L$(LCLIBDIR) -lGENUTIL -lLUHADR \
         -lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
         -lHELASV204 -lFORTLIB -lCOM -lCLI \
         $(EXTRALIBS) $(JIMLDLIBS) \
 	-L$(ROOTSYS)/lib  -lEGPythia -lEG -ljetset74
 
+# -lTAUOLA : subroutine ginit in libTAUOLA.a conflcts with ginit in 
+# libgeant321.a, so removed.
+
 JIMLDLIBS = -L$(JSFROOT)/example/readjim -lreadjim \
 	-L$(JLCSIMROOT)/lib -lct -lvx -lcal -ljim  -ljlclib -lzbs -ljlcutil \
 	-lcal \
-	-L$(CERN_ROOT)/lib -lgeant321 -lmathlib -lpawlib -lgraflib \
-	-lgrafX11 -lpacklib -lkernlib
+	-L$(CERN_ROOT)/lib -lgeant321 \
+	-lmathlib -lpawlib -lgraflib \
+	-lgrafX11 -lpacklib -lkernlib 
 
 JIMOBJS =$(JLCSIMROOT)/lib/libjim.a
 
@@ -53,7 +57,7 @@ OBJS          = JSFJIM.$(ObjSuf) \
 		jimsub.o  jsfjimrun.o $(JIMFOBJS) \
 		libJSFJIM.$(ObjSuf)
 
-JIMFOBJS       = jmbfhd.o guout.o
+JIMFOBJS       = guout.o jmffrd.o
 
 SRC           = JSFJIM.$(SrcSuf)
 
@@ -69,8 +73,7 @@ all:: jsfjim
 
 
 jsfjim: $(OBJS) jsfjim.o $(JIMOBJS)
-	$(LD) jsfjim.o $(OBJS) $(LDFLAGS) -o jsfjim \
-	-Wl,-y,guout_,-y,jmbfhd_
+	$(LD) jsfjim.o $(OBJS) $(LDFLAGS) -o jsfjim 
 
 jim: $(JIMOBJS) jimsub.o
 	$(FC) -o jim jimsub.o $(JIMMAIN) $(JIMLDLIBS) \
