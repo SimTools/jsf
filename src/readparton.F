@@ -61,7 +61,6 @@ c     nret = -2 for read error.
          if(input(1:1).eq.'#') go to 200
          if( input(1:30).eq.'                              ') go to 200
          read(input,*)  nv
-         print *,' nv =',nv
          if( nv .eq. 0 ) go to 200
          read(input,*)  nvers, nevent, npart
          do 250 j=1, npart
