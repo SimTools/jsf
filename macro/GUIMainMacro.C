@@ -185,6 +185,8 @@ void InitGenSim()
   Float_t ecm;
   sscanf(jsf->Env()->GetValue("JSFGUI.ECM","300.0"),"%g",&ecm);
   JSFModule *genmod;
+  Char_t classname[128];
+  Char_t cmdstr[128];
 
   full  = new JSFLCFULL();
   switch (eventtype) {
@@ -215,7 +217,6 @@ void InitGenSim()
 	hdr    = new JSFHadronizer();
       }
       else {
-	Char_t cmdstr[128];
 	sprintf(cmdstr,"new %s();",hadronizer);
 	gROOT->ProcessLine(cmdstr);
 	hdr=gROOT->FindObject(hadronizer);
@@ -227,7 +228,12 @@ void InitGenSim()
       hdr =new JSFHadronizer();
       break;
     case kReadHepevt:
-      gen=new JSFReadGenerator();
+      sprintf(classname,"%s",jsf->Env()->GetValue("JSFGUI.JSFReadGenerator.ClassName",
+					       "JSFReadGenerator"));
+      sprintf(cmdstr,"new %s();",classname);
+      printf(" classname is %s\n",classname);
+      gROOT->ProcessLine(cmdstr);
+      gen=gROOT->FindObject(classname);
       break;
     case kNoGenerator:
       gen=0;
