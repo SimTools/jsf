@@ -29,7 +29,8 @@ void   uxdate( int &y, int &m, int &d, int &h, int &min );
 ******************************************************************************/
 {
 
-  flag_bases = 1;
+  flag_bases = 1;  // flag_bases = 1 when first integration step,
+                   //  = 2 when second integration step.
   flag_neg   = 0;
 
   uxdate( year, month, day, hour, min );
@@ -723,7 +724,9 @@ if( step == 1 )
  ============================================================================
  II.  The grid optimization step
  ============================================================================
+
                                                                             */
+    flag_bases=1;
     integ( 0 );
 
     EndIntegration( 0 );
@@ -738,6 +741,7 @@ if( step == 1 )
          pxd[i] = 0.0;
         }
 
+    flag_bases=2;
     integ( 1 );
 
     EndIntegration( 1 );

@@ -301,6 +301,8 @@
  |(1) Check if new histogram                                                 |
  +---------------------------------------------------------------------------+
                                                                             */
+  if ( Bases_Flag < 2 )  return; 
+
   int hash   = id % NHASH;
   int nhash  = xhash[0][hash];
   int histNo = -1;
@@ -395,6 +397,8 @@
  |(1) Check if new scatter plot                                              |
  +---------------------------------------------------------------------------+
                                                                             */
+  if( Bases_Flag < 2 ) return;
+
   int hash   = id % NHASH;
   int nhash  = dhash[0][hash];
   int histNo = -1;
@@ -460,6 +464,7 @@
   for(  i = 0; i < no_hist; i++ ) xhist[i]->sh_plot( scalls );
   for(  i = 0; i < no_scat; i++ ) scatt[i]->dh_plot( );
 }
+
                                                                             /*
 ******************************************************************************
 *             =============================================                  */

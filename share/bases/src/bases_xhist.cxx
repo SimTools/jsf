@@ -250,8 +250,6 @@
 
      for( int j = 0; j < n; j++ ) {
 
-//          printf(" buff[%5d] = %11.6e\n", j, h.buff[j] );
-
          totfr[j] += freq[j];
          freq [j]   = 0.0;
          totf2[j] += freq2[j];
@@ -276,7 +274,7 @@
   char blank = ' ', star = '*', oo = 'o', bar = '|';
   float calls = (float) scalls;
 
-  printf(" from xh_plot  calls = %10.4f\n", calls );
+  //  printf(" from xh_plot  calls = %10.4f\n", calls );
 
   float *val;
   float *verr;
