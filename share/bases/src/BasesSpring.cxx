@@ -306,7 +306,7 @@ void   uxdate( int &y, int &m, int &d, int &h, int &min );
  printf("%c\n", cn );
  printf("\n\n");
  printf("%s                                             ", ss);
- printf("Date:  %2d/%2d/%2d  %2d:%2.2d\n", year, month, day,  hour, min );
+ printf("Date:  %4d/%2d/%2d  %2d:%2.2d\n", year, month, day,  hour, min );
  printf("%s**********************************************************\n",ss);
  printf("%s*                                                        *\n",ss);
  printf("%s*     BBBBBBB     AAAA     SSSSSS   EEEEEE   SSSSSS      *\n",ss);
@@ -353,7 +353,7 @@ void   uxdate( int &y, int &m, int &d, int &h, int &min );
  printf("%c\n", cn );
  printf("\n\n");
  printf("%s                                             ", ss);
- printf("Date:  %2d/%2d/%2d  %2d:%2.2d\n", year, month, day,  hour, min );
+ printf("Date:  %4d/%2d/%2d  %2d:%2.2d\n", year, month, day,  hour, min );
  printf("%s***** Convergency Behavior for the Grid Optimization Step *****\n",
          ss);
 
@@ -371,7 +371,7 @@ if( step == 1 )
  printf("%c\n", cn );
  printf("\n\n");
  printf("%s                                             ", ss);
- printf("Date:  %2d/%2d/%2d  %2d:%2.2d\n", year, month, day,  hour, min );
+ printf("Date:  %4d/%2d/%2d  %2d:%2.2d\n", year, month, day,  hour, min );
  printf("%s****** Convergency Behavior for the Integration Step ******\n",
          ss );
 

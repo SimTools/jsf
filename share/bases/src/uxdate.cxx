@@ -20,7 +20,7 @@ void uxdate(int &year, int &mon,
         time(&tp);
         date = ctime(&tp);
         q = *localtime(&tp);
-        year = q.tm_year;
+        year = q.tm_year + 1900;
         mon  = q.tm_mon + 1;
         day  = q.tm_mday;
         hour = q.tm_hour;
