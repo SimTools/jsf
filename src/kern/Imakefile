@@ -39,7 +39,7 @@ libJSF.$(DylibSuf): $(OBJJSF)
 	@echo "Linking $@ "
 	$(LD) $(DYLIBFLAGS)  $(OBJJSF) -o $@
 
-install:: $(HDRJSF)
+install:: $(HDRJSF) libJSF.$(DylibSuf) jsf
 	mkdir -p $(JSFLIBDIR)
 	install -p -m 644 $(HDRJSF) $(JSFINCDIR)
 	install -p -m 755 libJSF.$(DylibSuf) $(JSFLIBDIR)
