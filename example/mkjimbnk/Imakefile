@@ -38,16 +38,11 @@ ANALLIB = -Wl,-Bdynamic $(JSFLIBS) $(EXTRALDOPT) \
         -lHELASV204 -lFORTLIB -lCOM -lCLI \
         $(EXTRALIBS) 
 
-# -lTAUOLA : subroutine ginit in libTAUOLA.a conflcts with ginit in 
-# libgeant321.a, so removed.
-
-# CERNLIB = $(shell cernlib jetset74 geant321 mathlib pawlib graflib grafX11 packlib kernlib)
-CERNLIB = $(shell cernlib jetset74 packlib kernlib mathlib)
 
 JIMLDLIBS = -L$(JSFROOT)/lib -lJSFGUI \
 	-L$(JLCSIMROOT)/lib -lzbs -ljlcutil 
 
-ROOTLIBS += -lEGPythia -lEG $(CERNLIB)
+ROOTLIBS += -lEGPythia -lEG $(CERNLIBS)
 
 EXTRALIBS = $(JIMLIBS) 
 
