@@ -1,4 +1,4 @@
-#!/bin/csh -f
+#!/bin/sh -f
 # ###################################################
 #
 # This script stores system information in config file.
@@ -10,70 +10,166 @@
 #
 # ###################################################
 
-set systype=`uname -s`
-echo -n "OS of this system is $systype".
-#if ( $systype != "Linux" ) then
-#    echo ""
-#    exit 0
-#endif
+# ##################################################
+error_message(){
+  echo "System configuration error.."
+  echo "Environment variable, JSFROOT, is not set,"
+  echo "root command is not found or g77 is not found."
+  exit
+}
 
-if ( $#argv > 0 ) then
-  set jsfroot=$1
+# ##################################################
+exit_message(){
+  echo "System information is saved in $1"
+  exit
+}
+
+
+# ##################################################
+set_g77info()
+{
+  specfile=$1
+  echo -n "g77 version .. "
+  g77 -v > tmp-g77.$$ 2>&1 
+  g77versionstr=`cat tmp-g77.$$ | grep release | grep gcc | cut -d"(" -f2 | cut -d")" -f1`
+
+  g77version=`echo $g77versionstr | cut -d" " -f1 | cut -d"-" -f2 | cut -d"." -f1 `
+  echo "#define __G77EGCS_VERSION__ " $g77version >> $specfile
+
+  g77mversion=`echo $g77versionstr | cut -d" " -f1 | cut -d"-" -f2 | cut -d"." -f2 `
+  echo "#define __G77EGCS_MINORVERSION__ " $g77mversion >> $specfile
+
+  g77plevel=`echo $g77versionstr | cut -d" " -f1 | cut -d"-" -f2 | cut -d"." -f3 `
+  echo "#define __G77EGCS_PATCHLEVEL__ " $g77plevel >> $specfile
+
+  g77lib="g2c"
+  if [ "$g77version" == "0" ] ; then
+     g77lib="f2c"
+  elif [ "$g77version" == "1" ] && ["$g77mversion" == "0" ] ;  then
+    g77lib="f2c"
+  fi
+  echo -n "#define __G77EGCS_LIBNAME__ " >> $specfile
+  echo $g77lib  >> $specfile
+
+  rm -f  tmp-g77.$$ 2>&1 
+}
+
+
+# #######################################################################
+# Check major version number of pythia used by JSF and LCLIB
+check_pythia()
+{
+  if [ X$LCLIBROOT == X ] ; then
+    echo "**** Fatal Error : Pythia major number check failed.***********"
+    echo "LCLIBROOT environment parameter is not set"
+    exit 1
+  fi
+  LCLIB_PYTHIA_VERSION=`grep PYTHIA_VERSION $LCLIBROOT/config/configure.in | grep -v "#" | sed -e "s/ //g" | cut -d"=" -f2`
+  echo "LCLIB($LCLIBROOT) is configured to use Pythia$LCLIB_PYTHIA_VERSION"
+  echo "JSF is configured to use Pythia$PYTHIA_VERSION"
+
+  if [ X$LCLIB_PYTHIA_VERSION != X$PYTHIA_VERSION ] ; then
+    echo "**** Fatal Error : Pythia major number check failed.***********"
+    echo "Pythia version of LCLIB and JSF is not consistent"
+    echo "LCLIB Pythia version is specified by a file, $LCLIBROOT/config/configure.in"
+    echo "JSF Pythia version is specified by a file, $JSFROOT/conf/configure.in"
+    echo "Modify these files and make libraries again"
+    exit 1
+  fi
+
+  echo "Pythia major version check....OK"
+  echo "Makesure Pythia library used to build ROOT is same as those used by JSF"
+  return 0
+}
+
+# ############################################
+#
+# Main shell
+#
+# ############################################
+
+echo "Configuration parameters are obtained from ../conf/configure.in"
+. ../conf/configure.in
+
+systype=`uname -s`
+echo "OS of this system is $systype".
+
+if [ $# -ne 0 ] ; then
+  jsfroot=$1
 else
-  if ( !($?JSFROOT) )   goto message
-  set jsfroot=$JSFROOT
-endif
-if ( !(`which root | grep -c root `)  ) goto message 
+  if [ -z $JSFROOT ] ; then
+    error_message
+  fi
+  jsfroot=$JSFROOT
+fi
 
-echo -n "  Creating system information ."
-set specfile=$jsfroot/src/JSFConfig.h
+if [ "`which root | grep -c root`" == 0 ] ; then
+  error_message
+fi
 
-echo "#ifndef __JSFCONFIG__" >! $specfile
+# ---------------------------------------------
+# Make sure to use same Pythia version for LCLIB, JSF
+check_pythia
+
+# ----------------------------------------------
+
+echo -n "Creating system information ."
+specfile=$jsfroot/src/JSFConfig.h
+rm -f $specfile
+
+
+
+echo "#ifndef __JSFCONFIG__" > $specfile
 echo "#define __JSFCONFIG__" >> $specfile
+
+# ---------------------------------------------
+
+echo "#define __PYTHIA_VERSION__     $PYTHIA_VERSION" >> $specfile
+echo "#define __PYTHIA_SUBVERSION__  $PYTHIA_SUBVERSION" >> $specfile
 
 echo -n "JSF version .."
 cat $JSFROOT/conf/jsf.version | grep -v XCOMM >> $specfile
 
 echo -n "Root version .."
-if ( $systype == "AIX" ) then
-  root -q -b $jsfroot/macro/printversion.C >&! tmp.$$
+if [ "$systype" == "AIX" ] ;  then
+  root -q -b -l $jsfroot/macro/printversion.C > tmp.$$ 2>&1 
   grep "ROOT_" tmp.$$ >> $specfile
   rm -f tmp.$$ 
 else
-  root -q -b $jsfroot/macro/printversion.C | grep "ROOT_" >> $specfile
-endif
+  root -q -b -l $jsfroot/macro/printversion.C | grep "ROOT_" >> $specfile
+fi
 
 ##################################
 # Check status of other softwares.
 ################################## 
 
 # pdflib
-if ( -e $CERN_ROOT/lib/libjetset74.a ) then
-    set pdflib=`nm $CERN_ROOT/lib/libjetset74.a | grep pdf | grep "pdf" | grep -c " T "`
-    if ( $pdflib == 1 ) then
+if [ -e $CERN_ROOT/lib/libjetset74.a ] ; then
+    pdflib=`nm $CERN_ROOT/lib/libjetset74.a | grep pdf | grep "pdf" | grep -c " T "`
+    if [ "$pdflib" == "1" ] ;  then
       echo "#define __CERNLIB_PDFLIB__ 1" >> $specfile
       echo -n "$CERN_ROOT/lib/libjetset74.a includes pdfset_"
       echo -n " ... "
-    endif
+    fi
 else
   echo "You did not define CERN_ROOT environment variable or "
   echo "you did not have $CERN_ROOT/lib/libjetset74.a"
   echo "You may have problem later"
-endif
+fi
 
 # Ranmar
-set useranmar=`grep -c -i ranmar $LCLIBROOT/util/fortlib/src/ran_.F`
-if ( $useranmar == 0 ) then
+useranmar=`grep -c -i ranmar $LCLIBROOT/util/fortlib/src/ran_.F`
+if [ "$useranmar" == "0" ] ;  then
    echo "Your random function in LCLIB directory does not use ranmar."
    echo "Please install the latest version of LCLIB"
 else
     echo "#define __LCLIBRAN_USE_RANMAR__ 1" >> $specfile
-endif
+fi
 
 # jlcsim
-if ( -e $JLCSIMROOT/lib/libjimlib.a ) then
+if [ -e $JLCSIMROOT/lib/libjimlib.a ] ; then
     echo "#define __JLCSIM_INSTALLED__ 1"  >> $specfile
-endif
+fi
 
 
 ##########################
@@ -85,55 +181,21 @@ uname -m >> $specfile
 echo -n "#define __UNAME_SYSNAME__ " >> $specfile
 uname -s >> $specfile
 
-if ( !(`which g77 | grep -c g77 `)  ) goto exitmsg
-if ( $systype == "AIX" ) then 
-  goto lastput
-endif
 
-echo -n "g77 version .. "
-set g77versionstr = `g77 -v |& grep release | grep gcc | cut -d"(" -f2 | cut -d")" -f1`
+if [ "$systype" != "AIX" ] ; then
+  if  [ "`which g77 | grep -c g77 `" != 0 ] ; then
+    set_g77info $specfile
+  fi 
+fi
 
-set g77version = `echo $g77versionstr | cut -d" " -f1 | cut -d"-" -f2 | cut -d"." -f1 `
-echo "#define __G77EGCS_VERSION__ " $g77version >> $specfile
-
-set g77mversion = `echo $g77versionstr | cut -d" " -f1 | cut -d"-" -f2 | cut -d"." -f2 `
-echo "#define __G77EGCS_MINORVERSION__ " $g77mversion >> $specfile
-
-g77 -v | & grep release | grep gcc | cut -d"(" -f2 | cut -d")" -f1
-
-set g77plevel = `echo $g77versionstr | cut -d" " -f1 | cut -d"-" -f2 | cut -d"." -f3 `
-echo "#define __G77EGCS_PATCHLEVEL__ " $g77plevel >> $specfile
-
-#######################
-#  Save parameters for Imakefile
-#######################
-
-set g77lib = "g2c"
-if ( $g77version == 0 ) then
-   set g77lib = "f2c"
-else if( $g77version == 1 && $g77mversion == 0 ) then
-   set g77lib = "f2c"
-endif
-echo -n "#define __G77EGCS_LIBNAME__ " >> $specfile
-echo $g77lib  >> $specfile
-
-lastput:
+# Parameters defined in configure.in file
+echo "#define __PYTHIA_LIBNAME__     $PYTHIA_LIBNAME" >> $specfile
 
 echo '#include "JSFDefines.h" ' >> $specfile
 echo "#endif" >> $specfile
 echo "#endif" >> $specfile
 
-
-exitmsg:
-
-echo "System information is saved in $specfile"
-
+echo " "
 exit
 
 
-# *****************************
-message:
-  echo "System configuration error.."
-  echo "Environment variable, JSFROOT, is not set,"
-  echo "root command is not found or g77 is not found."
-  exit
