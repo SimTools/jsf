@@ -430,7 +430,7 @@ void JSFBases::sh_update( )
   while( (th2=(JSFBasesTempHist*)hst2->Next()) ){
     if( th2->flag ) {
       sprintf(hstn,"%sSP",th2->GetName());
-      ((TH2D*)(fSPHash2->FindObject(hstn)))->Fill(th2->x);
+      ((TH2D*)(fSPHash2->FindObject(hstn)))->Fill((Axis_t)th2->x, (Axis_t)th2->y);
       th2->flag=kFALSE;
     }
   }
