@@ -1,13 +1,14 @@
+//*******************************************************************
 // Sample macro to read QuickSim data and show histogram online.
 // Displays Partons costh distribution and Combined_Hadron_Track energy 
 // Distribution.  Only Energy distribution of the Combined_hadron_track
 // is displayed while in the interactive session.
 // Event data is not saved in the output data.
 //
+//$Id$
+//*******************************************************************
 
-FFbarSpring *spring;
-JSFQuickSim    *sim;
-
+TFile *file;
 TH1F *hCosp, *hE;
 TCanvas *c1;
 
@@ -66,7 +67,13 @@ int anal()
 {
   gROOT->Reset();
 
-  TFile file("jsf.root","RECREATE");  // Output file
+  //  Load library ( dynamic loading is not available in ccjlc system.)
+  if( strncmp(gSystem->HostName(),"ccjlc",5)  != 0 ) {
+    Char_t *name=gSystem->DynamicPathName("libFFbarSpring");
+    gSystem->Load(name);
+  }      
+
+  file=new TFile("anal.root","RECREATE");  // Output file
 
   jsf    = new JSFSteer();
   full   = new JSFLCFULL();
@@ -84,7 +91,9 @@ int anal()
   for(Int_t ev=1;ev<=maxevt;ev++){
     jsf->Process(ev);
     hist(ev);
-    // jsf->FillTree();  // don not output event tree
+    // jsf->FillTree();  // do not output event tree
+                         // Since not event data is written, the file, jsf.root,
+                         // can not read by read.C macro.
     jsf->Clear();
   }
 

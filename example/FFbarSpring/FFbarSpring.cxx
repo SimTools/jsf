@@ -1,12 +1,35 @@
+//*LastUpdate:  jsf-1-12 31-July-1999 Akiya Miyamoto
 //*LastUpdate:  v.01.01 undefined  by undefined
-//*-- Author :  undefined  undefined
+//*-- Author :  Akiya Miyamoto
 
 //////////////////////////////////////////////////////////////////
 //
 //  FFbarSpring
 //  
-//  Sample program
+// Sample program in example/FFbarSpring directory.
 //  
+// Files in this directory is created automatically as a template files 
+// for Bases/Spring program by a script, buildjsf.  
+// 
+// If you have selected INCLUDE SAMPLE option, sample program can be 
+// created and executed as follows.
+// 
+// To create executable, do
+// 
+// $ xmkmf
+// $ make jsf
+// 
+// This will create ROOT application, jsf, in this directory.  Example 
+// to run applications are,
+// 
+// $ jsf begin_html <a href="example/FFbarSpring/bases.C.html">bases.C</a> end_html   --> Bases calculation.
+// $ jsf begin_html <a href="example/FFbarSpring/sim.C.html">sim.C</a> end_html     --> JSF quicksim using bases results.
+// $ jsf begin_html <a href="example/FFbarSpring/nsim.C.html">nsim.C</a> end_html     --> Run next run usung seeds at the end of sim.C script.
+// $ jsf begin_html <a href="example/FFbarSpring/read.C.html">read.C</a> end_html    --> Read data 
+// $ jsf begin_html <a href="example/FFbarSpring/anal.C.html">anal.C</a> end_html    --> JSF quick sim and analysis. 
+//  
+//$Id$
+//
 //////////////////////////////////////////////////////////////////
 
 #include "JSFModule.h"

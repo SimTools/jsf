@@ -1,5 +1,23 @@
+//***************************************************************
+//*  read.C
+//*  An example script to read data created by sim.C script.
+//*
+//*  31-July-1999 Akiya Miyamoto Use dynamic loading on system other than 
+//*                              ccjlc.         
+//*$Id$
+//***************************************************************
+
+TFile *file;
+
+Int_t read()
 {
-  TFile f("jsf.root","READ");
+  file=new TFile("jsf.root","READ");
+
+  //  Load library ( dynamic loading is not available in ccjlc system.)
+  if( strncmp(gSystem->HostName(),"ccjlc",5)  != 0 ) {
+    Char_t *name=gSystem->DynamicPathName("libFFbarSpring");
+    gSystem->Load(name);
+  }      
 
   jsf = new JSFSteer();
 
@@ -8,7 +26,7 @@
   Int_t maxevt=30;
 
   for(Int_t i=1;i<=maxevt;i++){
-    if( !jsf->GetEvent(i) ) break;
+    if( !jsf->GetEvent(i) ) break;  // GetEvent method is to read i-th event.
 
     JSFQuickSim *sim=(JSFQuickSim*)jsf->FindModule("JSFQuickSim");
     JSFQuickSimBuf *sbuf=(JSFQuickSimBuf*)sim->EventBuf();
@@ -52,7 +70,6 @@
 
   jsf->Terminate();
 
-// f->Write();
 
 }
 

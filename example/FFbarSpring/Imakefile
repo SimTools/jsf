@@ -2,6 +2,8 @@
 
 #include "conf/makejsf.tmpl"
 
+#ifdef hitachiArchitecture
+
 #if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 22 
 ROOT222LIBS	= -lPhysics
 #endif
@@ -22,26 +24,37 @@ ANALLIB   = -L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim \
 	    -lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
 	    -lHELASV204 -lFORTLIB -lCOM -lCLI 
 
+#endif
 
 #-------------------------------------------------------------
 
+PROGRAM       = FFbarSpring
 
-OBJS          = FFbarSpring.$(ObjSuf) \
-		libFFbarSpring.$(ObjSuf)
+SOLIBNAME     = lib$(PROGRAM)
 
-SRC           = FFbarSpring.$(SrcSuf) 
+OBJS          = $(PROGRAM).$(ObjSuf) $(SOLIBNAME).$(ObjSuf)
 
-EVENTSO       = libFFbarSpring.$(DllSuf)
+SRC           = $(PROGRAM).$(SrcSuf) 
 
-HDRS	      = FFbarSpring.h
+HDRS	      = $(PROGRAM).h
 
-SOLIBNAME     = libFFbarSpring
-PROGRAM       = $(SOLIBNAME).$(DllSuf)
+WEBDIR        = $(JSFROOT)/html/example/$(PROGRAM)
 
-all::  jsf
+#############################################################
 
+#ifdef hitachiArchitecture
+all::  jsf 
 jsf: $(OBJS) jsfmain.o
 	$(LD) jsfmain.o $(BLOCKDATA) $(OBJS) $(LDFLAGS) -o jsf
+jsfmain.cxx:
+	ln -s ../../src/jsfmain.cxx jsfmain.cxx
+
+#else
+all::  lib
+lib: $(OBJS)
+	$(LD) $(SOFLAGS) $(OBJS) -o  $(SOLIBNAME).$(DllSuf)
+#endif
+
 
 clean:: 
 	@rm -f $(OBJS) core *.so $(SOLIBNAME).$(SrcSuf) $(SOLIBNAME).h
@@ -49,13 +62,16 @@ clean::
 depend:: 
 	makedepend -I$(ROOTSYS)/include $(SRC)
 
-jsfmain.cxx:
-	ln -s ../../src/jsfmain.cxx .
-
 distclean::
 	@rm -f $(OBJS) core *.so $(SOLIBNAME).$(SrcSuf) $(SOLIBNAME).h *.~ *.o
 	@rm -f PYTHIA.SEED *.bak
 	@rm -f jsf *.root Makefile jsfmain.cxx
+
+web:	jsf  $(WEBDIR)
+	./jsf -q -b html.C 
+
+$(WEBDIR):
+	mkdir $(WEBDIR)
 
 ###
 
@@ -64,5 +80,4 @@ $(SOLIBNAME).$(SrcSuf): $(HDRS) LinkDef.h
 		rootcint -f $(SOLIBNAME).$(SrcSuf) \
 	 	-c -I$(JSFROOT)/include $(HDRS) LinkDef.h
 
-#---------------------------------------------------
 

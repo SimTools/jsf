@@ -14,6 +14,13 @@ TFile *file;
 Int_t nsim()
 {
   gROOT->Reset();
+
+  //  Load library ( dynamic loading is not available in ccjlc system.)
+  if( strncmp(gSystem->HostName(),"ccjlc",5)  != 0 ) {
+    Char_t *name=gSystem->DynamicPathName("libFFbarSpring");
+    gSystem->Load(name);
+  }      
+
   file=new TFile("jsf.run2.root","RECREATE");  // Output file
 
   jsf    = new JSFSteer();
@@ -56,3 +63,4 @@ Int_t nsim()
   file->Write();
 
 }
+
