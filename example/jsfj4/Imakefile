@@ -105,10 +105,13 @@ LDFLAGS += $(JSFLIBS) $(ANALLIB) $(JUPITERLIB) $(G4LIBS) \
 	$(ROOTLIBS) $(ANALLIB) \
 	-lm -ldl -l$(G77EGCS_LIBNAME)
 
-all:: libJSFJ4.so 
+all:: libG4all.a libJSFJ4.so 
 
 libJSFJ4.so: $(OBJS) $(OBJG4)
 	$(LD)  -shared -rdynamic  $(OBJS) $(OBJG4) $(LDFLAGS) -o libJSFJ4.so
+
+libG4all.a: 
+	./g4merge.sh
 
 install:: libJSFJ4.so
 	cp -p libJSFJ4.so ../../lib
