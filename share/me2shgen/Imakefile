@@ -12,7 +12,9 @@ SRCS =   JSFHEPEUP.$(SrcSuf) JSFHEPRUP.$(SrcSuf) \
 	JSFMEGenerator.$(SrcSuf) JSFSHGenerator.$(SrcSuf) \
 	JSFReadMEGenerator.$(SrcSuf) JSFPythiaHadronizer.$(SrcSuf)
 
+
 OBJS  = $(subst .$(SrcSuf),.$(ObjSuf),$(SRCS)) \
+	JSFReadGZippedFile.$(ObjSuf) \
 	lib$(PROGNAME).$(ObjSuf)
 
 HDRS  = $(subst .$(SrcSuf),.h,$(SRCS))

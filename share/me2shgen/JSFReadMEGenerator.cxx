@@ -12,6 +12,7 @@
 
 #include "JSFSteer.h"
 #include "JSFReadMEGenerator.h"
+#include "JSFReadGZippedFile.h"
 
 #include <iostream>
 #include <fstream>
@@ -32,6 +33,8 @@ JSFReadMEGenerator::JSFReadMEGenerator(const char *name, const char *title)
 
   fEventFileName=TString(gJSF->Env()->GetValue("JSFReadMEGenerator.EventFileName","event.dat"));
   fRunFileName=TString(gJSF->Env()->GetValue("JSFReadMEGenerator.RunFileName","run.dat"));
+
+  fIsGZipped=gJSF->Env()->GetValue("JSFReadMEGenerator.IsGZipped",0);
 }
 
 //_____________________________________________________________________________
@@ -54,12 +57,23 @@ Bool_t JSFReadMEGenerator::Initialize()
   }
   cout << "JSFReadMEGenerator read run info. from the file, " << fRunFileName << endl;
 
-  fEventInput=new ifstream(fEventFileName.Data(), ios::in);
-  if ( !fEventInput ) {
-    cout << "Fatal Error at JSFReadMEGenerator::Initialize" << endl;
-    cout << "Unable to open HEPEUP file. File name is " << fEventFileName << endl;
-    return kFALSE;
+  if( fIsGZipped ) {
+    fgzfile=new JSFReadGZippedFile(fEventFileName.Data());
+    if( fgzfile->GetStatus() != JSFReadGZippedFile::kOpen ) {
+      cout << "Fatal Error at JSFReadMEGenerator::Initialize" << endl;
+      cout << "Unable to open HEPEUP file. File name is " << fEventFileName << endl;
+      return kFALSE;
+    }
   }
+  else {
+    fEventInput=new ifstream(fEventFileName.Data(), ios::in);
+    if ( !fEventInput ) {
+      cout << "Fatal Error at JSFReadMEGenerator::Initialize" << endl;
+      cout << "Unable to open HEPEUP file. File name is " << fEventFileName << endl;
+      return kFALSE;
+    }
+  }
+
   cout << "JSFReadMEGenerator read event info. from the file, " << fEventFileName << endl;
 
   return kTRUE;
@@ -86,7 +100,13 @@ Bool_t JSFReadMEGenerator::SetHEPRUP()
 JSFReturnCode_t JSFReadMEGenerator::SetHEPEUP(JSFHEPEUP &hepeup)
 {
 
-  Bool_t iret=hepeup.ReadFile(*fEventInput);
+  Bool_t iret;
+  if( IsGZipped() ) {
+    iret=hepeup.ReadFile(*fgzfile);
+  }
+  else {
+    iret=hepeup.ReadFile(*fEventInput);
+  }
 
   if( !iret ) return JSFSteer::kJSFEOF;
 

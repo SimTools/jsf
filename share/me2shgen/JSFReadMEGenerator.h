@@ -17,6 +17,7 @@
 #endif
 
 class JSFReadMEGenerator;
+class JSFReadGZippedFile;
 
 // ---------------------------------------------
 class JSFReadMEGeneratorBuf : public JSFMEGeneratorBuf {
@@ -40,11 +41,17 @@ protected:
   ifstream *fEventInput;  //!
   ifstream *fRunInput;    //!
 
+  JSFReadGZippedFile *fgzfile; //!
+
+  Bool_t    fIsGZipped;   //!
+
 public:
    JSFReadMEGenerator(const char *name="JSFReadMEGenerator", 
 		      const char *title="JSF Read Matrix Event Generator");
 
    virtual ~JSFReadMEGenerator();
+
+   Bool_t IsGZipped(){ return fIsGZipped; }
 
    virtual Bool_t Initialize();
 

@@ -12,6 +12,8 @@
 
 #include "TObject.h"
 
+class JSFReadGZippedFile;
+
 //----------------------------------------------------------------
 class JSFHEPEUP : public TObject
 {
@@ -87,6 +89,7 @@ class JSFHEPEUP : public TObject
   void Print();  // Print contents 
 
   Bool_t ReadFile(ifstream &in);
+  Bool_t ReadFile(JSFReadGZippedFile &in);
 
   ClassDef(JSFHEPEUP,1) // HEPEUP event data
 

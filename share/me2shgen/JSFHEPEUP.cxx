@@ -21,6 +21,8 @@
 #include "TString.h"
 #include <iostream>
 #include <fstream>
+#include <sstream>
+#include "JSFReadGZippedFile.h"
 using namespace std;
 
 // --- HEPEUP Common
@@ -40,6 +42,7 @@ typedef struct {
   Double_t VTIMUP[kMAXNUP];
   Double_t SPINUP[kMAXNUP];
 } COMMON_HEPEUP_t ;
+
 
 ClassImp(JSFHEPEUP)
 
@@ -352,3 +355,61 @@ Bool_t JSFHEPEUP::ReadFile(ifstream &in)
   return kTRUE;
 
 }
+
+
+//----------------------------------------------------------------
+Bool_t JSFHEPEUP::ReadFile(JSFReadGZippedFile &gzfile)
+{
+
+  Int_t noldup = sizeof(fIDUP)/4;
+
+  char instr[1024];
+
+  Int_t ir=gzfile.GetLine(instr, 1024);
+
+  if( ir <= 0 || gzfile.IsEOF() ) {
+    fNUP=0;
+    return kFALSE;
+  }
+
+  istringstream istr;
+  istr.str(instr);
+  istr >> fNUP >> fIDPRUP >> fXWGTUP >> fSCALUP >> fAQEDUP >> fAQCDUP ;
+
+  if( fNUP > noldup ) {
+    if( fIDUP ) {
+      delete fIDUP;
+      delete fISTUP;
+      delete fMOTHUP;
+      delete fICOLUP;
+      delete fPUP;
+      delete fVTIMUP;
+      delete fSPINUP;
+    }
+    fIDUP   = new Int_t[fNUP];
+    fISTUP  = new Int_t[fNUP];
+    fMOTHUP = new Int_t[2*fNUP];
+    fICOLUP = new Int_t[2*fNUP];
+    fPUP    = new Double_t[5*fNUP];
+    fVTIMUP = new Double_t[fNUP];
+    fSPINUP = new Double_t[fNUP];
+  }
+
+  for(Int_t i=0;i<fNUP;i++) {
+    Int_t ir=gzfile.GetLine(instr, 1024);
+    if( ir <= 0 || gzfile.IsEOF() ) {
+      fNUP=0;
+      return kFALSE;
+    }
+    istr.str(instr);
+    istr >>  fIDUP[i] >> fISTUP[i] >> fMOTHUP[2*i] >> fMOTHUP[2*i+1] 
+       >> fICOLUP[2*i] >> fICOLUP[2*i+1] 
+       >> fPUP[5*i] >> fPUP[5*i+1] >> fPUP[5*i+2] >> fPUP[5*i+3] >> fPUP[5*i+4] 
+       >> fVTIMUP[i] >> fSPINUP[i] ;
+
+  }
+
+  return kTRUE;
+
+}
+
