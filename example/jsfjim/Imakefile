@@ -36,6 +36,8 @@ ROOTLIBS += -lEGPythia -lEG $(CERNLIBS)
 
 JIMOBJS =$(JLCSIMROOT)/lib/libjim.a
 
+LDFLAGS += -lXt -lXm
+
 #
 # ----------------------------------
 #
