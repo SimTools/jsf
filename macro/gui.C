@@ -13,7 +13,7 @@
   gROOT->LoadMacro("$JSFROOT/macro/GUIMainMacro.C");
 
   if( strncmp(gSystem->HostName(),"ccjlc",5)  != 0 ) {
-    if( strcmp(gSystem->Getenv("OSTYPE"),"hpux") ==0 ) {
+    if( strncmp(gSystem->Getenv("OSTYPE"),"hpux",4) ==0 ) {
       gSystem->Load("$JSFROOT/example/guiexam1/libJSFGUI.sl");
     }
     else {
