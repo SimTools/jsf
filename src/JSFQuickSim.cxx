@@ -613,7 +613,7 @@ Bool_t JSFQuickSimBuf::MakeCDCTracks()
 
   for(i=0;i<ncmb;i++){
      JSFLTKCLTrack *ct=(JSFLTKCLTrack*)fTracks->UncheckedAt(i);
-     if( ct->GetNCDC() < 0 ) continue;
+     if( ct->GetNCDC() <= 0 ) continue;
      if( ct->GetType() == 1 || ct->GetType() ==3  ) continue;
 
      for(Int_t j=0;j<ct->GetNCDC();j++){

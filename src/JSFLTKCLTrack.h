@@ -50,7 +50,7 @@ protected:
   Int_t     f1stCDC;  // Element number of corresponding CDC:Track_Parameter or Index of CDC tracks.
   JSFCDCTrack *fCDC;  //! Address of corresponding CDC track.
 
-  Int_t     fIDCDC[16];//[fNCDC]  saves CDC tracks contributing to this LTKCLTrack
+  Int_t     fIDCDC[32];//[fNCDC]  saves CDC tracks contributing to this LTKCLTrack
   TObjArray  fCDCs;   // Associated CDC tracks
   TObjArray  fEMGen;  // Generator particles contributing to the EM cluster.  
 
