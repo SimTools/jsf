@@ -26,7 +26,8 @@ static const Int_t hidden=10;
 static const Int_t nftrain=3;
 static const Int_t kinsize=nevtrain*nftrain;
 static const Int_t nftest=3;
-static const Int_t nepoch=500;
+// static const Int_t nepoch=500;
+static const Int_t nepoch=50;
 
 //_____________________________________________________________
 Int_t ctag()
@@ -117,7 +118,7 @@ Int_t ctag()
   //C...Set parameters suitable for the given method of updating
   if( jn.GetMSTJN(5) == 0 ) {
     //C...Normal Backprop
-    jn.SetPARJN( 1,2.0);
+    //    jn.SetPARJN( 1,2.0);
     jn.SetPARJN( 2,0.5);
     jn.SetPARJN(11,0.999);
   }
@@ -176,6 +177,13 @@ Int_t ctag()
 
     printf(" iepoch=%d train=%g\n",iepoch, train);
   }
+
+//C Write the result to the file.
+
+  TFile *cnout=new TFile("ctag-weight.root","RECREATE");
+  jn.Write();
+  cnout->Close();
+
 
 // Plot results after training.
   TH1F **hrsl=(TH1F**)new void[3];
