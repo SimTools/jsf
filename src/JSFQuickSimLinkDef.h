@@ -19,4 +19,10 @@
 #pragma link C++ class JSFSIMDST;
 #pragma link C++ class JSFSIMDSTBuf;
 
+#pragma link C++ class JSFHelixParameter ;
+#pragma link C++ class JSFHelixParameter_f ;
+#pragma link C++ class JSFHelixErrorMatrix ;
+#pragma link C++ class JSFHelixErrorMatrix_u ;
+#pragma link C++ class JSFHelicalTrack;
+
 #endif

@@ -168,7 +168,7 @@ void JSFCDCTrack::ExtrapolateErrorAtEMC(Float_t helix[], Float_t x[], Float_t dx
 //   (Input)
 //       Float_t helix[] ; helix parameter and error matrix
 //   (Output)
-//       Float_t x[0] ; radius of the pivot
+//       Float_t x[0] ; radius of the pivot ( distance from the beam line)
 //               x[1] ; theta of pivot
 //               x[2] ; phi 
 //       Float_t dx[0] ; delta-costh

@@ -10,5 +10,14 @@
 #pragma link C++ class JSFEventBuf;
 #pragma link C++ class JSFDBS;
 
+#pragma link C++ class JSF2DV;
+
+#pragma link C++ class JSF3DV_f;
+#pragma link C++ class JSFRPhiZ_f;
+#pragma link C++ class JSFRThPhi_f;
+#pragma link C++ class JSF3DV;
+#pragma link C++ class JSFRPhiZ;
+#pragma link C++ class JSFRThPhi;
+
 
 #endif

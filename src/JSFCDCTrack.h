@@ -20,6 +20,12 @@
 #ifndef __JSFVTXHit__
 #include "JSFVTXHit.h"
 #endif
+#ifndef __JSFBasicClasses__
+#include "JSFBasicClasses.h"
+#endif
+#ifndef __JSFHelicalTrack__
+#include "JSFHelicalTrack.h"
+#endif
 
 const Int_t kMaxCDCTracks=500;
 
@@ -61,6 +67,7 @@ public:
   void ExtrapolateErrorAtEMC(Float_t helix[], Float_t x[], Float_t dx[]);
   void MovePivot(Float_t pivot[], Float_t bfield);
 
+
   Int_t GetCharge(){ return fCharge;}
   Int_t GetNDF(){ return fNDF;}
   Float_t GetPx(){ return fP[0];}
@@ -71,22 +78,39 @@ public:
   Float_t GetY(){ return fX[1];}
   Float_t GetZ(){ return fX[2];}
 
-  TVector GetPv(){ TVector p(4); p(0)=fE; p(1)=fP[0]; p(2)=fP[1];
+  TVector GetPV(){ TVector p(4); p(0)=fE; p(1)=fP[0]; p(2)=fP[1];
                    p(3)=fP[2]; return p;}
-  TVector GetXv(){ TVector x(4); x(0)=0.0 ; x(1)=fX[0]; x(2)=fX[1];
+  TVector GetXV(){ TVector x(4); x(0)=0.0 ; x(1)=fX[0]; x(2)=fX[1];
                    x(3)=fX[2]; return x;}
 
   void GetHelix(Float_t helix[]){ 
      Int_t i; for(i=0;i<5;i++){ helix[i]=fHelix[i];} }
+
   void GetPivot(Float_t pivot[]){
      Int_t i; for(i=0;i<3;i++){ pivot[i]=fPivot[i];} }
+
   void GetError(Double_t err[]){
      Int_t i; for(i=0;i<15;i++){ err[i]=fError[i];} }
+
   void GetPosAtEMC(Float_t pos[]){
      Int_t i; for(i=0;i<3;i++){ pos[i]=fPosAtEMC[i];} 
-              for(i=0;i<2;i++){ pos[i+3]=fEPosAtEMC[i];} 
+              for(i=0;i<2;i++){ pos[i+3]=fEPosAtEMC[i];} }
+
+  JSFHelixParameter GetHelix(){
+     JSFHelixParameter hlx;
+     hlx.dr=fHelix[0]; hlx.phi0=fHelix[1] ; hlx.kappa = fHelix[2];
+     hlx.dz=fHelix[3]; hlx.tanl=fHelix[4];
+     hlx.pivot.x=fPivot[0]; hlx.pivot.y=fPivot[1]; hlx.pivot.z=fPivot[2];
+     return hlx;
   }
-  
+
+  JSFHelicalTrack GetHelicalTrack(){
+     return  JSFHelicalTrack(fHelix, fPivot, fNDF, 1.0, 0.0, fError); 
+  }
+
+  JSF3DV_f GetPivot(){ JSF3DV_f pivot; pivot.x=fPivot[0]; 
+         pivot.y=fPivot[1]; pivot.z=fPivot[2];  return pivot; }
+
   ClassDef(JSFCDCTrack,1)  //A CDC Track class
 };
 
