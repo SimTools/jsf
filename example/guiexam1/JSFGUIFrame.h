@@ -160,7 +160,7 @@ public:
    inline Int_t GetFirstEvent(){ 
      return gJSF->Env()->GetValue("JSFGUI.FirstEvent",1);}
    inline Int_t GetNEventsAnalize(){ 
-     return gJSF->Env()->GetValue("JSFGUI.NEventAnalize",10);}
+     return gJSF->Env()->GetValue("JSFGUI.NEventsAnalize",10);}
 
    void SetEcm(Float_t ecm){ 
      Char_t str[24];       sprintf(str,"%g",ecm);
@@ -176,7 +176,7 @@ public:
      gJSF->Env()->SetValue("JSFGUI.FirstEvent",str);}
    void SetNEventsAnalize(Int_t n){ 
      Char_t str[12];       sprintf(str,"%d",n);
-     gJSF->Env()->SetValue("JSFGUI.NEventAnalize",str);}
+     gJSF->Env()->SetValue("JSFGUI.NEventsAnalize",str);}
    void SetReturnCode(Int_t ir){ fReturnCode=ir;}
    
 };

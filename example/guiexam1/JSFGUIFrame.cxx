@@ -1,4 +1,4 @@
-//*LastUpdate :  jsf-1-12 31-July-1999  By Akiya Miyamoto
+//*LastUpdate :  jsf-1-12 3-September-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-9  16-May-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-8  19-April-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-5  20-Feburary-1999  By Akiya Miyamoto
@@ -10,6 +10,7 @@
   16-May-1999 A.Miyamoto  Does not call GetArguments macro.
                           It is now called from MainMacro.C
   31-July-1999 A.Miyamoto Add comments.
+  3-September-1999 A.Miyamoto A lot of changes to use JSFEnv class and JSFDemoDisplay
 */
 
 ///////////////////////////////////////////////////////////////////
@@ -42,7 +43,7 @@
 //  JSFGUI.FirstEvent: 1
 //                 # Event number where to start analysis.  This number is shown in 
 //                 # "From event no." field of JSF control pannel.
-//  JSFGUI.NEventAnalize: 10
+//  JSFGUI.NEventsAnalize: 10
 //                 # Number of event to analize.  The number is shown in the JSF control
 //                 # pannel. 
 //  JSFGUI.EventType: 1
