@@ -12,7 +12,13 @@ void InitPythia()
 
   PythiaGenerator *py=(PythiaGenerator*)jsf->FindModule("PythiaGenerator");
 
-  TPythia *tpy=py->GetPythia();
+  Int_t ivers=py->GetVersionNumber();
+  if( ivers <= 5 ) {
+    TPythia *tpy=py->GetPythia();
+  }
+  else {
+    TPythia6 *tpy=py->GetPythia();
+  }
 
   //****************************
   // Set ISUB according to parameters.
@@ -56,14 +62,15 @@ void InitPythia()
     Float_t hmass;
     sscanf(jsf->Env()->GetValue("JSFGUI.Pythia.Higgsmass","120.0"),"%g",&hmass);
     Int_t kf=25;              // kf code for H0 is 25
-    Int_t rootver, rootmver, rootplevel;
-    sscanf(gROOT->GetVersion(),"%d.%d/%d",&rootver,&rootmver,&rootplevel);
-    Int_t fullvers=rootver*10000 + rootmver*100 + rootplevel ;
-    if ( fullvers >= 22300 ) {
-       Int_t kc=tpy->Lucomp(kf);      // Get kc code for Higgs.
-    } else {
-       Int_t kc=tpy->LuComp(kf);      // Get kc code for Higgs.
+
+    Int_t kc;
+    if ( ivers <= 5 ) {
+      kc=tpy->Lucomp(kf);
     }
+    else {
+      kc=tpy->Pycomp(kf);
+    }
+
     tpy->SetPMAS(kc,1,hmass); // Set Higgs mass 
     printf(" Higgs mass Mass=%g (GeV)\n",tpy->GetPMAS(kc,1));
   }

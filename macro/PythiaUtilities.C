@@ -5,7 +5,12 @@ void PrintEventInfo()
 
    PythiaGenerator *py
      =(PythiaGenerator*)jsf->FindModule("PythiaGenerator");
-   TPythia *tpy=py->GetPythia();
+   if( py->GetVersionNumber() <= 5 ) {
+     TPythia *tpy=py->GetPythia();
+   }
+   else {
+     TPythia6 *tpy=py->GetPythia();
+   }
 
    // See page 140. of the Pythia document 
    //**********************************************
