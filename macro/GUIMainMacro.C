@@ -313,6 +313,12 @@ void InitGenSim()
     InitHerwig();         // Set Herwig parameters.
   }
 
+  if( jsf->Env()->GetValue("JSFGUI.OptModules",0) != 0 ) {
+     gROOT->LoadMacro(
+             jsf->Env()->GetValue("JSFGUI.OptFunctions","OptFunctions.C"));
+     InitOptionalModules();
+  }
+
 }
 
 //______________________________________________
