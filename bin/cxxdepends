@@ -10,14 +10,14 @@ set cxx="gcc"
 set iret=`which $cxx | grep -c /`
 if ( $iret > 0 ) then
   set gccvers=`$cxx -v |& head -1 | cut -f4 -d" " | sed -e 's/specs$//g' `
-  set cppfile=$gccvers/cpp
+  set cppfile=$gccvers/cpp0
   if ( -e $cppfile ) then
   else
-    set cppfile=$gccvers/cpp0
+    set cppfile=$gccvers/cpp
   endif
   
   set strcmd=`which strings`
-  set incdir=`$strcmd $cppfile  | grep include  | grep "/" `
+  set incdir=`$strcmd $cppfile  | grep include  | grep "/"`
   foreach i ( $incdir )
     if ( -e $i && $i != "/usr/include" ) then
 	echo -n " -I$i" 
