@@ -98,11 +98,11 @@ TClonesArray *gsEMCHits;
 TClonesArray *gsHDCHits;
 
 //_____________________________________________________________________________
-JSFSIMDST::JSFSIMDST(const char *name, const char *title)
+JSFSIMDST::JSFSIMDST(const char *name, const char *title, Bool_t constbuf)
        : JSFModule(name,title)
 {
-  fEventBuf = new JSFSIMDSTBuf("JSFSIMDSTBuf", 
-	       "JSFSIMDST event buffer",this);
+  if(constbuf)   
+    fEventBuf = new JSFSIMDSTBuf("JSFSIMDSTBuf", "JSFSIMDST event buffer",this);
  
   sscanf(gJSF->Env()->GetValue("JSFSIMDST.DataFile","simdst.dat"),
 	 "%s",fDataFileName);
@@ -535,6 +535,15 @@ Bool_t JSFSIMDSTBuf::UnpackDST(Int_t nev)
     printf("Use proper program to read this file.\n");
     return kFALSE;
   }
+  else if( nret == -1 ) { 
+    printf("Read end-of-file of input file\n");
+    return kFALSE;
+  }
+  else if( nret == -2 ) {
+    printf("Read error of input file.\n");
+    return kFALSE;
+  }
+
 
   SetClonesArray();
 

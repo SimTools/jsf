@@ -127,7 +127,8 @@ protected:
   JSFQuickSimParam  *fParam ; //! Parameters for JSFQuickSim
 public:
   JSFSIMDST(const char *name="JSFSIMDST", 
-		  const char *title="Read/Write SIMDST data");
+ 	    const char *title="Read/Write SIMDST data",
+	    Bool_t constbuf=kTRUE);
   virtual ~JSFSIMDST(){}
 
   friend class JSFSIMDSTBuf;
@@ -137,8 +138,8 @@ public:
   virtual Bool_t Process(Int_t ev=1);
   virtual Bool_t EndRun();
 
-  JSFQuickSimParam *Param(){ return fParam; }
-  void SetQuickSimParam(JSFQuickSimParam *par){ fParam=par; }
+  virtual JSFQuickSimParam *Param(){ return fParam; }
+  virtual void SetQuickSimParam(JSFQuickSimParam *par){ fParam=par; }
 
   Int_t  GetUnit(){ return fUnit;}
   Char_t *GetDataFileName(){ return fDataFileName; }
@@ -146,7 +147,7 @@ public:
   void SetDataFileName(Char_t *name){ strcpy(fDataFileName, name);}
   void SetParamFileName(Char_t *name){ strcpy(fParamFileName, name);}
 
-  Bool_t WriteParameters(Int_t nrun);
+  virtual Bool_t WriteParameters(Int_t nrun);
 
   void WriteData(){ fReadWrite=1;}
   void ReadData(){ fReadWrite=2;}

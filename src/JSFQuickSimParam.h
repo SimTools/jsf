@@ -104,9 +104,9 @@ public:
    JSFQuickSimParam();
    ~JSFQuickSimParam();
 
-   void SetSwimParam() ; // Set swimmer parameters
-   void SetSmearParam() ; // Set smear parameters
-   void ReadParamDetector(Char_t *file) ;// Read detector parameter
+   virtual void SetSwimParam() ; // Set swimmer parameters
+   virtual void SetSmearParam() ; // Set smear parameters
+   virtual void ReadParamDetector(Char_t *file) ;// Read detector parameter
 					      
    virtual JSFCALGeoParam *GetEMCGeom(){ return fEMCGeom; }  
    virtual JSFCALGeoParam *GetHDCGeom(){ return fHDCGeom; }  

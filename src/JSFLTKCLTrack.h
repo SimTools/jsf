@@ -28,7 +28,6 @@ typedef enum {kCombinedGammaTrack, kCombinedLeptonTrack,
 // *********************************************************
 class JSFLTKCLTrack : public TObject {
 friend class JSFQuickSimBuf;
-friend class JSFSIMDSTBuf;
 protected:
   EJSFLTKCLTrackBank  fBank; // The original bank name
   Double_t    fP[4];    // four momentum (E,Px,Py,Pz), GeV
@@ -41,7 +40,6 @@ protected:
   Int_t     f1stCDC;  // Element number of corresponding CDC:Track_Parameter or Index of CDC tracks.
   JSFCDCTrack *fCDC;  //! Address of corresponding CDC track.
   
-  void SetCDC(Int_t ind, JSFCDCTrack *t){ f1stCDC=ind; fCDC=t; }; 
 
 public:
   JSFLTKCLTrack() {}
@@ -52,6 +50,8 @@ public:
  	 Int_t ncdc, Int_t first);
   JSFLTKCLTrack(EJSFLTKCLTrackBank bank, Float_t data[]);
   JSFLTKCLTrack(Float_t data[]);
+
+  void SetCDC(Int_t ind, JSFCDCTrack *t){ f1stCDC=ind; fCDC=t; }; 
 
   Double_t GetPx(){ return fP[1] ;}
   Double_t GetPy(){ return fP[2] ;}

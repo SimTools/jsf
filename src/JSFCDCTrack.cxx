@@ -1,5 +1,11 @@
+//*LastUpdate : jsf-1-8  2-May-1999  A.Miyamoto
 //*LastUpdate : jsf-1-4  7-Feburary-1999  A.Miyamoto
 //*-- Author  : Akiya Miyamoto  7-Feburary-1999  A.Miyamoto
+
+/*
+2-May-1999 A.Miyamoto  Bug in MovePivot is fixed.
+5-May-1999 A.Miyamoto  Add MovePivotToIP(...) and AddMSError(...)
+*/
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -13,7 +19,9 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include "JSFSteer.h"
+#include "JSFQuickSimParam.h"
 #include "JSFCDCTrack.h"
+#include "JSFHelicalTrack.h"
 
 ClassImp(JSFCDCTrack)
 
@@ -288,7 +296,7 @@ void JSFCDCTrack::MovePivot(Float_t pivot[], Float_t bfield)
   Double_t rdr = r + dr;
   Double_t fip = (fi0+2*x2pid)-x2pid*((Double_t)((Int_t)((fi0+2*x2pid)/x2pid)));
   Double_t csf0 = TMath::Cos(fip);
-  Double_t snf0 = TMath::Sin(fip);
+  Double_t snf0 = TMath::Sqrt( TMath::Max(0.0, (1.0-csf0)*(1.0+csf0)) );
   if( fip > xpid ) snf0 = -snf0 ;
 
   Double_t xc  = x0 + rdr*csf0 ;
@@ -338,7 +346,7 @@ void JSFCDCTrack::MovePivot(Float_t pivot[], Float_t bfield)
   //C--
   //C  Copy error matrix to EEP and symmetrize it into EE.
   //C--
-  Double_t ee[4][4];
+  Double_t ee[5][5];
   Int_t i,j,n;
   n=0;
   for(i=0;i<5;i++){ for(j=0;j<=i;j++) {
@@ -361,7 +369,7 @@ void JSFCDCTrack::MovePivot(Float_t pivot[], Float_t bfield)
   //C--
   //C  Fill HELXOT array.
   //C--
-  fHelix[0]=dr;
+  fHelix[0]=drp;
   fHelix[1]=fip;
   fHelix[2]=cpa;
   fHelix[3]=dzp;
@@ -375,6 +383,81 @@ void JSFCDCTrack::MovePivot(Float_t pivot[], Float_t bfield)
 }
 
 //______________________________________________________________________________
+void JSFCDCTrack::AddMSError(Float_t xrad)
+{
+  // Increase the error matrix to include the effect of 
+  // the multiple scattering in the matterinal of radiation length xrad.
+
+  Double_t tnlsq=fHelix[4]*fHelix[4];
+  Double_t tnlsqone=1.0+tnlsq;
+  Double_t pt=1.0/TMath::Abs(fHelix[2]);
+  Double_t p =pt*TMath::Sqrt(tnlsqone);
+  Double_t radx=xrad;
+  Double_t sigms=0.0141*(1.0+TMath::Log10(radx)/9.0)*TMath::Sqrt(radx)/p;
+  Double_t sigmsq=sigms*sigms;
+
+  fError[2] = fError[2] +sigmsq*tnlsqone;
+  fError[5] = fError[5] +sigmsq*(fHelix[2]*fHelix[2]*tnlsq);
+  fError[12]= fError[12]+sigmsq*fHelix[2]*fHelix[4]*tnlsqone;
+  fError[14]= fError[14]+sigmsq*tnlsqone*tnlsqone;
+
+  //C .. E(2,2)=EDAT(3), E(3,3)=Edat(6), E(3,5)=Edat(13), E(5,5)=Edat(15)
+
+}
+
+//____________________________________________________________________________
+Bool_t JSFCDCTrack::MovePivotToIP(JSFQuickSimParam *spar)
+{
+  // Move Pivot of Track parameter to IP
+  // This program assumes that pivot of the track parameter is at the
+  // first layer of VTX.  Procedure is 
+  //   (1) Include multiple-scattering effect in first layer of VTX, 
+  //   (2) Move pivot to beam pipe,
+  //   (3) Include multiple-scatteing efect in the beam pipe.
+  //   (4) Move pivot to IP.
+  // Geometry information is obtained from JSFQuickSimParam
+  
+  JSFHelicalTrack *helix=new JSFHelicalTrack(GetHelix());
+  JSFHelixParameter hp=helix->GetHelixParameter();
+  Double_t pnorm=TMath::Sqrt(1.0+hp.tanl*hp.tanl);
+  Double_t rnow=TMath::Sqrt(hp.pivot.x*hp.pivot.x+hp.pivot.y*hp.pivot.y);
+  Double_t costh=(-hp.pivot.x*TMath::Sin(hp.phi0) + 
+		  hp.pivot.y*TMath::Cos(hp.phi0)) / (rnow*pnorm) ;
+  Float_t rad1=spar->GetVTXThickness(1)/costh;
+  AddMSError(rad1);  // Include MS at the first layer of VXT
+
+  Float_t field=spar->GetBField();
+  helix->SetBfield(field);
+  Double_t rcyl=spar->GetVTXRadius(0);
+  Double_t zcyl=spar->GetVTXZplus(0);
+  Double_t phi0, phi1;
+  Int_t maxloop=5;
+  Int_t ncros=helix->OriginToCylinder(rcyl, zcyl, phi0, phi1, maxloop);
+  if( ncros != 0 ) {
+    printf("Eror in JSFCDCTrack::MovePivotToIP(...)  .. Track does not intersect");
+    printf(" with beam pipe.\n");
+    printf("Track parameter is not changed.\n");
+    return kFALSE;
+  }
+  //
+  JSF3DV piv=helix->GetCoordinate(phi1);
+  Float_t pivot[3]={piv.x, piv.y, piv.z};
+  // Move to Beam pipe.
+  MovePivot(pivot, field);
+
+  hp=helix->GetHelixParameter();
+  pnorm=TMath::Sqrt(1.0+hp.tanl*hp.tanl);
+  costh=(-pivot[0]*TMath::Sin(hp.phi0)+pivot[1]*TMath::Cos(hp.phi0))
+                / (rcyl*pnorm) ;
+  Float_t rad0=spar->GetVTXThickness(0)/costh;
+  AddMSError(rad0);
+  Float_t ip[3]={0.0, 0.0, 0.0};
+  MovePivot(ip, field);
+
+  return kTRUE;
+
+}
+//____________________________________________________________________________
 void JSFCDCTrack::Streamer(TBuffer &R__b)
 {
    // Stream an object of class JSFCDCTrack.

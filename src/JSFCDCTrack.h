@@ -20,12 +20,17 @@
 #ifndef __JSFVTXHit__
 #include "JSFVTXHit.h"
 #endif
-#ifndef __JSFBasicClasses__
-#include "JSFBasicClasses.h"
+#ifndef __JSFQuickSimParam__
+#include "JSFQuickSimParam.h"
 #endif
+// #ifndef __JSFBasicClasses__
+// #include "JSFBasicClasses.h"
+// #endif
 #ifndef __JSFHelicalTrack__
 #include "JSFHelicalTrack.h"
 #endif
+
+class JSFQuickSimParam;
 
 const Int_t kMaxCDCTracks=500;
 
@@ -66,7 +71,8 @@ public:
   void SetPositionAtEMC(Float_t pos[]);
   void ExtrapolateErrorAtEMC(Float_t helix[], Float_t x[], Float_t dx[]);
   void MovePivot(Float_t pivot[], Float_t bfield);
-
+  void AddMSError(Float_t xrad);
+  Bool_t MovePivotToIP(JSFQuickSimParam *spar);
 
   Int_t GetCharge(){ return fCharge;}
   Int_t GetNDF(){ return fNDF;}
