@@ -3,6 +3,7 @@
 // 
 //(History)
 // 29-May-1999 A.Miyamoto Created
+//  1-Feb-2000 A.Miyamoto Include JSFReadJIMCommonSize.h 
 //
 //$Id$
 //
@@ -10,14 +11,7 @@
 #ifndef __JSFReadJIMCommon__
 #define __JSFReadJIMCommon__
 
-
-const Int_t kJGenMax=700;
-const Int_t kJCmbMax=700;
-const Int_t kJTrkMax=300;
-const Int_t kJEClsMax=500;
-const Int_t kJHClsMax=400;
-const Int_t kJClsSize=3;
-const Int_t kJVTXBufSize=2000;
+#include "JSFReadJIMCommonSize.h"
 
 typedef struct {
   Int_t endian;

@@ -3,6 +3,9 @@
 # Imakefile for readjim
 # create a library, libreadjim.a
 #
+# (Update)
+#  1-Feb-2000 A.Miyamoto  Include make JSFReadJIMCommonSize.h 
+#
 # $Id$
 #---------------------------------------------------
 
@@ -36,7 +39,7 @@ JIMOBJ  = $(JLCSIMROOT)/util/src/getcal.o  $(JLCSIMROOT)/util/src/getcls.o \
 
 INC           = $(JSFROOT)/include 
 
-INCPATH	      = -I$(JLCSIMROOT)/util/inc -I$(JLCSIMROOT)/include/jlc 
+INCPATH	      = -I./ -I$(JLCSIMROOT)/util/inc -I$(JLCSIMROOT)/include/jlc 
 FCFLAGS	      = $(FFLAGS)
 
 OBJS          = JSFReadJIMBank.$(ObjSuf) \
@@ -55,7 +58,7 @@ SOLIBNAME     = libJSFReadJIMBank
 
 all::  jsfrjim lib
 
-jsfrjim: $(OBJS) $(JSFROOT)/src/jsfmain.o
+jsfrjim: $(OBJS) $(JSFROOT)/src/jsfmain.o JSFReadJIMCommonSize.h
 	$(LD) $(JSFROOT)/src/jsfmain.o $(BLOCKDATA) $(OBJS) \
 	$(LDFLAGS) -o jsfrjim 
 
@@ -84,4 +87,12 @@ $(SOLIBNAME).$(SrcSuf): $(HDRS) JSFReadJIMLinkDef.h
 		rootcint -f $(SOLIBNAME).$(SrcSuf) \
 	 	-c -I$(JSFROOT)/include $(HDRS) \
 		JSFReadJIMLinkDef.h
+
+
+JSFReadJIMBank.cxx: JSFReadJIMCommon.h JSFReadJIMCommonSize.h
+
+JSFReadJIMCommon.h: JSFReadJIMCommonSize.h
+
+JSFReadJIMCommonSize.h: $(JLCSIMROOT)/util/inc/trbuff.inc getcomsize.pl
+	perl getcomsize.pl > JSFReadJIMCommonSize.h
 
