@@ -114,7 +114,7 @@ clean::
 	@rm -f libJSFQuickSim.$(SrcSuf) libJSFQuickSim.h
 
 depend:: 
-	makedepend -I$(ROOTSYS)/include $(SRC)
+	makedepend -I$(ROOTSYS)/include -I$(JSFROOT)/include $(SRC)
 
 distclean:: clean
 	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h *.~ *.o
