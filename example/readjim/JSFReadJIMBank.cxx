@@ -1,3 +1,4 @@
+//*LastUpdate :  jsf-1-14  29-January-2000 By Akiya Miyamoto
 //*LastUpdate :  jsf-1-8  17-April-1999  By Akiya Miyamoto
 //*-- Author  : Akiya Miyamoto  17-April-1999
 
@@ -49,6 +50,13 @@ JSFReadJIMBank::JSFReadJIMBank(const char *name, const char *title, Bool_t const
 
 
 // ---------------------------------------------------------------
+JSFReadJIMBank::~JSFReadJIMBank()
+{
+  if( fEventBuf ) delete fEventBuf;
+  if( fParam ) delete fParam;
+}
+
+// ---------------------------------------------------------------
 Bool_t JSFReadJIMBank::Initialize()
 {
   return kTRUE;
@@ -81,11 +89,12 @@ Bool_t JSFReadJIMBank::Process(Int_t nev)
 
   Int_t ierr;
   jlread_(&ierr);
+
   if( ierr == 1 ) {
     printf(" JSFReadJIMBank::Process .. Read end-of-file\n");
     return kFALSE;
   }
-  else if( ierr == 0 ) {
+  else if( ierr != 0 ) {
     printf(" JSFReadJIMBank::Process .. Read error occured.\n");
     return kFALSE;
   }
@@ -133,7 +142,6 @@ Bool_t JSFReadJIMBankBuf::UnpackDST(Int_t nev)
   for(ivers=0;ivers<4;ivers++){ fProduc[ivers]=trbuff_.produc[ivers]; }
   fProduc[4]=0;
   ivers=trbuff_.ivers;
-  printf(" ivers=%d\n",ivers);
   if( ivers != fVersion ) {
     printf("SIMDST version of the file is %d ",ivers);
     printf("while the program is for the version %d\n",fVersion);
@@ -150,7 +158,8 @@ Bool_t JSFReadJIMBankBuf::UnpackDST(Int_t nev)
   }
 
 
-  SetClonesArray();
+  Clear();
+  //  SetClonesArray();
 
   // ***************************************
   // Fill GeneratorParticle Array
@@ -276,6 +285,12 @@ JSFReadJIMBankBuf::JSFReadJIMBankBuf(const char *name, const char *title,
     : JSFSIMDSTBuf(name, title, module)
 {  
   strcpy(fProduc,"JIM ");
+  //  SetClonesArray();
+}
+
+// ---------------------------------------------------------------
+JSFReadJIMBankBuf::~JSFReadJIMBankBuf()
+{  
 }
 
 

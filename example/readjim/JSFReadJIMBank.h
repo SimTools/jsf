@@ -25,7 +25,7 @@ public:
   JSFReadJIMBankBuf(const char *name="JSFReadJIMBankBuf", 
 	     const char *title="Read JIM bnk file",
   	     JSFSIMDST *module=NULL);
-  virtual ~JSFReadJIMBankBuf(){}
+  virtual ~JSFReadJIMBankBuf();
 
 //  virtual void SetClassData(Int_t nev);       // Set Class Data
 //  virtual Bool_t PackDST(Int_t nev); // Pack SIMDST information.
@@ -44,7 +44,7 @@ public:
   JSFReadJIMBank(const char *name="JSFReadJIMBank", 
 		  const char *title="Read JIM's *.bnk file",
                  Bool_t constbuf=kTRUE);
-  virtual ~JSFReadJIMBank(){}
+  virtual ~JSFReadJIMBank();
 
   friend class JSFReadJIMBankBuf;
 

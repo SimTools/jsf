@@ -53,11 +53,11 @@ HDRS	      = JSFReadJIMBank.h \
 SOLIBNAME     = libJSFReadJIMBank
 
 
-all::  jsf lib
+all::  jsfrjim lib
 
-jsf: $(OBJS) $(JSFROOT)/src/jsfmain.o
+jsfrjim: $(OBJS) $(JSFROOT)/src/jsfmain.o
 	$(LD) $(JSFROOT)/src/jsfmain.o $(BLOCKDATA) $(OBJS) \
-	$(LDFLAGS) -o jsf 
+	$(LDFLAGS) -o jsfrjim 
 
 lib: $(OBJS)
 	ar cr libreadjim.a $(OBJS) $(JIMOBJ)
