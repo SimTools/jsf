@@ -12,30 +12,23 @@ jsf-1-12 will be released soon.  Main changes of this release are
 **********************************************************
 To-Do ( listed in arbitrary order ) -- Help wanted
 **********************************************************
-1) More event generator  --> This will come soon.
-      --> Available as physsim 
-2) Re-write QuickSimulator by C++ 
-3) Include interface to JIM --> This needs further test.
-3.1) Run JIM in JSF --> Prepared in example/jsfjim in jsf-1-10
-4) Prepare to generate event with background events and hits.
-5) jsf.conf editor. Which is executable from GUI
-6) Integrate Bases/Spring generator in GUI pannel ( easy selection of process)
-7) Move example/guiexam1/MainMacro.C to macro directory for use as
-   standard macro.
-      --> done in jsf-1-11 	
-8) Output of a root file should be turned off in some case.
-      --> done in jsf-1-10, in the case of example/guiexam1/gui.C
-9) Prepare an example macro to read multiple root file randomly/sequentially.
-10) Prepare an example to use rootd.
-11) Prepare interface to read generator data with only parton information
-    such as Grace.
-	
-
+1) Re-write QuickSimulator by C++ --> Now in designing stage (2-Septembet-1999) 
+2) Prepare an example macro to read multiple root file randomly/sequentially.
+3) Prepare an example to use rootd.
+4) Further test of jsf-jim interface.
+5) Add switch to selectively suppress data output.
+6) parallel-jsf.
 
 	
 **********************************************************
 jsf-1-12  Modification toward jsf-1-12 A.Miyamoto
 **********************************************************
+-----------------------
+2-September-1999 A.Miyamoto
+------------------------
+(1) Changes in example/jsfjim and macro/GUIMainMacro.C and 
+    example/JSFGUIMainFrame.cxx so as to run jsfjim properly with gui.C
+
 -----------------------
 30-August-1999 A.Miyamoto
 -----------------------
