@@ -214,6 +214,13 @@ void InitGenSim()
 
   if( jsf->Env()->GetValue("JSFGUI.SimulationType",1) == 1 ) {
     sim    = new JSFQuickSim();
+
+    if( jsf->Env()->GetValue("JSFGUI.MergeEvent",0 )) {
+      merge=new JSFMergeEvent();
+      merge->SetDataFileName(
+	   jsf->Env()->GetValue("JSFMergeEvent.DataFile","mergeevent.root"));
+    }
+
     simdst = new JSFSIMDST();
     simdst->SetQuickSimParam(sim->Param());
   }
@@ -225,11 +232,6 @@ void InitGenSim()
     //simdst = new JSFJIM();
     //}
 
-  if( jsf->Env()->GetValue("JSFGUI.MergeEvent",0 )) {
-    merge=new JSFMergeEvent();
-    merge->SetDataFileName(
-	   jsf->Env()->GetValue("JSFMergeEvent.DataFile","mergeevent.root"));
-  }
 
 
   if( jsf->Env()->GetValue("JSFGUI.SIMDST.Output",0) == 0 && simdst ) 
