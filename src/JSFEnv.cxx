@@ -66,8 +66,8 @@ void JSFEnv::ReadFile(const char *n, EEnvLevel l)
 		kNewComment, kContComment };
   Int_t istat=kHeader;
   Int_t lstat=istat;
-  Char_t name[80], value[80], type[80];
-  Char_t help[4096], arg[80];  EEnvLevel level=kEnvLocal;
+  Char_t name[256], value[256], type[256];
+  Char_t help[4096], arg[256];  EEnvLevel level=kEnvLocal;
   Bool_t defined=kFALSE;
   Int_t  nread=0;
   while( fgets(inp,256,fd) != NULL ) {
