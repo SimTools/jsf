@@ -14,6 +14,7 @@
 //////////////////////////////////////////////////////////////////
 
 #include <strings.h>
+
 #include "JSFLCFULL.h"
 
 extern "C" {
@@ -51,7 +52,22 @@ extern void thrust_(Int_t *numprt, Float_t *prtlst, const Int_t *lngdat,
 extern void eprobx_(Double_t *x, const Int_t *ntyp, Double_t *xbeam);
 };
 
+#ifdef __LCLIBRAN_USE_RANMAR__
+#include "TSystem.h"
+#include "JSFSteer.h"
+extern "C" {
+extern void rmarin_(Int_t *iseed, Int_t *ntotin, Int_t *nto2in);
+};
+typedef struct {
+  UInt_t rdat1[104];
+} COMMON_RANMA1;
 
+typedef struct {
+  UInt_t rdat2[104];
+} COMMON_RANMA2;
+extern COMMON_RANMA1 ranma1_;
+extern COMMON_RANMA2 ranma2_;
+#endif
 
 typedef struct {
   Int_t rtimlm, rcpumx,
@@ -178,6 +194,134 @@ Bool_t JSFLCFULL::Process(Int_t ev)
   //  return fRecid;
   return kTRUE;
 }
+
+#ifdef __LCLIBRAN_USE_RANMAR__
+//_____________________________________________________________________________
+Bool_t JSFLCFULL::EndRun()
+{
+  for(Int_t i=0;i<104;i++){
+    fRandomSeed[i]=ranma1_.rdat1[i];
+    fRandomSeed[i+104]=ranma2_.rdat2[i];
+  }
+
+  if( fFile->IsWritable() ) {
+    Write();
+  }
+  return kTRUE;
+}
+
+// ---------------------------------------------------------------
+void JSFLCFULL::SetRandomSeed(UInt_t rdat[208])
+{
+  for(Int_t i=0;i<104;i++){
+    ranma1_.rdat1[i]=rdat[i];
+    ranma2_.rdat2[i]=rdat[i+104];
+  }
+  for(Int_t i=0;i<208;i++) { fRandomSeed[i]=rdat[i]; }
+}
+
+// ---------------------------------------------------------------
+void JSFLCFULL::GetRandomSeed(UInt_t rdat[208])
+{
+  for(Int_t i=0;i<104;i++){
+    rdat[i]=ranma1_.rdat1[i];
+    rdat[i+104]=ranma2_.rdat2[i];
+  }
+}
+
+// ---------------------------------------------------------------
+void JSFLCFULL::WriteRandomSeed(Char_t *fw)
+{
+
+  Char_t fn[256];
+  if( strlen(fw) == 0 ) {
+    sprintf(fn,"%s",gJSF->Env()->GetValue("JSFLCFULL:RandomSeedWriteFile","undefined"));
+    if( strcmp(fn,"undefined") == 0 ) {
+      sprintf(fn,"jsf-lcfull-seed.%d",gSystem->GetPid());
+    }
+  }
+  else {
+    sprintf(fn,"%s",fw);
+  }
+
+  FILE *fd=fopen(fn,"w");
+  fprintf(fd,"0 %d\n",gJSF->GetEventNumber());
+  for(Int_t i=0;i<104;i++){
+    fprintf(fd,"%d\n",ranma1_.rdat1[i]);
+  }
+  for(Int_t i=0;i<104;i++){
+    fprintf(fd,"%d\n",ranma2_.rdat2[i]);
+  }
+  fclose(fd);
+}
+
+
+// ---------------------------------------------------------------
+void JSFLCFULL::ReadRandomSeed(Char_t *fr)
+{
+  Char_t fn[256];
+  if( strlen(fr) == 0 ) {
+    sprintf(fn,"%s",
+	    gJSF->Env()->GetValue("JSFLCFULL:RandomSeedReadFile","undefined"));
+    if( strcmp(fn,"undefined") == 0 ) {
+      printf("  Error in JSFLCFULL:ReadRandomSeed()   \n");
+      printf("  File name to read random seed (JSFLCFULL:RandomSeedReadFile) is not specified.\n");
+      return;
+    }
+  }
+  else {
+    sprintf(fn,"%s",fr);
+  }
+  FILE *fd=fopen(fn,"r");
+  Int_t mode, ievt;
+  fscanf(fd,"%d %d",&mode, &ievt);
+
+  for(Int_t i=0;i<104;i++){
+    fscanf(fd,"%d",&fRandomSeed[i]);
+  }
+  for(Int_t i=0;i<104;i++){
+    fscanf(fd,"%d",&fRandomSeed[i+104]);
+  }
+  fclose(fd);
+
+  Int_t iseed=(Int_t)fRandomSeed[0];
+  Int_t ntotin=(Int_t)fRandomSeed[1];
+  Int_t nto2in=(Int_t)fRandomSeed[2];
+
+  rmarin_(&iseed, &ntotin, &nto2in); // Initialize ranmar.
+
+  for(Int_t i=0;i<104;i++){
+    ranma1_.rdat1[i]=fRandomSeed[i];
+    ranma2_.rdat2[i]=fRandomSeed[i+104];
+  }
+
+  printf(" Random seed for event#%d of JSFLCFULL is obtained from a file %s\n",ievt,fn);
+}
+
+// ---------------------------------------------------------------
+void JSFLCFULL::PrintRandomSeed(Int_t num)
+{ 
+  printf(" JSFLCFULL-Seed:");
+  for(Int_t i=0;i<num;i++){
+    printf("%d ",ranma1_.rdat1[i]);
+  }
+  printf("\n");
+}
+
+
+//_____________________________________________________________________________
+Bool_t JSFLCFULL::GetLastRunInfo()
+{
+  // Read seed of previous run 
+
+  Read(GetName());
+
+  printf("Random seeds for JSFLCFULL were reset by ");
+  printf("values from a file.\n");
+
+  return kTRUE;
+}
+#endif
 
 // ---------------------------------------------------------------
 void JSFLCFULL::SetNumgen(Int_t ng)

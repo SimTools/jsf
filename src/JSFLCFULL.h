@@ -15,6 +15,8 @@
 #include <TTree.h>
 #include <TClonesArray.h>
 
+#include "JSFConfig.h"
+
 #ifndef __JSFModule__
 #include "JSFModule.h"
 #endif
@@ -26,7 +28,9 @@ class JSFLCFULL : public JSFModule  {
 
 public:
   Int_t fRecid;  //! Record ID.
-
+#ifdef __LCLIBRAN_USE_RANMAR__
+  UInt_t fRandomSeed[208]; // Seed of random variables
+#endif
 public:
   JSFLCFULL(const char *name="JSFLCFULL"  , 
 	    const char *title="JSFLCFULL");
@@ -35,6 +39,10 @@ public:
   virtual Bool_t Initialize();
   virtual Bool_t Process(Int_t ev);
   virtual Bool_t BeginRun(Int_t nrun);
+#ifdef __LCLIBRAN_USE_RANMAR__
+  virtual Bool_t EndRun();
+  virtual Bool_t GetLastRunInfo();
+#endif
 
   void SetNumgen(Int_t ng);
 
@@ -73,8 +81,16 @@ public:
   void EPROBX(Double_t x, const Int_t ntyp, Double_t &xbeam);
 
 
-
+#ifdef __LCLIBRAN_USE_RANMAR__
+  void SetRandomSeed(UInt_t rdat[208]);
+  void GetRandomSeed(UInt_t rdat[208]);
+  void WriteRandomSeed(Char_t *fw="");
+  void ReadRandomSeed(Char_t *fr="");
+  void PrintRandomSeed(Int_t num=8);  // First num's data are printed.
+  ClassDef(JSFLCFULL, 2)  // JSF LCFULL interface
+#else
   ClassDef(JSFLCFULL, 1)  // JSF LCFULL interface
+#endif
 
 };
 

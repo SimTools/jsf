@@ -14,6 +14,7 @@
 #include <TPythia.h>
 #include <TMCParticle.h>
 
+#include "JSFConfig.h"
 #include "JSFGenerator.h"
 
 
@@ -64,6 +65,12 @@ public:
 
   void SetEventWeight(Float_t weight){ fEventWeight=weight; }
   Float_t GetEventWeight(){ return fEventWeight; }
+
+#ifdef __LCLIBRAN_USE_RANMAR__
+  void WriteRandomSeed(Char_t *fw="");
+  void ReadRandomSeed(Char_t *fr="");
+  void PrintRandomSeed(Int_t num=8);  // First num's data are printed
+#endif
 
   ClassDef(PythiaGenerator, 3)  // Pythia Generator
 

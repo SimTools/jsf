@@ -16,6 +16,8 @@
 #include "TMath.h"
 #include "TDatime.h"
 
+#include "JSFConfig.h"
+
 #ifndef __JSFFULLGenerator__
 #include "JSFFULLGenerator.h"
 #endif
@@ -29,8 +31,10 @@ protected:
    Bool_t      fCopySpringClassDataToBank; //! 
    Int_t    fMRLU[6];   // random seed for Jetset
    Float_t  fRRLU[100];  //
+#ifndef __LCLIBRAN_USE_RANMAR__
    Float_t  fRASET1U[98];  // random seed for tauola
    Int_t    fRASET1IJ97[2]; // 
+#endif
 public:
    JSFHadronizer(const char *name="JSFHadronizer", 
 		 const char *title="JSFHadronizer");
@@ -44,7 +48,11 @@ public:
      fCopySpringClassDataToBank= flag ;}
    Bool_t GetCopySpringClassDataToBank(){return fCopySpringClassDataToBank ; }
 
+#ifndef __LCLIBRAN_USE_RANMAR__
    ClassDef(JSFHadronizer,2)  // Debug structure
+#else
+   ClassDef(JSFHadronizer,3)  // Debug structure
+#endif
 };
 
 

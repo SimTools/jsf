@@ -1,25 +1,3 @@
-//*LastUpdate :  jsf-1-12  26-August-1999  A.Miyamoto
-//*LastUpdate :  jsf-1-11  23-July-1999  A.Miyamoto
-//*LastUpdate :  jsf-1-9   15-May-1999  A.Miyamoto
-//*LastUpdate :  jsf-1-7-2  16-April-1999  A.Miyamoto
-//*LastUpdate :  jsf-1-7-1  9-April-1999  A.Miyamoto
-//*LastUpdate :  jsf-1-7  8-April-1999  A.Miyamoto
-//*LastUpdate :  0.04/04  9-November-1998  By A.Miyamoto
-//*-- Author  : A.Miyamoto  9-November-1998
-
-/*
- 26-August-1999 A.Miyamoto Add pyevwt(wtxs) to provide weight for events.
-                           This is a global function, since this is to replace dummy 
-                           PYEVWT in Pythia library. (see p.142 of manual)
- 23-July-1999 A.Miyamoto Add GetLastRunInfo() to save/restore random seed.
- 15-May-1999 A.Miyamoto  Lifetime of particles in documentation line is set 
-                         to 0, otherwise initial mu and tau are swimed.
- 16-Apr-1999 A.Miyamoto  A bug(mother of particle was not set) was fixed.
-  9-Apr-1999 A.Miyamoto  A bug to pickup stable particle from LUJETS is fixed.
-  8-Apr-1999 A.Miyamoto  Save all particles in LUJETS common to 
-                         JSFGeneratorParticle class
-*/
-
 ///////////////////////////////////////////////////////////////////
 //
 //  PythiaGenerator class
@@ -62,6 +40,7 @@
 #include "PythiaGenerator.h"
 #include "JSFSteer.h"
 #include "TEnv.h"
+#include "TSystem.h"
 
 #include "JSFGenerator.h"
 
@@ -278,6 +257,85 @@ Bool_t PythiaGenerator::Terminate()
 
   return kTRUE;
 }
+
+#ifdef __LCLIBRAN_USE_RANMAR__
+// ---------------------------------------------------------------
+void PythiaGenerator::WriteRandomSeed(Char_t *fw)
+{
+  Char_t fn[256];
+  if( strlen(fw) == 0 ) {
+    sprintf(fn,"%s",
+	    gJSF->Env()->GetValue("PythiaGenerator:RandomSeedWriteFile","undefined"));
+    if( strcmp(fn,"undefined") == 0 ) {
+      sprintf(fn,"jsf-lcfull-seed.%d",gSystem->GetPid());
+    }
+  }
+  else {
+    sprintf(fn,"%s",fw);
+  }
+  
+  FILE *fd=fopen(fn,"w");
+  fprintf(fd,"0 %d\n",gJSF->GetEventNumber());
+
+  for(Int_t i=0;i<6;i++){
+    fprintf(fd,"%d\n",(UInt_t)fPythia->GetMRLU(i+1));
+  }
+  for(Int_t i=0;i<100;i++){
+    Float_t val=fPythia->GetRRLU(i+1);
+    UInt_t *uval=(UInt_t*)&val;
+    fprintf(fd,"%d\n",*uval);
+  }
+  fclose(fd);
+}
+
+
+// ---------------------------------------------------------------
+void PythiaGenerator::ReadRandomSeed(Char_t *fr)
+{
+  Char_t fn[256];
+  if( strlen(fr) == 0 ) {
+    sprintf(fn,"%s",
+	    gJSF->Env()->GetValue("PythiaGenerator:RandomSeedReadFile","undefined"));
+    if( strcmp(fn,"undefined") == 0 ) {
+      printf("  Error in PythiaGenerator:ReadRandomSeed()   \n");
+      printf("  File name to read random seed (PythiaGenerator:RandomSeedReadFile) is not specified.\n");
+      return;
+    }
+  }
+  else {
+    sprintf(fn,"%s",fr);
+  }
+  FILE *fd=fopen(fn,"r");
+  Int_t mode, ievt;
+  fscanf(fd,"%d %d",&mode, &ievt);
+
+  Int_t ival;
+  for(Int_t i=0;i<6;i++){
+    fscanf(fd,"%d",(UInt_t*)&ival);
+    fPythia->SetMRLU(i+1,ival);
+  }
+  for(Int_t i=0;i<100;i++){
+    UInt_t uval;
+    fscanf(fd,"%d",&uval);
+    Float_t *val=(Float_t*)&uval;
+    fPythia->SetRRLU(i+1,*val);
+  }
+  fclose(fd);
+  printf(" Random seed for event#%d of PythiaGenerator is obtained from a file %s\n",ievt,fn);
+}
+
+// ---------------------------------------------------------------
+void PythiaGenerator::PrintRandomSeed(Int_t num)
+{ 
+  printf(" Pythia-Seed:");
+  for(Int_t i=0;i<num;i++){
+    Float_t val=fPythia->GetRRLU(i+1);
+    UInt_t *uval=(UInt_t*)&val;
+    printf("%d ",*uval);
+  }
+  printf("\n");
+}
+#endif
 
 // ---------------------------------------------------------------
 Bool_t PythiaGenerator::GetLastRunInfo()

@@ -14,7 +14,6 @@
 
 
 #include "TRandom.h"
-
 #include "JSFSteer.h"
 #include "JSFLCFULL.h"
 #include "JSFHadronizer.h"
@@ -44,11 +43,14 @@ typedef struct {  // Common for JETSET random variables
 } COMMON_LUDATR;
 extern COMMON_LUDATR ludatr_;
 
+
+#ifndef __LCLIBRAN_USE_RANMAR__ 
 typedef struct { // Commo for Tauola random variables
   Float_t  u[98];
   Int_t ij97[2];
 } COMMON_RASET1;
 extern COMMON_RASET1 raset1_;
+#endif
 
 //_____________________________________________________________________________
 JSFHadronizer::JSFHadronizer(const char *name, const char *title)
@@ -119,9 +121,10 @@ Bool_t JSFHadronizer::Process(Int_t ev)
   Int_t i;
   for(i=0;i<6;i++){ fMRLU[i]=ludatr_.mrlu[i];}
   for(i=0;i<100;i++){ fRRLU[i]=ludatr_.rrlu[i];}
+#ifndef __LCLIBRAN_USE_RANMAR__
   for(i=0;i<98;i++){ fRASET1U[i]=raset1_.u[i];}
   for(i=0;i<2;i++){ fRASET1IJ97[i]=raset1_.ij97[i];}
-
+#endif
   if( fCopySpringClassDataToBank ) TBPUT(fSpring);
 
   Int_t idrec=1;
@@ -148,9 +151,10 @@ Bool_t JSFHadronizer::EndRun()
   Int_t i;
   for(i=0;i<6;i++){ fMRLU[i]=ludatr_.mrlu[i];}
   for(i=0;i<100;i++){ fRRLU[i]=ludatr_.rrlu[i];}
+#ifndef __LCLIBRAN_USE_RANMAR__
   for(i=0;i<98;i++){ fRASET1U[i]=raset1_.u[i];}
   for(i=0;i<2;i++){ fRASET1IJ97[i]=raset1_.ij97[i];}
-
+#endif
   if( fFile->IsWritable() ) {
     if( !JSFFULLGenerator::EndRun() ) return kFALSE;
     Write();
@@ -165,11 +169,6 @@ Bool_t JSFHadronizer::GetLastRunInfo()
   // Read seed of previous run 
 
   Read(GetName());
-
-  //  for(Int_t i=0;i<6;i++){ ludatr_.mrlu[i]=fMRLU[i];}
-  //for(Int_t i=0;i<100;i++){ ludatr_.rrlu[i]=fRRLU[i];}
-  //for(Int_t i=0;i<98;i++){ raset1_.u[i]=fRASET1U[i];}
-  //for(Int_t i=0;i<2;i++){ raset1_.ij97[i]=fRASET1IJ97[i];}
 
   printf("Random seeds for JSFHadronizer were reset by ");
   printf("values from a file.\n");
@@ -193,8 +192,10 @@ void JSFHadronizer::Streamer(TBuffer &R__b)
      JSFFULLGenerator::Streamer(R__b);
      R__b.ReadStaticArray(fMRLU);
      R__b.ReadStaticArray(fRRLU);
+#ifndef __LCLIBRAN_USE_RANMAR__
      R__b.ReadStaticArray(fRASET1U);
      R__b.ReadStaticArray(fRASET1IJ97);
+#endif
      R__b.CheckByteCount(R__s, R__c, JSFHadronizer::IsA());
 
    } else {
@@ -214,15 +215,19 @@ void JSFHadronizer::Streamer(TBuffer &R__b)
       JSFFULLGenerator::Streamer(R__b);
       R__b.ReadStaticArray(fMRLU);
       R__b.ReadStaticArray(fRRLU);
+#ifndef __LCLIBRAN_USE_RANMAR__
       R__b.ReadStaticArray(fRASET1U);
       R__b.ReadStaticArray(fRASET1IJ97);
+#endif
    } else {
       R__b.WriteVersion(JSFHadronizer::IsA());
       JSFFULLGenerator::Streamer(R__b);
       R__b.WriteArray(fMRLU, 6);
       R__b.WriteArray(fRRLU, 100);
+#ifndef __LCLIBRAN_USE_RANMAR__
       R__b.WriteArray(fRASET1U, 98);
       R__b.WriteArray(fRASET1IJ97, 2);
+#endif
    }
 }
 #endif
