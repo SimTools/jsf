@@ -79,6 +79,7 @@ void UserAnalysis()
   **  are printed.
 */
 
+/*
   JSFGenerator *gg=(JSFGenerator*)gJSF->FindModule("JSFGenerator");
   JSFGeneratorBuf *sdb=(JSFGeneratorBuf*)gg->EventBuf();
   printf(" # Generator Particle is %d\n",sdb->GetNParticles());
@@ -90,6 +91,8 @@ void UserAnalysis()
     // printf(" ndau=%d\n",ndau);
     g->ls();
   }
+
+*/
 
 }
 
