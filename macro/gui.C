@@ -5,12 +5,13 @@
 //(Author) 
 //  10-Mar-1999 A.Miyamoto  Original version 
 //  21-Apr-1999 A.Miyamoto  Modified to run both in batch and interactive.
+//  25-Jan-2000 A.Miyamoto  Use local GUIMainMacro.C
 //
 // $Id$
 //
 // **************************************************************** 
 
-  gROOT->LoadMacro("$JSFROOT/macro/GUIMainMacro.C");
+  gROOT->LoadMacro("GUIMainMacro.C");
 
   if( strncmp(gSystem->HostName(),"ccjlc",5)  != 0 ) {
     if( strncmp(gSystem->Getenv("OSTYPE"),"hpux",4) ==0 ) {
