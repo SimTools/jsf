@@ -55,10 +55,10 @@
 #endif
 
 #if __PYTHIA_VERSION__ <= 5
-#define pychge luchge
-#define pycomp lucomp
+#define pychge_ luchge_
+#define pycomp_ lucomp_
 
-#define pydat2 ludat2
+#define pydat2_ ludat2_
 
 #define MRPY   MRLU
 #define RRPY   RRLU

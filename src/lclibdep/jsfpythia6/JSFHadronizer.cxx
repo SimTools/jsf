@@ -23,19 +23,19 @@
 #include "JSFHadronizer.h"
 
 #if __PYTHIA_VERSION__ <= 5 
-#define pyjoin lujoin
-#define pyshow lushow
-#define pyprep luprep
-#define pychge luchge
-#define pylist lulist
-#define pycomp lucomp
-#define pyexec luexec
+#define pyjoin_ lujoin_
+#define pyshow_ lushow_
+#define pyprep_ luprep_
+#define pychge_ luchge_
+#define pylist_ lulist_
+#define pycomp_ lucomp_
+#define pyexec_ luexec_
 
-#define pydat1 ludat1
-#define pydat2 ludat2
-#define pydat3 ludat3
-#define pydatr ludatr
-#define pyjets lujets
+#define pydat1_ ludat1_
+#define pydat2_ ludat2_
+#define pydat3_ ludat3_
+#define pydatr_ ludatr_
+#define pyjets_ lujets_
 #define MRPY   MRLU
 #define RRPY   RRLU
 #endif

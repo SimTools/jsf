@@ -15,8 +15,10 @@
 #if __PYTHIA_VERSION__ >= 6
 #include "TPythia6.h"
 #else
-#define pychge luchge
-#define pycomp lucomp
+#define pychge_ luchge_
+#define pycomp_ lucomp_
+
+#define pydat2_ ludat2_
 #endif
 
 extern "C" {
