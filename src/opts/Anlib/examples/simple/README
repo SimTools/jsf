@@ -3,8 +3,8 @@
 -------------------------------------------------------------------------------
 Usage:		
 
-$ xmkmf -a; make
+$ make
 $ ./UserAnalysis
 
-$(KFLIBROOT)/lib should be in LD_LIBRARY_PATH so as to dynamically
-load libAnlib.so.
+$(LEDAROOT)/lib should be in LD_LIBRARY_PATH so as to dynamically
+load libAnlib.so and libS4Utils.so.
