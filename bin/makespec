@@ -43,21 +43,6 @@ else
   root -q -b $jsfroot/macro/printversion.C | grep "ROOT_" >> $specfile
 endif
 
-#######################
-#  Directories for DEPEND files
-#######################
-echo "Depend directories .."
-set gccvers=`gcc -v |& head -1 | cut -f4 -d" " | sed -e 's/specs$//g' `
-set strcmd=`which strings`
-set incdir=`$strcmd $gccvers/cpp  | grep include  | grep "/" `
-echo -n "#define __JSF_DEPEND_INCLUDE__ "  >> $specfile
-foreach i ( $incdir )
- if ( -e $i && $i != "/usr/include" ) then
-	echo -n " \\\n\t -I"$i >> $specfile
- endif
-end
-echo "  " >> $specfile
-
 
 ##################################
 # Check status of other softwares.
