@@ -35,7 +35,7 @@ JIMOBJ  = $(JLCSIMROOT)/util/src/getcal.o  $(JLCSIMROOT)/util/src/getcls.o \
 
 INC           = $(JSFROOT)/include 
 
-INCPATH	      = -I../util/inc -I$(JLCSIMROOT)/include/jlc 
+INCPATH	      = -I$(JLCSIMROOT)/util/inc -I$(JLCSIMROOT)/include/jlc 
 FCFLAGS	      = $(FFLAGS)
 
 OBJS          = JSFReadJIMBank.$(ObjSuf) \
