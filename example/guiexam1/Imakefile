@@ -36,7 +36,8 @@ HDRJSFGUI     = InputDialog.h \
 		JSFGUIFrame.h JSFGUIAnalysis.h \
 		JSFGUILinkDef.h
 
-SONAME        = libJSFGUI
+SOLIBNAME     = libJSFGUI
+SONAME	      = $(SOLIBNAME).$(SOEXT)	
 
 
 #ifdef hitachiArchitecture
@@ -76,7 +77,7 @@ jsf: jsfmain.o $(OBJJSFGUI)
 #else
 all::  libgui
 libgui: $(OBJJSFGUI)
-	$(LD) $(SOFLAGS) $(OBJJSFGUI) -o  $(SONAME).$(SOEXT)
+	$(LD) $(SOFLAGS) $(OBJJSFGUI) -o  $(SONAME)
 #endif
 
 clean:: 

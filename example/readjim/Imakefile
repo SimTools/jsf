@@ -8,14 +8,14 @@
 
 #include    "config/lclib.tmpl"
 #include    "conf/makejsf.tmpl"
+
 CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lpacklib
 JSFLIBS       = -Wl,-L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim
-
 ROOTLIBS      = -L$(ROOTSYS)/lib \
 		-lEGPythia -lEG $(CERNLIBS) \
 		-lNew -lBase -lCint -lClib -lCont -lFunc \
                 -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
-                -lPostscript -lProof -lTree -lUnix -lZip
+                $(ROOT222LIBS) -lPostscript -lProof -lTree -lUnix -lZip
 
 ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
 
@@ -55,6 +55,8 @@ SRC           = JSFReadJIMBank.$(SrcSuf) \
 HDRS	      = JSFReadJIMBank.h \
 		JSFJIMParam.h
 
+SOLIBNAME     = libJSFReadJIMBank
+
 
 all::  jsf lib
 
@@ -66,22 +68,22 @@ lib: $(OBJS)
 	ar cr libreadjim.a $(OBJS) $(JIMOBJ)
 
 clean:: 
-	@rm -f $(OBJS) core *.so 
-	@rm -f libJSFReadJIMBank.$(SrcSuf) libJSFReadJIMBank.h
+	@rm -f $(OBJS) core *~
+	@rm -f $(SOLIBNAME).*
 
 depend:: 
 	makedepend -I$(ROOTSYS)/include $(SRC)
 
 distclean::
-	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h *.~ *.o
-	@rm -f *.bak libJSFReadJIMBank.*
+	@rm -f $(OBJS) core *~ *.o
+	@rm -f *.bak 
 	@rm -f jsf *.root Makefile 
 
 ###
 
-libJSFReadJIMBank.$(SrcSuf): $(HDRS) JSFReadJIMLinkDef.h
+$(SOLIBNAME).$(SrcSuf): $(HDRS) JSFReadJIMLinkDef.h
 		@echo "Generating dictionary ..."
-		rootcint -f libJSFReadJIMBank.$(SrcSuf) \
+		rootcint -f $(SOLIBNAME).$(SrcSuf) \
 	 	-c -I$(JSFROOT)/include $(HDRS) \
 		JSFReadJIMLinkDef.h
 

@@ -22,9 +22,18 @@ To-Do ( listed in arbitrary order ) -- Help wanted
     such as Grace.
 	
 
+
 	
 **********************************************************
-jsf-1-10  Modification toward jsf-1-10 A.Miyamoto
+jsf-1-11  Modification toward jsf-1-11 A.Miyamoto
+**********************************************************
+-----------------------	
+15-July-1999 A.Miyamoto
+-----------------------	
+(1) SONAME in makejsf.tmpl and Imakefile were changed to SOLIBNAME
+	
+**********************************************************
+jsf-1-10  15-July-1999 A.Miyamoto
 **********************************************************
 -----------------------	
 15-July-1999 A.Miyamoto

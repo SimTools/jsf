@@ -43,7 +43,7 @@ EXTRACXXOPT   = -I$(JSFROOT)/example/readjim
 
 INCPATH	      = -I$(JLCSIMROOT)/util/inc -I$(JLCSIMROOT)/include/jlc \
 		-I$(JLCSIMROOT)/include
- 
+
 FCFLAGS	      = $(FFLAGS)
 
 FCINCLUDES = -I./ -I$(JLCSIMROOT)/include -I$(JLCSIMROOT)/include/jlc \
@@ -93,7 +93,7 @@ depend::
 	makedepend -I$(ROOTSYS)/include $(SRC)
 
 distclean::
-	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h *~ *.o
+	@rm -f $(OBJS) core *~ *.o
 	@rm -f *.bak libJSFJIM.* *.bnk
 	@rm -f jsfjim *.root Makefile 
 

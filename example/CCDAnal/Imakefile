@@ -29,13 +29,11 @@ SRC           = CCDRawData.$(SrcSuf) \
 		CCD2x2Cluster.$(SrcSuf) \
 		CCDDBS.$(SrcSuf)
 
-EVENTSO       = libCCD.$(DllSuf)
-
 HDRS	      = CCDDBS.h CCDRawData.h CCDRawHist.h CCDCorrectDark.h \
 		CCD2x2Cluster.h 
 
-SONAME        = libCCD
-PROGRAM       = $(SONAME).$(DllSuf)
+SOLIBNAME     = libCCD
+PROGRAM       = $(SOLIBNAME).$(SOEXT)
 
 all::   lib ccd
 
@@ -49,22 +47,22 @@ lib:     $(OBJS)
 	@cp -p libCCD.a ../../lib
 
 clean:: 
-	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h
+	@rm -f $(OBJS) core *.so $(SOLIBNAME).*
 
 depend:: 
 	makedepend -I$(ROOTSYS)/include $(SRC)
 
 
 distclean::
-	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h *.~ *.o
+	@rm -f $(OBJS) core *.so $(SOLIBNAME).*  *~  *.o
 	@rm -f PYTHIA.SEED *.bak
 	@rm -f ccd jsf.root Makefile
 
 ###
 
-$(SONAME).$(SrcSuf): $(HDRS) LinkDef.h
+$(SOLIBNAME).$(SrcSuf): $(HDRS) LinkDef.h
 		@echo "Generating dictionary ..."
-		rootcint -f $(SONAME).$(SrcSuf) \
+		rootcint -f $(SOLIBNAME).$(SrcSuf) \
 	 	-c -I$(JSFROOT)/include $(HDRS) LinkDef.h
 
 #---------------------------------------------------

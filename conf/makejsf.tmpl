@@ -14,15 +14,20 @@ XCOMM #              Define .cxx compile rule here.
 XCOMM # 
 XCOMM # $Id$
 XCOMM # 
+#include "conf/spec"
 DllSuf        = $(SOEXT)
 SrcSuf        = cxx
 ObjSuf        = o
 
 LD            = $(CXX)
 
+#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 22 
+ROOT222LIBS	= -lPhysics
+#endif
+
 ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
                 -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
-                -lPostscript -lProof -lTree -lUnix -lZip
+                $(ROOT222LIBS) -lPostscript -lProof -lTree -lUnix -lZip
 ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
 
 LCLIBDIR      = $(LCLIBROOT)/lib
@@ -39,7 +44,6 @@ XCOMM # -----------------------------------------------------
 XCOMM # Linux with egcs
 XCOMM # -----------------------------------------------------
 #if defined(LinuxArchitecture)
-#include "conf/spec"
 SOEXT         = so
 LIBF2C	      = -l$(G77EGCS_LIBNAME)
 FC	      = g77
@@ -47,7 +51,7 @@ CXX           = g++ -O2
 CXXFLAGS      = -Wall  -fno-rtti -fno-exceptions -fPIC \
 		$(EXTRACXXOPT) \
 		-I$(JSFROOT)/include -I$(ROOTSYS)/include
-SOFLAGS       = -shared -Wl,-soname,$(SONAME).$(SOEXT)
+SOFLAGS       = -shared -Wl,-soname,$(SONAME)
 LDFLAGS       = $(ANALLIB) $(GLIBS)
 LIBS          = $(ROOTLIBS) -lm -ldl -rdynamic
 GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -L/usr/X11R6/lib \
@@ -65,7 +69,7 @@ CXX           = g++ -O2
 CXXFLAGS      = -Wall -fsigned-char -fno-rtti -fno-exceptions -fPIC \
 		$(EXTRACXXOPT) \
                 -I$(JSFROOT)/include -I$(ROOTSYS)/include
-SOFLAGS       = -shared -Wl,-soname,$(SONAME).$(SOEXT)
+SOFLAGS       = -shared -Wl,-soname,$(SONAME)
 LDFLAGS       = $(ANALLIB) $(GLIBS)
 LIBS          = $(ROOTLIBS) -lm -ldl -rdynamic
 GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -L/usr/X11R6/lib \
@@ -83,7 +87,7 @@ CXX           = g++ -O2
 CXXFLAGS      = -Wall  -fno-rtti -fno-exceptions -fPIC \
 		$(EXTRACXXOPT) \
 		-I$(JSFROOT)/include -I$(ROOTSYS)/include
-SOFLAGS       = -shared -Wl,-soname,$(SONAME).$(SOEXT)
+SOFLAGS       = -shared -Wl,-soname,$(SONAME)
 LDFLAGS       = $(ANALLIB) $(GLIBS)
 LIBS          = $(ROOTLIBS) -lm -ldl -rdynamic
 GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -L/usr/X11R6/lib \

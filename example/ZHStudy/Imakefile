@@ -54,7 +54,7 @@ depend::
 	makedepend -I$(ROOTSYS)/include $(SRC)
 
 distclean::
-	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h *.~ *.o
+	@rm -f $(OBJS) core *.so *~ *.o
 	@rm -f *.bak libMyAnalysis.*
 	@rm -f jsf *.root Makefile 
 

@@ -11,7 +11,7 @@ CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lpacklib
 ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
 		-lEGPythia -lEG \
                 -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
-  		$(ROOT222LIBS) -lPostscript -lProof -lTree -lUnix -lZip \
+		$(ROOT222LIBS) -lPostscript -lProof -lTree -lUnix -lZip \
 		-Wl,-u,pytest_ \
 		$(CERNLIBS)
 
@@ -127,7 +127,7 @@ depend::
 	makedepend -I$(ROOTSYS)/include -I$(JSFROOT)/include $(SRC)
 
 distclean:: clean
-	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h *.~ *.o
+	@rm -f $(OBJS) core *~ *.o
 	@rm -f PYTHIA.SEED *.bak *.a
 	@rm -f jsf *.root Makefile 
 

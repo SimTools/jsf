@@ -1,4 +1,6 @@
-#---------------------------------------------------
+XCOMM #---------------------------------------------------
+XCOMM # $id$
+XCOMM #---------------------------------------------------
 
 #include "config/lclib.tmpl"
 #include "conf/makejsf.tmpl"
@@ -22,21 +24,18 @@ INCPATH = -I$(LCLIBROOT)/simjlc/src -I$(LCLIBROOT)/util/fortlib/src
 
 
 
-#-------------------------------------------------------------
+XCOMM #-------------------------------------------------------------
 
 FOBJS         = wwdcy.o wwamp.o coupla.o wwspr.o boost0.o
 
 OBJS          = WWSpring.$(ObjSuf) \
-		libWWSpring.$(ObjSuf)
+		$(SOLIBNAME).$(ObjSuf)
 
 SRC           = WWSpring.$(SrcSuf) 
 
-EVENTSO       = libWWSpring.$(DllSuf)
-
 HDRS	      = WWSpring.h
 
-SONAME        = libWWSpring
-PROGRAM       = $(SONAME).$(DllSuf)
+SOLIBNAME     = libWWSpring
 
 all::  jsf
 
@@ -44,21 +43,19 @@ jsf: $(OBJS) jsfmain.o $(FOBJS)
 	$(LD) jsfmain.o $(FOBJS) $(BLOCKDATA) $(OBJS) $(LDFLAGS) -o jsf
 
 clean:: 
-	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h
+	@rm -f $(OBJS) core *.so $(SOLIBNAME).*
 
 depend:: 
 	makedepend -I$(ROOTSYS)/include $(SRC)
 
 distclean::
-	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h *.~ *.o
+	@rm -f $(OBJS) core *.so $(SOLIBNAME).* *~ *.o
 	@rm -f PYTHIA.SEED *.bak
 	@rm -f jsf *.root Makefile 
 
-###
 
-$(SONAME).$(SrcSuf): $(HDRS) LinkDef.h
+$(SOLIBNAME).$(SrcSuf): $(HDRS) LinkDef.h
 		@echo "Generating dictionary ..."
-		rootcint -f $(SONAME).$(SrcSuf) \
+		rootcint -f $(SOLIBNAME).$(SrcSuf) \
 	 	-c -I$(JSFROOT)/include $(HDRS) LinkDef.h
 
-#

@@ -35,8 +35,8 @@ EVENTSO       = libFFbarSpring.$(DllSuf)
 
 HDRS	      = FFbarSpring.h
 
-SONAME        = libFFbarSpring
-PROGRAM       = $(SONAME).$(DllSuf)
+SOLIBNAME     = libFFbarSpring
+PROGRAM       = $(SOLIBNAME).$(DllSuf)
 
 all::  jsf
 
@@ -44,7 +44,7 @@ jsf: $(OBJS) jsfmain.o
 	$(LD) jsfmain.o $(BLOCKDATA) $(OBJS) $(LDFLAGS) -o jsf
 
 clean:: 
-	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h
+	@rm -f $(OBJS) core *.so $(SOLIBNAME).$(SrcSuf) $(SOLIBNAME).h
 
 depend:: 
 	makedepend -I$(ROOTSYS)/include $(SRC)
@@ -53,15 +53,15 @@ jsfmain.cxx:
 	ln -s ../../src/jsfmain.cxx .
 
 distclean::
-	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h *.~ *.o
+	@rm -f $(OBJS) core *.so $(SOLIBNAME).$(SrcSuf) $(SOLIBNAME).h *.~ *.o
 	@rm -f PYTHIA.SEED *.bak
 	@rm -f jsf *.root Makefile jsfmain.cxx
 
 ###
 
-$(SONAME).$(SrcSuf): $(HDRS) LinkDef.h
+$(SOLIBNAME).$(SrcSuf): $(HDRS) LinkDef.h
 		@echo "Generating dictionary ..."
-		rootcint -f $(SONAME).$(SrcSuf) \
+		rootcint -f $(SOLIBNAME).$(SrcSuf) \
 	 	-c -I$(JSFROOT)/include $(HDRS) LinkDef.h
 
 #---------------------------------------------------
