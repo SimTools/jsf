@@ -60,6 +60,8 @@
   enum EJSFGUIEventType { kPythia=0, kDebug=1, kBasesSpring=2,
                         kReadParton=3, kReadHepevt=4 };
 
+  Bool_t gHasUserMonitor=kFALSE;
+
 //______________________________________________
 int Initialize()
 {
@@ -70,6 +72,10 @@ int Initialize()
 					"UserAnalysis.C"));
 
   if( gROOT->GetGlobalFunction("UserSetOptions",0,kTRUE) ) UserSetOptions();
+
+  if( gROOT->GetGlobalFunction("UserMonitor",0,kTRUE) ) {
+    gHasUserMonitor=kTRUE;
+  }
 
   Char_t *inputFileName=jsf->Env()->GetValue("JSFGUI.InputFileName","");
   Char_t *outputFileName=jsf->Env()->GetValue("JSFGUI.OutputFileName",
@@ -268,11 +274,20 @@ Bool_t GetEvent(Int_t ev)
 
     if( iret & jsf->kJSFFALSE ) return kFALSE;
 
-    if( gui != 0 ) gui->DisplayEventData();
+    if( !( iret & ( jsf->kJSFSkipRestModules|
+		    jsf->kJSFDoEndRun|jsf->kJSFTerminate|jsf->kJSFQuit) )) {
+      UserAnalysis();
 
-    UserAnalysis();
-    if( gui != 0 ) gui->DrawHist();
-    
+      if( (iret&jsf->kJSFDrawEvent) && (gui != 0) ) gui->DisplayEventData();
+
+      if( (iret&jsf->kJSFDrawHist) && (gui != 0) ) gui->DrawHist();
+
+    }    
+
+    if( gHasUserMonitor ) {
+      UserMonitor();
+    }
+
     //    if( irunmode==1 || irunmode = 4 ) {
     if( jsf->GetOutput() ) {
       if( !(iret & jsf->kJSFNoOutput) ) jsf->FillTree();
