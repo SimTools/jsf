@@ -146,7 +146,7 @@ Bool_t JSFHadronizer::Initialize()
    fPythia->SetMDCY(33,1,0);
 #else
    Int_t one=1;
-   lutuhl_(&one, &IHLON);
+   lutuhl_(&one, &fIHLON);
    ludat3_.mdcy[0][22]=0;
    ludat3_.mdcy[0][23]=0;
    ludat3_.mdcy[0][32]=0;

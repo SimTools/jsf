@@ -66,6 +66,7 @@ extern COMMON_PYDAT2 pydat2_;
 Float_t ulctau_(Int_t *kf);
 
 };
+
 #else
 extern "C" {
 extern Int_t luchge_(Int_t *kf);
@@ -80,6 +81,7 @@ ClassImp(PythiaGenerator)
 
 PythiaGenerator *lPythiaGenerator=NULL;
 
+#if __PYTHIA_VERSION__ >= 6
 //_____________________________________________________________________________
 Float_t ulctau_(Int_t *kf){
 
@@ -87,6 +89,7 @@ Float_t ulctau_(Int_t *kf){
   Double_t xctau=pydat2_.pmas[3][kc-1]*0.1;
   return (Float_t)xctau;
 }
+#endif
 
 //_____________________________________________________________________________
 PythiaGenerator::PythiaGenerator(const Char_t *name, 

@@ -35,12 +35,12 @@ protected:
    JSFSpring  *fSpring;    //! Pointer to spring module
    Bool_t      fCopySpringClassDataToBank; //! 
    Int_t    fIHLON;     // Tau polarization switch
+   Int_t    fDebug;     //! Debug flag
 #if __PYTHIA_VERSION__ >= 6 
    Int_t    fMRPY[6];   // random seed for Jetset
    Float_t  fRRPY[100];  //
    TPythia6   *fPythia; //
    Bool_t   fDoesShower;  // Does shower, if TRUE.
-   Int_t    fDebug;     //! Debug flag
 #else
    Int_t    fMRLU[6];   // random seed for Jetset
    Float_t  fRRLU[100];  //
