@@ -14,6 +14,7 @@
 //$Id$
 //////////////////////////////////////////////////////////////////
 
+#include <strings.h>
 #include <TSystem.h>
 #include <TApplication.h>
 #include <TROOT.h>
