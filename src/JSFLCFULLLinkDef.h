@@ -30,4 +30,6 @@
 #pragma link C++ class DebugWGenerator-;
 #pragma link C++ class PythiaGenerator-;
 
+#pragma link C++ class JSFGeneratedProcessType+;
+
 #endif

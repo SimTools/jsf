@@ -176,6 +176,7 @@ Bool_t PythiaGenerator::Process(Int_t ev)
 
   if ( fBeamStrahlung > 0 ) {
     Int_t idummy=0;
+  repeat:
     Double_t xrand=rlu_(&idummy);
     Double_t eb1=1.0;
     eprobx_(&xrand, &fBeamStrahlung, &eb1);
@@ -183,6 +184,7 @@ Bool_t PythiaGenerator::Process(Int_t ev)
     Double_t eb2=1.0;
     eprobx_(&xrand, &fBeamStrahlung, &eb2);
     Double_t ecmnew=TMath::Sqrt(eb1*eb2)*ecm;
+    if( ecmnew < 50.0 ) goto repeat;
     fPythia->Initialize(fFrame, fBeamParticle, fTargetParticle, ecmnew);
   }
 

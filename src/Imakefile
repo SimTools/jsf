@@ -53,7 +53,7 @@ SRCJSFLCFULL  = JSFBases.$(SrcSuf) \
 		JSFLCFULL.$(SrcSuf) \
 		JSFReadGenerator.$(SrcSuf) \
 		DebugGenerator.$(SrcSuf) DebugWGenerator.$(SrcSuf) \
-		PythiaGenerator.$(SrcSuf) 
+		PythiaGenerator.$(SrcSuf) JSFGeneratedProcessType.$(SrcSuf)
 
 SRCJSFQUICKSIM= JSFQuickSimParam.$(SrcSuf) JSFQuickSim.$(SrcSuf) \
 		JSFLTKCLTrack.$(SrcSuf) JSFSIMDST.$(SrcSuf) \
