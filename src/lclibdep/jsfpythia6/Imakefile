@@ -36,7 +36,7 @@ OBJ	      = $(subst .$(SrcSuf),.$(ObjSuf),$(SRC)) \
 HDR	      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRC)) \
 		$(NAME)LinkDef.h
 
-LIBS	      = -L$(LCLIBROOT)/lib -l TAUOLA 
+LIBS	      = -L$(LCLIBROOT)/lib -lTAUOLA -lFORTLIB
 
 CXXFLAGS     += -D__PYTHIA_VERSION__=6 
 /*----------------------------------------------------------------------*/

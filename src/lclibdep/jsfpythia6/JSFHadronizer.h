@@ -40,11 +40,11 @@ protected:
    Int_t    fMRPY[6];   // random seed for Jetset
    Float_t  fRRPY[100];  //
    TPythia6   *fPythia; //
-   Bool_t   fDoesShower;  // Does shower, if TRUE.
 #else
    Int_t    fMRLU[6];   // random seed for Jetset
    Float_t  fRRLU[100];  //
 #endif
+   Bool_t   fDoesShower;  // Does shower, if TRUE.
 #ifndef __LCLIBRAN_USE_RANMAR__
    Float_t  fRASET1U[98];  // random seed for tauola
    Int_t    fRASET1IJ97[2]; // 
@@ -65,7 +65,6 @@ public:
    Bool_t GetCopySpringClassDataToBank(){return fCopySpringClassDataToBank ; }
 
 
-#if __PYTHIA_VERSION__ >= 6 
    void Fragmentation(const Int_t nin, Double_t inlist[][10],
 		      const Int_t mxxout, const Int_t nspar,
 		      const Int_t ispar1[], const Int_t ispar2[],
@@ -73,7 +72,6 @@ public:
 		      Int_t &nout, Double_t outlst[][20],
 		      Int_t &nret);
    void Hadronize(JSFSpring *spring, Int_t &nret);
-#endif
 
 
 #ifndef __LCLIBRAN_USE_RANMAR__
