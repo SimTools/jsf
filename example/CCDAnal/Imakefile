@@ -1,7 +1,6 @@
 #---------------------------------------------------
 
-# #include "/proj.hi/phys/lclib/jsf/conf/makejsf.tmpl"
-#include "../../conf/makejsf.tmpl"
+#include "conf/makejsf.tmpl"
 
 ANALLIB   = -L$(JSFROOT)/lib -lJSF
 LDFLAGS   = $(ANALLIB) $(GLIBS) 
@@ -47,9 +46,6 @@ lib:     $(OBJS)
 	@/bin/rm -f libCCD.a
 	ar -r libCCD.a $(OBJS)
 	@cp -p libCCD.a ../../lib
-
-jsfmain.cxx:
-	ln -s ../../src/jsfmain.cxx .
 
 clean:: 
 	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h
