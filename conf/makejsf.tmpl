@@ -134,7 +134,7 @@ XCOMM # -----------------------------------------------------
 SOEXT         = sl
 LIBF2C        = -L/opt/fortran/lib -lU77
 CXX	      = aCC -O
-CXXFLAGS      = +W70,495,740,749,829 -DR__ACC -z +Z \
+CXXFLAGS      = +W70,495,740,749,829,823 -DR__ACC -z +Z \
 		$(EXTRACXXOPT) \
 		-I$(JSFROOT)/include -I$(ROOTSYS)/include
 SOFLAGS       = -b -z -Wl,+vnocompatwarnings -Wl,-E
