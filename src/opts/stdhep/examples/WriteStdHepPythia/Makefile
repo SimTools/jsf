@@ -9,7 +9,7 @@ FFLAGS= $(DFLG) -fno-second-underscore
 FFLAGS += -I/proj/soft/share/include/pythia
 
 LIBS = -L$(CLHEPDIR) -L/proj/soft/share/lib -lpythia6222 -lCLHEP \
-	-lg2c -lnsl
+	-lg2c #-lnsl
 
 writeStdHepPythia: $(OBJS)
 	$(CXX) -o $@ $(OBJS) $(LIBS)

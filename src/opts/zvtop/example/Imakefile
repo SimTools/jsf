@@ -8,7 +8,7 @@ OBJS    = $(subst .$(SrcSuf),.$(ObjSuf),$(SRC)) \
 
 HDRS    = $(subst .$(SrcSuf),.h,$(SRC))
 
-INCPATH  += -I$(LEDAROOT)/include \
+INCPATH  += -I. -I../src -I$(JSFROOT)/include -I$(LEDAROOT)/include \
 	$(shell jsf-config --includes) \
 	$(shell root-config --cflags)
 

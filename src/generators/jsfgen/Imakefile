@@ -38,7 +38,7 @@ HDR	      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRC)) \
 
 INSTALLHDR    = $(HDR) JSFParticleData.h
 
-LIBS	      = -lg2c -lnsl 
+LIBS	      = -lg2c /* -lnsl */
 
 /*----------------------------------------------------------------------*/
 /*  Make targets							*/

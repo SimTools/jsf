@@ -10,7 +10,7 @@ CXXFLAGS = -I$(CLHEPDIR)/include
 FFLAGS= $(DFLG) -fno-second-underscore
 
 LIBS = -L$(CLHEPDIR) -L/proj/soft/share/lib -lherwig6500 -lcirce -lCLHEP \
-	-lg2c -lnsl
+	-lg2c # -lnsl
 
 $(NAME): $(OBJS)
 	$(CXX) -o $@ $(OBJS) $(LIBS)

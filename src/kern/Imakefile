@@ -33,16 +33,16 @@ HDRJSF	      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRCJSF)) \
 /*  Make targets							*/
 /*----------------------------------------------------------------------*/
 
-all::  libJSF.$(DllSuf) jsf
+all::  libJSF.$(DylibSuf) jsf
 
-libJSF.$(DllSuf): $(OBJJSF)
+libJSF.$(DylibSuf): $(OBJJSF)
 	@echo "Linking $@ "
-	$(LD) $(SOFLAGS)  $(OBJJSF) -o $@
+	$(LD) $(DYLIBFLAGS)  $(OBJJSF) -o $@
 
 install:: $(HDRJSF)
 	mkdir -p $(JSFLIBDIR)
 	install -p -m 644 $(HDRJSF) $(JSFINCDIR)
-	install -p -m 755 libJSF.$(DllSuf) $(JSFLIBDIR)
+	install -p -m 755 libJSF.$(DylibSuf) $(JSFLIBDIR)
 	install -p -m 755 jsf $(JSFBINDIR)
 
 jsf: jsfmain.o 

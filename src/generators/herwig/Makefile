@@ -3,6 +3,8 @@ include $(LCBASEDIR)/conf/common.gmk
 
 SharedLib = libTHerwig.$(DllSuf)
 
+INCPATH = -I. -I$(JSFROOT)/include -I$(ROOTSYS)/include -I$(LCBASEDIR)/include
+
 HDRS = THerwig.h HerwigGenerator.h
 
 SRCS = THerwig.$(SrcSuf) HerwigGenerator.$(SrcSuf)
@@ -31,7 +33,7 @@ herwig65_test.f:
 
 lib: $(OBJS) 
 	@rm -f $(SharedLib)
-	$(LD) $(OBJS) -o $(SharedLib) $(LDFLAGS) 
+	$(LD) $(SOFLAGS) $(OBJS) -o $(SharedLib)
 
 install: lib
 	$(INSTALL) -m 755 $(SharedLib) $(JSFLIBDIR)
