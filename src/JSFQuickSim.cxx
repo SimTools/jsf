@@ -437,7 +437,7 @@ Bool_t JSFQuickSimBuf::MakeJSFLTKCLTrackPointers()
   // Set link information of JSFLTKCLTracks
 
   Int_t ncmb = fNTracks;
-  Int_t isrc, iemc, emcls[50];
+  Int_t isrc, iemc, emcls[200];
   JSFGenerator *gen=(JSFGenerator*)gJSF->FindModule("JSFGenerator");
   JSFGeneratorBuf *gevt=(JSFGeneratorBuf*)gen->EventBuf();
   TClonesArray *pa=gevt->GetParticles();
@@ -459,7 +459,7 @@ Bool_t JSFQuickSimBuf::MakeJSFLTKCLTrackPointers()
      Int_t itype=ct->GetType();
      if( itype==1 || itype==2 ) {
        gJSFLCFULL->TBGET(1,"Production:EMC;Cluster",nemc,nw,emcls,iret);
-       if( nw > 50 || iret < 0 ) { 
+       if( nw > 200 || iret < 0 ) { 
 	 printf("Error in MakeJSFLTKCLTrackPointers .. ");
 	 printf("Production:EMC;Cluster  nw=%d  iret=%d\n",nw,iret);
 	 printf(" icmb=%d itype=%d nemc=%d",icmb,itype,nemc);
@@ -570,7 +570,7 @@ Bool_t JSFQuickSimBuf::MakeCALHits()
   TClonesArray &emc=*(GetEMCHits());
   Int_t nemc=0;
   Int_t nelm, neary[2*kMaxCalHits];  // reserve enough space for neary
-  Int_t iwrk[50]; 
+  Int_t iwrk[500]; 
   Int_t i,nw,iret;
 
   gJSFLCFULL->TBNOEL(1,"Production:EMC;Hit_Cell", nelm, neary);
