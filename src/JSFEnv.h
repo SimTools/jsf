@@ -1,3 +1,4 @@
+//*LastUpdate:  jsf-1-14 29-January-2000  Akiya Miyamoto
 //*LastUpdate:  jsf-1-12 31-July-1999  Akiya Miyamoto
 //*-- Author :  Akiya Miyamoto  31-July-1999 Akiya Miyamoto
 
@@ -38,12 +39,7 @@ public:
             const char *help=NULL, const char *arg=NULL);
 
   const Char_t *EntryString();
-
-  // Int_t Compare(TObject *er){ 
-  //   return strcmp(fName.Data(),((JSFEnvRec*)er)->fName.Data()); }
-  // Bool_t IsSortable(){ return kTRUE; }
-
-  //  ClassDef(JSFEnvRec,1) // JSF Environment parameter
+  Char_t *GetHelpMessage();
 
   ClassDef(JSFEnvRec,1) // JSF Environment Record parameter
 

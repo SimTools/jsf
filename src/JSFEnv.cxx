@@ -1,3 +1,4 @@
+//*LastUpdate:  jsf-1-14 29-January-2000  Akiya Miyamoto
 //*LastUpdate:  jsf-1-12 31-July-1999  Akiya Miyamoto
 //*-- Author :  Akiya Miyamoto  31-July-1999 Akiya Miyamoto
 //////////////////////////////////////////////////////////////////
@@ -10,6 +11,9 @@
 //   (2) In the configuration file, user can specify not only a value
 //       of parameter, but also description of parameter and 
 //       alias name which can be specified at the command argument.
+//   
+//(Update)
+//  29-January-2000  A.Miyamoto Add JSFEnvRec::GetHelpMessage()   
 //   
 //$Id$
 //////////////////////////////////////////////////////////////////
@@ -319,6 +323,38 @@ const Char_t *JSFEnvRec::EntryString()
   }
   sprintf(str,"%s%s:%s",lstr,fName.Data(),fValue.Data());
   return str;
+}
+//___________________________________________________________
+Char_t *JSFEnvRec::GetHelpMessage()
+{
+  // From the Help message stored in fHelp, return lines
+  // whose characters in column 1 and 2 are not #.
+  // Since return space is allocated here, it must be deleted when 
+  // it becomes unnecessary
+
+  Int_t lstr=strlen(fHelp.Data());
+
+  Char_t *msg=new Char_t[lstr+1];
+  
+  Bool_t com=kTRUE;
+  Bool_t newline=kTRUE;
+  Int_t i, k=0;
+  const Char_t *src=fHelp.Data();
+  for(i=0;i<lstr;i++) {
+    if( newline ) {
+      if( src[i] == '.' ) com=kFALSE;
+      else { 
+	com=kTRUE;
+	msg[k++]=src[i];
+      }
+      newline=kFALSE;
+    }
+    else { if ( com ) msg[k++] = src[i]; }
+    if( src[i] == 0x0a ) newline=kTRUE;
+  }
+  msg[k]=0;
+
+  return msg;
 }
 
 //___________________________________________________________
