@@ -1,0 +1,37 @@
+********************************************************
+gui.C, MainMacro.C, UserAnalysis.C in this directory were moved to 
+$JSFROOT/macro.  MainMacro.C is renamed to GUIMainMacro.C
+
+Akiya Miyamoto
+27-July-1999
+
+********************************************************
+The files in this directory are for GUI and event display.
+Please note that the program in this directory may be changed 
+completely in future, when we get more familiar with ROOT GUI.
+
+To run program, do
+
+  $JSFROOT/bin/jsf gui.C
+
+When the program is started, JSF control panel is displayed, from which 
+user can select various analysis mode.
+
+There are three run types. Those are
+(1) Run Generator and Quick Simulator interactively.
+(2) Read simulated data from a ROOT file.
+(3) Read SIMDST format data.
+The run type is selected from File menu.  "Read Root file" and
+"Read SIMDST file" are disabled unntil input file is specified.
+
+Several options for Generator, User Analysis and event display are
+selected from menu.  In addtion, JSF standard configuration file,
+jsf.conf can be used to set parameters.
+
+To start X3D display, select View -> View with X3D of
+event display Canvas.  Key board command of X3D is displayed
+when m is typed during X3D display.
+
+Akiya Miyamoto
+10-March-1999
+ 
