@@ -43,10 +43,23 @@ else
   root -q -b $jsfroot/macro/printversion.C | grep "ROOT_" >> $specfile
 endif
 
-
 ##################################
 # Check status of other softwares.
 ################################## 
+
+# pdflib
+if ( -e $CERN_ROOT/lib/libjetset74.a ) then
+    set pdflib=`nm $CERN_ROOT/lib/libjetset74.a | grep pdf | grep -c "T pdf"`
+    if ( $pdflib == 1 ) then
+      echo "#define __CERNLIB_PDFLIB__ 1" >> $specfile
+      echo -n "$CERN_ROOT/lib/libjetset74.a includes pdfset_"
+      echo -n " ... "
+    endif
+else
+  echo "You did not define CERN_ROOT environment variable or "
+  echo "you did not have $CERN_ROOT/lib/libjetset74.a"
+  echo "You may have problem later"
+endif
 
 # Ranmar
 set useranmar=`grep -c -i ranmar $LCLIBROOT/util/fortlib/src/ran_.F`
