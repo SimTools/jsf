@@ -71,7 +71,7 @@ public:
 	     WWSpring *spring=NULL)
 	     : JSFSpringBuf(name,title,(JSFSpring*)spring) {} 
   virtual ~WWSpringBuf(){}
-  virtual Bool_t SetPartons();
+  virtual void Spevnt(Int_t &iret);
 
   ClassDef(WWSpringBuf,1)  // WWSpring event buffer
 };

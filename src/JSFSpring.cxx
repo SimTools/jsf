@@ -192,6 +192,14 @@ Bool_t JSFSpringBuf::SetPartons()
   //  This function is provided as an interface to old TBS routines.
   //  Use of TBS routine is strongly discouraged as they will be removed
   //  when LCLIB is converted to C++
+  Int_t iret;
+  gJSFLCFULL->TBCRTE(1,"Spring:Parton_List",0,0, iret);
+  gJSFLCFULL->TBCRTE(1,"Spring:Header",0,0, iret);
+  gJSFLCFULL->TBCRTE(1,"Generator:Particle_List",0,0, iret);
+  gJSFLCFULL->TBCRTE(1,"Generator:Header",0,0, iret);
+
+  Spevnt(iret);
+
   Int_t nelm, neary[1000];
 
   // Save Particle information
@@ -201,7 +209,7 @@ Bool_t JSFSpringBuf::SetPartons()
     return kTRUE;
   }
 
-  Int_t iret, nw;
+  Int_t nw;
   Float_t data[20];
   TClonesArray &particles = *fPartons;
   Int_t npart=0;

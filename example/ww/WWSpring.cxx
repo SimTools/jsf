@@ -82,18 +82,7 @@ Bool_t WWSpring::Initialize()
 
 
 //_____________________________________________________________________________
-Bool_t WWSpringBuf::SetPartons()
-{
-  Int_t iret;
-  gJSFLCFULL->TBCRTE(1,"Spring:Parton_List",0,0, iret);
-  gJSFLCFULL->TBCRTE(1,"Spring:Header",0,0, iret);
-  gJSFLCFULL->TBCRTE(1,"Generator:Particle_List",0,0, iret);
-  gJSFLCFULL->TBCRTE(1,"Generator:Header",0,0, iret);
-
-  spevnt_(&iret);
-  return kTRUE ;
-}
-
+void WWSpringBuf::Spevnt(Int_t &iret) { spevnt_(&iret); }
 
 //_____________________________________________________________________________
 WWBases::WWBases(const char *name, const char *title)

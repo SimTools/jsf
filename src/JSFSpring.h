@@ -43,6 +43,7 @@ public:
 
    virtual void Clear(Option_t *option="");
    virtual Bool_t SetPartons();
+   virtual void   Spevnt(Int_t &iret) {}
 
    Int_t             GetNpartons() const { return fNparton; }
    TClonesArray     *GetPartons() { return fPartons; }
