@@ -27,6 +27,8 @@ extern void utrkmv_(Int_t *lnxhlx, Float_t helxin[],
 JSFCDCTrack::JSFCDCTrack(Int_t itrkp[])
 {
   // Make a JSFCDCTrack class from a data from Production:CDC;Track_Parameter
+
+
   fGenID=itrkp[56];
   Float_t *trk=(Float_t*)&itrkp[0];
   fP[0]=trk[0];  fP[1]=trk[1];  fP[2]=trk[2];
@@ -41,8 +43,13 @@ JSFCDCTrack::JSFCDCTrack(Int_t itrkp[])
 
   fPosAtEMC[0]=-1.0; fPosAtEMC[1]=0.0 ; fPosAtEMC[2]=0.0 ;
   fEPosAtEMC[0]=0.0 ;    fEPosAtEMC[1]=0.0 ;  
+
+#ifdef R__ACC
+  memcpy(&fError[0],&itrkp[18],120);
+#else
   Double_t *err=(Double_t*)&itrkp[18];
   for(i=0;i<15;i++){ fError[i]=err[i]; }
+#endif
 
   fNVTX = 0;
   for(i=0;i<10;i++){ fVTXHits[i]=NULL; }
@@ -202,8 +209,16 @@ void JSFCDCTrack::ExtrapolateErrorAtEMC(Float_t helix[], Float_t x[], Float_t dx
    //  3   4   5               2  6   9
    //  6   7   8   9           3  7  10  12
    // 10  11  12  13  14       4  8  11  13  14
+  
 
+
+#ifdef R__ACC
+   Double_t erm[15];
+   memcpy(erm,&helix[8],120);
+#else
    Double_t *erm = (Double_t*)&helix[8];
+#endif
+
    Double_t dphi2 = dphidr*dphidr/2.*erm[iPdrdr] 
                   + dphidr*dphif0*erm[iPdrf0] + dphif0*dphif0/2.0*erm[iPf0f0];
    Double_t dth2  = dthdr*dthdr/2.*erm[iPdrdr] 
