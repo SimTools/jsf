@@ -90,7 +90,8 @@ void JSFDemoDisplay::InitializeDemo()
 
     fCont = new TGCompositeFrame(fMain,200,750,kVerticalFrame);
 
-    fLogo=new TGIcon(fCont,gClient->GetPicture("JLClogo98a.xpm"),
+    fLogo=new TGIcon(fCont,gClient->GetPicture(
+      gJSF->Env()->GetValue("JSFDEMO.Logofile","JLClogo98a.xpm")),
 		     legodispXsize, legodispYsize);
     fCont->AddFrame(fLogo,fL3);
 
@@ -155,6 +156,7 @@ void JSFDemoDisplay::DisplayDemo()
     // fDisp->GetCanvas()->cd();
     gPad->Clear();
     ///    fMain->Clear();
+
     fDisp->Clear();
     Clear();
   } 
@@ -166,6 +168,7 @@ void JSFDemoDisplay::DisplayDemo()
   simdst=(JSFSIMDST*)gJSF->FindModule("JSFSIMDST");
 
   fDisp->GetCanvas()->cd();
+  fDisp->GetCanvas()->Clear();
   fView   = new TView(fViewNo);
   Int_t ierr;
   fView->SetView(fViewAngle[0], fViewAngle[1], fViewAngle[2], ierr);
