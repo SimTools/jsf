@@ -23,8 +23,8 @@ type THerwig::Get##var() { return common->var; }
 
 #ifndef HERWIG_SetGet_Def
 #define HERWIG_SetGet_Def(type,var)  \
-void THerwig::Set##var(type var);     \
-type THerwig::Get##var();
+void Set##var(type var);     \
+type Get##var();
 #endif
 
 

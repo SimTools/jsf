@@ -4,11 +4,19 @@ UNAME  = $(shell uname)
 PYTHIANAME=pythia$(PYTHIA_VERSION)$(PYTHIA_SUBVERSION)
 
 ifeq ($(UNAME),AIX)
-FFLAGS    = -C -g -qcharlen=32767 -qstrict -qarch=pwr3 \
+CXX           = xlC
+##  FFLAGS    = -C -g -qcharlen=32767 -qstrict -qarch=pwr3 
+FFLAGS    = -C -g -qcharlen=32767 \
 	  -qextname -qfixed -qsave -qinitauto -brtl -bshared
-CFLAGS    = -O
+CFLAGS    = -O $(shell root-config --cflags)
+CXXFLAGS      = $(EXTRACXXOPT) -DAIX \
+	  -I$(JSFROOT)/include $(shell root-config --cflags) \
+	  -I/usr/vacpp/include -brtl -bshared
 LD        =  /usr/vacpp/bin/makeC++SharedLib -brtl -bshared -p 0
-LDFLAGS   = -lxlf90
+LDFLAGS   = -shared -rdynamic \
+	-L$(JSFROOT)/lib -lJSF -lJSFQuickSim -lJSFBeamGeneration \
+	$(shell root-config --libs) -lEG -lxlf90 \
+	-Wl,-bnoquiet
 SharedLib = libTHerwig.a
 INSTALL   = cp -fp
 else
@@ -48,15 +56,17 @@ SRCS = THerwig.$(SrcSuf) HerwigGenerator.$(SrcSuf)
 
 
 OBJS = herwig6500.$(ObjSuf) circe.$(ObjSuf) \
-	herwig_util.$(ObjSuf) herwig65_test.$(ObjSuf) \
 	herwig_common_block_address.$(ObjSuf) \
 	herwig_address.$(ObjSuf)
+
+# herwig65_test.$(ObjSuf) 	herwig_util.$(ObjSuf) 
+
 
 OBJS += THerwig.$(ObjSuf) HerwigGenerator.$(ObjSuf) libTHerwig.$(ObjSuf)
 
 CLEANOBJS = $(subst herwig6500.o, ,$(OBJS))
 
-CXXFLAGS += -I$(JSFROOT)/include
+CXXFLAGS += -I./ -I$(JSFROOT)/include
 
 DEPENDS = $(DEPENDFLAGS) -I/usr/lib/gcc-lib/i386-redhat-linux/2.96/include
 
@@ -68,7 +78,7 @@ HERWIG65.INC:
 herwig65_test.f:
 	ln -s herwig65.tst herwig65_test.f
 
-lib: $(OBJS)
+lib: $(OBJS) 
 	@rm -f $(SharedLib)
 	$(LD) $(OBJS) -o $(SharedLib) $(LDFLAGS) 
 

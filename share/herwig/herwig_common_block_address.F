@@ -1,3 +1,9 @@
+      subroutine hwaend
+      print *,'Dummy HWAEND routine was called'
+      return
+      end
+
+
       integer function herwig_common_block_address(common_block_name)
 c-----------------------------------------------------------------------
 c (Function)
