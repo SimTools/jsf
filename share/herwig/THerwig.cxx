@@ -94,6 +94,7 @@
 
 #include "THerwigCommons.h"
 #include "THerwigMacros.h"
+#include "JSFSteer.h"
 
 using namespace std; 
 
@@ -275,6 +276,10 @@ void THerwig::Initialize()
   //C   THIS POINT, OTHERWISE DEFAULT
   //C   VALUES IN HWIGIN WILL BE USED.
   //      PTMIN=100.
+  
+  gROOT->LoadMacro(gJSF->Env()->GetValue("JSFGUI.InitHerwigMacro","InitHerwig.C"));
+  gROOT->ProcessLine("InitHerwig();");
+
   //C---COMPUTE PARAMETER-DEPENDENT CONSTANTS
   hwuinc_();
   //      CALL HWUINC
@@ -312,7 +317,6 @@ void THerwig::GenerateEvent()
   hwufne_();
   //C---USER'S EVENT ANALYSIS
   //  CALL HWANAL
-
 }
 
 //______________________________________________________________

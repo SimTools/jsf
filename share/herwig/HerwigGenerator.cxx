@@ -18,6 +18,8 @@
 
 #include "JSFGenerator.h"
 
+using namespace std;
+
 ClassImp(HerwigGenerator)
 
 THerwig *HerwigGenerator::fHerwig=0;
@@ -35,7 +37,7 @@ HerwigGenerator::HerwigGenerator(const Char_t *name,
   fHerwig = new THerwig();
 
   TEnv *env=gJSF->Env();
-  sscanf(env->GetValue("HerwigGenerator.Ecm","300.0"),"%lg",&fEcm);
+  sscanf(env->GetValue("JSFGUI.Ecm","300.0"),"%lg",&fEcm);
   fPrintStat=env->GetValue("HerwigGenerator.PrintStat",1);
   fIPROC=env->GetValue("HerwigGenerator.IPROC",100); // e+e- -> hadron
 
@@ -212,6 +214,7 @@ Int_t HerwigGenerator::HepevtToGeneratorParticles(COMMON_HEPEVT_t *hepevt)
     map[i].nser=0;
     if( hepevt->ISTHEP[i] == 0 ) continue;
     if( hepevt->ISTHEP[i] >= 100 && hepevt->ISTHEP[i] <= 103 ) continue;
+    if( hepevt->ISTHEP[i] >= 123 && hepevt->ISTHEP[i] <= 124 ) continue;
     if( hepevt->ISTHEP[i] == 3 ) continue;
 
     nser++;
@@ -265,6 +268,7 @@ Int_t HerwigGenerator::HepevtToGeneratorParticles(COMMON_HEPEVT_t *hepevt)
   // Fill GeneratorParticle Array
   // ***************************************
 
+
   JSFGeneratorBuf *buf=(JSFGeneratorBuf*)EventBuf();
   TClonesArray &ps=*(buf->GetParticles());
   ps.Clear();
@@ -300,6 +304,7 @@ Int_t HerwigGenerator::HepevtToGeneratorParticles(COMMON_HEPEVT_t *hepevt)
     new(ps[is-1]) JSFGeneratorParticle(iser, id, mass, charge,
 	              px, vp, ndaughter, firstdaughter, mother,
 		      xctau, dl);
+
   }
 
   buf->SetNparticles(iser);
