@@ -43,7 +43,7 @@ const Int_t kCmbtSize=8;
 const Int_t kTrkfSize=23;
 const Int_t kTrkdSize=15;
 
-const Int_t kVTXHMax=10;  // Maximum number of vertex hit
+const Int_t kVTXHMax=22;  // Maximum number of vertex hit
 const Int_t kVTXBufSize=kVTXHMax*kTrkMax;
 const Int_t kVTXHSize=5;
 const Int_t kVTXIDSize=2;

@@ -397,6 +397,7 @@ Bool_t JSFQuickSimBuf::MakeVTXHits()
   const Int_t kMaxBuff=200;
   Float_t hits[kMaxBuff][3], errs[kMaxBuff][2]; 
 
+
   for(icdc=0;icdc<ncdc;icdc++){
     JSFCDCTrack *t=(JSFCDCTrack*)fCDCTracks->UncheckedAt(icdc);
     Int_t igen=t->GetGenID();

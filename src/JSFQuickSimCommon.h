@@ -29,7 +29,7 @@ extern COMMON_SMRFLD smrfld_;
 
 
 // ******* Commons for smearng *****************
-static const Int_t kMXxVXL=11;
+static const Int_t kMXxVXL=23;
 typedef struct {
   Int_t   nsmpvx;
   Float_t dphivx, dzeevx;

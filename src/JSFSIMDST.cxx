@@ -7,6 +7,7 @@
    SIMDST Format is changed.  EMH(2,i), HDH(2,i) is increased to 
    EMH(3,i), and HDH(3,i), to store EM and HD responce separately. 
  17-May-1999  A.Miyamoto   igendat is changed from Short to Int
+ 27-May-1999  A.Miyamoto   kVTXHmax is increased from 10 to 22.
 */
 
 

@@ -91,7 +91,7 @@ protected:
    Int_t   fNSMPVX   ; // Number of VTX layer.
    Float_t fDPHIVX   ; // VTX-phi pitch (cm)                        
    Float_t fDZEEVX   ; // VTX-Z   pitch (cm)                        
-   Float_t fVTXLayer[10][4]; // VTX Layer
+   Float_t fVTXLayer[22][4]; // VTX Layer
    Float_t fVTXError[5];     // VTX resolution parameter
    Int_t   fNERRVX;          // VTX Error flag. 
    Int_t   fNUMVTX;          // Number of VTX layer
@@ -151,7 +151,7 @@ public:
    Float_t GetVTXSigmaSP(){ return fVTXError[0]; }
    Int_t   GetVTXLayerNumber(Float_t radius);   
 
-   ClassDef(JSFQuickSimParam,2) // JSFQuickSim Parameters
+   ClassDef(JSFQuickSimParam,3) // JSFQuickSim Parameters
 };
  
 #endif
