@@ -154,7 +154,7 @@ public:
    Bool_t MakeEventBuf();
 
   void SetNTracks(Int_t nt){ fNTracks=nt;}
-//   Int_t GetNtracks(){ return fNTracks; }
+  Int_t GetNtracks(){ return fNTracks; } // kept for backward compatibility
   Int_t GetNTracks(){ return fNTracks; }
   TClonesArray *GetTracks(){ return fTracks; }
 
