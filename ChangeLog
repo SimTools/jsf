@@ -34,11 +34,14 @@ jsf-1-4  progress since  5-January-1999 A.Miyamoto
     separate branch.
 (9) Add Float_t data argument type in JSFLCFULL::TBGET.
 (10) In conf/makejsf.tmpl, remove LCDIR difinition.  Now it must be defined
-     as an environment variable.
+     as an environment variable, LCLIBROOT.
 (11) src/JSFQuickSim.h  A function GetNtrack() is renamed to GetNTrack(),
      for the compatibility with other functions, GETCDCTracks, etc.
-(12) example/ZHStudy : Imakefile is changed to use LCDIR variable.
+(12) example/ZHStudy : Imakefile is changed to use LCLIBROOT variable.
      Do ln -s example/ZHStudy/jsfmain.cxx jsfmain.cxx
+(13) JSFSIMDST class to output SIMDST format data or read it.
+(14) In the Makefile at the top directory, add an entry, makeweb, to create
+     html file.  bin/webindx script is also added.
 	
 **********************************************************
 jsf-1-3   5-January-1999 A.Miyamoto
