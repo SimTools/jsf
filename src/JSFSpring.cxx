@@ -1,23 +1,25 @@
+//*LastUpdate :  jsf-1-14  11-Feburary-2000  By A.Miyamoto
 //*LastUpdate :  jsf-1-12  2-September-1999  By A.Miyamoto
 //*LastUpdate :  jsf-1-11  23-July-1999  By A.Miyamoto
 //*LastUpdate :  jsf-1-4  15-Feburary-1999  By A.Miyamoto
 //*LastUpdate :  0.02/01  10-September-1998  By A.Miyamoto
 //*-- Author  : A.Miyamoto  10-September-1998
 
-/*
-2-September-1999 A.Miyamoto  Memory leak by fPartons are fixed.
-                             Add function, TBGETsSpringPartonList()
-*/
 
 ////////////////////////////////////////////////////////////////////////
 //
 // JSFSpring
 //
-//   Create parto lists
+//   Create parton lists
 //
 //  For example of how to use JSFSpring and JSFBases, please see
 //  begin_html <a href="http://www-jlc.kek.jp/subg/offl/jsf/docs/bsguide/index.html">html </a> end_html or begin_html <a href="http://www-jlc.kek.jp/subg/offl/jsf/docs/bsguide.ps.gz">postscript</a> end_html documents. 
 // 
+// (Update)
+// 2-September-1999 A.Miyamoto  Memory leak by fPartons are fixed.
+//                              Add function, TBGETsSpringPartonList()
+// 11-Feb-2000 A.Miyamoto Use new C++ Bases/Spring Library
+//
 //$Id$
 //
 ////////////////////////////////////////////////////////////////////////
@@ -30,25 +32,8 @@
 #include "JSFSpring.h"
 #include "JSFSpringParton.h"
 
-extern "C" {
-extern void spring_(void *adr, int *mxtry);
-};
-
 ClassImp(JSFSpringBuf)
 ClassImp(JSFSpring)
-
-
-JSFSpring     *lSpring;
-
-// JSFSpringParam gJSFSpringParam;
-
-Double_t Springfunc(double x[]);
-Double_t Springfunc(double x[])
-{
-  double val=lSpring->Bases()->Func(x);
-  return val; 
-}
-
 
 //_____________________________________________________________________________
 JSFSpring::JSFSpring(const char *name, const char *title, JSFBases *bases)
@@ -58,11 +43,14 @@ JSFSpring::JSFSpring(const char *name, const char *title, JSFBases *bases)
 // User class should set addresses to the event buf here, as follows.
 //   fEventBuf = new JSFSpringBuf("JSFSpringBuf", "Spring Event buffer", this);
 
-   lSpring  = this;
-   fMXTRY   = 500;
+   fMXTRY   = 50;
    fDoBases = kFALSE;
    fSetSeed = kFALSE;
    fBases   = NULL;
+
+   fPrintInfo = gJSF->Env()->GetValue("JSFSpring.PrintInfo",kFALSE);
+   fPrintHist = gJSF->Env()->GetValue("JSFSpring.PrintHist",kFALSE);
+
    if( bases ) {
      SetBases( bases );
    }
@@ -75,37 +63,38 @@ JSFSpring::~JSFSpring()
     delete fBases; 
     fBases=NULL;
   }
+
 }
 
 
 //_____________________________________________________________________________
 void JSFSpring::ReadBases(const char *name)
 {
-  TDirectory *last=gDirectory;
-  TFile *fBasesFile=new TFile(name);
-  fBasesFile->cd("/");
+  // Read bases data and bases histogram from a file, name.
+
+  TDirectory *now=gDirectory;
+  TFile *f=new TFile(name);
   fDoBases = kFALSE;
   fBases->Read(fBases->GetName());
-  
-  fBases->Initialize();
+
+  fBases->CopyHists(f,now); // Read Hists data into Bases area
+  f->Close();
+  now->cd();
 
   if( fSetSeed ) {
-    Int_t i;
-    for(i=0;i<33;i++){ randm_.rdm[i]=fSeedRdm[i]; }
-    for(i=0;i<12;i++){ randm_.ia1[i]=fSeedIa1[i]; }
+    bases_ran1 *rn=fBases->GetRan1();
+    rn->SetSeed(fSeed);
+    rn->SetSeed2(fSeedIY, fSeedIV);
     printf("JSFSpring::ReadBases() .. random seed is overridden by values");
     printf(" taken from a file.\n");
-  }
+  } 
 
-  fBases->Userin();
-
-  last->cd();
 }
 
 //_____________________________________________________________________________
 Bool_t JSFSpring::BeginRun(Int_t nrun)
 {
-   
+
   if( fFile->IsWritable() ) {
     if( !JSFModule::BeginRun(nrun) ) return kFALSE;
     Write();
@@ -115,11 +104,20 @@ Bool_t JSFSpring::BeginRun(Int_t nrun)
 
 
 //_____________________________________________________________________________
+Bool_t JSFSpring::Terminate()
+{
+  if( fPrintInfo ) GetBases()->Sp_info();
+  if( fPrintHist ) GetBases()->Sh_plot();
+  return kTRUE;
+}
+
+//_____________________________________________________________________________
 Bool_t JSFSpring::EndRun()
 {
-  Int_t i;
-  for(i=0;i<33;i++){ fSeedRdm[i]=randm_.rdm[i]; }
-  for(i=0;i<12;i++){ fSeedIa1[i]=randm_.ia1[i]; }
+
+  bases_ran1 *rn=fBases->GetRan1();
+  fSeed=rn->GetSeed();
+  rn->GetSeed2(fSeedIY, fSeedIV);
 
   if( fFile->IsWritable() ) {
     if( !JSFModule::EndRun() ) return kFALSE;
@@ -131,13 +129,8 @@ Bool_t JSFSpring::EndRun()
 //_____________________________________________________________________________
 Bool_t JSFSpring::Process(Int_t ev)
 {
-  Int_t i;
-  for(i=0;i<33;i++){ fSeedRdm[i]=randm_.rdm[i]; }
-  for(i=0;i<12;i++){ fSeedIa1[i]=randm_.ia1[i]; }
 
-  fBases->fInBases=kFALSE;
-  Int_t mxtry=fMXTRY;
-  spring_(Springfunc, &mxtry);
+  fBases->Spring(fMXTRY);
 
   if( fEventBuf ) {
     JSFSpringBuf *buf=(JSFSpringBuf*)fEventBuf;
@@ -147,6 +140,26 @@ Bool_t JSFSpring::Process(Int_t ev)
   return kTRUE;
 }
 
+
+
+//_____________________________________________________________________________
+void JSFSpring::Spring(Int_t maxtry)
+{
+  if( fBases ) {
+    fBases->Spring(maxtry);
+  }
+  else {  
+    printf("Error in JSFSpring::Spring.. fBases is not set.\n");
+  }
+}
+
+//_____________________________________________________________________________
+void JSFSpring::Spring()
+{
+  Spring(fMXTRY);
+}
+
+
 //_____________________________________________________________________________
 Bool_t JSFSpring::GetLastRunInfo()
 {
@@ -154,8 +167,6 @@ Bool_t JSFSpring::GetLastRunInfo()
 
   Read(GetName());
   fSetSeed=kTRUE;
-  //  printf("Random seeds for JSFSpring will be reset by ");
-  //  printf("values from a file.\n");
 
   return kTRUE;
 }
@@ -229,10 +240,12 @@ void JSFSpring::Streamer(TBuffer &R__b)
 
    Int_t lc;
    if (R__b.IsReading()) {
-
       Version_t R__v = R__b.ReadVersion(); if (R__v) { }
+      if( R__v < 3 ) {
+	printf("JSFSpring::Streamer data's version number is not");
+	printf(" compatible with streamer.\n");
+      }
       JSFModule::Streamer(R__b);
-      //      R__b >> fDoBases;
 
       Char_t cname[100], name[100], title[100],cmdstr[300];
       lc=R__b.ReadStaticArray(cname);
@@ -244,8 +257,9 @@ void JSFSpring::Streamer(TBuffer &R__b)
 	gROOT->ProcessLine(cmdstr);
       }
 
-      lc=R__b.ReadStaticArray(fSeedRdm);
-      lc=R__b.ReadStaticArray(fSeedIa1);
+      R__b >> fSeed;
+      R__b >> fSeedIY;
+      R__b.ReadStaticArray(fSeedIV);
 
    } else {
       R__b.WriteVersion(JSFSpring::IsA());
@@ -258,8 +272,9 @@ void JSFSpring::Streamer(TBuffer &R__b)
       lc=strlen(fBases->GetTitle())+1;
       R__b.WriteArray(fBases->GetTitle(),lc);
 
-      R__b.WriteArray(fSeedRdm,33);
-      R__b.WriteArray(fSeedIa1,12);
+      R__b << fSeed; 
+      R__b << fSeedIY;
+      R__b.WriteArray(fSeedIV,NTAB);
 
    }
 }

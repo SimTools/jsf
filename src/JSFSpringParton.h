@@ -16,6 +16,7 @@
 #include "TH1.h"
 #include "TMath.h"
 #include "TVector.h"
+#include "TLorentzVector.h"
 
 class JSFSpringParton : public TObject {
 
@@ -79,6 +80,8 @@ public:
 
   TVector GetPV(){ TVector p(4) ; 
           p(0)=fP[0] ; p(1) =fP[1] ; p(2)=fP[2] ; p(3)=fP[3] ; return p ; }
+
+  TLorentzVector GetLorentzVector(){ return TLorentzVector(fP[1],fP[2],fP[3],fP[0]);}
 
   virtual void ls(Option_t* option="");
 

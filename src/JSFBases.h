@@ -5,175 +5,112 @@
 //
 // JSFBases
 //
-// A general class to run bases in root
+// Interface to BasesSpring package.
 //
-//$Id$
+//$ID$
 //
 //////////////////////////////////////////////////////////////////////////
 
 #include "TNamed.h"
-#include "TMath.h"
-#include "TDatime.h"
-
-
-// =====================================================================
-//  COMMONs for Bases
-// =====================================================================
-typedef struct {
-  Double_t xl[50], xu[50];
-  Int_t    ndim, nwild, ig[50], ncall;
-} COMMON_BPARM1;             //  Common for BASES
-
-typedef struct {
-   Double_t acc1, acc2;
-   Int_t    itmx1, itmx2;
-} COMMON_BPARM2;             //  Common for BASES
-
-
-static const Int_t kLenBSRSLT=9;
-typedef struct {
-   Double_t avgi, sd, chi2a, stime;
-   Int_t    itf;
-} COMMON_BSRSLT;             //  Common for bases result
-
-static const Int_t kMXDIM=50;
-static const Int_t kNDMX=50;
-static const Int_t kLENG=32768;
-static const Int_t kITM=50;
-static const Int_t kNHS=50;
-static const Int_t kNSC=50;
-
-typedef struct {
-     Double_t xl[kMXDIM], xu[kMXDIM];
-     Int_t    ndim, nwild, ig[kMXDIM], ncall;
-} COMMON_BASE1; 
-
-typedef struct {
-  Double_t acc1,acc2; 
-  Int_t    itmx1,itmx2;
-} COMMON_BASE2;
-
-typedef struct {
-  Double_t scalls, wgt, ti, tsi,tacc;
-  Int_t    it;
-} COMMON_BASE3;
-
-typedef struct {
-  Double_t xi[kNDMX*kNDMX],dx[kMXDIM],dxd[kLENG],dxp[kLENG];
-  Int_t nd,ng,npg,ma[kMXDIM];
-} COMMON_BASE4;
-
-typedef struct {
-  Int_t itrat[2*kITM];
-  Float_t time[3*kITM],eff[2][kITM],wrong[2][kITM];
-  Double_t reslt[2*kITM],acstd[2][kITM];
-  Float_t trslt[2*kITM],tstd[2][kITM],pcnt[2][kITM];
-} COMMON_BASE5;
-
-typedef struct {
-  Float_t rdm[33];
-  Int_t ia1[12];
-} COMMON_RANDM;
-
-typedef struct {
-  Int_t xhash[13*(kNHS+1)],dhash[14][kNSC],ifbase[kNHS];
-  Int_t nhist,mapl[kNHS*4],nscat,mapd[kNSC*4],nw;
-} COMMON_PLOTH;
-
-static const Int_t kLenIBUF= 281*kNHS + 2527*kNSC ;
-typedef struct {
-  Int_t ibuf[ kLenIBUF ];
-} COMMON_PLOTB;
-
-extern COMMON_BPARM1 bparm1_;
-extern COMMON_BPARM2 bparm2_;
-extern COMMON_BSRSLT bsrslt_;
-extern COMMON_BASE1 base1_;
-extern COMMON_BASE2 base2_;
-extern COMMON_BASE3 base3_;
-extern COMMON_BASE4 base4_;
-extern COMMON_BASE5 base5_;
-extern COMMON_RANDM randm_;
-extern COMMON_PLOTH ploth_;
-extern COMMON_PLOTB plotb_;
-
+#include "TFile.h"
+#include "TObjArray.h"
+#include "THashTable.h"
+#include "BasesSpring.h"
 
 class JSFSpring;
 
-// =====================================================================
-//  JSFBases class
-// =====================================================================
-class JSFBases : public TNamed {
-protected:
-   JSFSpring *fSpring; //!
-   Bool_t    fIsInitialized; //!
-public:
+class JSFBasesTempHist : public TNamed
+{
+ public:
+  Bool_t   flag;
+  Double_t x;
+  Double_t y;
+  Double_t wgt;
 
-   Bool_t    fInBases;  //! kTRUE, when func is called by bases.
-   Double_t  fESTIM;  // Results of the integration
-   Double_t  fSIGMA;  // Its estimate
-   Double_t  fCTIME;  // CPU time.
-   Int_t     fIT1;    // number of iteration in first step.
-   Int_t     fIT2;    // number of iteration in second step.
+  JSFBasesTempHist(){flag=kFALSE; x=0; y=0; wgt=0;}
+  JSFBasesTempHist(const char *name, const char *title="JSFBasesTempHist"):
+    TNamed(name,title){flag=kFALSE; x=0; y=0; wgt=0;}
+  virtual ~JSFBasesTempHist(){}
 
-   Double_t  fACC1;   // precision at 1st step.
-   Double_t  fACC2;   // precision at 2nd step.
-   Int_t     fITMX1;  // max number of iteration at 1st step.
-   Int_t     fITMX2;  // max number of iteration at 2nd step.
-   Int_t     fNDIM;   // dimension
-   Int_t     fNWILD;  // number of wild variable
-   Int_t     fNCALL;
-   Int_t     fISEED;  // Initial seed of Bases/Spring
-
-   Double_t  fXL[50];
-   Double_t  fXU[50];
-   Int_t     fIG[50];
-
-   Bool_t     fPrintInfo;  //!  !=0 to print Bases Information.
-   Bool_t     fPrintHist; //!  !=0 to print Bases Historgram.
-
-public:
-   JSFBases(const char *name="JSFBases", const char *title="JSFBases");
-
-   virtual ~JSFBases(){ printf(" Bases destructor is called.\n");}
-
-   
-   void DoBases();          // Do bases integration
-   void Print();            // Print bases information.
-   void SetSeed(Int_t iseed); // Set seed of random number
-
-   virtual void Initialize(); // Bases initialization
-   virtual void Userin();   // Bases user initialization
-   virtual void Userout();  // Bases user output 
-   virtual Double_t Func(Double_t x[])=0; // Bases integration function.
-
-   void Xhinit(Int_t id, Double_t xl, Double_t xu, Int_t nxbin, Char_t *title);
-   void Dhinit(Int_t id, Double_t xl, Double_t xu, Int_t nxbin, 
-	       Double_t yl, Double_t yu, Int_t nybin, Char_t *title);
-   void Xhfill(Int_t id, Double_t x, Double_t val);
-   void Dhfill(Int_t id, Double_t x, Double_t y, Double_t val);
-
-   void Xhsave(Int_t lunit, Int_t id);
-
-   
-   void SetACC1(const Double_t acc1){ fACC1=acc1; return; }
-   void SetACC2(const Double_t acc2){ fACC2=acc2; return; }
-   void SetITMX1(const Int_t itmx1){ fITMX1=itmx1; return; }
-   void SetITMX2(const Int_t itmx2){ fITMX2=itmx2; return; }
-
-   void SetNDIM(const Int_t ndim){ fNDIM=ndim; return; }
-   void SetNWILD(const Int_t nwild){ fNWILD=nwild; return; }
-   void SetNCALL(const Int_t ncall){ fNCALL=ncall; return; }
-   
-   void SetLimit(const Int_t i, const Double_t xl, const Double_t xu){
-     fXL[i]=xl ; fXU[i]=xu; return ; }
-
-   virtual void SetSpring(JSFSpring *spring);  // Set Spring address
-   virtual void SetSpring(Int_t address);  // Set Spring address
-   virtual JSFSpring *Spring(){ return fSpring;}
-
-   ClassDef(JSFBases,2)  // BASES basic class
+  ClassDef(JSFBasesTempHist,1) //
 };
 
+
+class JSFBases: public BasesSpring, public TNamed
+{
+ protected:
+   JSFSpring *fSpring; //!
+   Bool_t    fIsSpring; //! kTRUE when Spring is called.
+   THashTable *fBSHash1; //!  Hash table for Bases TH1F histogram
+   THashTable *fBSHash2; //!  Hash table for Bases TH2F histogram
+   THashTable *fSPHash1; //!  Hash table for Spring TH1F histogram
+   THashTable *fSPHash2; //!  Hash table for Spring TH2F histogram
+
+   THashTable *fTempHash1; //!
+   THashTable *fTempHash2; //!
+
+ public:
+   JSFBases(const char *name="JSFBases", const char *title="JSFBases");
+   virtual ~JSFBases();
+
+   virtual void SetSpring(JSFSpring *spring);  // Set Spring address
+   virtual JSFSpring *GetSpring(){ return fSpring;}
+
+   void CopyHists(TFile *f, TDirectory *dest=NULL);
+
+//  For defining parameters for BasesSpring
+    void   Param( int sample, double tune, int itr1, 
+		  double ac1, int itr2, double ac2 );
+    void   SetNoOfSample( int sample );
+    void   SetTuneValue ( double tune );
+    void   SetIteration1( double ac1, int itx1 );
+    void   SetIteration2( double ac2, int itx2 );
+    void   DefineVariable( double &v, double low, double high, int wld, int grd );
+    void   DefineVariable( int ndim, int nwild, 
+                                    double x_l[], double x_u[], int jg[] );
+//  For integration  and evet generation
+    void   Bases( );
+    void   Spring( int mxtry );
+    void   Sp_info( );
+
+//  Utilities
+    void   Forder( float v, float &fv, float &order, int &iorder );
+    Double_t GetWeight( );
+    Double_t GetScalls( );
+    Int_t    Flag_bases( );
+    Double_t GetEstimate( );
+    Double_t GetError( );
+    Int_t    GetNoOfIterate( );
+
+// Histograms
+    void  H1Init(Char_t *hn, Char_t *title, Int_t nbin, Double_t xlow, Double_t xhigh);
+    void  H1Fill(Char_t *hn, Double_t x, Double_t fx );
+    void  H2Init(Char_t *hn, Char_t *title, Int_t nbinx, Double_t xlow, Double_t xhigh,
+                  Int_t nbiny, Double_t ylow, Double_t yhigh);
+    void  H2Fill(Char_t *hn, Double_t x, Double_t y, Double_t fx );
+    void  EndIntegration(Int_t step);
+
+// For histogramming package
+    void   Xh_init( int id, double x_low, double x_high, int bin, char title[] );
+    void   Dh_init( int id, double x_low, double x_high, int Xbin,
+		    double y_low, double y_high, int Ybin, char title[] );
+    void   Bh_plot( );
+    void   Xh_fill( int id, double x, double fx );
+    void   Dh_fill( int id, double x, double y, double fx );
+    void   Bh_save( );
+    void   Sh_reset( );
+    void   Sh_update( );
+    void   sh_update( );
+    void   Sh_plot( );
+
+    virtual double Func( double x[] );
+    virtual double Func( );
+
+    double func( double x[] );
+    double func();
+
+    ClassDef(JSFBases,3) // Multi-dimensional integration and generation
+
+};
 
 #endif

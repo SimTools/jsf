@@ -4,10 +4,12 @@
 #pragma link off all classes;
 #pragma link off all functions;
 
+#pragma link C++ class JSFBases-;
+#pragma link C++ class JSFBasesTempHist;
 #pragma link C++ class JSFSpring-;
 #pragma link C++ class JSFSpringBuf;
 #pragma link C++ class JSFSpringParton;
-#pragma link C++ class JSFBases-;
+
 #pragma link C++ class JSFReadParton;
 #pragma link C++ class JSFReadPartonBuf;
 

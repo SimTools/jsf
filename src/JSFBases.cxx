@@ -1,16 +1,8 @@
-//*LastUpdate:  jsf-1-11 24-July-1999 Akiya Miyamoto
+//*LastUpdate:  jsf-1-14 11-Feburary-2000
 //*LastUpdate:  jsf-1-9 17-May-1999 Akiya Miyamoto
 //*LastUpdate:  jsf-1-7 8-April-1999 Akiya Miyamoto
 //*LastUpdate:  v0.3.08 09/29/1998  by A.Miyamoto
 //*-- Author :  Akiya Miyamoto  09/22/1998
-
-/*
-  8-Apr-1999 A.Miyamoto  forgetted Int_t is inserted in const of 
-             function Streamer.
- 17-May-1999 A.Miyamoto  Add Xhsave function.
- 24-July-1999 A.Miyamoto  Environment variable, JSFBases.RandomSeed 
-              is added to set seed of random variable.
-*/
 
 //////////////////////////////////////////////////////////////////
 //
@@ -28,113 +20,69 @@
 //         bases = new LLbarBases();
 //         bases->SetEcm(300.0);            // Set ECM
 //         bases->SetParton(1, 2.0/3.0 );   // Set Parton
-//         bases->DoBases();
+//         bases->Bases();
 //         bases->Write();
 //         file->Write();
 //       }
+//
+// (Update)
+//   8-Apr-1999 A.Miyamoto  forgetted Int_t is inserted in consit of 
+//              function Streamer.
+//  17-May-1999 A.Miyamoto  Add Xhsave function.
+//  24-Jul-1999 A.Miyamoto  Environment variable, JSFBases.RandomSeed 
+//              is added to set seed of random variable.
+//  11-Feb-2000 A.Miyamoto  Uses new C++ BasesSpring library 
 //
 //$Id$
 //
 //////////////////////////////////////////////////////////////////
 // 
 
-#include "TNamed.h"
-#include "JSFSteer.h"
+#include "TH1.h"
+#include "TH2.h"
+#include "THashTable.h"
+#include "TIterator.h"
+#include "TKey.h"
+
 #include "JSFBases.h"
 #include "JSFSpring.h"
 
 ClassImp(JSFBases)
-
-extern "C" {
-extern void bsinit_();
-extern void bsinfo_(int*);
-extern void bhplot_(int*);
-extern void bases_(const void *adr, double *estim, double *sigma, double *ctime,
-		   int *it1, int *it2);
-extern void xhinit_(int *id, double *xl, double *, int *nbin,
-		    char *title, int len);
-extern void dhinit_(int *id, double *xl, double *xu, int *nxbin, 
-		    double *yl, double *yu, int *nybin, char *title, int len);
-extern void xhfill_(int *id, double *x, double *val);
-extern void dhfill_(int *id, double *x, double *y, double *val);
-extern void xhsave_(int *lunit, Int_t *id);
-extern void drnset_(int *iseed);
-};
-
-
-JSFBases *gJSFBases;
-
-Double_t Basesfunc(double x[]);
-Double_t Basesfunc(double x[])
-{
-  double val=gJSFBases->Func(x);
-  return val; 
-}
-
-
+ClassImp(JSFBasesTempHist)
 
 //_____________________________________________________________________________
 JSFBases::JSFBases(const char *name, const char *title)
-       : TNamed(name,title)
+       : BasesSpring(), TNamed(name,title)
 {
-  // Default constructor of JSFBases.
-  // Default parameter of derived class should be initialized in the
-  // constructor.
-
-  fACC1=-1.0;
-  fACC2=-1.0;
-  fITMX1=-1;
-  fITMX2=-1;
-  fNDIM=-1;
-  fNWILD=-1;
-  fNCALL=-1;   // Negative value means to use default value.
-
-  fISEED=gJSF->Env()->GetValue("JSFBases.RandomSeed",12345);
-
-  for(Int_t i=0;i<(Int_t)(sizeof(fIG)/4);i++){
-    fIG[i]=1;
-    fXU[i]=-1.0e6;
-  }
-
-  fPrintInfo=kTRUE;
-  fPrintHist=kTRUE;
-
-  fIsInitialized = kFALSE;
-  gJSFBases=0;
-
+  fIsSpring = kFALSE;
+  fBSHash1=new THashTable();
+  fBSHash2=new THashTable();
+  fSPHash1=new THashTable();
+  fSPHash2=new THashTable();
+  fTempHash1=new THashTable();
+  fTempHash2=new THashTable();
 }
 
-//_____________________________________________________________________________
-void JSFBases::Xhinit(Int_t id, Double_t xl, Double_t xu, Int_t nbin, Char_t *title)
-{
-  Int_t len=strlen(title);
-  xhinit_(&id, &xl, &xu, &nbin, title, len);
-}
 
 //_____________________________________________________________________________
-void JSFBases::Dhinit(Int_t id, Double_t xl, Double_t xu, Int_t nxbin, 
-		      Double_t yl, Double_t yu, Int_t nybin, Char_t *title)
+JSFBases::~JSFBases()
 {
-  Int_t len=strlen(title);
-  dhinit_(&id, &xl, &xu, &nxbin, &yl, &yu, &nybin, title, len);
-}
+  if( fBSHash1 ) fBSHash1->Delete();
+  if( fBSHash2 ) fBSHash2->Delete();
+  delete fBSHash1;
+  delete fBSHash2;
 
-//_____________________________________________________________________________
-void JSFBases::Xhfill(Int_t id, Double_t x, Double_t val)
-{
-  xhfill_(&id, &x, &val);
-}
+  if( fSPHash1 ) fSPHash1->Delete();
+  if( fSPHash2 ) fSPHash2->Delete();
+  delete fSPHash1;
+  delete fSPHash2;
 
-//_____________________________________________________________________________
-void JSFBases::Dhfill(Int_t id, Double_t x, Double_t y, Double_t val)
-{
-  dhfill_(&id, &x, &y, &val);
-}
+  if( fTempHash1 ) fTempHash1->Delete();
+  if( fTempHash2 ) fTempHash2->Delete();
 
-//_____________________________________________________________________________
-void JSFBases::Xhsave(Int_t lunit, Int_t id)
-{
-  xhsave_(&lunit, &id);
+  delete fTempHash1;
+  delete fTempHash2;
+
 }
 
 //_____________________________________________________________________________
@@ -142,104 +90,381 @@ void JSFBases::SetSpring(JSFSpring *spring)
 {
 // Set Address of spring module
   fSpring=spring;
-  if( fSpring->Bases() != this ) fSpring->SetBases(this); 
+  if( fSpring->GetBases() != this ) fSpring->SetBases(this); 
 }
 
-//_____________________________________________________________________________
-void JSFBases::SetSpring(Int_t address)
+//_________________________________________________________
+void JSFBases::Param(int sample, double tune, int itr1, 
+		  double ac1, int itr2, double ac2 )
 {
-// Set Address of spring module
-  fSpring=(JSFSpring*)address;
-  if( fSpring->Bases() != this ) fSpring->SetBases(this); 
+  //*         ===================================================                *
+  //******************************************************************************
+  //* ( Function )                                                               *
+  //*   To set the bases parameters.                                             *
+  //* ( Output = Input )                                                         *
+  //*   ncall  = sample  : the number of sampling points per iteration ( given ) *
+  //*   itmx1  = itr1    : maximum number of iterations for grid opt. step       *
+  //*   acc1   = ac1     : required accuracy for grid opt. step                  *
+  //*   itmx2  = itr2    : maximum number of iterations for integration step     *
+  //*   acc2   = ac2     : required accuracy for integration step                *
+  //*   coded by S.kawabata June '99 at KEK                                      *
+  //******************************************************************************/
+
+  param(sample, tune, itr1, ac1, itr2, ac2);
 }
 
-
-//_____________________________________________________________________________
-void JSFBases::DoBases()
-{
-//  Main function to perform Bases. Does initialization, integration
-//  and output
-
-  if( !fIsInitialized ) Initialize();
-
-  Userin();   // User initialization.
-
-  fInBases=kTRUE;
-  bases_(Basesfunc, &fESTIM, &fSIGMA, &fCTIME, &fIT1, &fIT2);
-
-  printf(" *** BASES completed ***\n");
-  printf("     ESTIM = %g +- %g \n",fESTIM, fSIGMA);
-  printf("     CTIME = %g  IT1=%d  IT2=%d \n",fCTIME, fIT1, fIT2);
-
-  Print();  // Print result
-  
-  Userout();           // Does user out process.
-     
+//_________________________________________________________
+void JSFBases::SetNoOfSample( int sample )
+{ 
+  setNoOfSample(sample); 
 }
 
-//_____________________________________________________________________________
-void JSFBases::Initialize()
-{
-
-  if( !gJSFBases ) {
-    bsinit_();  // bases initialization 
-  }
-  drnset_(&fISEED);
-  gJSFBases=this;
+//_________________________________________________________
+void JSFBases::SetTuneValue ( double tune )
+{ 
+  setTuneValue(tune); 
 }
 
-
-//_____________________________________________________________________________
-void JSFBases::SetSeed(Int_t iseed)
-{
-  fISEED=iseed; 
-  drnset_(&fISEED);
+//_________________________________________________________
+void JSFBases::SetIteration1( double ac1, int itx1 ) 
+{ 
+  setIteration1(ac1, itx1); 
 }
 
-//_____________________________________________________________________________
-void JSFBases::Userin()
+//_________________________________________________________
+void JSFBases::SetIteration2( double ac2, int itx2 ) 
+{ 
+  setIteration2(ac2, itx2);
+}
+
+//_________________________________________________________
+void JSFBases::DefineVariable( double &v, double low, double high, int wld, int grd )
 {
+  defineVariable(v, low, high, wld, grd); 
+}
+
+//_________________________________________________________
+void JSFBases::DefineVariable( int ndim, int nwild, 
+                                    double x_l[], double x_u[], int jg[] )
+{
+  defineVariable(ndim, nwild, x_l, x_u, jg );
+}
+
+//_________________________________________________________
+void JSFBases::Bases( ) 
+{ 
+  fIsSpring=kFALSE;
+  BasesSpring::Bases(); 
+}
+
+//_________________________________________________________
+void JSFBases::Spring( int mxtry )
+{ 
+  fIsSpring=kTRUE;
+  BasesSpring::Spring(mxtry); 
+}
+
+//_________________________________________________________
+void JSFBases::Sp_info( )
+{ 
+  sp_info(); 
+}
+
+//  Utilities
+//_________________________________________________________
+void JSFBases::Forder( float v, float &fv, float &order, int &iorder )
+{
+  forder( v, fv, order, iorder );
+}
+
+//_________________________________________________________
+Double_t JSFBases::GetWeight( )
+{ 
+  return getwgt(); 
+}
+
+//_________________________________________________________
+Double_t JSFBases::GetScalls( )
+{ 
+  return getscalls(); 
+}
+
+//_________________________________________________________
+Int_t JSFBases::Flag_bases( )
+{ 
+  return BasesSpring::Flag_bases(); 
+}
+
+//_________________________________________________________
+Double_t JSFBases::GetEstimate( )
+{ 
+  return getEstimate(); 
+}
+
+//_________________________________________________________
+Double_t JSFBases::GetError( )
+{ 
+  return getError(); 
+}
+
+//_________________________________________________________
+Int_t JSFBases::GetNoOfIterate( )
+{ 
+  return getNoOfIterate(); 
+}
+
+// For histogramming package
+//_________________________________________________________
+void JSFBases::H1Init(Char_t *hn, Char_t *title, Int_t nbin, Double_t xlow, Double_t xhigh)
+{ 
+// Create histogram object to save Bases and Spring result
 //
-//   Initialize User parameters for Bases
-//
+  Char_t hstn[128];
+  sprintf(hstn,"%sBS",hn);
+  TH1D *hst=new TH1D(hstn, title, nbin, xlow, xhigh);
+  fBSHash1->Add(hst);
+  sprintf(hstn,"%sSP",hn);
+  hst=new TH1D(hstn, title, nbin, xlow, xhigh);
+  fSPHash1->Add(hst);
 
-  if( fACC1  > 0.0 ) { bparm2_.acc1=fACC1; }
-  else { fACC1=bparm2_.acc1;}
-  if( fACC2  > 0.0 ) { bparm2_.acc2=fACC2; }
-  else { fACC2=bparm2_.acc2;}
-  if( fITMX1 > 0   ) { bparm2_.itmx1=fITMX1; }
-  else { fITMX1=bparm2_.itmx1;}
-  if( fITMX2 > 0   ) { bparm2_.itmx2=fITMX2; }
-  else { fITMX2=bparm2_.itmx2;}
+  JSFBasesTempHist *th=new JSFBasesTempHist(hn);
+  fTempHash1->Add(th);
 
-  if( fNDIM  > 0   ) { bparm1_.ndim=fNDIM ;}
-  else { fNDIM=bparm1_.ndim;}
-  if( fNWILD > 0   ) { bparm1_.nwild=fNWILD ;}
-  else { fNWILD=bparm1_.nwild;}
-  if( fNCALL > 0   ) { bparm1_.ncall=fNCALL ;}
-  else { fNCALL=bparm1_.ncall;}
+}
 
-  for(Int_t i=0;i<bparm1_.ndim;i++){
-     bparm1_.xl[i]=fXL[i];
-     bparm1_.xu[i]=fXU[i];
-     bparm1_.ig[i]=fIG[i];
+//_________________________________________________________
+void JSFBases::H1Fill(Char_t *hn, Double_t x, Double_t fx)
+{ 
+// Fill Histogram
+
+  if( fIsSpring ) { 
+    JSFBasesTempHist *th=((JSFBasesTempHist*)(fTempHash1->FindObject(hn)));
+    th->flag=kTRUE;
+    th->x=x;
+    th->wgt=fx*GetWeight();
+  }
+  else { 
+    Char_t hstn[128];
+    Char_t *hnsuf;
+    hnsuf="BS"; 
+    sprintf(hstn,"%s%s",hn,hnsuf);
+    ((TH1D*)(fBSHash1->FindObject(hstn)))->Fill(x, fx*GetWeight());
   }
 
-  return ;
 }
 
-//_____________________________________________________________________________
-void JSFBases::Userout()
-{
+//_________________________________________________________
+void JSFBases::H2Init(Char_t *hn, Char_t *title, Int_t nbinx, Double_t xlow, Double_t xhigh,
+		      Int_t nbiny, Double_t ylow, Double_t yhigh)
+{ 
+  Char_t hstn[128];
+  sprintf(hstn,"%sBS",hn);
+  TH2D *hst=new TH2D(hstn, title, nbinx, xlow, xhigh, nbiny, ylow, yhigh);
+  fBSHash2->Add(hst);
+  sprintf(hstn,"%sSP",hn);
+  hst=new TH2D(hstn, title, nbinx, xlow, xhigh, nbiny, ylow, yhigh);
+  fSPHash2->Add(hst);
+
+  JSFBasesTempHist *th=new JSFBasesTempHist(hn);
+  fTempHash2->Add(th);
 
 }
 
-//_____________________________________________________________________________
-void JSFBases::Print()
+//_________________________________________________________
+void JSFBases::H2Fill(Char_t *hn, Double_t x, Double_t y, Double_t fx)
+{ 
+  if( fIsSpring ) { 
+    JSFBasesTempHist *th=((JSFBasesTempHist*)(fTempHash2->FindObject(hn)));
+    th->flag=kTRUE;
+    th->x=x;
+    th->y=y;
+    th->wgt=fx*GetWeight();
+  }
+  else { 
+    Char_t hstn[128];
+    Char_t *hnsuf;
+    hnsuf="BS"; 
+    sprintf(hstn,"%s%s",hn,hnsuf);
+    ((TH2D*)(fBSHash2->FindObject(hstn)))->Fill(x, y, fx*GetWeight());
+  }
+}
+
+//_________________________________________________________
+void JSFBases::EndIntegration( Int_t step )
+{ 
+  if( step == 0 ) {
+    /*
+    TIterator *hst=fBSHash1->MakeIterator();
+    TH1D *h1;
+    while( (h1=(TH1D*)hst->Next()) ){
+      h1->Reset();
+    }
+
+    hst=fBSHash2->MakeIterator();
+    TH2D *h2;
+    while( (h2=(TH2D*)hst->Next()) ){
+      h2->Reset();
+    }
+    */
+
+  }
+  else {
+    TIterator *hst=fBSHash1->MakeIterator();
+    TH1D *h1;
+    Double_t sc=1./GetScalls();
+    while( (h1=(TH1D*)hst->Next()) ){
+      Double_t fact=sc/h1->GetBinWidth(1);
+      h1->Scale(fact);
+    }
+
+    hst=fBSHash2->MakeIterator();
+    TH2D *h2;
+    while( (h2=(TH2D*)hst->Next()) ){
+      Double_t fact=sc/h2->GetBinWidth(1);
+      h2->Scale(fact);
+    }
+  }
+
+}
+
+//_________________________________________________________
+void JSFBases::CopyHists(TFile *f, TDirectory *dest)
 {
-  Int_t luinfo=6;
-  if( fPrintInfo ) { bsinfo_(&luinfo); }   // Printout bases information.
-  if( fPrintHist ) { bhplot_(&luinfo); }   // Printout bases histogram.
+  // Copy bases hists in f to the directory dest
+
+  TDirectory *now=0;
+  if( dest ) { now=gDirectory; dest->cd(); }
+
+  TList *klst = f->GetListOfKeys();
+  TListIter nkey(klst);
+  TKey  *key;
+  while ((key = (TKey*)nkey())) {
+    if( strcmp(key->GetClassName(),"TH1D") == 0 ) {
+      Int_t ln=strlen(key->GetName());
+      const Char_t *hn=key->GetName();
+      if( *(hn+ln-1) == 'S' && *(hn+ln-2) == 'B' ) {
+	TH1D *hnew=(TH1D*)(fBSHash1->FindObject(hn));
+	if( hnew ) hnew->Add((TH1D*)f->Get(key->GetName()));
+	else {
+	  printf("Warning in JSFBases::CopyHists\n");
+	  printf("Bases histogram, %s, in the file, %s",hn,f->GetName());
+	  printf(" is not defined in the current job.\n");
+	}
+      }
+    }	    
+  }
+
+  if( dest ) { now->cd(); }
+
+}
+
+// For histogramming package
+//_________________________________________________________
+void JSFBases::Xh_init( int id, double x_low, double x_high, int bin, char title[] )
+{ 
+  xh_init( id, x_low, x_high, bin, title ); 
+}
+
+//_________________________________________________________
+void JSFBases::Dh_init( int id, double x_low, double x_high, int Xbin,
+                            double y_low, double y_high, int Ybin, char title[] )
+{ 
+  dh_init( id, x_low, x_high, Xbin, y_low, y_high, Ybin, title ); 
+}
+
+//_________________________________________________________
+void JSFBases::Bh_plot( )
+{ 
+  bh_plot( ); 
+}
+
+//_________________________________________________________
+void JSFBases::Xh_fill( int id, double x, double fx )
+{ 
+  xh_fill( id, x, fx ); 
+}
+
+//_________________________________________________________
+void JSFBases::Dh_fill( int id, double x, double y, double fx )
+{ 
+  dh_fill( id, x, y, fx ); 
+}
+
+//_________________________________________________________
+void JSFBases::Bh_save( )
+{ 
+  bh_save(); 
+}
+
+//_________________________________________________________
+void JSFBases::Sh_reset( )
+{ 
+  sh_reset();
+}
+
+//_________________________________________________________
+void JSFBases::Sh_update( )
+{ 
+  sh_update(); 
+}
+
+//_________________________________________________________
+void JSFBases::sh_update( )
+{ 
+  // Fill saved histogram inforation
+
+  Char_t hstn[128];
+
+  TIterator *hst1=fTempHash1->MakeIterator();
+  JSFBasesTempHist *th1;
+  while( (th1=(JSFBasesTempHist*)hst1->Next()) ){
+    if( th1->flag ) {
+      sprintf(hstn,"%sSP",th1->GetName());
+      ((TH1D*)(fSPHash1->FindObject(hstn)))->Fill(th1->x);
+      th1->flag=kFALSE;
+    }
+  }
+
+  TIterator *hst2=fTempHash2->MakeIterator();
+  JSFBasesTempHist *th2;
+  while( (th2=(JSFBasesTempHist*)hst2->Next()) ){
+    if( th2->flag ) {
+      sprintf(hstn,"%sSP",th2->GetName());
+      ((TH2D*)(fSPHash2->FindObject(hstn)))->Fill(th2->x);
+      th2->flag=kFALSE;
+    }
+  }
+
+}
+
+//_________________________________________________________
+void JSFBases::Sh_plot( )
+{ 
+  sh_plot(); 
+}
+
+//_________________________________________________________
+Double_t JSFBases::Func( double x[] )
+{
+  return BasesSpring::func(x) ;
+}
+
+//_________________________________________________________
+Double_t JSFBases::Func( )
+{ 
+  return BasesSpring::func() ; 
+}
+
+//_________________________________________________________
+double JSFBases::func( double x[] )
+{
+  return Func(x);
+}
+
+//_________________________________________________________
+double JSFBases::func()
+{ 
+  return Func(); 
 }
 
 //______________________________________________________________________________
@@ -249,107 +474,98 @@ void JSFBases::Streamer(TBuffer &R__b)
 
    if (R__b.IsReading()) {
       Version_t R__v = R__b.ReadVersion(); if (R__v) { }
+
+      if( R__v < 3 ) { 
+	printf("JSFBases::Streamer .. Old version data.  Can not read.\n");
+      }
       TNamed::Streamer(R__b);
 
-      R__b >> fESTIM;
-      R__b >> fSIGMA;
-      R__b >> fCTIME;
-      R__b >> fIT1;
-      R__b >> fIT2;
-      R__b >> fACC1;
-      R__b >> fACC2;
-      R__b >> fITMX1;
-      R__b >> fITMX2;
-      R__b >> fNDIM;
-      R__b >> fNWILD;
-      R__b >> fNCALL;
-      if( R__v > 1 ) R__b >> fISEED;
-      base2_.acc1=fACC1; base2_.acc2=fACC2 ;
-      base2_.itmx1=fITMX1; base2_.itmx2=fITMX2;
+      R__b >> ndim;
+      R__b >> nwild;
 
-      R__b.ReadStaticArray(fXU);
-      R__b.ReadStaticArray(fXU);
-      R__b.ReadStaticArray(fIG);
+      R__b.ReadStaticArray(ig);
+      R__b >> ncall;
+      R__b >> ngiven;
+      R__b.ReadStaticArray(xl);
+      R__b.ReadStaticArray(xu);
+      R__b.ReadStaticArray(&xi[0][0]);
+      R__b.ReadStaticArray(dx);
+      R__b >> nd;
+      R__b >> ng;
+      R__b >> nsp;
+      R__b >> npg;
+      R__b.ReadStaticArray(ma);
+      R__b.ReadStaticArray(dxd);
+      R__b.ReadStaticArray(pxd);
+      R__b >> it;
+      R__b >> itmx1;
+      R__b >> itmx2;
+      R__b >> acc1;
+      R__b >> acc2;
+      R__b >> si;
+      R__b >> swgt;
+      R__b >> scalls;
+      R__b >> xnd;
+      R__b >> jacob;
+      R__b >> dxg;
+      R__b >> estim;
+      R__b >> error;
 
-      R__b.ReadStaticArray(base1_.xl);
-      R__b >> base1_.ndim;
-      R__b >> base1_.nwild;
-      R__b.ReadStaticArray(base1_.ig);
-      R__b >> base1_.ncall;
-      R__b >> base3_.scalls;
-      R__b >> base3_.wgt;
-      R__b >> base3_.ti;
-      R__b >> base3_.tsi;
-      R__b >> base3_.tacc;
-      R__b >> base3_.it;
-      
-      R__b.ReadStaticArray(base4_.xi);
-      R__b >> base4_.nd;
-      R__b >> base4_.ng;
-      R__b >> base4_.npg;
-      R__b.ReadStaticArray(base4_.ma);
+      // save seed
+      long seed, iy, iv[NTAB];
+      R__b >> seed;
+      R__b >> iy;
+      R__b.ReadStaticArray(iv);
+      ran1.SetSeed(seed);
+      ran1.SetSeed2(iy, iv);
 
-      R__b.ReadStaticArray(base5_.itrat);
-      R__b.ReadStaticArray(base5_.time);
-      R__b.ReadStaticArray(base5_.reslt);
-      R__b.ReadStaticArray(base5_.trslt);
-
-      R__b.ReadStaticArray(randm_.rdm);
-      R__b.ReadStaticArray(randm_.ia1);
-
-      R__b.ReadStaticArray(ploth_.xhash);
-      R__b.ReadStaticArray(plotb_.ibuf);
    } else {
       R__b.WriteVersion(JSFBases::IsA());
       TNamed::Streamer(R__b);
-      R__b << fESTIM;
-      R__b << fSIGMA;
-      R__b << fCTIME;
-      R__b << fIT1;
-      R__b << fIT2;
-      R__b << fACC1;
-      R__b << fACC2;
-      R__b << fITMX1;
-      R__b << fITMX2;
-      R__b << fNDIM;
-      R__b << fNWILD;
-      R__b << fNCALL;
-      R__b << fISEED;
-      R__b.WriteArray(fXL,fNDIM);
-      R__b.WriteArray(fXU,fNDIM);
-      R__b.WriteArray(fIG,fNDIM);
 
-      R__b.WriteArray(base1_.xl,2*kMXDIM);
-      R__b << base1_.ndim;
-      R__b << base1_.nwild;
-      R__b.WriteArray(base1_.ig,kMXDIM);
-      R__b << base1_.ncall;
-      R__b << base3_.scalls;
-      R__b << base3_.wgt;
-      R__b << base3_.ti;
-      R__b << base3_.tsi;
-      R__b << base3_.tacc;
-      R__b << base3_.it;
+      R__b << ndim;
+      R__b << nwild;
+      R__b.WriteArray(ig,ndim);
+      R__b << ncall;
+      R__b << ngiven;
+      R__b.WriteArray(xl,ndim);
+      R__b.WriteArray(xu,ndim);
+      Int_t mxndmxdim=MXND*MXDIM;
+      Int_t mxdim=MXDIM;
+      R__b.WriteArray(&xi[0][0],mxndmxdim);
+      R__b.WriteArray(dx,mxdim);
+      R__b << nd;
+      R__b << ng;
+      R__b << nsp;
+      R__b << npg;
+      R__b.WriteArray(ma,ndim);
+      R__b.WriteArray(dxd,nsp);
+      R__b.WriteArray(pxd,nsp);
+      //      R__b << seed;
+      R__b << it;
+      R__b << itmx1;
+      R__b << itmx2;
+      R__b << acc1;
+      R__b << acc2;
+      R__b << si;
+      R__b << swgt;
+      R__b << scalls;
+      R__b << xnd;
+      R__b << jacob;
+      R__b << dxg;
+      R__b << estim;
+      R__b << error;
+
+      // save seed
+      long seed=ran1.GetSeed();
+      long iy, iv[NTAB];
+      ran1.GetSeed2(iy, iv);
+      R__b << seed;
+      R__b << iy;
+      R__b.WriteArray(iv, NTAB);
+
       
-      const Int_t kLenBase4xi=kNDMX*kNDMX+kMXDIM+2*kLENG;
-      R__b.WriteArray(base4_.xi,kLenBase4xi);
-      R__b << base4_.nd;
-      R__b << base4_.ng;
-      R__b << base4_.npg;
-      R__b.WriteArray(base4_.ma,kMXDIM);
-
-      R__b.WriteArray(base5_.itrat,2*kITM);
-      R__b.WriteArray(base5_.time,7*kITM);
-      R__b.WriteArray(base5_.reslt,4*kITM);
-      R__b.WriteArray(base5_.trslt,6*kITM);
-
-      R__b.WriteArray(randm_.rdm,33);
-      R__b.WriteArray(randm_.ia1,12);
-
-      const Int_t kPLOTH=13*(kNHS+1)+14*kNSC+kNHS+1+4*kNHS+1+4*kNSC+1;
-      R__b.WriteArray(ploth_.xhash,kPLOTH);
-
-      R__b.WriteArray(plotb_.ibuf,kLenIBUF);
    }
+
 }
 
