@@ -256,7 +256,7 @@ void JSFMergeEvent::PrintRandomSeed()
 { 
   printf(" JSFMergeEvent-Seed:");
   fRandomSeed=gRandom->GetSeed();
-  printf("%d\n",*uval);
+  printf("%d\n",fRandomSeed);
 }
 
 

@@ -755,10 +755,6 @@ void JSFQuickSimBuf::SetGeneratorPointers(JSFGeneratorBuf *ingen)
     return ;
   }
 
-  for(Int_t k=0;k<genb->GetNparticles();k++){
-    JSFGeneratorParticle *gp=(JSFGeneratorParticle*)gps->UncheckedAt(k);
-  }
-
   for(Int_t i=0;i<fNTracks;i++){
     JSFLTKCLTrack *lt=(JSFLTKCLTrack*)fTracks->UncheckedAt(i);
     if( !lt->fEMGen ) { lt->fEMGen=new TObjArray(); }

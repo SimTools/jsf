@@ -61,21 +61,10 @@
    html.MakeClass("JSFCALGeoParam");
 
    html.MakeClass("JSFHelicalTrack");
-   html.MakeClass("JSFDMatrix");
-   html.MakeClass("JSFDLazyMatrix");
-   html.MakeClass("JSFDMatrixRow");
-   html.MakeClass("JSFDMatrixColumn");
-   html.MakeClass("JSFDMatrixDiag");
 
    html.MakeClass("JSFVirtualFit");
    html.MakeClass("JSFGeoCFit");
    html.MakeClass("JSFVertexing");
-
-//   html.MakeClass("JSFHitCylinder");
-//   html.MakeClass("JSFHelixParameter");
-//   html.MakeClass("JSFHelixParameter_f");
-//   html.MakeClass("JSFHelixErrorMatrix");
-//   html.MakeClass("JSFHelixErrorMatrix_u");
 
    html.MakeIndex();
 
