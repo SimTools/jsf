@@ -120,6 +120,7 @@ EMsgBoxIcon mb_icon[4] = { kMBIconStop, kMBIconQuestion,
                            kMBIconExclamation, kMBIconAsterisk };
 
 const char *filetypes[] = { "ROOT files",    "*.root",
+                            "SIMDST files",     "*.dat",
                             "All files",     "*",
                             0,               0 };
 
