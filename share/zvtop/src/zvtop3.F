@@ -858,6 +858,7 @@ C            ack
                   VPOSSG(3) = 10.0
                   JJ = 2
 C             protect against -ve error matrix
+c                  PRINT *,' Zvtop3 will call  zxfit ... jj=',jj
                   SGLISS=ZXFIT(1,JJ,VID,VPOS,VPOSSG,CHISQ,XVTX,XVTXSG,
      *            CHISQTK,PXYZ,IER)
 c                  print *,' calls zxfit in zvtop3 ...ierr=',ier

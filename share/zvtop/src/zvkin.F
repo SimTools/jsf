@@ -873,7 +873,7 @@ C
          NVT = 0
          VPOSE(1) = 0.0
          VPOSE(2) = 0.0
-         VPOSE(3) = 0.4
+         VPOSE(3) = 0.0
          VPOSSG(1) = 10.0
          VPOSSG(2) = 10.0
          VPOSSG(3) = 10.0
@@ -895,6 +895,10 @@ C    TEST zxfit by iterating.
          VPOSE(1) = 0.0
          VPOSE(2) = 0.0
          VPOSE(3) = 0.4
+
+cc         if( nvt .lt. 2 ) then
+           print *,' in zvkin ... nvt=',nvt
+cc         endif
          CALL ZXFIT(FITMODE,NVT,VID,VPOSE,VPOSSG,CHISQ,XVTX,XVTXSG,
      *   CHISQTK,PXYZ,IER)
          IF (FITMODE .EQ. -1) THEN
@@ -1149,6 +1153,10 @@ C       add in ghost if only one prong
 C    add ghost to all vertices ? no
          IF (NVT.GT.1) THEN
 C       use zxfit here to get error matrices
+c            if( nvt .lt. 2  ) then
+               print *,' Funny data '
+               print *,' in zvkin ... NVT=',nvt
+c            endif
             CALL ZXFIT(1,NVT,VID,VPOSE,VPOSSG,CHISQ,XVTX,XVTXSG,
      *      CHISQTK,PXYZ,IER)
             DLON1 = (XVTX(1)-IPX)*GAXI(1) + (XVTX(2)-IPY)*GAXI(2) + (

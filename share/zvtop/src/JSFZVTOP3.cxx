@@ -339,26 +339,51 @@ Int_t JSFZVTOP3::ZXFIT(Int_t *mode, Int_t *jj, Int_t vid[], Float_t vpos[],
   //  chisqtk() : Chi-square of each track.
   //  pxyz[][3] : three momentum at the vertex
 
+
+
+  Int_t ntrk=*jj;
+  if( *jj < 2 ) {
+    printf(" JSFZVTOP3::ZXFIT was called, but the number of tracks is less than 2, *jj=%d\n",*jj);
+    printf(" mode=%d\n",*mode);
+    printf(" vpos=%g %g %g\n",vpos[0],vpos[1],vpos[2]);
+    return 4;
+  }
+
+
   Float_t b0[3];
   JSFZVTOP3::GUFLD(vpos,b0);
   Float_t bf=b0[2];
 
-
-  TClonesArray fitbuf("JSFHelicalTrack",*jj);
+  TClonesArray fitbuf("JSFHelicalTrack",ntrk);
   JSFVertexing vtx(2);
 
-  for(Int_t i=0;i<*jj;i++){
+  for(Int_t i=0;i<ntrk;i++){
+    if( vid[i] < 1 ) {
+      printf(" JSFZVTOP3::ZXFIT .. Error: invalid index to track pointers\n");
+      printf(" Program may be broken somewhere.\n");
+      return 4;
+    }
     JSFCDCTrack *t=JSFZVTOP3::fTrackPointers[vid[i]-1];
-    JSFHelicalTrack ht=t->GetHelicalTrack();
-    
-    ht.SetBfield(bf);
-    if( *jj == 2 ) {  vtx.SetTrack(i,ht); }
-    new( fitbuf[i] ) JSFHelicalTrack(ht);
+    if( !t ) {
+      printf(" JSFZVTOP3::ZXFIT .. Error: Pointer to CDC track is not available.\n");
+      return 4;
+    }
+    Int_t ndf=t->GetNDF();
+    Double_t errmtr[15];
+    Float_t helix[5], pivot[3];
+    t->GetHelix(helix);
+    t->GetPivot(pivot);
+    t->GetError(errmtr);
+    new( fitbuf[i] ) JSFHelicalTrack(helix, pivot, ndf, 1.0, 0.0, errmtr);
+    JSFHelicalTrack *ht=(JSFHelicalTrack*)fitbuf.At(i);
+    ht->SetBfield(bf);
+    if( ntrk == 2 ) {  vtx.SetTrack(i,*ht); }
+
   }
 
   TVector3 v(vpos[0], vpos[1], vpos[2]);
 
-  JSFGeoCFit fit(*jj, &fitbuf, v);
+  JSFGeoCFit fit(ntrk, &fitbuf, v);
   Bool_t err=fit.Fit();
   //  printf(" Fit err =%d ntry=%d\n",err,fit.GetNtry());
 
@@ -381,7 +406,7 @@ Int_t JSFZVTOP3::ZXFIT(Int_t *mode, Int_t *jj, Int_t vid[], Float_t vpos[],
     xvtxsg[ip++]=errmatrix(i,j);
   }}
 
-  for(Int_t i=0;i<*jj;i++){
+  for(Int_t i=0;i<ntrk;i++){
     Int_t ip=3*(i+1);
     Float_t pt=1.0/TMath::Abs(ans(ip+1,0));
     Float_t phi0=ans(ip,0);
@@ -477,6 +502,11 @@ void JSFZVTOP3::MakeVertices(TObjArray *tracks)
      zxtrks_bank_.rtrk[nt][0]=ct->GetCharge();
      zxtrks_bank_.rtrk[nt][1]=1;
      trkid[numtrk]=nt+1;
+     if( numtrk > kMaxTrks ) {
+       printf(" JSFZVTOP3::MakeVertices .. Number of CDC tracks(%d)",numtrk);
+       printf(" exceeds buffer size.  Track#%d is neglected.\n",nt);
+       continue;
+     }
      numtrk++;
      JSFZVTOP3::fTrackPointers[nt]=ct;
 
@@ -625,7 +655,7 @@ void JSFZVTOP3::CalculateMSPTM()
   Int_t idsec[50];
   fMSPTM=0.0;
   fProbo=0.0;
-  fNseco=0.0;
+  fNseco=0;
   fProb2=0.0;
   fDecayLength=0.0;
   fDecayLength0=0.0;
@@ -655,10 +685,6 @@ void JSFZVTOP3::CalculateMSPTM()
   Float_t probo;
   Int_t ndfo=5*nseco -3*(nseco+1);
   uconfl_(&probo, &ndfo, &chisq); 
-  fProbo=probo;
-  fNseco=nseco;
-
-  fProb2  =zvtopl3_.rvrt[jetno][ivrt][11];
 
   // take furthest rec. vertex as seed to add isolated tracks.
   Float_t disv = TMath::Sqrt(vax*vax + vay*vay + vaz*vaz);
@@ -779,6 +805,16 @@ void JSFZVTOP3::CalculateMSPTM()
     }  // Track is in secondary
   }    // Loop over quality tracks in hemi
 
+  if( nsec < 2 ) {
+    printf(" in JSFZVTOP3::  nsec=%d\n",nsec);
+    printf(" nvrt=%d\n",nvrt);
+    return ;
+  }
+  fProbo=probo;
+  fNseco=nseco;
+  fProb2  =zvtopl3_.rvrt[jetno][ivrt][11];
+
+
   Float_t vpos[3]={0.0, 0.0, 0.0};
   Float_t vpossg[3]={10.0, 10.0, 10.0};
 
@@ -787,6 +823,7 @@ void JSFZVTOP3::CalculateMSPTM()
   Float_t xvtx[3], xvtxsg[6];
   Float_t chisqtk[50], pxyz[50][3];
   Int_t ierr;
+
   ZXFIT(&mode, &nsec, idsec, vpos , vpossg, 
 	&chisq, xvtx, xvtxsg, chisqtk, pxyz, &ierr);
 

@@ -16,14 +16,8 @@ HDRS    = $(subst .$(SrcSuf),.h,$(SRC))
 
 
 CERNLIBS      = $(shell cernlib jetset74 packlib)
-ROOTLIBS     += -lEGPythia -lEG -Wl,-u,pytest_ $(CERNLIBS)
+ROOTLIBS     += -lEGPythia -lEG $(CERNLIBS)
 LCLIBDIR      = $(LCLIBROOT)/lib
-
-ANALLIB = $(JSFLIBS) $(EXTRALDOPT) \
-        -L$(LCLIBDIR) -lGENUTIL -lLUHADR -lTAUOLA \
-        -lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
-        -lHELASV204 -lFORTLIB -lCOM -lCLI \
-        $(EXTRALIBS)
 
 CXXFLAGS += -I$(KFLIBROOT)/Anlib/src -I$(JSFROOT)/example/guiexam1
 EXTRALDOPT += -L$(JSFROOT)/example/guiexam1 -lJSFGUI
@@ -33,13 +27,21 @@ FFLAGS += -I$(LCLIBROOT)/simjlc/src \
 
 ADDOBJ = $(LCLIBROOT)/util/fortlib/src/uconfl.o
 
+#ifdef AIXArchitecture
+AIXFLAGS += $(KFLIBROOT)/lib/libAnlib.so $(JSFLIBS) -L$(LCLIBDIR) \
+	-L/dfs/g/jlc/soft/root/pro/lib -lCore -lCint -lHist -lGraf \
+	-lTree -lRint -lMatrix -lPhysics -lxlf90 -lm \
+	-L/cern/pro/lib -lkernlib
+#endif
+
 all:: install
 
 install:: libJSFZVTOP3.$(DllSuf)
 	cp libJSFZVTOP3.$(DllSuf) $(JSFROOT)/lib
 
 libJSFZVTOP3.$(DllSuf): $(OBJS) $(FOBJS)
-	$(LD) $(SOFLAGS) $(OBJS) $(FOBJS) $(ADDOBJ) -o libJSFZVTOP3.$(DllSuf)
+	$(LD) $(SOFLAGS) $(OBJS) $(FOBJS) -o libJSFZVTOP3.$(DllSuf) $(ADDOBJ) \
+	$(AIXFLAGS)
 
 depend:: $(SRC) $(HDR)
 	for i in $(SRC); do \
@@ -60,3 +62,4 @@ cleanall:: clean
 zvtop3.o : zvtop3.F zvtopoption.inc
 zvres3.o : zvres3.F zvtopoption.inc
 zvsig3.o : zvsig3.F zvtopoption.inc
+

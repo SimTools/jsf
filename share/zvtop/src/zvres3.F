@@ -6,8 +6,12 @@ C--------------------------------------------------------->>>>ZVRES3
 #include "phbm.inc"
 #include "zvkon3.inc"
 #include "zvtopl3.inc"
+
+      INTEGER NVMAXIMUM
+      PARAMETER (NVMAXIMUM=100)
+
       INTEGER NTRK
-      INTEGER ID(30)
+      INTEGER ID(50)
       real rac
       REAL PXJ
       REAL PYJ
@@ -16,8 +20,10 @@ C--------------------------------------------------------->>>>ZVRES3
       INTEGER JETNO
       INTEGER   SIGNAL$S_WARNING
       PARAMETER (SIGNAL$S_WARNING=3)
-      INTEGER  SGLGBL, SGLCHK, SGLRTN, SGLHDL, SGLRMV, SGLGET, SGLLEV,
-     *SGLIT, SGLISS, SIGSEV(0:7)/3,1,4,2,5,5,5,5/
+CC      INTEGER  SGLGBL, SGLCHK, SGLRTN, SGLHDL, SGLRMV, SGLGET, SGLLEV,
+CC     *SGLIT, SGLISS, SIGSEV(0:7)/3,1,4,2,5,5,5,5/
+      INTEGER  SGLLEV,
+     * SGLISS, SIGSEV(0:7)/3,1,4,2,5,5,5,5/
       COMMON /SGLCOM/ SGLLEV
 CDEC$ PSECT /SGLCOM/ NOSHR
       INTEGER   SLD$NORMAL
@@ -45,29 +51,21 @@ C               ----------- -------------------------------------------
 C  9  Feb 1995     Program creation date
 C  30 May 1998     Max of nvert=7 protection, near end
 C   4 May 1999     ZVTOP3 upgrades, original ALGO=1 here
-      REAL UPDATE / 3.00 /
 CCurrent Version 3.00
 C*--------------------------------------------------------------------*
       COMMON /ZVTOPL3 /ZVTOPL3
       INTEGER ZVTOPL3(-20:5000)
-CDEC$ PSECT /ZVTOPL3/ NOSHR
-      INTEGER PZVKONFAM
-      INTEGER PZVKON
-      INTEGER PPHBMFAM
-      INTEGER PPHBM
-      INTEGER PZXTRKSFAM
-      INTEGER PZXTRKS
       COMMON/SWIMINT/HLXINT(6),DHLXINT(15)
       REAL *4 HLXINT,DHLXINT
-      LOGICAL FIRST/.TRUE./,POSHEM,ISOL,NEWV,OLDT,TRINVE
+      LOGICAL NEWV,OLDT,TRINVE
       LOGICAL RESM,FLAG,AGAIN
-      INTEGER JZBLOC,NSID,ZVTRK
+      INTEGER ZVTRK
       INTEGER NVERT,NISOL,ISOM
       INTEGER I,J,II,JJ,STEP,IMAX,VISOL(30),IV,NT,NTR
       INTEGER NTSPP,NV
-      INTEGER VISSP(100),NTRV(30),VETR(20,30)
-CJLC      INTEGER ZXSWIM,ZXFIT,ZVFIT,TMAX,NTEM,N2VER,NCHRG,IER,VID(50)
-      INTEGER ZXFIT,ZVFIT,TMAX,NTEM,N2VER,NCHRG,IER,VID(50)
+CC      INTEGER VISSP(100),NTRV(30),VETR(20,30)
+      INTEGER VISSP(100),NTRV(NVMAXIMUM),VETR(NVMAXIMUM,30)
+      INTEGER ZXFIT,TMAX,NTEM,N2VER,NCHRG,IER,VID(50)
       INTEGER VER,TRA,SPO
       INTEGER NSTEP,NSP
       INTEGER ZNO,NZT,CRGZ,DONE(10),VORD(10),CRG(10),NEXV,FARV
@@ -84,34 +82,34 @@ Cres... ditto
       REAL LPNX(2,3),XI,YI,ZI,LAM,IPOS(9),RIPE,ZIPE,IPER(5,5)
       REAL PWID,KANG,KIPW,SWIM
       REAL POT,DX,DY,ST(30),CT(30),X0P(30),Z0(30)
-      REAL RI(5),PIVOT,ELM,XPR,YPR,XPRT,YPRT,PRFI,PRFJ
+      REAL RI(5),PIVOT,ELM,XPR,YPR,PRFI,PRFJ
       REAL LPRFI,LPRFJ,GMAX,MAX
       REAL VNEW,VOLD,VMIN,VM3D,ISTEP
       REAL B0(3),KAPPA(30),TL(30),S1S(30),S2S(30),CHIP(30),IMP(30)
-      REAL C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,CM(5,5),SING,XD,YD,ZD
+      REAL C1,C2,C3,C4,C5,C6,C7,C8,C9,CM(5,5),SING,XD,YD,ZD
       REAL PHT(30),MAS(10),PXT,PYT,PZT,ETOT
       REAL AXI(3),AXF(3),TKI(3),TKV(3),TRD,LOD,ANTA
       REAL COSL,SINL,PTOT,PT,PX,PY,PZ,TRDI(30),LODI(30)
       REAL P1(10),P2(10),P3(10),ALPHA(10),DMAG,DLONG,DTRAN
       REAL DP1(10),DP2(10),DP3(10),DP4(10),DP5(10),DP6(10)
-      REAL XISQ(10),NEAR,DIS(30)
-      REAL PDV(4),VSIG(7),VTSG,VTR(30)
-      REAL CHIV(30),VMINSP(100,100),MAXCHI
+      REAL XISQ(10),NEAR,DIS(NVMAXIMUM)
+      REAL VSIG(7),VTSG,VTR(30)
+CC      REAL CHIV(30),VMINSP(100,100),MAXCHI
+      REAL CHIV(NVMAXIMUM),VMINSP(100,100),MAXCHI
       REAL VPOS(3),VPOSSG(3),CHISQTK(50),PXYZ(3,50),CHISQ,XVTX(3)
       REAL XVTXSG(6),MAXS
       REAL IPX,IPY,IPZ,XCUT
       REAL VSG,ZVSIG3,VMINI,DIST
-      REAL XC,YC,ZC,BTEST,BMAX,VTEM(30)
+      REAL XC,YC,ZC,BMAX,VTEM(30)
       REAL DXC,DYC,DZC,VMAXI,VIJMIN,VRAT,RCUT
-      REAL RAD, PHIX, XF(3), OK
-      REAL S1I,S2I,S1M,S2M,S1F,S2F,ARCF,ARCM,ARCF2,ARCM2,DETY
+      REAL OK
+      REAL S1I,S2I,S1M,S2M,S1F,S2F
       REAL QCOEF(30,2,3)
 C  visol(30) -- 10 = isolated
 C                0 = not done yet
 C                1...7 = first to seventh vertex
 C
 C----------------------------------------------------------------------
-      DATA PPHBMFAM/0/,PZXTRKSFAM/0/,PZVKONFAM/0/
 CJSF      IF ((PPHBMFAM .EQ. 0)) THEN
 CJSF         SGLISS=JZBLOC('PHBM', PPHBMFAM)
 CJSF      END IF
@@ -690,6 +688,13 @@ C          use swam ZXFIT chi**2 for Aaron
                END IF
                IF (LPRFI.LT.XCUT .AND. LPRFJ.LT.XCUT .AND. PRFI*PRFJ.GT.
      *         0.0 .AND. VMAXI.GT.0.001) THEN
+                  if( nsp .ge.400) then
+        print *,' zvres3.F: nsp exceeds 400.  This points are neglected'
+             else if( ntsp(i).ge.30 .or. ntsp(j).ge.30 ) then
+        print *,' zvres3.F: ntsp(i) or ntsp(j) is greater than 30',
+     >   'i=',i,' ntsp(i)=',ntsp(i),' j=',j,' ntsp(j)=',ntsp(j),
+     >   ' Further points are discarded.'
+             else
                   NSP = NSP + 1
                   SPX(NSP) = XD
                   SPY(NSP) = YD
@@ -699,6 +704,7 @@ C          use swam ZXFIT chi**2 for Aaron
                   NTSP(J) = NTSP(J) + 1
                   TRK(I,NTSP(I)) = NSP
                   TRK(J,NTSP(J)) = NSP
+             endif
                END IF
             END IF
 C       2 track max found, sing>0.5
@@ -718,7 +724,12 @@ C    no. of res. spatial points on track
          NRSP(IT) = 0
 280      MAX = -1.0
          NRSP(IT) = NRSP(IT) + 1
+         if( nrsp(it) .gt. 30 ) then
+            print *,' Fatal error in ZVRES3 .. NRSP(IT)>30'
+            stop
+         endif
 C   loop over track's spatial points
+	if( ntsp(it) .le. 0 ) goto 300
          DO 291 ISP=1,NTSP(IT),1
 C      flag as 0 when done
             IF (TRK(IT,ISP).NE.0) THEN
@@ -736,6 +747,11 @@ C   loop over spatial points on track
          IF (NRSP(IT).EQ.1) THEN
             GMAX = MAX
          END IF
+	if( IMAX.LE.0) then
+	  print *,' Fatal error in zvres3 .. IMAX<0 '
+	  print *,' IT=',IT,' NTSP(IT)=',NTSP(IT)
+	  stop
+           endif
          TRK(IT,IMAX) = 0
          IF (MAX.LT.0.001 .OR. MAX.LT.(0.1*GMAX)) THEN
 C      must be >frac of big max
@@ -937,17 +953,22 @@ C*******************************************************************
 C  the original ZVRES code started here, above from old ZVTOP
 C*******************************************************************
 C set resolution here
-
       NRESP = NRESP - 1
       DO 491 I=1,100,1
          VISSP(I) = 0
 491   CONTINUE
 492   CONTINUE
+      DO 8501 I=1, NVMAXIMUM, 1
+         NTRV(I)=0
+         CHIV(I)=0
+ 8501 CONTINUE
+
       DO 501 I=1,30,1
          VISOL(I) = 0
-         NTRV(I) = 0
-         CHIV(I) = 0.0
-         DO 511 J=1,20,1
+c         NTRV(I) = 0
+c         CHIV(I) = 0.0
+c         DO 511 J=1,20,1
+         DO 511 J=1,NVMAXIMUM,1
             VETR(J,I) = 0
 511      CONTINUE
 512      CONTINUE
@@ -1040,6 +1061,7 @@ C;];]
 551   CONTINUE
 552   CONTINUE
 Cloop over spat. points
+
       IF (IMAX.EQ.0) THEN
          GOTO   560
       END IF
@@ -1091,9 +1113,23 @@ Cnow look for next vertex if any
 C**********************************************************************
 Cnow loop over tracks/vertices and find which tracks belong to them
 C**********************************************************************
+      IF( NVERT .GT. NVMAXIMUM ) THEN
+         print *,' Fatal error in ZVRES3 ..'
+         print *,' Number of candidate vertices (',NVERT,
+     >    ')  is larger than buffersize (',NVMAXIMUM,').'
+         print *,' Please increase array size of NTRV, NVERT.'
+         stop
+      endif
+
       DO 621 NT=1,NTRK,1
          DO 631 NTSPP=1,NRSP(NT),1
             DO 641 NV=1,NVERT,1
+         if( TRSP(NT,NTSPP).LE.0.OR.TRSP(NT,NTSPP).GT.100) THEN
+                  print *,' nt,ntspp=',nt,ntspp,' trsp=',
+     >       trsp(nt,ntspp),' this point is neglected.'
+                  goto 641
+               endif
+
                IF (VISSP(TRSP(NT,NTSPP)).EQ.NV) THEN
 C            track is in vertex
                   OLDT = .FALSE.
@@ -1162,7 +1198,7 @@ CJSF      NCHRG = JZL$I(JZL$X(PZXTRKS)+24)
 722         CONTINUE
             VPOS(1) = 0.0
             VPOS(2) = 0.0
-            VPOS(3) = 0.45
+            VPOS(3) = 0.0
             VPOSSG(1) = 10.0
             VPOSSG(2) = 10.0
             VPOSSG(3) = 10.0
@@ -1206,6 +1242,8 @@ C**********************************************************************
             DO 771 NTSPP=1,NRSP(NT),1
 C         make sure track is still in vertex after chi**2 trimming
                TRINVE = .FALSE.
+               if( trsp(nt,ntspp).le.0 ) goto 771
+               if( vissp(trsp(nt,ntspp)).le.0 ) goto 771
                DO 781 NTR=1,NTRV(VISSP(TRSP(NT,NTSPP))),1
                   IF (VETR(VISSP(TRSP(NT,NTSPP)),NTR) .EQ. NT) THEN
                      TRINVE = .TRUE.
@@ -1421,7 +1459,7 @@ C       vertex characteristics
             IF (NZT.GE.2) THEN
                VPOS(1) = 0.0
                VPOS(2) = 0.0
-               VPOS(3) = 0.45
+               VPOS(3) = 0.0
                VPOSSG(1) = 10.0
                VPOSSG(2) = 10.0
                VPOSSG(3) = 10.0
