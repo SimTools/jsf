@@ -183,10 +183,22 @@ void InitGenSim()
 			 "../FFbarSpring/libFFbarSpring.sl"));
       sprintf(spname,"%s",jsf->Env()->GetValue("JSFGUI.Spring.ModuleName",
 					       "FFbarSpring"));
+
+      Char_t hadronizer[128];
+      sprintf(hadronizer,"%s",jsf->Env()->GetValue("JSFGUI.Hadronizer",
+						   "JSFHadronizer"));
       sprintf(wrkstr,"%s *sp=new %s();",spname, spname);
       gROOT->ProcessLine(wrkstr);
       spring = (JSFSpring*)jsf->FindModule(spname);
-      hdr    = new JSFHadronizer();
+      if( strcmp(hadronizer,"JSFHadronizer") == 0 ) {
+	hdr    = new JSFHadronizer();
+      }
+      else {
+	Char_t cmdstr[128];
+	sprintf(cmdstr,"new %s();",hadronizer);
+	gROOT->ProcessLine(cmdstr);
+	hdr=gROOT->FindObject(hadronizer);
+      }
       gen=spring;
       break;
     case kReadParton:
@@ -310,8 +322,8 @@ void ResetHist()
 //_________________________________________________________
 void BatchRun()
 {
-  Initialize();
 
+  Initialize();
   Int_t firstrun=jsf->Env()->GetValue("JSFGUI.RunNo",1);
   Int_t lastrun=jsf->Env()->GetValue("JSFGUI.LastRun",-1);
 
@@ -321,7 +333,6 @@ void BatchRun()
   Int_t ievt;
   Bool_t flag=kTRUE;
   JSFSteer::EJSFReturnCode iret=jsf->kJSFOK;
-  
   for(irun=firstrun;irun<=lastrun;irun++){
     if( irun != firstrun ) jsf->BeginRun(irun);
     for( ievt=jsf->Env()->GetValue("JSFGUI.FirstEvent",1);
