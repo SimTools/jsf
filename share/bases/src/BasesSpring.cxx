@@ -1267,6 +1267,7 @@ void BasesSpring::EndIntegration( int step )
 
       while( ntry < maxtry && accept == 0 )
       {
+	sh_reset();  // reset histogram buffer every time.
         ntry++;
         wgt = jacob;
         for( int j = 0; j < ndim; j++ )

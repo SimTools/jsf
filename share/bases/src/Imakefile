@@ -34,7 +34,7 @@ install:: $(LIBBASES)
 
 depend:: $(SRCS) $(HDRS)
 	for i in $(SRCS); do \
-        rmkdepend -a -- $(CXXFLAGS) $(INCPATH) -- $$i; done
+        rmkdepend -a -- $(DEPENDFILES) -- $$i; done
 
 clean::
 	\rm -f *.o
