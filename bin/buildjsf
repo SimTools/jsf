@@ -18,6 +18,86 @@ proc NotAvailable {w} {
 }
 
 #########################################################
+# Load Parameters for Analysis module
+#########################################################
+
+proc ConfAnalModule {w args} {
+  global titlefont
+  global incsample
+  global useanlib
+
+  catch { destroy $w }
+  toplevel $w
+  wm title $w "Configuration"
+  label $w.title -text "Configuration of User Analysis module" -font $titlefont
+  pack $w.title -side top -fill x -pady 7
+
+  label $w.mess -text "Initial parameter values are obtained from the configuration file. After updating them,  press Build Program button to save them in the file build.conf. \n  After the end of buildjsf command, do 'xmkmf -a' and 'make' to create shared library. The program is executed by 'jsf gui.C' " -wraplength 500 -justify left
+  pack $w.mess -side top -fill x -pady 8
+  frame $w.ruler -relief sunken -bd 2 -height 4
+  pack $w.ruler -side top -fill x
+
+  set file [ .conf.entry get ]
+  frame $w.conf -bd 0
+  label $w.conf.label -width 20 -anchor w -text "Configuration file"
+  label $w.conf.labelb -width 60 -anchor w -text $file 
+  pack $w.conf.label -side left
+  pack $w.conf.labelb -side right
+  pack $w.conf -side top -fill x
+
+  # parameter entry
+
+  foreach i { anlcls anltit version comment} {
+    frame $w.$i -bd 0
+    label $w.$i.label -width 25 -anchor w
+    entry $w.$i.entry  -relief sunken -width 40 
+    pack  $w.$i.label -side left 
+    pack  $w.$i.entry  -side left
+  }
+  $w.anlcls.label config -text {Name of Analysis  module:} 
+  $w.anltit.label config -text {Title of Analysis module:}
+  $w.version.label config -text {Version number  :}
+  $w.comment.label config -text {Program comment:}
+  pack $w.anlcls $w.anltit $w.version \
+	  $w.comment -side top -fill x
+
+  frame $w.sample
+  label $w.sample.label -text "Include sample code ?" 
+  radiobutton $w.sample.yes -text "Yes" -variable incsample \
+	  -value yes -relief flat
+  radiobutton $w.sample.no -text "No" -variable incsample \
+	  -value no -relief flat
+  pack $w.sample.label $w.sample.yes $w.sample.no -side left -anchor w
+  pack $w.sample
+
+  frame $w.anlib
+  label $w.anlib.label -text "Use Anlib package ?"
+  radiobutton $w.anlib.yes -text "Yes" -variable useanlib \
+    -value yes -relief flat
+  radiobutton $w.anlib.no -text "No" -variable useanlib \
+    -value no -relief flat
+  pack $w.anlib.label $w.anlib.yes $w.anlib.no -side left -anchor w
+  pack $w.anlib
+
+
+  frame $w.buttons -borderwidth 10
+  pack $w.buttons -side top -fill x
+
+  button $w.buttons.load -text "Load Parameter" -command "LoadParam .am yes"
+  button $w.buttons.save -text "Save Parameter" -command "SaveParam .am yes"
+  button $w.buttons.build -text "Build Program" -command "BuildProgram .am" 
+  button $w.buttons.quit -text Dismiss -command "destroy $w"
+  pack $w.buttons.load $w.buttons.save $w.buttons.build -side left
+  pack $w.buttons.quit -side right
+
+
+#  set default parameters
+  LoadParam .am no
+
+
+}
+
+#########################################################
 # Load BasesSpring Parameters
 #########################################################
 
@@ -71,9 +151,6 @@ proc ConfBasesSpring {w args} {
   pack $w.sample.label $w.sample.yes $w.sample.no -side left -anchor w
   pack $w.sample
 
-#IncludeSample:  yes
-#SampleName:     LLbar
-
 
   frame $w.buttons -borderwidth 10
   pack $w.buttons -side top -fill x
@@ -99,10 +176,15 @@ proc ConfBasesSpring {w args} {
 proc BuildProgram { name } {
   global jsfroot
   set cfile [.conf.entry get ]
+
+
   switch $name {
     .bs { SaveParam .bs no
          set mess [exec -- perl -w $jsfroot/bin/mkbs -conf $cfile -jsfroot $jsfroot]
         tk_messageBox -icon info -message $mess -type ok -parent .bs }
+    .am { SaveParam .am no
+         set mess [exec -- perl -w $jsfroot/bin/mkanal -conf $cfile -jsfroot $jsfroot]
+        tk_messageBox -icon info -message $mess -type ok -parent .am }
     }
 }
 
@@ -135,6 +217,7 @@ proc SetFile { } {
 
 proc LoadParam { w {message yes} } {
   global incsample
+  global useanlib
   set file [ .conf.entry get ]
     
   if { $file == "" } {
@@ -154,6 +237,7 @@ proc LoadParam { w {message yes} } {
       set param [ split $line : ]
       set pname [string trimright [string trimleft [lindex $param 0] ]]
       set pval  [string trimright [string trimleft [lindex $param 1] ]]
+
       switch $w {
 	  . {
 	      switch $pname {
@@ -185,6 +269,20 @@ proc LoadParam { w {message yes} } {
 			    .bs.comment.entry insert 0 $pval}
   	          IncludeSample { set incsample $pval }
 	      }
+	   }
+	  .am {
+	      switch $pname {
+	          Analysis { .am.anlcls.entry delete 0 end ; \
+			     .am.anlcls.entry insert 0 $pval }
+	          AnalysisTitle { .am.anltit.entry delete 0 end ; \
+			     .am.anltit.entry insert 0 $pval }
+		  Version { .am.version.entry delete 0 end ; \
+			    .am.version.entry insert 0 $pval}
+		  Comment { .am.comment.entry delete 0 end ; \
+			    .am.comment.entry insert 0 $pval}
+  	          IncludeSample { set incsample $pval } 
+  	          UseAnlib { set useanlib $pval }
+	      }
 	 }
 
       }
@@ -205,6 +303,7 @@ proc LoadParam { w {message yes} } {
 ################################################
 proc SaveParam { w { message yes } } {
   global incsample
+  global useanlib
 
   set file [ .conf.entry get ]
   if { $file == "" } {
@@ -230,6 +329,8 @@ proc SaveParam { w { message yes } } {
       set param [ split $line : ]
       set pname [string trimright [string trimleft [lindex $param 0] ]]
       set pval  [string trimright [string trimleft [lindex $param 1] ]]
+
+
       switch $w {
 	  . {
 	      switch $pname {
@@ -256,6 +357,20 @@ proc SaveParam { w { message yes } } {
 		  Comment { set nval [.bs.comment.entry get] ;
   		         set rline($lno) "$pname: \t $nval" }
 		 IncludeSample { set rline($lno) "$pname: \t $incsample" }
+		}
+  	      }
+	  .am {
+	      switch $pname {
+		  Analysis { set nval [.am.anlcls.entry get] ;
+  		         set rline($lno) "$pname: \t $nval" }
+		  AnalysisTitle { set nval [.am.anltit.entry get] ;
+  		         set rline($lno) "$pname: \t $nval" }
+		  Version { set nval [.am.version.entry get] ;
+  		         set rline($lno) "$pname: \t $nval" }
+		  Comment { set nval [.am.comment.entry get] ;
+  		         set rline($lno) "$pname: \t $nval" }
+		 IncludeSample { set rline($lno) "$pname: \t $incsample" }
+		 UseAnlib { set rline($lno) "$pname: \t $useanlib" }
 	      }
 	 } 
       } 
@@ -389,6 +504,7 @@ foreach arg $argv {
 }
 
 set ftemp [.conf.entry get]
+
 if { $ftemp == "" } {
     if { ![file exists build.conf] } { 
 	set cout [exec cp $jsfroot/conf/build.conf  build.conf] 
@@ -420,8 +536,8 @@ foreach i { bases sana btest} {
 .bases.label config -text {Bases/Spring} 
 .bases.conf config -command {ConfBasesSpring .bs conf}
 
-.sana.label config -text {Sim. Data Analysis}
-.sana.conf config -command  { NotAvailable . }
+.sana.label config -text {Data Analysis}
+.sana.conf config -command  {ConfAnalModule .am conf}
 
 .btest.label config -text {Beam test analysis}
 .btest.conf config -command  { NotAvailable . }

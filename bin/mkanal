@@ -1,8 +1,9 @@
 #
 # Create program template.
+# This script is for UserAnalysis module
 #
-
-# print "start mkbs ...";
+#$Id:
+# 
 
 # #########################
 # #  Parse command argument
@@ -20,7 +21,7 @@ foreach $i (@ARGV) {
     elsif ( $iflag =~ "jsfroot" ) { $jsfroot=$line ; $iflag = "" ; }
 }
 
-# print " conf file is $conffile" ;
+print " conf file is $conffile\n" ;
 # #########################
 # #  Set default parameters
 # #########################
@@ -30,19 +31,17 @@ foreach $i (@ARGV) {
 # r means a key for source code replacement.
 # g means a general paramter.
 #
-%param = ( TemplateDirectory  => ["BasesSpring","g"],
-	  OutputDirectory => ["example","g"],
-	  Spring => ["LLbarSpring","r"] ,
-	  SpringTitle => ["LLbar spring","r"],
-          Bases => ["LLbarBases","r"],
-          BasesTitle => ["LLbar Bases","r"],
+%param = ( TemplateDirectory  => ["AnalModule","g"],
+	  OutputDirectory => [".","g"],
+	  Analysis => ["MyAnalysis","r"] ,
           Comment => ["Comment","r"],
           JSFROOT => [$jsfroot,"r"],
 	  Author => ["Someone","r"],
 	  Date => ["auto","r"],
 	  Version => ["v01.01","r"],
 	  IncludeSample => ["yes","g"],
-	  SampleName => ["LLbar","g"] );
+	  UseAnlib => ["no","g"],
+	  SampleName => ["EMAnal","g"] );
 
 # #########################
 # #  Scan configuration file and update parameters
@@ -76,7 +75,11 @@ if( $param{'Date'}[0] =~ "auto" ) {
   $yearstr=$now[5]+1900;
   $monstr=$now[4]+1;
   $param{'Date'}[0] = sprintf "%2.2d/%2.2d/%d",$now[3],$monstr,$yearstr;
-#  print " Current date is ",$param{'Date'}[0],"\n";
+}
+
+$shrlib="lib$param{'Analysis'}[0].so";
+if( $param{'UseAnlib'}[0] =~ "yes" ) {
+  $shrlib="libAnlib.so:lib$param{'Analysis'}[0].so";
 }
 
 $Outdir=$param{'OutputDirectory'}[0];
@@ -96,8 +99,9 @@ $TempDir="$jsfroot/template/$param{'TemplateDirectory'}[0]";
     $fname=$_ ;
     $fout=$fname;
     $fout=~ s/tmp//g;
-    $fout=~ s/Spring/$param{'Spring'}[0]/g;
+    $fout=~ s/Analysis/$param{'Analysis'}[0]/g;
     $tspring="$TempDir/$fname";
+#	print "$fout   $tspring\n";
     open(FD2,"> $Outdir/$fout");
     $outdummy="no";
     open(FD1, $tspring);
@@ -119,12 +123,17 @@ $TempDir="$jsfroot/template/$param{'TemplateDirectory'}[0]";
 	  else { $outdummy="no";}
 	  next;
       }
+      if( /<<SharedLibrary>>/ ){
+          $outline =~ s/<<SharedLibrary>>/$shrlib/;
+      }
+
       REPLACE: foreach $ind ( keys %param) {
-	  next REPLACE if $param{$ind}[1] !~ "r" ;
-	  $outline =~ s/<<$ind>>/$param{$ind}[0]/g;
+	  if( $param{$ind}[1] =~ "r" ) {
+	     $outline =~ s/<<$ind>>/$param{$ind}[0]/g;
+	 }
       }
       if( $outdummy =~ "yes" ) { next; }
-      else { print FD2 $outline; }
+      else { print FD2 $outline ; }
     }
     close FD1;
     close FD2;
