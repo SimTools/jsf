@@ -33,6 +33,7 @@ JSFJ4CTHit::JSFJ4CTHit(J4CTLayerHit *ahit)
 
   fWireNo=vc->GetMyID();
   fLayerNo=vc->GetMother()->GetMother()->GetMyID();
+  fTrackID=ahit->GetTrackID();
 
   fPDGParticleID = ahit->GetParticle()->GetPDGEncoding();   
   
