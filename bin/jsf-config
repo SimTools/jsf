@@ -1,0 +1,21 @@
+#!/bin/bash
+
+has_pythia5()
+{
+
+  if [ -x $ROOTSYS/lib/libEGPythia.so ] ; then 
+	echo "JSFPythia5"
+  fi
+
+}
+
+
+
+while [ $# -ne 0 ] 
+do 
+  case "$1" in 
+    --has_pythia5) has_pythia5 ;; 
+  esac
+  shift
+done
+
