@@ -52,6 +52,8 @@ clean::
 depend:: 
 	makedepend -I$(ROOTSYS)/include $(SRC)
 
+web: ccd
+	./ccd -b -q html.C
 
 distclean::
 	@rm -f $(OBJS) core *.so $(SOLIBNAME).*  *~  *.o
