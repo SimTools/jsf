@@ -25,6 +25,9 @@
 
 MakeJIMInput  *anal=0;
 PythiaGenerator *py=0;
+JSFSpring    *spring=0;
+JSFHadronizer  *had=0;
+
 TFile *ofile=0;
 
 /*
@@ -42,21 +45,39 @@ void UserModuleDefine()
 {
   // Define modules to run Pythia and MakeJIMInput class only.
 
-  Char_t *outputFileName=jsf->Env()->GetValue("JSFGUI.OutputFileName",
-                                              "jsf.root");
+  //  enum EJSFEventType { kPythia=0, kBasesSpring=2, kReadParton=3};
 
+  Char_t *outputFileName=jsf->Env()->GetValue("JSFGUI.OutputFileName","jsf.root");
   ofile=new TFile(outputFileName,"RECREATE");
   jsf->SetIOFiles();
 
-  py=new PythiaGenerator();
-  anal=new MakeJIMInput();
+  Int_t eventtype=jsf->Env()->GetValue("JSFGUI.GeneratorType",kPythia);
+  Char_t wrkstr[256], spname[64];
+  switch (eventtype) {
+    case kPythia:
+      py=new PythiaGenerator();
+      anal=new MakeJIMInput();
+      py->SetMakeBranch(kFALSE);
+      gROOT->LoadMacro(jsf->Env()->GetValue("JSFGUI.InitPythiaMacro","InitPythia.C"));
+      py->SetEcm(jsf->Env()->GetValue("JSFGUI.ECM",300.0));
+      InitPythia();         // Set Pythia parameters.
+      break;
 
+    case kBasesSpring:
+      lcfull=new JSFLCFULL();
+      sprintf(spname,"%s",jsf->Env()->GetValue("JSFGUI.Spring.ModuleName",
+                                               "FFbarSpring"));
+      sprintf(wrkstr,"%s *sp=new %s();",spname, spname);
+      gROOT->ProcessLine(wrkstr);
+      spring = (JSFSpring*)jsf->FindModule(spname);
+      hdr    = new JSFHadronizer();
+      ana    = new MakeJIMInputForHadronizer();
+      gen=spring;
+      spring->ReadBases(
+		jsf->Env()->GetValue("JSFGUI.Spring.BasesFile","bases.root"));
 
-  py->SetMakeBranch(kFALSE);
-
-  gROOT->LoadMacro(jsf->Env()->GetValue("JSFGUI.InitPythiaMacro","InitPythia.C"));
-  py->SetEcm(jsf->Env()->GetValue("JSFGUI.ECM",300.0));
-  InitPythia();         // Set Pythia parameters.
+      break;
+  }
 
 
 }
@@ -73,7 +94,6 @@ void UserAnalysis()
   if( jsf->GetEventNumber()%10 == 1 ) {
     printf(" Event #%d\n",jsf->GetEventNumber());
   }
-
 }
 
 //_________________________________________________________

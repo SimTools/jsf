@@ -5,7 +5,7 @@
 //
 //  MakeJIMInput
 //
-//  Create ZBS format data for JIM simulator
+//  Create ZBS format data for JIMsimulator
 //
 //$Id:
 //
@@ -13,15 +13,17 @@
 
 #include <TObject.h>
 #include "JSFModule.h"
-
+#include "TClonesArray.h"
+#include "TString.h"
 
 // *******************************************************
 class MakeJIMInput : public JSFModule 
 {
  protected:
-  Char_t fOutputFile[256];
-  Int_t  fLunit;
-  Int_t  fFirstEvent;
+  TString fOutputFile;     //!
+  Int_t  fLunit;           //!
+  Int_t  fFirstEvent;      //!
+
  public:
   MakeJIMInput(const char *name="MakeJIMInput", 
 		  const char *title="MakeJIMInput");
@@ -32,8 +34,30 @@ class MakeJIMInput : public JSFModule
   virtual Bool_t EndRun();
   virtual Bool_t Terminate();
   virtual Bool_t Process(Int_t ev=1);
+
+  virtual void   MakeTrack(Int_t jseg, Int_t idata[]);
+  virtual Int_t  GetNtracks();
   
   ClassDef(MakeJIMInput, 1)  // MakeJIMInput class
+
+};
+
+// *******************************************************
+class MakeJIMInputForHadronizer : public MakeJIMInput
+{
+ protected:
+  Int_t            fNparticles; //!
+  TClonesArray    *fParticles; //!
+  
+ public:
+  MakeJIMInputForHadronizer(const char *name="MakeJIMInputForHadronizer", 
+			    const char *title="MakeJIMInputForHadronizer");
+  virtual ~MakeJIMInputForHadronizer(){}
+
+  virtual void   MakeTrack(Int_t jseg, Int_t idata[]);
+  virtual Int_t  GetNtracks();
+  
+  ClassDef(MakeJIMInputForHadronizer, 1)  // MakeJIMInputForHadronizer class
 
 };
 

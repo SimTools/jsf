@@ -5,7 +5,8 @@
 #pragma link off all functions;
 
 #pragma link C++ class MakeJIMInput;
-#pragma link C++ class MakeJIMInputBuf;
+
+#pragma link C++ class MakeJIMInputForHadronizer;
 
 // User defined class must be declared here to include them in CINT 
 // dictionary

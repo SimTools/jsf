@@ -10,7 +10,7 @@
 # (Author)
 #    Akiya Miyamoto  27-July-2000
 #
-# $Id:
+#$Id:
 #
 # ------------------------------------------------------------------- 
 #
@@ -32,7 +32,31 @@ HDRS    = $(subst .$(SrcSuf),.h,$(SRC))
 #  CXXFLAGS +=   ( for additional CXX options )
 #  JSFLIBS  +=   ( to include additiona libraries after JSF libraries)
 
-all:: $(LIBNAME).$(DllSuf)
+ANALLIB = -Wl,-Bdynamic $(JSFLIBS) $(EXTRALDOPT) \
+	$(JIMLDLIBS) -L$(LCLIBDIR) -lGENUTIL -lLUHADR \
+        -lSIMJLC -lLTKCL -lLCFULL -lTAUOLA -lTBS \
+        -lHELASV204 -lFORTLIB -lCOM -lCLI \
+        $(EXTRALIBS) 
+
+# -lTAUOLA : subroutine ginit in libTAUOLA.a conflcts with ginit in 
+# libgeant321.a, so removed.
+
+# CERNLIB = $(shell cernlib jetset74 geant321 mathlib pawlib graflib grafX11 packlib kernlib)
+CERNLIB = $(shell cernlib jetset74 packlib kernlib)
+
+JIMLDLIBS = -L$(JSFROOT)/lib -lJSFGUI \
+	-L$(JLCSIMROOT)/lib -lzbs -ljlcutil 
+
+ROOTLIBS += -lEGPythia -lEG $(CERNLIB)
+
+EXTRALIBS = $(JIMLIBS) 
+
+# =============================================================================
+
+all:: $(LIBNAME).$(DllSuf) mkjimbnk
+
+mkjimbnk: jsfmain.o $(OBJS)
+	$(LD) jsfmain.o $(OBJS) $(BLOCKDATA) $(LDFLAGS) -o ../../bin/mkjimbnk
 
 $(LIBNAME).$(DllSuf): $(OBJS) 
 	$(LD) $(SOFLAGS) $(OBJS)  -o $@
@@ -45,5 +69,15 @@ $(LIBNAME).$(SrcSuf): $(HDRS) LinkDef.h
 	rootcint -f $@ -c -I$(JSFROOT)/include \
 	$(HDRS) LinkDef.h 
 
+clean:: 
+	@rm -f $(OBJS) core *.so 
+	@rm -f libMakeJIMInput.*
+
 distclean:: clean
-	rm -f libMakeJIMInput.* Makefile.* *.root *.conf *.bnk Makefile
+	rm -f Makefile.* *.root *.bnk Makefile
+
+jsfmain.cxx: $(JSFROOT)/src/jsfmain.cxx
+	ln -s $(JSFROOT)/src/jsfmain.cxx .
+
+jsfmain.o: jsfmain.cxx
+

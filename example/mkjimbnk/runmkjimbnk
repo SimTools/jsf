@@ -1,0 +1,3 @@
+#!/bin/sh
+
+mkjimbnk $* -conf=bases.conf gui.C
