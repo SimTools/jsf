@@ -20,7 +20,15 @@ int MainSimdst(Int_t maxevt)
   file = new TFile(outfile,"RECREATE");  // Output file
   jsf   = new JSFSteer();
   full  = new JSFLCFULL();
-  py    = new PythiaGenerator();
+
+  if( strlen(fnreadgen) == 0 ) {
+    py    = new PythiaGenerator();
+  }
+  else {
+    rgen=new JSFReadGenerator();
+    rgen->SetDataFileName(fnreadgen);
+  }
+
   sim   = new JSFQuickSim();
   simdst = new JSFSIMDST();
 
@@ -36,8 +44,10 @@ int MainSimdst(Int_t maxevt)
   //  sim->SetMakeBranch(kFALSE);    // suppress output of EventBuf
   //  simdst->SetMakeBranch(kFALSE);     // suppress output of EventBuf
  
-  py->SetEcm(fEcm);             // Center of mass energy (GeV)
-  InitPythia();         // Set Pythia parameters.
+  if( strlen(fnreadgen) == 0 ) {
+    py->SetEcm(fEcm);     // Center of mass energy (GeV)
+    InitPythia();         // Set Pythia parameters.
+  }
   jsf->Initialize();
 
   jsf->BeginRun(1);              // Set run number to 1.
