@@ -143,7 +143,6 @@ Bool_t JSFJIMParam::GetEMPosition(Int_t cell, Float_t pos[3], Float_t width[3])
   // In the case of Endcap calorimeter
   else {
     ith*=iz;
-    ith--;
     iph*=iz;
     pos[0]=fREM1EC[ith-1];
     pos[2]=iz*fZEM1EC[ith-1];
@@ -156,6 +155,7 @@ Bool_t JSFJIMParam::GetEMPosition(Int_t cell, Float_t pos[3], Float_t width[3])
     
     width[1]=TMath::Abs(width[1]);
 
+    ith--;
     if( ith > 2 ) { width[0]=fREM1EC[ith]-fREM1EC[ith-1]; }
     else { width[0]=fREM1EC[ith+1]-fREM1EC[ith]; }
     width[0]=TMath::Abs(width[0]);
@@ -204,7 +204,6 @@ Bool_t JSFJIMParam::GetHDPosition(Int_t cell, Float_t pos[3], Float_t width[3])
   // In the case of Endcap calorimeter
   else {
     ith*=iz;
-    ith--;
     iph*=iz;
     pos[0]=fRHD1EC[ith-1];
     pos[2]=iz*fZHD1EC[ith-1];
@@ -217,6 +216,7 @@ Bool_t JSFJIMParam::GetHDPosition(Int_t cell, Float_t pos[3], Float_t width[3])
     if( width[1] < -TMath::Pi() ) { width[1] += 2*TMath::Pi(); }
     width[1]=TMath::Abs(width[1]);
 
+    ith--;
     if( ith > 2 ) { width[0]=fRHD1EC[ith]-fRHD1EC[ith-1]; }
     else { width[0]=fRHD1EC[ith+1]-fRHD1EC[ith]; }
     width[0]=TMath::Abs(width[0]);
