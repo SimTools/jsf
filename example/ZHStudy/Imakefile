@@ -1,36 +1,32 @@
 #---------------------------------------------------
 
-#include    "../../conf/makejsf.tmpl"
-CERNLIBS      = -L/cern/pro/lib -ljetset74 -lpythia
-JSFLIBS       = -Wl,-L$(JSFROOT)/lib -lJSF -lJSFLCFULL 
-
-#if defined(hitachiArchitecture)
-CERNLIBS      = -L/cern/97a/lib -ljetset74
-JSFLIBS       = -Wl,-L$(JSFROOT)/lib -lJSF -lJSFLCFULL 
-#endif
+#include    "conf/makejsf.tmpl"
+CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lpythia
+JSFLIBS       = -Wl,-L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim
 
 ROOTLIBS      = -L$(ROOTSYS)/lib \
-		-lEGPythia -lEG \
-		$(CERNLIBS) \
+		-lEGPythia -lEG $(CERNLIBS) \
 		-lNew -lBase -lCint -lClib -lCont -lFunc \
                 -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
                 -lPostscript -lProof -lTree -lUnix -lZip
 
 ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
 
-LCLIB 	  = $(LCDIR)/lib
+LCLIBDIR      = $(LCLIBROOT)/lib
 
-ANALLIB   = $(JSFLIBS) \
-	    -L$(LCLIB) -lLCFULL -lGENUTIL -lLUHADR -lTAUOLA \
-	    -lLTKCL -lHELASV204 -lBASESV5.1 -lSIMJLC -lFORTLIB  \
-	    -lTBS -lLCFULL -lGENUTIL -lLUHADR  -lCOM -lCLI \
-	    -lFORTLIB -lTBS
+#ifdef hitachiArchitecture
+EXTRALDOPT = -Wl,-a,default 
+#endif
 
-LCLIBDIR = /proj/phys/lclib/pro
+ANALLIB = $(JSFLIBS) $(EXTRALDOPT) \
+	-L$(LCLIBDIR) -lGENUTIL -lLUHADR -lTAUOLA \
+        -lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
+        -lHELASV204 -lFORTLIB -lCOM -lCLI \
+        $(EXTRALIBS)
 
 #-------------------------------------------------------------
 
-INC           = ../../include 
+INC           = $(JSFROOT)/include 
 
 OBJS          = MyAnalysis.$(ObjSuf) \
 		libMyAnalysis.$(ObjSuf)
