@@ -97,7 +97,7 @@
 #include "JSFModule.h"
 #include <TBenchmark.h>
 
-JSFSteer *gJSF=kFALSE;
+JSFSteer *gJSF=0;
 
 ClassImp(JSFSteer)
 ClassImp(JSFSteerConf)
