@@ -30,7 +30,8 @@ ANALLIB = $(JSFLIBS) $(EXTRALDOPT) \
         -lHELASV204 -lFORTLIB -lCOM -lCLI \
         $(EXTRALIBS)
 
-JIMOBJ  = $(JLCSIMROOT)/util/src/getcal.o  $(JLCSIMROOT)/util/src/getcls.o \
+JIMOBJ  = jlread.o \
+	$(JLCSIMROOT)/util/src/getcal.o  $(JLCSIMROOT)/util/src/getcls.o \
 	$(JLCSIMROOT)/util/src/getgen.o  $(JLCSIMROOT)/util/src/getmch.o \
 	$(JLCSIMROOT)/util/src/gettrk.o  $(JLCSIMROOT)/util/src/getvtx.o
 

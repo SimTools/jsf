@@ -13,13 +13,9 @@
 //////////////////////////////////////////////////////////////////
 
 #include "JSFJIMParam.h"
+#include "JSFJLCSIM.h"
 
 ClassImp(JSFJIMParam)
-
-extern "C" {
-extern void kzget_(Char_t *cname, Int_t *isegm, 
-		   Int_t *ndata, Int_t idata[], Int_t lcname);
-};
 
 //_____________________________________________________________________________
 JSFJIMParam::JSFJIMParam()
@@ -36,72 +32,144 @@ void JSFJIMParam::ReadParameter()
 {
   // Read detector parameter for JIM from JIM data buffer.
 
-  //  kzget_(Char_t *cname, Int_t *isegm, Int_t *ndata, Int_t idata[], lcname);
- 
-  printf("Dummy function JSFJIMParam::ReadParameter was called.\n");
-  //  Int_t isegm=0;
-  // Int_t ndata; Int_t idata[100];
+  const Int_t maxbuf=1000;
+  Int_t idat[300];
+  Int_t len=0;
 
-  /*
-  FILE *fd;
-  fd=fopen(file,"r");
-  if( !fd ) Fatal("ReadParamFile","Unable to open file %s",file);
- 
-  printf("JSFQuickSimParam::ReadParamDetector \n");
-  printf(" --  Read detector parameter from the file %s\n",file);
-  Char_t input[256];
+  JSFJLCSIM::KZGET("MCBCPAR",0, len, idat);
+  for(Int_t i=0;i<15;i++){ fBCPAR0I[i]=idat[i]; }
+  Float_t *rtmp=(Float_t*)(idat+15);
+  for(Int_t i=0;i<16;i++){ fBCPAR0R[i]=rtmp[i]; }
 
-  // Read a file
-  while(fgets(input, 256, fd) ){
+  fEMCal[0]=idat[3];  // # of Phi
+  fEMCal[1]=idat[2];  // # of theta
+  fHDCal[0]=idat[5];  // # of phi in HD
+  fHDCal[1]=idat[4];  // # of theta in HD
 
-    if( !strncmp("@!",input,2) ) continue;
-    
-    Int_t id;
-    Float_t val;
-    sscanf(input,"%d %g",&id, &val);
-   
-  // Set a data to varaiables
-    Float_t *clspar=&fCLSPAR[0][0];
-    if( id == 1 ) continue ;
-    else if( id == 2 ) { fBfield = val; 
-                    prfeld_.bfield=10.1085  ;  // kgauss
-                    prfeld_.ptor=329.9837713  ;
-		    prfeld_.ropt=3.03045206e-3 ;
-    }
-    else if( 10 < id && id < 20 ) fTrack[id-11]=val;
-    else if( 30 < id && id < 50 ) fEMCal[id-31]=val;
-    else if( 50 < id && id < 70 ) fHDCal[id-51]=val;
-    else if( id == 70 ) fNERRVX = (Int_t)val ; //# sampling layers + 1 = NSMPVX
-    else if( id == 71 ) fNSMPVX = (Int_t)val ; //# sampling layers + 1 = NSMPVX
-    else if( 1000 < id && id < 1021 ) clspar[id-1001]=val;
-
-    else { 
-      if( fNERRVX ==1 || fNERRVX == 2 ) {
-        if( id == 72 ) fDPHIVX = val ; // phi pitch (cm)
-        else if( id == 73 ) fDZEEVX = val ; // Z pitch (cm)
-	else if( 73 < id && id < 4*(fNSMPVX+1)+74 ) { // VTX layer info.
-	  Int_t ilay=(id-74)/4 ;
-	  fVTXLayer[ilay][id-(74+4*ilay)]=val;
-	}
-	else if( 4*(fNSMPVX+1)+73 < id && id < 4*(fNSMPVX+1)+79 ) { // VTX error info.
-	  fVTXError[id-(4*(fNSMPVX+1)+74 )]=val;
-	}
-      }
-      else if( fNERRVX==3 ){
-	if( 73 <= id  && id <= 76 ) { fVTXError[id-73]=val; }
-	else if( 76 < id && id < 4*(fNSMPVX+1)+77 ) {
-	  Int_t ilay=(id-76)/4;
-	  fVTXLayer[ilay][id - (4*ilay+77)]=val;
-	}
-      }
-      else {
-        Fatal("ReadParamDetector",
-	      "Invalid Parameter ID %d, Error line is \n%s",id,input);
-      }
-    }
+  if( idat[1] > maxbuf ) {
+    printf(" Fatal error in JSFJIMParam::ReadParameter()\n");
+    printf(" Number of phi segment in EM Cal is larger than byfer size.\n");
   }
-  fclose(fd);
-  */  
+  
+  JSFJLCSIM::KZGET("MCBCPAR",1,len,(Int_t*)fREM1BC);
+  fEMCal[4]=fREM1BC[0];
+
+  JSFJLCSIM::KZGET("MCBCPAR",2,len,(Int_t*)fZEM1BC);
+  fEMCal[5]=fZEM1BC[idat[2]-1];
+  fEMCal[6]=fZEM1BC[0];
+
+  JSFJLCSIM::KZGET("MCBCPAR",3,len,(Int_t*)fPEM1BC);
+  JSFJLCSIM::KZGET("MCBCPAR",4,len,(Int_t*)fRHD1BC);
+  fHDCal[4]=fRHD1BC[0];
+  JSFJLCSIM::KZGET("MCBCPAR",5,len,(Int_t*)fZHD1BC);
+  fHDCal[5]=fZHD1BC[idat[4]-1];
+  fHDCal[6]=fZHD1BC[0];
+  JSFJLCSIM::KZGET("MCBCPAR",6,len,(Int_t*)fPHD1BC);
+
+  // Get End Cap cal information.
+  
+  JSFJLCSIM::KZGET("MCECPAR",0, len, idat);
+  for(Int_t i=0;i<2;i++){ fECPAR0I[i]=idat[i]; }
+  rtmp=(Float_t*)(idat+3);
+  for(Int_t i=0;i<10;i++){ fECPAR0R[i]=rtmp[i]; }
+
+  printf(" NDREC=%d\n",fECPAR0I[1]);
+  printf(" RI1EC, RO1EC=%g %g\n",fECPAR0R[0],fECPAR0R[1]);
+
+  JSFJLCSIM::KZGET("MCECPAR",1,len,fNDPEC);
+  printf(" fNDPEC=%d\n",len);
+  JSFJLCSIM::KZGET("MCECPAR",2,len,(Int_t*)fREM1EC);
+  printf(" fREM1EC=%d\n",len);
+  JSFJLCSIM::KZGET("MCECPAR",3,len,(Int_t*)fZEM1EC);
+  printf(" fZEM1EC=%d\n",len);
+  JSFJLCSIM::KZGET("MCECPAR",4,len,(Int_t*)fPEM1EC);
+  printf(" fPEM1EC=%d\n",len);
+  JSFJLCSIM::KZGET("MCECPAR",5,len,(Int_t*)fRHD1EC);
+  printf(" fRHD1EC=%d\n",len);
+  JSFJLCSIM::KZGET("MCECPAR",6,len,(Int_t*)fZHD1EC);
+  printf(" fZHD1EC=%d\n",len);
+  JSFJLCSIM::KZGET("MCECPAR",7,len,(Int_t*)fPHD1EC);
+  printf(" fPHD1EC=%d\n",len);
+
+
+  fTrack[0]=45.0;
+  fTrack[1]=155.0;
+  fTrack[2]=-155.0;
+  fTrack[3]=155.0;
+  fTrack[4]=50.0;
+
+ 
+}
+
+
+//________________________________________________________________
+Bool_t JSFJIMParam::GetEMPosition(Int_t cell, Float_t pos[3], Float_t width[3])
+{
+  //(Function)
+  //   Get EM cell position and width from cell number.
+  //(Input)
+  //   cell ; Cell number
+  //(Output)
+  //   pos[0] ; r (cm)
+  //   pos[1] ; phi(radian)
+  //   pos[2] ; z(cm)
+  //   width[0]; half width in r (cm) ( = 0 for End Cap cell )
+  //   width[1]; half width in phi (radian)
+  //   width[2]; half width in z (cm)
+
+  Int_t iz=cell/1000000 ;
+  Int_t ith=(cell-iz*1000000)/1000;
+  Int_t iph=cell%1000;
+
+  pos[0]=fREM1BC[ith-1];
+  pos[2]=fZEM1BC[ith-1];
+  pos[1]=fPEM1BC[iph-1];
+
+  width[0]=0;
+  if( iph > 2 ) { width[1]=fPEM1BC[iph]-fPEM1BC[iph-1]; }
+  else { width[1]=fPEM1BC[iph+1]-fPEM1BC[iph]; }
+
+  width[1]=TMath::Abs(width[1]);
+
+  if( ith > 2 ) { width[2]=fZEM1BC[ith]-fZEM1BC[ith-1]; }
+  else { width[2]=fZEM1BC[ith+1]-fZEM1BC[ith]; }
+  width[2]=TMath::Abs(width[2]);
+
+  return kTRUE;
+
+}
+
+//________________________________________________________________
+Bool_t JSFJIMParam::GetHDPosition(Int_t cell, Float_t pos[3], Float_t width[3])
+{
+  //(Function)
+  //   Get HD cell position and width from cell number.
+  //(Input)
+  //   cell ; Cell number
+  //(Output)
+  //   pos[0] ; r (cm)
+  //   pos[1] ; phi(radian)
+  //   pos[2] ; z(cm)
+  //   width[0]; half width in r (cm) ( = 0 for End Cap cell )
+  //   width[1]; half width in phi (radian)
+  //   width[2]; half width in z (cm)
+
+  Int_t iz=cell/1000000 ;
+  Int_t ith=(cell-iz*1000000)/1000;
+  Int_t iph=cell%1000;
+
+  pos[0]=fRHD1BC[ith-1];
+  pos[2]=fZHD1BC[ith-1];
+  pos[1]=fPHD1BC[iph-1];
+
+  width[0]=0;
+  if( iph > 2 ) { width[1]=fPHD1BC[iph]-fPHD1BC[iph-1]; }
+  else { width[1]=fPHD1BC[iph+1]-fPHD1BC[iph]; }
+
+  if( ith > 2 ) { width[2]=fZHD1BC[ith]-fZHD1BC[ith-1]; }
+  else { width[2]=fZHD1BC[ith+1]-fZHD1BC[ith]; }
+
+  return kTRUE;
 
 }
 

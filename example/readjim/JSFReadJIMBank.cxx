@@ -28,7 +28,8 @@ extern "C" {
 extern void readjiminit_(Int_t *unit, Char_t *name, Int_t len);
 extern void readjimend_();
 extern void readjimread_(Int_t *nret);
-extern void jlread_(Int_t *ierr);
+extern void jlread0_(Int_t *ierr);
+extern void jlread1_(Int_t *ierr);
 extern Float_t ulctau_(Int_t *kf);
 extern void kzget_(Char_t *cname, Int_t *iseg, Int_t *leng, Int_t idat[],  Int_t lenb);
 
@@ -76,6 +77,16 @@ Bool_t JSFReadJIMBank::BeginRun(Int_t nrun)
     readjiminit_(&fUnit, fDataFileName, lenf);
     printf("%s is opened.\n",fDataFileName);
   }
+  Int_t ierr;
+  jlread0_(&ierr);
+
+  printf(" jlread0  ierr=%d\n",ierr);
+
+  if( !fDoesParameterInitialized ) {
+    fDoesParameterInitialized=kTRUE;
+    fParam->ReadParameter();
+  }
+
 
   return kTRUE;
 }
@@ -94,7 +105,7 @@ Bool_t JSFReadJIMBank::Process(Int_t nev)
 //
 
   Int_t ierr;
-  jlread_(&ierr);
+  jlread1_(&ierr);
 
   if( ierr == 1 ) {
     printf(" JSFReadJIMBank::Process .. Read end-of-file\n");
@@ -111,10 +122,6 @@ Bool_t JSFReadJIMBank::Process(Int_t nev)
 
   Bool_t rc=simb->UnpackDST(nev);
 
-  if( !fDoesParameterInitialized ) {
-    fDoesParameterInitialized=kTRUE;
-    fParam->ReadParameter();
-  }
 
   /*
   if( fReadWrite == 2 ) return simb->UnpackDST(nev);
@@ -216,14 +223,12 @@ Bool_t JSFReadJIMBankBuf::UnpackDST(Int_t nev)
   fNEMCHits = trbuff_.nemh;
   TClonesArray &emha = *(fEMCHits);
   for(i=0;i<fNEMCHits;i++){
-    //     new(emha[i])  JSFEMCHit(trbuff_.emh[i][2], trbuff_.emh[i][0], trbuff_.emh[i][1]);
-     new(emha[i])  JSFEMCHit(trbuff_.emh[i][1], trbuff_.emh[i][0], 0);
+     new(emha[i])  JSFEMCHit(trbuff_.emh[i][2], trbuff_.emh[i][0], trbuff_.emh[i][1]);
   }
   fNHDCHits = trbuff_.nhdh;
   TClonesArray &hdha = *(fHDCHits);
   for(i=0;i<fNHDCHits;i++){
-    //     new(hdha[i])  JSFHDCHit(hdh[i][2], hdh[i][0], hdh[i][1]);
-     new(hdha[i])  JSFHDCHit(trbuff_.hdh[i][1], trbuff_.hdh[i][0], 0);
+     new(hdha[i])  JSFHDCHit(trbuff_.hdh[i][2], trbuff_.hdh[i][0], trbuff_.emh[i][1]);
   }
 
   // ***************************************
