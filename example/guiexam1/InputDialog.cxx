@@ -122,7 +122,14 @@ InputDialog::InputDialog(const char *prompt, const char *defval, char *retstr,
 
    // create prompt label and textentry widget
    if( tline > 1  ) {
+#if __ROOT_VERSION__ > 3 || \
+	( __ROOT_VERSION__ == 2 && __ROOT_MINORVERSION__ > 25 ) || \
+	( __ROOT_VERSION__ == 2 && __ROOT_MINORVERSION__ == 25 \
+	&& __ROOT_PATCHLEVEL__ > 0 )
+     TGTextView *label=new TGTextView(fDialog, wuse, 15*tline);
+#else
      TGTextFrame *label=new TGTextFrame(fDialog, wuse, 15*tline, kDoubleBorder);
+#endif
      label->LoadBuffer(prompt);
      fWidgets->Add(label);
      fDialog->AddFrame(label, l1);
