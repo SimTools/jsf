@@ -42,7 +42,7 @@ ANALLIB = -Wl,-Bdynamic $(JSFLIBS) $(EXTRALDOPT) \
 # libgeant321.a, so removed.
 
 # CERNLIB = $(shell cernlib jetset74 geant321 mathlib pawlib graflib grafX11 packlib kernlib)
-CERNLIB = $(shell cernlib jetset74 packlib kernlib)
+CERNLIB = $(shell cernlib jetset74 packlib kernlib mathlib)
 
 JIMLDLIBS = -L$(JSFROOT)/lib -lJSFGUI \
 	-L$(JLCSIMROOT)/lib -lzbs -ljlcutil 
