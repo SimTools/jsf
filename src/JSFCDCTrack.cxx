@@ -5,6 +5,7 @@
 /*
 2-May-1999 A.Miyamoto  Bug in MovePivot is fixed.
 5-May-1999 A.Miyamoto  Add MovePivotToIP(...) and AddMSError(...)
+14-May-1999 A.Miyamoto Avoid negative costh in MovePivotToIP.
 */
 
 ////////////////////////////////////////////////////////////////////////
@@ -423,6 +424,12 @@ Bool_t JSFCDCTrack::MovePivotToIP(JSFQuickSimParam *spar)
   Double_t rnow=TMath::Sqrt(hp.pivot.x*hp.pivot.x+hp.pivot.y*hp.pivot.y);
   Double_t costh=(-hp.pivot.x*TMath::Sin(hp.phi0) + 
 		  hp.pivot.y*TMath::Cos(hp.phi0)) / (rnow*pnorm) ;
+  if( costh < 0.0 ) {
+	printf("Warning in JSFCDCTrack::MovePivotToIP()...vtx1");
+	printf(" costh=%g <=0, though it should be positive\n",costh);
+	printf("Abs(costh) is used instead..\n");	
+	costh= -costh;
+  }
   Float_t rad1=spar->GetVTXThickness(1)/costh;
   AddMSError(rad1);  // Include MS at the first layer of VXT
 
@@ -449,6 +456,12 @@ Bool_t JSFCDCTrack::MovePivotToIP(JSFQuickSimParam *spar)
   pnorm=TMath::Sqrt(1.0+hp.tanl*hp.tanl);
   costh=(-pivot[0]*TMath::Sin(hp.phi0)+pivot[1]*TMath::Cos(hp.phi0))
                 / (rcyl*pnorm) ;
+  if( costh < 0.0 ) {
+	printf("Warning in JSFCDCTrack::MovePivotToIP()...ip");
+	printf(" costh=%g <=0, though it should be positive\n",costh);
+	printf("Abs(costh) is used instead..\n");	
+	costh= -costh;
+  }
   Float_t rad0=spar->GetVTXThickness(0)/costh;
   AddMSError(rad0);
   Float_t ip[3]={0.0, 0.0, 0.0};
