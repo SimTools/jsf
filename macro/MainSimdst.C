@@ -27,7 +27,7 @@ int MainSimdst(Int_t maxevt)
   sprintf(ofile,"%s/%s%s.dat",fndir,fnpref,ftype);
   sprintf(oparam,"%s/%s%s.param",fndir,fnpref,ftype);
 
-  simdst->SetOutputFileName(ofile);
+  simdst->SetDataFileName(ofile);
   simdst->SetParamFileName(oparam);
 
   
