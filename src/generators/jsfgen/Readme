@@ -1,0 +1,2 @@
+JSF classes for event generation which does not depend on LCLIB,
+but this depends on Pythia to get particle informaion

@@ -1,0 +1,54 @@
+Files in this directory is C++ version of Bases/Spring developped
+by Setsuya Kawabata, 2000.
+
+[Contents of directories]:
+src/             source files for bases/spring system
+example/nunugam  stand alone example of bases 
+
+[How to build library]:
+ 1) Make sure JSFROOT environparameter is set properly.
+ 2) Then, do
+    $ cd src
+    $ xmkmf -a
+    $ make
+    $ make install
+  
+     "make install" copies library in $(JSFROOT)/lib and create a 
+     symbolic link of header files in $(JSFROOT)/include
+  
+[How to run example]:
+  Example to calculate the cross secion of  e+e- -> nu nu~ gamma and event 
+  generation is in example/nunugam.  To create executables, do
+   
+    $ cd example/nunugam
+    $ xmkmf -a
+    $ make
+
+  To run bases example, do
+
+    $ bases
+
+  This program writes a result in a file, bases.data
+  
+  To run spring using the above result, do
+
+    $ spring
+
+  To run bases and spring subsequently, do
+
+    $ basesspring
+
+  Results of these jobs are in files, jobout.bases, jobout.spring,
+  jobout.basesspring.
+
+  Main program for them are in testint.cxx, testgen.cxx, and intgen.cxx.
+  User initialization and user function are defined in nunugam.cxx.
+  In this example, user integration function is called without
+  argument.  In the function, user refers the integral variable
+  by his own variable, not through an array X.
+
+
+
+10-Feburary-2000
+Written by Akiya Miyamoto
+E-mail:akiya.miyamoto@kek.jp

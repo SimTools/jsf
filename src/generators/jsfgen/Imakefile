@@ -1,0 +1,80 @@
+/************************************************************************/
+/*									*/
+/* Imakefile to build JSF libraries and application			*/
+/*									*/
+/* (Update)								*/
+/*  4-Feb-2000 A.Miyamoto Include libJSFDMatrix, create shared library  */
+/*          								*/
+/*$Id:      								*/
+/*       								*/
+/************************************************************************/
+
+/*----------------------------------------------------------------------*/
+/*  Some macros specific to jsf	building				*/
+/*----------------------------------------------------------------------*/
+
+#include    "../../../conf/makejsf.tmpl"
+
+NAME		= JSFGenerator
+LIBNAME		= lib$(NAME)
+JSFINSTALLDIR   = ../../..
+INC		= $(JSFINSTALLDIR)/include 
+
+/*----------------------------------------------------------------------*/
+/*  Source files, headers, and objects to build				*/
+/*----------------------------------------------------------------------*/
+
+SRC		= JSFGeneratorParticle.$(SrcSuf) JSFGenerator.$(SrcSuf) \
+		DebugGenerator.$(SrcSuf) \
+		JSFReadGenerator.$(SrcSuf) \
+		JSFGeneratedProcessType.$(SrcSuf)
+
+OBJ	      = $(subst .$(SrcSuf),.$(ObjSuf),$(SRC)) \
+		readgenutil.o readparton.o \
+		$(LIBNAME).$(ObjSuf)
+
+HDR	      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRC)) \
+		$(NAME)LinkDef.h
+
+INSTALLHDR    = $(HDR) JSFParticleData.h
+
+LIBS	      = -lg2c -lnsl 
+
+/*----------------------------------------------------------------------*/
+/*  Make targets							*/
+/*----------------------------------------------------------------------*/
+
+all::  $(LIBNAME).$(DllSuf)
+
+$(LIBNAME).$(DllSuf): $(OBJ)
+	@echo "Linking $@ "
+	$(LD) $(SOFLAGS)  $(OBJ) $(LIBS) -o $(LIBNAME).$(DllSuf)
+
+install:: $(LIBNAME).$(DllSuf)
+	install -p -m 755 $(LIBNAME).$(DllSuf) $(JSFLIBDIR)
+	install -p -m 644 $(INSTALLHDR) $(JSFINCDIR)
+
+uninstall::
+	rm -f $(JSFLIBDIR)/$(LIBNAME).$(DllSuf)
+	( cd $(JSFINCIDR) ; rm -f $(HDR) )
+
+clean:: 
+	@rm -f $(OBJS) core *.so *~
+	@rm -f $(LIBNAME).*
+
+depend:: $(SRC) $(HDR)
+	for i in $(SRC); do \
+	rmkdepend -a -- $(DEPENDFILES) -- $$i; done
+
+distclean:: clean
+	@rm -f $(OBJ) core *~ *.o
+	@rm -f Makefile 
+
+web:
+	../bin/jsf -q -b html.C
+
+$(LIBNAME).$(SrcSuf): $(HDR)
+		@echo "Generating dictionary ..."
+		rootcint -f $(LIBNAME).$(SrcSuf) -c -I. -I$(JSFINSTALLDIR)/include \
+		$(RCINTDEFINES) $(HDR)
+

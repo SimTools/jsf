@@ -1,0 +1,50 @@
+#
+#
+#  Imakefile to create JSFME2SHGen library 
+#
+# $Id$
+
+#include "conf/makejsf.tmpl"
+
+PROGNAME = JSFME2SHGenerator
+
+SRCS =   JSFHEPEUP.$(SrcSuf) JSFHEPRUP.$(SrcSuf) \
+	JSFMEGenerator.$(SrcSuf) JSFSHGenerator.$(SrcSuf) \
+	JSFReadMEGenerator.$(SrcSuf) JSFPythiaHadronizer.$(SrcSuf)
+
+
+OBJS  = $(subst .$(SrcSuf),.$(ObjSuf),$(SRCS)) \
+	JSFReadGZippedFile.$(ObjSuf) \
+	lib$(PROGNAME).$(ObjSuf)
+
+HDRS  = $(subst .$(SrcSuf),.h,$(SRCS))
+
+
+all:: lib$(PROGNAME).$(DllSuf)
+
+install:: lib$(PROGNAME).$(DllSuf)
+	install -p -m 755 lib$(PROGNAME).$(DllSuf) $(JSFROOT)/lib
+	install -p -m 644 $(HDRS) $(JSFROOT)/include
+
+lib$(PROGNAME).$(DllSuf): $(OBJS)
+	$(LD) $(DYLIBFLAGS) $(OBJS) -lz -o lib$(PROGNAME).$(DllSuf) 
+
+depend:: $(SRCS) $(HDRS)
+	for i in $(SRCS); do \
+	rmkdepend -a -- $(DEPENDFILES) -- $$i; done
+
+lib$(PROGNAME).$(SrcSuf): $(HDRS) $(PROGNAME)LinkDef.h
+	rootcint -f $@ -c -I$(JSFROOT)/include \
+	$(HDRS) $(PROGNAME)LinkDef.h
+
+clean::
+	rm -f lib$(PROGNAME).*
+
+distclean:: clean
+	rm -f Makefile
+	rm -f $(JSFROOT)/lib/lib$(PROGNAME).$(DylibSuf)
+	rm -f genbeam.root genbeam2.root
+
+XCOMM  web:
+XCOMM   jsf -q -b html.C
+

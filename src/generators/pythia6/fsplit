@@ -1,0 +1,81 @@
+#!/usr/bin/perl
+# (Function)
+#    splits a fortran source file into individual subroutines.
+# (Usage)
+#    Basic usage is as follows:
+#       fsplit foobar.f
+# (Update Record)
+#    02/07/17  K.Fujii	Original version.
+#
+#--
+#  Check # input files.
+#--
+$n_files = @ARGV;
+if (!$n_files) {
+   print "$n_files files given\n";
+   print "Usage:\n";
+   print "   fsplit <fortran source file to split>\n";
+   exit 0;
+}
+#--
+#  Loop over input files.
+#--
+$init = 0;
+$tmpfile = "tempout.f";
+foreach $file (@ARGV) {
+   open(FILE,"<$file");
+   open(TMPFILE,">$tmpfile");
+   $nfile = 0;
+   while (<FILE>) {
+      if (/^       *SUBROUTINE/) {
+         $name = $_;
+         $name =~ s/^\s*SUBROUTINE\s*([^( ]*)\s*.*/\1/;
+         chomp($name);
+         print TMPFILE;
+      } elsif (/^       *FUNCTION/) {
+         $name = $_;
+         $name =~ s/^\s*FUNCTION\s*([^( ]*)\s*\(.*/\1/;
+         chomp($name);
+         print TMPFILE;
+      } elsif (/^       *DOUBLE PRECISION FUNCTION/) {
+         $name = $_;
+         $name =~ s/^\s*DOUBLE PRECISION FUNCTION\s*([^( ]*)\s*\(.*/\1/;
+         chomp($name);
+         print TMPFILE;
+      } elsif (/^       *BLOCK DATA/) {
+         $name = $_;
+         $name =~ s/^\s*BLOCK DATA\s\s*(\S*)\s*$/\1/;
+         chomp($name);
+         print TMPFILE;
+      } elsif (/^       *END *$/) {
+         print TMPFILE;
+         if ($nfile == 0) {
+            if ($init == 0) {
+               print "SRCS = ";
+               $init = 1;
+            } else {
+               print "       ";
+            }
+         }
+         print "$name.f";
+         if ($nfile < 5) {
+            print " ";
+            $nfile++;
+         } else {
+            print "\\\n";
+            $nfile = 0;
+         }
+         close(TMPFILE);
+         rename($tmpfile,"$name.f");
+         open(TMPFILE,">$tmpfile");
+      } else {
+         print TMPFILE;
+      }
+   }
+   close(FILE);
+   close(TMPFILE);
+   unlink($tmpfile);
+   print "\n\n";
+   print "OBJS = \$(subst .f,.o,\$(SRCS))\n";
+}
+exit 0;

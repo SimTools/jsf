@@ -1,0 +1,11 @@
+12-Oct-2001 Akiya Miyamoto
+  In the Bases step, histograms were accumulated both during 
+the grid defining step and the accumulation step, though they were
+normalized by the variable, SCALLS, which was reset to zero 
+just before the accumlation step.  As a result, dsigma/dx of histograms
+printed by bases_xhplot, etc were not correct.
+
+To avoid this problem, we utilize a variable, bases_flag
+and histograms are not filled during the grid defining step.
+
+ 

@@ -1,0 +1,45 @@
+# /bin/sh
+
+PYTHIA_VERSION=6
+PYTHIA_SUBVERSION=222
+PYTHIANAME="pythia$PYTHIA_VERSION$PYTHIA_SUBVERSION"
+
+# ---------------------------------------------------
+# make sure PYTHIA_VERSION and PYTHIA_SUBVERSIO are correct
+# before yo run this script.  These must be also same as 
+# parameters saved in $JSFROOT/conf/configure.in
+#
+# You will not need to edit rest of lines.
+# ---------------------------------------------------
+
+FFLAGS="-O2 -g -fPIC -fno-second-underscore"
+
+g77 -c $FFLAGS $PYTHIANAME.f
+g77 -c $FFLAGS tpythia6_called_from_cc.F
+g77 -c $FFLAGS pythia6_common_block_address.F
+echo 'void MAIN__() {}' >main.c
+gcc -c main.c
+gcc -c -fPIC pythia6_address.c
+g77 -shared -rdynamic -Wl,-soname,libPythia6.so -o libPythia6.so \
+ main.o pythia6_address.o tpythia6_called_from_cc.o \
+ pythia6_common_block_address.o $PYTHIANAME.o
+
+
+install libPythia6.so ../../../lib/libPythia6.so
+mkdir -p ../../../include
+install pythia6.inc ../../../include/pythia6.inc
+
+
+#----------------------------
+echo "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+echo "%  Pythia test program will start                   %"
+echo "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+date
+
+g77 -o pythia_test pythia_test.f -L../../../lib -lPythia6
+pythia_test
+
+echo "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+echo "%  Pythia test program has completed                %"
+echo "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+date
