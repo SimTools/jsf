@@ -34,25 +34,14 @@ clean:
 	( cd example/guiexam1 ; make clean )
 	( cd example/CCDAnal  ; make clean )
 
-web:  CCDAnal
-	( cd example/FFbarSpring ; ./jsf -q -b html.C ; \
-		cd $(JSFROOT)/html ; mv USER_Index.html FFbarSpring_Index.html)
-	( cd example/ww ; ./jsf -q -b html.C ; \
-		cd $(JSFROOT)/html ; mv USER_Index.html ww_Index.html)
-	( cd example/guiexam1 ; $(JSFROOT)/bin/jsf -q -b html.C ; \
-		cd $(JSFROOT)/html ; mv USER_Index.html guiexam1_Index.html)
-	( cd src ; ../bin/jsf -q -b html.C ; \
-		cd $(JSFROOT)/html ; mv USER_Index.html JSFMain_Index.html)
-	( cd example/CCDAnal ; xmkmf ; make ; ./ccd -q -b html.C ; \
-		cd $(JSFROOT)/html ; mv USER_Index.html CCDAnal_Index.html)
-	( cd example/readjim ; xmkmf ; make ; ./jsf -q -b html.C ; \
-		cd $(JSFROOT)/html ; mv USER_Index.html ReadJIM_Index.html)
-	( cd example/jsfjim ; xmkmf ; make ; ./jsfjim -q -b html.C ; \
-		cd $(JSFROOT)/html ; mv USER_Index.html JSFJIM_Index.html)
-	( perl bin/webindx > html/JSF_Index.html )
+web: html/example
+	( cd src ; xmkmf ; make web ) 
+	for i in FFbarSpring guiexam1 ww CCDAnal readjim jsfjim ; do \
+	( cd example/$$i ; xmkmf ; make web ) \
+	done
 
-CCDAnal:
-	( cd example/CCDAnal ; xmkmf ; make )
+html/example: 
+	mkdir html/example
 
 lib: 
 	mkdir lib
