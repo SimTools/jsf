@@ -47,7 +47,7 @@ XCOMM # -----------------------------------------------------
 #if defined(PPCArchitecture)
 SOEXT         = so
 LIBF2C        = -lg2c           
-CXX           = g++ -O2 -g
+CXX           = g++ -O2
 CXXFLAGS      = -Wall -fsigned-char -fno-rtti -fno-exceptions -fPIC \
                 -I$(JSFROOT)/include -I$(ROOTSYS)/include
 SOFLAGS       = -shared -Wl,-soname,$(SONAME).$(SOEXT)
@@ -64,7 +64,7 @@ XCOMM # -----------------------------------------------------
 #if defined(MachTenPPCArchitecture)
 SOEXT         = so
 LIBF2C        = -lf2c           
-CXX           = g++ -O2 -g
+CXX           = g++ -O2
 CXXFLAGS      = -Wall  -fno-rtti -fno-exceptions -fPIC \
 		-I$(JSFROOT)/include -I$(ROOTSYS)/include
 SOFLAGS       = -shared -Wl,-soname,$(SONAME).$(SOEXT)
@@ -105,15 +105,15 @@ XCOMM # HP-UX
 XCOMM # -----------------------------------------------------
 #if defined(HPArchitecture)
 LIBF2C        = -L/opt/fortran/lib -lU77
-CXX	      = aCC -O -g
+CXX	      = aCC -O
 CXXFLAGS      = +W70,495,740,749,829 -DR__ACC -z +Z \
 		-I$(JSFROOT)/include -I$(ROOTSYS)/include
 SOFLAGS       = -b -z -Wl,+vnocompatwarnings
 LDFLAGS       = -z -Wl,+s -Wl,-E $(ANALLIB) $(GLIBS)
 SOEXT         = sl
-LIBS          = $(ROOTLIBS) -lm -ldld
+LIBS          = $(ROOTLIBS) -L/usr/lib -lm -ldld
 GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -lXpm -lX11 \
-		$(LIBF2C) -lm -ldld
+		$(LIBF2C) -L/usr/lib -lm -ldld
 BLOCKDATA     = 
 #endif
 
