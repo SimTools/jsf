@@ -249,7 +249,7 @@ Bool_t GetEvent(Int_t ev)
   //  if( irunmode==2 && !jsf->GetEvent(ev) ) { return kFALSE; }
 
   if( jsf->GetInput() ) {
-    if( jsf->GetEvent(ev) ) { return kFALSE; }
+    if( !jsf->GetEvent(ev) ) { return kFALSE; }
   }
 
     Bool_t flag=jsf->Process(ev);
