@@ -654,10 +654,11 @@ Bool_t JSFSIMDSTBuf::UnpackDST(Int_t nev)
   // ***************************************
   // Put LTKCLTrack class
   // ***************************************
-  TObjArray &cta = *(fCombinedTracks);
+  //  TObjArray &cta = *(fCombinedTracks);
   for(i=0;i<fNCombinedTracks;i++){
-    new(cta[i]) JSFLTKCLTrack(&cmbt[i][0]);
-    lt=(JSFLTKCLTrack*)cta.UncheckedAt(i);
+    //    new(cta[i]) JSFLTKCLTrack(&cmbt[i][0]);
+    fCombinedTracks->Add(new JSFLTKCLTrack(&cmbt[i][0]));
+    lt=(JSFLTKCLTrack*)fCombinedTracks->UncheckedAt(i);
     Int_t icdc=(Int_t)cmbt[i][7]-1;
     if( icdc >= 0 ){
       ct=(JSFCDCTrack*)fCDCTracks->UncheckedAt(icdc);
@@ -691,7 +692,10 @@ JSFSIMDSTBuf::~JSFSIMDSTBuf()
   Clear();
   
   if(fGeneratorParticles) delete fGeneratorParticles;
-  if(fCombinedTracks) delete fCombinedTracks;
+  if(fCombinedTracks) {
+    fCombinedTracks->Delete();
+    delete fCombinedTracks;
+  }
   if(fCDCTracks) delete fCDCTracks;
   if(fVTXHits) delete fVTXHits;
   if(fEMCHits) delete fEMCHits;
