@@ -186,7 +186,12 @@ void InitGenSim()
   Int_t eventtype=jsf->Env()->GetValue("JSFGUI.EventType",kPythia);
 
   bool gentype=gJSF->Env()->GetValue("JSFJ4.UseJupiterGenerator",0);
-  if( gentype == 1 ) eventtype=kNoGenerator;
+  if( gentype == 1 ) {
+    eventtype=kNoGenerator;
+  }
+  else {
+    full  = new JSFLCFULL();
+  }
 
   Float_t ecm;
   sscanf(jsf->Env()->GetValue("JSFGUI.ECM","300.0"),"%g",&ecm);
@@ -194,8 +199,6 @@ void InitGenSim()
   Char_t classname[128];
   Char_t cmdstr[128];
   Char_t hadronizer[128];
-
-  full  = new JSFLCFULL();
 
   switch (eventtype) {
     case kPythia:
@@ -377,7 +380,7 @@ void JobEnd()
   Bool_t flag=gROOT->GetGlobalFunction("UserTerminate",0,kTRUE) ;
   jsf->Terminate();
   if( flag ) {  UserTerminate(); }
-  if( ofile ) ofile->Write();
+  if( ofile ) ofile->Write(0,jsf->GetWriteMode());
 }
 
 //_________________________________________________________
