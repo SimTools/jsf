@@ -14,7 +14,13 @@ To-Do  -- Help wanted
 	
 	
 **********************************************************
-jsf-1-4  progress since  5-January-1999 A.Miyamoto
+jsf-1-5  Progress since 16-Feburary-1999 A.Miyamoto
+**********************************************************
+(1) Add several member functions in JSFGenertorParticle class
+(2) Typo in src/JSFSIMDST.h and fixed.
+
+**********************************************************
+jsf-1-4  5-January-1999 A.Miyamoto
 **********************************************************
 (1) Save Ecm properly in PythiaGenerator.cxx
 (2) A bug in JSFQuickSim.cxx.  fHDCal was not set.
