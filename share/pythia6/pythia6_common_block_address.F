@@ -66,6 +66,10 @@ c-----------------------------------------------------------------------
         common_block_address = pythia6_addressd(XXM(1))
       elseif (common_block_name.eq."PYBINS") then
         common_block_address = pythia6_addressi(IHIST(1))
+      elseif (common_block_name.eq."HEPRUP") then
+        common_block_address = pythia6_addressi(IDBMUP(1))
+      elseif (common_block_name.eq."HEPEUP") then
+        common_block_address = pythia6_addressi(NUP)
       endif
 c
       pythia6_common_block_address = common_block_address
