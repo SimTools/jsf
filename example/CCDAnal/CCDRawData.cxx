@@ -143,7 +143,8 @@ Bool_t CCDRawData::BeginRun(Int_t nrun)
     printf(" Data size(%d) exceeds predefined buffer size(720000)\n",hd[kReclength]);
   }
 #else
-  Int_t data[hd[kReclength]];
+  Int_t ilen=hd[kReclength];
+  Int_t data[ilen];
 #endif
   Int_t kr=hd[kReclength]-6;
   lw=fread(data,4,kr,fd);
