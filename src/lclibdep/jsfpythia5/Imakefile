@@ -54,9 +54,11 @@ $(LIBNAME).$(DllSuf): $(OBJ)
 install:: $(LIBNAME).$(DllSuf)
 	mkdir -p $(JSFINSTALLDIR)/lib $(JSFINCDIR)
 	install -p -m 755 $(LIBNAME).$(DllSuf) $(JSFLIBDIR)
+	install -p -m 644 JSFHadronizer.h $(JSFINCDIR)
 
 uninstall::
 	rm -f $(JSFINSTALLDIR)/$(LIBNAME).$(DllSuf)
+	rm -f $(JSFINCDIR)/JSFHadronizer.h
 
 clean:: 
 	@rm -f $(OBJS) core *.so *~
