@@ -74,7 +74,7 @@ JSFSpring::~JSFSpring()
 //_____________________________________________________________________________
 void JSFSpring::ReadBases(const char *name)
 {
-  TFile *last=gFile;
+  TDirectory *last=gDirectory;
   TFile *fBasesFile=new TFile(name);
   fBasesFile->cd("/");
   fDoBases = kFALSE;
@@ -91,7 +91,7 @@ void JSFSpring::ReadBases(const char *name)
 
   fBases->Userin();
 
-  last->cd("/");
+  last->cd();
 }
 
 //_____________________________________________________________________________

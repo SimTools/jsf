@@ -284,7 +284,7 @@ Bool_t JSFSteer::Initialize()
    }
 
    InitializeMessage();
-
+   TDirectory *last=gDirectory;
    TListIter next(fModules);
    JSFModule *module;
    while ((module = (JSFModule*)next())) {
@@ -294,6 +294,7 @@ Bool_t JSFSteer::Initialize()
      if( !module->Initialize() )  return kFALSE; 
    }
 
+   last->cd();
    return kTRUE;
 }
 
