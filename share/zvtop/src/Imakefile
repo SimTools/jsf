@@ -59,6 +59,8 @@ cleanall:: clean
 	rm -f Makefile
 	rm -f $(JSFROOT)/lib/libJSFZVTOP3.$(DllSuf)
 
+distclean:: cleanall
+
 zvtop3.o : zvtop3.F zvtopoption.inc
 zvres3.o : zvres3.F zvtopoption.inc
 zvsig3.o : zvsig3.F zvtopoption.inc
