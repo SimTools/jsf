@@ -42,10 +42,12 @@ extern "C" void hf_fint(char *option); /* to initialize fortran environment */
 extern "C" void G__cpp_setupG__Pythia();
 #endif
 
+#if __ROOT_FULLVERSION__ <= 30200
 extern void InitGui();
 VoidFuncPtr_t initfuncs[] = { InitGui, 0 };
 
 TROOT root("Rint","The ROOT Interactive Interface", initfuncs);
+#endif
 
 //______________________________________________________________________________
 int main(int argc, char **argv)
