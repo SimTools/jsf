@@ -21,7 +21,7 @@
 const Int_t kMaxVTXHits=500;
 
 class JSFVTXHit : public TObject {
-
+friend class JSFQuickSimBuf;
 protected:
   Double_t   fR;      // Radius (cm) of vertex hits.
   Double_t   fPhi;    // Azimuthal angle (radian) of vertex hits.
@@ -40,6 +40,7 @@ public:
 	    Double_t dz, Int_t layer, Int_t trackid, Int_t gentrack){
             fR=r ; fPhi=phi; fZ=z ;  fDphi=dphi, fDz=dz ;
 	    fLayer=layer ; fLinkedTrack=trackid; fGenTrack=gentrack; }
+  JSFVTXHit(JSFVTXHit& h);
 
   Double_t GetR(){return fR;}
   Double_t GetPhi(){ return fPhi;}

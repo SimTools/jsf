@@ -50,6 +50,7 @@ public:
  	 Int_t ncdc, Int_t first);
   JSFLTKCLTrack(EJSFLTKCLTrackBank bank, Float_t data[]);
   JSFLTKCLTrack(Float_t data[]);
+  JSFLTKCLTrack(JSFLTKCLTrack& t);
 
   void SetCDC(Int_t ind, JSFCDCTrack *t){ f1stCDC=ind; fCDC=t; }; 
 

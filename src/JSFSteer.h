@@ -98,7 +98,7 @@ public:
   TTree     *ITree() {return fITree;}
   TTree     *OTree() {return fOTree;}
   TList     *Modules()  {return fModules;}
-  JSFModule *FindModule(Text_t *classname);
+  JSFModule *FindModule(Text_t *classname,const Option_t *opt="");
   TEnv      *Env(){ return fEnv;}
 
   Int_t     GetVersion(){ return fVersion;}

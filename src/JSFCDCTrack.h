@@ -23,9 +23,6 @@
 #ifndef __JSFQuickSimParam__
 #include "JSFQuickSimParam.h"
 #endif
-// #ifndef __JSFBasicClasses__
-// #include "JSFBasicClasses.h"
-// #endif
 #ifndef __JSFHelicalTrack__
 #include "JSFHelicalTrack.h"
 #endif
@@ -35,7 +32,7 @@ class JSFQuickSimParam;
 const Int_t kMaxCDCTracks=500;
 
 class JSFCDCTrack : public TObject {
-
+friend class JSFQuickSimBuf;
 protected:
   Float_t  fP[3] ; // Px, Py, Pz at cloest approach
   Float_t  fE    ; // Particle energy assuming mass less particle.
@@ -49,13 +46,14 @@ protected:
   Float_t  fPosAtEMC[3]  ; // ( r, th, phi) at EMC entrance.
   Float_t  fEPosAtEMC[2] ; // (dth,dphi) of EMC entrance position.
   Int_t    fNVTX    ; // Number of matched VTX hits.
-  JSFVTXHit *fVTXHits[10] ; //! Pointer to linked VTX hits. 
+  JSFVTXHit *fVTXHits[22] ; //! Pointer to linked VTX hits. 
 
 public:
   JSFCDCTrack(){}
   virtual ~JSFCDCTrack();
   JSFCDCTrack( Int_t trkp[] );
   JSFCDCTrack( Float_t trkf[], Double_t trkd[] );
+  JSFCDCTrack(JSFCDCTrack& t );
 
   void GetErrorMatrix(Double_t trkd[]);
   void GetTrackParameter(Float_t trkf[]);

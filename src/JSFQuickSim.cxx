@@ -9,6 +9,7 @@
 /*  Change Log
   30-March-1999  A.Miyamoto  Put modification to run with lclib-98a-4
   28-May-1999    A.Miyamoto  Increased buffer size for VTX layer from 10 to 22
+  30-July-1999   A.Miyamoto  Add Append.  Does not use global variables for TClonesArray
 */
 
 
@@ -50,6 +51,13 @@
 //   }
 //   printf(" Total energy is %g\n",psum(0));    
 // 
+// 
+//  Environment parameter and its default value  are as follows
+//
+// # If 0, track parameter in JSFCDCTrack is parameter by CDCTrack only.
+// # If 1, JSFCDCTrack is a result of CDC-VTX combined track parameter.
+//  JSFQuickSim.CDCTrackIsCDCVTX   1 
+//
 //$Id$
 //
 //
@@ -80,13 +88,6 @@ extern void cmbtrk_(int *iret);
 ClassImp(JSFQuickSim)
 ClassImp(JSFQuickSimBuf)
 
-TClonesArray *gTracks;
-TClonesArray *gCDCTracks;
-TClonesArray *gVTXHits;
-TClonesArray *gEMCHits;
-TClonesArray *gHDCHits;
-
-
 // ******* Common /PRJUNK/  ****************
 // to access temporary information of LTKCL package.
 const int MXxZET=43;
@@ -112,14 +113,16 @@ extern COMMON_PRJUNK prjunk_;
 
 
 //_____________________________________________________________________________
-JSFQuickSim::JSFQuickSim(const char *name, const char *title)
-       : JSFModule(name,title)
+JSFQuickSim::JSFQuickSim(const Char_t *name, const Char_t *title, const Char_t *opt)
+       : JSFModule(name,title,opt)
 {
   // JLC QuickSimulator module.
   // 
   fParam   = new JSFQuickSimParam();
   fEventBuf= new JSFQuickSimBuf("JSFQuickSimBuf", 
 			       "JSF QuickSim Event data", this);
+  //  SetMakeBranch(kFALSE);
+
 }
 
 
@@ -128,24 +131,19 @@ JSFQuickSimBuf::JSFQuickSimBuf(const char *name, const char *title, JSFQuickSim 
        : JSFEventBuf(name,title, sim)
 {
   fNTracks=0;
-  if( !gTracks ) gTracks= new TClonesArray("JSFLTKCLTrack", 1000);
-  fTracks=gTracks;
+  fTracks= new TClonesArray("JSFLTKCLTrack", 1000);
 
   fNCDCTracks=0;
-  if( !gCDCTracks )gCDCTracks= new TClonesArray("JSFCDCTrack", kMaxCDCTracks);
-  fCDCTracks=gCDCTracks;
+  fCDCTracks= new TClonesArray("JSFCDCTrack", kMaxCDCTracks);
 
   fNVTXHits=0 ;
-  if( !gVTXHits ) gVTXHits= new TClonesArray("JSFVTXHit", kMaxVTXHits);
-  fVTXHits=gVTXHits;
+  fVTXHits= new TClonesArray("JSFVTXHit", kMaxVTXHits);
 
   fNEMCHits=0 ;
-  if( !gEMCHits ) gEMCHits= new TClonesArray("JSFEMCHit", kMaxCalHits);
-  fEMCHits=gEMCHits;
+  fEMCHits= new TClonesArray("JSFEMCHit", kMaxCalHits);
 
   fNHDCHits=0 ;
-  if( !gHDCHits ) gHDCHits= new TClonesArray("JSFHDCHit", kMaxCalHits);
-  fHDCHits=gHDCHits;
+  fHDCHits= new TClonesArray("JSFHDCHit", kMaxCalHits);
 
   fCDCTrackIsCDCVTX = gJSF->Env()->GetValue("JSFQuickSim.CDCTrackIsCDCVTX",1);
 
@@ -154,14 +152,31 @@ JSFQuickSimBuf::JSFQuickSimBuf(const char *name, const char *title, JSFQuickSim 
 //_____________________________________________________________________________
 JSFQuickSim::~JSFQuickSim()
 {
-  //  if( fParam ) delete fParam;
-  //  if( fEventBuf  ) delete fEventBuf;
+  if( fParam ) delete fParam;
+  if( fEventBuf  ) delete fEventBuf;
 }
 
 //_____________________________________________________________________________
 JSFQuickSimBuf::~JSFQuickSimBuf()
 {
+  Clear();
+  if(fTracks)    delete fTracks;
+  if(fCDCTracks) delete fCDCTracks;
+  if(fVTXHits)   delete fVTXHits;
+  if(fEMCHits)   delete fEMCHits;
+  if(fHDCHits)   delete fHDCHits;
 }
+
+//_____________________________________________________________________________
+void JSFQuickSimBuf::Clear(const Option_t *option)
+{
+  if(fTracks)    fTracks->Clear(option);
+  if(fCDCTracks) fCDCTracks->Clear(option);
+  if(fVTXHits)   fVTXHits->Clear(option);
+  if(fEMCHits)   fEMCHits->Clear(option);
+  if(fHDCHits)   fHDCHits->Clear(option);
+}
+
 
 //_____________________________________________________________________________
 Bool_t JSFQuickSim::Initialize()
@@ -301,6 +316,66 @@ Bool_t JSFQuickSim::TBPUTGeneratorParticles()
   return kTRUE;
 }
 
+
+//____________________________________________________________________________
+void JSFQuickSim::MakeBranch(TTree *tree)
+{
+  //  JSFModule::MakeBranch(tree);
+
+   fTree=tree;
+   if( fEventBuf && fMakeBranch ) {
+     Int_t split=0;
+     Int_t bsize=50000;
+     tree->Branch(fEventBuf->GetName(), fEventBuf->ClassName() ,
+		  &fEventBuf, bsize, split);
+   }
+}
+
+//_____________________________________________________________________________
+void JSFQuickSim::SetBranch(TTree *tree)
+{
+//  Set Branch address for this module
+
+   fTree=tree;
+   if( fEventBuf ) {
+     Char_t name[50];
+     sprintf(name,"%s",fEventBuf->GetName());
+     fBranch=tree->GetBranch(name);
+     fBranch->SetAddress(&fEventBuf);
+   }
+}
+
+
+// ---------------------------------------------------------------
+Bool_t JSFQuickSim::EndRun()
+{
+
+   // Save random seed
+   fSMRRND=smrrnd_.iseed;
+   fSWMRND=swmrnd_.iseed;
+
+  if( fFile->IsWritable() ) {  Write();  }
+
+   return kTRUE;
+}
+
+
+// ---------------------------------------------------------------
+Bool_t JSFQuickSim::GetLastRunInfo()
+{
+
+  Read(GetName());
+  
+  smrrnd_.iseed=fSMRRND;
+  swmrnd_.iseed=fSWMRND;
+
+  printf("Random seeds for JSFQuickSim were reset by ");
+  printf("values from a file.\n");
+  
+  return kTRUE;
+}
+
+
 //_____________________________________________________________________________
 Bool_t JSFQuickSimBuf::MakeEventBuf()
 {
@@ -344,36 +419,6 @@ Bool_t JSFQuickSimBuf::MakeJSFLTKCLTracks()
 
   return kTRUE;
 }
-
-// ---------------------------------------------------------------
-Bool_t JSFQuickSim::EndRun()
-{
-
-   // Save random seed
-   fSMRRND=smrrnd_.iseed;
-   fSWMRND=swmrnd_.iseed;
-
-  if( fFile->IsWritable() ) {  Write();  }
-
-   return kTRUE;
-}
-
-
-// ---------------------------------------------------------------
-Bool_t JSFQuickSim::GetLastRunInfo()
-{
-
-  Read(GetName());
-  
-  smrrnd_.iseed=fSMRRND;
-  swmrnd_.iseed=fSWMRND;
-
-  printf("Random seeds for JSFQuickSim were reset by ");
-  printf("values from a file.\n");
-  
-  return kTRUE;
-}
-
 
 //_____________________________________________________________________________
 Bool_t JSFQuickSimBuf::MakeCALHits()
@@ -565,35 +610,6 @@ Bool_t JSFQuickSim::ReviseGeneratorInfo()
 }
 
 
-//____________________________________________________________________________
-void JSFQuickSim::MakeBranch(TTree *tree)
-{
-  //  JSFModule::MakeBranch(tree);
-
-   fTree=tree;
-   if( fEventBuf && fMakeBranch ) {
-     Int_t split=0;
-     Int_t bsize=50000;
-     tree->Branch(fEventBuf->GetName(), fEventBuf->ClassName() ,
-		  &fEventBuf, bsize, split);
-   }
-}
-
-//_____________________________________________________________________________
-void JSFQuickSim::SetBranch(TTree *tree)
-{
-//  Set Branch address for this module
-
-   fTree=tree;
-   if( fEventBuf ) {
-     Char_t name[50];
-     sprintf(name,"%s",fEventBuf->GetName());
-     fBranch=tree->GetBranch(name);
-     fBranch->SetAddress(&fEventBuf);
-   }
-}
-
-
 //______________________________________________________________________________
 void JSFQuickSimBuf::SetPointers()
 {
@@ -619,6 +635,166 @@ void JSFQuickSimBuf::SetPointers()
 
 
 }
+
+
+
+//______________________________________________________________________________
+void JSFQuickSimBuf::Append(JSFQuickSimBuf *src, Int_t numgp)
+{
+  // Append JSFQuickSimBuf object, src, to current object
+  // numgp is a number of generator particles in the src.  It is used to increment
+  // pointer information 
+
+  // Append JSFEMCHits
+
+  AppendCALHits(src);
+
+  AppendLTKCLTracks(src, numgp);
+
+}
+
+//______________________________________________________________________________
+void JSFQuickSimBuf::AppendCALHits(JSFQuickSimBuf *src)
+{
+  // Append JSFQuickSimBuf object, src, to current object
+  // numgp is a number of generator particles in the src.  It is used to increment
+  // pointer information 
+
+  // Append JSFEMCHits
+
+  Int_t indcel[kMaxCalHits];  Int_t sind[kMaxCalHits]; 
+  Int_t scelid[kMaxCalHits];  Int_t scelpnt[kMaxCalHits];
+
+  if( src->GetNEMCHits() > 0 ) {
+    TClonesArray *emc=src->GetEMCHits(); // Make a cellid index of current hits.
+    JSFEMCHit *hemc;
+    for(Int_t i=0;i<fNEMCHits;i++){
+      hemc=(JSFEMCHit*)fEMCHits->UncheckedAt(i);
+      indcel[i]=hemc->GetCellID();
+    }                                               
+    TMath::Sort(fNEMCHits, indcel, sind );
+    for(Int_t i=0;i<fNEMCHits;i++){
+      scelid[i]=indcel[sind[i]];
+      scelpnt[i]=sind[i];                // Sort CellID data.
+    }
+
+    Int_t nemc=fNEMCHits;
+    for(Int_t i=0;i<src->GetNEMCHits();i++){
+      JSFEMCHit *h=(JSFEMCHit*)emc->UncheckedAt(i);
+      Int_t cellid=h->GetCellID();
+      Int_t ifnd=TMath::BinarySearch(fNEMCHits, scelid, cellid);
+      if( scelid[ifnd]==cellid ) {
+        hemc=(JSFEMCHit*)fEMCHits->UncheckedAt(scelpnt[i]);
+        hemc->AddEnergy(h->GetEMEnergy(), h->GetHDEnergy());
+      }
+      else {
+        new((*fEMCHits)[nemc]) JSFEMCHit(h->GetCellID(), h->GetEMEnergy(), h->GetHDEnergy());
+        nemc++;
+      }
+    }
+    fNEMCHits=nemc;
+  }
+
+
+  // ****************************
+  //  Merging HDC hits
+  // ****************************
+
+  if( src->GetNHDCHits() > 0 ) {
+    TClonesArray *hdc=src->GetHDCHits(); // Make a cellid index of current hits.
+    JSFHDCHit *hhdc;
+    for(Int_t i=0;i<fNHDCHits;i++){
+      hhdc=(JSFHDCHit*)fHDCHits->UncheckedAt(i);
+      indcel[i]=hhdc->GetCellID();
+    }                                               
+    TMath::Sort(fNHDCHits, indcel, sind );
+    for(Int_t i=0;i<fNHDCHits;i++){
+      scelid[i]=indcel[sind[i]];
+      scelpnt[i]=sind[i];                // Sort CellID data.
+    }
+
+    Int_t nhdc=fNHDCHits;
+    for(Int_t i=0;i<src->GetNHDCHits();i++){
+      JSFHDCHit *h=(JSFHDCHit*)hdc->UncheckedAt(i);
+      Int_t cellid=h->GetCellID();
+      Int_t ifnd=TMath::BinarySearch(fNHDCHits, scelid, cellid);
+      if( scelid[ifnd]==cellid ) {
+        hhdc=(JSFHDCHit*)fHDCHits->UncheckedAt(scelpnt[i]);
+        hhdc->AddEnergy(h->GetEMEnergy(), h->GetHDEnergy());
+      }
+      else {
+        new((*fHDCHits)[nhdc]) JSFHDCHit(h->GetCellID(), h->GetEMEnergy(), h->GetHDEnergy());
+        nhdc++;
+      }
+    }
+    fNHDCHits=nhdc;
+  }
+
+}
+
+
+//______________________________________________________________________________
+void JSFQuickSimBuf::AppendLTKCLTracks(JSFQuickSimBuf *src, Int_t numgp)
+{
+  // Append JSFQuickSimBuf object, src, to current object
+  // numgp is a number of generator particles in the src.  It is used to increment
+  // pointer information 
+
+  if( src->GetNTracks() <= 0 ) return ;
+
+  Int_t nltsrc=src->GetNTracks();
+  Int_t indlt[nltsrc];
+  TClonesArray *tracks=src->GetTracks(); 
+  for(Int_t i=0;i<nltsrc;i++){
+    JSFLTKCLTrack *t=(JSFLTKCLTrack*)tracks->UncheckedAt(i);
+    new((*fTracks)[fNTracks]) JSFLTKCLTrack(*t);
+    indlt[i]=fNTracks;
+    fNTracks++;
+  }
+
+  // ****************************************
+  // * Append CDCTracks
+  // ****************************************
+
+  Int_t ncdcsrc=src->GetNCDCTracks();
+  Int_t indcdc[kMaxCDCTracks]={-1};
+  if( ncdcsrc > 0 ) {
+    for(Int_t i=0;i<nltsrc;i++){
+      JSFLTKCLTrack *ct=(JSFLTKCLTrack*)fTracks->UncheckedAt(indlt[i]);
+      JSFCDCTrack *t=ct->GetCDC();
+      if( t == NULL ) continue;
+      t->fGenID+=numgp;
+      new((*fCDCTracks)[fNCDCTracks]) JSFCDCTrack(*t);
+      JSFCDCTrack *nt=(JSFCDCTrack*)fCDCTracks->UncheckedAt(fNCDCTracks);
+      nt->fNVTX=0;
+      indcdc[ct->Get1stCDC()]=fNCDCTracks;
+      ct->SetCDC(fNCDCTracks, nt);
+      fNCDCTracks++;
+    }
+  }
+
+  // ****************************************
+  // * Append VTXHits
+  // ****************************************
+
+  Int_t nvtxsrc=src->GetNVTXHits();
+  if( nvtxsrc > 0 ) {
+    TClonesArray *vtx=src->GetVTXHits();
+    TClonesArray *cdc=src->GetCDCTracks();
+    for(Int_t i=0;i<nvtxsrc;i++){
+      JSFVTXHit *v=(JSFVTXHit*)vtx->UncheckedAt(i);
+      v->fGenTrack +=numgp;
+      v->fLinkedTrack = indcdc[v->fLinkedTrack]; // Update VTX->cdc pointer
+      new((*fVTXHits)[fNVTXHits]) JSFVTXHit(*v);
+      JSFVTXHit *nv=(JSFVTXHit*)fVTXHits->UncheckedAt(i);
+      JSFCDCTrack *t=(JSFCDCTrack*)cdc->UncheckedAt(nv->GetLinkedTrack());
+      t->AddVTXHit(nv);  // Update cdc->vtx pointer
+      fNVTXHits++;
+    }  
+  }
+}
+
+      
 
 //______________________________________________________________________________
 void JSFQuickSimBuf::Streamer(TBuffer &R__b)

@@ -64,14 +64,15 @@ ClassImp(JSFModule)
 ClassImp(JSFEventBuf)
 
 //_____________________________________________________________________________
-JSFModule::JSFModule(const char *name, const char *title)
+JSFModule::JSFModule(const char *name, const char *title, Option_t *opt)
        :TNamed(name,title)
 {
 // Default constructor of JSF module.
+// If opt != "", the module is not included in the module list of JSFSteer.
 
   fVersion  =104;
   fStat     = kConstruct;
-  gJSF->Modules()->Add(this);
+  if( strcmp(opt,"")==0 )gJSF->Modules()->Add(this);
   fEventBuf=0;
   fHistograms = 0;
   fBufferSize=1000;
@@ -79,8 +80,10 @@ JSFModule::JSFModule(const char *name, const char *title)
 
   fMakeBranch=kTRUE;
 
-  if( strcmp(title,"Readin module") == 0 ) fFile = gJSF->GetInput();
-  else fFile = gJSF->GetOutput() ;
+  if( strcmp(opt,"") == 0 ) {
+    if( strcmp(title,"Readin module") == 0 ) fFile = gJSF->GetInput();
+    else fFile = gJSF->GetOutput() ;
+  }
 
 }
 

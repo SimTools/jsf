@@ -1,3 +1,4 @@
+//*LastUpdate :  jsf-1-11  30-July-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-4  13-Feburary-1999  By Akiya Miyamoto
 //*LastUpdate :  0.04.01  5-October-1998  By Akiya Miyamoto
 //*-- Author  : Akiya Miyamoto  5-Octorber-1998
@@ -76,6 +77,18 @@ JSFLTKCLTrack::JSFLTKCLTrack(Float_t data[])
     fNEMC=0;
     if( fType !=1 || fType != 3 ) f1stCDC=(Int_t)data[7];
 
+}
+//_____________________________________________________________________________
+JSFLTKCLTrack::JSFLTKCLTrack(JSFLTKCLTrack& t)
+{
+  // Load data obtained from SIMDST data.
+
+  fBank=t.fBank;
+  for(Int_t i=0;i<4;i++){ fP[i]=t.fP[i]; }
+  fEcl=t.fEcl;  fNEMC=t.fNEMC;
+  fCharge=t.fCharge ;  fType=t.fType;
+  fSource=t.fSource;   fNCDC=t.fNCDC;   f1stCDC=t.f1stCDC;
+  fCDC=t.fCDC;
 }
 
 //_____________________________________________________________________________

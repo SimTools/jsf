@@ -23,9 +23,15 @@ ClassImp(JSFGeneratorParticle)
 
 
 // ---------------------------------------------------------------
-void JSFGeneratorParticle::ls(Option_t *)
+void JSFGeneratorParticle::ls(Option_t *opt)
 {
-  printf(" Particle ID=%d  Mass=%g GeV Charge=%g",fID, fMass, fCharge);
+  printf(" Particle ID=%d",fID);
+  printf(" Mass=%g GeV Charge=%g",fMass, fCharge);
+  if( strcmp(opt,"all") ==0 ) {
+    printf(" Ser=%d Ndau=%d  1stDau=%d",fSer,fNdaughter,fFirstDaughter);
+    printf(" Mother=%d",fMother);
+    printf(" Life=%g DL=%g\n       ",fLifeTime, fDecayLength);
+  }
   printf(" (E,Px,Py,Pz)=(%g,%g,%g,%g) (GeV)",fP[0],fP[1],fP[2],fP[3]);
   printf(" (T,X,Y,Z)=(%g,%g,%g,%g) (cm)",fX[0],fX[1],fX[2],fX[3]);
   printf("\n");
@@ -77,3 +83,15 @@ JSFGeneratorParticle::JSFGeneratorParticle(Float_t data[])
    fMother=(Int_t)data[13]; fLifeTime=data[15];
    fDecayLength=data[16];
 }
+
+// ---------------------------------------------------------------
+JSFGeneratorParticle::JSFGeneratorParticle(JSFGeneratorParticle& g)
+{
+  fSer=g.fSer ; fID=g.fID ; fMass=g.fMass ; fCharge=g.fCharge;
+  for(Int_t i=0;i<4;i++){ fP[i]=g.fP[i]; fX[i]=g.fX[i]; }
+  fNdaughter=g.fNdaughter ; fFirstDaughter=g.fFirstDaughter;
+  fMother=g.fMother ; fLifeTime=g.fLifeTime;
+  fDecayLength=g.fDecayLength;
+}
+
+

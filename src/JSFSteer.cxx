@@ -659,7 +659,7 @@ void JSFSteer::MakeConfDir()
 }
 
 //_____________________________________________________________________________
-JSFModule *JSFSteer::FindModule(Text_t *classname)
+JSFModule *JSFSteer::FindModule(Text_t *classname, const Char_t *opt)
 {
   // Find JSF Module, which is inherited by "classname".
 
@@ -670,7 +670,9 @@ JSFModule *JSFSteer::FindModule(Text_t *classname)
 //    if( strcmp(classname, module->ClassName()) == 0 ) { return module; }
   }
 
-  Error("FindModule","A class %s is not found",classname);
+  if( strcmp(opt,"quiet") != 0 ) {
+    Error("FindModule","A class %s is not found",classname);
+  }
   return NULL;
 }
 

@@ -63,6 +63,9 @@ private:
    Bool_t MakeVTXHits();
    Bool_t MakeCDCTracks();
 
+   void AppendCALHits(JSFQuickSimBuf *src);
+   void AppendLTKCLTracks(JSFQuickSimBuf *src, Int_t numgp=0);
+
 public:
    JSFQuickSimBuf(const char *name="JSFQuickSimBuf",
 		   const char *title="JSF QuickSim event class",
@@ -92,6 +95,9 @@ public:
   Int_t GetNHDCHits(){ return fNHDCHits; }
   TClonesArray *GetHDCHits(){ return fHDCHits; }
 
+  void Clear(const Option_t *opt="");
+  void Append(JSFQuickSimBuf *src, Int_t numgp=0);
+
 
   ClassDef(JSFQuickSimBuf, 1) // QuickSim event buffer class.
 
@@ -104,8 +110,9 @@ protected:
    Int_t fSMRRND;   // Random seed for smearing
    Int_t fSWMRND;   // Random seed for swiming
 public:
-   JSFQuickSim(const char *name="JSFQuickSim", 
-	       const char *title="JSF Quick Simulator");
+   JSFQuickSim(const Char_t *name="JSFQuickSim", 
+	       const Char_t *title="JSF Quick Simulator",
+	       const Char_t *opt="");
    virtual      ~JSFQuickSim();
 
    virtual Bool_t  Initialize(); 

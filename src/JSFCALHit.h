@@ -41,6 +41,9 @@ public:
   virtual Float_t GetEMEnergy(){ return fEMEnergy; }
   virtual Float_t GetHDEnergy(){ return fHDEnergy; }
   virtual Float_t GetEnergy(){ return fEMEnergy+fHDEnergy; }
+  void AddEnergy(Float_t em, Float_t hd){
+     fEMEnergy=em;  fHDEnergy=hd; 
+  }
 
   ClassDef(JSFCALHit,2)  // Calorimeter Hit Cell.
 };

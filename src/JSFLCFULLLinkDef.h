@@ -20,10 +20,11 @@
 #pragma link C++ class JSFHadronizer;
 #pragma link C++ class JSFReadGenerator;
 #pragma link C++ class JSFReadGeneratorBuf;
+#pragma link C++ class JSFMergeEvent;
 
 #pragma link C++ class DebugGenerator;
 #pragma link C++ class DebugWGeneratorBuf;
 #pragma link C++ class DebugWGenerator-;
-#pragma link C++ class PythiaGenerator;
+#pragma link C++ class PythiaGenerator-;
 
 #endif

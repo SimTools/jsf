@@ -46,7 +46,7 @@ OBJJSFLCFULL  = JSFBases.$(ObjSuf) \
 		DebugGenerator.$(ObjSuf) DebugWGenerator.$(ObjSuf) \
 		PythiaGenerator.$(ObjSuf) \
 		JSFReadGenerator.$(ObjSuf) readgenutil.o \
-		JSFReadParton.$(ObjSuf) readparton.o \
+		JSFReadParton.$(ObjSuf) readparton.o JSFMergeEvent.$(ObjSuf) \
 		libJSFLCFULL.$(ObjSuf)
 
 OBJJSFQUICKSIM= JSFQuickSimParam.$(ObjSuf) JSFQuickSim.$(ObjSuf) \
@@ -60,7 +60,7 @@ SRCJSF        = JSFSteer.$(SrcSuf) JSFModule.$(SrcSuf) \
 
 SRCJSFLCFULL    = JSFBases.$(SrcSuf) \
 		JSFSpringParton.$(SrcSuf) JSFSpring.$(SrcSuf) \
-		JSFReadParton.$(SrcSuf) \
+		JSFReadParton.$(SrcSuf) JSFMergeEvent.$(SrcSuf) \
 		JSFGeneratorParticle.$(SrcSuf) JSFGenerator.$(SrcSuf) \
 		JSFFULLGenerator.$(SrcSuf) JSFHadronizer.$(SrcSuf) \
 		JSFLCFULL.$(SrcSuf) \
@@ -85,7 +85,7 @@ HDRJSFLCFULL  = JSFBases.h \
 		JSFFULLGenerator.h JSFHadronizer.h \
 		JSFLCFULL.h \
 		DebugGenerator.h DebugWGenerator.h \
-		JSFReadGenerator.h JSFReadParton.h \
+		JSFReadGenerator.h JSFReadParton.h JSFMergeEvent.h \
 		PythiaGenerator.h JSFLCFULLLinkDef.h
 
 HDRJSFQUICKSIM= JSFVTXHit.h JSFCALHit.h \

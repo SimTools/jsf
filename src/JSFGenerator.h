@@ -7,6 +7,7 @@
 //                                                                      //
 // A template for JSFGenerator                                          //
 //                                                                      //
+//$Id$
 //////////////////////////////////////////////////////////////////////////
 
 #include "TObject.h"
@@ -48,6 +49,8 @@ public:
    Int_t         GetNparticles() const { return fNparticles;}
    TClonesArray *GetParticles(){ return fParticles; }
 
+   void Append(JSFGeneratorBuf *src);
+
    ClassDef(JSFGeneratorBuf, 1) // JSF Generator Buffer class.
 };
    
@@ -55,8 +58,9 @@ public:
 //*************************************************************
 class JSFGenerator : public JSFModule {
 public:
-   JSFGenerator(const char *name="JSFGenerator", 
-		const char *title="JSF Generator");
+   JSFGenerator(const Char_t *name="JSFGenerator", 
+		const Char_t *title="JSF Generator",
+		const Char_t *opt="");
    virtual      ~JSFGenerator();
 
    virtual Bool_t Process(Int_t event);

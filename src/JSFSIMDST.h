@@ -84,7 +84,7 @@ public:
   JSFSIMDSTBuf(const char *name="JSFSIMDSTBuf", 
 	     const char *title="JSF SimDST event buffer",
   	     JSFModule *module=NULL);
-  virtual ~JSFSIMDSTBuf(){}
+  virtual ~JSFSIMDSTBuf();
 
   virtual void SetClassData(Int_t nev);       // Set Class Data
   virtual Bool_t PackDST(Int_t nev); // Pack SIMDST information.
@@ -113,6 +113,7 @@ public:
   void AddVTXHit(Double_t r, Double_t phi, Double_t z, Double_t dphi,
 	    Double_t dz, Int_t layer, Int_t trackid=0, Int_t gentrack=0);
 
+  void Clear(const Option_t *opt="");
  
   ClassDef(JSFSIMDSTBuf,1)  // JSSF SimDST event buffer
 };

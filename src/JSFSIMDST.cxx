@@ -1,3 +1,4 @@
+//*LastUpdate :  jsf-1-11  30-July-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-9  27-March-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-6  30-March-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-4  28-January-1999  By Akiya Miyamoto
@@ -9,6 +10,7 @@
    EMH(3,i), and HDH(3,i), to store EM and HD responce separately. 
  17-May-1999  A.Miyamoto   igendat is changed from Short to Int
  27-May-1999  A.Miyamoto   kVTXHmax is increased from 10 to 22.
+ 30-July-1999  A.Miyamoto   Does not use global variable to store particle information
 */
 
 
@@ -92,13 +94,6 @@ extern Float_t ulctau_(Int_t *kf);
 
 Int_t genidTOtrkid[kGenMax];  // Generator track number to CDC track number
 Float_t smrpar[300];
-
-TClonesArray *gsGeneratorParticles;
-TClonesArray *gsCombinedTracks;
-TClonesArray *gsCDCTracks;
-TClonesArray *gsVTXHits;
-TClonesArray *gsEMCHits;
-TClonesArray *gsHDCHits;
 
 //_____________________________________________________________________________
 JSFSIMDST::JSFSIMDST(const char *name, const char *title, Bool_t constbuf)
@@ -488,21 +483,12 @@ void JSFSIMDSTBuf::SetClonesArray()
 {
   // Set pointers for TClonesArray;
 
-      if( !gsGeneratorParticles ) 
-         gsGeneratorParticles= new TClonesArray("JSFGeneratorParticle", kGenMax);
-      fGeneratorParticles=gsGeneratorParticles;
-      if( !gsCombinedTracks ) 
-         gsCombinedTracks = new TClonesArray("JSFLTKCLTrack", kTrkMax);
-      fCombinedTracks = gsCombinedTracks ; 
-      if( !gsCDCTracks )gsCDCTracks= new TClonesArray("JSFCDCTrack", kTrkMax);
-      fCDCTracks=gsCDCTracks;
-      if( !gsVTXHits ) gsVTXHits= new TClonesArray("JSFVTXHit", kVTXBufSize);
-      fVTXHits=gsVTXHits;
-      if( !gsEMCHits ) gsEMCHits= new TClonesArray("JSFEMCHit", kClsMax);
-      fEMCHits=gsEMCHits;
-      if( !gsHDCHits ) gsHDCHits= new TClonesArray("JSFHDCHit", kClsMax);
-      fHDCHits=gsHDCHits;
-
+      fGeneratorParticles= new TClonesArray("JSFGeneratorParticle", kGenMax);
+      fCombinedTracks = new TClonesArray("JSFLTKCLTrack", kTrkMax);
+      fCDCTracks= new TClonesArray("JSFCDCTrack", kTrkMax);
+      fVTXHits= new TClonesArray("JSFVTXHit", kVTXBufSize);
+      fEMCHits= new TClonesArray("JSFEMCHit", kClsMax);
+      fHDCHits= new TClonesArray("JSFHDCHit", kClsMax);
 }
 
 
@@ -547,8 +533,8 @@ Bool_t JSFSIMDSTBuf::UnpackDST(Int_t nev)
     return kFALSE;
   }
 
-
-  SetClonesArray();
+  Clear();
+  // SetClonesArray();
 
   // ***************************************
   // Fill GeneratorParticle Array
@@ -638,6 +624,35 @@ JSFSIMDSTBuf::JSFSIMDSTBuf(const char *name, const char *title,	JSFModule *modul
   //fVersion = 202;     // Since jsf-1-6
   fVersion = 203;     // Since jsf-1-9
   strcpy(fProduc,"QIK ");
+
+  SetClonesArray();
+
+}
+
+// ---------------------------------------------------------------
+JSFSIMDSTBuf::~JSFSIMDSTBuf()
+{  
+  Clear();
+  
+  if(fGeneratorParticles) delete fGeneratorParticles;
+  if(fCombinedTracks) delete fCombinedTracks;
+  if(fCDCTracks) delete fCDCTracks;
+  if(fVTXHits) delete fVTXHits;
+  if(fEMCHits) delete fEMCHits;
+  if(fHDCHits) delete fHDCHits;
+
+}
+
+// ---------------------------------------------------------------
+void JSFSIMDSTBuf::Clear(const Option_t *opt)
+{  
+
+  if(fGeneratorParticles) fGeneratorParticles->Clear(opt);
+  if(fCombinedTracks) fCombinedTracks->Clear(opt);
+  if(fCDCTracks)      fCDCTracks->Clear(opt);
+  if(fVTXHits)        fVTXHits->Clear(opt);
+  if(fEMCHits)        fEMCHits->Clear(opt);
+  if(fHDCHits)        fHDCHits->Clear(opt);
 
 }
 

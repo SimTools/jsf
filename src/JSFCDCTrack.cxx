@@ -1,3 +1,4 @@
+//*LastUpdate : jsf-1-11  11-July-1999  A.Miyamoto
 //*LastUpdate : jsf-1-9  17-May-1999  A.Miyamoto
 //*LastUpdate : jsf-1-8  2-May-1999  A.Miyamoto
 //*LastUpdate : jsf-1-4  7-Feburary-1999  A.Miyamoto
@@ -86,7 +87,25 @@ JSFCDCTrack::JSFCDCTrack(Float_t trkf[], Double_t trkd[])
   for(i=0;i<15;i++){ fError[i]=trkd[i]; }
 
   fNVTX = 0;
-  for(i=0;i<10;i++){ fVTXHits[i]=NULL; }
+  for(i=0;i<22;i++){ fVTXHits[i]=NULL; }
+
+}
+
+
+//_____________________________________________________________________________
+JSFCDCTrack::JSFCDCTrack(JSFCDCTrack& t)
+{
+  // Make a JSFCDCTrack class from a data from Production:CDC;Track_Parameter
+
+  fE=t.fE;  fCharge=t.fCharge ; fGenID=t.fGenID; fNDF=t.fNDF;
+  for(Int_t i=0;i<3;i++){
+    fP[i]=t.fP[i] ; fX[i]=t.fX[i]; 
+    fPivot[i]=t.fPivot[i] ;  fPosAtEMC[i]=t.fPosAtEMC[i];
+  }
+  for(Int_t i=0;i<5;i++){ fHelix[i]=t.fHelix[i]; }
+  for(Int_t i=0;i<15;i++){ fError[i]=t.fError[i]; }
+  fNVTX=t.fNVTX;
+  for(Int_t i=0;i<fNVTX;i++){ fVTXHits[i]=t.fVTXHits[i]; }
 
 }
 

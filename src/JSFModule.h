@@ -69,8 +69,9 @@ protected:
     EJSFModuleStatus fStat;  //! Module status
     void ConfDirectory();
 public:
-   JSFModule(const char *name="JSFModule", 
-             const char *title="JSF Default Module");
+   JSFModule(const Char_t *name="JSFModule", 
+             const Char_t *title="JSF Default Module",
+	     const Option_t *opt="");
    virtual ~JSFModule();
 
    void SetModuleStatus(EJSFModuleStatus stat){ fStat=stat;}

@@ -1,5 +1,13 @@
+//*LastUpdate :  JSF-1-11  29-July-1999 Akiya Miyamoto
 //*LastUpdate :  0.02/02  11-September-1998  By A.Miyamoto
 //*-- Author  : A.Miyamoto  11-September-1998
+
+/*
+  29-July-1999 A.Miyamoto  Add opt option in constructor.
+  30-July-1999 A.Miyamoto  Do not use gParticles for TClonesArray.
+                           It is not good if there are more than one generator object.
+			   Add Apend();
+*/
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -7,6 +15,7 @@
 //
 //  JSF Generator
 //
+//$Id$
 ////////////////////////////////////////////////////////////////////////
 
 #include "JSFSteer.h"
@@ -17,12 +26,10 @@
 ClassImp(JSFGeneratorBuf)
 ClassImp(JSFGenerator)
 
-TClonesArray *gParticles;
-
 
 //_____________________________________________________________________________
-JSFGenerator::JSFGenerator(const char *name, const char *title)
-       : JSFModule(name,title)
+JSFGenerator::JSFGenerator(const Char_t *name, const Char_t *title, const Char_t *opt)
+       : JSFModule(name,title, opt)
 {
 //   Create one JSFGenerator object
 //
@@ -36,13 +43,9 @@ JSFGeneratorBuf::JSFGeneratorBuf(const char *name, const char *title, JSFGenerat
        : JSFEventBuf(name,title, (JSFModule*)generator)
 {
 //   Create one JSFGenerator object
-//   When the constructor is invoked for the first time, the global
-//   variable gTracks is NULL. The TClonesArray gTracks is created.
-//   The histogram fH is created.
 //
   fNparticles=0;
-  if( !gParticles ) gParticles= new TClonesArray("JSFGeneratorParticle", 1000);
-  fParticles=gParticles;
+  if( !fParticles ) fParticles= new TClonesArray("JSFGeneratorParticle", 1000);
   fEcm=0;
   fStartSeed=0;
 }
@@ -50,6 +53,7 @@ JSFGeneratorBuf::JSFGeneratorBuf(const char *name, const char *title, JSFGenerat
 //_____________________________________________________________________________
 JSFGenerator::~JSFGenerator()
 {
+  if( fEventBuf ) { delete fEventBuf; }
 }
 
 //_____________________________________________________________________________
@@ -64,6 +68,7 @@ Bool_t JSFGenerator::Process(Int_t ev)
 JSFGeneratorBuf::~JSFGeneratorBuf()
 {
    Clear();
+   if( fParticles ) { delete fParticles; }
 }
 
 //_____________________________________________________________________________
@@ -72,4 +77,33 @@ void JSFGeneratorBuf::Clear(Option_t *option)
    if( fParticles) fParticles->Clear(option);
 }
 
+//--------------------------------------------------------------
+void JSFGeneratorBuf::Append(JSFGeneratorBuf *src)
+{
+  //
+  // Append JSFGeneratorBuf objects of src to current object.
+  // When appended, fSer, fFirstDaughter, and fMother are modified.
+  //
+
+  TClonesArray &part=*(fParticles);
+  Int_t norg=fNparticles;
+  TClonesArray *sp=src->GetParticles();
+  Int_t nsrc=src->GetNparticles();
+  if( nsrc <= 0 ) return;
+
+  for(Int_t i=0;i<nsrc;i++){
+    JSFGeneratorParticle *p=(JSFGeneratorParticle*)sp->UncheckedAt(i);
+    p->fSer+=fNparticles;
+    p->fFirstDaughter+=fNparticles;
+    if( p->fMother > 0 ) {
+      p->fMother+=fNparticles;
+    }
+    else if( p->fMother < 0 ) {
+      p->fMother-=fNparticles;
+    }
+    new(part[norg+i]) JSFGeneratorParticle(*p);
+  }
+  fNparticles+=nsrc;
+
+}
 

@@ -31,6 +31,24 @@
 //  final state have fMother=0.  fNDaughter for them are always 1 and pointer
 //  to the first daughter points first particle in the final state.  
 //   
+//  About generated event information.
+//  At the end of run, total cross section and gnumber of generated events are
+//  saved togather with random seed into the data member of PythiaGenerator class.
+//  Seed of random number are used to continue the random number sequence in 
+//  the next run.  Cross section and number of generated events are used
+//  to merge events to simulate piled up events.
+//
+//  Environment parameters and default values used for this classes are as follows.
+//  
+//  PythiaGenerator.Ecm              500.0  # Center of mass energy (GeV)
+//  PythiaGenerator.Frame            CMS    # Event coordinate system
+//  PythiaGenerator.BeamParticle     e-     # Name of beam particle.
+//  PythiaGenerator.TargetParticle   e+     # Name of target particle.
+//  PythiaGenerator.PrintStat        1      # 1: call PYSTAT at the end run, =0 not call.
+//
+//  Valid values of Frame, BeamParticle, and TragetParticle are described in 
+//  the Pythia 5.7 manual page 140. (T.Sjostrand, CPC 82(1994) 74 ).
+//
 //$Id$
 //  
 //////////////////////////////////////////////////////////////////
@@ -50,12 +68,21 @@ extern Float_t ulctau_(Int_t *kf);
 ClassImp(PythiaGenerator)
 
 //_____________________________________________________________________________
-PythiaGenerator::PythiaGenerator(const char *name, const char *title)
-       : JSFGenerator(name,title)
+PythiaGenerator::PythiaGenerator(const Char_t *name, 
+				 const Char_t *title, const Char_t *opt)
+       : JSFGenerator(name,title, opt)
 {
 
   TEnv *env=gJSF->Env();
   sscanf(env->GetValue("PythiaGenerator.Ecm","500.0"),"%lg",&fEcm);
+  sscanf(env->GetValue("PythiaGenerator.Frame","CMS"),"%s",fFrame);
+  sscanf(env->GetValue("PythiaGenerator.BeamParticle","e-"),"%s",fBeamParticle);
+  sscanf(env->GetValue("PythiaGenerator.TargetParticle","e+"),"%s",fTargetParticle);
+  fPrintStat=env->GetValue("PythiaGenerator.PrintStat",1);
+
+  fNUMSUB=0;
+  fNGEN=NULL;
+  fXSEC=NULL;
 
   fPythia = new TPythia();
 }
@@ -63,9 +90,10 @@ PythiaGenerator::PythiaGenerator(const char *name, const char *title)
 // ---------------------------------------------------------------
 PythiaGenerator::~PythiaGenerator()
 {
-  if ( fPythia ) { 
-    delete fPythia ; fPythia=0 ;
-  }
+  if ( fPythia ) { delete fPythia ; fPythia=0 ;  }
+  if ( fNGEN ) { delete fNGEN ; fNGEN=NULL ; }
+  if ( fXSEC ) { delete fXSEC ; fXSEC=NULL ;}
+  fNUMSUB=0;
 }
 
 
@@ -76,7 +104,7 @@ Bool_t PythiaGenerator::Initialize()
 
   if( !JSFGenerator::Initialize() ) return kFALSE;
   
-  fPythia->Initialize("CMS", "e-", "e+", fEcm);
+  fPythia->Initialize(fFrame, fBeamParticle, fTargetParticle, fEcm);
 
   return kTRUE;
 }
@@ -93,11 +121,36 @@ Bool_t PythiaGenerator::EndRun()
 {
    if( !JSFGenerator::EndRun() ) return kFALSE;
 
+   if( fPrintStat ) {
+     printf(" End of Pythia run.\n");
+     fPythia->PyStat(fPrintStat);
+   }
+
    // Save random seed
    for(Int_t i=0;i<6;i++){ fMRLU[i]=fPythia->GetMRLU(i+1); }
    for(Int_t i=0;i<100;i++){ fRRLU[i]=fPythia->GetRRLU(i+1); }
 
-  if( fFile->IsWritable() ) {  Write();  }
+   // Save PYINT5 information.
+   Int_t ns[201];
+   ns[0]=0;
+   fNUMSUB=1;
+   for(Int_t isub=1;isub<=200;isub++){
+     if( fPythia->GetMSUB(isub) ) { ns[fNUMSUB]=isub; fNUMSUB++; }
+   }
+   if( fISUB ) { delete fISUB; }
+   if( fNGEN ) { delete fNGEN; }
+   if( fXSEC ) { delete fXSEC; }
+   
+   fISUB=new Int_t[fNUMSUB];
+   fNGEN=new Int_t[fNUMSUB];
+   fXSEC=new Double_t[fNUMSUB];
+   for(Int_t i=0;i<fNUMSUB;i++){
+     fISUB[i]=ns[i];
+     fNGEN[i]=fPythia->GetNGEN(ns[i], 3);
+     fXSEC[i]=fPythia->GetXSEC(ns[i], 3);
+   }
+
+   if( fFile->IsWritable() ) {  Write();  }
 
    return kTRUE;
 }
@@ -182,7 +235,7 @@ Bool_t PythiaGenerator::Process(Int_t ev)
 
    }
   buf->SetNparticles(nout);
-  
+
   return kTRUE;
  
 }
@@ -214,5 +267,50 @@ Bool_t PythiaGenerator::GetLastRunInfo()
   printf("Random seeds for PythiaGenerator were reset by ");
   printf("values from a file.\n");
   return kTRUE;
+}
+
+//______________________________________________________________________________
+void PythiaGenerator::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class PythiaGenerator.
+
+   if (R__b.IsReading()) {
+      Version_t R__v = R__b.ReadVersion(); if (R__v) { }
+      JSFGenerator::Streamer(R__b);
+      R__b >> fEcm;
+      R__b.ReadStaticArray(fFrame);
+      R__b.ReadStaticArray(fBeamParticle);
+      R__b.ReadStaticArray(fTargetParticle);
+      R__b.ReadStaticArray(fMRLU);
+      R__b.ReadStaticArray(fRRLU);
+      R__b >> fNUMSUB;
+
+      if( fISUB ) { delete fISUB; } ; 
+      fISUB = new Int_t[fNUMSUB];
+      R__b.ReadStaticArray(fISUB);
+
+      if( fNGEN ) { delete fNGEN; } ; 
+      fNGEN = new Int_t[fNUMSUB];
+      R__b.ReadStaticArray(fNGEN);
+
+      if( fXSEC ) { delete fXSEC; } ; 
+      fXSEC = new Double_t[fNUMSUB];
+      R__b.ReadStaticArray(fXSEC);
+
+   } else {
+      R__b.WriteVersion(PythiaGenerator::IsA());
+      JSFGenerator::Streamer(R__b);
+      R__b << fEcm;
+      R__b.WriteArray(fFrame, 8);
+      R__b.WriteArray(fBeamParticle, 8);
+      R__b.WriteArray(fTargetParticle, 8);
+      R__b.WriteArray(fMRLU, 6);
+      R__b.WriteArray(fRRLU, 100);
+      R__b << fNUMSUB;
+      R__b.WriteArray(fISUB, fNUMSUB);
+      R__b.WriteArray(fNGEN, fNUMSUB);
+      R__b.WriteArray(fXSEC, fNUMSUB);
+      
+   }
 }
 
