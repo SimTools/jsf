@@ -78,7 +78,7 @@ Bool_t JSFReadStdHep::Process(Int_t nev)
   if( block == empty ) return kFALSE;
 
   JSFReadStdHepBuf *buf=(JSFReadStdHepBuf*)EventBuf();
-  std::cerr << " will call ReadOneRecord...." << std::endl;
+//  std::cerr << " will call ReadOneRecord...." << std::endl;
   buf->ReadOneRecord();
 
   return kTRUE;
@@ -117,7 +117,6 @@ Bool_t JSFReadStdHep::BeginRun(Int_t nrun)
     std::cerr << "RunInfo block is not found in the input data" << std::endl;
     return kFALSE;
   }
-  std::cerr << "End of Begin Run " << std::endl;
 
   return kTRUE;
 }
@@ -148,15 +147,6 @@ Bool_t JSFReadStdHepBuf::ReadHepEvent(const Int_t maxhep, Int_t &nevhep,
          Int_t jdahep[][2], Double_t phep[][5], Double_t vhep[][4])
 {
   // Read Generator data and saved to the class.
-
-  std::cerr << "JSFReadHepStd::ReadHepStd is called" << std::endl;
-
-  //  Int_t nvers=1;
-  //  Int_t ivers, endian ;
-  //  Int_t nret;
-
-  //  readgenhepevt_(&unit,&endian, &ivers, &nevhep,  &nhep,
-  //		 isthep, idhep, jmohep, jdahep, phep, vhep, &nret);
 
   StdHep::StdEvent *event=((JSFReadStdHep*)Module())->GetEvent();  
  
@@ -190,9 +180,9 @@ Bool_t JSFReadStdHepBuf::ReadHepEvent(const Int_t maxhep, Int_t &nevhep,
       vhep[i][2]   = vh.z();
       vhep[i][3]   = vh.t();
 
-	std::cerr << "i=" << i << " status=" << isthep[i] ;
-	std::cerr << " id=" << idhep[i] << " e=" << phep[i][3] ;
-	std::cerr << " mother= " << jmohep[i][0] << std::endl;
+//	std::cerr << "i=" << i << " status=" << isthep[i] ;
+//	std::cerr << " id=" << idhep[i] << " e=" << phep[i][3] ;
+//	std::cerr << " mother= " << jmohep[i][0] << std::endl;
     }
   } 
   if ( nhep != nrp ) {
@@ -207,7 +197,3 @@ Bool_t JSFReadStdHepBuf::ReadHepEvent(const Int_t maxhep, Int_t &nevhep,
 JSFReadStdHepBuf::~JSFReadStdHepBuf()
 {
 }
-
-
-
-
