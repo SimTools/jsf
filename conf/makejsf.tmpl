@@ -54,6 +54,17 @@ DEPENDFILES   = $(CXXFLAGS) $(INCPATH)
 
 AIXLIBS       =
 
+CERNLIBLIBS   = jetset74
+#ifndef __CERNLIB_PDFLIB__
+CERNLIBLIBS   += pdflib804
+#endif
+#ifdef __LCLIBRAN_USE_RANMAR__
+CERNLIBLIBS   += mathlib
+#endif
+CERNLIBLIBS   += packlib
+CERNLIBS      = $(shell cernlib $(CERNLIBLIBS))
+
+
 XCOMM #---------------------------------------------------
 
 .SUFFIXES: .$(SrcSuf)
