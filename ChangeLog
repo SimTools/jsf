@@ -13,6 +13,31 @@ To-Do  -- Help wanted
 	
 	
 **********************************************************
+jsf-1-8  9-April-1999 A.Miyamoto
+**********************************************************
+-----------------------	
+16-April-1999 A.Miyamoto
+-----------------------	
+1) Bug in src/JSFReadGenerator.cxx and src/PythiaGenerator.cxx was fixed.
+	
+-----------------------	
+15-April-1999 A.Miyamoto
+-----------------------	
+1) The statement in JSFSteer::MakeTree was incompatible with ROOT.v2.21/08
+   and modiifed.  Hopefully this does not cause problem in previous
+   root version.
+2) Create a script, bin/makespec, to save information about system configuration
+   into conf/spec file.  Now g2c and f2c is swicthed automatically on linux system.
+3) Put FC = g77 for LinuxArchitecture for conf/makejsf.tmpl
+	
+-----------------------	
+9-April-1999 A.Miyamoto	
+-----------------------	
+1) There was a bug in putting particles to JSFGeneratorParticle class
+   in PythiaGenerator class.  It was modified.
+
+	
+**********************************************************
 jsf-1-7  9-April-1999 A.Miyamoto
 **********************************************************
 (1) Add JSFReadGenerator class to read HEPEVT format Fortran binray data.
