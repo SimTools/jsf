@@ -22,6 +22,7 @@ jsf-1-3   since 9-December-1998  in progress A.Miyamoto
    src/JSFHadronizer was changed accordinglly.
 3) There was a bug in JSFQuickSim, when setting VTX geometrical parameter, and fixed.	
 4) DebugGenerator calculation of Azimuthal angle was not correct.
+5) In JSFBases.cxx, fIG[] is saved in Bases common.
 	
 **********************************************************
 jsf-1-2   9-December-1998  A.Miyamoto
