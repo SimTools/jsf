@@ -4,10 +4,15 @@ Change Log
 	
 
 **********************************************************
-jsf-1-1   since 20-November-1998  in progress A.Miyamoto
+jsf-1-1   9-December-1998  in progress A.Miyamoto
 **********************************************************
 1) Put comments in JSFLTKCLTrack class
-2) Modifications to run on HI-UX
+2) There was a bug in example/ZHStudy/MyAnalysis.cxx, which 
+   caused fatal error when no particle is reconstructed by the
+   QuickSimulator, which was fixed.
+3) To load library properly without specifying all object files,
+   jsfmain.cxx  in example/ZHStudy is modified to call routines 
+   to creates dictionary
 
 **********************************************************
 jsf-1-0   20-November-1998  A.Miyamoto
