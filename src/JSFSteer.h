@@ -1,3 +1,4 @@
+//*LastUpdate:  jsf-1-14 29-January-2000  by A.Miyamoto
 //*LastUpdate:  jsf-1-11 23-July-1999  by A.Miyamoto
 //*LastUpdate:  v0.3.04 09/24/1998  by A.Miyamoto
 //*-- Author :  Akiya Miyamoto  09/24/1998
@@ -16,7 +17,6 @@
 
 #include <TNamed.h>
 #include <TTree.h>
-// #include <TEnv.h>
 #include <TChain.h>
 #include <TDatime.h>
 
@@ -44,10 +44,10 @@ public:
   ClassDef(JSFSteerConf,1) // Stores JSF Module info at Initialize()
 };
 
-
 //********************************************************************
 class JSFSteer  : public TNamed {
 protected:
+
   JSFSteer  *fReadin ; //! Pointer to readin JSF class
 
   Bool_t     fIsInitialized; //! kTRUE when JSF is initialized.
@@ -73,12 +73,19 @@ protected:
   Int_t      fDate  ;       // Event Date
   Int_t      fTime  ;       // Event time
 
+  Int_t fReturnCode ; //! Return code of JSF Module
+
 private:
   virtual void MakeConfDir();
   void InitializeMessage();
 
 public:
   JSFSteerConf *fConf;       //! Pointer to module information.
+
+  enum  EJSFReturnCode {kJSFOK=0x00, kJSFSkipRestModules=0x01, kJSFNoOutput=0x02,
+        kJSFEOF=0x04, kJSFDoEndtRun=0x08, kJSFTerminate=0x10,
+        kJSFQuit=0x20, kJSFDrawEvent=0x40, kJSFDrawHist=0x80, kJSFFALSE=0x8000} ;
+
 
 public:
   JSFSteer(const char *name="JSF", const char *title="The JLC Study Frame");
@@ -122,6 +129,8 @@ public:
   virtual void  FillTree(){ fOTree->Fill(); }
   TBranch *GetBranch(){return fBrJSF;}
 
+  void SetReturnCode(Int_t ir){ fReturnCode=ir; }
+  Int_t GetReturnCode(){ return fReturnCode; }
   
   ClassDef(JSFSteer, 1)   // Steering class to control JLC study modules
 

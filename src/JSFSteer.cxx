@@ -249,9 +249,12 @@ Bool_t JSFSteer::Process(Int_t i)
 //  
 
 // Initialize
-  if( !fIsInitialized ) {  if( !Initialize() ) { return kFALSE; } }
+  if( !fIsInitialized ) {  
+    if( !Initialize() ) { fReturnCode=fReturnCode|kJSFQuit|kJSFFALSE ; return kFALSE; } }
 
   if( !fIsGetEvent ) fEvent=i;
+
+  fReturnCode=kJSFOK;
 
 // BeginRun
   if( fLastRun == 0 ) { 
@@ -259,11 +262,11 @@ Bool_t JSFSteer::Process(Int_t i)
       Warning("Process","Run number is undefined. Set default run number 1");
       fRun = 1;
     } 
-    if( !BeginRun(fRun) ) return kFALSE;
+    if( !BeginRun(fRun) ) { fReturnCode+=kJSFTerminate|kJSFFALSE; return kFALSE; }
   }
   else if( fLastRun != fRun ) {
-    if( !EndRun() ) { return kFALSE; }
-    if( !BeginRun(fRun) ) { return kFALSE; }
+    if( !EndRun() ) { fReturnCode+=kJSFTerminate|kJSFFALSE; return kFALSE; }
+    if( !BeginRun(fRun) ) { fReturnCode+=kJSFTerminate|kJSFFALSE; return kFALSE; }
   }
 
 // Loop over all module to process event data
@@ -276,7 +279,8 @@ Bool_t JSFSteer::Process(Int_t i)
    while (( module = (JSFModule*)next())) {
      module->SetModuleStatus(kEventLoop);
      if( module->IsWritable() ) {
-       if( !module->Process(i) ) return kFALSE;
+       if( !module->Process(i) ) { fReturnCode+=kJSFFALSE; return kFALSE; }
+       if( fReturnCode&kJSFSkipRestModules ) break;
      }
    }
 
@@ -405,6 +409,7 @@ Bool_t JSFSteer::EndRun()
 //  Calls JSFModule::EndRun
 //
     fRunEnded = kTRUE;
+    fReturnCode = kJSFOK;
 
     Char_t keyname[32];
     sprintf(keyname,"end%5.5d",fRun);
@@ -421,7 +426,7 @@ Bool_t JSFSteer::EndRun()
     while (( module = (JSFModule*)next())) {
         module->SetModuleStatus(kEndRun);
 	module->GetFile()->cd(keyname);
-        if( !module->EndRun() )  return kFALSE; 
+        if( !module->EndRun() )  { fReturnCode+=kFALSE ; return kFALSE; }
     }
     if( fOFile ) fOFile->cd("/");
     return kTRUE;
@@ -498,6 +503,7 @@ Int_t JSFSteer::GetEvent(Int_t nevt)
    fRun = fReadin->GetRunNumber();
    fEvent = fReadin->GetEventNumber(); 
    fIsGetEvent=kTRUE;
+   if( !nb ) { fReturnCode = kJSFEOF|kJSFFALSE; }
 
    return nb; 
 }
