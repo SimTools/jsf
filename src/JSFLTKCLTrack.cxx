@@ -6,6 +6,11 @@
 //  JSFLTKCLTrack
 //
 //  A class to save linked track-cluster track
+//  Algorithm and performance of Link-Track-Cluster routines are described
+//  in begin_html <a href="http://www-jlc.kek.jp/subg/offl/lib/docs/cmbtrk.ps.gz">New Combined Track Bank(PS 329KB)</a> end_html .
+// 
+//  Data member in this classes are those created by the subroutine CMBTRK. 
+//  Bank data can be obtained by member functions of this class.
 //
 ////////////////////////////////////////////////////////////////////////
 
