@@ -158,8 +158,15 @@ JSFSteer::JSFSteer(const char *name, const char *title)
       printf(" TBenchmark is initialized\n");
       for(Int_t i=0;i<30;i++) { fCPUTime[i]=0;  fRealTime[i]=0; }
       gStopwatch=new TStopwatch();
+#if ROOT_VERSION_CODE >= ROOT_VERSION(3,3,0)
+      fCPUTime[0]=0;
+      fRealTime[0]=0;
+      gStopwatch->Reset();
+      gStopwatch->Start();
+#else
       fCPUTime[0]=gStopwatch->GetCPUTime();
       fRealTime[0]=gStopwatch->GetRealTime();
+#endif
     }
 
     SetIOFiles();
@@ -343,14 +350,28 @@ Bool_t JSFSteer::Process(Int_t i)
         Double_t cputime=0;
 	Double_t realtime=0;
 	if( gStopwatch ) {
+#if ROOT_VERSION_CODE >= ROOT_VERSION(3,3,0)
+	  gStopwatch->Stop();
+	  cputime=gStopwatch->CpuTime();
+	  realtime=gStopwatch->RealTime();
+	  gStopwatch->Continue();
+#else
 	  cputime=gStopwatch->GetCPUTime();
 	  realtime=gStopwatch->GetRealTime();
+#endif
 	}
 	Bool_t rcode=module->Process(i);
 	if( gStopwatch ) {
 	  iloop++;
+#if ROOT_VERSION_CODE >= ROOT_VERSION(3,3,0)
+	  gStopwatch->Stop();
+	  fCPUTime[iloop] += gStopwatch->CpuTime()-cputime;
+	  fRealTime[iloop] += gStopwatch->RealTime()-realtime;
+	  gStopwatch->Continue();
+#else
 	  fCPUTime[iloop] += gStopwatch->GetCPUTime()-cputime;
 	  fRealTime[iloop] += gStopwatch->GetRealTime()-realtime;
+#endif
 	}
 
         if( !rcode ) { fReturnCode+=kJSFFALSE; return kFALSE; }
@@ -416,14 +437,28 @@ Bool_t JSFSteer::Initialize()
      Double_t cputime=0;
      Double_t realtime=0;
      if( gStopwatch ) {
+#if ROOT_VERSION_CODE >= ROOT_VERSION(3,3,0)
+       gStopwatch->Stop();
+       cputime=gStopwatch->CpuTime();
+       realtime=gStopwatch->RealTime();
+       gStopwatch->Continue();
+#else
        cputime=gStopwatch->GetCPUTime();
        realtime=gStopwatch->GetRealTime();
+#endif
      }
      Bool_t rcode=module->Initialize();
      if( gStopwatch ) {
        iloop++;
+#if ROOT_VERSION_CODE >= ROOT_VERSION(3,3,0)
+       gStopwatch->Stop();
+       fCPUTime[iloop] += gStopwatch->CpuTime()-cputime;
+       fRealTime[iloop] += gStopwatch->RealTime()-realtime;
+       gStopwatch->Continue();
+#else
        fCPUTime[iloop] += gStopwatch->GetCPUTime()-cputime;
        fRealTime[iloop] += gStopwatch->GetRealTime()-realtime;
+#endif
      }
      if( !rcode ) return kFALSE;
    }
@@ -490,14 +525,28 @@ Bool_t JSFSteer::BeginRun(Int_t nrun)
     Double_t cputime=0;
     Double_t realtime=0;
     if( gStopwatch ) {
+#if ROOT_VERSION_CODE >= ROOT_VERSION(3,3,0)
+      gStopwatch->Stop();
+       cputime=gStopwatch->CpuTime();
+       realtime=gStopwatch->RealTime();
+      gStopwatch->Continue();
+#else
        cputime=gStopwatch->GetCPUTime();
        realtime=gStopwatch->GetRealTime();
+#endif
     }
     Bool_t rcode=module->BeginRun(fRun);
     if( gStopwatch ) {
       iloop++;
+#if ROOT_VERSION_CODE >= ROOT_VERSION(3,3,0)
+      gStopwatch->Stop();
+      fCPUTime[iloop] += gStopwatch->CpuTime()-cputime;
+      fRealTime[iloop] += gStopwatch->RealTime()-realtime;
+      gStopwatch->Continue();
+#else
       fCPUTime[iloop] += gStopwatch->GetCPUTime()-cputime;
       fRealTime[iloop] += gStopwatch->GetRealTime()-realtime;
+#endif
     }
 
     if( !rcode ) return kFALSE;
@@ -539,14 +588,28 @@ Bool_t JSFSteer::EndRun()
 	Double_t cputime=0;
 	Double_t realtime=0;
 	if( gStopwatch ) {
+#if ROOT_VERSION_CODE >= ROOT_VERSION(3,3,0)
+	  gStopwatch->Stop();
+	  cputime=gStopwatch->CpuTime();
+	  realtime=gStopwatch->RealTime();
+	  gStopwatch->Continue();
+#else
 	  cputime=gStopwatch->GetCPUTime();
 	  realtime=gStopwatch->GetRealTime();
+#endif
 	}
 	Bool_t rcode=module->EndRun();
 	if( gStopwatch ) {
 	  iloop++;
+#if ROOT_VERSION_CODE >= ROOT_VERSION(3,3,0)
+	  gStopwatch->Stop();
+	  fCPUTime[iloop] += gStopwatch->CpuTime()-cputime;
+	  fRealTime[iloop] += gStopwatch->RealTime()-realtime;
+	  gStopwatch->Continue();
+#else
 	  fCPUTime[iloop] += gStopwatch->GetCPUTime()-cputime;
 	  fRealTime[iloop] += gStopwatch->GetRealTime()-realtime;
+#endif
 	}
 
 	if( !rcode ) { fReturnCode+=kFALSE ; return kFALSE; }
@@ -660,14 +723,28 @@ Bool_t JSFSteer::Terminate()
 	Double_t cputime=0;
 	Double_t realtime=0;
 	if( gStopwatch ) {
+#if ROOT_VERSION_CODE >= ROOT_VERSION(3,3,0)
+	  gStopwatch->Stop();
+	  cputime=gStopwatch->CpuTime();
+	  realtime=gStopwatch->RealTime();
+	  gStopwatch->Continue();
+#else
 	  cputime=gStopwatch->GetCPUTime();
 	  realtime=gStopwatch->GetRealTime();
+#endif
 	}
 	Bool_t rcode=module->Terminate();
 	if( gStopwatch ) {
 	  iloop++;
+#if ROOT_VERSION_CODE >= ROOT_VERSION(3,3,0)
+	  gStopwatch->Stop();
+	  fCPUTime[iloop] += gStopwatch->CpuTime()-cputime;
+	  fRealTime[iloop] += gStopwatch->RealTime()-realtime;
+	  gStopwatch->Continue();
+#else
 	  fCPUTime[iloop] += gStopwatch->GetCPUTime()-cputime;
 	  fRealTime[iloop] += gStopwatch->GetRealTime()-realtime;
+#endif
 	}
         if( !rcode )  return kFALSE; 
 
@@ -694,6 +771,16 @@ Bool_t JSFSteer::Terminate()
       cpusum  += fCPUTime[loop];
       realsum += fRealTime[loop];
     }
+#if ROOT_VERSION_CODE >= ROOT_VERSION(3,3,0)
+    gStopwatch->Stop();
+    printf("JSFSteer     CPU time = %g",gStopwatch->CpuTime()-fCPUTime[0]-cpusum);
+    printf("  Real time = %g \n",gStopwatch->RealTime()-fRealTime[0]-realsum);
+    printf(" ----------------------------------------------------\n");
+    printf("Total time ");
+    printf(" CPU time = %g ",gStopwatch->CpuTime()-fCPUTime[0]);
+    printf(" Real time = %g ",gStopwatch->RealTime()-fRealTime[0]);
+    printf("\n");
+#else
     printf("JSFSteer     CPU time = %g",gStopwatch->GetCPUTime()-fCPUTime[0]-cpusum);
     printf("  Real time = %g \n",gStopwatch->GetRealTime()-fRealTime[0]-realsum);
     printf(" ----------------------------------------------------\n");
@@ -701,6 +788,7 @@ Bool_t JSFSteer::Terminate()
     printf(" CPU time = %g ",gStopwatch->GetCPUTime()-fCPUTime[0]);
     printf(" Real time = %g ",gStopwatch->GetRealTime()-fRealTime[0]);
     printf("\n");
+#endif
 
   }
 
