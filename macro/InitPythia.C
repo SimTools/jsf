@@ -86,9 +86,20 @@ void InitPythia()
   
   Int_t izdcy=jsf->Env()->GetValue("JSFGUI.Pythia.Decay.Z",0);
   if( izdcy != 0 ) {
-    for(Int_t idc=156;idc<=171;idc++)   tpy->SetMDME(idc,1,0);
-    if( izdcy > 0 && izdcy < 7 ) tpy->SetMDME(155+izdcy,1,1);
-    if( izdcy > 10 && izdcy < 16 ) tpy->SetMDME(153+izdcy,1,1);
+    if( ivers <= 5 ) {
+      for(Int_t idc=156;idc<=171;idc++)   tpy->SetMDME(idc,1,0);
+      if( izdcy > 0 && izdcy < 7 ) tpy->SetMDME(155+izdcy,1,1);
+      if( izdcy > 10 && izdcy < 16 ) tpy->SetMDME(153+izdcy,1,1);
+    }
+    else {
+      Int_t kfz=23;
+      Int_t kcz=tpy->Pycomp(kfz);
+      Int_t mdcy2=tpy->GetMDCY(kcz,2);
+      Int_t mdcy3=tpy->GetMDCY(kcz,3);
+      for(Int_t i=mdcy2;i<=mdcy2+mdcy3-1;i++){ tpy->SetMDME(i,1,0); }
+      if( izdcy > 0 && izdcy < 7 ) { tpy->SetMDME(mdcy2+izdcy-1, 1, 1); }
+      if( izdcy > 10 && izdcy < 17 ) { tpy->SetMDME(mdcy2+8+izdcy-11, 1, 1); }
+    }
   }
 
   //*******************************************
