@@ -3,6 +3,13 @@ Change Log
 **********************************************************
 
 **********************************************************
+jsf-0.4.4   20-October-1998  
+**********************************************************
+1) Put jsf-0.4.3 into cvs respository with a revision 0-4-3 and changed 
+   Makefiles and Imakefiles for easy compilation and likn of 
+   libraries and executables.
+
+**********************************************************
 jsf-0.4.3   19-October-1998  
 **********************************************************
 1) Prepare example for CCD beam data analysis.

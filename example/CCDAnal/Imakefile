@@ -39,7 +39,7 @@ PROGRAM       = $(SONAME).$(DllSuf)
 
 all::   lib ccd
 
-ccd: jsfmain.o $(OBJS)
+ccd: $(OBJS) jsfmain.o
 	$(LD) jsfmain.o $(OBJS) $(LDFLAGS) -o ccd
 
 lib:     $(OBJS)
@@ -48,16 +48,20 @@ lib:     $(OBJS)
 	ar -r libCCD.a $(OBJS)
 	@cp -p libCCD.a ../../lib
 
+jsfmain.cxx:
+	ln -s ../../src/jsfmain.cxx .
+
 clean:: 
 	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h
 
 depend:: 
 	makedepend -I$(ROOTSYS)/include $(SRC)
 
+
 distclean::
 	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h *.~ *.o
 	@rm -f PYTHIA.SEED *.bak
-	@rm -f ccd jsf.root Makefile 
+	@rm -f ccd jsf.root Makefile jsfmain.cxx
 
 ###
 

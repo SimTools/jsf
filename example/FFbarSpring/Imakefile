@@ -45,10 +45,13 @@ clean::
 depend:: 
 	makedepend -I$(ROOTSYS)/include $(SRC)
 
+jsfmain.cxx:
+	ln -s ../../src/jsfmain.cxx .
+
 distclean::
 	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h *.~ *.o
 	@rm -f PYTHIA.SEED *.bak
-	@rm -f jsf *.root Makefile 
+	@rm -f jsf *.root Makefile jsfmain.cxx
 
 ###
 
