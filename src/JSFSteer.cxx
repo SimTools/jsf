@@ -157,6 +157,40 @@ JSFSteer::JSFSteer(const char *name, const char *title)
 
     SetIOFiles();
 
+    LoadSharedLibraries();
+
+  }
+}
+
+//---------------------------------------------------------------------------
+void JSFSteer::LoadSharedLibraries()
+{
+// Load shared libraries specified in JSF.SharedLibraries   environment variable.
+//  
+  Char_t shlibs[1024];
+ 
+  sscanf(fEnv->GetValue("JSF.SharedLibraries","undef"),"%s",shlibs);
+  if( strcmp("undef",shlibs) == 0 ) return ;
+  Int_t lsh=strlen(shlibs);
+  Char_t fn[256];
+  Int_t  j=0;
+  for(Int_t i=0;i<lsh+1;i++){
+    if( shlibs[i] == ' ' || shlibs[i] == '\t' ) {
+      continue;
+    }
+    else if( shlibs[i] != ':' && shlibs[i] != 0) {
+      fn[j++]=shlibs[i];
+      fn[j]=0;
+    }
+    else {
+      Int_t lfn=strlen(fn);
+      if( lfn > 3 ) {
+	gSystem->Load(fn);
+	printf("JSFSteer::LoadSharedLibraries sucessfully loaded %s\n",fn);
+      }
+      j=0;
+      fn[0]=0;
+    }
   }
 }
 

@@ -78,6 +78,7 @@ protected:
 private:
   virtual void MakeConfDir();
   void InitializeMessage();
+  void LoadSharedLibraries();
 
 public:
   JSFSteerConf *fConf;       //! Pointer to module information.

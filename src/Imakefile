@@ -135,10 +135,10 @@ libjsfdmatrix: ../lib/libJSFDMatrix.$(DllSuf)
 	$(LD) $(SOFLAGS)  $(OBJJSFDMATRIX) -o $@
 
 
-jsf: $(OBJS) jsfmain.o
+jsf: $(OBJS) jsfmain.o ../lib/libJSFGUI.so
 	$(LD) jsfmain.o $(BLOCKDATA) \
 	-L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim -lJSFDMatrix \
-	-lBasesSpring $(LDFLAGS) \
+	-lBasesSpring -lJSFGUI $(LDFLAGS) \
 	 -o jsf
 	@cp -p jsf ../bin
 	@rm -f jsf
@@ -178,3 +178,7 @@ libJSFDMatrix.$(SrcSuf): $(HDRJSFDMATRIX)
 
 JSFConfig.h: ../conf/jsf.version ../bin/makespec
 	../bin/makespec 
+
+
+../lib/libJSFGUI.so:
+	( cd $(JSFROOT)/example/guiexam1 ; xmkmf -a ; make )
