@@ -1,0 +1,22 @@
+
+This is an example to read JLCSIM data by JSF.  
+
+There are still several inconsistency in the data.
+Due to error, the program will break.
+Please note that this version is prepared as a test version.
+
+To build a program,
+
+$ setenv JLCSIMROOT [jlcsim-directory]
+$ xmkmf
+$ make install
+
+To run sample program do,
+
+$ jsf rjim.C
+  
+  ( this macro reads a data file, jetset_qq_fast.bnk )
+
+7-May-1999
+A.Miyamoto
+
