@@ -30,6 +30,10 @@ extern void readjimend_();
 extern void readjimread_(Int_t *nret);
 extern void jlread_(Int_t *ierr);
 extern Float_t ulctau_(Int_t *kf);
+extern void kzget_(Char_t *cname, Int_t *iseg, Int_t *leng, Int_t idat[],  Int_t lenb);
+
+  //extern void kzread_(Int_t *lu, Int_t *ierr);
+  //extern void kzefst_();
 
 };
 
@@ -67,10 +71,12 @@ Bool_t JSFReadJIMBank::Initialize()
 Bool_t JSFReadJIMBank::BeginRun(Int_t nrun)
 {
   Int_t lenf=strlen(fDataFileName);
+
   if( fReadWrite == 2 ) {
     readjiminit_(&fUnit, fDataFileName, lenf);
     printf("%s is opened.\n",fDataFileName);
   }
+
   return kTRUE;
 }
 
@@ -135,8 +141,8 @@ Bool_t JSFReadJIMBankBuf::UnpackDST(Int_t nev)
 
 
   Int_t nret;
-  readjimread_(&nret);
 
+  readjimread_(&nret);
 
   Int_t ivers;
   for(ivers=0;ivers<4;ivers++){ fProduc[ivers]=trbuff_.produc[ivers]; }
@@ -319,5 +325,13 @@ JSFReadJIMBankBuf::~JSFReadJIMBankBuf()
 {  
 }
 
+
+// ---------------------------------------------------------------
+void JSFReadJIMBankBuf::KZGET(Char_t *cname, Int_t iseg, Int_t &leng, Int_t idat[])
+{
+  Int_t lenb=strlen(cname);
+  kzget_(cname, &iseg, &leng, idat, lenb);
+  return ;
+}
 
 

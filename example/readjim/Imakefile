@@ -12,7 +12,7 @@
 #include    "config/lclib.tmpl"
 #include    "conf/makejsf.tmpl"
 
-CERNLIBS      = $(shell cernlib jetset74 packlib)
+CERNLIBS      = $(shell cernlib jetset74 packlib mathlib)
 
 ROOTLIBS     += -lEGPythia -lEG $(CERNLIBS)
 
@@ -24,21 +24,22 @@ CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lkernlib -lpacklib
 #endif
 
 ANALLIB = $(JSFLIBS) $(EXTRALDOPT) \
+	-L$(JLCSIMROOT)/lib -lct -ljlclib -lvx -lcal -lzbs -ljlcutil \
 	-L$(LCLIBDIR) -lGENUTIL -lLUHADR -lTAUOLA \
         -lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
         -lHELASV204 -lFORTLIB -lCOM -lCLI \
-        $(EXTRALIBS) \
-	-L$(JLCSIMROOT)/lib -lct -ljlclib -lvx -lcal -lzbs -ljlcutil
+        $(EXTRALIBS)
 
 JIMOBJ  = $(JLCSIMROOT)/util/src/getcal.o  $(JLCSIMROOT)/util/src/getcls.o \
 	$(JLCSIMROOT)/util/src/getgen.o  $(JLCSIMROOT)/util/src/getmch.o \
-	$(JLCSIMROOT)/util/src/gettrk.o  $(JLCSIMROOT)/util/src/getvtx.o 
+	$(JLCSIMROOT)/util/src/gettrk.o  $(JLCSIMROOT)/util/src/getvtx.o
 
 #-------------------------------------------------------------
 
 INC           = $(JSFROOT)/include 
 
-INCPATH	      = -I./ -I$(JLCSIMROOT)/util/inc -I$(JLCSIMROOT)/include/jlc 
+INCPATH	      = -I./ -I$(JLCSIMROOT)/util/inc -I$(JLCSIMROOT)/include/jlc \
+		-I$(JLCSIMROOT)/jimlib/inc
 FCFLAGS	      = $(FFLAGS)
 
 OBJS          = JSFReadJIMBank.$(ObjSuf) \
@@ -59,7 +60,7 @@ all::  jsfrjim lib
 
 jsfrjim: $(OBJS) $(JSFROOT)/src/jsfmain.o JSFReadJIMCommonSize.h
 	$(LD) $(JSFROOT)/src/jsfmain.o $(BLOCKDATA) $(OBJS) \
-	$(LDFLAGS) -o ../../bin/jsfrjim
+	$(LDFLAGS) -o ../../bin/jsfrjim 
 
 lib: $(OBJS)
 	ar cr libreadjim.a $(OBJS) $(JIMOBJ)
@@ -68,8 +69,9 @@ clean::
 	@rm -f $(OBJS) core *~
 	@rm -f $(SOLIBNAME).*
 
-depend:: 
-	makedepend -I$(ROOTSYS)/include $(SRC)
+depend:: $(SRC) $(HDRS)
+	for i in $(SRC); do \
+	rmkdepend -a -- $(DEPENDFILES) -- $$i; done
 
 web: jsfrjim lib
 	../../bin/jsfrjim -q -b html.C
@@ -92,6 +94,6 @@ JSFReadJIMBank.cxx: JSFReadJIMCommon.h JSFReadJIMCommonSize.h
 
 JSFReadJIMCommon.h: JSFReadJIMCommonSize.h
 
-JSFReadJIMCommonSize.h: $(JLCSIMROOT)/util/inc/trbuff.inc getcomsize.pl
+JSFReadJIMCommonSize.h: $(JLCSIMROOT)/include/jlc/trbuff.inc getcomsize.pl
 	perl getcomsize.pl > JSFReadJIMCommonSize.h
 

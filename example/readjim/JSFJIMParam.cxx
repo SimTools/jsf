@@ -36,17 +36,10 @@ void JSFJIMParam::ReadParameter()
 {
   // Read detector parameter for JIM from JIM data buffer.
 
-  printf("ReadParameter is called......\n");
-
   //  kzget_(Char_t *cname, Int_t *isegm, Int_t *ndata, Int_t idata[], lcname);
  
   Int_t isegm=0;
   Int_t ndata; Int_t idata[100];
-  kzget_("MCVXPAR",&isegm,&ndata, idata, 7);
-
-  printf(" ndata =%d idata[1:2]=%d %d\n",ndata,idata[0],idata[1]);
-
-
 
   /*
   FILE *fd;

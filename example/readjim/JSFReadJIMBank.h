@@ -32,6 +32,9 @@ public:
   virtual Bool_t UnpackDST(Int_t nev); // Unpack SIMDST information.
   friend class JSFReadJIMBank;
 
+  // Interface functions to get JIM result
+  void KZGET(Char_t *cname, Int_t iseg, Int_t &leng, Int_t idat[]);  
+
   ClassDef(JSFReadJIMBankBuf,1)  // Buffer to read JIM bank
 };
 
@@ -40,6 +43,7 @@ class JSFReadJIMBank : public JSFSIMDST {
 protected:
   JSFJIMParam *fParam;
   Bool_t      fDoesParameterInitialized; //!
+  Int_t       fIGEOJM;     // Detector type (1=2T, 2=3T)
 public:
   JSFReadJIMBank(const char *name="JSFReadJIMBank", 
 		  const char *title="Read JIM's *.bnk file",

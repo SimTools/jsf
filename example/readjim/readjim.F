@@ -34,6 +34,7 @@ C     WRECON was modified to ZHRECON.			30-May-96, Y.Fujii
 #include "jlunit.inc"
 #include "jlfile.inc"
 #include "jlanal.inc"
+#include "jmcntl.inc"
 #include "trbuff.inc"
 #include "pawc.inc"
 
@@ -44,8 +45,6 @@ C     WRECON was modified to ZHRECON.			30-May-96, Y.Fujii
       INTEGER*4 IUNIT
       CHARACTER*(*) FNAME
 
-      print *,' readjiminit was called.'
-
 *-- HBOOK etc. Initialization
       CALL HLIMIT(NHBOOK)
 
@@ -53,7 +52,7 @@ C     WRECON was modified to ZHRECON.			30-May-96, Y.Fujii
 
       CALL KZINIT
       
-C      CALL JLFFKY
+      CALL JLFFKY
 
 
 C .. Varaibales in jlunit.inc
@@ -88,6 +87,7 @@ C      CALL FFKEY('PRNT',IPRINT,1,'INTEGER')
 C      CALL FFGO
 
       call fuevti
+
 
 C================  NTUPLE definitions =========================
 
@@ -128,21 +128,26 @@ C      CHARACTER*4  PRODUC
 #include "jlunit.inc"
 #include "jlfile.inc"
 #include "jlanal.inc"
+#include "jmcntl.inc"
 #include "trbuff.inc"
 #include "pawc.inc"
-      
+
 
       INTEGER IERR,ICYCLE
 
       INTEGER LNBLNK
 
+      INTEGER*4  LBANK, IBUFF(20), NBUFF
+
       NRET = 1
+
  1000 CONTINUE 
 
       IEVENT = IEVENT + 1
 
-CC      WRITE(6,600) IEVENT
-CC 600  FORMAT(//1H ,'<< Event #: ',I5,' >>'/)
+
+C      WRITE(6,600) IEVENT
+C 600  FORMAT(//1H ,'<< Event #: ',I5,' >>'/)
          
       CALL GETMCH
 
@@ -151,10 +156,13 @@ CC 600  FORMAT(//1H ,'<< Event #: ',I5,' >>'/)
       CALL GETGEN
 
 *-- Read Track Data
-      CALL CTHSIM
-      CALL CTANAL
-
-      CALL GETTRK
+      if( IGEOJM.EQ.IG2TJM) THEN
+	call cthsim
+	call ctanal
+	call gettrk
+      else
+	call ctcyla
+      endif
       
       CALL GETCAL(IERR)
 
