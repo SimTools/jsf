@@ -60,7 +60,7 @@ extern "C" void pydata_();
 
 #if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 23
 TROOT root("Rint","The ROOT Interactive Interface");
-#else
+#elif __ROOT_FULLVERSION__ <= 30200
 extern void InitGui();
 VoidFuncPtr_t initfuncs[] = { InitGui, 0 };
 TROOT root("Rint","The ROOT Interactive Interface", initfuncs);
