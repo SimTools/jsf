@@ -187,7 +187,7 @@ JSFSpringBuf::JSFSpringBuf(const char *name, const char *title,
   : JSFEventBuf(name, title, (JSFModule*)spring)
 {
    fNparton = 0 ;
-#if 1
+#if 0
    if( !fPartons ) fPartons = new TClonesArray("JSFSpringParton",100);
 #else
    fPartons = new TClonesArray("JSFSpringParton",100);
