@@ -1,4 +1,34 @@
+-------------------------------------------------------------------------------
+2000/02/22  A.Miyamoto
+-------------------------------------------------------------------------------
+(1) JSFDMatrix and related classes are created.
+    They are double precission version of TMatrix and created from 
+    the source files of TMatrix by using the perl script, $JSFROOT/bin/mkmatrix.pl.
+    They are created as separate libraries.  For this library, source files for
+    Root-2.23/11 are used.
 
+(2) JSFVertexing, JSFGeoCFit, JSFVirtualFit classes are added.
+    They are for vertex finding and fitting using helix parameters.
+    They are included in libJSFQuickSim library.
+
+(3) JSFHelicalTrack::MovePivot functions is added.
+
+(4) Add $JSFROOT/share directory to put C++ Bases/Spring. 
+    Non-JSF files will be placed in this directory.
+    In share directory, bases directories are put, where 
+    C++ Bases/Spring source files and example are put.
+
+(5) $JSFROOT/example/NuNuGam directory is created.
+    Example to use new Bases/Spring library is found there.
+
+(6) JSFBases, JSFSpring are modified to use C++ Bases/Spring
+
+(7) JSFBasicClass.h is modified to add X(), Y(), Z() functions
+    in JSF3DV and JSF2DV classes.
+
+(8) JSFGeneratorParticle.h class is modified to add 
+    GetLorentzVector funciton
+	
 -------------------------------------------------------------------------------
 2000/02/01  A.Miyamoto
 -------------------------------------------------------------------------------
