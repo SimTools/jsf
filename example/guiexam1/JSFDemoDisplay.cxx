@@ -88,7 +88,7 @@ void JSFDemoDisplay::InitializeDemo()
     fButtons[0]= new TGTextButton(fUpbuttons, "Step", 8000);
     fButtons[1]= new TGTextButton(fUpbuttons, "X3D", 8001);
     fButtons[2]= new TGTextButton(fUpbuttons, "Reset", 8002);
-    fButtons[3]= new TGTextButton(fUpbuttons, "Help", 8003);
+    fButtons[3]= new TGTextButton(fUpbuttons, "About", 8003);
     for(i=0;i<4;i++){
       fButtons[i]->Associate((TGMainFrame*)GetGUIMain());
       fUpbuttons->AddFrame(fButtons[i],lhTL);
@@ -188,10 +188,6 @@ void JSFDemoDisplay::DisplayDemo()
 
    txt->Draw();
 
-   //   txt->SetText(0., -0.9,GetEventTypeString());
-   //  jsftxt->Draw();
-
-
   fDisp->GetCanvas()->Update();
 
 
@@ -286,12 +282,26 @@ void JSFDemoDisplay::ProcessButton(Long_t parm1)
 
     case 8003:  // Help
       new TGMsgBox(gClient->GetRoot(), GetGUIMain(),  "JSF Message", 
-		      "JSF Demo Help message",
+"JSF Demo
+<<Type of event>>
+Standard model processes are generated using Pythia and 
+Quick Simulator. Event rates are mixed by proper weight.
+<<Event Display>>
+Green helixes: CDC tracks
+Blue boxes: Elemag calorimeters
+Purple boxes: Hadron calorimeters
+Central red bar: e+ incident side
+Central blue bar: e- incident side
+<<Histograms>>
+Current data are added to data analized previously.  
+[Reset] button clears first two entries.
+Higgs mass: ZH->(nu ~nu)+(b ~b) are selected.
+",
               icontype, buttons, &retval);
       break;
 
     case 8002:  // Reset
-      //      gROOT->ProcessLine("ResetHist();");
+      gROOT->ProcessLine("ResetHist();");
       break;
 
     case 8001:  // X3D
