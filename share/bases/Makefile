@@ -23,6 +23,6 @@ clean: src/Makefile example/nunugam/Makefile
 	( cd example/nunugam ; make clean )
 
 cleanall: src/Makefile example/nunugam/Makefile
-	( cd src ;  make cleanall ; rm -f Makefile )
+	( cd src ;  make distclean ; rm -f Makefile)
 	( cd example/nunugam ; make cleanall ; rm -f Makefile )
 
