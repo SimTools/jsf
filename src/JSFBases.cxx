@@ -247,11 +247,13 @@ void JSFBases::H1Fill(Char_t *hn, Double_t x, Double_t fx)
     th->Fill(x, fx*GetWeight() );
   }
   else { 
-    Char_t hstn[128];
-    Char_t *hnsuf;
-    hnsuf="BS"; 
-    sprintf(hstn,"%s%s",hn,hnsuf);
-    ((TH1D*)(fBSHash1->FindObject(hstn)))->Fill(x, fx*GetWeight());
+    if( Flag_bases() > 1 ) { // Accumulate only during second integration loop
+      Char_t hstn[128];
+      Char_t *hnsuf;
+      hnsuf="BS"; 
+      sprintf(hstn,"%s%s",hn,hnsuf);
+      ((TH1D*)(fBSHash1->FindObject(hstn)))->Fill(x, fx*GetWeight());
+    }
   }
 
 }
@@ -281,12 +283,14 @@ void JSFBases::H2Fill(Char_t *hn, Double_t x, Double_t y, Double_t fx)
     th->Fill(x, y, fx*GetWeight() );
   }
   else { 
-    Char_t hstn[128];
-    Char_t *hnsuf;
-    hnsuf="BS"; 
-    sprintf(hstn,"%s%s",hn,hnsuf);
-    ((TH2D*)(fBSHash2->FindObject(hstn)))->Fill(x, y, fx*GetWeight());
-  }
+    if( Flag_bases() > 1 ) { // Integrate only in 2nd integration loop.
+      Char_t hstn[128];
+      Char_t *hnsuf;
+      hnsuf="BS"; 
+      sprintf(hstn,"%s%s",hn,hnsuf);
+      ((TH2D*)(fBSHash2->FindObject(hstn)))->Fill(x, y, fx*GetWeight());
+    }
+   }
 }
 
 //_________________________________________________________
