@@ -37,7 +37,7 @@ HDRS	      = MyAnalysis.h
 all::  jsf
 
 jsf: $(OBJS) jsfmain.o
-	$(LD) jsfmain.o $(BLOCKDATA) $(OBJS) \
+	$(CXX) jsfmain.o $(BLOCKDATA) $(OBJS) \
 	$(LDFLAGS) -o jsf 
 
 
