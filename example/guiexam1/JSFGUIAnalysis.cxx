@@ -10,6 +10,8 @@
 // This is a preliminary version of event display for experiment
 // to know how to use ROOT GUI and 3D Graphics.
 //
+//$Id$
+//
 ///////////////////////////////////////////////////////////////////
 
 #include "JSFSteer.h"

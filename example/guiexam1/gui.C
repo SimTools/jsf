@@ -2,6 +2,8 @@
 // 
 //  Example of Event display script. 
 // 
+// $Id$
+//
 
   gROOT->LoadMacro("MainMacro.C");
 

@@ -1,4 +1,3 @@
-
 //*LastUpdate:  jsf-1-5 22-Feburary-1999  by Akiya Miyamoto
 //*-- Author :  Akiya Miyamoto  22/02/1999
 
@@ -7,6 +6,8 @@
 //  JSFEventDisplay
 //
 //  Event Display
+//  
+//$Id$
 //  
 //////////////////////////////////////////////////////////////////
 

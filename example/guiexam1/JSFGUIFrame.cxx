@@ -14,6 +14,8 @@
 //   GetPrevious() when Previous button is pressed.
 //   GetEvent(Int_t event) when Goto event button is pressed.
 //   
+//$Id$
+//
 ///////////////////////////////////////////////////////////////////
 
 #include <stdlib.h>

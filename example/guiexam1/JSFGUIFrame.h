@@ -1,6 +1,8 @@
 #ifndef __JSFGUIFrame__
 #define __JSFGUIFrame__
-
+//
+//$Id$
+//
 #include <stdlib.h>
 
 #include <TROOT.h>

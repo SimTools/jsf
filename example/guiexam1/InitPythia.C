@@ -1,13 +1,11 @@
 // *****************************************
 // Initialize Pythia Parameter 
 //   for e+e- -> zh event.
-//(Parameters) 
-//  There is one global parameter, fHiggsmass,  for this macro.
-//  It must be defined prior to the execution.
+//$Id$
 // *****************************************
 void InitPythia()
 {
-  Float_t fHiggsmass=110.0;
+  Float_t fHiggsmass=110.0;       // Higgs mass
 
   TPythia *tpy=py->GetPythia();
   tpy->SetMSEL(18);                  // e+e- -> ZH process
