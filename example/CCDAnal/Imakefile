@@ -1,5 +1,6 @@
 #---------------------------------------------------
-
+#$Id$
+#
 #include "conf/makejsf.tmpl"
 
 ANALLIB   = -L$(JSFROOT)/lib -lJSF
@@ -57,7 +58,7 @@ depend::
 distclean::
 	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h *.~ *.o
 	@rm -f PYTHIA.SEED *.bak
-	@rm -f ccd jsf.root Makefile jsfmain.cxx
+	@rm -f ccd jsf.root Makefile
 
 ###
 

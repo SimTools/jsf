@@ -1,5 +1,10 @@
+//*LastUpdate:  jsf-1-9 28-May-1999 by Akiya Miyamoto
 //*LastUpdate:  v0.1.01 14-October-1998 by Akiya Miyamoto
 //*-- Author :  Akiya Miyamoto  14-October-1998
+
+/*
+ 28-May-1999 A.Miyamoto  Compiler warning in line#105 is removed.
+*/
 
 //////////////////////////////////////////////////////////////////
 //
@@ -13,6 +18,8 @@
 //  CCD2x2Clustering.Threshold3:   Threshould for 3-th CCD
 //  CCD2x2Clustering.DoHist:       (TRUE/FALSE) Do histograming or not
 //  CCD2x2Clustering.ShowHist:     (TRUE/FALSE) Show histograming or not
+//
+//$Id$
 //
 //////////////////////////////////////////////////////////////////
 
@@ -102,7 +109,7 @@ Bool_t CCD2x2Cluster::Process(Int_t ev)
   }
 
   static CCDPedestals peds;
-  static lastrun=0;
+  static Int_t lastrun=0;
   if( lastrun != gJSF->GetRunNumber() ) peds.ReadDBS(gJSF->GetRunNumber());
   lastrun=gJSF->GetRunNumber();
 
