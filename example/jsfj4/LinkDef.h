@@ -10,7 +10,7 @@
 
 #pragma link C++ class JSFJ4VTXHit+;
 #pragma link C++ class JSFJ4ITHit+;
-#pragma link C++ class JSFJ4CDCHit+;
+// pragma link C++ class JSFJ4CDCHit+;
 #pragma link C++ class JSFJ4CALHit+;
 
 #ifdef USE__J4CT

@@ -22,8 +22,10 @@
 
 LIBNAME = libJSFJ4
 
+#	JSFJ4VTXHit.$(SrcSuf) JSFJ4CDCHit.$(SrcSuf) 
+
 SRC     = JSFJ4.$(SrcSuf) \
-	JSFJ4VTXHit.$(SrcSuf) JSFJ4CDCHit.$(SrcSuf) \
+	JSFJ4VTXHit.$(SrcSuf) \
 	JSFJ4ITHit.$(SrcSuf) JSFJ4CALHit.$(SrcSuf) \
 	JSFJ4PrimaryParticle.$(SrcSuf) JSFJ4PrimaryVertex.$(SrcSuf)
 
@@ -45,6 +47,7 @@ HDRS    = $(subst .$(SrcSuf),.h,$(SRC))
 CPPFLAGS =  -Wall  -pipe  -DGNU_GCC $(CXXFLAGS)
 
 JUPITERINCLUDE = -I$(JUPITERROOT)/sources/kern/include \
+	-I$(JUPITERROOT)/sources/lcexp/include \
 	-I$(JUPITERROOT)/sources/vtx/include \
 	-I$(JUPITERROOT)/sources/it/include \
 	-I$(JUPITERROOT)/sources/cdc/include \
@@ -63,11 +66,12 @@ CXXFLAGS += -DG4USE_STD_NAMESPACE
 #endif
 
 JUPITERLIB = -L$(JUPITERROOT)/lib/$(G4SYSTEM) -lJ4bd -lJ4sol \
-	-lJ4cal -lJ4cdc -lJ4ir -lJ4it -lJ4vtx -lJ4kern
+	-lJ4cal -lJ4cdc -lJ4ir -lJ4it -lJ4vtx -lJ4lcexp -lJ4kern
 
 ROOTCINTOPT =
 XCOMM define USE__J4CT
 #undef USE__J4CT
+#define USE__J4CT
 #ifdef USE__J4CT
 CXXFLAGS += -DUSE__J4CT
 JUPITERINCLUDE += -I$(JUPITERROOT)/sources/ct/include
@@ -76,26 +80,17 @@ SRC  += JSFJ4CTHit.$(SrcSuf)
 ROOTCINTOPT += -DUSE__J4CT
 #endif
 
+#	-lG4hadronic_man_gen 
+#	-lG4hadronic_stringfrag 
+#       -lG4hadronic_string_common  
+#	-lG4hadronic_HE_gen 
+#	-lG4hadronic_kinetic 
+#	-lG4hadronic_deex 
+#	-lG4hadronic_util_gen 
+#	-lG4geomver 
+
 G4LIBS := -L$(G4INSTALL)/lib/$(G4SYSTEM) \
-	-lG4RayTracer -lG4FR -lG4visHepRep -lG4OpenGL \
-	-lG4geomBoolean -lG4emstandard 	-lG4muons -lG4hadronic_interface_ci \
-	-lG4decay -lG4UIbasic -lG4VRML -lG4Tree -lG4parameterisation \
-	-lG4vis_management -lG4hadronic_body_ci -lG4shortlived \
-	-lG4hadronic_man_gen -lG4hadronic_stringfrag \
-	-lG4hadronic_qgstring -lG4hadronic_string_common  \
-	-lG4hadronic_string_common -lG4hadronic_HE_gen -lG4hadronic_kinetic \
-	-lG4hadronic_stop -lG4hadronic_deex -lG4hadronic_HE \
-	-lG4hadronic_util_gen -lG4modeling -lG4hadronic_proc \
-	-lG4hadronic_man_gen -lG4hadronic_LE -lG4hadronic_mgt \
-	-lG4hadronic_xsect -lG4hadronic_util -lG4ions -lG4mesons \
-	-lG4baryons -lG4run -lG4event -lG4bosons -lG4tracking \
-	-lG4emutils -lG4detector -lG4hits \
-	-lG4leptons -lG4procman -lG4volumes -lG4digits -lG4geomver \
-	-lG4track -lG4UIcommon -lG4partman -lG4specsolids -lG4csg \
-	-lG4hepnumerics -lG4magneticfield -lG4geometrymng \
-	-lG4emlowenergy \
-	-lG4geombias -lG4transportation -lG4track \
-	-lG4materials -lG4intercoms -lG4graphics_reps -lG4globman \
+	-L. -lG4all \
 	-lGLU -lGL -lXm -lXpm -lXaw -lXmu -lXt \
 	-L/usr/lib -lCLHEP
 
