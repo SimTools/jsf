@@ -58,6 +58,26 @@ foreach i ( $incdir )
 end
 echo "  " >> $specfile
 
+
+##################################
+# Check status of other softwares.
+################################## 
+
+# Ranmar
+set useranmar=`grep -c -i ranmar $LCLIBROOT/util/fortlib/src/ran_.F`
+if ( $useranmar == 0 ) then
+   echo "Your random function in LCLIB directory does not use ranmar."
+   echo "Please install the latest version of LCLIB"
+else
+    echo "#define __LCLIBRAN_USE_RANMAR__ 1" >> $specfile
+endif
+
+# jlcsim
+if ( -e $JLCSIMROOT/lib/libjimlib.a ) then
+    echo "#define __JLCSIM_INSTALLED__ 1"  >> $specfile
+endif
+
+
 ##########################
 #
 ##########################
