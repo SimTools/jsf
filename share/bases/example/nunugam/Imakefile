@@ -52,8 +52,10 @@ $(INT): $(IOBJS)
 $(GEN): $(GOBJS)
 	$(LD) -o $(GEN) $(GOBJS) $(LDFLAGS)
 
-depend::
-	makedepend -I$(BASESDIR)/src -I/usr/include/g++-2 $(SRCS)
+depend:: $(SRCS) $(HDRS)
+	for i in $(SRCS); do \
+	rmkdepend -a -- $(CXXFLAGS) $(INCPATH) -- $$i; done
+
 
 clean::
 	rm -f *.o
