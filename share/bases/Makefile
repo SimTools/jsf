@@ -7,6 +7,7 @@
 all: lib eg
 
 lib: src/Makefile
+	( cd src ; xmkmf -a )
 	( cd src ; make ; make install )
 
 eg: example/nunugam/Makefile
