@@ -25,7 +25,7 @@ jsf-1-5  Progress since 16-Feburary-1999 A.Miyamoto
 (4) Add JSFBasicClasses.h to define frequently used basic classes.
 (5) Add HitPostion fnction in JSFCALGeoParm class.
 (6) Separate JSFQuickSim to JSFQuickSim and JSFQuickSimParam	
-
+(7) Add example/gui1exam1 as a GUI example.
 	
 **********************************************************
 jsf-1-4  16-Feburary-1999 A.Miyamoto
