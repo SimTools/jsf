@@ -2,6 +2,8 @@
 //*
 //*  Sample UserAnalysis Script 
 //*  
+//*$Id$
+//*
 //****************************************************
 
 TCanvas *cHist;

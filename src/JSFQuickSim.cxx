@@ -1,3 +1,4 @@
+//*LastUpdate :  jsf-1-9  30-March-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-6  30-March-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-5  26-Feburary-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-4  6-Feburary-1999  By Akiya Miyamoto
@@ -5,9 +6,8 @@
 //*-- Author  : A.Miyamoto  11-September-1998
 
 /*  Change Log
-
   30-March-1999  A.Miyamoto  Put modification to run with lclib-98a-4
-
+  28-May-1999    A.Miyamoto  Increased buffer size for VTX layer from 10 to 22
 */
 
 

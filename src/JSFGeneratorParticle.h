@@ -7,6 +7,8 @@
 //                                                                      //
 // Description of JSFGeneratorParticle parameters                       //
 //                                                                      //
+//$Id$                                                                  //
+//                                                                      //
 //////////////////////////////////////////////////////////////////////////
 
 #include "TObject.h"

@@ -7,15 +7,13 @@
 //
 // A general class to run bases in root
 //
+//$Id$
+//
 //////////////////////////////////////////////////////////////////////////
 
 #include "TNamed.h"
 #include "TMath.h"
 #include "TDatime.h"
-
-// #ifndef __JSFSpring__
-// #include "JSFSpring.h"
-// #endif
 
 
 // =====================================================================

@@ -15,6 +15,39 @@ To-Do  -- Help wanted
 **********************************************************
 jsf-1-8  9-April-1999 A.Miyamoto
 **********************************************************
+
+-----------------------	
+27-May-1999 A.Miyamoto
+-----------------------	
+  (1) JSFQuickSim.cxx,JSFQuickSimCommon.h,JSFQuickSimParam.h,JSFSIMDST.cxx/h
+     Changes to allow up to 20 layers of VTX and IMT
+
+-----------------------	
+26-May-1999 K.Fujii
+-----------------------	
+  (1) Compile everything with a PIC flag: +Z for HP.
+
+-----------------------	
+17-May-1999 A. Miyamoto
+-----------------------	
+  (1) Avoid memory leak in JSFCDCTrack::MovePivotToIP, by putting delete helix.
+  (2) Add Xhsave in JSFBases class
+  (3) In Pythia generator, mu/tau in documentation line cased trouble. 
+      They were treated as long lived particle, which decayed after flying
+      very long distance.  This bug was fixed.
+  (4)  Short size variables in JSFGeneratorParticle classes are changed to
+      Integer*4 size.  Integer*2 is too small to save all PID.
+      JSFGeneratorParticle.h JSFSIMDST.cxx simdstutil.F 
+      are changed accordingly.  This is SIMDST version is set to 2.03
+  (5) Add patches for HP aCC in JSFGUIFrame.cxx
+      Add UserTerminate function in UserAnalysis.C
+	
+	
+-----------------------	
+13-May-1999 A.Miyamoto
+-----------------------	
+1) JSFLCFULL.cxx/h : 	Defines macro to call JCLUST, THRUST, etc.
+
 -----------------------	
 7-May-1999 A.Miyamoto
 -----------------------	

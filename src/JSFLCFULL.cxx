@@ -9,7 +9,7 @@
 //  Interface to execute LCFULL in ROOT environment.
 //  This routine does (1) TBS initialize
 //  
-//$Id:  
+//$Id$  
 //  
 //////////////////////////////////////////////////////////////////
 

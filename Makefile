@@ -1,7 +1,7 @@
 #
 # Makefile for JSF
 #
-#$Id:
+#$Id$
 #
 all: help
 

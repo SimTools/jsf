@@ -1,3 +1,4 @@
+//*LastUpdate :  jsf-1-9   15-May-1999  A.Miyamoto
 //*LastUpdate :  jsf-1-7-2  16-April-1999  A.Miyamoto
 //*LastUpdate :  jsf-1-7-1  9-April-1999  A.Miyamoto
 //*LastUpdate :  jsf-1-7  8-April-1999  A.Miyamoto
@@ -28,7 +29,7 @@
 //  final state have fMother=0.  fNDaughter for them are always 1 and pointer
 //  to the first daughter points first particle in the final state.  
 //   
-//$ID:
+//$Id$
 //  
 //////////////////////////////////////////////////////////////////
 

@@ -1,3 +1,4 @@
+//*LastUpdate:  jsf-1-9 17-May-1999 Akiya Miyamoto
 //*LastUpdate:  jsf-1-7 8-April-1999 Akiya Miyamoto
 //*LastUpdate:  v0.3.08 09/29/1998  by A.Miyamoto
 //*-- Author :  Akiya Miyamoto  09/22/1998
@@ -29,7 +30,7 @@
 //         file->Write();
 //       }
 //
-//$ID:
+//$Id$
 //
 //////////////////////////////////////////////////////////////////
 // 

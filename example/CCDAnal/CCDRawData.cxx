@@ -1,3 +1,4 @@
+//*LastUpdate:  jsf-1-9 28-May-1999 by Akiya Miyamoto
 //*LastUpdate:  v0.1.01 8-October-1998 by Akiya Miyamoto
 //*-- Author :  Akiya Miyamoto  8-October-1998
 
@@ -29,6 +30,8 @@
 //
 //  CCDRawData.RFNFormat:       printf format to construct file name
 //  CCDRawData.DoHist:         (TRUE/FASLE)  # Do Ph histogram or not.
+//
+//$Id$
 //
 //////////////////////////////////////////////////////////////////
 

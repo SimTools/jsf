@@ -7,7 +7,7 @@
 //
 // A QuickSim Parameter class
 //
-//$Id:
+//$Id$
 //                                                                      //
 // 30-Mar-1999 A.Miyamoto  Add fNUMVTX in JSFQuickSimParam
 //

@@ -1,4 +1,10 @@
 c*******************************************************************
+c* Subroutines to read/write SIMDST data
+c*
+c*
+c*$Id$
+c*
+c*******************************************************************
       subroutine simdstopen(iunit, fname)
       character*(*) fname
       
