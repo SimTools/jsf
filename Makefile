@@ -21,6 +21,7 @@ help:
 install : makespec lib html include
 	@echo "JSFROOT is set to $(JSFROOT)"
 	( cd share/bases ; make )
+	( cd share/bsgen ; xmkmf -a ; make )
 	( cd src ; xmkmf -a ; make )
 	( cd example/FFbarSpring ; xmkmf -a ; make )
 	( cd example/ZHStudy ; xmkmf -a ; make )
@@ -40,17 +41,21 @@ allinstall: install mkopsoft
 	( cd example/NuNuGam ; xmkmf -a ; make )
 	( cd example/mkjimbnk ; xmkmf -a ; make )
 	( cd share/zvtop ; make all )
+	( cd share/jetnet ; make all )
 
 fullinstall: allinstall web
 
 clean: 
 	( cd share/bases ; make clean )
+	( cd share/bsgen ; make clean )
 	( cd src ; make clean )
 	( cd example/FFbarSpring ; make clean )
 	( cd example/ZHStudy  ; make clean )
 	( cd example/ww ; make clean )
 	( cd example/guiexam1 ; make clean )
 	( cd example/CCDAnal  ; make clean )
+	( cd share/zvtop ; make clean )
+	( cd share/jetnet ; make clean )
 
 web: html/example
 	( cd src ; xmkmf ; make web ) 
@@ -73,14 +78,18 @@ include:
 	ln -s src include
 
 distclean: 
-	( cd share/bases ; make cleanall ) 
-	( cd src ; make distclean ) 
-	( cd example/FFbarSpring ; make distclean )
-	( cd example/ZHStudy ; make distclean )
-	( cd example/ww ; make distclean )
-	( cd example/guiexam1 ; make distclean )
-	( cd html ; rm -f *.html *.h *.ps *~ ; rm -rf src ; rm -rf exam* )
-	( rm -r lib ; rmdir html )
+	( cd share/bases ; make cleanall )
+	( cd share/bsgen ; make cleanall )
+	( cd src ; xmkmf ; make distclean ) 
+	( cd example/FFbarSpring ; xmkmf ; make distclean )
+	( cd example/ZHStudy ; xmkmf ; make distclean )
+	( cd example/ww ; xmkmf ; make distclean )
+	( cd example/guiexam1 ; xmkmf ; make distclean )
+	( cd example/CCDAnal ; xmkmf ; make distclean )
+	( cd share/zvtop ; make distclean )
+	( cd share/jetnet ; make distclean )
+	( rm -rf lib ; rm -rf html )
 	( cd macro ; rm -f jsf.root , PYTHIA.SEED )
-	( cd example/CCDAnal ; make distclean )
+	rm -f *~ core jsf.conf jsf.root
+
 
