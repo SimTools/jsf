@@ -112,9 +112,33 @@ TNtuple *ntrlodi=0;
 JSFZVTOP3::JSFZVTOP3()
 {
 
-  if( ntrlodi == 0 ) {
-  ntrlodi=new TNtuple("ntrlodi","Ntuple","trdi:lodi:disv:lodidisv");
-  }
+  fNTRK = 0 ; // number of input tracks.
+  fNVRT = 0 ; // number of found vertices.
+  fNISO = 0 ; // number of tracks left isolated.
+  for(Int_t i=0;i<4;i++) { fPTKS[i]=0.0; }
+  for(Int_t i=0;i<3;i++) { fIPX[i]=0.0; }
+  for(Int_t i=0;i<3;i++) { fAXI[i]=0.0; }
+  fGWID = 0.0 ;    // Fitted ghost track gaussian width /um
+
+  fMSPTM = 0.0 ;   // 
+  fMSPT  = 0.0 ;
+  fPTM2  = 0.0 ;
+
+  fChisq = 0.0 ; //
+  fProb  = 0.0 ;  // 
+  fProb2 = 0.0 ; // Vfit probability of first fit.
+  fProbo = 0.0 ;// Probability of original vertex
+  fNseco = 0 ;
+  fNsec  = 0 ; //
+  fDecayLength = 0.0 ; //
+  fDecayLength0 = 0.0 ; //
+  fSecondaryMass = 0.0 ; //
+  fSecondaryMomentum = 0.0 ; //
+
+
+  //  if( ntrlodi == 0 ) {
+  //  ntrlodi=new TNtuple("ntrlodi","Ntuple","trdi:lodi:disv:lodidisv");
+  //  }
 
   zvkon3_bank_.tidy=0 ;    // set TIDY=0 to use all tracks 
   sscanf(gJSF->Env()->GetValue("JSFZVTOP3.TIDY","0"),"%d",&zvkon3_bank_.tidy);
@@ -764,6 +788,7 @@ void JSFZVTOP3::CalculateMSPTM()
 #endif
 
 
+     /*
      Float_t array[3];
      array[0]=trdi;
      array[1]=lodi;
@@ -771,6 +796,7 @@ void JSFZVTOP3::CalculateMSPTM()
      array[3]=lodi/disv;
 
      ntrlodi->Fill(array);
+     */
 
      if( (mtvers == 0 && (zvtopl3_.itrk[jetno][it][1] == 2 || 
      	                ( zvtopl3_.itrk[jetno][it][1] > 2  &&

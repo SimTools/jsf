@@ -38,6 +38,9 @@ all:: install
 
 install:: libJSFZVTOP3.$(DllSuf)
 	cp libJSFZVTOP3.$(DllSuf) $(JSFROOT)/lib
+	cp JSFVirtualVertex.h $(JSFROOT)/include
+	cp JSFGeneratorVertex.h $(JSFROOT)/include
+	cp JSFZVTOP3.h $(JSFROOT)/include
 
 libJSFZVTOP3.$(DllSuf): $(OBJS) $(FOBJS)
 	$(LD) $(SOFLAGS) $(OBJS) $(FOBJS) -o libJSFZVTOP3.$(DllSuf) $(ADDOBJ) \
