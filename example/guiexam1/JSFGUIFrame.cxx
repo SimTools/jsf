@@ -41,6 +41,7 @@
 //  JSFUI.SimulationType : 1                             ( not available yet)
 //                 # 1 = Quick Simulator                
 //                 # 2 = JLCSIM/JIM Simulator
+//                 # 3 = Jupiter/Geant4 simulation
 //  JSFGUI.ECM: 300
 //                 # Center of mass system for PythiaGenerator in GeV unit.
 //  JSFGUI.InitPythia: InitPythia.C
@@ -183,7 +184,9 @@ enum EJSFGUICommandIdentifiers {
 
    M_SIM_QUICKSIM=841,
    M_SIM_JIM=842,
-   M_SIM_QUICKSIM_PARAM=843,
+   M_SIM_JUPITER=843,
+   M_SIM_QUICKSIM_PARAM=844,
+   M_SIM_JUPITER_PARAM=845,
 
    M_GUI_RUNNO=861,
    M_GUI_SIMDSTOUT=862,
@@ -418,8 +421,10 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h,
    fMenuSimType->AddSeparator();
    fMenuSimType->AddEntry("Use QuickSim",M_SIM_QUICKSIM);
    fMenuSimType->AddEntry("Use JIM Sim.",M_SIM_JIM);
+   fMenuSimType->AddEntry("Use Jupiter Sim.",M_SIM_JUPITER);
    fMenuSimType->AddSeparator();
    fMenuSimType->AddEntry("QuickSim Parameter file...",M_SIM_QUICKSIM_PARAM);
+   fMenuSimType->AddEntry("Jupiter Parameter file...",M_SIM_JUPITER_PARAM);
 
 
    fMenuControl=new TGPopupMenu(fClient->GetRoot());
@@ -717,6 +722,7 @@ void JSFGUIFrame::Update()
   fMenuSimType->UnCheckEntry(M_SIM_QUICKSIM);
   fMenuSimType->UnCheckEntry(M_SIM_JIM);
   fMenuSimType->DisableEntry(M_SIM_JIM);
+  fMenuSimType->UnCheckEntry(M_SIM_JUPITER);
   Int_t isim=gJSF->Env()->GetValue("JSFGUI.SimulationType",1);
   fMenuSimType->CheckEntry(M_SIM_QUICKSIM+isim-1);
 
@@ -1513,6 +1519,10 @@ Mass of Higgs used by Pythia.\n\
 
    case M_SIM_JIM:
       gJSF->Env()->SetValue("JSFGUI.SimulationType","2");
+      break;
+
+   case M_SIM_JUPITER:
+      gJSF->Env()->SetValue("JSFGUI.SimulationType","3");
       break;
 
     case M_CONT_PARAM_EDIT:
