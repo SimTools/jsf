@@ -38,7 +38,7 @@ class JSFGeneratedProcessType : public TNamed {
 
   void Reset();
 
-private:
+public:
   JSFGeneratedProcessType(TClonesArray *gen=NULL);
   virtual ~JSFGeneratedProcessType(){};
 
