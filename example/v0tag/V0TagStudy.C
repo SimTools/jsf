@@ -196,7 +196,8 @@ void V0Tagger()
 
       fit.Fit();
 
-      JSFDMatrix ans(fit.GetParameter());
+      //      JSFDMatrix ans(fit.GetParameter()); ( For Root Version < 3.0 )
+      TMatrixD  ans(fit.GetParameter());
 
 #if debug
       printf(" Chisq=%g",fit.GetChisq());
