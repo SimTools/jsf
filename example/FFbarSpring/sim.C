@@ -33,11 +33,15 @@ Int_t sim()
   hdr    = new JSFHadronizer();
   sim    = new JSFQuickSim();
 
-  Int_t maxevt=10;      // Number of event is 10.
+  Int_t maxevt=20;      // Number of event is 10.
   jsf->Initialize();
 
-  spring->ReadBases("bases.root");  // ReadBases must be called before BeginRun
+  spring->GetBases()->Bases();
+  //spring->ReadBases("bases.root");  // ReadBases must be called before BeginRun
   //  spring->Bases()->SetSeed(12345);  // Set seed for Spring
+  spring->SetPrintInfo(kTRUE);
+  // spring->SetPrintHist(kTRUE);
+
 
   jsf->BeginRun(30);      // Set run number to 30.
 
@@ -59,7 +63,7 @@ Int_t sim()
     jsf->FillTree();
     jsf->Clear();
   }
-
+  
   //  ------------------------------------------------------------
 
   jsf->Terminate();

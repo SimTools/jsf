@@ -32,10 +32,7 @@
 //
 //////////////////////////////////////////////////////////////////
 
-#include "JSFModule.h"
-#include "JSFSpring.h"
 #include "JSFSteer.h"
-#include "JSFBases.h"
 #include "FFbarSpring.h"
 
 ClassImp(FFbarSpring)
@@ -57,6 +54,7 @@ FFbarSpring::FFbarSpring(const char *name, const char *title,
 }
 
 
+
 //_____________________________________________________________________________
 FFbarSpring::~FFbarSpring()
 {
@@ -68,18 +66,20 @@ Bool_t FFbarSpringBuf::SetPartons()
 {
 
   TClonesArray &partons = *fPartons;
-  FFbarBases *bases=(FFbarBases*)((FFbarSpring*)Module())->Bases();
+  FFbarBases *bases=(FFbarBases*)((FFbarSpring*)Module())->GetBases();
 
 //  <<+LLbar>>
   fNparton = 2;
   Double_t ecm=bases->GetEcm();
+  fCosth = bases->GetCosth();
+  fPhi   = bases->GetPhi();
 
-  Double_t sinth=TMath::Sqrt( (1.0-fX[0])*(1.0+fX[0]) ); 
+  Double_t sinth=TMath::Sqrt( (1.0-fCosth)*(1.0+fCosth) ); 
   TVector p1(4);
   TVector p2(4);
-  p1(1)=ecm*sinth*TMath::Cos(fX[1]);
-  p1(2)=ecm*sinth*TMath::Sin(fX[1]);
-  p1(3)=ecm*fX[0];
+  p1(1)=ecm*sinth*TMath::Cos(fPhi);
+  p1(2)=ecm*sinth*TMath::Sin(fPhi);
+  p1(3)=ecm*fCosth;
   p1(0)=ecm;
   
   p2(1)=-p1(1);
@@ -113,7 +113,7 @@ FFbarBases::FFbarBases(const char *name, const char *title)
 //
 
 //  <<+LLbar>>
-  fNDIM=2;
+  //  fNDIM=2;
 
 // Get parameters from jsf.conf, if specified.
   
@@ -134,52 +134,39 @@ FFbarBases::FFbarBases(const char *name, const char *title)
   }
   fCharge=cdata[fID-1];
 
-  fPrintInfo = gJSF->Env()->GetValue("FFbarBases.PrintInfo",kTRUE);
-  fPrintHist = gJSF->Env()->GetValue("FFbarBases.PrintHist",kTRUE);
+  DefineVariable(fCosth, fXL[0], fXU[0], 1, 1);
+  DefineVariable(fPhi, fXL[1], fXU[1], 0, 1);
 
-//  <<-LLbar>>
+
+  SetNoOfSample(2000);
+  SetTuneValue( 1.5 );
+  SetIteration1( 0.05, 100);
+  SetIteration2( 0.05, 100);
+
+  Xh_init(1, fXL[0], fXU[0], 50, "Costh");
+  Xh_init(2, fXL[1], fXU[1], 50, "Phi");
+
+  H1Init("hCosth","Costh distrubution",50,fXL[0],fXU[0]);
+  //  hCosth=new TH1F("hCosth","Costh distrubution",50,fXL[0],fXU[0]);
 
 }
 
 //_____________________________________________________________________________
-Double_t FFbarBases::Func(Double_t x[])
+Double_t FFbarBases::Func()
 {
 //  Bases Integrand
 //
 
-//  <<+LLbar>>
-  if( !fInBases ) { 
-    ((FFbarSpringBuf*)((FFbarSpring*)fSpring->EventBuf()))->fX[0]=x[0];
-    ((FFbarSpringBuf*)((FFbarSpring*)fSpring->EventBuf()))->fX[1]=x[1];
-  }
-  Double_t val=(kAlpha*kAlpha/4.0/fEcm/fEcm)*(1.0+x[0]*x[0])*kGev2fb;
+  Double_t val=(kAlpha*kAlpha/4.0/fEcm/fEcm)*(1.0+fCosth*fCosth)*kGev2fb;
 
-  Xhfill(1, x[0], val);
-  Xhfill(2, x[1], val);
+  Xh_fill(1, fCosth, val);
+  Xh_fill(2, fPhi, val);
+
+  //  hCosth->Fill(fCosth,val); 
+  H1Fill("hCosth", fCosth, val);
 
 //  <<-LLbar>>
   return val ;
-}
-
-//_____________________________________________________________________________
-void FFbarBases::Userin()
-{
-//
-//   Initialize User parameters for Bases
-//
-  JSFBases::Userin();  // Call JSFBases::Userin() for standard setup.
-
-//  <<+LLbar>>
-  Xhinit(1, fXL[0], fXU[0], 50, "Costh");
-  Xhinit(2, fXL[1], fXU[1], 50, "Phi");
-//  <<-LLbar>>
-
-  return ;
-}
-
-//_____________________________________________________________________________
-void FFbarBases::Userout()
-{
 }
 
 

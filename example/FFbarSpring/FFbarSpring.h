@@ -10,8 +10,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 #include "TNamed.h"
-#include "TMath.h"
-#include "TDatime.h"
+#include "TH1.h"
 
 #ifndef __JSFModule__
 #include "JSFModule.h"
@@ -32,13 +31,19 @@ const Double_t   kGev2fb=0.38927e12;
 class FFbarBases  : public JSFBases {
 protected:
 //  <<+LLbar>>
+  Double_t fCosth;
+  Double_t fPhi;   
+
+  Double_t  fXU[2];
+  Double_t  fXL[2];
   Int_t    fID   ; // Parton ID.
   Float_t  fEcm  ; // Center of mass energy
   Float_t  fCharge ; // Parton Charge.		 
+
 //  <<-LLbar>>
 public:
   FFbarBases(const char *name="FFbarBases", 
-	     const char *title="LLbar  Bases");
+	     const char *title="FFbar  Bases");
   virtual ~FFbarBases(){} 
 
 //  <<+LLbar>>
@@ -47,13 +52,16 @@ public:
   void SetCharge( Float_t c){ fCharge=c;}
   void SetParton(Int_t id, Float_t c){ fID=id; fCharge=c;}
 
+  Double_t GetCosth(){ return fCosth;}
+  Double_t GetPhi(){ return fPhi; }
+
   Int_t GetID(){return fID;}
   Float_t GetEcm(){ return fEcm;}
   Float_t GetCharge(){ return fCharge;}
 //  <<-LLbar>>
-  void Userin();   // Bases user initialization
-  void Userout();  // Bases user output 
-  Double_t Func(Double_t x[]); // Bases integration function.
+  //  void Userin();   // Bases user initialization
+  //  void Userout();  // Bases user output 
+  virtual Double_t Func(); // Bases integration function.
 
   ClassDef(FFbarBases,1)  // Bases for e+e- -> l+l- process
 
@@ -64,7 +72,8 @@ class FFbarSpring;
 class FFbarSpringBuf : public JSFSpringBuf {
 public:
 //  <<+LLbar>>
-   Double_t fX[2];  // Two bases parameters, costh and phi.
+  Double_t fCosth;
+  Double_t fPhi;
 //  <<-LLbar>>
 public:
   FFbarSpringBuf(const char *name="FFbarSpringBuf", 

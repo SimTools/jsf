@@ -46,7 +46,7 @@ clean::
 	@rm -f $(OBJS) core *.so $(SOLIBNAME).$(SrcSuf) $(SOLIBNAME).h
 
 depend:: 
-	makedepend -I$(ROOTSYS)/include $(SRC)
+	makedepend -I$(ROOTSYS)/include -I$(JSFROOT)/include $(SRC)
 
 distclean::
 	@rm -f $(OBJS) core *.so $(SOLIBNAME).$(SrcSuf) $(SOLIBNAME).h *.~ *.o
