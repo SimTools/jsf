@@ -40,9 +40,13 @@
   TFile *ofile;
   JSFSteer *jsf;
   JSFLCFULL *full;
-  JSFQuickSim *sim;
-  JSFReadGenerator *rgen;
+  JSFQuickSim *sim=0;
+  JSFSpring *spring=0;
+  JSFSIMDST  *simdst=0;
+  JSFModule  *gen=0;
+  JSFHadronizer *hdr=0;
   
+
   Int_t gRunMode;  // Generate event, Read root file, ...
   Char_t *gOutputFileName; // Output file name
   Char_t *gInputFileName;  // Input file name
@@ -59,19 +63,21 @@
   Int_t gRunNo;  //  Run number 
   Char_t gLastRunFile[256]; // A file name of last run file, where to get seed.
  
+
+enum EJSFGUIEventType { kPythia=0, kDebug=1, kBasesSpring=2,
+                        kReadParton=3, kReadHepevt=4 };
+
 //______________________________________________
 int Initialize()
 {
 
   //  Set parameters 
-  gRunNo=jsf->Env()->GetValue("MainMacro.RunNo",1);
-  sscanf(jsf->Env()->GetValue("MainMacro.LastRunFile","Undefined"), "%s",gLastRunFile);
 
   if( gui == 0 ) {
     SetOptionsForBatch();
   }
   else {
-    // In interactive mode, GetArguments() is called when gui object is created.
+   // In interactive mode, GetArguments() is called when gui object is created.
     gRunMode=gui->GetRunMode();
     gOutputFileName=gui->GetOutputFileName();
     gInputFileName=gui->GetInputFileName();
@@ -82,7 +88,6 @@ int Initialize()
 
   }
 
-  GetArguments();
   gROOT->LoadMacro(gMacroFileName);
 
   UserSetOptions();
@@ -116,20 +121,35 @@ int Initialize()
       par->ReadParamDetector(parf) ;// Read detector parameter
       simdst->SetQuickSimParam(par);
       break;
+    case 4:
+      break;
     default:
       printf("Run mode %d is not supported\n",gRunMode);
       return -1;
   }
 
+  printf(" Start Initialize \n");
+
   jsf->Initialize();
+
+  printf(" End of initialize.\n");
 
   if( gRunMode == 2 ) {
     sim=(JSFQuickSim*)jsf->FindModule("JSFQuickSim");
     simdst->SetQuickSimParam(sim->Param());
   }  
 
-  if( strcmp(gLastRunFile,"Undefined") != 0 ) {
-    TFile *flast=new TFile(gLastRunFile,"READ");
+
+  printf(" spring is %x\n",(Int_t)spring);
+
+  if( spring ) {  spring->ReadBases(
+		jsf->Env()->GetValue("JSFGUI.Spring.BasesFile","bases.root"));
+  printf("bases file is obtained.\n");
+  }
+
+  if( jsf->Env()->GetValue("JSFGUI.LastRun",0)) {
+    TFile *flast=new TFile(jsf->Env()->GetValue("JSFGUI.LastRunFile",""),
+			   "READ");
     jsf->GetLastRunInfo(flast);       // Get seed of last run. 
     flast->Close(); 
   }
@@ -137,60 +157,84 @@ int Initialize()
   if( jsf->GetOutput() ) { jsf->GetOutput()->cd(); }
   UserInitialize();
 
-  jsf->BeginRun(gRunNo);   // Set run number.
+  jsf->BeginRun(jsf->Env()->GetValue("JSFGUI.RunNo",1));
+
 }
 
 //______________________________________________
 void InitGenSim()
 {
+  // To initialize modules for event generation and simulation
+  // 
+  Char_t wrkstr[256], spname[64];
+  Int_t eventtype=gEventType;
+  Float_t ecm=gEcm;
+  JSFModule *genmod;
 
-   Int_t eventtype=gEventType;
-   Float_t ecm=gEcm;
+  full  = new JSFLCFULL();
+  switch (eventtype) {
+    case kPythia:
+      py  = new PythiaGenerator();
+      gen = py;
+      break;
+    case kDebug:
+      gen=new DebugGenerator();
+      break;
+    case kBasesSpring:
+      gSystem->Load(jsf->Env()->GetValue("JSFGUI.Spring.SharedLibrary",
+			 "$JSFROOT/example/FFbarSpring/libFFbarSpring.sl"));
+      sprintf(spname,"%s",jsf->Env()->GetValue("JSFGUI.Spring.ModuleName",
+					       "FFbarSpring"));
+      sprintf(wrkstr,"%s *sp=new %s();",spname, spname);
+      gROOT->ProcessLine(wrkstr);
+      spring = (JSFSpring*)jsf->FindModule(spname);
+      hdr    = new JSFHadronizer();
+      gen=spring;
+      break;
+    case kReadPartin:
+      gen =new JSFReadParton();
+      hdr =new JSFHadronizer();
+      break;
+    case kReadHepevt:
+      gen=new JSFReadGenerator();
+      break;
+    default;
+      break;
+  }
 
-   full  = new JSFLCFULL();
-   switch (eventtype) {
-      case kDebug:
-	dbg=new DebugGenerator();
-	break;
-      case kReadGen:
-        rgen=new JSFReadGenerator();
-	break;
-      default:
-	if( gInitPythiaMacro != 0 ) gROOT->LoadMacro(gInitPythiaMacro);
-	py    = new PythiaGenerator();
-	break;
-   }
-   sim    = new JSFQuickSim();
-   simdst = new JSFSIMDST();
+  if( jsf->Env()->GetValue("JSFGUI.SimulationType",1) == 1 ) 
+    sim    = new JSFQuickSim();
+  else sim = new JSFJIM();
 
-   simdst->NoReadWrite();
-   simdst->SetQuickSimParam(sim->Param());
-   // simdst->WriteData();
-   // simdst->SetDataFileName("simdst.dat");
-   // simdst->SetParamFileName("simdst.param");
+  simdst = new JSFSIMDST();
 
-   // If these comments are removed, corresponding information
-   // is not saved in the ROOT tree.
-   //
+  if( jsf->Env()->GetValue("JSFGUI.SIMDST.Output",0) == 0 ) 
+    simdst->NoReadWrite();
 
-   if( gEventDataOff ) {
-     full->SetMakeBranch(kFALSE);   // suppress output of EventBuf 
-     py->SetMakeBranch(kFALSE);     // suppress output of EventBuf 
-     sim->SetMakeBranch(kFALSE);    // suppress output of EventBuf
-     simdst->SetMakeBranch(kFALSE); // suppress output of EventBuf
-   }
+  simdst->SetQuickSimParam(sim->Param());
+
+  if( jsf->Env()->GetValue("JSFGUI.OutputEventData",0) == 0  ) {
+    full->SetMakeBranch(kFALSE);  
+    sim->SetMakeBranch(kFALSE);   
+    simdst->SetMakeBranch(kFALSE);
+    gen->SetMakeBranch(kFALSE); 
+    if( hdr ) hdr->SetMakeBranch(kFALSE);
+  }
  
-   if( eventtype == kPythia ) { 
-     py->SetEcm(ecm);             // Center of mass energy (GeV)
-     InitPythia();         // Set Pythia parameters.
-   }
+  if( eventtype == kPythia ) { 
+    gROOT->LoadMacro(
+	     jsf->Env()->GetValue("JSFGUI.InitPythiaMacro","InitPythia.C"));
+    py->SetEcm(jsf->Env()->GetValue("JSFGUI.ECM",300.0));
+    InitPythia();         // Set Pythia parameters.
+  }
 
 }
 
 //______________________________________________
 Bool_t GetEvent(Int_t ev)
 {
-  //  
+  //  disp=0 so as not to draw event and histogram.
+
     if( gRunMode==2 && !jsf->GetEvent(ev) ) {
       gReturnCode=-2 ;
       if( gui != 0 ) gui->SetReturnCode(gReturnCode);
@@ -201,7 +245,10 @@ Bool_t GetEvent(Int_t ev)
       if( gui != 0 ) gui->SetReturnCode(gReturnCode);
       return kFALSE;
     }
+
+
     if( gui != 0 ) gui->DisplayEventData();
+
     UserAnalysis();
     gReturnCode=0;
     if( gui != 0 ) {
@@ -242,7 +289,7 @@ Bool_t GetPrevious()
 void JobEnd()
 {
   jsf->Terminate();
-  UserTerminate();
+  if( gROOT->GetGlobalFunction("UserTerminate",0,kTRUE) ) UserTerminate();
   if( ofile ) ofile->Write();
 
 }
@@ -295,89 +342,6 @@ void BatchRun()
 
   JobEnd();
     
-}
-
-
-//_________________________________________________________
-void GetArguments()
-{
-
-  TApplication *ap=gROOT->GetApplication();
-
-  Int_t maxevt;
-  Int_t i;
-  Char_t str[256];
-  for(i=0;i<ap->Argc();i++){
-    if( strncmp(ap->Argv(i),"--maxevt=",9) == 0 ){
-      strcpy(str,(ap->Argv(i)+9)); 
-      sscanf(str,"%d",&maxevt);
-      gNAnalizeEvent= maxevt;
-      if( gui ) gui->SetNEventsAnalize(gNAnalizeEvent);
-      printf(" Number of event to process is %d\n",gNAnalizeEvent);
-    } 
-    elseif( strncmp(ap->Argv(i),"--1stevt=",9) == 0 ){
-      strcpy(str,(ap->Argv(i)+9)); 
-      sscanf(str,"%d",&gFirstEvent);
-      if( gui ) gui->SetFirstEvent(gFirstEvent);
-      printf(" Event number to start analysis is %d\n",gFirstEvent);
-    } 
-    elseif( strncmp(ap->Argv(i),"--ecm=",6) == 0 ){
-      strcpy(str,(ap->Argv(i)+6)); 
-      sscanf(str,"%g",&gEcm);
-      if( gui ) gui->SetEcm(gEcm);
-      printf(" Center of mass energy is %g (GeV)\n",gEcm);
-    } 
-    elseif( strncmp(ap->Argv(i),"--runno=",8) == 0 ){
-      strcpy(str,(ap->Argv(i)+8)); 
-      sscanf(str,"%d",&gRunNo);
-      printf(" Run no is %d \n",gRunNo);
-    } 
-    elseif( strncmp(ap->Argv(i),"--macro=",8) == 0 ){
-      strcpy(str,(ap->Argv(i)+8)); 
-      gMacroFileName=new Char_t[strlen(str)+1];
-      strcpy(gMacroFileName,str);
-      printf(" User Macro filename is %s\n");
-    } 
-    elseif( strncmp(ap->Argv(i),"--InputFile=",12) == 0 ){
-      strcpy(str,(ap->Argv(i)+12)); 
-      gInputFileName=new Char_t[strlen(str)+1];
-      strcpy(gInputFileName,str);
-      printf(" Input file name is %s\n");
-    } 
-    elseif( strncmp(ap->Argv(i),"--OutputFile=",13) == 0 ){
-      strcpy(str,(ap->Argv(i)+13)); 
-      gOutputFileName=new Char_t[strlen(str)+1];
-      strcpy(gOutputFileName,str);
-      printf(" Output file name is %s\n");
-    } 
-    elseif( strncmp(ap->Argv(i),"--LastRunFile=",14) == 0 ){
-      strcpy(gLastRunFile,(ap->Argv(i)+14)); 
-      printf(" Seeds of random numbers will be obtained from %s\n");
-    } 
-    elseif( strcmp(ap->Argv(i),"--EventDataOff") == 0 ){
-      gEventDataOff=kTRUE;
-      printf(" Event data is not written to the root file.\n");
-    } 
-    elseif( strcmp(ap->Argv(i),"--help") ==0 ) {
-      printf("Macro : gui.C\n");
-      printf("  This macro is for batch and/or interactive execution of jsf.\n");
-      printf("  To run this macro, do\n");
-      printf("\n       jsf [options] gui.C \n\n");
-      printf("  Valid options are.\n");
-      printf("   --help : display help information\n");
-      printf("   --maxevt=N  : Number of event is set to N \n");
-      printf("   --1stevt=N  : First event number to analize \n");
-      printf("   --ecm=Ecm   : Set center of mass energy.\n");
-      printf("   --EventDataOff : Does not output event data to the root file.\n");
-      printf("   --macro=USERMACRO : A macro file name for UserAnalysis.\n");
-      printf("   --runno=N : Run number (default=1).\n");
-      printf("   --LastRunFile=FILENAME : A file name of last run, where to get seed.\n");
-      printf("   --InputFile=FILENAME : A file name from where data is read.\n");
-      printf("   --OutputFile=FILENAME : A file name to where data is written.\n");
-      ap->Terminate();
-    }
-  }
-  return ;
 }
 
 

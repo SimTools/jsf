@@ -22,6 +22,7 @@
   }
   JSFGUIFrame *gui;
   jsf  = new JSFSteer();
+
   if( gClient == 0 ) {
     gui=0;
     BatchRun();
