@@ -70,7 +70,7 @@ public:
   void SetGeoParam(EJSFCALType type, Int_t nphi, Int_t ntheta, Int_t nrad,
  	       Float_t rmin, Float_t rmax,  Float_t zminus, Float_t zplus );
 
-  JSFRThPhi HitPosition(Int_t iCellID);
+  virtual JSFRThPhi HitPosition(Int_t iCellID);
   void HitCellGeom(Int_t iCellID, Float_t geo[]);
 
   Float_t GetRmin(){ return fRmin; }
@@ -97,6 +97,9 @@ protected:
    Float_t fVTXError[5];     // VTX resolution parameter
    Float_t fCLSPAR[4][5]   ; // Clustering parameter.
    Float_t fCMBCUT[3] ; // ADXEVT, ENSGEM, ENSGHD for CMBCUT
+   Float_t fANMPAR[2][2]; // Prameter for lateral spread of calorimeter shower
+   Float_t fALMPAR[2][2]; // Prameter for lateral spread of calorimeter shower
+   Float_t fXRADCDC ; // Radiation length of CDC gas.               
 
    JSFCALGeoParam *fEMCGeom; //! EMC Geometry ( set by SetSmearParam() )
    JSFCALGeoParam *fHDCGeom; //! HDC Geometry
@@ -151,11 +154,15 @@ public:
    Float_t GetVTXSigmaSP(){ return fVTXError[0]; }
    Int_t   GetVTXLayerNumber(Float_t radius);   
 
+   inline Float_t GetANMPAR(Int_t i, Int_t j){ return fANMPAR[i][j]; };
+   inline Float_t GetALMPAR(Int_t i, Int_t j){ return fALMPAR[i][j]; };
+   inline Float_t GetXRADCDC(){ return fXRADCDC; };
+
    Float_t GetClusteringParameter(Int_t idev, Int_t ipar){ return fCLSPAR[idev][ipar];}
    Float_t GetCMBCUT(Int_t ipar){ return fCMBCUT[ipar]; }
 
 
-   ClassDef(JSFQuickSimParam,4) // JSFQuickSim Parameters
+   ClassDef(JSFQuickSimParam,5) // JSFQuickSim Parameters
 };
  
 #endif
