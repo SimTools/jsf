@@ -23,6 +23,10 @@ extern "C" {
   extern void jninit_();
   extern void jntral_();
   extern void jntest_();
+  extern void jnsepa_();
+  extern void jnhead_();
+  extern void jnstat_(Int_t *i);
+  extern void jnsefi_(Int_t *ila, Int_t *i1, Int_t *i2, Int_t *j1, Int_t *j2, Int_t *no);
 };
 
 typedef struct {
@@ -118,6 +122,12 @@ void JSFJETNET::JNTDEC(Int_t method){ jntdec_(&method); }
 void JSFJETNET::JNINIT(){ jninit_(); }
 void JSFJETNET::JNTRAL(){ jntral_(); }
 void JSFJETNET::JNTEST(){ jntest_(); }
+void JSFJETNET::JNHEAD(){ jnhead_(); }
+void JSFJETNET::JNSTAT(Int_t mode){ jnstat_(&mode); }
+void JSFJETNET::JNSEFI(Int_t ILA, Int_t I1, Int_t I2, Int_t J1, Int_t J2, Int_t NO){
+  jnsefi_(&ILA, &I1, &I2, &J1, &J2, &NO);
+}
+
 
 // ---------------------------------------------------------------
 Int_t    JSFJETNET::GetMSTJN(Int_t i){ return jndat1_.mstjn[i-1]; }
@@ -192,3 +202,92 @@ void JSFJETNET::SetER2(Float_t val){ jnint2_.er2=val; }
 void JSFJETNET::SetSM(Int_t i, Float_t val){ jnint2_.sm[i-1]=val; }
 void JSFJETNET::SetICPON(Int_t val){ jnint2_.icpon=val; }
   
+
+//------------------------------------------------------------------
+void JSFJETNET::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFJETNET.
+
+   UInt_t R__s, R__c;
+   if (R__b.IsReading()) {
+      Version_t R__v = R__b.ReadVersion(&R__s, &R__c); if (R__v) { }
+      Int_t ivers;
+      R__b >> ivers ;
+      if( ivers != 30 ) {
+	Error("JSFJETNET::Streamer","The version number of JETNET data (%d) is invalid\n",ivers);
+	return;
+      }
+      Float_t par[21];
+      Int_t nfsave=jndat1_.mstjn[5];
+      for(Int_t i=0;i<21;i++){
+	par[i]=jndat1_.parjn[19+i];
+      }
+      R__b.ReadStaticArray(jndat1_.mstjn);
+      R__b.ReadStaticArray(jndat1_.parjn);
+      R__b.ReadStaticArray(jndat2_.tinv);
+      R__b.ReadStaticArray(jndat2_.igfn);
+      R__b.ReadStaticArray(jndat2_.etal);
+      R__b.ReadStaticArray(jndat2_.widl);
+      R__b.ReadStaticArray(jndat2_.satm);
+      for(Int_t i=0;i<21;i++){
+	jndat1_.parjn[19+i]=par[i];
+      }
+
+      jnsepa_();
+
+      Int_t nl, mm0nl, mv0nl;
+      R__b >> nl;
+      R__b >> mm0nl;
+      R__b >> mv0nl;
+      if( nl != jnint2_.nl ) {
+	Error("JSFJETNET::Streamer","NL(%d) is inconsistent \n",nl);
+	return;
+      }
+      else if( mm0nl != jnint2_.mm0[nl] || mv0nl != jnint2_.mv0[nl] ) {
+	Error("JSFJETNET::Streamer","/JNINT2/MM0[NL](%d) or /JNINT2/MV0[NL](%d) is inconsistent\n",
+		jnint2_.mm0[nl], jnint2_.mv0[nl]);
+	return;
+      }
+      R__b.ReadStaticArray(jnint1_.w);
+      R__b.ReadStaticArray(jnint1_.t);
+      R__b.ReadStaticArray(jnint1_.nself);
+      R__b.ReadStaticArray(jnint1_.ntself);
+      jndat1_.mstjn[5]=nfsave;
+      R__b.CheckByteCount(R__s, R__c, JSFJETNET::IsA());
+
+      if( jndat1_.mstjn[5] < 0 ) { return ; }
+
+      JNHEAD();
+      JNSTAT(1);
+
+      printf("JSFJETNET::Streamer  Read Weights from file\n");
+      
+      return;
+      
+
+   } else {
+      R__c = R__b.WriteVersion(JSFJETNET::IsA(), kTRUE);
+      Int_t ivers=30;
+      R__b << ivers ;
+
+      R__b.WriteArray(&jndat1_.mstjn[0], 40);
+      R__b.WriteArray(&jndat1_.parjn[0], 40);
+      R__b.WriteArray(&jndat2_.tinv[0],  10);
+      R__b.WriteArray(&jndat2_.igfn[0],  10);
+      R__b.WriteArray(&jndat2_.etal[0],  10);
+      R__b.WriteArray(&jndat2_.widl[0],  10);
+      R__b.WriteArray(&jndat2_.satm[0],  10);
+
+      Int_t nl=jnint2_.nl  ;
+      R__b<< nl;
+      R__b<< jnint2_.mm0[nl] ;
+      R__b<< jnint2_.mv0[nl] ;
+      R__b.WriteArray(&jnint1_.w[0],      jnint2_.mm0[nl]);
+      R__b.WriteArray(&jnint1_.t[0],      jnint2_.mv0[nl]);
+      R__b.WriteArray(&jnint1_.nself[0],  jnint2_.mm0[nl]);
+      R__b.WriteArray(&jnint1_.ntself[0], jnint2_.mv0[nl]);
+      
+      R__b.SetByteCount(R__c, kTRUE);
+   }
+}
+

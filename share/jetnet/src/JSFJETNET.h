@@ -12,7 +12,7 @@
 #include <TObject.h>
 
 // *************************************************************
-class JSFJETNET 
+class JSFJETNET : public TObject
 {
  public:
   static const Int_t kMAXV;
@@ -29,6 +29,9 @@ class JSFJETNET
   void JNINIT();
   void JNTRAL();
   void JNTEST();
+  void JNHEAD();
+  void JNSTAT(Int_t mode);
+  void JNSEFI(Int_t ILA, Int_t I1, Int_t I2, Int_t J1, Int_t J2, Int_t NO);
 
   Int_t GetMAXV(){ return kMAXV; }
   Int_t GetMAXM(){ return kMAXM; }
@@ -99,7 +102,7 @@ class JSFJETNET
   void SetSM(Int_t i, Float_t val);
   void SetICPON(Int_t val);
   
-  ClassDef(JSFJETNET,0)  // Interfaces to JETNET routines.
+  ClassDef(JSFJETNET,1)  // Interfaces to JETNET routines.
 };
 
 #endif
