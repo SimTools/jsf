@@ -306,12 +306,12 @@ void BatchRun()
 
   for(i=i1stevt;i<=i1stevt+inoevt-1;i++){
     GetEvent(i);
-    EJSFReturnCode iret=jsf->GetReturnCode();
-    if( iret & kJSFEOF ) {
+    Int_t iret=jsf->GetReturnCode();
+    if( iret & jsf->kJSFEOF ) {
       printf("End of event loop due to end-of-file at event# %d\n",i);
       break;
     }
-    else if( iret & kJSFFALSE ) {
+    else if( iret & jsf->kJSFFALSE ) {
       printf("End of event loop due to error at event# %d\n",i);
       break;
     }
