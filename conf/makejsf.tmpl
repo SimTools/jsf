@@ -37,6 +37,8 @@ LCLIBDIR      = $(LCLIBROOT)/lib
 JSFLIBS       = -L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim -lJSFDMatrix \
 		-lBasesSpring
 
+DEPENDFILES   = $(CXXFLAGS) $(INCPATH)
+
 XCOMM #---------------------------------------------------
 
 .SUFFIXES: .$(SrcSuf)
@@ -62,6 +64,7 @@ LIBS          = $(ROOTLIBS) -lm -ldl
 GLIBS         = $(ROOTLIBS) $(ROOTGLIBS) -L/usr/X11R6/lib \
 		-lXpm -lX11 $(LIBF2C) -lm -ldl
 BLOCKDATA     = 
+DEPENDFILES  += $(shell cxxdepends)
 #endif
 
 XCOMM # -----------------------------------------------------
@@ -85,6 +88,7 @@ LIBS          = $(ROOTLIBS) -lm -ldl
 GLIBS         = $(ROOTLIBS) $(ROOTGLIBS) -L/usr/X11R6/lib \
                 -lXpm -lX11 $(LIBF2C) -lm -ldl
 BLOCKDATA     = 
+DEPENDFILES  += $(shell cxxdepends)
 #endif
 
 XCOMM # -----------------------------------------------------
@@ -103,6 +107,7 @@ LIBS          = $(ROOTLIBS) -lm -ldl
 GLIBS         = $(ROOTLIBS) $(ROOTGLIBS) -L/usr/X11R6/lib \
 		-lXpm -lX11 $(LIBF2C) -lm -ldl
 BLOCKDATA     = 
+DEPENDFILES  += $(shell cxxdepends)
 #endif
 
 XCOMM # -----------------------------------------------------
@@ -128,6 +133,7 @@ BLOCKDATA     = $(LCLIBROOT)/util/lcfull/src/prblk1.o \
 		$(LCLIBROOT)/util/fortlib/src/uconst.o \
 		$(LCLIBROOT)/simjlc/src/smrblk.o \
 		$(LCLIBROOT)/util/ltkcl/cmbblk.o 
+DEPENDFILES  += $(shell cxxdepends)
 #endif
 
 
@@ -147,6 +153,8 @@ LIBS          = $(ROOTLIBS) -L/usr/lib -lm -ldld
 GLIBS         = $(ROOTLIBS) $(ROOTGLIBS) \
 		$(LIBF2C) -L/usr/lib -lm -ldld
 BLOCKDATA     = 
+DEPENDFILES   += -I/opt/aCC/include -I/opt/aCC/include/iostream \
+                -I/usr -I/usr/include
 #endif
 
 
