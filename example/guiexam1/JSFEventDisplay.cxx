@@ -274,7 +274,6 @@ JSFEventDisplay::~JSFEventDisplay()
   fWidgets->Delete();
   delete fWidgets;
   delete fSignals;
-  delete fSignals;
   delete fGeometry;
 }
 
