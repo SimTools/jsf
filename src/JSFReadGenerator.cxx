@@ -35,11 +35,19 @@
 //   16-Apr-2000 A.Miyamoto  Put bug fixes written by I.Nakamura in ReadOneRecord()
 //
 //   31-Jan-2000 A.Miyamoto  Mange jmohep[i][0]=0 and isthep[i]=1 | 2 case in ReadOneRecord()
+//   21-Jan-2003 A.Miyamoto  Create ReadHepEvent method.
 //
 //$Id$
 //
 //////////////////////////////////////////////////////////////////
 
+#ifdef __USEISOCXX__
+#include <iostream>
+#else
+#include <iostream.h>
+#endif
+
+#include "TPythia6.h"
 #include "JSFSteer.h"
 #include "JSFLCFULL.h"
 #include "JSFGenerator.h"
@@ -57,9 +65,29 @@ extern void readgenhepevt_(Int_t *iunit,
         Int_t isthep[], Int_t idhep[],
         Int_t jmohep[][2], Int_t jdahep[][2],
 	Double_t phep[][5], Double_t vhep[][4], Int_t *nret);
-extern Float_t ulctau_(Int_t *kf);
-extern Int_t luchge_(Int_t *kf);
+
+#if __PYTHIA_VERSION__ >= 6 
+  extern Int_t pychge_(Int_t *kf);
+  extern int pycomp_(int *kf);
+#else
+  extern Int_t luchge_(Int_t *kf);
+  extern Float_t ulctau_(Int_t *kf);
+#endif
+
 };
+
+#if __PYTHIA_VERSION__ >= 6 
+struct COMMON_PYDAT2_t {
+  int KCHG[4][500];
+  double PMAS[4][500];
+  double PARF[2000];
+  double VCKM[4][4];
+};
+
+extern COMMON_PYDAT2_t pydat2_;
+#endif
+
+using namespace std;
 
 //_____________________________________________________________________________
 JSFReadGenerator::JSFReadGenerator(const char *name, const char *title)
@@ -119,7 +147,9 @@ JSFReadGeneratorBuf::JSFReadGeneratorBuf(const char *name,
 
 
 // ---------------------------------------------------------------
-Bool_t JSFReadGeneratorBuf::ReadOneRecord()
+Bool_t JSFReadGeneratorBuf::ReadHepEvent(const Int_t maxhep, Int_t &nevhep, Int_t &nhep, 
+	 Int_t isthep[], Int_t idhep[], Int_t jmohep[][2], Int_t jdahep[][2],
+	 Double_t phep[][5], Double_t vhep[][4])
 {
 // Read Generator data and saved to the class.
 
@@ -128,19 +158,12 @@ Bool_t JSFReadGeneratorBuf::ReadOneRecord()
 //
 // 
 
-  const Int_t kNMXHEP=2000;
-  Int_t endian, nevhep, nhep;
-  Int_t isthep[kNMXHEP], idhep[kNMXHEP];
-  Int_t jmohep[kNMXHEP][2], jdahep[kNMXHEP][2];
-  Double_t phep[kNMXHEP][5], vhep[kNMXHEP][4];
-
   Int_t nvers=1;
-  Int_t ivers;
+  Int_t ivers, endian ;
   Int_t nret;
   Int_t unit=((JSFReadGenerator*)Module())->GetUnit();
   readgenhepevt_(&unit,&endian, &ivers, &nevhep,  &nhep,
 	isthep, idhep, jmohep, jdahep, phep, vhep, &nret);
-
 
   if( nvers != ivers ) {
     printf("Errror at JSFReadGenerator.. Version number of ");
@@ -159,21 +182,44 @@ Bool_t JSFReadGeneratorBuf::ReadOneRecord()
     return kFALSE;
   }
 
+  return kTRUE;
+}
+
+// ---------------------------------------------------------------
+Bool_t JSFReadGeneratorBuf::ReadOneRecord()
+{
+// Read Generator data and saved to the class.
+
+// Due to imcompatibility in JSFGeneratorParticle class and HEPEVT,
+// second mother information is not saved.
+//
+// 
+
+  const Int_t kNMXHEP=4000;
+  Int_t nevhep, nhep;
+  Int_t isthep[kNMXHEP], idhep[kNMXHEP];
+  Int_t jmohep[kNMXHEP][2], jdahep[kNMXHEP][2];
+  Double_t phep[kNMXHEP][5], vhep[kNMXHEP][4];
+
+
+  if( !ReadHepEvent(kNMXHEP, nevhep, nhep, isthep, idhep, jmohep, jdahep,
+		    phep, vhep) ) return kFALSE;
+
   // ***************************************
   // Scan data and reassign mother-daughter map
   // ***************************************
-  
+
   Int_t i;
   struct modau {
     Int_t mother;
     Int_t ndau;
     Int_t dau1st;
     Int_t nser;
-  } map[2000];
+  } map[kNMXHEP];
   Int_t nser=0;
   Int_t n1stfinal=0;
   Int_t n1stdoc=0;
-  Int_t jlist[2000];
+  Int_t jlist[kNMXHEP];
 
   for(i=0;i<nhep;i++){
     map[i].nser=0;
@@ -258,24 +304,27 @@ Bool_t JSFReadGeneratorBuf::ReadOneRecord()
     Int_t firstdaughter=map[i].dau1st;
     Int_t ndaughter=map[i].ndau;
 
+#if __PYTHIA_VERSION__ >= 6
+    Float_t charge=((Float_t)pychge_(&id))/3.0;
+    Int_t kc=pycomp_(&id);
+    Float_t xctau=pydat2_.PMAS[3][kc-1]*0.1;
+#else
     Float_t charge=((Float_t)luchge_(&id))/3.0;
     Float_t xctau=((Float_t)ulctau_(&id));
+#endif
     Float_t dl=0.0;
     //    if( mother < 0 ) xctau=0.0;
 
     p(0)=phep[i][3]; p(1)=phep[i][0]; p(2)=phep[i][1]; p(3)=phep[i][2];
     v(0)=vhep[i][3]; v(1)=vhep[i][0]; v(2)=vhep[i][1]; v(3)=vhep[i][2];
-    
+
     iser++;
     new(particles[is-1]) JSFGeneratorParticle(iser, id, mass, charge,
 	              p, v, ndaughter, firstdaughter, mother,
 		      xctau, dl);
   }
 
-
   SetNparticles(iser);
-
-
 
   return kTRUE;
 }

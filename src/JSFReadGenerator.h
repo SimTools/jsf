@@ -34,6 +34,9 @@ public:
    virtual ~JSFReadGeneratorBuf(){}
 
    virtual Bool_t ReadOneRecord();
+   virtual Bool_t ReadHepEvent(const Int_t maxhep, Int_t &nevhep, Int_t &nhep, 
+   	 Int_t isthep[], Int_t idhep[], Int_t jmohep[][2], Int_t jdahep[][2],
+            Double_t phep[][5], Double_t vhep[][4]);
 
    ClassDef(JSFReadGeneratorBuf, 1) // JSF ReadGenerator EventBuffer class.
 

@@ -8,6 +8,25 @@ c*******************************************************************
       end
 
 c*******************************************************************
+      subroutine OpenFortranFile(iunit, fname, formstr, statusstr)
+      integer       iunit
+      character*(*) fname, formstr, statusstr
+      
+      open(iunit, file=fname, form=formstr, status=statusstr)  
+
+      return
+      end
+
+c*******************************************************************
+      subroutine CloseFortranFile(iunit)
+      integer       iunit
+
+      close(iunit)
+
+      return
+      end
+
+c*******************************************************************
       subroutine writehepevt(iunit, iendi, nvers, nevhep,
      >  nhep, isthep, idhep, jmohep, jdahep,
      >  phep, vhep)
