@@ -5,7 +5,7 @@
 /* (Update)								*/
 /*  4-Feb-2000 A.Miyamoto Include libJSFDMatrix, create shared library  */
 /*          								*/
-/*$ID$      								*/
+/*$Id:      								*/
 /*       								*/
 /************************************************************************/
 
@@ -153,7 +153,7 @@ clean::
 
 depend:: $(SRC) $(HDR)
 	for i in $(SRC); do \
-	rmkdepend -a -- $(CXXFLAGS) $(INCPATH) -- $$i; done
+	rmkdepend -a -- $(DEPENDFILES) -- $$i; done
 
 distclean:: clean
 	@rm -f $(OBJS) core *~ *.o
