@@ -191,8 +191,6 @@ Int_t HerwigGenerator::HepevtToGeneratorParticles(COMMON_HEPEVT_t *hepevt)
 
   Int_t nhep=hepevt->NHEP;
 
-  cout << " nhep= " << nhep << endl;
-
   // ***************************************
   // Scan data and reassign mother-daughter map
   // ***************************************
