@@ -1,4 +1,18 @@
 -------------------------------------------------------------------------------
+2000/07/13  Akiya Miyamoto
+-------------------------------------------------------------------------------
+(1) conf/jsf.version, bin/makespec, src/JSFSteer.h,cxx are modified
+    so that version information is saved automatically.
+    From here JSF version in CVS repository is 1-15-1, which means 
+    version 1, minor version 15, patch level 1.  Patch level is updated
+    day-by-day bases when CVS repository is modified.
+
+****************************************************
+jsf-1-15-1  13-July-2000  A.Miyamoto
+****************************************************
+
+	
+-------------------------------------------------------------------------------
 2000/07/04  Akiya Miyamoto
 -------------------------------------------------------------------------------
 (1) Add bin/cxxdepends to make a list of dependant directories for rmkdepend.
