@@ -165,7 +165,8 @@ Bool_t JSFVTXAnalysis::Process(Int_t nev)
     return kTRUE;
   }
  
-  TClonesArray *tracks=evt->GetLTKCLTracks();
+  //  TClonesArray *tracks=evt->GetLTKCLTracks();
+  TObjArray *tracks=evt->GetLTKCLTracks();
   JSFQuickSimParam *fpar=sds->Param(); 
 
   Int_t ndfmin=(Int_t)fpar->GetCDCNSample();
@@ -575,8 +576,9 @@ Int_t JSFVTXAnalysis::JetAnalysis(TObjArray &particles, ANL4DVector &sum,
    // ***************************************
 
    Int_t nt=evt->GetNLTKCLTracks();
-   TClonesArray *tracks=evt->GetLTKCLTracks();
- 
+   //   TClonesArray *tracks=evt->GetLTKCLTracks();
+   TObjArray *tracks=evt->GetLTKCLTracks();
+
    //   Int_t ievt=gJSF->GetEventNumber();
 
    // Accumulate 4 momentum of the event
