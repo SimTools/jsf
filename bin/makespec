@@ -31,7 +31,10 @@ set specfile=$jsfroot/src/JSFConfig.h
 echo "#ifndef __JSFCONFIG__" >! $specfile
 echo "#define __JSFCONFIG__\n" >> $specfile
 
-echo -n "\nRoot version .."
+echo -n "\nJSF version .."
+cat $JSFROOT/conf/jsf.version >> $specfile
+
+echo -n "Root version .."
 root -q -b $jsfroot/macro/printversion.C | grep "ROOT_" >> $specfile
 
 
