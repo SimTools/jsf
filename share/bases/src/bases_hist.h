@@ -1,5 +1,10 @@
+#ifdef __USEISOCXX__
 #include <fstream>
 #include <iostream>
+#else
+#include <fstream.h>
+#include <iostream.h>
+#endif
 #include "bases_xhist.h"
 #include "bases_scat.h"
 const int NHS = 10, NHASH = 13, MXHIST = 110;

@@ -1,5 +1,10 @@
+#ifdef __USEISOCXX__
 #include <iostream>
 #include <fstream>
+#else
+#include <iostream.h>
+#include <fstream.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

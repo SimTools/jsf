@@ -1,7 +1,13 @@
+#ifdef __USEISOCXX__
 #include <fstream>
+#else
+#include <fstream.h>
+#endif
  enum if_bases { BASES, SPRING };
 
+#ifdef __USEISOCXX__
 using namespace std;
+#endif
                                                                             /*
 ******************************************************************************
 *                   =====================================                    */
