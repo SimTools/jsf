@@ -17,7 +17,7 @@ echo exist
 #
 
 WORKDIR=g4tmp
-rm -f $WORKDIR
+rm -fr $WORKDIR
 mkdir $WORKDIR
 cd $WORKDIR
 
