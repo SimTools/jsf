@@ -10,10 +10,11 @@
 void InitHerwig()
 {
 
-  HerwigGenerator *hw=(HerwigGenerator*)jsf->FindModule("HerwigGenerator");
+  HerwigGenerator *hwg=(HerwigGenerator*)jsf->FindModule("HerwigGenerator");
+  THerwig *hw=hwg->GetHerwig();
 
   Double_t hmass;
-  sscanf(jsf->Env()-GetValue("HerwigGenerator.HiggsMass","120.0"),"%s",&hmass);
+  sscanf(jsf->Env()->GetValue("HerwigGenerator.HiggsMass","120.0"),"%lg",&hmass);
   hw->SetRMASS(hmass, 201);
   cout << "HerwigGenerator.HiggsMass=" << hw->GetRMASS(201) << endl ;
 
