@@ -131,6 +131,10 @@ JSFSteer::JSFSteer(const char *name, const char *title)
   fModules = new TList();
   fConf    = new JSFSteerConf("JSFSteerConf", "JSF Configuration");
 
+#if ROOT_VERSION_CODE >= ROOT_VERSION(3,1,3)
+  TTree::SetBranchStyle(0);
+#endif
+
   if( strcmp(name,"JSF") == 0 ) {
     if( gJSF ) return ;
     gJSF=this;
