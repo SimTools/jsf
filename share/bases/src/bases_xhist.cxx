@@ -36,7 +36,7 @@
 *  S.Kawabata,  july `99 at KEK                                              *
 ******************************************************************************/
 {
-  printf("Deallocator for histogram( ID = %d ) was invoked.\n", ID );
+  //  printf("Deallocator for histogram( ID = %d ) was invoked.\n", ID );
 
   delete [ ] nsamp;
   delete [ ] freq;
@@ -549,7 +549,7 @@
          }
        disp[50] = '\0';
 
-       int   nx  = nsamp[i];
+       //       int   nx  = nsamp[i];
              vx  = val[i];
        float vx1 = vx;
 
@@ -988,7 +988,6 @@
 *   To reset the histograms before starting spring.                          *
 ******************************************************************************/
 {
-
   if( x_tag >= 0 && x_tag < no_bin+2)
     {
       freq[x_tag]++;

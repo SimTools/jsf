@@ -85,5 +85,10 @@ friend class JSFBases;
   void sh_plot( double scalls );
   void sh_reset();
   void sh_update();
+
+  inline int get_no_hist(){ return no_hist; }
+  inline int get_no_scat(){ return no_scat; }
+  inline int get_total_hist(){ return no_hist+no_scat; }
+
 };
 

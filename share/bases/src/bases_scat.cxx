@@ -1,12 +1,18 @@
-#include <fstream.h>
+#ifdef __USEISOCXX__
+#include <iostream>
+#include <fstream>
+using namespace std;
+#else
 #include <iostream.h>
+#include <fstream.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include "bases_scat.h"
 
-                                                                             /*
+                                                                           /*
 ******************************************************************************
 *                  ===================================                       */
                        bases_scat :: ~bases_scat( )                         /*
@@ -22,7 +28,7 @@
 *                  ===================================                       *
 ******************************************************************************/
 {
-  printf("Deallocator for scat.plot( ID = %d ) was invoked.\n", ID );
+  //  printf("Deallocator for scat.plot( ID = %d ) was invoked.\n", ID );
 
   for( int i =  0; i <  no_xbin+2; i++ ) delete [ ] freq[i];
   delete [ ] freq;

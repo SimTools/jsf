@@ -79,7 +79,7 @@ void   uxdate( int &y, int &m, int &d, int &h, int &min );
       for( int i = 0; i < ndim; i++ ) delete  var[i];
       delete [ ] var;
       /**********/
-      printf("The variable object var[ ] were deallocated.\n");
+      //      printf("The variable object var[ ] were deallocated.\n");
       /**********/
      }
 }
@@ -413,7 +413,7 @@ if( step == 1 )
 *   coded by S.kawabata June '99 at KEK                                      *
 ******************************************************************************/
 {
-  double xin[MXDIM];
+  //  double xin[MXDIM];
                                                                             /*
  ============================================================================
  I.   Determine the numbers of regions and sub-regions
@@ -1278,7 +1278,11 @@ void BasesSpring::EndIntegration( int step )
 
       while( ntry < maxtry && accept == 0 )
       {
-	sh_reset();  // reset histogram buffer every time.
+	if( his.get_total_hist() == 0 ) { 
+	  sh_reset();  // reset histogram buffer every time.
+	               // If Bases build in histogram package is used, 
+                       // Number of events in each bin does not plot properly.
+	}
         ntry++;
         wgt = jacob;
         for( int j = 0; j < ndim; j++ )

@@ -306,7 +306,7 @@
  |(1) Check if new histogram                                                 |
  +---------------------------------------------------------------------------+
                                                                             */
-  if ( Bases_Flag < 2 )  return; 
+  if ( Bases_Flag == 1 )  return; 
 
   int hash   = id % NHASH;
   int nhash  = xhash[0][hash];
@@ -402,7 +402,7 @@
  |(1) Check if new scatter plot                                              |
  +---------------------------------------------------------------------------+
                                                                             */
-  if( Bases_Flag < 2 ) return;
+  if( Bases_Flag == 1 ) return;
 
   int hash   = id % NHASH;
   int nhash  = dhash[0][hash];
