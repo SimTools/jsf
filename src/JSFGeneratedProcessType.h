@@ -63,7 +63,7 @@ public:
   inline Int_t GetNumberOfquarks(){ return fNd+fNu+fNs+fNs+fNb+fNt; }
   inline Int_t GetNumberOfChargedLeptons(){ return fNe+fNmu+fNtau; }
   inline Int_t GetNumberOfNeutrinos(){ return fNne+fNnmu+fNntau; }
-  inline Int_t GetNumberOfLeptons(){ return fNe+fNmu+fNtau+fNe+fNmu+fNtau; }
+  inline Int_t GetNumberOfLeptons(){ return fNe+fNmu+fNtau+fNne+fNnmu+fNntau; }
   inline Int_t GetNumberOfFermions(){ return GetNumberOfquarks() +
 					GetNumberOfLeptons(); }
 
