@@ -124,7 +124,11 @@ Bool_t JSFQuickSim::TBPUTGeneratorParticles()
     data[15]=p->fLifeTime;
     data[16]=p->fDecayLength;
     Int_t ielm=j+1;
- 
+    //    printf(" data[0:3]=%g %g %g %g ",data[0],data[1],data[2],data[3]);
+    //    printf(" data[4:10]=%g %g %g %g == %g %g %g \n",
+    //	   data[4],data[5],data[6],data[7],data[8],data[9],data[10]);
+    // printf(" data[11:16]=%g %g %g %g %g %g \n",
+    //	   data[11],data[12],data[13],data[14],data[15],data[16]);
     gJSFLCFULL->TBPUT(1,"Generator:Particle_List",ielm,20,(Int_t*)data,iret);
   }
 
@@ -398,10 +402,12 @@ void JSFQuickSim::MakeBranch(TTree *tree)
   //  JSFModule::MakeBranch(tree);
 
    fTree=tree;
-   Int_t split=0;
-   Int_t bsize=10000;
-   tree->Branch(fData->GetName(), fData->ClassName() ,&fData, bsize, split);
-   tree->Branch(fEventBuf->GetName(), fEventBuf->ClassName() ,&fEventBuf, bsize, split);
+   if( fEventBuf && fMakeBranch ) {
+     Int_t split=0;
+     Int_t bsize=10000;
+     tree->Branch(fData->GetName(), fData->ClassName() ,&fData, bsize, split);
+     tree->Branch(fEventBuf->GetName(), fEventBuf->ClassName() ,&fEventBuf, bsize, split);
+   }
 }
 
 

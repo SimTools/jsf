@@ -9,6 +9,12 @@ jsf-0.4.4   20-October-1998
    Makefiles and Imakefiles for easy compilation and likn of 
    libraries and executables.
 
+2) JSFHadronize : Add tauola initialization
+3) Use jetset74 and pythia in /cern/98/lib, using libLUHADR.a interface.
+4) Renew PythiaGenerator to use TPythia and TMCParticle of ROOT library
+5) Add DebugWGenerator
+6) Add an example of e+e- -> zh analysis
+	
 **********************************************************
 jsf-0.4.3   19-October-1998  
 **********************************************************

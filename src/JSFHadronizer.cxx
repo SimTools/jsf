@@ -19,10 +19,22 @@
 
 extern "C" {
 extern void  luhadr_(int *idrec, int *level, int *idebug, int *iret);
+extern void  tauint_(int *inut, int *iout, int *jak1, 
+		     int *jak2, int *itdkrc, int *keya1, float *xk0dec);
+extern void  lutuhl_(int *one, int *ihlon);
 };
 
+Int_t JAK1, JAK2, ITDKRC, KEYA1, IHLON;
+Float_t XK0DEC;
 
 ClassImp(JSFHadronizer)
+
+typedef struct {
+  Int_t mdcy[3][500], mdme[2][2000];
+  Float_t brat[2000];
+  Int_t kfdp[5][2000];
+} COMMON_LUDAT3;
+extern COMMON_LUDAT3 ludat3_;
 
 //_____________________________________________________________________________
 JSFHadronizer::JSFHadronizer(const char *name, const char *title)
@@ -48,6 +60,35 @@ JSFHadronizer::JSFHadronizer(const char *name, const char *title)
     }
   }
   if( !fSpring ){ Error("JSFHadronizer","No JSFSpring class was found"); }
+
+  
+  JAK1 = gJSF->Env()->GetValue("JSFHadronizer.JAK1",0);
+  JAK2 = gJSF->Env()->GetValue("JSFHadronizer.JAK2",0);
+  ITDKRC = gJSF->Env()->GetValue("JSFHadronizer.ITDKRC",1);
+  KEYA1 = gJSF->Env()->GetValue("JSFHadronizer.KEYA1",1);
+  IHLON = gJSF->Env()->GetValue("JSFHadronizer.IHLON",1);
+  XK0DEC = gJSF->Env()->GetValue("JSFHadronizer.XK0DEC",0.001);
+
+
+}
+
+//_____________________________________________________________________________
+Bool_t JSFHadronizer::Initialize()
+{
+// Initialize tauola
+
+   Int_t inut=5;
+   Int_t iout=6;
+   tauint_(&inut, &iout, &JAK1, &JAK2, &ITDKRC,  &KEYA1, &XK0DEC);
+   Int_t one=1;
+   lutuhl_(&one, &IHLON);
+
+   ludat3_.mdcy[0][22]=0;
+   ludat3_.mdcy[0][23]=0;
+   ludat3_.mdcy[0][32]=0;
+
+   return kTRUE ;
+
 }
 
 //_____________________________________________________________________________

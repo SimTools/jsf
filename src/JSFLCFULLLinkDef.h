@@ -24,6 +24,8 @@
 #pragma link C++ class JSFLTKCLTrack;
 
 #pragma link C++ class DebugGenerator;
+#pragma link C++ class DebugWGeneratorBuf;
+#pragma link C++ class DebugWGenerator-;
 #pragma link C++ class PythiaGenerator;
 
 #endif

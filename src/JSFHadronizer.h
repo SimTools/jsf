@@ -34,6 +34,7 @@ public:
 //   virtual void  Clear(Option_t *option ="");
 //   virtual void  PrintInfo(){}
 
+   virtual Bool_t Initialize();
    virtual Bool_t Process(Int_t event);
 //   virtual void  BeginRun(Int_t nrun);
 

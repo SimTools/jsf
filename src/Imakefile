@@ -3,15 +3,20 @@
 #include    "../conf/makejsf.tmpl"
 
 ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
+		-lEGPythia -lEG \
                 -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
-                -lPostscript -lProof -lTree -lUnix -lZip
+                -lPostscript -lProof -lTree -lUnix -lZip \
+		-Wl,-u,pytest_ \
+		-L/cern/pro/lib -lpythia -ljetset74
+
 ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
 
 LCLIB 	  = $(LCDIR)/lib
 
-ANALLIB   =  -L$(LCLIB) -lLCFULL -lGENUTIL -lLUND73 -lPYTHIA55 -lTAUOLA \
+ANALLIB   =  -L$(LCLIB) -lLCFULL -lGENUTIL -lLUHADR -lTAUOLA \
 	    -lLTKCL -lHELASV204 -lBASESV5.1 -lSIMJLC -lFORTLIB  \
-	    -lTBS -lLCFULL -lGENUTIL -lLUND73  -lCOM -lCLI \
+	    -L/cern/pro/lib -ljetset74 -lpythia \
+	    -lTBS -lLCFULL -lGENUTIL -lLUHADR  -lCOM -lCLI \
 	    -lFORTLIB -lTBS
 
 FFLAGS = -I$(LCDIR)/simjlc/src -I$(LCDIR)/util/fortlib/src 
@@ -32,7 +37,8 @@ OBJJSFLCFULL  = JSFBases.$(ObjSuf) \
 		JSFFULLGenerator.$(ObjSuf) JSFHadronizer.$(ObjSuf) \
 		JSFLCFULL.$(ObjSuf) \
 		JSFLTKCLTrack.$(ObjSuf) JSFQuickSim.$(ObjSuf) \
-		DebugGenerator.$(ObjSuf) PythiaGenerator.$(ObjSuf) \
+		DebugGenerator.$(ObjSuf) DebugWGenerator.$(ObjSuf) \
+		PythiaGenerator.$(ObjSuf) \
 		libJSFLCFULL.$(ObjSuf)
 
 SRCJSF           = JSFSteer.$(SrcSuf) JSFModule.$(SrcSuf) 
@@ -43,7 +49,8 @@ SRCJSFLCFULL    = JSFBases.$(SrcSuf) \
 		JSFFULLGenerator.$(SrcSuf) JSFHadronizer.$(SrcSuf) \
 		JSFLCFULL.$(SrcSuf) \
 		JSFLTKCLTrack.$(SrcSuf)	JSFQuickSim.$(SrcSuf) \
-		DebugGenerator.$(SrcSuf) PythiaGenerator.$(SrcSuf)
+		DebugGenerator.$(SrcSuf) DebugWGenerator.$(SrcSuf) \
+		PythiaGenerator.$(SrcSuf)
 
 SRC = $(SRCJSF) $(SRCLCFULL)
 
@@ -55,7 +62,8 @@ HDRJSFLCFULL  = JSFBases.h \
 		JSFFULLGenerator.h JSFHadronizer.h \
 		JSFLCFULL.h \
 		JSFLTKCLTrack.h JSFQuickSim.h \
-		DebugGenerator.h PythiaGenerator.h JSFLCFULLLinkDef.h
+		DebugGenerator.h DebugWGenerator.h \
+		PythiaGenerator.h JSFLCFULLLinkDef.h
 
 
 all::  libjsf libjsflcfull jsf

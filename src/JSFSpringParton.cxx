@@ -1,9 +1,53 @@
-//*-- Author :    Akiya Miyamoto   01/08/98
+//*LastUpdate:  v.01.01 11-November-1998  Akiya Miyamoto
+//*-- Author :    Akiya Miyamoto   1-August-1998
 //_____________________________________________________________________________
 //
 //  SpringParton Class
 //
 //  To store particle information produced by event generators
+// 
+//  When JSFSpringParton is created, following parameters are specified.
+//
+//   Int_t  fSer;        // parton serial number ( 1 to n )
+//   Int_t  fID;         // Particle ID a la PDG.
+//   Double_t  fMass;    // Particle mass (GeV);
+//   Double_t  fCharge;  // Charge
+//   Real_t    fP[4];    // four momentum (E,Px,Py,Pz), GeV
+//   Int_t     fNdaughter;     // Number of daughter particles
+//   Int_t     fFirstDaughter; // Serial number of 1st daughter
+//   Int_t     fMother;  // Serial number of mother particle ( =0 for initial)
+//   Int_t     fHelicity;  // parton helicity
+//   Int_t     fColorID;   // Color singlet group ID
+//   Int_t     fShowerInfo; // ShowerLevel*100 + Shower-PairID
+//
+//  Where fNdaughter, fFirstDaughter, fMother are numbers ranging from 1 to N
+//  and corresponds to the fSer value.    
+//  
+//  For fHelicity, fColorID and fShowerInfo, see comments below,
+//  which is taken from FORTRAN subroutine, LUFRAG.
+// 
+//  The parton showering is handled level by level, since showers
+//  from parent parton pairs might modify the momenta of their
+//  daughter partons.
+//  The level is defined by
+//     RBUF(19,*) = ISLEV*100 + ISPAIR
+//  where partons with the same ISLEV are passed to LUFRAG at one
+//  time (that means they comprise a set of color singlet states and
+//  that there is no parent-daughter relation among the set) and
+//  partons with the same ISPAIR are paired in LUSHOW calls in
+//  LUFRAG. 
+//  Lepton pairs are required to have ISLEV = 0 and NDAU = 0 for
+//  proper polarization handling when the pair contains a tau.
+//  If you are satisfied with the default tau decay treatment, you
+//  do not have to distinguish leptons from quarks in the decay
+//  daughters from W or Z, etc.
+//  Color singlet groups are distinguished by
+//     RBUF(18,*) = ICF
+//  where ICF must have different values for different color singlet
+//  groups.
+//  Helicities of the primary partons should be stored in
+//     RBUF(17,*) = IHEL
+//  when necessary as with tau leptons.
 //
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 

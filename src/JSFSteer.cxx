@@ -110,8 +110,8 @@ JSFSteer::JSFSteer(const char *name, const char *title)
   fModules = 0;
   fConf    = 0;
   fReadin  = 0;
-  fVersion    = 403  ;  // JSFSteer version number
-  fVersionDate  = 19981016 ; // version date.
+  fVersion    = 101  ;  // JSFSteer version number
+  fVersionDate  = 19981116 ; // version date.
   fIsInitialized = kFALSE ;
   fIsTerminated  = kFALSE ;
   fLastRun       = 0 ;
@@ -536,8 +536,6 @@ JSFSteerConf::~JSFSteerConf()
 void JSFSteerConf::Initialize(TList *mlist)
 {
 // Make fClasses and fNames from fModules list for output
-
-  printf(" Initialize of JSFSteerCOnfis called.\n");
 
   fNmodule=0;
   TIter next(mlist);

@@ -34,6 +34,7 @@ distclean:
 	( cd src ; make distclean ) 
 	( cd example/FFbarSpring ; make distclean )
 	( cd example/CCDAnal ; make distclean )
+	( cd example/ZHStudy ; make distclean )
 	( cd html ; rm -f *.html *.h *.ps *~ ; rm -rf src )
 	( rm -r lib ; rmdir html )
 	( cd macro ; rm -f jsf.root , PYTHIA.SEED )

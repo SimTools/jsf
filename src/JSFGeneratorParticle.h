@@ -22,8 +22,8 @@ public:
   Int_t  fID;         // Particle ID a la PDG.
   Double_t  fMass;    // Particle mass (GeV);
   Double_t  fCharge;  // Charge
-  Real_t    fP[4];    // four momentum (E,Px,Py,Pz), GeV
-  Real_t    fX[4];    // (t,x,y,z) (cm and nsec)
+  Double_t    fP[4];    // four momentum (E,Px,Py,Pz), GeV
+  Double_t    fX[4];    // (t,x,y,z) (cm and nsec)
   Int_t     fNdaughter;     // Number of daughter particles ( =0 for stable )
   Int_t     fFirstDaughter; // Serial number of 1st daughter
   Int_t     fMother;  // Serial number of mother particle ( =0 for initial)

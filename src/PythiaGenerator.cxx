@@ -1,62 +1,39 @@
-
+//*LastUpdate :  0.04/04  9-November-1998  By A.Miyamoto
+//*-- Author  : A.Miyamoto  9-November-1998
 ///////////////////////////////////////////////////////////////////
 //
-//  JSF Generator
+//  PythiaGenerator class
 //
-//  The first example to generate simple generator track 
-//  in the JLC Study Framework.
+//  To run Pythia in JLC Study Framework
 //  
 //////////////////////////////////////////////////////////////////
 
 #include "PythiaGenerator.h"
-#include "JSFLCFULL.h"
 #include "JSFSteer.h"
 #include "TEnv.h"
 
+#include "JSFGenerator.h"
 
-extern "C" { 
-extern void p55evt_(int *recid, int* level, int *debug, int *qualit);
-extern void p55com_rooti_(float *ecm);
-extern void p55com_root_(float *ecm, int *plund, int *iseed, int *isavelu);
-extern void p55bru_(int *level, int *debug);
-extern void p55eru_(int *level, int *debug);
-extern void p55ini_();
-extern void p55trm_();
-};
+// extern "C" { 
+// };
 
 ClassImp(PythiaGenerator)
 
 //_____________________________________________________________________________
 PythiaGenerator::PythiaGenerator(const char *name, const char *title)
-       : JSFFULLGenerator(name,title)
+       : JSFGenerator(name,title)
 {
 
   TEnv *env=gJSF->Env();
-
   sscanf(env->GetValue("PythiaGenerator.Ecm","500.0"),"%lg",&fEcm);
 
-  Char_t process[100];
-
-  sscanf(env->GetValue("PythiaGenerator.Process","WW"),"%s",process);
-
-  // Set parameters for some frequently used process.
-  if( strcmp(process,"WW")==0) {
-     SetParam("PYSUBS","MSEL",1);
-     SetParam("PYSUBS","CKIN",0,20.0);
-     SetParam("PYSUBS","CKIN",2, 0.0);
-     SetParam("PYPARS","MSTP",1,1);
-     SetParam("PYPARS","MSTP",121,1);
-     SetParam("PYPARS","MSTP",10,1);
-     SetParam("PYPARS","MSTP",32,1);
-     SetParam("LUDAT1","MSTU",10,6);
-     SetParam("LUDAT1","MSTU",11,1);
-  }
-
+  fPythia = new TPythia();
 }
 
 // ---------------------------------------------------------------
 PythiaGenerator::~PythiaGenerator()
 {
+  if ( fPythia ) delete fPythia ;
 }
 
 
@@ -65,10 +42,10 @@ Bool_t PythiaGenerator::Initialize()
 {
   // Initializer of Pythia generator
 
-  if( !JSFFULLGenerator::Initialize() ) return kFALSE;
-  Float_t ecm=(Double_t)fEcm;
-  p55com_rooti_(&ecm);
-  p55ini_();
+  if( !JSFGenerator::Initialize() ) return kFALSE;
+  
+  fPythia->Initialize("CMS", "e-", "e+", fEcm);
+
   return kTRUE;
 }
 
@@ -76,35 +53,87 @@ Bool_t PythiaGenerator::Initialize()
 Bool_t PythiaGenerator::BeginRun(Int_t nrun)
 {
    if( !JSFGenerator::BeginRun(nrun) ) return kFALSE;
-   Int_t level=1;
-   Int_t debug=0;
-   p55bru_(&level, &debug);
    return kTRUE;
 }
 
 // ---------------------------------------------------------------
 Bool_t PythiaGenerator::EndRun()
 {
-   if( !JSFFULLGenerator::EndRun() ) return kFALSE;
-   Int_t level=1;
-   Int_t debug=0;
-   p55eru_(&level, &debug);
+   if( !JSFGenerator::EndRun() ) return kFALSE;
    return kTRUE;
 }
 
 // ---------------------------------------------------------------
 Bool_t PythiaGenerator::Process(Int_t ev)
 {
-  if( !JSFFULLGenerator::Process(ev) ) return kFALSE;
+//  Generate one pythia event, and results are saved in the 
+//  GeneratorParticle class for JSF simulators
 
-  Int_t ir;
-  Int_t level=1;
-  Int_t debug=0;
-  int recid=1;
-  ir=0;
-  p55evt_(&recid, &level, &debug, &ir);
+  if( !JSFGenerator::Process(ev) ) return kFALSE;
 
-  TBGET();
+  fPythia->GenerateEvent();
+
+// Stable particles are saved in the GeneratorParticle class.
+
+   JSFGeneratorBuf *buf=(JSFGeneratorBuf*)EventBuf();
+   TClonesArray &tracks = *(buf->GetParticles());
+   TVector pv(4);
+   TVector xv(4);
+
+   Int_t np=fPythia->GetNumberOfPrimaries();
+   TObjArray *pa=fPythia->GetPrimaries();
+   Int_t n0=fPythia->GetMSTI(4);
+
+   Int_t nout=0;
+   Int_t ks,kf,kh,kfa;
+   Float_t charge, xctau, life, mass;
+   Int_t idhist[4001];
+   for(Int_t i=0;i<4001;i++){ idhist[i]=0 ; }
+   Int_t  ndaughter, firstdaughter, mother ;
+
+   for(Int_t i=n0+1;i<=np;i++) {
+     TMCParticle *p=(TMCParticle*)pa->UncheckedAt(i-1);
+     ks=p->GetKS();
+     kf=p->GetKF();
+     kh=p->GetParent();
+     idhist[i]=0;
+     kfa=TMath::Abs(kf);
+     if( (kfa >= 1 && kfa <= 10) || kfa == 21 ) continue ;
+     if(  kfa >=23 && kfa <= 100 ) continue ;
+     Float_t pt2=p->GetPx()*p->GetPx() + p->GetPy()*p->GetPy(); 
+     if( pt2 < 1.e-12 ) continue ;
+
+     nout++;
+     idhist[i] = nout ;
+
+     pv(0)=p->GetEnergy();
+     pv(1)=p->GetPx();
+     pv(2)=p->GetPy();
+     pv(3)=p->GetPz();
+     xv(0)=0.0; xv(1)=0.0 ; xv(2)=0.0 ; xv(3)=0.0 ; 
+     charge=((Float_t)luchge_(&kf))/3.0;
+     xctau=((Float_t)ulctau_(&kf));
+     mass=p->GetMass();
+     ndaughter=0;
+     firstdaughter=0;
+     mother=0;
+     life=0.0;
+     if( kh != 0 ) {
+       Int_t ipar=idhist[kh];
+       if( ipar > 0 ) {
+       JSFGeneratorParticle *gp=
+	 (JSFGeneratorParticle*)tracks.UncheckedAt(ipar-1);
+	 gp->fNdaughter++;
+	 if( gp->fNdaughter == 1 ) gp->fFirstDaughter=nout;
+	 mother=ipar;
+       }
+     }
+     new(tracks[nout-1]) 
+       JSFGeneratorParticle(nout, kf,(Double_t)mass,(Double_t)charge, pv, xv , 
+	    ndaughter, firstdaughter, mother, (Double_t)life, (Double_t)xctau ) ;
+
+   }
+  buf->SetNparticles(nout);
   
   return kTRUE;
  
@@ -113,86 +142,9 @@ Bool_t PythiaGenerator::Process(Int_t ev)
 // ---------------------------------------------------------------
 Bool_t PythiaGenerator::Terminate()
 {
-  if( !JSFFULLGenerator::Terminate() ) return kFALSE;
+  if( !JSFGenerator::Terminate() ) return kFALSE;
 
-  p55trm_();
   return kTRUE;
-}
-
-
-
-// ---------------------------------------------------------------
-void PythiaGenerator::SetParam(const Char_t *common, const Char_t *vname,
-      Int_t value)
-{
-  if( strcmp(common,"PYSUBS") == 0 ) {
-    if( strcmp(vname,"MSEL") == 0 ) pysubs_.msel=value;
-  }
-  else {
-    Warning("SetParam","Common %s or Variable %s is unrecognized",
-	    common, vname);
-  }
-}
-
-
-// ---------------------------------------------------------------
-void PythiaGenerator::SetParam(const Char_t *common, const Char_t *vname,
-      Int_t index, Double_t value)
-{
-  if( strcmp(common,"PYSUBS") == 0 ) {
-    if( strcmp(vname,"CKIN") == 0 ) pysubs_.ckin[index]=(Float_t)value;
-  }
-  else if( strcmp(common,"PYPARS") == 0 ) {
-    if( strcmp(vname,"PARP") == 0 ) pypars_.parp[index]=(Float_t)value;
-    if( strcmp(vname,"PARI") == 0 ) pypars_.pari[index]=(Float_t)value;
-  }
-  else if( strcmp(common,"LUDAT1") == 0 ) {
-    if( strcmp(vname,"PARJ") == 0 ) ludat1_.parj[index]=(Float_t)value;
-  }
-  else {
-    Warning("SetParam","Common %s or Variable %s is unrecognized",
-	    common, vname);
-  }
-
-}
-
-
-// ---------------------------------------------------------------
-void PythiaGenerator::SetParam(const Char_t *common, const Char_t *vname,
-      Int_t index, Int_t value)
-{
-  if( strcmp(common,"PYSUBS") == 0 ) {
-    if( strcmp(vname,"MSUB") == 0 ) pysubs_.msub[index]=value;
-  }
-  else if( strcmp(common,"PYPARS") == 0 ) {
-    if( strcmp(vname,"MSTP") == 0 ) pypars_.mstp[index]=value;
-    if( strcmp(vname,"MSTI") == 0 ) pypars_.msti[index]=value;
-  }
-  else if( strcmp(common,"LUDAT1") == 0 ) {
-    if( strcmp(vname,"MSTU") == 0 ) ludat1_.mstu[index]=value;
-    if( strcmp(vname,"PARU") == 0 ) ludat1_.paru[index]=value;
-    if( strcmp(vname,"MSTJ") == 0 ) ludat1_.mstj[index]=value;
-  }
-  else {
-    Warning("SetParam","Common %s or Variable %s is unrecognized",
-	    common, vname);
-  }
-
-}
-
-
-// ---------------------------------------------------------------
-void PythiaGenerator::SetParam(const Char_t *common, const Char_t *vname,
-      Int_t ind1, Int_t ind2, Int_t value)
-{
-  if( strcmp(common,"PYSUBS") == 0 ) {
-    if( strcmp(vname,"KFIN") == 0 ) pysubs_.kfin[ind1][ind2]=value;
-  }
-  else {
-    Warning("SetParam","Common %s or Variable %s is unrecognized",
-	    common, vname);
-  }
-
 }
 
 

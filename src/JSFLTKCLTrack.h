@@ -50,6 +50,15 @@ public:
   Double_t GetPt(){ return TMath::Sqrt( fP[1]*fP[1]+fP[2]*fP[2]);}
   Double_t GetCosth(){ return fP[3]/GetPabs();}
 
+  Double_t GetECL(){ return fEcl; }
+  Int_t    GetNEMC(){ return fNEMC; }
+  Int_t    GetCharge(){ return fCharge; }
+  Int_t    GetType(){ return fType;}
+  Int_t    GetSource(){return fSource; }
+  Int_t    GetNCDC(){ return fNCDC;}
+  Int_t    Get1stCDC(){ return f1stCDC;}
+ 
+
   TVector GetPV(){ TVector p(4) ; 
           p(0)=fP[0] ; p(1) =fP[1] ; p(2)=fP[2] ; p(3)=fP[3] ; return p ; }
 

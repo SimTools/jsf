@@ -3,19 +3,20 @@
 #include "../../conf/makejsf.tmpl"
 
 ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
+		-lEGPythia -lEG \
                 -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
-                -lPostscript -lProof -lTree -lUnix -lZip
+                -lPostscript -lProof -lTree -lUnix -lZip  \
+		-L/cern/pro/lib -lpythia -ljetset74
+
 ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
 
 LCLIB 	  = $(LCDIR)/lib
 
 ANALLIB   = -L$(JSFROOT)/lib -lJSF -lJSFLCFULL \
-	    -L$(LCLIB) -lLCFULL -lGENUTIL -lLUND73 -lPYTHIA55 -lTAUOLA \
+	    -L$(LCLIB) -lLCFULL -lGENUTIL -lLUHADR -lTAUOLA \
 	    -lLTKCL -lHELASV204 -lBASESV5.1 -lSIMJLC -lFORTLIB  \
-	    -lTBS -lLCFULL -lGENUTIL -lLUND73 -lCOM -lCLI \
+	    -lTBS -lLCFULL -lGENUTIL -lCOM -lCLI \
 	    -lFORTLIB -lTBS 
-
-FFLAGS = -I$(LCDIR)/simjlc/src -I$(LCDIR)/util/fortlib/src 
 
 
 
