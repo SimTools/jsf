@@ -1,0 +1,82 @@
+/************************************************************************/
+/*									*/
+/* Imakefile to build JSF libraries and application			*/
+/*									*/
+/* (Update)								*/
+/*  4-Feb-2000 A.Miyamoto Include libJSFDMatrix, create shared library  */
+/*          								*/
+/*$Id:      								*/
+/*       								*/
+/************************************************************************/
+
+/*----------------------------------------------------------------------*/
+/*  Some macros specific to jsf	building				*/
+/*----------------------------------------------------------------------*/
+
+#include    "../../../conf/makejsf.tmpl"
+
+NAME		= JSFPythia5
+LIBNAME		= lib$(NAME)
+JSFINSTALLDIR   = ../../..
+INC		= $(JSFINSTALLDIR)/include 
+
+/*----------------------------------------------------------------------*/
+/*  Source files, headers, and objects to build				*/
+/*----------------------------------------------------------------------*/
+
+SRC		= JSFHadronizer.$(SrcSuf) \
+		JSFMergeEvent.$(SrcSuf) \
+		PythiaGenerator.$(SrcSuf)
+
+OBJ	      = $(subst .$(SrcSuf),.$(ObjSuf),$(SRC)) \
+		JSFParticleData.$(ObjSuf) ranmar.$(ObjSuf) \
+		$(LIBNAME).$(ObjSuf)
+
+HDR	      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRC)) \
+		$(NAME)LinkDef.h
+
+LIBS	      =	-L$(LCLIBROOT)/lib -lLUHADR -lTAUOLA \
+		$(ROOTLIBS) $(ROOTGLIBS) \
+		-L/cern/pro/lib -ljetset74  -lpdflib804 -lg2c -lnsl
+
+CXXFLAGS     += -D__PYTHIA_VERSION__=5 
+
+/*----------------------------------------------------------------------*/
+/*  Make targets							*/
+/*----------------------------------------------------------------------*/
+
+all::  $(LIBNAME).$(DllSuf)
+
+$(LIBNAME).$(DllSuf): $(OBJ)
+	@echo "Linking $@ "
+	$(LD) $(SOFLAGS)  $(OBJ) $(LIBS) -o $(LIBNAME).$(DllSuf)
+
+install:: $(LIBNAME).$(DllSuf)
+	mkdir -p $(JSFINSTALLDIR)/lib $(JSFINSTALLDIR)/include
+	install -p -m 755 $(LIBNAME).$(DllSuf) $(JSFINSTALLDIR)/lib
+# 	install -p -m 644 $(HDR) $(JSFINSTALLDIR)/include	
+
+uninstall::
+	rm -f $(JSFINSTALLDIR)/$(LIBNAME).$(DllSuf)
+#	( cd $(JSFINSTALLDIR) && rm -f $(HDR) )
+
+clean:: 
+	@rm -f $(OBJS) core *.so *~
+	@rm -f $(LIBNAME).*
+
+depend:: $(SRC) $(HDR)
+	for i in $(SRC); do \
+	rmkdepend -a -- $(DEPENDFILES) -- $$i; done
+
+distclean:: clean
+	@rm -f $(OBJ) core *~ *.o
+	@rm -f Makefile 
+
+web:
+	../bin/jsf -q -b html.C
+
+$(LIBNAME).$(SrcSuf): $(HDR)
+		@echo "Generating dictionary ..."
+		rootcint -f $(LIBNAME).$(SrcSuf) -c -I. -I$(JSFINSTALLDIR)/include \
+		$(RCINTDEFINES) $(HDR)
+

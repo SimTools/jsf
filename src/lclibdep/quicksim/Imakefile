@@ -1,0 +1,95 @@
+/************************************************************************/
+/*									*/
+/* Imakefile to build JSF libraries and application			*/
+/*									*/
+/* (Update)								*/
+/*  4-Feb-2000 A.Miyamoto Include libJSFDMatrix, create shared library  */
+/*          								*/
+/*$Id:      								*/
+/*       								*/
+/************************************************************************/
+
+/*----------------------------------------------------------------------*/
+/*  Some macros specific to jsf	building				*/
+/*----------------------------------------------------------------------*/
+
+#include    "../../../conf/makejsf.tmpl"
+
+NAME		= JSFQuickSim
+LIBNAME		= lib$(NAME)
+JSFINSTALLDIR   = ../../..
+INC		= $(JSFINSTALLDIR)/include 
+
+/*----------------------------------------------------------------------*/
+/*  Source files, headers, and objects to build				*/
+/*----------------------------------------------------------------------*/
+
+SRC	      = JSFBases.$(SrcSuf) \
+	        JSFSpring.$(SrcSuf) JSFSpringParton.$(SrcSuf) \
+	        JSFFULLGenerator.$(SrcSuf) \
+                JSFLCFULL.$(SrcSuf) \
+		DebugWGenerator.$(SrcSuf) \
+		JSFQuickSimParam.$(SrcSuf) JSFQuickSim.$(SrcSuf) \
+                JSFLTKCLTrack.$(SrcSuf) JSFSIMDST.$(SrcSuf) \
+                JSFCDCTrack.$(SrcSuf) JSFRandom.$(SrcSuf) 
+
+OBJ	      = $(subst .$(SrcSuf),.$(ObjSuf),$(SRC)) \
+		simdstutil.o fortutils.o \
+		$(LIBNAME).$(ObjSuf)
+
+HDR	      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRC)) \
+		$(NAME)LinkDef.h
+
+#LIBS     = -L$(LCLIBDIR) $(EXTRALDOPT) -lGENUTIL \
+#        -lSIMJLC -lLTKCL -lLCFULL -lTBS \
+#        -lHELASV204 -lFORTLIB -lCOM -lCLI \
+#        $(EXTRALIBS) -lg2c -lnsl
+
+LIBS     = -L$(LCLIBDIR) $(EXTRALDOPT) \
+        -lSIMJLC -lLTKCL -lLCFULL -lTBS \
+        -lFORTLIB \
+        $(EXTRALIBS) -lg2c -lnsl
+
+
+/*----------------------------------------------------------------------*/
+/*  Make targets							*/
+/*----------------------------------------------------------------------*/
+
+all::  $(LIBNAME).$(DllSuf)
+
+$(LIBNAME).$(DllSuf): $(OBJ)
+	@echo "Linking $@ "
+	$(LD) $(SOFLAGS)  $(OBJ) $(LIBS) -o $(LIBNAME).$(DllSuf)
+
+exam:  JSFRandom.o  test.o
+	g77 -o exam JSFRandom.o test.o $(ROOTLIBS)	
+
+install:: $(LIBNAME).$(DllSuf)
+	mkdir -p $(JSFINSTALLDIR)/lib $(JSFINSTALLDIR)/include
+	install -p -m 755 $(LIBNAME).$(DllSuf) $(JSFINSTALLDIR)/lib
+	install -p -m 644 $(HDR) $(JSFINSTALLDIR)/include	
+
+uninstall::
+	rm -f $(JSFINSTALLDIR)/$(LIBNAME).$(DllSuf)
+	( cd $(JSFINSTALLDIR) && rm -f $(HDR) )
+
+clean:: 
+	@rm -f $(OBJS) core *.so *~
+	@rm -f $(LIBNAME).*
+
+depend:: $(SRC) $(HDR)
+	for i in $(SRC); do \
+	rmkdepend -a -- $(DEPENDFILES) -- $$i; done
+
+distclean:: clean
+	@rm -f $(OBJ) core *~ *.o
+	@rm -f Makefile 
+
+web:
+	../bin/jsf -q -b html.C
+
+$(LIBNAME).$(SrcSuf): $(HDR)
+		@echo "Generating dictionary ..."
+		rootcint -f $(LIBNAME).$(SrcSuf) -c -I. -I$(JSFINSTALLDIR)/include \
+		$(RCINTDEFINES) $(HDR)
+
