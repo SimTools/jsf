@@ -668,7 +668,8 @@ void JSFQuickSimBuf::AppendCALHits(JSFQuickSimBuf *src)
   if( src->GetNEMCHits() > 0 ) {
     TClonesArray *emc=src->GetEMCHits(); // Make a cellid index of current hits.
     JSFEMCHit *hemc;
-    for(Int_t i=0;i<fNEMCHits;i++){
+    Int_t i;
+    for(i=0;i<fNEMCHits;i++){
       hemc=(JSFEMCHit*)fEMCHits->UncheckedAt(i);
       indcel[i]=hemc->GetCellID();
     }                                               
@@ -703,7 +704,8 @@ void JSFQuickSimBuf::AppendCALHits(JSFQuickSimBuf *src)
   if( src->GetNHDCHits() > 0 ) {
     TClonesArray *hdc=src->GetHDCHits(); // Make a cellid index of current hits.
     JSFHDCHit *hhdc;
-    for(Int_t i=0;i<fNHDCHits;i++){
+    Int_t i;
+    for(i=0;i<fNHDCHits;i++){
       hhdc=(JSFHDCHit*)fHDCHits->UncheckedAt(i);
       indcel[i]=hhdc->GetCellID();
     }                                               

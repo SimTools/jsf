@@ -136,7 +136,8 @@ Bool_t PythiaGenerator::EndRun()
    }
 
    // Save random seed
-   for(Int_t i=0;i<6;i++){ fMRLU[i]=fPythia->GetMRLU(i+1); }
+   Int_t i;
+   for(i=0;i<6;i++){ fMRLU[i]=fPythia->GetMRLU(i+1); }
    for(i=0;i<100;i++){ fRRLU[i]=fPythia->GetRRLU(i+1); }
 
    // Save PYINT5 information.
@@ -172,7 +173,8 @@ Bool_t PythiaGenerator::Process(Int_t ev)
 
   if( !JSFGenerator::Process(ev) ) return kFALSE;
 
-  for(Int_t i=0;i<6;i++){ fMRLU[i]=fPythia->GetMRLU(i+1); }
+  Int_t i;
+  for(i=0;i<6;i++){ fMRLU[i]=fPythia->GetMRLU(i+1); }
   for(i=0;i<100;i++){ fRRLU[i]=fPythia->GetRRLU(i+1); }
 
   JSFGeneratorBuf *buf=(JSFGeneratorBuf*)EventBuf();
@@ -269,7 +271,8 @@ Bool_t PythiaGenerator::GetLastRunInfo()
     return kFALSE;
   }
 
-  for(Int_t i=0;i<6;i++){ fPythia->SetMRLU(i+1, fMRLU[i]); }
+  Int_t i;
+  for(i=0;i<6;i++){ fPythia->SetMRLU(i+1, fMRLU[i]); }
   for(i=0;i<100;i++){ fPythia->SetRRLU(i+1, fRRLU[i]); }
   
   printf("Random seeds for PythiaGenerator were reset by ");

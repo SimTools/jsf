@@ -90,7 +90,8 @@ void JSFSpring::ReadBases(const char *name)
   fBases->Initialize();
 
   if( fSetSeed ) {
-    for(Int_t i=0;i<33;i++){ randm_.rdm[i]=fSeedRdm[i]; }
+    Int_t i;
+    for(i=0;i<33;i++){ randm_.rdm[i]=fSeedRdm[i]; }
     for(i=0;i<12;i++){ randm_.ia1[i]=fSeedIa1[i]; }
     printf("JSFSpring::ReadBases() .. random seed is overridden by values");
     printf(" taken from a file.\n");
@@ -116,8 +117,8 @@ Bool_t JSFSpring::BeginRun(Int_t nrun)
 //_____________________________________________________________________________
 Bool_t JSFSpring::EndRun()
 {
-
-  for(Int_t i=0;i<33;i++){ fSeedRdm[i]=randm_.rdm[i]; }
+  Int_t i;
+  for(i=0;i<33;i++){ fSeedRdm[i]=randm_.rdm[i]; }
   for(i=0;i<12;i++){ fSeedIa1[i]=randm_.ia1[i]; }
 
   if( fFile->IsWritable() ) {
@@ -130,7 +131,8 @@ Bool_t JSFSpring::EndRun()
 //_____________________________________________________________________________
 Bool_t JSFSpring::Process(Int_t ev)
 {
-  for(Int_t i=0;i<33;i++){ fSeedRdm[i]=randm_.rdm[i]; }
+  Int_t i;
+  for(i=0;i<33;i++){ fSeedRdm[i]=randm_.rdm[i]; }
   for(i=0;i<12;i++){ fSeedIa1[i]=randm_.ia1[i]; }
 
   fBases->fInBases=kFALSE;

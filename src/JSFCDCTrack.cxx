@@ -98,7 +98,8 @@ JSFCDCTrack::JSFCDCTrack(JSFCDCTrack& t)
   // Make a JSFCDCTrack class from a data from Production:CDC;Track_Parameter
 
   fE=t.fE;  fCharge=t.fCharge ; fGenID=t.fGenID; fNDF=t.fNDF;
-  for(Int_t i=0;i<3;i++){
+  Int_t i;
+  for(i=0;i<3;i++){
     fP[i]=t.fP[i] ; fX[i]=t.fX[i]; 
     fPivot[i]=t.fPivot[i] ;  fPosAtEMC[i]=t.fPosAtEMC[i];
   }
