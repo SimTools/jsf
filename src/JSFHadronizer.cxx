@@ -24,6 +24,9 @@ extern void pyjoin_(int *njoin, int ijoin[]);
 extern void pyshow_(int *ip1, int *ip2, double *qmax);
 extern void pyprep_(int *ip);
 extern int  pychge_(int *kf);
+extern void pylist_(int *flag);
+extern void pyhepc_(int *flag);
+extern void pyexec_();
 };
 #else
 extern "C" {
