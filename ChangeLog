@@ -3,6 +3,13 @@ Change Log and some future plan.
 **********************************************************
 	
 **********************************************************
+jsf-1-12 will be released soon.  Main changes of this release are
+ (1) New class JSFEnv to handle environment parameter.
+ (2) Many changes in example/guiexam1.  A lot of functions are
+     included in GUI panel.  (26-August-1999)
+**********************************************************
+	
+**********************************************************
 To-Do ( listed in arbitrary order ) -- Help wanted
 **********************************************************
 1) More event generator  --> This will come soon.
@@ -30,11 +37,39 @@ To-Do ( listed in arbitrary order ) -- Help wanted
 jsf-1-12  Modification toward jsf-1-12 A.Miyamoto
 **********************************************************
 -----------------------	
+26-August-1999 A.Miyamoto
+-----------------------	
+(1) PythiaGenrator.cxx/h
+    Add SetEventWeight, etc to use Pythia subroutine, PYEVWT
+    to use event weighting.
+(2) JSFEnv.cxx/JSFEnv.h
+    New class to add environment parameters.
+    JSFSteer, Imakefile, JSFLinkDef are modified accordingly.
+(3) There were memory leak in JSFModule.cxx and Debug Generator.cxx.  
+    Those wre fixed.
+(4) example/FFbarSpring/Imakefile is modified so as to produce
+    shared library on system other than HI-UX. Macro files in this
+    directory are also modified accordingly.
+(5) html documents of example directory is created by Imakefile of
+    each directory.
+(6) Changes in example.guiexam1
+    -- InputDialog class : Allows multiple line help message.
+    -- Memory leak problem in JSFEventDisplay class is modified.
+    -- Run control menu in JSF Control panel is modied so that
+       more parameters can be selected from popup menu.
+    -- JSFDemoDisplay class is included for demo event display at KEK OpenHouse
+	
+-----------------------	
 5-August-1999 A.Miyamoto
 -----------------------	
 (1) A bug in macro/GUIMainMacro.C was fixed.  
     Due to this bug, histograms defined in UserAnalysis.C was nout out put
     to the file when reading simulated data.
+	
+-----------------------	
+30-July-1999 A.Miyamoto
+-----------------------	
+(1) Makefile in top directory is bit changed to simplify make html.
 	
 **********************************************************
 jsf-1-11  Released 30-July-1999 A.Miyamoto
