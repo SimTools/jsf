@@ -125,10 +125,10 @@ Bool_t DebugGenerator::Process(Int_t ievt)
       Double_t costh=fCosth[0]
                +(fCosth[1]-fCosth[0])*gRandom->Rndm();
       Double_t azim=( fAzimA[0]+(fAzimA[1]
-               -fAzimA[0])*gRandom->Rndm())*TMath::Pi()/360.0 ;
+               -fAzimA[0])*gRandom->Rndm())*TMath::Pi()/180.0 ;
       Double_t r=fR[0]+(fR[1]-fR[0])*gRandom->Rndm();
       Double_t phi=(fPhi[0]+(fPhi[1]-fPhi[0])*gRandom->Rndm())
-  	       *TMath::Pi()/360.0 ;
+  	       *TMath::Pi()/180.0 ;
       Double_t z=fZ[0]+(fZ[1]-fZ[0])*gRandom->Rndm();
 
       Double_t sinth=TMath::Sqrt( (1.0-costh)*(1.0+costh));
