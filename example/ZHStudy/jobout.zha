@@ -2,51 +2,47 @@
   *                                         *
   *        W E L C O M E  to  R O O T       *
   *                                         *
-  *   Version   2.00/13   30 October 1998   *
+  *   Version   2.20/06  17 December 1998   *
   *                                         *
   *  You are welcome to visit our Web site  *
   *          http://root.cern.ch            *
   *                                         *
   *******************************************
 
-CINT/ROOT C/C++ Interpreter version 5.13.78, Oct 22 1998
+CINT/ROOT C/C++ Interpreter version 5.13.83, Dec 2 1998
 Type ? for help. Commands must be C++ statements.
 Enclose multiple statements between { }.
 
 Processing zha.C...
  temp=MyAnalysis mod0("MyAnalysis","Readin module")
 ****  JSF Initialization *******************************************
-      Version 101 : Version Date 19981116 
-      Current date and time : Thu Nov 19 16:29:50 1998
+      Version 104 : Version Date 19990214 
+      Current date and time : Tue Feb 16 10:34:56 1999
 ====  List of defined modules ======================================
       Module name          Tile           Writing? 
 --------------------------------------------------------------------
       MyAnalysis           Readin module            0
 ********************************** end of JSF initialize message ****
-JSF Terminated at date and time : Thu Nov 19 16:30:16 1998
- **********
- **    1 **SET ERR           1
- **********
- FCN=7.97675 FROM MIGRAD    STATUS=CONVERGED     128 CALLS         129 TOTAL
-                     EDM=0.00018977    STRATEGY= 1      ERROR MATRIX ACCURATE 
+JSF Terminated at date and time : Tue Feb 16 10:34:56 1999
+ FCN=2.11441 FROM MIGRAD    STATUS=CONVERGED     110 CALLS         111 TOTAL
+                     EDM=2.12543e-05    STRATEGY= 1      ERROR MATRIX ACCURATE 
   EXT PARAMETER                                   STEP         FIRST   
   NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
-   1  Constant     1.49191e+02   5.10156e+00   7.13425e-03  -3.30824e-04
-   2  Mean         1.07774e+02   3.55505e-02   5.85647e-05  -8.22399e-02
-   3  Sigma        2.74187e+00   3.84765e-02   4.26733e-05  -5.26730e-01
+   1  Constant     1.63724e+00   8.54173e-01   5.36166e-04   5.77572e-03
+   2  Mean         1.07243e+02   1.61014e+00   1.37913e-03   8.25455e-04
+   3  Sigma        2.36123e+00   2.63464e+00   1.68509e-03   3.35225e-03
  Gaussian fit to the invariant mass of higgs candidate
  Fit range : from 104 to 114 (GeV)
- Fit results :   Constant = 149.191 :  Mean = 107.774 :  Sigma = 2.74187 :
- Number of candidate from mass 99.5488 to 116 GeV is 1135
+ Fit results :   Constant = 1.63724 :  Mean = 107.243 :  Sigma = 2.36123 :
+ Number of candidate from mass 100.159 to 114.327 GeV is 12
 
  Summary of event selection .
-                             Total event :   20000 
-              Visible Energy < 170 (GeV) :    5798 
-                   Missing Pt > 20 (GeV) :    5338 
-                  # jets = 2 (ycut=0.03) :    3777 
-             Electron Momentum < 2 (GeV) :    2641 
-                 Muon Momentum < 2 (GeV) :    1899 
-                     |Costh-jet1| < 0.85 :    1856 
-                     |Costh-jet2| < 0.85 :    1388 
-TFile Writing Name=anal.root
+                             Total event :     200 
+              Visible Energy < 170 (GeV) :      57 
+                   Missing Pt > 20 (GeV) :      53 
+                  # jets = 2 (ycut=0.03) :      35 
+             Electron Momentum < 2 (GeV) :      25 
+                 Muon Momentum < 2 (GeV) :      15 
+                     |Costh-jet1| < 0.85 :      15 
+                     |Costh-jet2| < 0.85 :      12 
 NULL

@@ -2,14 +2,14 @@
   *                                         *
   *        W E L C O M E  to  R O O T       *
   *                                         *
-  *   Version   2.00/13   30 October 1998   *
+  *   Version   2.20/06  17 December 1998   *
   *                                         *
   *  You are welcome to visit our Web site  *
   *          http://root.cern.ch            *
   *                                         *
   *******************************************
 
-CINT/ROOT C/C++ Interpreter version 5.13.78, Oct 22 1998
+CINT/ROOT C/C++ Interpreter version 5.13.83, Dec 2 1998
 Type ? for help. Commands must be C++ statements.
 Enclose multiple statements between { }.
 
@@ -21,17 +21,19 @@ Processing zhsim.C...
  **                                                                          **
  **     JLC FULL_ANALYSIS                   ( Version  8.02 Date 95-03-25 )  **
  **                                                                          **
- **         Date 16-Nov-9                                                    **
- **         Time 22:47:07                                                    **
+ **         Date 16-Feb-9                                                    **
+ **         Time 10:31:19                                                    **
  **                                                                          **
  ******************************************************************************
 
 
 
+Detector parameter file is undefined.
+ Will use parameters those defined in the source file, JSFQuickSim.cxx
  Higgs mass parameters Mass=110 Width=0 Trancat 0 LifeTime=0
 ****  JSF Initialization *******************************************
-      Version 101 : Version Date 19981116 
-      Current date and time : Mon Nov 16 22:47:07 1998
+      Version 104 : Version Date 19990214 
+      Current date and time : Tue Feb 16 10:31:19 1999
 ====  List of defined modules ======================================
       Module name          Tile           Writing? 
 --------------------------------------------------------------------
@@ -148,12 +150,18 @@ Processing zhsim.C...
 
  ********************** PYINIT: initialization completed **********************
   ******* SMRJIN modified /SMRVGO/ ******* 
-     RCYVX(   1) =   2.49992609
-     ZCYVX(1, 1) =  -22.5
-     ZCYVX(2, 1) =  -230.
-     RCYVX(   2) =   7.49977827
-     ZCYVX(1, 2) =   22.5
-     ZCYVX(2, 2) =   230.
+     RCYVX(   1) =   2.39965844
+     ZCYVX(1, 1) =  -5.
+     ZCYVX(2, 1) =   5.
+     RCYVX(   2) =   3.59968686
+     ZCYVX(1, 2) =  -7.5
+     ZCYVX(2, 2) =   7.5
+     RCYVX(   3) =   4.79971504
+     ZCYVX(1, 3) =  -10.
+     ZCYVX(2, 3) =   10.
+     RCYVX(   4) =   5.99974298
+     ZCYVX(1, 4) =  -12.5
+     ZCYVX(2, 4) =   12.5
  Warning: maximum violated by  1.030E+00 in event      83
  ISUB =  24; Point of violation:
  tau =  1.000E+00, y* = -2.196E-05, cthe =   0.1765403, tau' =  1.000E+00
@@ -166,38 +174,5 @@ Processing zhsim.C...
  ISUB =  24; Point of violation:
  tau =  9.999E-01, y* =  3.758E-05, cthe =  -0.4275955, tau' =  2.678E-04
  XSEC(24,1) increased to  5.988E-09
- Warning: maximum violated by  1.248E+00 in event     354
- ISUB =  24; Point of violation:
- tau =  9.999E-01, y* = -4.716E-05, cthe =   0.3041327, tau' =  8.930E-01
- XSEC(24,1) increased to  7.470E-09
- Warning: maximum violated by  1.012E+00 in event     370
- ISUB = 124; Point of violation:
- tau =  1.345E-01, y* =  3.770E-05, cthe =  -0.9606317, tau' =  9.999E-01
- XSEC(124,1) increased to  8.033E-10
- Warning: maximum violated by  1.282E+00 in event    1610
- ISUB = 124; Point of violation:
- tau =  1.345E-01, y* = -3.219E-05, cthe =  -0.6586626, tau' =  9.999E-01
- XSEC(124,1) increased to  1.030E-09
- Warning: maximum violated by  1.041E+00 in event    1811
- ISUB =  24; Point of violation:
- tau =  9.999E-01, y* = -4.549E-05, cthe =   0.1418338, tau' =  9.991E-01
- XSEC(24,1) increased to  7.776E-09
- JCLUST - ERROR. MASMIN>99999.0
- Warning: maximum violated by  1.045E+00 in event    5088
- ISUB = 123; Point of violation:
- tau =  1.344E-01, y* = -9.895E-03, cthe =  -0.2734646, tau' =  9.803E-01
- XSEC(123,1) increased to  1.523E-10
- JCLUST - ERROR. MASMIN>99999.0
- Warning: maximum violated by  3.728E+00 in event    5503
- ISUB = 124; Point of violation:
- tau =  1.345E-01, y* =  1.106E-03, cthe =   0.5820720, tau' =  9.977E-01
- XSEC(124,1) increased to  3.839E-09
- Warning: maximum violated by  1.005E+00 in event   12380
- ISUB =  24; Point of violation:
- tau =  9.999E-01, y* =  4.615E-05, cthe =  -0.0179392, tau' =  9.996E-01
- XSEC(24,1) increased to  7.813E-09
- JCLUST - ERROR. MASMIN>99999.0
- JCLUST - ERROR. MASMIN>99999.0
-JSF Terminated at date and time : Mon Nov 16 23:14:47 1998
-TFile Writing Name=zhsim.root
+JSF Terminated at date and time : Tue Feb 16 10:31:39 1999
 NULL
