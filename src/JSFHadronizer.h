@@ -3,10 +3,11 @@
 
 //////////////////////////////////////////////////////////////////////////
 //                                                                      //
-// JSFHadronizer                                                         //
+// JSFHadronizer                                                        //
 //                                                                      //
-// A template for JSFHadronizer                                          //
+// A template for JSFHadronizer                                         //
 //                                                                      //
+//$Id$
 //////////////////////////////////////////////////////////////////////////
 
 #include "TObject.h"
@@ -24,15 +25,20 @@
 
 class JSFHadronizer : public JSFFULLGenerator {
 protected:
-   JSFSpring  *fSpring;
-   Bool_t      fCopySpringClassDataToBank; // 
-public:
+   JSFSpring  *fSpring;    //! Pointer to spring module
+   Bool_t      fCopySpringClassDataToBank; //! 
+   Int_t    fMRLU[6];   // random seed for Jetset
+   Float_t  fRRLU[100];  //
+   Float_t  fRASET1U[98];  // random seed for tauola
+   Int_t    fRASET1IJ97[2]; // 
 public:
    JSFHadronizer(const char *name="JSFHadronizer", 
 		 const char *title="JSFHadronizer");
 
    virtual Bool_t Initialize();
    virtual Bool_t Process(Int_t event);
+   virtual Bool_t EndRun();
+   virtual Bool_t GetLastRunInfo();
 
    void SetCopySpringClassDataToBank(Bool_t flag){
      fCopySpringClassDataToBank= flag ;}

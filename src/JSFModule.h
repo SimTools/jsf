@@ -84,6 +84,7 @@ public:
    virtual Bool_t BeginRun(Int_t nrun);
    virtual Bool_t EndRun();
    virtual Bool_t Terminate();
+   virtual Bool_t GetLastRunInfo();
 
    virtual  void MakeBranch(TTree *tree); // Make branch for the module 
    virtual  void SetBranch(TTree *tree);  // Set Branch address for the module

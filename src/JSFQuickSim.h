@@ -100,6 +100,8 @@ public:
 class JSFQuickSim : public JSFModule {
 protected:
    JSFQuickSimParam  *fParam ; //! Parameters for JSFQuickSim
+   Int_t fSMRRND;   // Random seed for smearing
+   Int_t fSWMRND;   // Random seed for swiming
 public:
    JSFQuickSim(const char *name="JSFQuickSim", 
 	       const char *title="JSF Quick Simulator");
@@ -108,6 +110,8 @@ public:
    virtual Bool_t  Initialize(); 
    virtual Bool_t  Process(Int_t event);
    virtual Bool_t  BeginRun(Int_t nrun);
+   virtual Bool_t  EndRun();
+   virtual Bool_t  GetLastRunInfo();
    JSFQuickSimParam *Param(){ return fParam; }
 
    Bool_t TBPUTGeneratorParticles();

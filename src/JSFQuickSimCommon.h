@@ -11,7 +11,7 @@
 //
 //////////////////////////////////////////////////////////////////////////
 
-// ******* Commons for Smearing ****************
+// ******* Commons for Swming ****************
 typedef struct {
   Float_t bfield, ptor, ropt;
 } COMMON_PRFELD;
@@ -83,4 +83,13 @@ typedef struct {
 } COMMON_CMBCUT;
 extern COMMON_CMBCUT cmbcut_;
 
+typedef struct {
+  Int_t iseed;
+} COMMON_SMRRND;
+extern COMMON_SMRRND smrrnd_;
+
 #endif
+
+
+
+

@@ -1,3 +1,4 @@
+//*LastUpdate:  jsf-1-11 23-July-1999  by Akiya Miyamoto
 //*LastUpdate:  jsf-1-4 14-Feburary-1999  by Akiya Miyamoto
 //*LastUpdate:  v0.3.08 09/29/1998  by A.Miyamoto
 //*-- Author :  Akiya Miyamoto  09/22/1998
@@ -22,10 +23,12 @@
 //  Event data is stored in the tree, Event, in the "fFile".  Other 
 //  configuration data are stored as an Keyed file in the "fFile".
 //  Directory and key names are,
-//       Initialize()  --> /conf/[module-name]/init
-//       BeginRun(nnn) --> /conf/[module-name]/beginmmmmm
-//       EndRun(nnn)   --> /conf/[module-name]/endmmmmm
-//       Terminate()   --> /conf/[module-name]/term
+//       Initialize()  --> /conf/init/[modulename]
+//       BeginRun(nnn) --> /conf/beginNNNNNN/[modulename]
+//       EndRun(nnn)   --> /conf/endNNNNN/[modulename]
+//       Terminate()   --> /conf/term/[modulename]
+//  Note that key names have been changed since JSF-1-11, to
+//  simplfy the directory structure.
 //  The member function, ConfDirectory(), creates and cd to proper 
 //  directory.  How to write/read data is depend on the implementaion
 //  of the class.  
@@ -50,6 +53,10 @@
 //
 //////////////////////////////////////////////////////////////////
 //  
+#include <TSystem.h>
+#include <TDirectory.h>
+#include <TKey.h>
+
 #include "JSFSteer.h"
 #include "JSFModule.h"
 
@@ -84,8 +91,10 @@ JSFModule::~JSFModule()
   Clear();  
   TObject *obj=gJSF->Modules()->FindObject(this);
 
-  if( !obj ) gJSF->Modules()->Remove(this);
-  if( !fEventBuf )   delete fEventBuf;
+  //  if( !obj ) gJSF->Modules()->Remove(this);
+  //  if( !fEventBuf )   delete fEventBuf;
+  if( obj ) gJSF->Modules()->Remove(this);
+  if( fEventBuf )   delete fEventBuf;
 }
 
 //____________________________________________________________________________
@@ -127,27 +136,27 @@ void JSFModule::ConfDirectory()
   // cd to conf directory to access configuration information
   // or where event tree is.
 
-  // Is there /conf/"module-name" ?
+  // Is there /conf ?
   
-  fFile->cd("conf");
-  TList *dlist=gDirectory->GetListOfKeys();
-  if ( !dlist->FindObject(GetName()) ){gDirectory->mkdir(GetName());}
-  gDirectory->cd(GetName());
+  //fFile->cd("conf");
+  //TList *dlist=gDirectory->GetListOfKeys();
+  //if ( !dlist->FindObject(GetName()) ){gDirectory->mkdir(GetName());}
+  //gDirectory->cd(GetName());
 
   // Create run status dependant directory
   Char_t name[30];
   switch (fStat) {
     case kInitialize:
-      strcpy(name,"init");
+      strcpy(name,"/conf/init");
       break;
     case kBeginRun:
-      sprintf(name,"begin%5.5i",fRunNumber);
+      sprintf(name,"/conf/begin%5.5i",fRunNumber);
       break;
     case kEndRun:
-      sprintf(name,"end%5.5i",fRunNumber);
+      sprintf(name,"/conf/end%5.5i",fRunNumber);
       break;
     case kTerminate:
-      strcpy(name,"term");
+      strcpy(name,"/conf/term");
       break;
     case kEventLoop:
       strcpy(name,"/");
@@ -161,11 +170,12 @@ void JSFModule::ConfDirectory()
 // cd to right directory
    if( fStat == kEventLoop ) fFile->cd(name);
    else {
-     TList *dlist=gDirectory->GetListOfKeys();
-     if ( dlist->FindObject(name) == NULL) gDirectory->mkdir(name);
+     //     TList *dlist=gDirectory->GetListOfKeys();
+     //if ( dlist->FindObject(name) == NULL) gDirectory->mkdir(name);
      gDirectory->cd(name);
    }
 }
+
 //____________________________________________________________________________
 Bool_t JSFModule::BeginRun(Int_t nrun)
 {
@@ -175,9 +185,7 @@ Bool_t JSFModule::BeginRun(Int_t nrun)
 
   ConfDirectory();
   return kTRUE;
-  
 }
-
 
 //____________________________________________________________________________
 Bool_t JSFModule::EndRun()
@@ -187,13 +195,17 @@ Bool_t JSFModule::EndRun()
   return kTRUE;
 }
 
-
 //____________________________________________________________________________
 Bool_t JSFModule::Terminate()
 {
-// End of job.
-
+//  End of run.
   ConfDirectory();
+  return kTRUE;
+}
+
+//____________________________________________________________________________
+Bool_t JSFModule::GetLastRunInfo()
+{
   return kTRUE;
 }
 

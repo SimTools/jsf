@@ -1,3 +1,4 @@
+//*LastUpdate :  jsf-1-11  23-July-1999  A.Miyamoto
 //*LastUpdate :  jsf-1-9   15-May-1999  A.Miyamoto
 //*LastUpdate :  jsf-1-7-2  16-April-1999  A.Miyamoto
 //*LastUpdate :  jsf-1-7-1  9-April-1999  A.Miyamoto
@@ -6,6 +7,7 @@
 //*-- Author  : A.Miyamoto  9-November-1998
 
 /*
+ 23-July-1999 A.Miyamoto Add GetLastRunInfo() to save/restore random seed.
  15-May-1999 A.Miyamoto  Lifetime of particles in documentation line is set 
                          to 0, otherwise initial mu and tau are swimed.
  16-Apr-1999 A.Miyamoto  A bug(mother of particle was not set) was fixed.
@@ -61,7 +63,9 @@ PythiaGenerator::PythiaGenerator(const char *name, const char *title)
 // ---------------------------------------------------------------
 PythiaGenerator::~PythiaGenerator()
 {
-  if ( fPythia ) delete fPythia ;
+  if ( fPythia ) { 
+    delete fPythia ; fPythia=0 ;
+  }
 }
 
 
@@ -88,6 +92,13 @@ Bool_t PythiaGenerator::BeginRun(Int_t nrun)
 Bool_t PythiaGenerator::EndRun()
 {
    if( !JSFGenerator::EndRun() ) return kFALSE;
+
+   // Save random seed
+   for(Int_t i=0;i<6;i++){ fMRLU[i]=fPythia->GetMRLU(i+1); }
+   for(Int_t i=0;i<100;i++){ fRRLU[i]=fPythia->GetRRLU(i+1); }
+
+  if( fFile->IsWritable() ) {  Write();  }
+
    return kTRUE;
 }
 
@@ -98,6 +109,9 @@ Bool_t PythiaGenerator::Process(Int_t ev)
 //  GeneratorParticle class for JSF simulators
 
   if( !JSFGenerator::Process(ev) ) return kFALSE;
+
+  for(Int_t i=0;i<6;i++){ fMRLU[i]=fPythia->GetMRLU(i+1); }
+  for(Int_t i=0;i<100;i++){ fRRLU[i]=fPythia->GetRRLU(i+1); }
 
   JSFGeneratorBuf *buf=(JSFGeneratorBuf*)EventBuf();
   Double_t ecm=GetEcm();
@@ -181,5 +195,24 @@ Bool_t PythiaGenerator::Terminate()
   return kTRUE;
 }
 
+// ---------------------------------------------------------------
+Bool_t PythiaGenerator::GetLastRunInfo()
+{
 
+  Float_t ecm=fEcm;
+  Read(GetName());
+
+  if( fEcm != ecm ) {
+    printf("Error in PythiaGenerator::GetLastRunInfo() \n");
+    printf(" Ecm of last run(%g) and current run(%g) is inconsistent.\n",fEcm, ecm);
+    return kFALSE;
+  }
+
+  for(Int_t i=0;i<6;i++){ fPythia->SetMRLU(i+1, fMRLU[i]); }
+  for(Int_t i=0;i<100;i++){ fPythia->SetRRLU(i+1, fRRLU[i]); }
+  
+  printf("Random seeds for PythiaGenerator were reset by ");
+  printf("values from a file.\n");
+  return kTRUE;
+}
 

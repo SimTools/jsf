@@ -176,8 +176,10 @@ Bool_t JSFQuickSim::BeginRun(Int_t nrun)
   fParam->SetSmearParam();
 
   smrjin_();
-  if( fFile->IsWritable() ) fParam->Write();
-  
+  if( fFile->IsWritable() ) { 
+    fParam->Write();
+    Write();
+  }
   Int_t level=1;
   Int_t idebug=0;
   swmrin_(&level, &idebug);
@@ -195,6 +197,9 @@ Bool_t JSFQuickSim::Process(Int_t ev)
    Int_t level=1;
    Int_t idebug=0;
    Int_t iret;
+
+   fSMRRND=smrrnd_.iseed;
+   fSWMRND=swmrnd_.iseed;
 
 //  Move load Generator data in the class into TBS buffer
 
@@ -334,6 +339,35 @@ Bool_t JSFQuickSimBuf::MakeJSFLTKCLTracks()
   }
   SetNTracks(nt);
 
+  return kTRUE;
+}
+
+// ---------------------------------------------------------------
+Bool_t JSFQuickSim::EndRun()
+{
+
+   // Save random seed
+   fSMRRND=smrrnd_.iseed;
+   fSWMRND=swmrnd_.iseed;
+
+  if( fFile->IsWritable() ) {  Write();  }
+
+   return kTRUE;
+}
+
+
+// ---------------------------------------------------------------
+Bool_t JSFQuickSim::GetLastRunInfo()
+{
+
+  Read(GetName());
+  
+  smrrnd_.iseed=fSMRRND;
+  swmrnd_.iseed=fSWMRND;
+
+  printf("Random seeds for JSFQuickSim were reset by ");
+  printf("values from a file.\n");
+  
   return kTRUE;
 }
 

@@ -1,3 +1,4 @@
+//*LastUpdate :  jsf-1-11  23-July-1999  By A.Miyamoto
 //*LastUpdate :  jsf-1-4  15-Feburary-1999  By A.Miyamoto
 //*LastUpdate :  0.02/01  10-September-1998  By A.Miyamoto
 //*-- Author  : A.Miyamoto  10-September-1998
@@ -16,6 +17,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include <TObjectTable.h>
+#include <TKey.h>
 #include "TRandom.h"
 #include "JSFSteer.h"
 #include "JSFSpring.h"
@@ -52,12 +54,20 @@ JSFSpring::JSFSpring(const char *name, const char *title, JSFBases *bases)
    lSpring  = this;
    fMXTRY   = 500;
    fDoBases = kFALSE;
-   if( bases ) SetBases( bases );
+   fSetSeed = kFALSE;
+   fBases   = NULL;
+   if( bases ) {
+     SetBases( bases );
    }
+}
 
 //_____________________________________________________________________________
 JSFSpring::~JSFSpring()
 {
+  if( fBases ) { 
+    delete fBases; 
+    fBases=NULL;
+  }
 }
 
 
@@ -69,7 +79,16 @@ void JSFSpring::ReadBases(const char *name)
   fBasesFile->cd("/");
   fDoBases = kFALSE;
   fBases->Read(fBases->GetName());
+  
   fBases->Initialize();
+
+  if( fSetSeed ) {
+    for(Int_t i=0;i<33;i++){ randm_.rdm[i]=fSeedRdm[i]; }
+    for(Int_t i=0;i<12;i++){ randm_.ia1[i]=fSeedIa1[i]; }
+    printf("JSFSpring::ReadBases() .. random seed is overridden by values");
+    printf(" taken from a file.\n");
+  }
+
   fBases->Userin();
 
   last->cd("/");
@@ -78,13 +97,35 @@ void JSFSpring::ReadBases(const char *name)
 //_____________________________________________________________________________
 Bool_t JSFSpring::BeginRun(Int_t nrun)
 {
-  if( fFile->IsWritable() ) Write();
+   
+  if( fFile->IsWritable() ) {
+    if( !JSFModule::BeginRun(nrun) ) return kFALSE;
+    Write();
+  }
+  return kTRUE;
+}
+
+
+//_____________________________________________________________________________
+Bool_t JSFSpring::EndRun()
+{
+
+  for(Int_t i=0;i<33;i++){ fSeedRdm[i]=randm_.rdm[i]; }
+  for(Int_t i=0;i<12;i++){ fSeedIa1[i]=randm_.ia1[i]; }
+
+  if( fFile->IsWritable() ) {
+    if( !JSFModule::EndRun() ) return kFALSE;
+    Write();
+  }
   return kTRUE;
 }
 
 //_____________________________________________________________________________
 Bool_t JSFSpring::Process(Int_t ev)
 {
+  for(Int_t i=0;i<33;i++){ fSeedRdm[i]=randm_.rdm[i]; }
+  for(Int_t i=0;i<12;i++){ fSeedIa1[i]=randm_.ia1[i]; }
+
   fBases->fInBases=kFALSE;
   Int_t mxtry=fMXTRY;
   spring_(Springfunc, &mxtry);
@@ -96,6 +137,20 @@ Bool_t JSFSpring::Process(Int_t ev)
 
   return kTRUE;
 }
+
+//_____________________________________________________________________________
+Bool_t JSFSpring::GetLastRunInfo()
+{
+  // Read seed of previous run 
+
+  Read(GetName());
+  fSetSeed=kTRUE;
+  //  printf("Random seeds for JSFSpring will be reset by ");
+  //  printf("values from a file.\n");
+
+  return kTRUE;
+}
+
 
 //_____________________________________________________________________________
 JSFSpringBuf::JSFSpringBuf(const char *name, const char *title, 
@@ -128,30 +183,38 @@ void JSFSpring::Streamer(TBuffer &R__b)
 
    Int_t lc;
    if (R__b.IsReading()) {
+
       Version_t R__v = R__b.ReadVersion(); if (R__v) { }
       JSFModule::Streamer(R__b);
       //      R__b >> fDoBases;
+
       Char_t cname[100], name[100], title[100],cmdstr[300];
       lc=R__b.ReadStaticArray(cname);
       lc=R__b.ReadStaticArray(name);
       lc=R__b.ReadStaticArray(title);
       if( !fBases ) {
-        sprintf(cmdstr,"bases=new %s(\"%s\",\"%s\") ; bases->SetSpring((Int_t)%d);", cname, name, title,(Int_t)this);
+	sprintf(cmdstr,"bases=new %s(\"%s\",\"%s\") ; 
+        bases->SetSpring((Int_t)%d);", cname, name, title,(Int_t)this);
 	gROOT->ProcessLine(cmdstr);
       }
+
+      lc=R__b.ReadStaticArray(fSeedRdm);
+      lc=R__b.ReadStaticArray(fSeedIa1);
+
    } else {
       R__b.WriteVersion(JSFSpring::IsA());
       JSFModule::Streamer(R__b);
-      //      R__b << fDoBases;
+
       lc=strlen(fBases->ClassName())+1;
       R__b.WriteArray(fBases->ClassName(),lc);
       lc=strlen(fBases->GetName())+1;
       R__b.WriteArray(fBases->GetName(),lc);
       lc=strlen(fBases->GetTitle())+1;
       R__b.WriteArray(fBases->GetTitle(),lc);
-      // printf(" Bases file name is %s\n",fBasesFile->GetName());
-      //      lc=strlen(fBasesFile->GetName())+1;
-      // R__b.WriteArray(fBasesFile->GetName(),lc);
+
+      R__b.WriteArray(fSeedRdm,33);
+      R__b.WriteArray(fSeedIa1,12);
+
    }
 }
 

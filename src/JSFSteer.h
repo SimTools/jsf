@@ -1,3 +1,4 @@
+//*LastUpdate:  jsf-1-11 23-July-1999  by A.Miyamoto
 //*LastUpdate:  v0.3.04 09/24/1998  by A.Miyamoto
 //*-- Author :  Akiya Miyamoto  09/24/1998
 
@@ -7,6 +8,7 @@
 //
 //  Controls execution of JSF Modules
 //  
+//$Id$
 //////////////////////////////////////////////////////////////////
 
 #ifndef __JSFSteer__
@@ -45,6 +47,7 @@ public:
 };
 
 
+//********************************************************************
 class JSFSteer  : public TNamed {
 protected:
   JSFSteer  *fReadin ; //! Pointer to readin JSF class
@@ -115,6 +118,7 @@ public:
   virtual Bool_t  Terminate();              
   virtual Bool_t  BeginRun(Int_t nrun);
   virtual Bool_t  EndRun();
+  virtual Bool_t  GetLastRunInfo(TFile *file, Int_t lastrun=-1);
 
   virtual void  PrintInfo();
   virtual void  FillTree(){ fOTree->Fill(); }

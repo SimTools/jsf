@@ -35,7 +35,7 @@ EXTRADEFINES = -I$(LCLIBROOT)/simjlc/src -I$(LCLIBROOT)/util/fortlib/src
 INC           = ../include 
 
 OBJJSF        = JSFSteer.$(ObjSuf) JSFModule.$(ObjSuf) \
-		JSFDBS.$(ObjSuf) \
+		JSFDBS.$(ObjSuf) JSFUtil.$(ObjSuf) \
 		libJSF.$(ObjSuf)
 
 OBJJSFLCFULL  = JSFBases.$(ObjSuf) \
@@ -54,7 +54,8 @@ OBJJSFQUICKSIM= JSFQuickSimParam.$(ObjSuf) JSFQuickSim.$(ObjSuf) \
 		JSFHelicalTrack.$(ObjSuf) JSFCDCTrack.$(ObjSuf) \
 		libJSFQuickSim.$(ObjSuf) simdstutil.o 
 
-SRCJSF           = JSFSteer.$(SrcSuf) JSFModule.$(SrcSuf) 
+SRCJSF        = JSFSteer.$(SrcSuf) JSFModule.$(SrcSuf) \
+		JSFDBS.$(SrcSuf) JSFUtil.$(SrcSuf)
 
 SRCJSFLCFULL    = JSFBases.$(SrcSuf) \
 		JSFSpringParton.$(SrcSuf) JSFSpring.$(SrcSuf) \
@@ -73,7 +74,8 @@ SRCJSFQUICKSIM= JSFQuickSimParam.$(SrcSuf) JSFQuickSim.$(SrcSuf) \
 
 SRC = $(SRCJSF) $(SRCJSFLCFULL) $(SRCJSFQUICKSIM)
 
-HDRJSF	      = JSFDBS.h JSFModule.h JSFSteer.h JSFBasicClasses.h JSFLinkDef.h
+HDRJSF	      = JSFUtil.h JSFDBS.h JSFModule.h JSFSteer.h \
+		JSFBasicClasses.h JSFLinkDef.h
 
 HDRJSFLCFULL  = JSFBases.h \
 		JSFSpringParton.h JSFSpring.h \

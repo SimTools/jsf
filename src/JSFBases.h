@@ -123,6 +123,7 @@ public:
    Int_t     fNDIM;   // dimension
    Int_t     fNWILD;  // number of wild variable
    Int_t     fNCALL;
+   Int_t     fISEED;  // Initial seed of Bases/Spring
 
    Double_t  fXL[50];
    Double_t  fXU[50];
@@ -139,7 +140,7 @@ public:
    
    void DoBases();          // Do bases integration
    void Print();            // Print bases information.
-     
+   void SetSeed(Int_t iseed); // Set seed of random number
 
    virtual void Initialize(); // Bases initialization
    virtual void Userin();   // Bases user initialization
@@ -171,7 +172,7 @@ public:
    virtual void SetSpring(Int_t address);  // Set Spring address
    virtual JSFSpring *Spring(){ return fSpring;}
 
-   ClassDef(JSFBases,1)  // BASES basic class
+   ClassDef(JSFBases,2)  // BASES basic class
 };
 
 

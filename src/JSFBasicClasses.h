@@ -38,6 +38,7 @@ class JSF2DV {
 class JSFRThPhi_f;
 
 class JSFRThPhi;
+class JSFRPhiZ;
 
 class JSF3DV_f {
 public:
@@ -76,7 +77,7 @@ public:
 
   inline Double_t Abs(){ return TMath::Sqrt(x*x+y*y+z*z); }
   inline JSF3DV UnitV(){ Double_t l=Abs(); return JSF3DV(x/l, y/l, z/l) ; }
-    
+     
   inline JSF3DV operator + (JSF3DV v) { return JSF3DV( x+v.x, y+v.y, z+v.z); }
   inline JSF3DV operator - (JSF3DV v) { return JSF3DV( x-v.x, y-v.y, z-v.z); }
   inline Double_t operator * (JSF3DV v) { return ( x*v.x+y*v.y+z*v.z); }
@@ -105,6 +106,18 @@ public:
   Double_t r;
   Double_t phi;
   Double_t z;
+public:
+  JSFRPhiZ(Double_t ri=0, Double_t phii=0, Double_t zi=0){ r=ri; phii=phi ; zi=z; }
+  JSFRPhiZ(JSF3DV xyz){
+     r=TMath::Sqrt(xyz.x*xyz.x+xyz.y*xyz.y);
+     phi=TMath::ATan2(xyz.y, xyz.x);
+     z=xyz.z; 
+  }
+  inline JSF3DV XYZ(){ JSF3DV xyz; xyz.x=r*TMath::Cos(phi);
+                xyz.y=r*TMath::Sin(phi);
+                xyz.z=z;
+		return xyz; 
+  }
 };
 
 class JSFRThPhi_f {

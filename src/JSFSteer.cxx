@@ -116,8 +116,8 @@ JSFSteer::JSFSteer(const char *name, const char *title)
   fModules = 0;
   fConf    = 0;
   fReadin  = 0;
-  fVersion    = 109  ;  // JSFSteer version number
-  fVersionDate  = 19990528 ; // version date.
+  fVersion    = 111  ;  // JSFSteer version number
+  fVersionDate  = 19990723 ; // version date.
   fIsInitialized = kFALSE ;
   fIsTerminated  = kFALSE ;
   fLastRun       = 0 ;
@@ -279,6 +279,7 @@ Bool_t JSFSteer::Initialize()
    if( fOFile && fOFile->IsOpen() && fOFile->IsWritable() ) {
        fOFile->cd("/");
        MakeConfDir();
+       fOFile->cd("/");
        if( !MakeTree() ) return kFALSE; 
    }
 
@@ -288,7 +289,8 @@ Bool_t JSFSteer::Initialize()
    JSFModule *module;
    while ((module = (JSFModule*)next())) {
      module->SetModuleStatus(kInitialize);
-     module->GetFile()->cd("/");
+     //     module->GetFile()->cd("/conf/init");
+     module->GetFile()->cd();
      if( !module->Initialize() )  return kFALSE; 
    }
 
@@ -307,12 +309,22 @@ Bool_t JSFSteer::BeginRun(Int_t nrun)
   fRunEnded = kFALSE ;
 //  Make a begin-Run directory in the output file
 
+  Char_t keyname[32];
+  sprintf(keyname,"begin%5.5d",fRun);
+
+   // If Output file is writable, make tree for them
+   if( fOFile && fOFile->IsOpen() && fOFile->IsWritable() ) {
+      fOFile->cd("/conf");
+      gDirectory->mkdir(keyname);
+   }
+
+  sprintf(keyname,"/conf/begin%5.5d",fRun);
   TIter next(fModules);
   JSFModule *module;
   while (( module = (JSFModule*)next())) {
     module->SetModuleStatus(kBeginRun);
     module->SetRunNumber(fRun);
-    module->GetFile()->cd();
+    module->GetFile()->cd(keyname);
     if( !module->BeginRun(fRun) ) return kFALSE ;
   }
 
@@ -329,15 +341,84 @@ Bool_t JSFSteer::EndRun()
 //
     fRunEnded = kTRUE;
 
+    Char_t keyname[32];
+    sprintf(keyname,"end%5.5d",fRun);
+   // If Output file is writable, make endrun directory
+   if( fOFile && fOFile->IsOpen() && fOFile->IsWritable() ) {
+      fOFile->cd("/conf");
+      gDirectory->mkdir(keyname);
+   }
+
+
+    sprintf(keyname,"/conf/end%5.5d",fRun);
     TIter next(fModules);
     JSFModule *module;
     while (( module = (JSFModule*)next())) {
         module->SetModuleStatus(kEndRun);
-	module->GetFile()->cd();
+	module->GetFile()->cd(keyname);
         if( !module->EndRun() )  return kFALSE; 
     }
     if( fOFile ) fOFile->cd("/");
     return kTRUE;
+}
+
+//_____________________________________________________________________________
+Bool_t JSFSteer::GetLastRunInfo(TFile *file, Int_t lastrun)
+{
+//
+//  Calls JSFModule::GetLastRunInfo(TFile *file, Int_t lastrun)
+//  Purpose of this function is to read seed of randam number, etc
+//  from conf/endNNNNN directory.
+//  If lastrun < 0, last run number in conf/[classname] is used.
+//
+
+  TDirectory *curdir=gDirectory;
+
+  file->cd("/conf");
+  Char_t keyname[32];
+  Int_t lrun=lastrun;
+  if( lrun < 0 ) {
+    TList *dlist=gDirectory->GetListOfKeys();
+    TListIter nkey(dlist);
+    TKey  *key;
+    Int_t irun;
+    while ((key = (TKey*)nkey())) {
+       Char_t tname[20];
+       strncpy(tname,key->GetName(),9);
+       if( tname[0] == 'e' && tname[1]=='n' && tname[2]=='d' ) {
+	  sscanf(&tname[3],"%d",&irun);
+	  if( irun > lrun ) { lrun = irun; }
+       }
+    }
+  }
+
+  if( lrun < 0 ) {
+    printf("Error in JSFSteer::GetLastRunInfo() \n");
+    printf(" No endrun directory was found in conf directory ");
+    printf(" of file %s\n",file->GetName());
+    return kFALSE;
+  }
+
+  sprintf(keyname,"/conf/end%5.5d",lrun);
+  if( !file->cd(keyname) ) {
+    printf("Error in JSFSteer::GetLastRunInfo() \n");
+    printf(" Unable to change directory to %s\n",keyname);
+    return kFALSE;
+  }
+
+  printf("JSFSteer::GetLastRunInfo(...)");
+  printf(" Get Last Run information from a file %s\n",file->GetName());
+  //
+  TIter next(fModules);
+  JSFModule *module;
+  while (( module = (JSFModule*)next())) {
+    Bool_t rc=module->GetLastRunInfo();
+    if( !rc ) return kFALSE;
+  }
+
+  curdir->cd();
+  return kTRUE;
+
 }
 
 //_____________________________________________________________________________
@@ -364,6 +445,7 @@ Bool_t JSFSteer::Terminate()
 
   if( fOFile ) { 
     fOFile->cd("/conf");
+    gDirectory->mkdir("term");
     fConf->Initialize(fModules);
     fConf->Write("JSF");
   }
@@ -372,7 +454,7 @@ Bool_t JSFSteer::Terminate()
   JSFModule *module;
   while (( module = (JSFModule*)next())) {
         module->SetModuleStatus(kTerminate); 
-	module->GetFile()->cd();
+	module->GetFile()->cd("/conf/term");
         if( !module->Terminate() )  return kFALSE; 
   }
   if( fOFile ) fOFile->cd("/");
@@ -510,6 +592,10 @@ void JSFSteer::MakeConfDir()
   TFile *file=fOFile;
   TList *dlist=fOFile->GetList();
   if ( dlist->FindObject("conf") == NULL ) { file->mkdir("conf"); }
+
+  file->cd("conf");
+  dlist=gDirectory->GetListOfKeys();
+  if ( dlist->FindObject("init") == NULL ) { file->mkdir("init"); }
 
 }
 

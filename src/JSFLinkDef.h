@@ -9,6 +9,7 @@
 #pragma link C++ class JSFSteerConf-;
 #pragma link C++ class JSFEventBuf;
 #pragma link C++ class JSFDBS;
+#pragma link C++ class JSFUtil;
 
 #pragma link C++ class JSF2DV;
 

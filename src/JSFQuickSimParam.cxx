@@ -147,8 +147,8 @@ JSFQuickSimParam::JSFQuickSimParam()
     ReadParamDetector(fParamFile);
   }
   else {
-    printf("Detector parameter file is undefined.\n");
-    printf(" Will use parameters those defined in the source file, JSFQuickSim.cxx\n");
+    // printf("Detector parameter file is undefined.\n");
+    // printf(" Will use parameters those defined in the source file, JSFQuickSim.cxx\n");
   }
 
   sscanf(gJSF->Env()->GetValue("JSFQuickSim.CMBCUT.ADXECT","20.0"),

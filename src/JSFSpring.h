@@ -50,12 +50,17 @@ public:
    ClassDef(JSFSpringBuf,1)  // Spring Event data
 };
 
+//*************************************************************
 class JSFSpring : public JSFModule {
 protected:
    JSFBases        *fBases;  //! Pointer to bases class
    Bool_t          fDoBases; //! Do bases at beginrun, or read bases data
    TFile           *fBasesFile; //! Pointer to a bases file
    Int_t            fMXTRY; // Max number of try in the Spring step.
+
+   Float_t    fSeedRdm[33]; //! Random seed array at the begining of current event
+   Int_t    fSeedIa1[12]; //! I*4 Random seed array at the begining of current event
+   Bool_t     fSetSeed; //! true to copy fSeedRdm and fSeedIa1 to bases common.
 public:
    JSFSpring(const char *name="JSFSpring", 
 	     const char *title="JSF Spring", 
@@ -66,6 +71,8 @@ public:
 
    virtual Bool_t Process(Int_t event);
    virtual Bool_t BeginRun(Int_t nrun);
+   virtual Bool_t EndRun();
+   virtual Bool_t GetLastRunInfo();
 
    virtual JSFBases *Bases() { return fBases; }
    
@@ -73,7 +80,7 @@ public:
    if( fBases->Spring() != this ) fBases->SetSpring(this) ; }
    void DoBases(){ fDoBases=kTRUE; }
    void ReadBases(const char *name);
-
+   
 //   JSFSpringParam    *GetParam(){ return &gJSFSpringParam; }
 
     ClassDef(JSFSpring,1)  // JSFSpring module

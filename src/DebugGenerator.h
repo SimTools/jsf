@@ -46,6 +46,8 @@ public:
    virtual Bool_t Initialize();
    virtual Bool_t Process(Int_t event);
    virtual Bool_t BeginRun(Int_t nrun);
+   virtual Bool_t EndRun();
+   virtual Bool_t GetLastRunInfo();
    
    void Print();
    void SetNgen(Int_t n){ fNgen=n;}

@@ -5,6 +5,7 @@
 //
 //  JSF Pythia generator
 //
+//$Id$
 ///////////////////////////////////////////////////////////////////////
 
 #include <TObject.h>
@@ -20,6 +21,8 @@ class PythiaGenerator : public JSFGenerator {
 private:
   Double_t fEcm;     ; // Center of mass energy (GeV)
   TPythia  *fPythia  ; //! Pointer to the pythia class
+  Int_t    fMRLU[6];   // Random seed at the begining of event
+  Float_t  fRRLU[100]; // 			     
 public:
   PythiaGenerator(const char *name="PythiaGenerator", 
 		  const char *title="Pythia Event generator");
@@ -30,6 +33,7 @@ public:
   virtual Bool_t Process(Int_t ev=1);
   virtual Bool_t EndRun();
   virtual Bool_t Terminate();
+  virtual Bool_t GetLastRunInfo();
   TPythia  *GetPythia(){ return fPythia ; }
 
   void SetEcm(Double_t ecm){fEcm=ecm; }

@@ -1,3 +1,4 @@
+//*LastUpdate:  jsf-1-11  23-July-1999  by A.Miyamoto
 //*LastUpdate:  v0.2.01 09/09/1998  by A.Miyamoto
 //*-- Author :  Akiya Miyamoto  09/09/1998
 
@@ -8,6 +9,7 @@
 //  Hadronize parton information in JSFParton class and 
 //  create JSFGeneratorParticle class.
 //  
+//$Id$  
 //////////////////////////////////////////////////////////////////
 
 
@@ -35,6 +37,18 @@ typedef struct {
   Int_t kfdp[5][2000];
 } COMMON_LUDAT3;
 extern COMMON_LUDAT3 ludat3_;
+
+typedef struct {  // Common for JETSET random variables
+  Int_t mrlu[6];
+  Float_t rrlu[100];
+} COMMON_LUDATR;
+extern COMMON_LUDATR ludatr_;
+
+typedef struct { // Commo for Tauola random variables
+  Float_t  u[98];
+  Int_t ij97[2];
+} COMMON_RASET1;
+extern COMMON_RASET1 raset1_;
 
 //_____________________________________________________________________________
 JSFHadronizer::JSFHadronizer(const char *name, const char *title)
@@ -102,6 +116,11 @@ Bool_t JSFHadronizer::Process(Int_t ev)
  
   JSFFULLGenerator::Process(ev);
 
+  for(Int_t i=0;i<6;i++){ fMRLU[i]=ludatr_.mrlu[i];}
+  for(Int_t i=0;i<100;i++){ fRRLU[i]=ludatr_.rrlu[i];}
+  for(Int_t i=0;i<98;i++){ fRASET1U[i]=raset1_.u[i];}
+  for(Int_t i=0;i<2;i++){ fRASET1IJ97[i]=raset1_.ij97[i];}
+
   if( fCopySpringClassDataToBank ) TBPUT(fSpring);
 
   Int_t idrec=1;
@@ -121,3 +140,39 @@ Bool_t JSFHadronizer::Process(Int_t ev)
 
   return kTRUE;
 }
+
+//_____________________________________________________________________________
+Bool_t JSFHadronizer::EndRun()
+{
+
+  for(Int_t i=0;i<6;i++){ fMRLU[i]=ludatr_.mrlu[i];}
+  for(Int_t i=0;i<100;i++){ fRRLU[i]=ludatr_.rrlu[i];}
+  for(Int_t i=0;i<98;i++){ fRASET1U[i]=raset1_.u[i];}
+  for(Int_t i=0;i<2;i++){ fRASET1IJ97[i]=raset1_.ij97[i];}
+
+  if( fFile->IsWritable() ) {
+    if( !JSFFULLGenerator::EndRun() ) return kFALSE;
+    Write();
+  }
+  return kTRUE;
+}
+
+
+//_____________________________________________________________________________
+Bool_t JSFHadronizer::GetLastRunInfo()
+{
+  // Read seed of previous run 
+
+  Read(GetName());
+
+  //  for(Int_t i=0;i<6;i++){ ludatr_.mrlu[i]=fMRLU[i];}
+  //for(Int_t i=0;i<100;i++){ ludatr_.rrlu[i]=fRRLU[i];}
+  //for(Int_t i=0;i<98;i++){ raset1_.u[i]=fRASET1U[i];}
+  //for(Int_t i=0;i<2;i++){ raset1_.ij97[i]=fRASET1IJ97[i];}
+
+  printf("Random seeds for JSFHadronizer were reset by ");
+  printf("values from a file.\n");
+
+  return kTRUE;
+}
+

@@ -18,6 +18,7 @@
    html.MakeClass("JSFSteerConf");
    html.MakeClass("JSFEventBuf");
    html.MakeClass("JSFDBS");
+   html.MakeClass("JSFUtil");
 
    html.MakeClass("JSFSpring");
    html.MakeClass("JSFSpringBuf");
@@ -51,6 +52,13 @@
    html.MakeClass("JSFEMCHit");
    html.MakeClass("JSFHDCHit");
    html.MakeClass("JSFCALGeoParam");
+
+   html.MakeClass("JSFHelicalTrack");
+//   html.MakeClass("JSFHitCylinder");
+//   html.MakeClass("JSFHelixParameter");
+//   html.MakeClass("JSFHelixParameter_f");
+//   html.MakeClass("JSFHelixErrorMatrix");
+//   html.MakeClass("JSFHelixErrorMatrix_u");
 
    html.MakeIndex();
 }

@@ -1,8 +1,11 @@
+//*LastUpdate:  jsf-1-11   23-July-1999  by Akiya Miyamoto
 //*LastUpdate:  jsf-1-7-3  20-April-1999  by Akiya Miyamoto
 //*LastUpdate:  v.01.01 04/10/1998  by Akiya Miyamoto
 //*-- Author :  04/10/1998  03/10/1998
 
 /*
+  23-July-1999 Akiya Miyamoto
+          Save random seed in EndRun
   20-Apri-1999 Akiya Miyamoto
           One of the constructor of JSFGeneratorParticle calls constructor 
           twice, that causes the error.
@@ -151,6 +154,33 @@ Bool_t DebugGenerator::BeginRun(Int_t nrun)
   return kTRUE;
 }
 
+     
+//_____________________________________________________________________________
+Bool_t DebugGenerator::EndRun()
+{
+   // Save random seed
+  if( !JSFGenerator::EndRun() ) return kFALSE;
+
+  if( fFile->IsWritable() ) {  Write(); }
+
+  return kTRUE;
+
+}
+
+     
+//_____________________________________________________________________________
+Bool_t DebugGenerator::GetLastRunInfo()
+{
+
+  Read(GetName());
+  gRandom->SetSeed(fRandomSeed);  
+  printf("Random seeds for DebugGenerator was reset by ");
+  printf("values from a file.\n");
+
+  return kTRUE;
+
+}
+
 
 //_____________________________________________________________________________
 Bool_t DebugGenerator::Process(Int_t ievt)
@@ -158,7 +188,8 @@ Bool_t DebugGenerator::Process(Int_t ievt)
   if( !JSFGenerator::Process(ievt) ) { return kFALSE ; }
  
     JSFGeneratorBuf *buf=(JSFGeneratorBuf*)EventBuf();
-    buf->SetStartSeed(gRandom->GetSeed());
+    fRandomSeed=gRandom->GetSeed();  // random seed.
+    buf->SetStartSeed(fRandomSeed);
     TClonesArray &tracks = *(buf->GetParticles());
     Int_t np=0;
     for(Int_t i=0;i<fNgen;i++){

@@ -1,3 +1,4 @@
+//*LastUpdate:  jsf-1-11 24-July-1999 Akiya Miyamoto
 //*LastUpdate:  jsf-1-9 17-May-1999 Akiya Miyamoto
 //*LastUpdate:  jsf-1-7 8-April-1999 Akiya Miyamoto
 //*LastUpdate:  v0.3.08 09/29/1998  by A.Miyamoto
@@ -7,6 +8,8 @@
   8-Apr-1999 A.Miyamoto  forgetted Int_t is inserted in const of 
              function Streamer.
  17-May-1999 A.Miyamoto  Add Xhsave function.
+ 24-July-1999 A.Miyamoto  Environment variable, JSFBases.RandomSeed 
+              is added to set seed of random variable.
 */
 
 //////////////////////////////////////////////////////////////////
@@ -36,6 +39,7 @@
 // 
 
 #include "TNamed.h"
+#include "JSFSteer.h"
 #include "JSFBases.h"
 #include "JSFSpring.h"
 
@@ -54,6 +58,7 @@ extern void dhinit_(int *id, double *xl, double *xu, int *nxbin,
 extern void xhfill_(int *id, double *x, double *val);
 extern void dhfill_(int *id, double *x, double *y, double *val);
 extern void xhsave_(int *lunit, Int_t *id);
+extern void drnset_(int *iseed);
 };
 
 
@@ -83,6 +88,8 @@ JSFBases::JSFBases(const char *name, const char *title)
   fNDIM=-1;
   fNWILD=-1;
   fNCALL=-1;   // Negative value means to use default value.
+
+  fISEED=gJSF->Env()->GetValue("JSFBases.RandomSeed",12345);
 
   for(Int_t i=0;i<(Int_t)(sizeof(fIG)/4);i++){
     fIG[i]=1;
@@ -177,9 +184,17 @@ void JSFBases::Initialize()
   if( !gJSFBases ) {
     bsinit_();  // bases initialization 
   }
+  drnset_(&fISEED);
   gJSFBases=this;
 }
 
+
+//_____________________________________________________________________________
+void JSFBases::SetSeed(Int_t iseed)
+{
+  fISEED=iseed; 
+  drnset_(&fISEED);
+}
 
 //_____________________________________________________________________________
 void JSFBases::Userin()
@@ -248,6 +263,7 @@ void JSFBases::Streamer(TBuffer &R__b)
       R__b >> fNDIM;
       R__b >> fNWILD;
       R__b >> fNCALL;
+      if( R__v > 1 ) R__b >> fISEED;
       base2_.acc1=fACC1; base2_.acc2=fACC2 ;
       base2_.itmx1=fITMX1; base2_.itmx2=fITMX2;
 
@@ -298,6 +314,7 @@ void JSFBases::Streamer(TBuffer &R__b)
       R__b << fNDIM;
       R__b << fNWILD;
       R__b << fNCALL;
+      R__b << fISEED;
       R__b.WriteArray(fXL,fNDIM);
       R__b.WriteArray(fXU,fNDIM);
       R__b.WriteArray(fIG,fNDIM);

@@ -24,5 +24,6 @@
 #pragma link C++ class JSFHelixErrorMatrix ;
 #pragma link C++ class JSFHelixErrorMatrix_u ;
 #pragma link C++ class JSFHelicalTrack;
+#pragma link C++ class JSFHitCylinder;
 
 #endif
