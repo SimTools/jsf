@@ -180,17 +180,18 @@ typedef struct {
 } COMMON_HWMINB_t;
 //extern COMMON_HWMINB_t hwminb_;
 
-//C
-//C Variables controling mixing and vertex information
-//      COMMON/HWDIST/EXAG,GEV2MM,HBAR,PLTCUT,VMIN2,VTXPIP(4),XMIX(2),
+//C--VTXPIP should have been a 5-vector, problems with NAG compiler
+//      COMMON/HWDIST/EXAG,GEV2MM,HBAR,PLTCUT,VMIN2,VTXPIP(5),XMIX(2),
 //     & XMRCT(2),YMIX(2),YMRCT(2),IOPDKL,MAXDKL,MIXING,PIPSMR
 typedef struct {
-  double EXAG,GEV2MM,HBAR,PLTCUT,VMIN2,VTXPIP[4],XMIX[2];
+  double EXAG,GEV2MM,HBAR,PLTCUT,VMIN2,VTXPIP[5],XMIX[2];
   double XMRCT[2],YMIX[2],YMRCT[2];
   int    IOPDKL;
   bool   MAXDKL,MIXING,PIPSMR;
 } COMMON_HWDIST_t ;
 //extern COMMON_HWDIST_t hwdist_;
+
+
 
 //C
 //C Parameters for cluster decays (NMXCDK = max total no of cluster

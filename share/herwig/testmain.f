@@ -1,3 +1,3 @@
-      call herwig64_test
+      call herwig65_test
       stop
       end

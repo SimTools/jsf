@@ -8,7 +8,7 @@ c (Author)
 c  Akiya Miyamoto   12-Oct-2002
 c
 c-----------------------------------------------------------------------
-#include "HERWIG64.INC"
+#include "HERWIG65.INC"
 c
       character*(*) common_block_name
       external      hwudat

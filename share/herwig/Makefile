@@ -47,26 +47,26 @@ HDRS = THerwig.h HerwigGenerator.h
 SRCS = THerwig.$(SrcSuf) HerwigGenerator.$(SrcSuf)
 
 
-OBJS = herwig6400.$(ObjSuf) circe.$(ObjSuf) \
-	herwig_util.$(ObjSuf) herwig64_test.$(ObjSuf) \
+OBJS = herwig6500.$(ObjSuf) circe.$(ObjSuf) \
+	herwig_util.$(ObjSuf) herwig65_test.$(ObjSuf) \
 	herwig_common_block_address.$(ObjSuf) \
 	herwig_address.$(ObjSuf)
 
 OBJS += THerwig.$(ObjSuf) HerwigGenerator.$(ObjSuf) libTHerwig.$(ObjSuf)
 
-CLEANOBJS = $(subst herwig6400.o, ,$(OBJS))
+CLEANOBJS = $(subst herwig6500.o, ,$(OBJS))
 
 CXXFLAGS += -I$(JSFROOT)/include
 
 DEPENDS = $(DEPENDFLAGS) -I/usr/lib/gcc-lib/i386-redhat-linux/2.96/include
 
-all: HERWIG64.INC herwig64_test.f install
+all: HERWIG65.INC herwig65_test.f install
 
-HERWIG64.INC:
-	ln -s herwig6400.inc HERWIG64.INC
+HERWIG65.INC:
+	ln -s herwig6500.inc HERWIG65.INC
 
-herwig64_test.f:
-	ln -s herwig64.tst herwig64_test.f
+herwig65_test.f:
+	ln -s herwig65.tst herwig65_test.f
 
 lib: $(OBJS)
 	@rm -f $(SharedLib)
@@ -89,7 +89,7 @@ testrun: testmain.o $(SharedLib)
 
 cleanall:
 	rm -f *.o core *~ a.out testmain
-	rm -f herwig64_test.f HERWIG64.INC $(SharedLib)
+	rm -f herwig65_test.f HERWIG65.INC $(SharedLib)
 	rm -f fort.77 fort.88
 
 clean:

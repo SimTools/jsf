@@ -1,7 +1,6 @@
-CJSF      PROGRAM HWIGPR
-      SUBROUTINE herwig64_test
-C---COMMON BLOCKS ARE INCLUDED AS FILE HERWIG64.INC
-      INCLUDE 'HERWIG64.INC'
+      PROGRAM HWIGPR
+C---COMMON BLOCKS ARE INCLUDED AS FILE HERWIG65.INC
+      INCLUDE 'HERWIG65.INC'
       INTEGER N
       EXTERNAL HWUDAT
 C---MAX NUMBER OF EVENTS THIS RUN
@@ -57,14 +56,12 @@ C---TERMINATE ELEMENTARY PROCESS
       CALL HWEFIN
 C---USER'S TERMINAL CALCULATIONS
       CALL HWAEND
-CJSF      STOP
-      RETURN
+      STOP
       END
 C----------------------------------------------------------------------
       SUBROUTINE HWABEG
 C     USER'S ROUTINE FOR INITIALIZATION
 C----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
       END
 C----------------------------------------------------------------------
       SUBROUTINE HWAEND

@@ -33,7 +33,7 @@ C(@)  Dipartimento di Fisica, Universita di Bologna
 C(%)  Dipartimento di Fisica, Universita di Padova
 C(~)  Institute of Physics, Prague
 C-----------------------------------------------------------------------
-C                  Version 6.400 - 21 January 2002
+C                  Version 6.500 - 16 October 2002
 C-----------------------------------------------------------------------
 C Main references:
 C
@@ -50,47 +50,47 @@ CDECK  ID>, CIRCEE.
 *CMZ :-        -03/07/01  17.07.47  by  Bryan Webber
 *-- Author :    Bryan Webber
 C-----------------------------------------------------------------------
-CJSF      FUNCTION CIRCEE (X1, X2)
+cjsf      FUNCTION CIRCEE (X1, X2)
 C-----------------------------------------------------------------------
 C     DUMMY FUNCTION: DELETE AND SET CIRCOP NON-ZERO
 C     IN MAIN PROGRAM IF YOU USE CIRCE BEAM SPECTRUM PACKAGE
 C-----------------------------------------------------------------------
-CJSF      DOUBLE PRECISION CIRCEE, X1, X2
-CJSF      WRITE (6,10)
-CJSF   10 FORMAT(/10X,'CIRCEE CALLED BUT NOT LINKED')
-CJSF      CIRCEE = 0.0D0
-CJSF      STOP
-CJSF      END
+cjsf      DOUBLE PRECISION CIRCEE, X1, X2
+cjsf      WRITE (6,10)
+cjsf   10 FORMAT(/10X,'CIRCEE CALLED BUT NOT LINKED')
+cjsf      CIRCEE = 0.0D0
+cjsf      STOP
+cjsf      END
 CDECK  ID>, CIRCES.
 *CMZ :-        -03/07/01  17.07.47  by  Bryan Webber
 *-- Author :    Bryan Webber
 C-----------------------------------------------------------------------
-CJSF      SUBROUTINE CIRCES (XX1M, XX2M, XROOTS, XACC, XVER, XREV, XCHAT)
+cjsf       SUBROUTINE CIRCES (XX1M, XX2M, XROOTS, XACC, XVER, XREV, XCHAT)
 C-----------------------------------------------------------------------
 C     DUMMY SUBROUTINE: DELETE AND SET CIRCOP NON-ZERO
 C     IN MAIN PROGRAM IF YOU USE CIRCE BEAM SPECTRUM PACKAGE
 C-----------------------------------------------------------------------
-CJSF      DOUBLE PRECISION XX1M, XX2M, XROOTS
-CJSF      INTEGER XACC, XVER, XREV, XCHAT
-CJSF      WRITE (6,10)
-CJSF   10 FORMAT(/10X,'CIRCES CALLED BUT NOT LINKED')
-CJSF      STOP
-CJSF      END
+cjsf      DOUBLE PRECISION XX1M, XX2M, XROOTS
+cjsf      INTEGER XACC, XVER, XREV, XCHAT
+cjsf      WRITE (6,10)
+cjsf   10 FORMAT(/10X,'CIRCES CALLED BUT NOT LINKED')
+cjsf      STOP
+cjsf      END
 CDECK  ID>, CIRCGG.
 *CMZ :-        -03/07/01  17.07.47  by  Bryan Webber
 *-- Author :    Bryan Webber
 C-----------------------------------------------------------------------
-CJSF      FUNCTION CIRCGG (X1, X2)
+cjsf      FUNCTION CIRCGG (X1, X2)
 C-----------------------------------------------------------------------
 C     DUMMY FUNCTION: DELETE AND SET CIRCOP NON-ZERO
 C     IN MAIN PROGRAM IF YOU USE CIRCE BEAM SPECTRUM PACKAGE
 C-----------------------------------------------------------------------
-CJSF      DOUBLE PRECISION CIRCGG, X1, X2
-CJSF      WRITE (6,10)
-CJSF   10 FORMAT(/10X,'CIRCGG CALLED BUT NOT LINKED')
-CJSF      CIRCGG = 0.0D0
-CJSF      STOP
-CJSF      END
+cjsf      DOUBLE PRECISION CIRCGG, X1, X2
+cjsf      WRITE (6,10)
+cjsf   10 FORMAT(/10X,'CIRCGG CALLED BUT NOT LINKED')
+cjsf      CIRCGG = 0.0D0
+cjsf      STOP
+cjsf      END
 CDECK  ID>, DECADD.
 *CMZ :-        -28/01/92  12.34.44  by  Mike Seymour
 *-- Author :    Luca Stanco
@@ -146,7 +146,7 @@ C used by TAUOLA
 C
 C written by Martin W. Gruenewald (91/01/28)
 C ----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       LOGICAL QEDRAD
       COMMON /PHORAD/ QEDRAD(NMXHEP)
       INTEGER N,IHEP,IST,ID,JMO1,JMO2,JDA1,JDA2,I,IP
@@ -248,7 +248,7 @@ C-----------------------------------------------------------------------
 C     Azimuthal correlation functions for Collins' algorithm,
 C     see I.G.Knowles, Comp. Phys. Comm. 58 (90) 271 for notation.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION Z1,Z2,DOT12,DOT23,DOT31,TR,FN(7),VEC1(2),VEC2(2),
      & VEC3(2),VEC(2)
       INTEGER IPAR,JPAR
@@ -322,7 +322,7 @@ C     MODIFIED 11/01/01 BY PR  FOR SPIN CORRELATIONS(PROBLEM WITH ORDER
 C                                                    OF DECAYS)
 C     NEW VARAIBLE BACK TO ALLOW CODE TO SEARCH DOWN CHAIN
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IHEP,IST,ID,JC,KC,JD,JHEP,LHEP,ID2,NTRY,KHEP
       LOGICAL BACK
       IF (IERROR.NE.0) RETURN
@@ -494,7 +494,7 @@ C
 C********MODIFIED 13/11/00 BY BRW TO ALLOW MULTIPLE APPLICATION IN
 C*******SAME EVENT (FOR WW AND ZZ) N.B. NO CLEANUP CALLS FOR THESE!
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWBVMC,HWRGEN,HWUALF,HWUSQR,X(3),W,WMAX,WSUM,
      & X1MIN,X1MAX,X2MIN,X2MAX,QSCALE,GAMFAC,GLUFAC,R(3,3),CS,SN,M(3),
      & E(3),LAMBDA,A,B,C,PTSQ,EM,P1(5),P2(5),PVRT(4),EPS,MASDEP
@@ -503,7 +503,7 @@ C-----------------------------------------------------------------------
       EXTERNAL HWBVMC,HWRGEN,HWUALF,HWUSQR
       SAVE X,WMAX,P1,P2
       DATA WSUM,WMAX,X1MIN,X1MAX,EMIT,ICMF,IEVT
-     & /0.994651,1.84096,0,0.773459,3*0/
+     & /0.994651D0,1.84096D0,0.0D0,0.773459D0,3*0.0D0/
       LAMBDA(A,B,C)=(A**2+B**2+C**2-2*A*B-2*B*C-2*C*A)/(4*A)
       IF (IOPT.EQ.1) THEN
 C---FIND AN UNTREATED CMF
@@ -764,7 +764,7 @@ C     FILL MISSING AREA OF DIS PHASE-SPACE WITH 2+1-JET EVENTS
 C     IF (IOPT.EQ.1) SET UP EVENT RECORD
 C     IF (IOPT.EQ.2) CLEAN UP EVENT RECORD AFTER SHOWERING
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWBVMC,HWUALF,HWULDO,P1(5),P2(5),P3(5),
      & PCMF(5),L(5),R(3,3),Q,XBJ,RN,XPMIN,XPMAX,XP,ZPMIN,ZPMAX,ZP,FAC,
      & X1,X2,XTSQ,XT,PTSQ,SIN1,SIN2,W1,W2,CFAC,PDFOLD(13),PDFNEW(13),
@@ -775,8 +775,8 @@ C-----------------------------------------------------------------------
       LOGICAL BGF
       EXTERNAL HWRGEN,HWBVMC,HWUALF,HWULDO
       SAVE BGF,IIN,IOUT,ICMF,ID,Q1,Q2,XP,XBJ
-      DATA EMIT,COMINT,BGFINT,COMWGT/0,3.9827,1.2462,0.3/
-      DATA C1,C2,CM,B1,B2,BM/0.56,0.20,10,0.667,0.167,3/
+      DATA EMIT,COMINT,BGFINT,COMWGT/0D0,3.9827D0,1.2462D0,0.3D0/
+      DATA C1,C2,CM,B1,B2,BM/0.56D0,0.20D0,10D0,0.667D0,0.167D0,3D0/
       IF (IERROR.NE.0) RETURN
       IF (IOPT.EQ.1) THEN
 C---FIND AN UNTREATED CMF
@@ -1232,7 +1232,7 @@ C-----------------------------------------------------------------------
       SUBROUTINE HWBDYP(IOPT)
 C     MATRIX ELEMENT CORRECTIONS TO DRELL-YAN PROCESSES
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWBVMC,HWRGEN,HWUALF,HWUSQR,PMODK,AZ,CZ,
      & T,U,S,EM,TMIN,TMAX,PMOD2,GLUFAC,SMIN,SMAX,SZ,TEST,
      & JAC,M(3),W1,W,PMOD3,SCAPR,CPHI,SPHI,SCALE,XI1,XI2,
@@ -1831,7 +1831,7 @@ C-----------------------------------------------------------------------
 C     DELETES INTERNAL LINES FROM SHOWER, MAKES COLOUR CONNECTION INDEX
 C     AND COPIES INTO /HEPEVT/ IN COLOUR ORDER.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IHEP,ID,IJET,KHEP,IPAR,JPAR,NXPAR,IP,JP
       IF (IERROR.NE.0) RETURN
 C---SAVE VIRTUAL PARTON DATA
@@ -1938,7 +1938,7 @@ C     BRANCHING GENERATOR WITH INTERFERING GLUONS
 C     HWBGEN EVOLVES QCD JETS ACCORDING TO THE METHOD OF
 C     G.MARCHESINI & B.R.WEBBER, NUCL. PHYS. B238(1984)1
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWULDO,HWRGAU,EINHEP,ERTXI,RTXI,XF
       INTEGER NTRY,LASHEP,IHEP,NRHEP,ID,IST,JHEP,KPAR,I,J,IRHEP(NMXJET),
      & IRST(NMXJET),JPR
@@ -2139,15 +2139,206 @@ C   IT MIGHT NEED RESHOWERING
         GOTO 10
       ENDIF
  999  END
+CDECK  ID>, HWBGUP.
+*CMZ :-        -16/07/02  09.40.25  by  Peter Richardson
+*-- Author :    Peter Richardson
+C----------------------------------------------------------------------
+      SUBROUTINE HWBGUP(ISTART,ICMF)
+C----------------------------------------------------------------------
+C     Makes the colour connections and performs the parton shower
+C     for events read in from the GUPI (Generic User Process Interface)
+C     event common block
+C----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      INTEGER MAXNUP
+      PARAMETER (MAXNUP=500)
+      INTEGER NUP,IDPRUP,IDUP,ISTUP,MOTHUP,ICOLUP
+      DOUBLE PRECISION XWGTUP,SCALUP,AQEDUP,AQCDUP,PUP,VTIMUP,SPINUP
+      COMMON/HEPEUP/NUP,IDPRUP,XWGTUP,SCALUP,AQEDUP,AQCDUP,
+     &              IDUP(MAXNUP),ISTUP(MAXNUP),MOTHUP(2,MAXNUP),
+     &              ICOLUP(2,MAXNUP),PUP(5,MAXNUP),VTIMUP(MAXNUP),
+     &              SPINUP(MAXNUP)
+C--Local variables
+      INTEGER ISTART,ICMF,J,K,I,JCOL,ICOL
+      LOGICAL FOUND
+      COMMON /HWGUP/ILOC(NMXHEP),JLOC(MAXNUP)
+      INTEGER ILOC,JLOC
+C--now we need to do the colour connections
+ 20   ISTART = ISTART+1
+      IF(ISTART.GT.NHEP) GOTO 30
+      IF(ISTART.EQ.ICMF) ISTART = ISTART+1
+      IF(JMOHEP(2,ISTART).NE.0.AND.JDAHEP(2,ISTART).NE.0) GOTO 20
+      K = ISTART
+      J = ILOC(K)
+      IF(ICOLUP(1,J).NE.0) THEN
+        JCOL = 1
+        ICOL = ICOLUP(1,J)
+      ELSE
+        JCOL = 2
+        ICOL = ICOLUP(2,J)
+      ENDIF
+      IF(ICOL.EQ.0) THEN
+        JMOHEP(2,K) = K
+        JDAHEP(2,K) = K
+        GOTO 20
+      ENDIF
+C--now search for the partner
+C--first search for the flavour partner if not looking for colour partner
+C--search for the flavour partner of the particle
+C--this must be set or HERWIG won't work
+ 10   IF(JDAHEP(2,K).NE.0.AND.JMOHEP(2,K).NE.0) GOTO 20
+      IF(ICOL.EQ.0) THEN
+        FOUND = .FALSE.
+C--look for unpaired particle
+        DO 15 I=1,NUP
+          IF(JLOC(I).EQ.0) GOTO 15
+          IF(IDUP(I).EQ.21.OR.IDUP(I).EQ.9) GOTO 15
+          IF(JLOC(I).EQ.ISTART) GOTO 15
+          IF(ICOLUP(1,I).EQ.0.AND.ICOLUP(2,I).EQ.0) GOTO 15
+C--antiflavour partner
+          IF(JDAHEP(2,JLOC(I)).EQ.0) THEN
+C--pair incoming     particle with outgoing     particle
+C-- or  outgoing antiparticle with outgoing     particle
+            IF(ISTUP(I).GT.0.AND.IDUP(I).GT.0.AND.
+     &         ((IDUP(J).GT.0.AND.ISTUP(J).EQ.-1).OR.
+     &          (IDUP(J).LT.0.AND.ISTUP(J).GT.0 )))  THEN
+              FOUND = .TRUE.
+              JCOL = 1
+C--pair incoming     particle with incoming antiparticle
+C-- or  outgoing antiparticle with incoming antiparticle
+            ELSEIF(IDUP(I).LT.0.AND.ISTUP(I).EQ.-1.AND.
+     &             ((IDUP(J).GT.0.AND.ISTUP(J).EQ.-1).OR.
+     &              (IDUP(J).LT.0.AND.ISTUP(J).GT.0 ))) THEN
+              FOUND = .TRUE.
+              JCOL = 2
+            ENDIF
+C--make the connection
+            IF(FOUND) THEN
+              JMOHEP(2,K)       = JLOC(I)
+              JDAHEP(2,JLOC(I)) = K
+            ENDIF     
+          ENDIF
+C--flavour partner
+          IF(JMOHEP(2,JLOC(I)).EQ.0.AND.(.NOT.FOUND)) THEN
+C--pair incoming antiparticle with outgoing antiparticle
+C-- or  outgoing     particle with outgoing antiparticle
+            IF(IDUP(I).LT.0.AND.ISTUP(I).GT.0.AND.
+     &         ((IDUP(J).LT.0.AND.ISTUP(J).EQ.-1).OR.
+     &          (IDUP(J).GT.0.AND.ISTUP(J).GT.0 ))) THEN
+              FOUND = .TRUE.
+              JCOL = 2
+C--pair incoming antiparticle with incoming     particle
+C-- or  outgoing     particle with incoming     particle
+            ELSEIF(IDUP(I).GT.0.AND.ISTUP(I).EQ.-1.AND.
+     &             ((IDUP(J).LT.0.AND.ISTUP(J).EQ.-1).OR.
+     &              (IDUP(J).GT.0.AND.ISTUP(J).GT.0 ))) THEN
+              FOUND = .TRUE.
+              JCOL = 1
+            ENDIF
+C--make the connection
+            IF(FOUND) THEN
+              JDAHEP(2,K) = JLOC(I)
+              JMOHEP(2,JLOC(I)) = K
+            ENDIF
+          ENDIF
+C--set up the search for the next partner
+          IF(FOUND) THEN
+            FOUND = .FALSE.
+            ICOL = ICOLUP(JCOL,I)
+            K = JLOC(I)
+            J = I
+            GOTO 10
+          ENDIF
+ 15     CONTINUE
+C--if no other choice then connect to the first particle in the loop
+        IF(JDAHEP(2,K).EQ.0.AND.JMOHEP(2,ISTART).EQ.0) THEN
+           JDAHEP(2,K) = ISTART
+           JMOHEP(2,ISTART) = K
+        ELSEIF(JDAHEP(2,ISTART).EQ.0.AND.JMOHEP(2,K).EQ.0) THEN
+           JMOHEP(2,K) = ISTART
+           JDAHEP(2,ISTART) = K
+        ELSE
+          CALL HWWARN('HWBGUP',100,*999)
+        ENDIF
+        GOTO 20
+      ENDIF 
+C--now the bit to find colour partners
+      FOUND = .FALSE.
+C--special for particle from a decaying coloured particle
+      IF(MOTHUP(1,J).NE.0) THEN
+        IF(ISTUP(MOTHUP(1,J)).EQ.2.OR.ISTUP(MOTHUP(1,J)).EQ.3) THEN
+          IF(IDUP(J).LT.0.AND.ICOL.EQ.ICOLUP(2,MOTHUP(1,J))) THEN
+            JDAHEP(2,K) = JLOC(MOTHUP(1,J))
+            JMOHEP(2,K) = JLOC(MOTHUP(1,J))
+            GOTO 20
+          ELSEIF(IDUP(J).GT.0.AND.ICOL.EQ.ICOLUP(1,MOTHUP(1,J))) THEN
+            JDAHEP(2,K) = JLOC(MOTHUP(1,J))
+            JMOHEP(2,K) = JLOC(MOTHUP(1,J))
+            GOTO 20
+          ENDIF
+        ENDIF
+      ENDIF
+C--search for the partner
+      DO I=1,NUP
+        IF(ICOLUP(1,I).EQ.ICOL.AND.I.NE.J) THEN
+          IF((JCOL.EQ.1.AND.ISTUP(J).EQ.-1.AND.ISTUP(I).GT.0).OR.
+     &       (JCOL.EQ.2.AND.ISTUP(J).GT.0.AND.ISTUP(I).GE.0)) THEN
+            JDAHEP(2,K)       = JLOC(I)
+            JMOHEP(2,JLOC(I)) = K
+            FOUND = .TRUE.
+          ELSEIF((JCOL.EQ.1.AND.ISTUP(J).GT.0.AND.ISTUP(I).EQ.-1).OR.
+     &          (JCOL.EQ.2.AND.ISTUP(J).EQ.-1.AND.ISTUP(I).EQ.-1)) THEN
+            JMOHEP(2,K)       = JLOC(I)
+            JDAHEP(2,JLOC(I)) = K
+            FOUND = .TRUE.
+          ENDIF
+          IF(FOUND) JCOL = 2
+        ELSEIF(ICOLUP(2,I).EQ.ICOL.AND.I.NE.J) THEN
+          IF((JCOL.EQ.1.AND.ISTUP(J).EQ.-1.AND.ISTUP(I).EQ.-1).OR.
+     &       (JCOL.EQ.2.AND.ISTUP(J).GT.0.AND.ISTUP(I).EQ.-1)) THEN
+            JDAHEP(2,K) = JLOC(I)
+            JMOHEP(2,JLOC(I)) = K
+            FOUND = .TRUE.
+          ELSEIF((JCOL.EQ.1.AND.ISTUP(J).GE.0.AND.ISTUP(I).GE.0).OR.
+     &           (JCOL.EQ.2.AND.ISTUP(J).EQ.-1.AND.ISTUP(I).GE.0)) THEN
+            JMOHEP(2,K) = JLOC(I)
+            JDAHEP(2,JLOC(I)) = K
+            FOUND = .TRUE.
+          ENDIF
+          IF(FOUND) JCOL = 1
+        ENDIF
+        IF(FOUND) THEN
+          K = JLOC(I)
+          J = I
+          ICOL = ICOLUP(JCOL,I)
+          GOTO 10
+        ENDIF
+      ENDDO
+C--special for self connected gluons
+      IF(IDUP(J).EQ.21.OR.IDUP(J).EQ.9.AND.
+     &     ICOLUP(1,J).EQ.ICOLUP(2,J)) THEN
+        JMOHEP(2,K) = K
+        JDAHEP(2,K) = K
+C--options for self connected gluons
+        IF(LHGLSF) THEN
+          CALL HWWARN('HWBGUP',1,*20)
+        ELSE
+          CALL HWWARN('HWBGUP',101,*999)
+        ENDIF
+        GOTO 20
+      ENDIF
+C--perform the shower
+ 30   CALL HWBGEN
+ 999  END
 CDECK  ID>, HWBJCO.
-*CMZ :-        -26/04/91  14.25.31  by  Federico Carminati
+*CMZ :-        -30/09/02  09.19.58  by  Peter Richardson
 *-- Author :    Bryan Webber
 C-----------------------------------------------------------------------
       SUBROUTINE HWBJCO
 C-----------------------------------------------------------------------
 C     COMBINES JETS WITH REQUIRED KINEMATICS
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWULDO,EPS,PTX,PTY,PF,PTINF,PTCON,CN,CP,SP,PP0,
      & PM0,ET0,DET,ECM,EMJ,EMP,EMS,DMS,ES,DPF,ALF,AL(2),ET(2),PP(2),
      & PT(3),PB(5),PC(5),PQ(5),PR(5),PS(5),RR(3,3),RS(3,3),ETC,
@@ -2391,8 +2582,19 @@ C Special to preserve photon momentum
            IF (IEND(2).GT.IJT+1) ISTHEP(IJT+1)=100
            ISTHEP(IJET(1))=ISTHEP(IJET(1))+10
            CALL HWVSUM(2,PHEP(3,IPAR(1)),PHEP(3,IJT),PHEP(3,ICM))
-        ELSE
-          PHEP(4,ICM)=SQRT(PTX**2+PTY**2+PHEP(3,ICM)**2+PHEP(5,ICM)**2)
+        ELSE 
+C--change to preserve either long mom or rapidity rather than long mom
+C--by PR and BRW 30/9/02
+          IF (PRESPL) THEN
+C--PRESERVE LONG MOM OF CMF
+            PHEP(4,ICM)=
+     &            SQRT(PTX**2+PTY**2+PHEP(3,ICM)**2+PHEP(5,ICM)**2)
+          ELSE
+C--PRESERVE RAPIDITY OF CMF
+            DET=SQRT(ONE+(PTX**2+PTY**2)/(PHEP(4,ICM)**2
+     &                -PHEP(3,ICM)**2))
+            CALL HWVSCA(2,DET,PHEP(3,ICM),PHEP(3,ICM))
+          ENDIF
 C---NOW BOOST TO REQUIRED Q**2 AND X-F
           PP0=PHEP(4,ICM)+PHEP(3,ICM)
           PM0=PHEP(4,ICM)-PHEP(3,ICM)
@@ -2648,7 +2850,7 @@ C
 C     On output PPAR(1-5,*) (if TMPAR(*)), containts:
 C     (P-trans,Xi or Xilast,P-long,E,M)
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWUSQR,EXI,PISQ,PJPK,EJEK,PTSQ,Z,ZMIN,ZMAX,
      $     EMI,EMJ,EMK,C,NQ,HWBVMC,RHO,POLD,PNEW,EOLD,ENEW,A,B
       INTEGER IPAR,JPAR,KPAR,MPAR,I,J,K
@@ -2762,7 +2964,7 @@ C-----------------------------------------------------------------------
 C     BRANCHES TIMELIKE PARTON KPAR INTO TWO, PUTS PRODUCTS
 C     INTO NPAR+1 AND NPAR+2, AND INCREASES NPAR BY TWO
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWBVMC,HWRGEN,HWUALF,HWUTAB,HWRUNI,HWULDO,PMOM,
      & QNOW,QLST,QKTHR,RN,QQBAR,DQQ,QGTHR,SNOW,QSUD,ZMIN,ZMAX,ZRAT,WMIN,
      & QLAM,Z1,Z2,ETEST,ZTEST,ENOW,XI,XIPREV,EPREV,QMAX,QGAM,SLST,SFNL,
@@ -3218,7 +3420,7 @@ C-----------------------------------------------------------------------
 C     SUBROUTINE TO REPLACE HWBCON IN RPARITY VIOLATING SUSY
 C     BASED ON HWBCON BY BRW
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IHEP,IST,ID,JC,JD,JHEP,IDP,IDM,IDP2,IDM2,
      &        RHEP,IST2,ORG,ANTC,XHEP,IP,COLP
       LOGICAL BVVUSE,BVVHRD,BVDEC1,BVDEC2,COLRD,ACOLRD,BVHRD,BVHRD2,
@@ -3691,7 +3893,11 @@ C--FIND THE COLOUR CONNECTED PARTON
         JC=JMOHEP(2,IHEP)
         ID=IDHW(JC)
         JHEP = JC
-        IF(BVDEC2(JC).AND.IDHW(JC).NE.449) GOTO 400
+        IF(BVDEC2(JC).AND.IDHW(JC).NE.449) THEN
+          IF(IDHW(IHEP).GE.7.AND.IDHW(IHEP).LE.12) 
+     &          JMOHEP(2,IHEP)=JDAHEP(1,JC) 
+          GOTO 400
+        ENDIF
         IF (ID.EQ.449) THEN
 C--SPECIAL FOR GLUINO DECAYS
           ID=IDHW(IHEP)
@@ -3702,6 +3908,7 @@ C--SPECIAL FOR GLUINO DECAYS
             JC=JDAHEP(1,JHEP)
           ELSE
             JC=JDAHEP(2,JHEP)
+            IF(IDHW(JHEP).EQ.6.AND.IDHW(JC).EQ.13) JC=JC-1
           ENDIF
         ENDIF
 C--SEARCH IN JET
@@ -3874,6 +4081,11 @@ C--SEARCH IN JET
               CALL HWBRC2(COLP,IHEP,JC,.FALSE.,BVVUSE,.FALSE.)
               IF(COLP.NE.0) JDAHEP(2,IHEP) = COLP
           ELSE
+            IF(ISTHEP(JMOHEP(1,JC)).EQ.155
+     &            .AND.IDHW(JC).LE.6) THEN
+               JDAHEP(2,IHEP) = JDAHEP(2,JMOHEP(1,JC)-1)
+               IF(JDAHEP(2,IHEP).NE.0) GOTO 610
+            ENDIF
             CALL HWWARN('HWBRCN',100,*610)
           ENDIF
         ENDIF
@@ -3887,7 +4099,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C--Function to find the right daugther of a decaying gluino
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER ID,JHEP,KC,JC
       LOGICAL COL
 C---N.B. WILL NEED MODS WHEN SUSY PARTICLES CAN SHOWER
@@ -3927,7 +4139,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C--Function to search in the jet for the particle
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER JC,JD,QHEP,LHEP,IHEP,JHEP,IDM,NCOUNT,ID,IP,IDM2,COLP
       LOGICAL CON,BVVUSE,FLA,AFLA,BVVHRD
       FLA(IP)  = (IP.LE.6.OR.(IP.GE.115.AND.IP.LE.120).
@@ -4066,7 +4278,14 @@ C--New piece
 C--Additional Baryon number violating piece
         IF((FLA(ID).AND.AFLA(IDM2)).OR.
      & ((AFLA(ID).OR.ID.EQ.13.OR.ID.EQ.449.OR.ID.EQ.15.OR.ID.EQ.59)
-     &    .AND.(FLA(IDM2).OR.IDM2.EQ.13.OR.IDM2.EQ.449))) THEN
+     &    .AND.(FLA(IDM2).OR.IDM2.EQ.13.OR.IDM2.EQ.449)
+     &  .AND..NOT.(IDHW(JMOHEP(1,JC)).EQ.13.AND.
+     &        IDHW(JMOHEP(1,JMOHEP(1,JC))).EQ.12.AND.
+     &        ISTHEP(JMOHEP(1,JMOHEP(1,JC))).EQ.155)
+     &        )) THEN
+C--special for gluino decay to gluon
+         IF(ID.EQ.449.AND.IDHW(JMOHEP(1,JMOHEP(1,JC))).EQ.449.AND.
+     &          IDHW(JMOHEP(1,JC)).EQ.13) RETURN
          QHEP = JC
  211     QHEP = QHEP+1
          IF(IDHEP(QHEP).EQ.0) GOTO 211
@@ -4139,7 +4358,7 @@ C     jet started by parton no.2 interference partner 1 and spin density
 C     DECPAR(2). RHOPAR(2) gives the jet spin density matrix.
 C     See I.G. Knowles, Comp. Phys. Comm. 58 (90) 271.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,DMIN,PT,EIKON,EISCR,EINUM,EIDEN1,EIDEN2,
      & WT,SPIN,Z1,Z2,TR,PRMAX,CX,SX,CAZ,ROHEP(3),RMAT(3,3),ZERO2(2)
       INTEGER IPAR,JPAR,KPAR,LPAR,MPAR,JSTR,LSTR,MSTR
@@ -4273,7 +4492,7 @@ C     Constructs appropriate spin density/decay matrix for parton
 C     in hard subprocess, otherwise zero. Assignments based upon
 C     Comp. Phys. Comm. 58 (1990) 271.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION C,V12,V23,V13,TR,C1,C2,C3,R1(2),R2(2)
       INTEGER IST
       SAVE R1,R2,V12
@@ -4378,7 +4597,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     COMPUTES (OR READS) TABLES OF SUDAKOV FORM FACTORS
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWUGAU,HWBVMC,HWBSUG,HWBSU1,HWBSU2,G1,G2,QRAT,
      & QLAM,POWER,AFAC,QMIN,QFAC,QNOW,ZMIN,ZMAX,Q1,QCOLD,VGOLD,VQOLD,
      & RMOLD(6),ACOLD,ZLO,ZHI
@@ -4541,7 +4760,7 @@ C     LOGARITHMIC PART OF INTEGRAND IN EXPONENT OF SUDAKOV FORM FACTOR.
 C     THE SECOND ORDER ALPHAS CASE COMES FROM CONVERTING INTEGRAL OVER
 C     Q^2 INTO ONE OVER ALPHAS, WITH FLAVOUR THRESHOLDS.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWBSUL,HWUALF,Z,QRAT,QLAM,U,AL,BL,QNOW,QMIN,
      & BET(6),BEP(6),MUMI(6),MUMA(6),ALMI(6),ALMA(6),FINT(6),ALFINT,
      & MUMIN,MUMAX,ALMIN,ALMAX
@@ -4623,7 +4842,7 @@ C     Includes azimuthal angular correlations between branching planes
 C     due to spin (if AZSPIN) using the algorithm of Knowles & Collins.
 C     Ses Nucl. Phys. B304 (1988) 794 & Comp. Phys. Comm. 58 (1990) 271.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,DMIN,PT,EIKON,EINUM,EIDEN1,EIDEN2,EISCR,
      & WT,SPIN,Z1,Z2,PRMAX,CAZ,CX,SX,ROHEP(3),RMAT(3,3),ZERO2(2)
       INTEGER INITBR,INTERF,IPAR,JPAR,KPAR,LPAR,MPAR,NTRY,JOLD
@@ -4769,7 +4988,7 @@ CDECK  ID>, HWBTOP.
 C-----------------------------------------------------------------------
       SUBROUTINE HWBTOP
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWBVMC,HWRGEN,HWUALF,HWUSQR,X(3),W,
      & X3MIN,X3MAX,X1MIN,X1MAX,QSCALE,GLUFAC,R(3,3),M(3),
      & E(3),AW,PTSQ,EM,EPS,MASDEP,A,B,C,GAMDEP,LAMBDA,
@@ -4928,7 +5147,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     VIRTUAL MASS CUTOFF FOR PARTON TYPE ID
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWBVMC
       INTEGER ID
       IF (ID.EQ.13) THEN
@@ -4950,7 +5169,7 @@ C-----------------------------------------------------------------------
 C  Subroutine to split a baryonic cluster containing two heavy quarks
 C  Based on HWCCUT
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWUPCM,HWRGEN,HWVDOT,EMC,QM1,QM2,QM3,QM4,
      &                 PXY,PCX,PCY,RCM,PCL(5),AX(5),PA(5),PB(5),PC(5),
      &                 VCLUS(4),DQM,EMX,EMY,SKAPPA,RKAPPA,VTMP(4),
@@ -5102,7 +5321,7 @@ C-----------------------------------------------------------------------
 C FINDS UNPAIRED PARTONS AFTER BARYON-NUMBER VIOLATION
 C  MODIFIED FOR RPARITY VIOLATING SUSY
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       COMMON/HWBVIC/NBV,IBV(18)
       DOUBLE PRECISION HWRGEN,PDQ(5)
       INTEGER NBV,IBV,JBV,KBV,LBV,IHEP,IP1,IP2,IP3,JP1,JP2,JP3,
@@ -5321,7 +5540,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C  Function to find the baryon number violating vertex a parton came from
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER HWCBVT,IP,JP(2),KP,I,J,ID,TYPE,IDM,IDM2,IDM3,IDM4
       JP(1) = IP
       ID = IDHW(IP)
@@ -5386,7 +5605,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C  Subroutine to correct colour connections after the gluon splitting
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IHEP,STFSPT,LHEP,MHEP,RHEP
       IF(IERROR.NE.0) RETURN
 C--Find the first particle in the event record with status 150
@@ -5443,7 +5662,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     Cuts into 2 the cluster, momentum PCL, made of partons JHEP & KHEP
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWREXQ,HWUPCM,HWRGEN,HWVDOT,EMC,QM1,QM2,EMX,EMY,
      & QM3,PXY,PCX,PCY,RCM,PCL(5),AX(5),PA(5),PB(5),PC(5),SKAPPA,DELTM,
      & VSCA,VTMP(4),RKAPPA,VCLUS
@@ -5591,7 +5810,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     DECAYS CLUSTERS INTO PRIMARY HADRONS
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER JCL,KCL,IP,JP,KP,IST,ID1,ID2,ID3
       IF (IERROR.NE.0) RETURN
       IF (IPROC/1000.EQ.9.OR.IPROC/1000.EQ.5) THEN
@@ -5660,7 +5879,7 @@ C     Modified by IGK to include BRW's colour rearrangement and
 C     MHS's cluster vertices
 C     MODIFIED 16/10/97 BY BRW FOR SUSY PROCESSES
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWULDO,HWVDOT,HWRGEN,HWUPCM,DCL0,DCL(4),DCL1,
      & DFAC,DISP1(4),DISP2(4),DMAX,PCL(5),DOT1,DOT2,FAC,VCLUS,SCA1,SCA2,
      & EM0,EM1,EM2,PC0,PC1
@@ -5985,7 +6204,7 @@ C-----------------------------------------------------------------------
 C     SPLITS ANY TIMELIKE GLUONS REMAINING AFTER PERTURBATIVE
 C     BRANCHING INTO LIGHT (I.E. U OR D) Q-QBAR PAIRS
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,PF
       INTEGER HWRINT,IHEP,JHEP,KHEP,LHEP,MHEP,ID,J,IST
       EXTERNAL HWRGEN,HWRINT
@@ -6123,7 +6342,7 @@ C     (IN SPECIAL CLUSTER CODE - SEE HWCFLA)
 C
 C MODIFIED 15/11/99 TO SMEAR POSITIONS OF HADRONS BY 1/(CLUSTER MASS)
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRGAU,HWVDOT,EM0,EM1,EM2,EMADU,EMSQ,
      & PCMAX,PCM,PTEST,PCQK,PP(5),EMLOW,RMAT(3,3),CT,ST,CX,SX,HPSMR
       INTEGER HWRINT,JCL,ID1,ID2,ID3,ID,IR1,IR2,NTRY,IDMIN,IMAX,I,MHEP,
@@ -6307,19 +6526,18 @@ C---SMEAR HADRON POSITIONS
       JMOHEP(2,NHEP)=JMOHEP(1,JMOHEP(1,JCL))
   999 END
 CDECK  ID>, HWD2ME.
-*CMZ :-        -12/10/01  17.14.22  by  Peter Richardson
+*CMZ :-        -09/04/02  13:37:38  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
       SUBROUTINE HWD2ME(IMODE)
 C-----------------------------------------------------------------------
 C     Computes the the width and maximum weight for a two body mode
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IMODE,I
       DOUBLE PRECISION A(2),M(3),PCM,E1,E2,HWUPCM,PHS,WGT,MWGT,PCM2,
-     &     M2(3),FPI,E,G
+     &     M2(3),E,G
       EXTERNAL HWUPCM
-      DATA FPI/0.09298/
 C--couplings
       E = SQRT(FOUR*PIFAC/128.0D0)
       G = E/SQRT(SWEIN)
@@ -6372,18 +6590,48 @@ C--next the scalar --> fermion fermion diagrams
         MWGT = WGT
 C--next the fermion --> fermion pion diagrams
       ELSEIF(I2DRTP(IMODE).EQ.7) THEN
-        WGT = HALF*FPI**2*G**2/FOUR/RMASS(198)**4*(
+        WGT = HALF/FOUR/RMASS(198)**4*(
      &        (A(1)**2+A(2)**2)*((M2(1)-M2(2))**2-M2(3)*(M2(1)+M2(2)))
      &         +FOUR*M(1)*M(2)*M2(3)*A(1)*A(2))
         E1 = SQRT(M2(2)+PCM2)
         E2 = SQRT(M2(3)+PCM2)
-        MWGT =G**2*FPI**2/8.0D0/RMASS(198)**4*ABS(A(1)**2-A(2)**2)*
+        MWGT =ONE/8.0D0/RMASS(198)**4*ABS(A(1)**2-A(2)**2)*
      &        M(1)*(M(1)*M2(3)+(M2(1)-M2(2)+M2(3))*(E2+PCM))+WGT
 C--next scalar --> antifermion fermion diagrams
       ELSEIF(I2DRTP(IMODE).EQ.8) THEN
         WGT = (M2(1)-M2(2)-M2(3))*(A(1)**2+A(2)**2)
      &        -FOUR*M(2)*M(3)*A(1)*A(2)
         MWGT = WGT
+C--next fermion --> gravitino photon
+      ELSEIF(I2DRTP(IMODE).EQ.9) THEN
+        WGT = 8.0D0*M2(1)**3
+        MWGT = WGT
+C--next fermion --> gravitino scalar
+      ELSEIF(I2DRTP(IMODE).EQ.10) THEN
+        WGT = HALF*(M2(1)-M2(3))**3 
+        E1 = SQRT(M2(2)+PCM2)
+        E2 = SQRT(M2(3)+PCM2)
+        MWGT = TWO*M2(1)/(E1+E2)*(E1+PCM)*(M2(1)-M2(3))**2 +WGT
+C--next sfermion --> fermion gravitino
+      ELSEIF(I2DRTP(IMODE).EQ.11) THEN
+        WGT = (M2(1)-M2(2))**3
+        MWGT = WGT
+C--next antisfermion --> fermion gravitino
+      ELSEIF(I2DRTP(IMODE).EQ.12) THEN
+        WGT = (M2(1)-M2(2))**3
+        MWGT = WGT
+C--next the scalar --> antifermion antifermion diagrams
+      ELSEIF(I2DRTP(IMODE).EQ.13) THEN
+        WGT = (M2(1)-M2(2)-M2(3))*(A(1)**2+A(2)**2)
+     &        -FOUR*M(2)*M(3)*A(1)*A(2)
+        MWGT = WGT
+C--next the antifermion --> scalar antifermion diagrams
+      ELSEIF(I2DRTP(IMODE).EQ.14) THEN
+        WGT = HALF*((A(1)**2+A(2)**2)*(M2(1)+M2(3)-M2(2))
+     &              +FOUR*A(1)*A(2)*M(1)*M(3))
+        E1 = SQRT(M2(2)+PCM2)
+        E2 = SQRT(M2(3)+PCM2)
+        MWGT = HALF*M2(1)/(E1+E2)*(E2+PCM)*ABS(A(1)**2-A(2)**2)+WGT
 C--unrecognised issue warning
       ELSE
         CALL HWWARN('HWITWO',500,*999)
@@ -6414,22 +6662,22 @@ C-----------------------------------------------------------------------
 C     Subroutine to perform the three body decays for spin correlations
 C     and SUSY three body modes
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IMODE,I,J,ID,IDP(4+NDIAGR),ITYPE,NDIA,ID1,ID2,
      &     DRTYPE(NDIAGR),NTRY,IDSPIN,NCTHRE,DRCF(NDIAGR)
       DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,WGT,M342,HWRUNI,
      &     HWUPCM,M232,M242,WMAX,WSUM,WSSUM,MR,PRE,TEMP,HWRGEN,WTMAX,
      &     BRW(6),BRZ(12),P(5,4),PM(5,4),WGTM,CFTHRE(NCFMAX,NCFMAX)
-      DOUBLE COMPLEX S,D,RHOIN(2,2),F0(2,2,8),
-     &     F1(2,2,8),F2(2,2,8),F0M(2,2,8),F1M(2,2,8),F01(2,2,8,8)
+      DOUBLE COMPLEX S,D,RHOIN(2,2),F0(2,2,8),F3(2,2,8),F1(2,2,8),
+     &     F2(2,2,8),F0M(2,2,8),F1M(2,2,8),F01(2,2,8,8)
       EXTERNAL HWRUNI,HWUPCM,HWRGEN
       COMMON/HWHEWS/S(8,8,2),D(8,8)
-      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F01,A(2,NDIAGR),B(2,NDIAGR),
+      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F3,F01,A(2,NDIAGR),B(2,NDIAGR),
      &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
      &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
-      DATA BRW/0.321,0.321,0.000,0.108,0.108,0.108/
-      DATA BRZ/0.154,0.120,0.154,0.120,0.152,0.000,
-     &            0.033,0.067,0.033,0.067,0.033,0.067/
+      DATA BRW/0.321D0,0.321D0,0.000D0,0.108D0,0.108D0,0.108D0/
+      DATA BRZ/0.154D0,0.120D0,0.154D0,0.120D0,0.152D0,0.000D0,
+     &         0.033D0,0.067D0,0.033D0,0.067D0,0.033D0,0.067D0/
 C--compute the masses of external particles for the decay mode
 C--first for true three body decay modes
       IF(ITYPE.EQ.0) THEN
@@ -6462,6 +6710,8 @@ C--enter the intermediate masses for the diagrams
           MWD(I) = RMASS(200)*GAMZ
         ELSEIF(I3MODE(I,IMODE).EQ.198.OR.I3MODE(I,IMODE).EQ.199) THEN
           MWD(I) = RMASS(198)*GAMW
+        ELSEIF(I3MODE(I,IMODE).EQ.59) THEN
+          MWD(I) = 0.0D0 
         ENDIF
  4      CONTINUE
 C--reorder for top quark decay modes(b first then W products)
@@ -6472,7 +6722,8 @@ C--reorder for top quark decay modes(b first then W products)
           IDP(3) = I
         ENDIF
 C--reorder if fermion not first
-        IF(IDP(3).GT.IDP(4)) THEN
+        IF(IDP(3).GT.IDP(4).AND.((IDP(1).EQ.6.OR.IDP(1).EQ.12).OR.
+     &     IDP(2).GE.400)) THEN
           I = IDP(3)
           IDP(3) = IDP(4)
           IDP(4) = I
@@ -6627,43 +6878,54 @@ C--format statements for the outputs
      &       /10X,'NEW MAXIMUM WEIGHT =',1PG24.16)
  999  END
 CDECK  ID>, HWD3M0.
-*CMZ :-        -11/10/01  09:44:08  by  Peter Richardson
+*CMZ :-        -09/04/02  13:46:07  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
       SUBROUTINE HWD3M0(ID,NDIA,WGT,MWGT,RHOIN,IDSPIN)
 C-----------------------------------------------------------------------
 C     Subroutine to calculate the matrix element for a given mode
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER I,J,P0,P1,P2,P3,P0P,IB,ID,IDP(4+NDIAGR),IDSPIN,NDIA,
      &     DRTYPE(NDIAGR),NCTHRE,DRCF(NDIAGR)
       DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,WGT,FJAC,M342,HWRUNI,
      &     M34,PCMA,PCMB,HWUPCM,PHS,N(3),HWVDOT,PP,HWULDO,EPS,PTMP(5),
      &     M232,M242,PRE,PLAB,PRW,XMASS,PCM,P(5,4),PM(5,4),MR,PREF(5),
-     &     MMIN,MMAX,MWGT,CFTHRE(NCFMAX,NCFMAX),WGTB(NCFMAX),WGTC,HWRGEN
+     &     MMIN,MMAX,MWGT,CFTHRE(NCFMAX,NCFMAX),WGTB(NCFMAX),WGTC,
+     &     HWRGEN,A02,A2
       DOUBLE COMPLEX S,D,ME(2,2,2,2,NCFMAX),MED(2,2,2,2),F01(2,2,8,8),
      &     RHOIN(2,2),F0(2,2,8),F1(2,2,8),F2(2,2,8),F0M(2,2,8),
-     &     RHOB(2,2),F1M(2,2,8)
+     &     RHOB(2,2),F1M(2,2,8),F3(2,2,8)
       EXTERNAL HWRUNI,HWUPCM,HWVDOT,HWULDO,HWRGEN
       COMMON/HWHEWP/XMASS(10),PLAB(5,10),PRW(5,2),PCM(5,10)
-      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F01,A(2,NDIAGR),B(2,NDIAGR),
+      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F3,F01,A(2,NDIAGR),B(2,NDIAGR),
      &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
      &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
       DATA PREF/1.0D0,0.0D0,0.0D0,1.0D0,0.0D0/
       COMMON/HWHEWS/S(8,8,2),D(8,8)
-      PARAMETER(EPS=1D-20)
+      PARAMETER(EPS=1D-10)
 C--select the momenta of the particles
 C--first see if there is a boson mode
       IB = -1
       DO 1 I=1,NDIA
-        IF(DRTYPE(I).EQ.1.OR.DRTYPE(I).EQ.5.OR.DRTYPE(I).EQ.6)
-     &        IB = IDP(I+4)
+        IF(DRTYPE(I).EQ.1.OR.DRTYPE(I).EQ.5.OR.DRTYPE(I).EQ.6.OR.
+     &     DRTYPE(I).EQ.7) IB = IDP(I+4)
  1    CONTINUE
 C--compute the mass of the 34 subsystem flat if no boson otherwise Breit-Wigner
       MMIN = (MA(3)+MA(4))**2
       MMAX = (MA(1)-MA(2))**2
-      IF(IB.GT.0) THEN
+      IF(IB.GT.0.AND.IB.NE.59) THEN
         CALL HWHGB1(1,2,IB,FJAC,M342,MMAX,MMIN)
+      ELSEIF(IB.EQ.59) THEN
+         M342 = HWRUNI(1,LOG(MMIN),LOG(MMAX))
+         M342 = EXP(M342)
+         FJAC = (LOG(MMAX)-LOG(MMIN))*M342
+      ELSEIF((DRTYPE(1).EQ.2.OR.DRTYPE(1).EQ.17).AND.
+     &        IDP(5).EQ.206.OR.IDP(5).EQ.207) THEN
+        A02   = ATAN((MMIN-MS(1))/MWD(1))
+        A2    = ATAN((MMAX-MS(1))/MWD(1))-A02
+        M342  = MS(1)+MWD(1)*TAN(A02+A2*HWRGEN(1))
+        FJAC  = A2*((M342-MS(1))**2+MWD(1)**2)/MWD(1)
       ELSE
         FJAC = MMAX-MMIN
         M342 = HWRUNI(1,MMIN,MMAX)
@@ -6738,6 +7000,7 @@ C--compute the F functions
       CALL HWH2F2(8,F0 ,5,PM(1,1), MA(1))
       CALL HWH2F1(8,F1 ,6,PM(1,2), MA(2))
       CALL HWH2F1(8,F2 ,7,PM(1,3), MA(3))
+      CALL HWH2F1(8,F3 ,8,PM(1,4), MA(4))
       CALL HWH2F1(8,F0M,5,PM(1,1),-MA(1))
       CALL HWH2F2(8,F1M,6,PM(1,2),-MA(2))
       CALL HWH2F3(8,F01,PTMP,ZERO)
@@ -6772,6 +7035,39 @@ C--antifermion vector boson exchange diagram
 C--scalar vector boson exchange diagram
       ELSEIF(DRTYPE(I).EQ.6) THEN
         CALL HWD3M6(I,MED)
+C--gravitino fermion fermion
+      ELSEIF(DRTYPE(I).EQ.7) THEN
+        CALL HWD3M7(I,MED)
+C--fermion RPV1
+      ELSEIF(DRTYPE(I).EQ.8) THEN
+        CALL HWD3M8(I,MED)
+C--fermion RPV2
+      ELSEIF(DRTYPE(I).EQ.9) THEN
+        CALL HWD3M9(I,MED)
+C--fermion RPV3
+      ELSEIF(DRTYPE(I).EQ.10) THEN
+        CALL HWD3MA(I,MED)
+C--fermion --> 3 fermions 1
+      ELSEIF(DRTYPE(I).EQ.11) THEN
+        CALL HWD3MB(I,MED)
+C--fermion --> 3 fermions 2
+      ELSEIF(DRTYPE(I).EQ.12) THEN
+        CALL HWD3MC(I,MED)
+C--fermion --> 3 fermions 3
+      ELSEIF(DRTYPE(I).EQ.13) THEN
+        CALL HWD3MD(I,MED)
+C--fermion --> 3 antifermions 1
+      ELSEIF(DRTYPE(I).EQ.14) THEN
+        CALL HWD3MF(I,MED)
+C--fermion --> 3 antifermions 2
+      ELSEIF(DRTYPE(I).EQ.15) THEN
+        CALL HWD3MG(I,MED)
+C--fermion --> 3 antifermions 3
+      ELSEIF(DRTYPE(I).EQ.16) THEN
+        CALL HWD3MH(I,MED)
+C--antifermion --> antifermion fermion fermion
+      ELSEIF(DRTYPE(I).EQ.17) THEN
+        CALL HWD3MI(I,MED)
 C--error not known
       ELSE
         CALL HWWARN('HWD3M0',501,*999)
@@ -6826,7 +7122,7 @@ C--put the matrix element into the spin common block
           NCFL(IDSPIN) = NCTHRE
         ENDIF
 C--if more than one colour flow pick the flow
-        IF(SPCOPT.EQ.1.AND.NCTHRE.NE.1) THEN
+        IF(SPCOPT.EQ.2.AND.NCTHRE.NE.1) THEN
 C--contstruct the matrix elements for the colour flows
           WGTC = ZERO
           DO 50 I=1,NCTHRE
@@ -6868,15 +7164,15 @@ C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the three body
 C  gauge boson exchange diagram
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F0(2,2,8),F1(2,2,8),F01(2,2,8,8),
      &     F0M(2,2,8),F2(2,2,8),PRE,C(2,2),E(2,2),ZI,APP(2,2),APM(2,2),
-     &     AMP(2,2),AMM(2,2),F1M(2,2,8)
+     &     AMP(2,2),AMM(2,2),F1M(2,2,8),F3(2,2,8)
       DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,M342,M232,M242,CN,
      &     MR,P(5,4),PM(5,4),CFTHRE(NCFMAX,NCFMAX)
       INTEGER P0,P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR),NCTHRE,
      &     DRCF(NDIAGR)
-      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F01,A(2,NDIAGR),B(2,NDIAGR),
+      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F3,F01,A(2,NDIAGR),B(2,NDIAGR),
      &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
      &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
       PARAMETER(ZI=(0.0D0,1.0D0))
@@ -6945,21 +7241,32 @@ C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the three body
 C  Higgs boson exchange diagram
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F0(2,2,8),F1(2,2,8),F01(2,2,8,8),
-     &     F0M(2,2,8),F2(2,2,8),PRE,ZI,V1(2,2),V2(2,2),F1M(2,2,8)
+     &     F0M(2,2,8),F2(2,2,8),PRE,ZI,V1(2,2),V2(2,2),F1M(2,2,8),
+     &     F3(2,2,8)
       DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,M342,M232,M242,MR,
      &     P(5,4),PM(5,4),CFTHRE(NCFMAX,NCFMAX)
       INTEGER P0,P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR),NCTHRE,
      &     DRCF(NDIAGR)
-      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F01,A(2,NDIAGR),B(2,NDIAGR),
+      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F3,F01,A(2,NDIAGR),B(2,NDIAGR),
      &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
      &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
       DATA O/2,1/
       COMMON/HWHEWS/S(8,8,2),D(8,8)
       PARAMETER(ZI=(0.0D0,1.0D0))
+C--decide whether to do the diagram
+      IF(MB(2)+MR(ID).LT.MB(1).AND.MR(ID).GT.MB(3)+MB(4).AND.
+     &     IDP(4+ID).NE.206) THEN
+        DO 5 P0=1,2
+        DO 5 P1=1,2
+        DO 5 P2=1,2
+        DO 5 P3=1,2
+ 5      ME(P0,P1,P2,P3) = (0.0D0,0.0D0)
+        RETURN
+      ENDIF
 C--calculate the propagator factor
-      PRE = -0.25D0/(M342-MS(ID)+ZI*MWD(ID))
+      PRE = 0.25D0/(M342-MS(ID)+ZI*MWD(ID))
 C--calculate the vertex functions
       DO 10 P1=1,2
       DO 10 P2=1,2
@@ -6983,21 +7290,22 @@ C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the three body
 C  antisfermion exchange diagram
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F0(2,2,8),F1(2,2,8),F01(2,2,8,8),
-     &     F0M(2,2,8),F2(2,2,8),PRE,V1(2,2),V2(2,2),ZI,F1M(2,2,8)
+     &     F0M(2,2,8),F2(2,2,8),PRE,V1(2,2),V2(2,2),ZI,F1M(2,2,8),
+     &     F3(2,2,8)
       DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,M342,M232,M242,MR,
      &     P(5,4),PM(5,4),CFTHRE(NCFMAX,NCFMAX)
       INTEGER P0,P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR),NCTHRE,
      &     DRCF(NDIAGR)
-      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F01,A(2,NDIAGR),B(2,NDIAGR),
+      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F3,F01,A(2,NDIAGR),B(2,NDIAGR),
      &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
      &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
       DATA O/2,1/
       COMMON/HWHEWS/S(8,8,2),D(8,8)
       PARAMETER(ZI=(0.0D0,1.0D0))
 C--decide whether to do the diagram
-      IF(MB(3)+MR(ID).LT.MB(1)) THEN
+      IF(MB(3)+MR(ID).LT.MB(1).AND.MR(ID).GT.MB(2)+MB(4)) THEN
         DO 5 P0=1,2
         DO 5 P1=1,2
         DO 5 P2=1,2
@@ -7030,21 +7338,22 @@ C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the three body
 C  sfermion exchange diagram
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F0(2,2,8),F1(2,2,8),F01(2,2,8,8),
-     &     F0M(2,2,8),F2(2,2,8),PRE,ZI,V1(2,2),V2(2,2),F1M(2,2,8)
+     &     F0M(2,2,8),F2(2,2,8),PRE,ZI,V1(2,2),V2(2,2),F1M(2,2,8),
+     &     F3(2,2,8)
       DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,M342,M232,M242,MR,
      &P(5,4),PM(5,4),CFTHRE(NCFMAX,NCFMAX)
       INTEGER P0,P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR),NCTHRE,
      &     DRCF(NDIAGR)
       COMMON/HWHEWS/S(8,8,2),D(8,8)
-      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F01,A(2,NDIAGR),B(2,NDIAGR),
+      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F3,F01,A(2,NDIAGR),B(2,NDIAGR),
      &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
      &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
       PARAMETER(ZI=(0.0D0,1.0D0))
       DATA O/2,1/
 C--decide whether to do the diagram
-      IF(MB(4)+MR(ID).LT.MB(1)) THEN
+      IF(MB(4)+MR(ID).LT.MB(1).AND.MR(ID).GT.MB(2)+MB(3)) THEN
         DO 5 P0=1,2
         DO 5 P1=1,2
         DO 5 P2=1,2
@@ -7077,15 +7386,15 @@ C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the three body
 C  gauge boson exchange diagram (antiparticle decay)
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F0(2,2,8),F1(2,2,8),
      &     F0M(2,2,8),F2(2,2,8),PRE,C(2,2),E(2,2),ZI,APP(2,2),APM(2,2),
-     &     AMP(2,2),AMM(2,2),F1M(2,2,8),F01(2,2,8,8)
+     &     AMP(2,2),AMM(2,2),F1M(2,2,8),F3(2,2,8),F01(2,2,8,8)
       DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,M342,M232,M242,CN,MR,
      &     P(5,4),PM(5,4),CFTHRE(NCFMAX,NCFMAX)
       INTEGER P0,P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR),NCTHRE,
      &     DRCF(NDIAGR)
-      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F01,A(2,NDIAGR),B(2,NDIAGR),
+      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F3,F01,A(2,NDIAGR),B(2,NDIAGR),
      &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
      &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
       PARAMETER(ZI=(0.0D0,1.0D0))
@@ -7154,15 +7463,15 @@ C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the three body
 C  gauge boson exchange diagram
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F0(2,2,8),F1(2,2,8),
      &     F0M(2,2,8),F2(2,2,8),PRE,C(2,2),ZI,APP(2,2),APM(2,2),
-     &     AMP(2,2),AMM(2,2),F1M(2,2,8),F01(2,2,8,8)
+     &     AMP(2,2),AMM(2,2),F1M(2,2,8),F3(2,2,8),F01(2,2,8,8)
       DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,M342,M232,M242,CN,MR,
      &     P(5,4),DOT,HWULDO,PM(5,4),CFTHRE(NCFMAX,NCFMAX)
       INTEGER P0,P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR),NCTHRE,
      &     DRCF(NDIAGR)
-      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F01,A(2,NDIAGR),B(2,NDIAGR),
+      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F3,F01,A(2,NDIAGR),B(2,NDIAGR),
      &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
      &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
       DOUBLE PRECISION XMASS,PLAB,PRW,PCM
@@ -7216,6 +7525,529 @@ C--compute the matrix element
      & +APP(P2,P3)*F01(  P2 ,  P2 ,3,4)+APM(P2,P3)*F01(O(P2),O(P2),7,4)
      & +AMP(P2,P3)*F01(  P2 ,  P2 ,3,8)+AMM(P2,P3)*F01(O(P2),O(P2),7,8))
       END
+CDECK  ID>, HWD3M7.
+*CMZ :-        -13/03/02  14:19:47  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWD3M7(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for the three body
+C  decay fermion --> gravitino fermion antifermion (via gauge boson)
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F0(2,2,8),F1(2,2,8),F01(2,2,8,8),
+     &     F0M(2,2,8),F2(2,2,8),PRE,ZI,F1M(2,2,8),F3(2,2,8)
+      DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,M342,M232,M242,MR,
+     &P(5,4),PM(5,4),CFTHRE(NCFMAX,NCFMAX),HWULDO,DL(2,2)
+      INTEGER P0,P1,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR),NCTHRE,
+     &     DRCF(NDIAGR)
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F3,F01,A(2,NDIAGR),B(2,NDIAGR),
+     &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
+     &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
+      PARAMETER(ZI=(0.0D0,1.0D0))
+      DOUBLE PRECISION XMASS,PLAB,PRW,PCM
+      COMMON/HWHEWP/XMASS(10),PLAB(5,10),PRW(5,2),PCM(5,10)
+      DATA O/2,1/
+      DATA DL/1.0D0,0.0D0,0.0D0,1.0D0/
+      EXTERNAL HWULDO
+C--compute the propagator factor
+      PRE = HALF*HWULDO(PCM(1,6),PM(1,2))*
+     &      HWULDO(PCM(1,7),PM(1,3))*HWULDO(PCM(1,8),PM(1,4))
+      PRE = SQRT(PRE)
+      PRE = PRE/(M342-MS(ID)+ZI*MWD(ID))
+      DO 10 P0=1,2
+      DO 10 P1=1,2
+      ME(P0,P1,  P1 ,  P1 ) = PRE*B(  P1 ,ID)*(
+     &   A(1,ID)*S(2,3,P1)*S(3,4,O(P1))*S(3,2,  P1 )*F0(O(P1),O(P0),2)
+     &  +A(2,ID)* DL(P1,1)*S(2,3,  P1 )*S(4,2,O(P1))*F0(  1  ,O(P0),2))
+      ME(P0,P1,O(P1),O(P1)) = PRE*B(O(P1),ID)*(
+     &   A(1,ID)*S(2,4,P1)*S(4,3,O(P1))*S(4,2,  P1 )*F0(O(P1),O(P0),2)
+     &  +A(2,ID)* DL(P1,1)*S(2,4,  P1 )*S(3,2,O(P1))*F0(  1  ,O(P0),2))
+      ME(P0,P1,O(P1),  P1 ) = (0.0D0,0.0D0)
+ 10   ME(P0,P1,  P1 ,O(P1)) = (0.0D0,0.0D0)
+      END
+CDECK  ID>, HWD3M8.
+*CMZ :-        -08/04/02  14:48:42  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWD3M8(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for 1st 3 body RPV
+C  diagram f--> fbar fbar f 
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F0(2,2,8),F1(2,2,8),F01(2,2,8,8),
+     &     F0M(2,2,8),F2(2,2,8),PRE,ZI,V1(2,2),V2(2,2),F1M(2,2,8),
+     &     F3(2,2,8)
+      DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,M342,M232,M242,MR,
+     &     P(5,4),PM(5,4),CFTHRE(NCFMAX,NCFMAX)
+      INTEGER P0,P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR),NCTHRE,
+     &     DRCF(NDIAGR)
+      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F3,F01,A(2,NDIAGR),B(2,NDIAGR),
+     &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
+     &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
+      DATA O/2,1/
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      PARAMETER(ZI=(0.0D0,1.0D0))
+C--decide whether to do the diagram
+      IF(MB(2)+MR(ID).LT.MB(1).AND.MR(ID).GT.MB(3)+MB(4)) THEN
+        DO 5 P0=1,2
+        DO 5 P1=1,2
+        DO 5 P2=1,2
+        DO 5 P3=1,2
+ 5      ME(P0,P1,P2,P3) = (0.0D0,0.0D0)
+        RETURN
+      ENDIF
+C--calculate the propagator factor
+      PRE = 0.25D0/(M342-MS(ID)+ZI*MWD(ID))
+C--calculate the vertex functions
+      DO 10 P1=1,2
+      DO 10 P2=1,2
+      V1(P1,P2) = PRE*( A(  P2 ,ID)*F0M(  P1 ,  P2 ,2)*S(2,6,  P2)
+     &                 -A(O(P2),ID)*F0M(  P1 ,O(P2),6)*MA(2))
+ 10   V2(P1,P2) =       B(  P1 ,ID)*F3 (O(P2),  P1 ,3)*S(3,7,P1)
+     &                 -B(O(P1),ID)*F3 (O(P2),O(P1),7)*MA(3)
+C--calculate the matrix element
+      DO 20 P0=1,2
+      DO 20 P1=1,2
+      DO 20 P2=1,2
+      DO 20 P3=1,2
+ 20   ME(P0,P1,P2,P3) = V1(P0,P1)*V2(P2,P3)
+      END
+CDECK  ID>, HWD3M9.
+*CMZ :-        -08/04/02  14:48:42  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWD3M9(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for 2nd 3 body RPV
+C  diagram f --> fbar fbar f
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F0(2,2,8),F1(2,2,8),F01(2,2,8,8),
+     &     F0M(2,2,8),F2(2,2,8),PRE,V1(2,2),V2(2,2),ZI,F1M(2,2,8),
+     &     F3(2,2,8)
+      DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,M342,M232,M242,MR,
+     &     P(5,4),PM(5,4),CFTHRE(NCFMAX,NCFMAX)
+      INTEGER P0,P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR),NCTHRE,
+     &     DRCF(NDIAGR)
+      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F3,F01,A(2,NDIAGR),B(2,NDIAGR),
+     &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
+     &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
+      DATA O/2,1/
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      PARAMETER(ZI=(0.0D0,1.0D0))
+C--decide whether to do the diagram
+      IF(MB(3)+MR(ID).LT.MB(1).AND.MR(ID).GT.MB(2)+MB(4)) THEN
+        DO 5 P0=1,2
+        DO 5 P1=1,2
+        DO 5 P2=1,2
+        DO 5 P3=1,2
+ 5      ME(P0,P1,P2,P3) = (0.0D0,0.0D0)
+        RETURN
+      ENDIF
+C--compute the propagator factor
+      PRE = -0.25D0/(M242-MS(ID)+ZI*MWD(ID))
+C--compute the vertex factors
+      DO 10 P1=1,2
+      DO 10 P2=1,2
+      V1(P1,P2) = PRE*( A(  P2 ,ID)*F0M(  P1 ,  P2 ,3)*S(3,7,P2)
+     &                 -A(O(P2),ID)*F0M(  P1 ,O(P2),7)*MA(3))
+ 10   V2(P1,P2) =       B(  P1 ,ID)*F3 (O(P2),  P1 ,2)*S(2,6,P1)
+     &                 -B(O(P1),ID)*F3 (O(P2),O(P1),6)*MA(2)
+C--compute the matrix element
+      DO 20 P0=1,2
+      DO 20 P1=1,2
+      DO 20 P2=1,2
+      DO 20 P3=1,2
+ 20   ME(P0,P1,P2,P3) = V1(P0,P2)*V2(P1,P3)
+      END
+CDECK  ID>, HWD3MA.
+*CMZ :-        -08/04/02  14:48:42  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWD3MA(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for 3rd 3 body RPV
+C  diagram f --> fbar fbar f
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F0(2,2,8),F1(2,2,8),F01(2,2,8,8),
+     &     F0M(2,2,8),F2(2,2,8),PRE,ZI,V1(2,2),V2(2,2),F1M(2,2,8),
+     &     F3(2,2,8)
+      DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,M342,M232,M242,MR,
+     &P(5,4),PM(5,4),CFTHRE(NCFMAX,NCFMAX)
+      INTEGER P0,P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR),NCTHRE,
+     &     DRCF(NDIAGR)
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F3,F01,A(2,NDIAGR),B(2,NDIAGR),
+     &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
+     &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
+      PARAMETER(ZI=(0.0D0,1.0D0))
+      DATA O/2,1/
+C--decide whether to do the diagram
+      IF(MB(4)+MR(ID).LT.MB(1).AND.MR(ID).GT.MB(2)+MB(3)) THEN
+        DO 5 P0=1,2
+        DO 5 P1=1,2
+        DO 5 P2=1,2
+        DO 5 P3=1,2
+ 5      ME(P0,P1,P2,P3) = (0.0D0,0.0D0)
+        RETURN
+      ENDIF
+C--compute the propagator factor
+      PRE = 0.25D0/(M232-MS(ID)+ZI*MWD(ID))
+C--compute the factors for the two vertices
+      DO 10 P1=1,2
+      DO 10 P2=1,2
+      V1(P1,P2) = PRE*( A(  P1 ,ID)*F3(O(P2),  P1 ,1)*S(1,5,P1)
+     &                 +A(O(P1),ID)*F3(O(P2),O(P1),5)*MA(1))
+ 10   V2(P1,P2) =       B(  P2 ,ID)*F1(  P1 ,  P2 ,3)*S(3,7,P2)
+     &                 -B(O(P2),ID)*F1(  P1 ,O(P2),7)*MA(3)
+C--now compute the matrix element
+      DO 20 P0=1,2
+      DO 20 P1=1,2
+      DO 20 P2=1,2
+      DO 20 P3=1,2
+ 20   ME(P0,P1,P2,P3) = V1(P0,P3)*V2(P1,P2)
+      END
+CDECK  ID>, HWD3MB.
+*CMZ :-        -08/04/02  14:48:42  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWD3MB(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for 4th 3 body RPV
+C  diagram f --> f f f
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F0(2,2,8),F1(2,2,8),F01(2,2,8,8),
+     &     F0M(2,2,8),F2(2,2,8),PRE,ZI,V1(2,2),V2(2,2),F1M(2,2,8),
+     &     F3(2,2,8)
+      DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,M342,M232,M242,MR,
+     &     P(5,4),PM(5,4),CFTHRE(NCFMAX,NCFMAX)
+      INTEGER P0,P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR),NCTHRE,
+     &     DRCF(NDIAGR)
+      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F3,F01,A(2,NDIAGR),B(2,NDIAGR),
+     &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
+     &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
+      DATA O/2,1/
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      PARAMETER(ZI=(0.0D0,1.0D0))
+C--decide whether to do the diagram
+      IF(MB(2)+MR(ID).LT.MB(1).AND.MR(ID).GT.MB(3)+MB(4)) THEN
+        DO 5 P0=1,2
+        DO 5 P1=1,2
+        DO 5 P2=1,2
+        DO 5 P3=1,2
+ 5      ME(P0,P1,P2,P3) = (0.0D0,0.0D0)
+        RETURN
+      ENDIF
+C--calculate the propagator factor
+      PRE = 0.25D0/(M342-MS(ID)+ZI*MWD(ID))
+C--calculate the vertex functions
+      DO 10 P1=1,2
+      DO 10 P2=1,2
+         V1(P1,P2) = PRE*( A(  P1 ,ID)*F1(O(P2),  P1 ,1)*S(1,5,P1)
+     &                    +A(O(P1),ID)*F1(O(P2),O(P1),5)*MA(1))
+ 10      V2(P1,P2) =       B(O(P2),ID)*F2(O(P1),O(P2),4)*S(4,8,O(P2))
+     &                    -B(  P2 ,ID)*F2(O(P1),  P2 ,8)*MA(4)
+C--calculate the matrix element
+      DO 20 P0=1,2
+      DO 20 P1=1,2
+      DO 20 P2=1,2
+      DO 20 P3=1,2
+ 20   ME(P0,P1,P2,P3) = V1(P0,P1)*V2(P2,P3)
+      END
+CDECK  ID>, HWD3MC.
+*CMZ :-        -08/04/02  14:48:42  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWD3MC(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for 5th 3 body RPV
+C  diagram f --> f f f
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F0(2,2,8),F1(2,2,8),F01(2,2,8,8),
+     &     F0M(2,2,8),F2(2,2,8),PRE,V1(2,2),V2(2,2),ZI,F1M(2,2,8),
+     &     F3(2,2,8)
+      DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,M342,M232,M242,MR,
+     &     P(5,4),PM(5,4),CFTHRE(NCFMAX,NCFMAX)
+      INTEGER P0,P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR),NCTHRE,
+     &     DRCF(NDIAGR)
+      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F3,F01,A(2,NDIAGR),B(2,NDIAGR),
+     &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
+     &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
+      DATA O/2,1/
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      PARAMETER(ZI=(0.0D0,1.0D0))
+C--decide whether to do the diagram
+      IF(MB(3)+MR(ID).LT.MB(1).AND.MR(ID).GT.MB(2)+MB(4)) THEN
+        DO 5 P0=1,2
+        DO 5 P1=1,2
+        DO 5 P2=1,2
+        DO 5 P3=1,2
+ 5      ME(P0,P1,P2,P3) = (0.0D0,0.0D0)
+        RETURN
+      ENDIF
+C--compute the propagator factor
+      PRE =-0.25D0/(M242-MS(ID)+ZI*MWD(ID))
+C--compute the vertex factors
+      DO 10 P1=1,2
+      DO 10 P2=1,2
+         V1(P1,P2) = PRE*( A(  P1 ,ID)*F2(O(P2),  P1 ,1)*S(1,5,P1)
+     &                    +A(O(P1),ID)*F2(O(P2),O(P1),5)*MA(1))
+ 10      V2(P1,P2) = B(O(P2),ID)*F1(O(P1),O(P2),4)*S(4,8,O(P2))
+     &              -B(  P2 ,ID)*F1(O(P1),  P2 ,8)*MA(4)
+C--compute the matrix element
+      DO 20 P0=1,2
+      DO 20 P1=1,2
+      DO 20 P2=1,2
+      DO 20 P3=1,2
+ 20   ME(P0,P1,P2,P3) = V1(P0,P2)*V2(P1,P3)
+      END
+CDECK  ID>, HWD3MD.
+*CMZ :-        -08/04/02  14:48:42  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWD3MD(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for 6th 3 body RPV
+C  diagram f --> f f f
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F0(2,2,8),F1(2,2,8),F01(2,2,8,8),
+     &     F0M(2,2,8),F2(2,2,8),PRE,ZI,V1(2,2),V2(2,2),F1M(2,2,8),
+     &     F3(2,2,8)
+      DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,M342,M232,M242,MR,
+     &P(5,4),PM(5,4),CFTHRE(NCFMAX,NCFMAX)
+      INTEGER P0,P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR),NCTHRE,
+     &     DRCF(NDIAGR)
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F3,F01,A(2,NDIAGR),B(2,NDIAGR),
+     &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
+     &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
+      PARAMETER(ZI=(0.0D0,1.0D0))
+      DATA O/2,1/
+C--decide whether to do the diagram
+      IF(MB(4)+MR(ID).LT.MB(1).AND.MR(ID).GT.MB(2)+MB(3)) THEN
+        DO 5 P0=1,2
+        DO 5 P1=1,2
+        DO 5 P2=1,2
+        DO 5 P3=1,2
+ 5      ME(P0,P1,P2,P3) = (0.0D0,0.0D0)
+        RETURN
+      ENDIF
+C--compute the propagator factor
+      PRE = 0.25D0/(M232-MS(ID)+ZI*MWD(ID))
+C--compute the factors for the two vertices
+      DO 10 P1=1,2
+      DO 10 P2=1,2
+         V1(P1,P2) = PRE*( A(O(P2),ID)*F0M(  P1 ,O(P2),4)*S(4,8,O(P2))
+     &                    -A(  P2 ,ID)*F0M(  P1 ,  P2 ,8)*MA(4))
+ 10      V2(P1,P2) = B(O(P1),ID)*F2 (O(P2),O(P1),2)*S(2,6,O(P1))
+     &              -B(  P1 ,ID)*F2 (O(P2),  P1 ,6)*MA(2)
+C--now compute the matrix element
+      DO 20 P0=1,2
+      DO 20 P1=1,2
+      DO 20 P2=1,2
+      DO 20 P3=1,2
+ 20   ME(P0,P1,P2,P3) = V1(P0,P3)*V2(P1,P2)
+      END
+CDECK  ID>, HWD3MF.
+*CMZ :-        -08/04/02  14:48:42  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWD3MF(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for 7th 3 body RPV
+C  diagram f --> fbar fbar fbar
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F0(2,2,8),F1(2,2,8),F01(2,2,8,8),
+     &     F0M(2,2,8),F2(2,2,8),PRE,ZI,V1(2,2),V2(2,2),F1M(2,2,8),
+     &     F3(2,2,8)
+      DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,M342,M232,M242,MR,
+     &     P(5,4),PM(5,4),CFTHRE(NCFMAX,NCFMAX)
+      INTEGER P0,P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR),NCTHRE,
+     &     DRCF(NDIAGR)
+      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F3,F01,A(2,NDIAGR),B(2,NDIAGR),
+     &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
+     &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
+      DATA O/2,1/
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      PARAMETER(ZI=(0.0D0,1.0D0))
+C--decide whether to do the diagram
+      IF(MB(2)+MR(ID).LT.MB(1).AND.MR(ID).GT.MB(3)+MB(4)) THEN
+        DO 5 P0=1,2
+        DO 5 P1=1,2
+        DO 5 P2=1,2
+        DO 5 P3=1,2
+ 5      ME(P0,P1,P2,P3) = (0.0D0,0.0D0)
+        RETURN
+      ENDIF
+C--calculate the propagator factor
+      PRE = 0.25D0/(M342-MS(ID)+ZI*MWD(ID))
+C--calculate the vertex functions
+      DO 10 P1=1,2
+      DO 10 P2=1,2
+         V1(P1,P2) = PRE*( A(  P2 ,ID)*F0M(  P1 ,  P2 ,2)*S(2,6,P2)
+     &                    -A(O(P2),ID)*F0M(  P1 ,O(P2),6)*MA(2))
+ 10      V2(P1,P2) =       B(  P2 ,ID)*F2(  P1 ,  P2 ,4)*S(4,8,P2)
+     &                    -B(O(P2),ID)*F2(  P1 ,O(P2),8)*MA(4)
+C--calculate the matrix element
+      DO 20 P0=1,2
+      DO 20 P1=1,2
+      DO 20 P2=1,2
+      DO 20 P3=1,2
+ 20   ME(P0,P1,P2,P3) = V1(P0,P1)*V2(P2,P3)
+      END
+CDECK  ID>, HWD3MG.
+*CMZ :-        -08/04/02  14:48:42  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWD3MG(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for 8th 3 body RPV
+C  diagram f --> fbar fbar fbar
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F0(2,2,8),F1(2,2,8),F01(2,2,8,8),
+     &     F0M(2,2,8),F2(2,2,8),PRE,V1(2,2),V2(2,2),ZI,F1M(2,2,8),
+     &     F3(2,2,8)
+      DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,M342,M232,M242,MR,
+     &     P(5,4),PM(5,4),CFTHRE(NCFMAX,NCFMAX)
+      INTEGER P0,P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR),NCTHRE,
+     &     DRCF(NDIAGR)
+      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F3,F01,A(2,NDIAGR),B(2,NDIAGR),
+     &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
+     &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
+      DATA O/2,1/
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      PARAMETER(ZI=(0.0D0,1.0D0))
+C--decide whether to do the diagram
+      IF(MB(3)+MR(ID).LT.MB(1).AND.MR(ID).GT.MB(2)+MB(4)) THEN
+        DO 5 P0=1,2
+        DO 5 P1=1,2
+        DO 5 P2=1,2
+        DO 5 P3=1,2
+ 5      ME(P0,P1,P2,P3) = (0.0D0,0.0D0)
+        RETURN
+      ENDIF
+C--compute the propagator factor
+      PRE = 0.25D0/(M242-MS(ID)+ZI*MWD(ID))
+C--compute the vertex factors
+      DO 10 P1=1,2
+      DO 10 P2=1,2
+         V1(P1,P2) = PRE*( A(  P2 ,ID)*F0M(  P1 ,  P2 ,3)*S(3,7,  P2 )
+     &                    -A(O(P2),ID)*F0M(  P1 ,O(P2),7)*MA(3))
+ 10      V2(P1,P2) =       B(  P1 ,ID)*F3 (  P2 ,  P1 ,2)*S(2,6,  P1 )
+     &                    -B(O(P1),ID)*F3 (  P2 ,O(P1),6)*MA(2)
+C--compute the matrix element
+      DO 20 P0=1,2
+      DO 20 P1=1,2
+      DO 20 P2=1,2
+      DO 20 P3=1,2
+ 20   ME(P0,P1,P2,P3) = V1(P0,P2)*V2(P1,P3)
+      END
+CDECK  ID>, HWD3MH.
+*CMZ :-        -08/04/02  14:48:42  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWD3MH(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for 9th 3 body RPV
+C  diagram f --> fbar fbar fbar
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F0(2,2,8),F1(2,2,8),F01(2,2,8,8),
+     &     F0M(2,2,8),F2(2,2,8),PRE,ZI,V1(2,2),V2(2,2),F1M(2,2,8),
+     &     F3(2,2,8)
+      DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,M342,M232,M242,MR,
+     &P(5,4),PM(5,4),CFTHRE(NCFMAX,NCFMAX)
+      INTEGER P0,P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR),NCTHRE,
+     &     DRCF(NDIAGR)
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F3,F01,A(2,NDIAGR),B(2,NDIAGR),
+     &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
+     &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
+      PARAMETER(ZI=(0.0D0,1.0D0))
+      DATA O/2,1/
+C--decide whether to do the diagram
+      IF(MB(4)+MR(ID).LT.MB(1).AND.MR(ID).GT.MB(2)+MB(3)) THEN
+        DO 5 P0=1,2
+        DO 5 P1=1,2
+        DO 5 P2=1,2
+        DO 5 P3=1,2
+ 5      ME(P0,P1,P2,P3) = (0.0D0,0.0D0)
+        RETURN
+      ENDIF
+C--compute the propagator factor
+      PRE = -0.25D0/(M232-MS(ID)+ZI*MWD(ID))
+C--compute the factors for the two vertices
+      DO 10 P1=1,2
+      DO 10 P2=1,2
+         V1(P1,P2) = PRE*( A(  P2 ,ID)*F0M(  P1 ,  P2 ,4)*S(4,8,P2)
+     &                    -A(O(P2),ID)*F0M(  P1 ,O(P2),8)*MA(4))
+ 10      V2(P1,P2) =       B(  P1 ,ID)*F2 (  P2 ,  P1 ,2)*S(2,6,P1)
+     &                    -B(O(P1),ID)*F2 (  P2 ,O(P1),6)*MA(2)
+C--now compute the matrix element
+      DO 20 P0=1,2
+      DO 20 P1=1,2
+      DO 20 P2=1,2
+      DO 20 P3=1,2
+ 20   ME(P0,P1,P2,P3) = V1(P0,P3)*V2(P1,P2)
+      END
+CDECK  ID>, HWD3MI.
+*CMZ :-        -09/04/02  13:37:38  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWD3MI(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for the three body
+C  Higgs boson exchange diagram antifermion decay
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F0(2,2,8),F1(2,2,8),F01(2,2,8,8),
+     &     F0M(2,2,8),F2(2,2,8),PRE,ZI,V1(2,2),V2(2,2),F1M(2,2,8),
+     &     F3(2,2,8)
+      DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,M342,M232,M242,MR,
+     &     P(5,4),PM(5,4),CFTHRE(NCFMAX,NCFMAX)
+      INTEGER P0,P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR),NCTHRE,
+     &     DRCF(NDIAGR)
+      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F3,F01,A(2,NDIAGR),B(2,NDIAGR),
+     &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
+     &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
+      DATA O/2,1/
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      PARAMETER(ZI=(0.0D0,1.0D0))
+C--decide whether to do the diagram
+      IF(MB(2)+MR(ID).LT.MB(1).AND.MR(ID).GT.MB(3)+MB(4).AND.
+     &   IDP(4+ID).NE.207) THEN
+        DO 5 P0=1,2
+        DO 5 P1=1,2
+        DO 5 P2=1,2
+        DO 5 P3=1,2
+ 5      ME(P0,P1,P2,P3) = (0.0D0,0.0D0)
+        RETURN
+      ENDIF
+C--calculate the propagator factor
+      PRE = 0.25D0/(M342-MS(ID)+ZI*MWD(ID))
+C--calculate the vertex functions
+      DO 10 P1=1,2
+      DO 10 P2=1,2
+      V1(P1,P2) = PRE*( A(  P2 ,ID)*F0M(O(P1),  P2 ,2)*S(2,6,P2)
+     &                 -A(O(P2),ID)*F0M(O(P1),O(P2),6)*MA(2))
+ 10   V2(P1,P2) =       B(  P2 ,ID)*F2(O(P1),  P2 ,4)*S(4,8,P2)
+     &                 -B(O(P2),ID)*F2(O(P1),O(P2),8)*MA(4)
+C--calculate the matrix element
+      DO 20 P0=1,2
+      DO 20 P1=1,2
+      DO 20 P2=1,2
+      DO 20 P3=1,2
+ 20   ME(P0,P1,P2,P3) = V1(P0,P1)*V2(P2,P3)
+      END
 CDECK  ID>, HWD4ME.
 *CMZ :-        -20/10/99  09:46:43  by  Peter Richardson
 *-- Author :    Peter Richardson
@@ -7224,15 +8056,15 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     Subroutine to perform the four body Higgs decays
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IMODE,I,J,ID,IDP(4+NDIAGR),ITYPE(2),NTRY,ITYPE1,ITYPE2
       DOUBLE PRECISION A,B,MS,MWD,M,M2,WGT,HWRUNI,BRW(6),BRZ(12),
      &     HWUPCM,WMAX,WSUM,WSSUM,MR,PRE,TEMP,HWRGEN,WTMAX,P(5,5)
       EXTERNAL HWRUNI,HWUPCM,HWRGEN
       COMMON/HWD4BY/A(2),B(2),MS(2),MWD(2),MR(2),M(5),M2(5),P,IDP
-      DATA BRW/0.321,0.321,0.000,0.108,0.108,0.108/
-      DATA BRZ/0.154,0.120,0.154,0.120,0.152,0.000,
-     &            0.033,0.067,0.033,0.067,0.033,0.067/
+      DATA BRW/0.321D0,0.321D0,0.000D0,0.108D0,0.108D0,0.108D0/
+      DATA BRZ/0.154D0,0.120D0,0.154D0,0.120D0,0.152D0,0.000D0,
+     &         0.033D0,0.067D0,0.033D0,0.067D0,0.033D0,0.067D0/
       ITYPE(1) = ITYPE1
       ITYPE(2) = ITYPE2
       WTMAX = WT4MAX(ITYPE(1),ITYPE(2),IMODE)
@@ -7329,7 +8161,7 @@ C-----------------------------------------------------------------------
 C     Subroutine to calculate the matrix element for a given four body
 C     decay mode
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER I,J,P0,P1,P2,P3,ID,O(2),IDP(4+NDIAGR),II,P4
       DOUBLE PRECISION A,B,MS,MWD,M,M2,WGT,HWRUNI,
      &     M23,PCMA,PCMB(2),HWUPCM,PHS,N(3),HWVDOT,PP,HWULDO,EPS,
@@ -7557,7 +8389,7 @@ C     USES SPIN DENSITY MATRIX IN RHOHEP (1ST CMPT=>-VE,2=>LONG,3=>+VE)
 C     IF BOSON CAME FROM HIGGS DECAY, GIVE BOTH THE SAME HELICITY (EPR)
 C     IF BOSON CAME FROM W+1JET, GIVE IT THE CORRECT DECAY CORRELATIONS
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRUNI,HWUPCM,HWULDO,R(3,3),CV,CA,BR,PCM,
      & PBOS(5),PMAX,PROB,RRLL,RLLR
       INTEGER HWRINT,IBOS,IBOSON,IPAIR,ICMF,IOPT,IHEL,IMOTH,
@@ -7722,7 +8554,7 @@ C-----------------------------------------------------------------------
 C     CHOOSE DECAY MODE OF BOSON
 C     IOPT=2 TO RESET COUNTERS, 1 FOR BOSON PAIR, 0 FOR ANY OTHERS
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,BRMODE(12,3),CV,CA,BR,BRLST,BRCOM,FACZ,
      & FACW
       INTEGER HWRINT,IDBOS,IDEC,IDMODE(2,12,3),IFER,IANT,IOPT,I1,I2,
@@ -7739,12 +8571,14 @@ C---STORE THE DECAY MODES (FERMION FIRST)
      &              1,  7,  2,  8,  3,  9,  4, 10,  5, 11,  6, 12,
      &            121,127,123,129,125,131,122,128,124,130,126,132/
 C---STORE THE BRANCHING RATIOS TO THESE MODES
-      DATA BRMODE/0.321,0.321,0.000,0.017,0.017,0.108,0.108,0.108,4*0.0,
-     &            0.321,0.321,0.000,0.017,0.017,0.108,0.108,0.108,4*0.0,
-     &            0.154,0.120,0.154,0.120,0.152,0.000,
-     &            0.033,0.033,0.033,0.067,0.067,0.067/
+      DATA BRMODE/0.321D0,0.321D0,0.000D0,0.017D0,0.017D0,0.108D0,
+     &            0.108D0,0.108D0,4*0.0D0,
+     &            0.321D0,0.321D0,0.000D0,0.017D0,0.017D0,0.108D0,
+     &            0.108D0,0.108D0,4*0.0D0,
+     &            0.154D0,0.120D0,0.154D0,0.120D0,0.152D0,0.000D0,
+     &            0.033D0,0.033D0,0.033D0,0.067D0,0.067D0,0.067D0/
 C---FACTORS FOR CV AND CA FOR W AND Z
-      DATA FACW,FACZ/2*0.0/
+      DATA FACW,FACZ/2*0.0D0/
       IF (FACZ.EQ.ZERO) FACZ=SQRT(SWEIN)
       IF (FACW.EQ.ZERO) FACW=0.5/SQRT(2D0)
       IF (IDBOS.LT.198.OR.IDBOS.GT.200) CALL HWWARN('HWDBOZ',101,*999)
@@ -7872,7 +8706,7 @@ C     IOPT=2 TO RESET COUNTERS, 1 FOR BOSON PAIR, 0 FOR ANY OTHERS
 C     IDENTICAL TO HWDBOZ BUT REQUIRES DECAY MODE ACCESSIBLE FOR GIVEN
 C     MASS
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,BRMODE(12,3),CV,CA,BR,BRLST,BRCOM,FACZ,
      & FACW,MSMODE(12,3),MASS
       INTEGER HWRINT,IDBOS,IDEC,IDMODE(2,12,3),IFER,IANT,IOPT,I1,I2,
@@ -7889,13 +8723,15 @@ C---STORE THE DECAY MODES (FERMION FIRST)
      &              1,  7,  2,  8,  3,  9,  4, 10,  5, 11,  6, 12,
      &            121,127,123,129,125,131,122,128,124,130,126,132/
 C---STORE THE BRANCHING RATIOS TO THESE MODES
-      DATA BRMODE/0.321,0.321,0.000,0.017,0.017,0.108,0.108,0.108,4*0.0,
-     &            0.321,0.321,0.000,0.017,0.017,0.108,0.108,0.108,4*0.0,
-     &            0.154,0.120,0.154,0.120,0.152,0.000,
-     &            0.033,0.033,0.033,0.067,0.067,0.067/
+      DATA BRMODE/0.321D0,0.321D0,0.000D0,0.017D0,0.017D0,0.108D0,
+     &            0.108D0,0.108D0,4*0.0D0,
+     &            0.321D0,0.321D0,0.000D0,0.017D0,0.017D0,0.108D0,
+     &            0.108D0,0.108D0,4*0.0D0,
+     &            0.154D0,0.120D0,0.154D0,0.120D0,0.152D0,0.000D0,
+     &            0.033D0,0.033D0,0.033D0,0.067D0,0.067D0,0.067D0/
       DATA MSMODE/36*0.0D0/
 C---FACTORS FOR CV AND CA FOR W AND Z
-      DATA FACW,FACZ/2*0.0/
+      DATA FACW,FACZ/2*0.0D0/
       IF (FACZ.EQ.ZERO) FACZ=SQRT(SWEIN)
       IF (FACW.EQ.ZERO) FACW=0.5/SQRT(2D0)
       IF (IDBOS.LT.198.OR.IDBOS.GT.200) CALL HWWARN('HWDBOZ',101,*999)
@@ -8036,7 +8872,7 @@ C-----------------------------------------------------------------------
 C     Checks line L of decay table is compatible with decay of particle
 C     IDKY, tidies up the line and sets NPRODS.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION EPS,QS,Q,DM
       INTEGER IDKY,L,IFAULT,I,ID,J
       PARAMETER (EPS=1.D-6)
@@ -8108,7 +8944,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C INTERFACE TO QQ-CLEO MONTE CARLO (LS 11/12/91)
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IHEP,IIHEP,NHEPHF,QQLMAT
       LOGICAL QQLERR
       CHARACTER*8 NAME
@@ -8282,7 +9118,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C INTERFACE TO EURODEC PACKAGE (LS 10/29/91)
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IHEP,IIHEP,NHEPHF,IEUPDG,IPDGEU
       CHARACTER*8 NAME
 C---EURODEC COMMON'S : INITIAL INPUT
@@ -8476,7 +9312,7 @@ C-----------------------------------------------------------------------
 C     GENERATES DECAYS OF UNSTABLE HADRONS AND LEPTONS
 C     Modified for TAUOLA interface 16/10/01 PR
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       COMMON/FFS/TB,BT
       COMMON/SFF/IT1,IB1,IT2,IB2
       DOUBLE PRECISION TB,BT
@@ -8737,7 +9573,7 @@ C-----------------------------------------------------------------------
 C  CALCULATE THE COMPLEX FUNCTION F OF HHG eq 2.18
 C  FOR USE IN H-->GAMMGAMM DECAYS
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION TAU,FNREAL,FNIMAG,FNLOG,FNSQR
       IF (TAU.GT.ONE) THEN
         FNREAL=(ASIN(1/SQRT(TAU)))**2
@@ -8761,13 +9597,13 @@ C-----------------------------------------------------------------------
 C  CALCULATE THE DOUBLE BREIT-WIGNER INTEGRAL
 C  X=(EMV/EMH)**2 , Y=EMV*GAMV/EMH**2
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWDHGF,X,Y,CHANGE,X1,X2,FAC1,FAC2,TH1,TH2,TH1HI,
      & TH1LO,TH2HI,TH2LO,X2MAX,SQFAC
       INTEGER NBIN,IBIN1,IBIN2
 C  CHANGE IS THE POINT WHERE DIRECT INTEGRATION BEGINS TO CONVERGE
 C  FASTER THAN STANDARD BREIT-WIGNER SUBSTITUTION
-      DATA CHANGE,NBIN/0.425,25/
+      DATA CHANGE,NBIN/0.425D0,25/
       HWDHGF=0
       IF (Y.LT.ZERO) RETURN
       IF (X.GT.CHANGE) THEN
@@ -8825,7 +9661,7 @@ C     A) FOR GAMinp=0 FIND AND DECAY HIGGS
 C     B) FOR GAMinp>0 CALCULATE TOTAL HIGGS WIDTH
 C                     FOR EMH=GAMINP. STORE RESULT IN GAMINP.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWDHGF,HWRGEN,HWRUNI,HWUSQR,HWUPCM,GAMINP,EMH,
      & EMF,COLFAC,ENF,K1,K0,BET0,BET1,GAM0,GAM1,SCLOG,CFAC,XF,EM,GAMLIM,
      & GAM,XW,EMW,XZ,EMZ,YW,YZ,EMI,TAUT,TAUW,WIDHIG,VECDEC,EMB,GAMB,
@@ -9046,7 +9882,7 @@ C   MODIFIED TO INCLUDE R-PARITY VIOLATING SUSY PR 9/4/99
 C   MODIFIED TO CALL A NUMBER OF ROUTINES TO DO THE VARIOUS BITS OF
 C   THE PROCESS
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION PW(5)
       INTEGER IHEP,IS,ID,IM,KHEP,LHEP,MHEP,NPR,CLSAVE(2),NHEPST
       LOGICAL FOUND
@@ -9101,7 +9937,7 @@ C   Subroutine to perform the first part of the heavy object decays
 C   IE to select the decay mode
 C   was part of HWDHOB
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWUMBW,HWRGEN,SDKM,RN,BF
       INTEGER IST(3),IHEP,ID,IM,I,JHEP,LHEP,MHEP,NPR,MTRY,NTRY,IS
       EXTERNAL HWRGEN
@@ -9215,7 +10051,7 @@ C Assign production vertices to decay products
       CALL HWVEQU(4,VHEP(1,MHEP),VHEP(1,NHEP))
  999  END
 CDECK  ID>, HWDH02.
-*CMZ :-        -17/10/01  10:19:15  by  Peter Richardson
+*CMZ :-        -30/09/02  14:05:28  by  Peter Richardson
 *-- Author :    Ian Knowles & Bryan Webber
 C-----------------------------------------------------------------------
       SUBROUTINE HWDHO2(IHEP,IM,NPR,MHEP,LHEP,KHEP,PW)
@@ -9224,7 +10060,7 @@ C   Subroutine to perform the second part of the heavy object decays
 C   IE generate the kinematics for the decay
 C   was part of HWDHOB
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       COMMON/FFS/TB,BT
       COMMON/SFF/IT1,IB1,IT2,IB2
       DOUBLE PRECISION TB,BT
@@ -9348,6 +10184,7 @@ C Four body decay: LHEP -> KHEP + RHEP + MHEP + NHEP
         KHEP = MHEP
         RHEP = MHEP+1
         MHEP = MHEP+2
+        ISTHEP(NHEP) = 114
 C Provisional colour connections of KHEP and RHEP
         JMOHEP(2,KHEP)=RHEP
         JDAHEP(2,KHEP)=RHEP
@@ -9372,7 +10209,7 @@ C   Subroutine to perform the third part of the heavy object decays
 C   IE setup the colour connections
 C   was part of HWDHOB
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IHEP,ID,IM,KHEP,LHEP,MHEP,NPR,CLSAVE(2)
       IF (IERROR.NE.0) RETURN
 C Colour connections
@@ -9555,7 +10392,7 @@ C Gaugino or Higgs
       ENDIF
  999  END
 CDECK  ID>, HWDHO4.
-*CMZ :-        -17/10/01  10:19:15  by  Peter Richardson
+*CMZ :-        -30/09/02  14:05:28  by  Peter Richardson
 *-- Author :    Ian Knowles & Bryan Webber
 C-----------------------------------------------------------------------
       SUBROUTINE HWDHO4(IHEP,ID,IM,NPR,MHEP,LHEP,KHEP,PW)
@@ -9564,7 +10401,7 @@ C   Subroutine to perform the fourth part of the heavy object decays
 C   IE parton-showers with special treatment for top
 C   was part of HWDHOB
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION PW(5),PDW(5,3)
       INTEGER IHEP,ID,IM,I,KHEP,LHEP,MHEP,NPR,NTRY,WHEP,SHEP
       DOUBLE COMPLEX RHOIN(2,2)
@@ -9667,7 +10504,7 @@ C   Subroutine to perform the fifth part of the heavy object decays
 C   IE sort out RPV colour connections
 C   was part of HWDHOB
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IHEP,ID,LHEP,MHEP,IDM,IDM2,THEP,CLSAVE(2)
       IF (IERROR.NE.0) RETURN
 C--New to correct colour connections in Rslash
@@ -9732,7 +10569,7 @@ C-----------------------------------------------------------------------
 C   Subroutine to perform the final part of the heavy object decays
 C   IE sort out any colour connection problems
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IHEP,IM,JHEP,ISM,JCM
       IF (IERROR.NE.0) RETURN
 C Fix any SUSY colour disconnections
@@ -9772,7 +10609,7 @@ C     Performs partonic decays of hadrons containing heavy quark(s):
 C     either, meson/baryon spectator model weak decays;
 C     or, quarkonia -> 2-gluons, q-qbar, 3-gluons, or 2-gluons + photon.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       COMMON/FFS/TB,BT
       COMMON/SFF/IT1,IB1,IT2,IB2
       DOUBLE PRECISION TB,BT
@@ -10005,7 +10842,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     Sets the colour connections in Baryon number violating decays
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IHEP,MHEP,ID,ID2,IDM2,IDM3,COLCON(2,2,3),FLACON(2,3),JHEP,
      &        DECAY,COLANT,KHEP,IDM,IDMB,IDMB2,IDMB3,IDMB4,QHEP,IDM4,
      &        CLSAVE(2),XHEP,I,HWRINT,THEP
@@ -10161,7 +10998,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     SUBROUTINE TO IMPLEMENT ALL RPARITY DECAY MATRIX ELEMENTS
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION SM(6),SW(6),HWULDO,INFCOL,AM, M12SQ,M23SQ,MSGN,
      &                 M13SQ,A(6),B(6),SWEAK,MW,DECMOM(5),TEST(3),EPS,
      &                 M12SQT(6),M23SQT(6),M13SQT(6),LIMIT,M(4),RAND,
@@ -10879,650 +11716,16 @@ C     MATRIX ELEMENT SQUARED FOR PHASE SPACE DECAY
 C-----------------------------------------------------------------------
       DOUBLE PRECISION HWDPWT,EMSQ,A,B,C
       HWDPWT=1.
-      END
-CDECK  ID>, HWDSM2.
-*CMZ :-        -11/10/01  12.10.50  by  Peter Richardson
-*-- Author :    Peter Richardson
-C-----------------------------------------------------------------------
-      SUBROUTINE HWDSM2(ID,IOUT1,IOUT2,IMODE,RHOIN,IDSPIN)
-C-----------------------------------------------------------------------
-C  Subroutine to calculate the two body matrix element for spin
-C  correlations
-C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
-      INTEGER IOUT1,IOUT2,IMODE,IDSPIN,ID,I,J,IDP(3),P0,P1,P2,O(2),P0P,
-     &     NTRY
-      DOUBLE PRECISION XMASS,PLAB,PRW,PCM,PREF(5),P(5,3),PM(5,3),PCMA,
-     &     HWUPCM,MA(3),MA2(3),HWULDO,PP,HWVDOT,N(3),EPS,PRE,PHS,A(2),
-     &     WGT,WTMAX,HWRGEN
-      DOUBLE COMPLEX RHOIN(2,2),S,D,ME(2,2,2),F1(2,2,8),F0(2,2,8),
-     &     F2M(2,2,8),F1M(2,2,8),F1F(2,2,8),F2(2,2,8,8)
-      COMMON/HWHEWP/XMASS(10),PLAB(5,10),PRW(5,2),PCM(5,10)
-      DATA PREF/1.0D0,0.0D0,0.0D0,1.0D0,0.0D0/
-      DATA O/2,1/
-      COMMON/HWHEWS/S(8,8,2),D(8,8)
-      PARAMETER(EPS=1D-20)
-      EXTERNAL HWUPCM,HWULDO,HWVDOT,HWRGEN
-C--first setup if this is the start of a new spin chain
-      IF(NSPN.EQ.0) THEN
-C--zero the elements of the array
-        CALL HWVZRI(  NMXHEP,ISNHEP)
-        CALL HWVZRI(  NMXSPN,JMOSPN)
-        CALL HWVZRI(2*NMXSPN,JDASPN)
-        CALL HWVZRI(  NMXSPN, IDSPN)
-        NSPN = NSPN+1
-        JMOSPN(NSPN) = 0
-        IDSPN (NSPN) = ID
-        DECSPN(NSPN) = .FALSE.
-        IF(RSPIN(IDHW(ID)).EQ.ZERO) THEN
-          RHOSPN(1,1,NSPN) = ONE
-          RHOSPN(2,1,NSPN) = ZERO
-          RHOSPN(1,2,NSPN) = ZERO
-          RHOSPN(2,2,NSPN) = ZERO
-        ELSE
-          RHOSPN(1,1,NSPN) = HALF
-          RHOSPN(2,1,NSPN) = ZERO
-          RHOSPN(1,2,NSPN) = ZERO
-          RHOSPN(2,2,NSPN) = HALF
-        ENDIF
-        ISNHEP(ID)    = NSPN
-      ENDIF
-C--MA is mass for this decay (OFF-SHELL)
-C--generate the momenta for a two body decay
-      P(5,1) = PHEP(5,   ID)
-      P(5,2) = PHEP(5,IOUT1)
-      P(5,3) = PHEP(5,IOUT2)
-      IDP(1) = IDHW(ID)
-      IDP(2) = IDHW(IOUT1)
-      IDP(3) = IDHW(IOUT2)
-      DO 1 I=1,3
-      MA(I)  = P(5,I)
- 1    MA2(I) = MA(I)**2
-      PCMA   = HWUPCM(P(5,1),P(5,2),P(5,3))
-C--setup the couplings
-      DO 2 I=1,2
- 2    A(I) = A2MODE(I,IMODE)
-C--phase space factor
-      PHS = PCMA/MA2(1)/8.0D0/PIFAC
-C--maximum weight
-      WTMAX = WT2MAX(IMODE)
-      NTRY = 0
- 1000 NTRY = NTRY+1
-      CALL HWVEQU(5,PHEP(1,ID),P(1,1))
-      CALL HWDTWO(P(1,1),P(1,2),P(1,3),PCMA,2.0D0,.TRUE.)
-      DO 3 I=1,3
-C--compute the references vectors
-C--not important if SM particle which can't have spin measured
-C--ie anything other the top and tau
-C--also not important if particle is approx massless
-C--first the SM particles other than top and tau
-      IF(IDP(I).LT.400.AND.(IDP(I).NE.6.AND.IDP(I).NE.12
-     &                .AND.IDP(I).NE.125.AND.IDP(I).NE.131)) THEN
-        CALL HWVEQU(5,PREF,PLAB(1,I+3))
-C--all other particles
-      ELSE
-        PP = SQRT(HWVDOT(3,P(1,I),P(1,I)))
-        CALL HWVSCA(3,ONE/PP,P(1,I),N)
-        PLAB(4,I+3) = HALF*(P(4,I)-PP)
-        PP = HALF*(PP-MA(I)-PP**2/(MA(I)+P(4,I)))
-        CALL HWVSCA(3,PP,N,PLAB(1,I+3))
-        CALL HWUMAS(PLAB(1,I+3))
-        PP = HWVDOT(3,PLAB(1,I+3),PLAB(1,I+3))
-C--fix to avoid problems if approx massless due to energy
-        IF(PP.LT.EPS) CALL HWVEQU(5,PREF,PLAB(1,I+3))
-      ENDIF
-C--now the massless vectors
-      PP = HALF*P(5,I)**2/HWULDO(PLAB(1,I+3),P(1,I))
-      DO 4 J=1,4
- 4    PLAB(J,I) = P(J,I)-PP*PLAB(J,I+3)
- 3    CALL HWUMAS(PLAB(1,I))
-C--change order of momenta for call to HE code
-      DO 5 I=1,3
-      PM(1,I) = P(3,I)
-      PM(2,I) = P(1,I)
-      PM(3,I) = P(2,I)
-      PM(4,I) = P(4,I)
- 5    PM(5,I) = P(5,I)
-      DO 6 I=1,6
-      PCM(1,I)=PLAB(3,I)
-      PCM(2,I)=PLAB(1,I)
-      PCM(3,I)=PLAB(2,I)
-      PCM(4,I)=PLAB(4,I)
- 6    PCM(5,I)=PLAB(5,I)
-C--compute the S functions
-      CALL HWHEW2(6,PCM(1,1),S(1,1,2),S(1,1,1),D)
-      DO 7 I=1,6
-      DO 7 J=1,6
-      S(I,J,2) = -S(I,J,2)
- 7    D(I,J)   = TWO*D(I,J)
-C--now compute the F functions needed
-      CALL HWH2F2(6,F1 ,5,PM(1,2), MA(2))
-      CALL HWH2F2(6,F0 ,4,PM(1,1), MA(1))
-      CALL HWH2F2(6,F1M,5,PM(1,2),-MA(2))
-      CALL HWH2F2(6,F2M,6,PM(1,3),-MA(3))
-      CALL HWH2F1(6,F1F,5,PM(1,2), MA(2))
-      CALL HWH2F3(6,F2   ,PM(1,3),ZERO  )
-C--now compute the diagrams
-C--fermion --> fermion scalar
-      IF(I2DRTP(IMODE).EQ.1) THEN
-        PRE = HWULDO(PM(1,1),PCM(1,4))*HWULDO(PM(1,2),PCM(1,5))
-        PRE = HALF/SQRT(PRE)
-        DO 8 P0=1,2
-        DO 8 P1=1,2
-        ME(P0,P1,2) = (0.0D0,0.0D0)
- 8      ME(P0,P1,1) = PRE*( A(O(P1))*S(5,2,O(P1))*F0(  P1 ,O(P0),2)
-     &                     +A(  P1 )*MA(2)*       F0(O(P1),O(P0),5))
-C--fermion --> scalar fermion   diagrams
-      ELSEIF(I2DRTP(IMODE).EQ.2) THEN
-        PRE = HWULDO(PM(1,1),PCM(1,4))*HWULDO(PM(1,3),PCM(1,6))
-        PRE = HALF/SQRT(PRE)
-        DO 20 P0=1,2
-        DO 20 P2=1,2
-        ME(P0,2,P2) = (0.0D0,0.0D0)
- 20     ME(P0,1,P2) = PRE*( A(O(P2))*S(6,3,O(P2))*F0(  P2 ,O(P0),3)
-     &                     +A(  P2 )*MA(3)*       F0(O(P2),O(P0),6))
-C--fermion --> scalar antifermion
-      ELSEIF(I2DRTP(IMODE).EQ.3) THEN
-        PRE = HWULDO(PM(1,1),PCM(1,4))*HWULDO(PM(1,3),PCM(1,6))
-        PRE =-HALF/SQRT(PRE)
-        DO 30 P0=1,2
-        DO 30 P2=1,2
-        ME(P0,2,P2) = (0.0D0,0.0D0)
- 30     ME(P0,1,P2) = PRE*( A(  P0 )*S(4,1,P0)*F2M(O(P0),O(P2),1)
-     &                     -A(O(P0))*MA(1)    *F2M(  P0 ,O(P2),4))
-C--fermion --> fermion gauge boson
-      ELSEIF(I2DRTP(IMODE).EQ.4) THEN
-        PRE = HWULDO(PM(1,1),PCM(1,4))*HWULDO(PM(1,2),PCM(1,5))*
-     &        HWULDO(PM(1,3),PCM(1,6))
-        PRE = HALF/SQRT(PRE)
-        DO 40 P0=1,2
-        DO 40 P1=1,2
-        ME(P0,P1,1) =-PRE*A(1)*F1F(O(P1),2,3)*S(3,6,2)*F0(1,O(P0),3)
- 40     ME(P0,P1,2) = PRE*     F1F(O(P1),1,3)*S(3,6,1)*F0(2,O(P0),3)
-C--scalar  --> fermion antifermion
-      ELSEIF(I2DRTP(IMODE).EQ.5) THEN
-        PRE = HWULDO(PM(1,2),PCM(1,5))*HWULDO(PM(1,3),PCM(1,6))
-        PRE =-HALF/SQRT(PRE)
-        DO 50 P1=1,2
-        DO 50 P2=1,2
-        ME(2,P1,P2) = (0.0D0,0.0D0)
- 50     ME(1,P1,P2) = PRE*( A(O(P1))*S(5,2,O(P1))*F2M(  P1 ,O(P2),2)
-     &                     +A(  P1 )*MA(2)*       F2M(O(P1),O(P2),5))
-C--scalar --> fermion fermion
-      ELSEIF(I2DRTP(IMODE).EQ.6) THEN
-        PRE = HWULDO(PM(1,2),PCM(1,5))*HWULDO(PM(1,3),PCM(1,6))
-        PRE = HALF/SQRT(PRE)
-        DO 60 P1=1,2
-        DO 60 P2=1,2
-        ME(2,P1,P2) = (0.0D0,0.0D0)
- 60     ME(1,P1,P2) = PRE*( A(O(P2))*S(6,3,O(P2))*F1M(  P2 ,P1,3)
-     &                     -A(  P2 )*MA(3)*       F1M(O(P2),p1,6))
-C--fermion --> fermion pion
-      ELSEIF(I2DRTP(IMODE).EQ.7) THEN
-        PRE = HWULDO(PM(1,1),PCM(1,4))*HWULDO(PM(1,2),PCM(1,5))
-        PRE = 0.25D0/SQRT(PRE)/RMASS(198)**2
-        DO 70 P0=1,2
-        DO 70 P1=1,2
-        ME(P0,P1,2) = (0.0D0,0.0D0)
- 70     ME(P0,P1,1) =PRE*(
-     &              MA(1)*A(O(P0))*( S(5,2,O(P1))*F2(  P1 ,O(P0),2,4)
-     &                                     +MA(2)*F2(O(P1),O(P0),5,4))
-     &         +A(O(P0))*S(1,4,P0)*( S(5,2,O(P1))*F2(  P1 ,  P0 ,2,1)
-     &                                     +MA(2)*F2(O(P1),  P0 ,5,1)))
-C--scalar  --> antifermion fermion
-      ELSEIF(I2DRTP(IMODE).EQ.8) THEN
-        PRE = HWULDO(PM(1,2),PCM(1,5))*HWULDO(PM(1,3),PCM(1,6))
-        PRE =-HALF/SQRT(PRE)
-        DO 80 P1=1,2
-        DO 80 P2=1,2
-        ME(2,P1,P2) = (0.0D0,0.0D0)
- 80     ME(1,P1,P2) = PRE*( A(O(P2))*S(6,3,O(P2))*F1M(  P2 ,O(P1),3)
-     &                     +A(  P2 )*MA(3)*       F1M(O(P2),O(P1),6))
-C--unrecognized type of diagram
-      ELSE
-        CALL HWWARN('HWDSM2',500,*999)
-      ENDIF
-C--now compute the weight
-      WGT = ZERO
-      DO 100 P0 =1,2
-      DO 100 P0P=1,2
-      DO 100 P1 =1,2
-      DO 100 P2 =1,2
- 100  WGT = WGT+PHS*P2MODE(IMODE)*ME(P0,P1,P2)*DCONJG(ME(P0P,P1,P2))*
-     &          RHOIN(P0,P0P)
-C--issue warning if greater than maximum
-      IF(WGT.GT.WTMAX) THEN
-        CALL HWWARN('HWDSM2',1,*200)
-        WRITE(6,2000) RNAME(IDK(ID2PRT(IMODE))),
-     &   RNAME(IDKPRD(1,ID2PRT(IMODE))),RNAME(IDKPRD(2,ID2PRT(IMODE))),
-     &   WTMAX,1.1D0*WGT
-        WT2MAX(IMODE) = 1.1D0*WGT
-        WTMAX         = WT2MAX(IMODE)
-      ENDIF
- 200  IF(HWRGEN(0)*WTMAX.GT.WGT.AND.NTRY.LT.NSNTRY) GOTO 1000
-      IF(NTRY.GE.NSNTRY) CALL HWWARN('HWDSM2',100,*999)
-C--now enter the momenta in the common block
-      CALL HWVEQU(5,P(1,2),PHEP(1,IOUT1))
-      CALL HWVEQU(5,P(1,3),PHEP(1,IOUT2))
-C--set up the spin information
-C--setup for all decays
-      JMOSPN(NSPN+1) = IDSPIN
-      JMOSPN(NSPN+2) = IDSPIN
-      JDASPN(1,IDSPIN) = NSPN+1
-      JDASPN(2,IDSPIN) = NSPN+2
-      IDSPN(NSPN+1) = IOUT1
-      IDSPN(NSPN+2) = IOUT2
-      DO 10 I=1,2
-      DECSPN(NSPN+I) = .FALSE.
-      DO 10 J=1,2
- 10   JDASPN(I,NSPN+J) = 0
-      ISNHEP(IOUT1) = NSPN+1
-      ISNHEP(IOUT2) = NSPN+2
-      DO 11 I=1,2
-        IF(RSPIN(IDHW(IDSPN(NSPN+I))).EQ.ZERO) THEN
-          RHOSPN(1,1,NSPN+I) = ONE
-          RHOSPN(2,1,NSPN+I) = ZERO
-          RHOSPN(1,2,NSPN+I) = ZERO
-          RHOSPN(2,2,NSPN+I) = ZERO
-        ELSE
-          RHOSPN(1,1,NSPN+I) = HALF
-          RHOSPN(2,1,NSPN+I) = ZERO
-          RHOSPN(1,2,NSPN+I) = ZERO
-          RHOSPN(2,2,NSPN+I) = HALF
-        ENDIF
- 11   CONTINUE
-      NSPN = NSPN+2
-C--now enter the matrix element
-      DO 150 P0=1,2
-      DO 150 P1=1,2
-      DO 150 P2=1,2
-      MESPN(P0,P1,P2,2,1,IDSPIN) = (0.0D0,0.0D0)
- 150  MESPN(P0,P1,P2,1,1,IDSPIN) = ME(P0,P1,P2)
-      SPNCFC(1,1,IDSPIN) = ONE
-      NCFL(IDSPIN) = 1
-      RETURN
-C--format statements
- 2000 FORMAT(/'WEIGHT FOR DECAY ',A8,' --> ',A8,' ',A8, 'EXCEEDS MAX',
-     &       /10X,'    MAXIMUM WEIGHT =',1PG24.16,
-     &       /10X,'NEW MAXIMUM WEIGHT =',1PG24.16)
- 999  END
-CDECK  ID>, HWDSM3.
-*CMZ :-        -11/10/01  10:19:01  by  Peter Richardson
-*-- Author :    Peter Richardson
-C-----------------------------------------------------------------------
-      SUBROUTINE HWDSM3(NPR,ID,IOUT1,IOUT2,IOUT3,IMODE,RHOIN,IDSPIN)
-C-----------------------------------------------------------------------
-C     Master subroutine for three body SUSY and spin ME's
-C     Uses HWD3ME to generate the momenta etc
-C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
-      DOUBLE COMPLEX F0(2,2,8),F1(2,2,8),F1M(2,2,8),
-     &     F0M(2,2,8),F2(2,2,8),RHOIN(2,2),F01(2,2,8,8)
-      DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,M342,M232,M242,MR,
-     &  P(5,4),PZ(5),HWRGEN,CV,CA,BR,PM(5,4),CFTHRE(NCFMAX,NCFMAX)
-      INTEGER ID,IDP(4+NDIAGR),NPR,ITYPE,I,IB,ID1,ID2,IDSPIN,
-     &     DRTYPE(NDIAGR),IOUT(3),IMODE,IOUT1,IOUT2,IOUT3,J,NCTHRE,
-     &     DRCF(NDIAGR)
-      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F01,A(2,NDIAGR),B(2,NDIAGR),
-     &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
-     &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
-      EXTERNAL HWRGEN
-      SAVE PZ,IOUT,ITYPE,ID1,ID2
-C--calculate the matrix element for a three body decay
-      IF(NPR.EQ.3) THEN
-C--set up the decay products, if a SUSY decay the SUSY particle
-C--must be the first decay product
-        IF(ABS(IDHEP(IOUT1)).GT.1000000) THEN
-          IOUT(1) = IOUT1
-          IOUT(2) = IOUT2
-          IOUT(3) = IOUT3
-        ELSEIF(ABS(IDHEP(IOUT2)).GT.1000000) THEN
-          IOUT(1) = IOUT2
-          IOUT(2) = IOUT1
-          IOUT(3) = IOUT3
-        ELSEIF(ABS(IDHEP(IOUT3)).GT.1000000) THEN
-          IOUT(1) = IOUT3
-          IOUT(2) = IOUT1
-          IOUT(3) = IOUT3
-C--special for top decay (bottom must be first)
-        ELSEIF(ABS(IDHEP(ID)).EQ.6) THEN
-          IOUT(1) = IOUT3
-          IOUT(2) = IOUT1
-          IOUT(3) = IOUT2
-        ENDIF
-C--fermion must be second and antifermion third
-        IF(IDHEP(IOUT(2)).LT.0) THEN
-          I = IOUT(2)
-          IOUT(2) = IOUT(3)
-          IOUT(3) = I
-        ENDIF
-C--setup the OFF SHELL MASSES
-        MA(1) = PHEP(5,ID)
-        DO 1 I=1,3
- 1      MA(I+1) = PHEP(5,IOUT(I))
-        DO 2 I=1,4
- 2      MA2(I) = MA(I)**2
-C--call to ME code
-        CALL HWD3ME(ID,0,IMODE,RHOIN,IDSPIN)
-        IF(IERROR.NE.0) RETURN
-C--copy momenta into event record
-        DO 3 I=1,3
- 3      CALL HWVEQU(5,P(1,1+I),PHEP(1,IOUT(I)))
-C--enter the spin information in the common block
-        IF(SYSPIN) THEN
-C--set up if start of new spin chain
-          IF(NSPN.EQ.0) THEN
-C--zero the elements
-            CALL HWVZRI(  NMXHEP,ISNHEP)
-            CALL HWVZRI(  NMXSPN,JMOSPN)
-            CALL HWVZRI(2*NMXSPN,JDASPN)
-            CALL HWVZRI(  NMXSPN, IDSPN)
-            NSPN = NSPN+1
-            JMOSPN(NSPN) = 0
-            IDSPN (NSPN) = ID
-            DECSPN(NSPN) = .FALSE.
-C--set up spin density matrix for particle
-            IF(RSPIN(IDHW(ID)).EQ.ZERO) THEN
-              RHOSPN(1,1,NSPN) = ONE
-              RHOSPN(2,1,NSPN) = ZERO
-              RHOSPN(1,2,NSPN) = ZERO
-              RHOSPN(2,2,NSPN) = ZERO
-            ELSE
-              RHOSPN(1,1,NSPN) = HALF
-              RHOSPN(2,1,NSPN) = ZERO
-              RHOSPN(1,2,NSPN) = ZERO
-              RHOSPN(2,2,NSPN) = HALF
-            ENDIF
-            ISNHEP(ID)    = NSPN
-          ENDIF
-C--enter the decay products
-          JDASPN(1,IDSPIN) = NSPN+1
-          JDASPN(2,IDSPIN) = NSPN+3
-          DO 7 I=1,3
-          JMOSPN(NSPN+I  ) = IDSPIN
-          IDSPN (NSPN+I  ) = IOUT(I)
-          DECSPN(NSPN+I  ) = .FALSE.
-          ISNHEP(IOUT(I) ) = NSPN+I
-          IF(RSPIN(IDHW(IOUT(I))).EQ.ZERO) THEN
-            RHOSPN(1,1,NSPN+I) = ONE
-            RHOSPN(2,1,NSPN+I) = ZERO
-            RHOSPN(1,2,NSPN+I) = ZERO
-            RHOSPN(2,2,NSPN+I) = ZERO
-          ELSE
-            RHOSPN(1,1,NSPN+I) = HALF
-            RHOSPN(2,1,NSPN+I) = ZERO
-            RHOSPN(1,2,NSPN+I) = ZERO
-            RHOSPN(2,2,NSPN+I) = HALF
-          ENDIF
-          DO 7 J=1,2
- 7        JDASPN(J,NSPN+I) = 0
-          NSPN = NSPN+3
-        ENDIF
-C--select the decay mode and generate the decay for a two body mode
-      ELSEIF(NPR.EQ.2) THEN
-        IF(IDHW(IOUT2).GE.198.AND.IDHW(IOUT2).LE.200) THEN
-          IB = IDHW(IOUT2)
-          IOUT(1) = IOUT1
-          IOUT(2) = IOUT2
-        ELSEIF(IDHW(IOUT1).GE.198.AND.IDHW(IOUT1).LE.200) THEN
-          IB = IDHW(IOUT1)
-          IOUT(1) = IOUT2
-          IOUT(2) = IOUT1
-        ELSE
-          CALL HWWARN('HWDSM3',501,*999)
-        ENDIF
-C--setup the off shell masses and particle ids for me code
-        MA(1) = PHEP(5,ID)
-        MA(2) = PHEP(5,IOUT(1))
-        CALL HWDBOZ(IB,ID1,ID2,CV,CA,BR,0)
-        ITYPE = ID1
-        IF(IB.EQ.199) ITYPE = ITYPE+1
-        IF(ITYPE.GT.120) ITYPE = ITYPE-114
-        IF(IB.NE.200) ITYPE = ITYPE/2
-C--generate momenta of decay products
-        CALL HWD3ME(ID,ITYPE,IMODE,RHOIN,IDSPIN)
-        CALL HWVEQU(5,P(1,2),PHEP(1,IOUT(1)))
-        CALL HWVSUM(4,P(1,3),P(1,4),PZ)
-        CALL HWUMAS(PZ)
-        CALL HWVEQU(5,PZ,PHEP(1,IOUT(2)))
-C--enter the spin information in the common block if starting new chain
-        IF(SYSPIN.AND.NSPN.EQ.0) THEN
-C--zero elements of common block
-          CALL HWVZRI(  NMXHEP,ISNHEP)
-          CALL HWVZRI(  NMXSPN,JMOSPN)
-          CALL HWVZRI(2*NMXSPN,JDASPN)
-          CALL HWVZRI(  NMXSPN, IDSPN)
-          NSPN = NSPN+1
-          JMOSPN(NSPN) = 0
-          IDSPN (NSPN) = ID
-          DECSPN(NSPN) = .FALSE.
-          IF(RSPIN(IDHW(ID)).EQ.ZERO) THEN
-            RHOSPN(1,1,NSPN) = ONE
-            RHOSPN(2,1,NSPN) = ZERO
-            RHOSPN(1,2,NSPN) = ZERO
-            RHOSPN(2,2,NSPN) = ZERO
-          ELSE
-            RHOSPN(1,1,NSPN) = HALF
-            RHOSPN(2,1,NSPN) = ZERO
-            RHOSPN(1,2,NSPN) = ZERO
-            RHOSPN(2,2,NSPN) = HALF
-          ENDIF
-          ISNHEP(ID)    = NSPN
-        ENDIF
-        IF(SYSPIN) THEN
-          IDSPN (NSPN+1  ) = IOUT(1)
-          ISNHEP(IOUT(1))  = NSPN+1
-        ENDIF
-C--put the boson decay products into the event record for a two body mode
-      ELSEIF(NPR.EQ.-1) THEN
-        IOUT(1) = JDAHEP(1,IOUT(2))
-        IOUT(2) = NHEP+1
-        IOUT(3) = NHEP+2
-C--set up the status of the particles
-        ISTHEP(IOUT(1)) = 195
-        JDAHEP(1,IOUT(1)) = NHEP+1
-        JDAHEP(2,IOUT(1)) = NHEP+2
-C--find the ID's of the particles
-        IF(IDHW(IOUT(1)).EQ.200) THEN
-          ID1 = ITYPE
-          IF(ITYPE.GT.6) ID1 = ID1+114
-          ID2 = ID1+6
-        ELSE
-          ID1 = 2*ITYPE-1
-          IF(ITYPE.GT.3) ID1 = ID1+114
-          ID2 = ID1+7
-          IF(IDHW(IOUT(1)).EQ.198) THEN
-            I   = ID1+6
-            ID1 = ID2-6
-            ID2 = I
-          ENDIF
-        ENDIF
-C--put id's of decay products into the event record
-        IDHW(NHEP+1)  = ID1
-        IDHW(NHEP+2)  = ID2
-        IDHEP(NHEP+1) = IDPDG(ID1)
-        IDHEP(NHEP+2) = IDPDG(ID2)
-C--boost decay products momenta to rest frame of boson
-        CALL HWULOF(PZ,P(1,3),P(1,3))
-        CALL HWULOF(PZ,P(1,4),P(1,4))
-C--boost back to lab using new boson
-        CALL HWULOB(PHEP(1,IOUT(1)),P(1,3),PHEP(1,NHEP+1))
-        CALL HWULOB(PHEP(1,IOUT(1)),P(1,4),PHEP(1,NHEP+2))
-C--setup for decay to quarks
-        IF(ID1.LE.12) THEN
-          ISTHEP(NHEP+1) = 113
-          ISTHEP(NHEP+2) = 114
-          JMOHEP(2,NHEP+1) = NHEP+2
-          JDAHEP(2,NHEP+1) = NHEP+2
-          JMOHEP(2,NHEP+2) = NHEP+1
-          JDAHEP(2,NHEP+2) = NHEP+1
-          JMOHEP(1,NHEP+1) = IOUT(1)
-          JMOHEP(1,NHEP+2) = IOUT(1)
-C--setup for decay to leptons
-        ELSE
-          ISTHEP(NHEP+1) = 193
-          ISTHEP(NHEP+2) = 193
-          JMOHEP(1,NHEP+1) = IOUT(1)
-          JMOHEP(1,NHEP+2) = IOUT(1)
-          JMOHEP(2,NHEP+1) = JMOHEP(1,IOUT(1))
-          JMOHEP(2,NHEP+2) = JMOHEP(1,IOUT(1))
-          JDAHEP(1,NHEP+1) = 0
-          JDAHEP(1,NHEP+2) = 0
-          JDAHEP(2,NHEP+1) = 0
-          JDAHEP(2,NHEP+2) = 0
-        ENDIF
-        NHEP=NHEP+2
-C--finish entering the spin information in the common block
-        IF(SYSPIN) THEN
-          JDASPN(1,IDSPIN) = NSPN+1
-          JDASPN(2,IDSPIN) = NSPN+3
-          DO 6 I=1,3
-          JMOSPN(NSPN+I  ) = IDSPIN
-          DECSPN(NSPN+I  ) = .FALSE.
-          IF(RSPIN(IDHW(IOUT(I))).EQ.ZERO) THEN
-            RHOSPN(1,1,NSPN+I) = ONE
-            RHOSPN(2,1,NSPN+I) = ZERO
-            RHOSPN(1,2,NSPN+I) = ZERO
-            RHOSPN(2,2,NSPN+I) = ZERO
-          ELSE
-            RHOSPN(1,1,NSPN+I) = HALF
-            RHOSPN(2,1,NSPN+I) = ZERO
-            RHOSPN(1,2,NSPN+I) = ZERO
-            RHOSPN(2,2,NSPN+I) = HALF
-          ENDIF
-          DO 6 J=1,2
- 6        JDASPN(J,NSPN+I) =0
-          NSPN = NSPN+3
-          IDSPN (NSPN-1) = NHEP-1
-          IDSPN (NSPN  ) = NHEP
-          ISNHEP(NHEP-1) = NSPN-1
-          ISNHEP(NHEP  ) = NSPN
-        ENDIF
-C--perform the parton shower for the decay products of the gauge boson
-        IF(ID1.LE.12) CALL HWBGEN
-C--error issue warning
-      ELSE
-        CALL HWWARN('HWDSM3',500,*999)
-      ENDIF
- 999  END
-CDECK  ID>, HWDSM4.
-*CMZ :-        -11/10/01  14:03:42  by  Peter Richardson
-*-- Author :    Peter Richardson
-C-----------------------------------------------------------------------
-      SUBROUTINE HWDSM4(IOPT,ID,IOUT1,IOUT2,IMODE)
-C-----------------------------------------------------------------------
-C     Subroutine to perform the four body decays
-C     IOPT = 1 select decay mode and generate momenta
-C     IOPT = 2 enter first decays and perform parton shower
-C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
-      INTEGER IOPT,ID,IOUT1,IOUT2,IB(2),I,IDF(4),ITYPE(2),IMODE,
-     &     IDP(4+NDIAGR),ID1,ID2,J
-      DOUBLE PRECISION CV,CA,A,B,MS,MWD,MR,M,M2,P(5,5),PW(5,2),BR
-      COMMON/HWD4BY/A(2),B(2),MS(2),MWD(2),MR(2),M(5),M2(5),P,IDP
-      SAVE PW,ITYPE
-C--generate the decay
-      IF(IOPT.EQ.1) THEN
-        IB(1) = IDHW(IOUT1)
-        IB(2) = IDHW(IOUT2)
-C--select the decays of the bosons
-        DO 1 I=1,2
-        CALL HWDBOZ(IB(I),IDF(2*I-1),IDF(2*I),CV,CA,BR,1)
-        ITYPE(I) = IDF(2*I-1)
-        IF(IB(I).EQ.199) ITYPE(I)    = ITYPE(I)+1
-        IF(ITYPE(I).GT.120) ITYPE(I) = ITYPE(I)-114
- 1      IF(IB(I).NE.200) ITYPE(I)    = ITYPE(I)/2
-C--generate the momenta of the decay products
-        CALL HWD4ME(ID,ITYPE(1),ITYPE(2),IMODE)
-        DO 2 I=1,2
-        CALL HWVSUM(4,P(1,2*I),P(1,2*I+1),PW(1,I))
- 2      CALL HWUMAS(PW(1,I))
-        CALL HWVEQU(5,PW(1,1),PHEP(1,IOUT1))
-        CALL HWVEQU(5,PW(1,2),PHEP(1,IOUT2))
-        IF(SYSPIN) THEN
-          IDSPN(1)     = JDAHEP(1,ID)
-          DECSPN(1)    = .FALSE.
-          ISNHEP(JDAHEP(1,ID)) = 1
-          JDASPN(1,1)  = 2
-          JDASPN(2,1)  = 5
-          DO 4 I=2,5
-          DECSPN(I) = .FALSE.
- 4        JMOSPN(I) = 1
-        ENDIF
-      ELSEIF(IOPT.EQ.2) THEN
-        IB(1) = JDAHEP(1,IOUT1)
-        IB(2) = JDAHEP(1,IOUT2)
-        DO 3 I=1,2
-          ISTHEP(IB(I)) = 195
-          JDAHEP(1,IB(I)) = NHEP+1
-          JDAHEP(2,IB(I)) = NHEP+2
-C--find the ID's of the particles
-          IF(IDHW(IB(I)).EQ.200) THEN
-            ID1 = ITYPE(I)
-            IF(ITYPE(I).GT.6) ID1 = ID1+114
-            ID2 = ID1+6
-          ELSE
-            ID1 = 2*ITYPE(I)-1
-            IF(ITYPE(I).GT.3) ID1 = ID1+114
-            ID2 = ID1+7
-            IF(IDHW(IB(I)).EQ.198) THEN
-              J   = ID1+6
-              ID1 = ID2-6
-              ID2 = J
-            ENDIF
-          ENDIF
-C--put id's of decay products into the event record
-          IDHW(NHEP+1)  = ID1
-          IDHW(NHEP+2)  = ID2
-          IDHEP(NHEP+1) = IDPDG(ID1)
-          IDHEP(NHEP+2) = IDPDG(ID2)
-C--boost decay products momenta to rest frame of boson
-          CALL HWULOF(PW(1,I),P(1,2*I  ),P(1,2*I  ))
-          CALL HWULOF(PW(1,I),P(1,2*I+1),P(1,2*I+1))
-C--boost back to lab using new boson
-          CALL HWULOB(PHEP(1,IB(I)),P(1,2*I  ),PHEP(1,NHEP+1))
-          CALL HWULOB(PHEP(1,IB(I)),P(1,2*I+1),PHEP(1,NHEP+2))
-C--setup for decay to quarks
-          IF(ID1.LE.12) THEN
-            ISTHEP(NHEP+1) = 113
-            ISTHEP(NHEP+2) = 114
-            JMOHEP(2,NHEP+1) = NHEP+2
-            JDAHEP(2,NHEP+1) = NHEP+2
-            JMOHEP(2,NHEP+2) = NHEP+1
-            JDAHEP(2,NHEP+2) = NHEP+1
-            JMOHEP(1,NHEP+1) = IB(I)
-            JMOHEP(1,NHEP+2) = IB(I)
-C--setup for decay to leptons
-          ELSE
-            ISTHEP(NHEP+1) = 193
-            ISTHEP(NHEP+2) = 193
-            JMOHEP(1,NHEP+1) = IB(I)
-            JMOHEP(1,NHEP+2) = IB(I)
-            JMOHEP(2,NHEP+1) = JMOHEP(1,IB(I))
-            JMOHEP(2,NHEP+2) = JMOHEP(1,IB(I))
-          ENDIF
-C--enter the information in the spin common block
-          IF(SYSPIN) THEN
-            IDSPN(2*I  ) = NHEP+1
-            IDSPN(2*I+1) = NHEP+2
-            ISNHEP(NHEP+1) = 2*I
-            ISNHEP(NHEP+2) = 2*I+1
-          ENDIF
-          NHEP=NHEP+2
-C--perform the parton shower for the decay products of the gauge boson
-          IF(ID1.LE.12) CALL HWBGEN
- 3      CONTINUE
-      ENDIF
- 999  END
+      END 
 CDECK  ID>, HWDSIN.
-*CMZ :-        -17/10/01  10:19:15  by  Peter Richardson
+*CMZ :-        -30/09/02  14:05:28  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
       SUBROUTINE HWDSIN(CLSAVE)
 C-----------------------------------------------------------------------
 C  Subroutine to perform decays including spin correlations
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION PW(5)
       INTEGER IDEC,IP,IS,IHEP,ID,IM,LHEP,MHEP,NPR,KHEP,CLSAVE(2),NTRY,
      &     ID1
@@ -11534,7 +11737,7 @@ C--search the decay products and decide which one to decay next
       IF(.NOT.DECSPN(IDEC)) THEN
         CALL HWDSI1(IDEC,IP)
       ELSE
-        IDEC = IDEC+1
+        IDEC = JMOSPN(IDEC)
         GOTO 1
       ENDIF
 C--first no more particles in this decay to develop so move up chain
@@ -11603,14 +11806,14 @@ C--continue and perform the next decay
       ENDIF
  999  END
 CDECK  ID>, HWDSI1.
-*CMZ :-        -17/10/01  12:29:54  by  Peter Richardson
+*CMZ :-        -30/09/02  14:05:28  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
       SUBROUTINE HWDSI1(IDEC,IP)
 C-----------------------------------------------------------------------
 C  Subroutine to check a vertex and decide which branch to treat
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IDEC,I,IPICK(5),IP,HWRINT,P1,P2,P3,P4,P3P,P4P,NPR,P0,P0P,
      &     P1P,P2P,IF1,IF2,P5,P5P
       DOUBLE PRECISION NORM
@@ -12036,12 +12239,12 @@ C--normalise the spin density matrix
           DO 15 P3P=1,2
  15       RHOSPN(P3,P3P,IP) = NORM*RHOSPN(P3,P3P,IP)
         ELSE
-          CALL HWWARN('HWDSI1',507,*999)
+          CALL HWWARN('HWDSI1',107,*999)
         ENDIF
       ENDIF
  999  END
 CDECK  ID>, HWDSI2.
-*CMZ :-        -20/10/99  09:46:43  by  Peter Richardson
+*CMZ :-        -30/09/02  14:05:28  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
       SUBROUTINE HWDSI2(IHEP,IM,NPR,MHEP,LHEP,KHEP,PW)
@@ -12051,24 +12254,41 @@ C   IE generate the kinematics for the decay
 C   including spin correlations
 C   was part of HWDHOB
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
-      DOUBLE PRECISION HWRGEN,PW(5),HWDPWT,HWDWWT
-      INTEGER IHEP,IM,KHEP,LHEP,MHEP,NPR
-      EXTERNAL HWRGEN,HWDPWT,HWDWWT
+      INCLUDE 'HERWIG65.INC'
+      DOUBLE PRECISION HWRGEN,PW(5),HWDPWT,HWDWWT,PCM,HWUPCM
+      INTEGER IHEP,IM,KHEP,LHEP,MHEP,NPR,ISN,RHEP
+      EXTERNAL HWRGEN,HWDPWT,HWDWWT,HWUPCM
       IF (IERROR.NE.0) RETURN
+      ISN = ISNHEP(IHEP)
       IF (NPR.EQ.2) THEN
 C Two body decay: LHEP -> MHEP + NHEP
         IF(NME(IM).GT.20000.AND.NME(IM).LT.30000) THEN
 C--generate a two body decay to a gauge boson as a three body decay
           CALL HWDSM3(2,IHEP,MHEP,NHEP,0,NME(IM)-20000,
-     &                 RHOSPN(1,1,ISNHEP(IHEP)),ISNHEP(IHEP))
+     &                 RHOSPN(1,1,ISN),ISN)
 C--two body decay
         ELSEIF(NME(IM).GT.30000.AND.NME(IM).LT.40000) THEN
           CALL HWDSM2(IHEP,MHEP,NHEP,NME(IM)-30000,
-     &          RHOSPN(1,1,ISNHEP(IHEP)),ISNHEP(IHEP))
+     &          RHOSPN(1,1,ISN),ISN)
 C--otherwise issue warning
+C--change by PR 9/30/02 to issue non-terminal warning and continue
         ELSE
-          CALL HWWARN('HWDSI2',501,*999)
+          CALL HWWARN('HWDSI2',1,*999)
+          PCM=HWUPCM(PHEP(5,IHEP),PHEP(5,MHEP),PHEP(5,NHEP))
+          CALL HWDTWO(PHEP(1,IHEP),PHEP(1,MHEP),
+     &                PHEP(1,NHEP),PCM,TWO,.FALSE.)
+          DECSPN(ISN) = .TRUE.
+          IF(RSPIN(IDHW(IHEP)).EQ.ZERO) THEN
+            RHOSPN(1,1,ISN) = ONE
+            RHOSPN(1,2,ISN) = ZERO
+            RHOSPN(2,1,ISN) = ZERO
+            RHOSPN(2,2,ISN) = ZERO
+          ELSE
+            RHOSPN(1,1,ISN) = HALF
+            RHOSPN(1,2,ISN) = ZERO
+            RHOSPN(2,1,ISN) = ZERO
+            RHOSPN(2,2,ISN) = HALF
+          ENDIF
         ENDIF
       ELSEIF (NPR.EQ.3) THEN
 C Three body decay: LHEP -> KHEP + MHEP + NHEP
@@ -12077,13 +12297,13 @@ C Three body decay: LHEP -> KHEP + MHEP + NHEP
 C Provisional colour self-connection of KHEP
         JMOHEP(2,KHEP)=KHEP
         JDAHEP(2,KHEP)=KHEP
-C--is old codes issue warning
+C--if old codes issue warning
         IF (NME(IM).EQ.100.OR.NME(IM).EQ.200.OR.NME(IM).EQ.300) THEN
           CALL HWWARN('HWDSI2',502,*999)
 C--three body spin matrix element
         ELSEIF(NME(IM).GE.10000.AND.NME(IM).LT.20000) THEN
           CALL HWDSM3(3,IHEP,MHEP,KHEP,NHEP,NME(IM)-10000,
-     &            RHOSPN(1,1,ISNHEP(IHEP)),ISNHEP(IHEP))
+     &            RHOSPN(1,1,ISN),ISN)
 C--special for top decay
           IF(ABS(IDHEP(IHEP)).EQ.6) THEN
             CALL HWVSUM(4,PHEP(1,KHEP),PHEP(1,MHEP),PW)
@@ -12091,17 +12311,59 @@ C--special for top decay
           ENDIF
 C--unknown issue warning
         ELSE
-          CALL HWWARN('HWDSI2',503,*999)
+          CALL HWWARN('HWDSI2',2,*999)
+C Three body phase space decay
+          CALL HWDTHR(PHEP(1,IHEP),PHEP(1,MHEP),
+     &                PHEP(1,KHEP),PHEP(1,NHEP),HWDPWT)
+          CALL HWVEQU(4,VHEP(1,KHEP),VHEP(1,MHEP))
+          DECSPN(ISN) = .TRUE.
+          IF(RSPIN(IDHW(IHEP)).EQ.ZERO) THEN
+            RHOSPN(1,1,ISN) = ONE
+            RHOSPN(1,2,ISN) = ZERO
+            RHOSPN(2,1,ISN) = ZERO
+            RHOSPN(2,2,ISN) = ZERO
+          ELSE
+            RHOSPN(1,1,ISN) = HALF
+            RHOSPN(1,2,ISN) = ZERO
+            RHOSPN(2,1,ISN) = ZERO
+            RHOSPN(2,2,ISN) = HALF
+          ENDIF
         ENDIF
-        CALL HWVEQU(4,VHEP(1,KHEP),VHEP(1,MHEP))
       ELSEIF(NPR.EQ.4) THEN
-        CALL HWWARN('HWDSI2',504,*999)
+        CALL HWWARN('HWDSI2',3,*999)
+C Four body decay: LHEP -> KHEP + RHEP + MHEP + NHEP
+        KHEP = MHEP
+        RHEP = MHEP+1
+        MHEP = MHEP+2
+        ISTHEP(NHEP) = 114
+C Provisional colour connections of KHEP and RHEP
+        JMOHEP(2,KHEP)=RHEP
+        JDAHEP(2,KHEP)=RHEP
+        JMOHEP(2,RHEP)=KHEP
+        JDAHEP(2,RHEP)=KHEP
+C Four body phase space decay
+        CALL HWDFOR(PHEP(1,IHEP),PHEP(1,KHEP),PHEP(1,RHEP),
+     &                PHEP(1,MHEP),PHEP(1,NHEP))
+        CALL HWVEQU(4,VHEP(1,KHEP),VHEP(1,RHEP))
+        CALL HWVEQU(4,VHEP(1,KHEP),VHEP(1,MHEP))
+        DECSPN(ISN) = .TRUE.
+        IF(RSPIN(IDHW(IHEP)).EQ.ZERO) THEN
+          RHOSPN(1,1,ISN) = ONE
+          RHOSPN(1,2,ISN) = ZERO
+          RHOSPN(2,1,ISN) = ZERO
+          RHOSPN(2,2,ISN) = ZERO
+        ELSE
+          RHOSPN(1,1,ISN) = HALF
+          RHOSPN(1,2,ISN) = ZERO
+          RHOSPN(2,1,ISN) = ZERO
+          RHOSPN(2,2,ISN) = HALF
+        ENDIF
       ELSE
         CALL HWWARN('HWDSI2',100,*999)
       ENDIF
  999  END
 CDECK  ID>, HWDSI3.
-*CMZ :-        -17/11/01  08:41:16  by  Peter Richardson
+*CMZ :-        -30/09/02  14:05:28  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
       SUBROUTINE HWDSI3(IP)
@@ -12111,7 +12373,7 @@ C     averages spin if not using TAUOLA
 C     if using TAUOLA selects the spin and uses TAUOLA to perform the
 C     decay
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IP,IHEP,ID1,ID,NTRY
       DOUBLE PRECISION PPOL,HWRGEN,POL
       EXTERNAL HWRGEN
@@ -12166,6 +12428,714 @@ C--decay the particle
         CALL HWWARN('HWDSI3',500,*999)
       ENDIF
  999  END
+CDECK  ID>, HWDSM2.
+*CMZ :-        -09/04/02  13:46:07  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWDSM2(ID,IOUT1,IOUT2,IMODE,RHOIN,IDSPIN)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the two body matrix element for spin
+C  correlations
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      INTEGER IOUT1,IOUT2,IMODE,IDSPIN,ID,I,J,IDP(3),P0,P1,P2,O(2),P0P,
+     &     NTRY
+      DOUBLE PRECISION XMASS,PLAB,PRW,PCM,PREF(5),P(5,3),PM(5,3),PCMA,
+     &     HWUPCM,MA(3),MA2(3),HWULDO,PP,HWVDOT,N(3),EPS,PRE,PHS,A(2),
+     &     WGT,WTMAX,HWRGEN
+      DOUBLE COMPLEX RHOIN(2,2),S,D,ME(2,2,2),F1(2,2,8),F0(2,2,8),
+     &     F2M(2,2,8),F1M(2,2,8),F1F(2,2,8),F2(2,2,8,8),F0B(2,2,8,8)
+      COMMON/HWHEWP/XMASS(10),PLAB(5,10),PRW(5,2),PCM(5,10)
+      DATA PREF/1.0D0,0.0D0,0.0D0,1.0D0,0.0D0/
+      DATA O/2,1/
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      PARAMETER(EPS=1D-20)
+      EXTERNAL HWUPCM,HWULDO,HWVDOT,HWRGEN
+C--first setup if this is the start of a new spin chain
+      IF(NSPN.EQ.0) THEN
+C--zero the elements of the array
+        CALL HWVZRI(  NMXHEP,ISNHEP)
+        CALL HWVZRI(  NMXSPN,JMOSPN)
+        CALL HWVZRI(2*NMXSPN,JDASPN)
+        CALL HWVZRI(  NMXSPN, IDSPN)
+        NSPN = NSPN+1
+        JMOSPN(NSPN) = 0
+        IDSPN (NSPN) = ID
+        DECSPN(NSPN) = .FALSE.
+        IF(RSPIN(IDHW(ID)).EQ.ZERO) THEN
+          RHOSPN(1,1,NSPN) = ONE
+          RHOSPN(2,1,NSPN) = ZERO
+          RHOSPN(1,2,NSPN) = ZERO
+          RHOSPN(2,2,NSPN) = ZERO
+        ELSE
+          RHOSPN(1,1,NSPN) = HALF
+          RHOSPN(2,1,NSPN) = ZERO
+          RHOSPN(1,2,NSPN) = ZERO
+          RHOSPN(2,2,NSPN) = HALF
+        ENDIF
+        ISNHEP(ID)    = NSPN
+      ENDIF
+C--MA is mass for this decay (OFF-SHELL)
+C--generate the momenta for a two body decay
+      P(5,1) = PHEP(5,   ID)
+      P(5,2) = PHEP(5,IOUT1)
+      P(5,3) = PHEP(5,IOUT2)
+      IDP(1) = IDHW(ID)
+      IDP(2) = IDHW(IOUT1)
+      IDP(3) = IDHW(IOUT2)
+      DO 1 I=1,3
+      MA(I)  = P(5,I)
+ 1    MA2(I) = MA(I)**2
+      PCMA   = HWUPCM(P(5,1),P(5,2),P(5,3))
+C--setup the couplings
+      DO 2 I=1,2
+ 2    A(I) = A2MODE(I,IMODE)
+C--phase space factor
+      PHS = PCMA/MA2(1)/8.0D0/PIFAC
+C--maximum weight
+      WTMAX = WT2MAX(IMODE)
+      NTRY = 0
+ 1000 NTRY = NTRY+1
+      CALL HWVEQU(5,PHEP(1,ID),P(1,1))
+      CALL HWDTWO(P(1,1),P(1,2),P(1,3),PCMA,2.0D0,.TRUE.)
+      DO 3 I=1,3
+C--compute the references vectors
+C--not important if SM particle which can't have spin measured
+C--ie anything other the top and tau
+C--also not important if particle is approx massless
+C--first the SM particles other than top and tau
+      IF(IDP(I).LT.400.AND.(IDP(I).NE.6.AND.IDP(I).NE.12
+     &                .AND.IDP(I).NE.125.AND.IDP(I).NE.131)) THEN
+        CALL HWVEQU(5,PREF,PLAB(1,I+3))
+C--all other particles
+      ELSE
+        PP = SQRT(HWVDOT(3,P(1,I),P(1,I)))
+        CALL HWVSCA(3,ONE/PP,P(1,I),N)
+        PLAB(4,I+3) = HALF*(P(4,I)-PP)
+        PP = HALF*(PP-MA(I)-PP**2/(MA(I)+P(4,I)))
+        CALL HWVSCA(3,PP,N,PLAB(1,I+3))
+        CALL HWUMAS(PLAB(1,I+3))
+        PP = HWVDOT(3,PLAB(1,I+3),PLAB(1,I+3))
+C--fix to avoid problems if approx massless due to energy
+        IF(PP.LT.EPS) CALL HWVEQU(5,PREF,PLAB(1,I+3))
+      ENDIF
+C--now the massless vectors
+      PP = HALF*P(5,I)**2/HWULDO(PLAB(1,I+3),P(1,I))
+      DO 4 J=1,4
+ 4    PLAB(J,I) = P(J,I)-PP*PLAB(J,I+3)
+ 3    CALL HWUMAS(PLAB(1,I))
+C--change order of momenta for call to HE code
+      DO 5 I=1,3
+      PM(1,I) = P(3,I)
+      PM(2,I) = P(1,I)
+      PM(3,I) = P(2,I)
+      PM(4,I) = P(4,I)
+ 5    PM(5,I) = P(5,I)
+      DO 6 I=1,6
+      PCM(1,I)=PLAB(3,I)
+      PCM(2,I)=PLAB(1,I)
+      PCM(3,I)=PLAB(2,I)
+      PCM(4,I)=PLAB(4,I)
+ 6    PCM(5,I)=PLAB(5,I)
+C--compute the S functions
+      CALL HWHEW2(6,PCM(1,1),S(1,1,2),S(1,1,1),D)
+      DO 7 I=1,6
+      DO 7 J=1,6
+      S(I,J,2) = -S(I,J,2)
+ 7    D(I,J)   = TWO*D(I,J)
+C--now compute the F functions needed
+      CALL HWH2F2(6,F1 ,5,PM(1,2), MA(2))
+      CALL HWH2F2(6,F0 ,4,PM(1,1), MA(1))
+      CALL HWH2F2(6,F1M,5,PM(1,2),-MA(2))
+      CALL HWH2F2(6,F2M,6,PM(1,3),-MA(3))
+      CALL HWH2F1(6,F1F,5,PM(1,2), MA(2))
+      CALL HWH2F3(6,F2   ,PM(1,3),ZERO  )
+      CALL HWH2F3(6,F0B  ,PM(1,1),ZERO  )
+C--now compute the diagrams
+C--fermion --> fermion scalar
+      IF(I2DRTP(IMODE).EQ.1) THEN
+        PRE = HWULDO(PM(1,1),PCM(1,4))*HWULDO(PM(1,2),PCM(1,5))
+        PRE = HALF/SQRT(PRE)
+        DO 10 P0=1,2
+        DO 10 P1=1,2
+        ME(P0,P1,2) = (0.0D0,0.0D0)
+ 10     ME(P0,P1,1) = PRE*( A(O(P1))*S(5,2,O(P1))*F0(  P1 ,O(P0),2)
+     &                     +A(  P1 )*MA(2)*       F0(O(P1),O(P0),5))
+C--fermion --> scalar fermion   diagrams
+      ELSEIF(I2DRTP(IMODE).EQ.2) THEN
+        PRE = HWULDO(PM(1,1),PCM(1,4))*HWULDO(PM(1,3),PCM(1,6))
+        PRE = HALF/SQRT(PRE)
+        DO 20 P0=1,2
+        DO 20 P2=1,2
+        ME(P0,2,P2) = (0.0D0,0.0D0)
+ 20     ME(P0,1,P2) = PRE*( A(O(P2))*S(6,3,O(P2))*F0(  P2 ,O(P0),3)
+     &                     +A(  P2 )*MA(3)*       F0(O(P2),O(P0),6))
+C--fermion --> scalar antifermion
+      ELSEIF(I2DRTP(IMODE).EQ.3) THEN
+        PRE = HWULDO(PM(1,1),PCM(1,4))*HWULDO(PM(1,3),PCM(1,6))
+        PRE =-HALF/SQRT(PRE)
+        DO 30 P0=1,2
+        DO 30 P2=1,2
+        ME(P0,2,P2) = (0.0D0,0.0D0)
+ 30     ME(P0,1,P2) = PRE*( A(  P0 )*S(4,1,P0)*F2M(O(P0),O(P2),1)
+     &                     -A(O(P0))*MA(1)    *F2M(  P0 ,O(P2),4))
+C--fermion --> fermion gauge boson
+      ELSEIF(I2DRTP(IMODE).EQ.4) THEN
+        PRE = HWULDO(PM(1,1),PCM(1,4))*HWULDO(PM(1,2),PCM(1,5))*
+     &        HWULDO(PM(1,3),PCM(1,6))
+        PRE = HALF/SQRT(PRE)
+        DO 40 P0=1,2
+        DO 40 P1=1,2
+        ME(P0,P1,1) =-PRE*A(1)*F1F(O(P1),2,3)*S(3,6,2)*F0(1,O(P0),3)
+ 40     ME(P0,P1,2) = PRE*     F1F(O(P1),1,3)*S(3,6,1)*F0(2,O(P0),3)
+C--scalar  --> fermion antifermion
+      ELSEIF(I2DRTP(IMODE).EQ.5) THEN
+        PRE = HWULDO(PM(1,2),PCM(1,5))*HWULDO(PM(1,3),PCM(1,6))
+        PRE =-HALF/SQRT(PRE)
+        DO 50 P1=1,2
+        DO 50 P2=1,2
+        ME(2,P1,P2) = (0.0D0,0.0D0)
+ 50     ME(1,P1,P2) = PRE*( A(O(P1))*S(5,2,O(P1))*F2M(  P1 ,O(P2),2)
+     &                     +A(  P1 )*MA(2)*       F2M(O(P1),O(P2),5))
+C--scalar --> fermion fermion
+      ELSEIF(I2DRTP(IMODE).EQ.6) THEN
+        PRE = HWULDO(PM(1,2),PCM(1,5))*HWULDO(PM(1,3),PCM(1,6))
+        PRE = HALF/SQRT(PRE)
+        DO 60 P1=1,2
+        DO 60 P2=1,2
+        ME(2,P1,P2) = (0.0D0,0.0D0)
+ 60     ME(1,P1,P2) = PRE*( A(O(P2))*S(6,3,O(P2))*F1M(  P2 ,P1,3)
+     &                     +A(  P2 )*MA(3)*       F1M(O(P2),P1,6))
+C--fermion --> fermion pion
+      ELSEIF(I2DRTP(IMODE).EQ.7) THEN
+        PRE = HWULDO(PM(1,1),PCM(1,4))*HWULDO(PM(1,2),PCM(1,5))
+        PRE = 0.25D0/SQRT(PRE)/RMASS(198)**2
+        DO 70 P0=1,2
+        DO 70 P1=1,2
+        ME(P0,P1,2) = (0.0D0,0.0D0)
+ 70     ME(P0,P1,1) =PRE*(
+     &              MA(1)*A(O(P0))*( S(5,2,O(P1))*F2(  P1 ,O(P0),2,4)
+     &                                     +MA(2)*F2(O(P1),O(P0),5,4))
+     &            +A(P0)*S(1,4,P0)*( S(5,2,O(P1))*F2(  P1 ,  P0 ,2,1)
+     &                                     +MA(2)*F2(O(P1),  P0 ,5,1)))
+C--scalar  --> antifermion fermion
+      ELSEIF(I2DRTP(IMODE).EQ.8) THEN
+        PRE = HWULDO(PM(1,2),PCM(1,5))*HWULDO(PM(1,3),PCM(1,6))
+        PRE =-HALF/SQRT(PRE)
+        DO 80 P1=1,2
+        DO 80 P2=1,2
+        ME(2,P1,P2) = (0.0D0,0.0D0)
+ 80     ME(1,P1,P2) = PRE*( A(O(P2))*S(6,3,O(P2))*F1M(  P2 ,O(P1),3)
+     &                     +A(  P2 )*MA(3)*       F1M(O(P2),O(P1),6))
+C--neutralino --> gravitino photon
+      ELSEIF(I2DRTP(IMODE).EQ.9) THEN
+        PRE = TWO*HWULDO(PM(1,1),PCM(1,4))*HWULDO(PM(1,3),PCM(1,6))
+        PRE = TWO/SQRT(PRE)
+        DO 90 P1=1,2
+        DO 90 P2=1,2
+        ME(P1,P2,O(P2)) = (0.0D0,0.0D0)
+ 90     ME(P1,P2,  P2 ) = PRE*S(2,3,P2)*S(3,6,O(P2))*
+     &       S(3,2,P2)*F0(O(P2),P1,2)
+C--neutralino --> gravitino scalar
+      ELSEIF(I2DRTP(IMODE).EQ.10) THEN
+        PRE = TWO*HWULDO(PM(1,1),PCM(1,4))
+        PRE = ONE/SQRT(PRE)
+        DO 100 P1=1,2
+        DO 100 P2=1,2
+        ME(P1,P2,2) = (0.0D0,0.0D0)
+ 100    ME(P1,P2,1) = PRE*F2(P2,1,2,2)*F0(1,O(P1),2)
+C--sfermion --> fermion gravitino
+      ELSEIF(I2DRTP(IMODE).EQ.11) THEN
+        PRE = TWO*HWULDO(PM(1,2),PCM(1,5))
+        PRE = ONE/SQRT(PRE)
+        DO 110 P1=1,2
+        DO 110 P2=1,2
+        ME(2,P1,P2) = (0.0D0,0.0D0)
+ 110    ME(1,P1,P2) = PRE*A(O(P2))*F1M(O(P1),P2,3)*F0B(P2,P2,3,3) 
+C--antisfermion --> antifermion gravitino
+      ELSEIF(I2DRTP(IMODE).EQ.12) THEN
+        PRE = TWO*HWULDO(PM(1,2),PCM(1,5))
+        PRE = ONE/SQRT(PRE)
+        DO 120 P1=1,2
+        DO 120 P2=1,2
+        ME(2,P1,P2) = (0.0D0,0.0D0)
+ 120    ME(1,P1,P2) = PRE*A(O(P2))*F0B(P2,P2,3,3)*F1(P2,O(P1),3)
+C--scalar --> antifermion antifermion
+      ELSEIF(I2DRTP(IMODE).EQ.13) THEN
+        PRE = HWULDO(PM(1,2),PCM(1,5))*HWULDO(PM(1,3),PCM(1,6))
+        PRE = HALF/SQRT(PRE)
+        DO 130 P1=1,2
+        DO 130 P2=1,2
+        ME(2,P1,P2) = (0.0D0,0.0D0)
+ 130    ME(1,P1,P2) = PRE*( A(  P1 )*S(5,2,  P1 )*F2M(O(P1),O(P2),2)
+     &                     +A(O(P1))*MA(2)       *F2M(  P1 ,O(P2),5))
+C--antifermion --> scalar antifermion
+      ELSEIF(I2DRTP(IMODE).EQ.14) THEN
+        PRE = HWULDO(PM(1,1),PCM(1,4))*HWULDO(PM(1,3),PCM(1,6))
+        PRE = HALF/SQRT(PRE)
+        DO 140 P0=1,2
+        DO 140 P2=1,2
+        ME(P0,2,P2) = (0.0D0,0.0D0)
+ 140    ME(P0,1,P2) = PRE*( A(O(P0))*S(4,1,O(P0))*F2M(  P0 ,O(P2),1)
+     &                     -A(  P0 )*MA(1)       *F2M(O(P0),O(P2),4))
+C--unrecognized type of diagram
+      ELSE
+        CALL HWWARN('HWDSM2',500,*999)
+      ENDIF
+C--now compute the weight
+      WGT = ZERO
+      DO 500 P0 =1,2
+      DO 500 P0P=1,2
+      DO 500 P1 =1,2
+      DO 500 P2 =1,2
+ 500  WGT = WGT+PHS*P2MODE(IMODE)*ME(P0,P1,P2)*DCONJG(ME(P0P,P1,P2))*
+     &          RHOIN(P0,P0P)
+      IF(I2DRTP(IMODE).EQ.5.OR.I2DRTP(IMODE).EQ.6.OR.
+     &   I2DRTP(IMODE).EQ.8.OR.I2DRTP(IMODE).EQ.13) GOTO 300
+C--issue warning if greater than maximum
+      IF(WGT.GT.WTMAX) THEN
+        CALL HWWARN('HWDSM2',1,*200)
+        WRITE(6,2000) RNAME(IDK(ID2PRT(IMODE))),
+     &   RNAME(IDKPRD(1,ID2PRT(IMODE))),RNAME(IDKPRD(2,ID2PRT(IMODE))),
+     &   WTMAX,1.1D0*WGT
+        WT2MAX(IMODE) = 1.1D0*WGT
+        WTMAX         = WT2MAX(IMODE)
+      ENDIF
+ 200  IF(HWRGEN(0)*WTMAX.GT.WGT.AND.NTRY.LT.NSNTRY) GOTO 1000
+      IF(NTRY.GE.NSNTRY) CALL HWWARN('HWDSM2',100,*999)
+C--now enter the momenta in the common block
+ 300  CALL HWVEQU(5,P(1,2),PHEP(1,IOUT1))
+      CALL HWVEQU(5,P(1,3),PHEP(1,IOUT2))
+C--set up the spin information
+C--setup for all decays
+      JMOSPN(NSPN+1) = IDSPIN
+      JMOSPN(NSPN+2) = IDSPIN
+      JDASPN(1,IDSPIN) = NSPN+1
+      JDASPN(2,IDSPIN) = NSPN+2
+      IDSPN(NSPN+1) = IOUT1
+      IDSPN(NSPN+2) = IOUT2
+      DO 11 I=1,2
+      DECSPN(NSPN+I) = .FALSE.
+      DO 11 J=1,2
+ 11   JDASPN(I,NSPN+J) = 0
+      ISNHEP(IOUT1) = NSPN+1
+      ISNHEP(IOUT2) = NSPN+2
+      DO 12 I=1,2
+        IF(RSPIN(IDHW(IDSPN(NSPN+I))).EQ.ZERO) THEN
+          RHOSPN(1,1,NSPN+I) = ONE
+          RHOSPN(2,1,NSPN+I) = ZERO
+          RHOSPN(1,2,NSPN+I) = ZERO
+          RHOSPN(2,2,NSPN+I) = ZERO
+        ELSE
+          RHOSPN(1,1,NSPN+I) = HALF
+          RHOSPN(2,1,NSPN+I) = ZERO
+          RHOSPN(1,2,NSPN+I) = ZERO
+          RHOSPN(2,2,NSPN+I) = HALF
+        ENDIF
+ 12   CONTINUE
+      NSPN = NSPN+2
+C--now enter the matrix element
+      DO 150 P0=1,2
+      DO 150 P1=1,2
+      DO 150 P2=1,2
+      MESPN(P0,P1,P2,2,1,IDSPIN) = (0.0D0,0.0D0)
+ 150  MESPN(P0,P1,P2,1,1,IDSPIN) = ME(P0,P1,P2)
+      SPNCFC(1,1,IDSPIN) = ONE
+      NCFL(IDSPIN) = 1
+      RETURN
+C--format statements
+ 2000 FORMAT(/'WEIGHT FOR DECAY ',A8,' --> ',A8,' ',A8, 'EXCEEDS MAX',
+     &       /10X,'    MAXIMUM WEIGHT =',1PG24.16,
+     &       /10X,'NEW MAXIMUM WEIGHT =',1PG24.16)
+ 999  END
+CDECK  ID>, HWDSM3.
+*CMZ :-        -09/04/02  13:46:07  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWDSM3(NPR,ID,IOUT1,IOUT2,IOUT3,IMODE,RHOIN,IDSPIN)
+C-----------------------------------------------------------------------
+C     Master subroutine for three body SUSY and spin ME's
+C     Uses HWD3ME to generate the momenta etc
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      DOUBLE COMPLEX F0(2,2,8),F1(2,2,8),F1M(2,2,8),F3(2,2,8),
+     &     F0M(2,2,8),F2(2,2,8),RHOIN(2,2),F01(2,2,8,8)
+      DOUBLE PRECISION A,B,MS,MWD,MA,MB,MA2,MB2,M342,M232,M242,MR,
+     &  P(5,4),PZ(5),HWRGEN,CV,CA,BR,PM(5,4),CFTHRE(NCFMAX,NCFMAX)
+      INTEGER ID,IDP(4+NDIAGR),NPR,ITYPE,I,IB,ID1,ID2,IDSPIN,
+     &     DRTYPE(NDIAGR),IOUT(3),IMODE,IOUT1,IOUT2,IOUT3,J,NCTHRE,
+     &     DRCF(NDIAGR)
+      COMMON/HWD3BY/F0,F0M,F1M,F1,F2,F3,F01,A(2,NDIAGR),B(2,NDIAGR),
+     &     MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),MA(4),MA2(4),MB(4),MB2(4),
+     &     M342,M232,M242,P,PM,CFTHRE,IDP,DRTYPE,NCTHRE,DRCF
+      EXTERNAL HWRGEN
+      SAVE PZ,IOUT,ITYPE,ID1,ID2
+C--calculate the matrix element for a three body decay
+      IF(NPR.EQ.3) THEN
+C--set up the decay products, if a SUSY decay the SUSY particle
+C--must be the first decay product
+        IF(ABS(IDHEP(IOUT1)).GT.1000000) THEN
+          IOUT(1) = IOUT1
+          IOUT(2) = IOUT2
+          IOUT(3) = IOUT3
+        ELSEIF(ABS(IDHEP(IOUT2)).GT.1000000) THEN
+          IOUT(1) = IOUT2
+          IOUT(2) = IOUT1
+          IOUT(3) = IOUT3
+        ELSEIF(ABS(IDHEP(IOUT3)).GT.1000000) THEN
+          IOUT(1) = IOUT3
+          IOUT(2) = IOUT1
+          IOUT(3) = IOUT3
+C--special for top decay (bottom must be first)
+        ELSEIF(ABS(IDHEP(ID)).EQ.6) THEN
+          IOUT(1) = IOUT3
+          IOUT(2) = IOUT1
+          IOUT(3) = IOUT2
+        ELSE
+          IOUT(1) = IOUT2
+          IOUT(2) = IOUT1
+          IOUT(3) = IOUT3
+        ENDIF
+C--fermion must be second and antifermion third
+        IF(IDHEP(IOUT(2)).LT.0.AND.
+     &    (ABS(IDHEP(IOUT(1))).GT.1000000.OR.ABS(IDHEP(ID)).EQ.6)) THEN
+          I = IOUT(2)
+          IOUT(2) = IOUT(3)
+          IOUT(3) = I
+        ENDIF
+C--setup the OFF SHELL MASSES
+        MA(1) = PHEP(5,ID)
+        DO 1 I=1,3
+ 1      MA(I+1) = PHEP(5,IOUT(I))
+        DO 2 I=1,4
+ 2      MA2(I) = MA(I)**2
+C--call to ME code
+        CALL HWD3ME(ID,0,IMODE,RHOIN,IDSPIN)
+        IF(IERROR.NE.0) RETURN
+C--juggle the momenta for the RPV BV gluino if needed
+        IF(SPCOPT.EQ.2.AND.N3NCFL(IMODE).EQ.3) THEN
+          IF(NCFL(IDSPIN).EQ.2) THEN
+            IOUT(1) = IOUT1 
+            IOUT(2) = IOUT2 
+            IOUT(3) = IOUT3 
+          ELSEIF(NCFL(IDSPIN).EQ.3) THEN
+            IOUT(1) = IOUT3
+            IOUT(2) = IOUT2
+            IOUT(3) = IOUT1
+          ENDIF
+          DO I=1,3
+            IDHW(IOUT(I)) = IDP(I+1)
+          ENDDO
+        ENDIF
+C--copy momenta into event record
+        DO 3 I=1,3
+ 3      CALL HWVEQU(5,P(1,1+I),PHEP(1,IOUT(I)))
+C--enter the spin information in the common block
+        IF(SYSPIN) THEN
+C--set up if start of new spin chain
+          IF(NSPN.EQ.0) THEN
+C--zero the elements
+            CALL HWVZRI(  NMXHEP,ISNHEP)
+            CALL HWVZRI(  NMXSPN,JMOSPN)
+            CALL HWVZRI(2*NMXSPN,JDASPN)
+            CALL HWVZRI(  NMXSPN, IDSPN)
+            NSPN = NSPN+1
+            JMOSPN(NSPN) = 0
+            IDSPN (NSPN) = ID
+            DECSPN(NSPN) = .FALSE.
+C--set up spin density matrix for particle
+            IF(RSPIN(IDHW(ID)).EQ.ZERO) THEN
+              RHOSPN(1,1,NSPN) = ONE
+              RHOSPN(2,1,NSPN) = ZERO
+              RHOSPN(1,2,NSPN) = ZERO
+              RHOSPN(2,2,NSPN) = ZERO
+            ELSE
+              RHOSPN(1,1,NSPN) = HALF
+              RHOSPN(2,1,NSPN) = ZERO
+              RHOSPN(1,2,NSPN) = ZERO
+              RHOSPN(2,2,NSPN) = HALF
+            ENDIF
+            ISNHEP(ID)    = NSPN
+          ENDIF
+C--enter the decay products
+          JDASPN(1,IDSPIN) = NSPN+1
+          JDASPN(2,IDSPIN) = NSPN+3
+          DO 7 I=1,3
+          JMOSPN(NSPN+I  ) = IDSPIN
+          IDSPN (NSPN+I  ) = IOUT(I)
+          DECSPN(NSPN+I  ) = .FALSE.
+          ISNHEP(IOUT(I) ) = NSPN+I
+          IF(RSPIN(IDHW(IOUT(I))).EQ.ZERO) THEN
+            RHOSPN(1,1,NSPN+I) = ONE
+            RHOSPN(2,1,NSPN+I) = ZERO
+            RHOSPN(1,2,NSPN+I) = ZERO
+            RHOSPN(2,2,NSPN+I) = ZERO
+          ELSE
+            RHOSPN(1,1,NSPN+I) = HALF
+            RHOSPN(2,1,NSPN+I) = ZERO
+            RHOSPN(1,2,NSPN+I) = ZERO
+            RHOSPN(2,2,NSPN+I) = HALF
+          ENDIF
+          DO 7 J=1,2
+ 7        JDASPN(J,NSPN+I) = 0
+          NSPN = NSPN+3
+        ENDIF
+C--select the decay mode and generate the decay for a two body mode
+      ELSEIF(NPR.EQ.2) THEN
+        IF(IDHW(IOUT2).GE.198.AND.IDHW(IOUT2).LE.200) THEN
+          IB = IDHW(IOUT2)
+          IOUT(1) = IOUT1
+          IOUT(2) = IOUT2
+        ELSEIF(IDHW(IOUT1).GE.198.AND.IDHW(IOUT1).LE.200) THEN
+          IB = IDHW(IOUT1)
+          IOUT(1) = IOUT2
+          IOUT(2) = IOUT1
+        ELSE
+          CALL HWWARN('HWDSM3',501,*999)
+        ENDIF
+C--setup the off shell masses and particle ids for me code
+        MA(1) = PHEP(5,ID)
+        MA(2) = PHEP(5,IOUT(1))
+        CALL HWDBOZ(IB,ID1,ID2,CV,CA,BR,0)
+        ITYPE = ID1
+        IF(IB.EQ.199) ITYPE = ITYPE+1
+        IF(ITYPE.GT.120) ITYPE = ITYPE-114
+        IF(IB.NE.200) ITYPE = ITYPE/2
+C--generate momenta of decay products
+        CALL HWD3ME(ID,ITYPE,IMODE,RHOIN,IDSPIN)
+        CALL HWVEQU(5,P(1,2),PHEP(1,IOUT(1)))
+        CALL HWVSUM(4,P(1,3),P(1,4),PZ)
+        CALL HWUMAS(PZ)
+        CALL HWVEQU(5,PZ,PHEP(1,IOUT(2)))
+C--enter the spin information in the common block if starting new chain
+        IF(SYSPIN.AND.NSPN.EQ.0) THEN
+C--zero elements of common block
+          CALL HWVZRI(  NMXHEP,ISNHEP)
+          CALL HWVZRI(  NMXSPN,JMOSPN)
+          CALL HWVZRI(2*NMXSPN,JDASPN)
+          CALL HWVZRI(  NMXSPN, IDSPN)
+          NSPN = NSPN+1
+          JMOSPN(NSPN) = 0
+          IDSPN (NSPN) = ID
+          DECSPN(NSPN) = .FALSE.
+          IF(RSPIN(IDHW(ID)).EQ.ZERO) THEN
+            RHOSPN(1,1,NSPN) = ONE
+            RHOSPN(2,1,NSPN) = ZERO
+            RHOSPN(1,2,NSPN) = ZERO
+            RHOSPN(2,2,NSPN) = ZERO
+          ELSE
+            RHOSPN(1,1,NSPN) = HALF
+            RHOSPN(2,1,NSPN) = ZERO
+            RHOSPN(1,2,NSPN) = ZERO
+            RHOSPN(2,2,NSPN) = HALF
+          ENDIF
+          ISNHEP(ID)    = NSPN
+        ENDIF
+        IF(SYSPIN) THEN
+          IDSPN (NSPN+1  ) = IOUT(1)
+          ISNHEP(IOUT(1))  = NSPN+1
+        ENDIF
+C--put the boson decay products into the event record for a two body mode
+      ELSEIF(NPR.EQ.-1) THEN
+        IOUT(1) = JDAHEP(1,IOUT(2))
+        IOUT(2) = NHEP+1
+        IOUT(3) = NHEP+2
+C--set up the status of the particles
+        ISTHEP(IOUT(1)) = 195
+        JDAHEP(1,IOUT(1)) = NHEP+1
+        JDAHEP(2,IOUT(1)) = NHEP+2
+C--find the ID's of the particles
+        IF(IDHW(IOUT(1)).EQ.200) THEN
+          ID1 = ITYPE
+          IF(ITYPE.GT.6) ID1 = ID1+114
+          ID2 = ID1+6
+        ELSE
+          ID1 = 2*ITYPE-1
+          IF(ITYPE.GT.3) ID1 = ID1+114
+          ID2 = ID1+7
+          IF(IDHW(IOUT(1)).EQ.198) THEN
+            I   = ID1+6
+            ID1 = ID2-6
+            ID2 = I
+          ENDIF
+        ENDIF
+C--put id's of decay products into the event record
+        IDHW(NHEP+1)  = ID1
+        IDHW(NHEP+2)  = ID2
+        IDHEP(NHEP+1) = IDPDG(ID1)
+        IDHEP(NHEP+2) = IDPDG(ID2)
+C--boost decay products momenta to rest frame of boson
+        CALL HWULOF(PZ,P(1,3),P(1,3))
+        CALL HWULOF(PZ,P(1,4),P(1,4))
+C--boost back to lab using new boson
+        CALL HWULOB(PHEP(1,IOUT(1)),P(1,3),PHEP(1,NHEP+1))
+        CALL HWULOB(PHEP(1,IOUT(1)),P(1,4),PHEP(1,NHEP+2))
+C--setup for decay to quarks
+        IF(ID1.LE.12) THEN
+          ISTHEP(NHEP+1) = 113
+          ISTHEP(NHEP+2) = 114
+          JMOHEP(2,NHEP+1) = NHEP+2
+          JDAHEP(2,NHEP+1) = NHEP+2
+          JMOHEP(2,NHEP+2) = NHEP+1
+          JDAHEP(2,NHEP+2) = NHEP+1
+          JMOHEP(1,NHEP+1) = IOUT(1)
+          JMOHEP(1,NHEP+2) = IOUT(1)
+C--setup for decay to leptons
+        ELSE
+          ISTHEP(NHEP+1) = 193
+          ISTHEP(NHEP+2) = 193
+          JMOHEP(1,NHEP+1) = IOUT(1)
+          JMOHEP(1,NHEP+2) = IOUT(1)
+          JMOHEP(2,NHEP+1) = JMOHEP(1,IOUT(1))
+          JMOHEP(2,NHEP+2) = JMOHEP(1,IOUT(1))
+          JDAHEP(1,NHEP+1) = 0
+          JDAHEP(1,NHEP+2) = 0
+          JDAHEP(2,NHEP+1) = 0
+          JDAHEP(2,NHEP+2) = 0
+        ENDIF
+        NHEP=NHEP+2
+C--finish entering the spin information in the common block
+        IF(SYSPIN) THEN
+          JDASPN(1,IDSPIN) = NSPN+1
+          JDASPN(2,IDSPIN) = NSPN+3
+          DO 6 I=1,3
+          JMOSPN(NSPN+I  ) = IDSPIN
+          DECSPN(NSPN+I  ) = .FALSE.
+          IF(RSPIN(IDHW(IOUT(I))).EQ.ZERO) THEN
+            RHOSPN(1,1,NSPN+I) = ONE
+            RHOSPN(2,1,NSPN+I) = ZERO
+            RHOSPN(1,2,NSPN+I) = ZERO
+            RHOSPN(2,2,NSPN+I) = ZERO
+          ELSE
+            RHOSPN(1,1,NSPN+I) = HALF
+            RHOSPN(2,1,NSPN+I) = ZERO
+            RHOSPN(1,2,NSPN+I) = ZERO
+            RHOSPN(2,2,NSPN+I) = HALF
+          ENDIF
+          DO 6 J=1,2
+ 6        JDASPN(J,NSPN+I) =0
+          NSPN = NSPN+3
+          IDSPN (NSPN-1) = NHEP-1
+          IDSPN (NSPN  ) = NHEP
+          ISNHEP(NHEP-1) = NSPN-1
+          ISNHEP(NHEP  ) = NSPN
+        ENDIF
+C--perform the parton shower for the decay products of the gauge boson
+        IF(ID1.LE.12) CALL HWBGEN
+C--error issue warning
+      ELSE
+        CALL HWWARN('HWDSM3',500,*999)
+      ENDIF
+ 999  END
+CDECK  ID>, HWDSM4.
+*CMZ :-        -11/10/01  14:03:42  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWDSM4(IOPT,ID,IOUT1,IOUT2,IMODE)
+C-----------------------------------------------------------------------
+C     Subroutine to perform the four body decays
+C     IOPT = 1 select decay mode and generate momenta
+C     IOPT = 2 enter first decays and perform parton shower
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      INTEGER IOPT,ID,IOUT1,IOUT2,IB(2),I,IDF(4),ITYPE(2),IMODE,
+     &     IDP(4+NDIAGR),ID1,ID2,J
+      DOUBLE PRECISION CV,CA,A,B,MS,MWD,MR,M,M2,P(5,5),PW(5,2),BR
+      COMMON/HWD4BY/A(2),B(2),MS(2),MWD(2),MR(2),M(5),M2(5),P,IDP
+      SAVE PW,ITYPE
+C--generate the decay
+      IF(IOPT.EQ.1) THEN
+        IB(1) = IDHW(IOUT1)
+        IB(2) = IDHW(IOUT2)
+C--select the decays of the bosons
+        DO 1 I=1,2
+        CALL HWDBOZ(IB(I),IDF(2*I-1),IDF(2*I),CV,CA,BR,1)
+        ITYPE(I) = IDF(2*I-1)
+        IF(IB(I).EQ.199) ITYPE(I)    = ITYPE(I)+1
+        IF(ITYPE(I).GT.120) ITYPE(I) = ITYPE(I)-114
+ 1      IF(IB(I).NE.200) ITYPE(I)    = ITYPE(I)/2
+C--generate the momenta of the decay products
+        CALL HWD4ME(ID,ITYPE(1),ITYPE(2),IMODE)
+        DO 2 I=1,2
+        CALL HWVSUM(4,P(1,2*I),P(1,2*I+1),PW(1,I))
+ 2      CALL HWUMAS(PW(1,I))
+        CALL HWVEQU(5,PW(1,1),PHEP(1,IOUT1))
+        CALL HWVEQU(5,PW(1,2),PHEP(1,IOUT2))
+        IF(SYSPIN) THEN
+          IDSPN(1)     = JDAHEP(1,ID)
+          DECSPN(1)    = .FALSE.
+          ISNHEP(JDAHEP(1,ID)) = 1
+          JDASPN(1,1)  = 2
+          JDASPN(2,1)  = 5
+          DO 4 I=2,5
+          DECSPN(I) = .FALSE.
+ 4        JMOSPN(I) = 1
+        ENDIF
+      ELSEIF(IOPT.EQ.2) THEN
+        IB(1) = JDAHEP(1,IOUT1)
+        IB(2) = JDAHEP(1,IOUT2)
+        DO 3 I=1,2
+          ISTHEP(IB(I)) = 195
+          JDAHEP(1,IB(I)) = NHEP+1
+          JDAHEP(2,IB(I)) = NHEP+2
+C--find the ID's of the particles
+          IF(IDHW(IB(I)).EQ.200) THEN
+            ID1 = ITYPE(I)
+            IF(ITYPE(I).GT.6) ID1 = ID1+114
+            ID2 = ID1+6
+          ELSE
+            ID1 = 2*ITYPE(I)-1
+            IF(ITYPE(I).GT.3) ID1 = ID1+114
+            ID2 = ID1+7
+            IF(IDHW(IB(I)).EQ.198) THEN
+              J   = ID1+6
+              ID1 = ID2-6
+              ID2 = J
+            ENDIF
+          ENDIF
+C--put id's of decay products into the event record
+          IDHW(NHEP+1)  = ID1
+          IDHW(NHEP+2)  = ID2
+          IDHEP(NHEP+1) = IDPDG(ID1)
+          IDHEP(NHEP+2) = IDPDG(ID2)
+C--boost decay products momenta to rest frame of boson
+          CALL HWULOF(PW(1,I),P(1,2*I  ),P(1,2*I  ))
+          CALL HWULOF(PW(1,I),P(1,2*I+1),P(1,2*I+1))
+C--boost back to lab using new boson
+          CALL HWULOB(PHEP(1,IB(I)),P(1,2*I  ),PHEP(1,NHEP+1))
+          CALL HWULOB(PHEP(1,IB(I)),P(1,2*I+1),PHEP(1,NHEP+2))
+C--setup for decay to quarks
+          IF(ID1.LE.12) THEN
+            ISTHEP(NHEP+1) = 113
+            ISTHEP(NHEP+2) = 114
+            JMOHEP(2,NHEP+1) = NHEP+2
+            JDAHEP(2,NHEP+1) = NHEP+2
+            JMOHEP(2,NHEP+2) = NHEP+1
+            JDAHEP(2,NHEP+2) = NHEP+1
+            JMOHEP(1,NHEP+1) = IB(I)
+            JMOHEP(1,NHEP+2) = IB(I)
+C--setup for decay to leptons
+          ELSE
+            ISTHEP(NHEP+1) = 193
+            ISTHEP(NHEP+2) = 193
+            JMOHEP(1,NHEP+1) = IB(I)
+            JMOHEP(1,NHEP+2) = IB(I)
+            JMOHEP(2,NHEP+1) = JMOHEP(1,IB(I))
+            JMOHEP(2,NHEP+2) = JMOHEP(1,IB(I))
+          ENDIF
+C--enter the information in the spin common block
+          IF(SYSPIN) THEN
+            IDSPN(2*I  ) = NHEP+1
+            IDSPN(2*I+1) = NHEP+2
+            ISNHEP(NHEP+1) = 2*I
+            ISNHEP(NHEP+2) = 2*I+1
+          ENDIF
+          NHEP=NHEP+2
+C--perform the parton shower for the decay products of the gauge boson
+          IF(ID1.LE.12) CALL HWBGEN
+ 3      CONTINUE
+      ENDIF
+ 999  END
 CDECK  ID>, HWDTAU.
 *CMZ :-        -17/10/01  09:42:21  by  Peter Richardson
 *-- Author :    Peter Richardson
@@ -12178,7 +13148,7 @@ C     IOPT = 0 initialises
 C     IOPT = 1 performs decay
 C     IOPT = 2 write outs final TAUOLA information
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IOPT,IHEP,ID,ITAU,I,IMO,NHEPPO
       DOUBLE PRECISION POL,PLAB(4)
       REAL POL1(4)
@@ -12309,7 +13279,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     DECIDES WHETHER TO DO TOP QUARK DECAY BEFORE HADRONIZATION
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       LOGICAL DECAY
       DECAY=RMASS(6).GT.130D0
       END
@@ -12370,7 +13340,7 @@ C-----------------------------------------------------------------------
 C     MATRIX ELEMENT SQUARED FOR
 C     ((V-A)*TB1+(V+A)*CT1)*((V-A)*TB2+(V+A)*CT2)) WEAK DECAY
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       COMMON/FFS/TB,BT
       COMMON/SFF/IT1,IB1,IT2,IB2
       DOUBLE PRECISION TB,BT
@@ -12398,7 +13368,7 @@ C-----------------------------------------------------------------------
 C     Sets STAB=.TRUE. if DKVRTX lies outside the specified region.
 C  Revised 05/09/00 by BRW to put parameters in common
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION DKVRTX(4),RR
       LOGICAL STAB
       STAB=.FALSE.
@@ -12432,22 +13402,76 @@ C-----------------------------------------------------------------------
       HWECIR=(1-Z)**ETA/(1-ETA)*CIRCEE(Z,-1D0)/SQRT(CIRCEE(-1D0,-1D0))
       END
 CDECK  ID>, HWEFIN.
-*CMZ :-        -26/04/91  11.11.55  by  Bryan Webber
+*CMZ :-        -15/07/02  17.56.53  by  Peter Richardson
 *-- Author :    Bryan Webber
 C-----------------------------------------------------------------------
       SUBROUTINE HWEFIN
 C-----------------------------------------------------------------------
 C     TERMINAL CALCULATIONS ON ELEMENTARY PROCESS
 C     Modified 28/03/01 by BRW to handle negative weights
+C     Modified 15/07/02 by PR for Les Houches Accord 
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER I
       DOUBLE PRECISION RNWGT,SPWGT,ERWGT
+C--Les Houches Common Block
+      INTEGER MAXPUP
+      PARAMETER(MAXPUP=100)
+      INTEGER IDBMUP,PDFGUP,PDFSUP,IDWTUP,NPRUP,LPRUP
+      DOUBLE PRECISION EBMUP,XSECUP,XERRUP,XMAXUP
+      COMMON /HEPRUP/ IDBMUP(2),EBMUP(2),PDFGUP(2),PDFSUP(2),
+     &                IDWTUP,NPRUP,XSECUP(MAXPUP),XERRUP(MAXPUP),
+     &                XMAXUP(MAXPUP),LPRUP(MAXPUP)
       IF(TAUDEC.EQ.'TAUOLA') CALL HWDTAU(2,0,0.0D0)
-      WRITE (6,1)
-    1 FORMAT(/10X,'OUTPUT ON ELEMENTARY PROCESS'/)
       IF (NWGTS.EQ.0) THEN
+        WRITE (6,1)
         WRITE (6,10)
    10   FORMAT(10X,'NO WEIGHTS GENERATED')
+        RETURN
+      ENDIF
+C--output Les Houches common block information
+      IF(IPROC.LE.0) THEN
+C--WRITE THE HEADER
+        WRITE(6,13) 
+        WRITE(6,14)
+C--FOR THE FIRST WEIGHT OPTION CALCULATE THE CROSS SECTION
+        IF(ABS(IDWTUP).EQ.1) THEN
+          DO I=1,NPRUP
+            RNWGT     = 1.0D0/DBLE(LHIWGT(I))
+            LHXSCT(I) = LHWGT(I)*RNWGT
+            LHXERR(I) = SQRT(MAX(LHWGTS(I)*RNWGT-LHXSCT(I)**2,ZERO))
+            LHXERR(I) = LHXERR(I)*SQRT(RNWGT)
+            LHXSCT(I) = LHXSCT(I)*1.0D3
+            LHXERR(I) = LHXERR(I)*1.0D3
+            LHXMAX(I) = LHXMAX(I)*1.0D3
+          ENDDO
+C--FOR THE SECOND WEIGHT OPTION THIS WAS AN INPUT
+        ELSEIF(ABS(IDWTUP).EQ.2) THEN
+          DO I=1,NPRUP
+            LHXMAX(I) = LHXMAX(I)*1.0D3
+          ENDDO
+        ENDIF
+        IF(ABS(IDWTUP).LE.2) THEN
+          AVWGT = ZERO
+          ERWGT = ZERO
+          DO I=1,NPRUP
+            WRITE(6,15) LPRUP(I),LHXSCT(I),LHXERR(I),LHXMAX(I)*1.0D-3,
+     &            LHNEVT(I)
+            AVWGT = AVWGT+LHXSCT(I)
+            ERWGT = ERWGT+LHXERR(I)**2
+          ENDDO
+          AVWGT = AVWGT*1.0D-3
+          ERWGT = SQRT(ERWGT)*1.0D-3
+        ELSE
+          RNWGT=1./FLOAT(NWGTS)
+          IF (NEGWTS) AVABW=ABWSUM*RNWGT
+          AVWGT=WGTSUM*RNWGT
+          SPWGT=SQRT(MAX(WSQSUM*RNWGT-AVWGT**2,ZERO))
+          ERWGT=SPWGT*SQRT(RNWGT)
+          IF (.NOT.NOWGT) WGTMAX=AVWGT
+          IF (WGTMAX.EQ.ZERO) WGTMAX=ONE
+        ENDIF
+C--STANDARD HERWIG OPTION
       ELSE
         RNWGT=1./FLOAT(NWGTS)
         IF (NEGWTS) AVABW=ABWSUM*RNWGT
@@ -12456,43 +13480,50 @@ C-----------------------------------------------------------------------
         ERWGT=SPWGT*SQRT(RNWGT)
         IF (.NOT.NOWGT) WGTMAX=AVWGT
         IF (WGTMAX.EQ.ZERO) WGTMAX=ONE
-        IF (NEGWTS) THEN
-           WRITE (6,12) NEVHEP,NNEGEV,NWGTS,NNEGWT,AVWGT,SPWGT,
-     &                  AVABW,WBIGST,WGTMAX,IPROC,
-     &                  1000.*AVWGT,1000.*ERWGT,100.*AVWGT/WGTMAX
-        ELSE
-           WRITE (6,11) NEVHEP,NWGTS,AVWGT,SPWGT,WBIGST,WGTMAX,
-     &                  IPROC,
-     &                  1000.*AVWGT,1000.*ERWGT,100.*AVWGT/WGTMAX
-        ENDIF
- 11     FORMAT(1P,
-     &         10X,'N.B. NEGATIVE WEIGHTS NOT ALLOWED'//
-     &         10X,'NUMBER OF EVENTS   = ',I11/
-     &         10X,'NUMBER OF WEIGHTS  = ',I11/
-     &         10X,'MEAN VALUE OF WGT  =',E12.4/
-     &         10X,'RMS SPREAD IN WGT  =',E12.4/
-     &         10X,'ACTUAL MAX WEIGHT  =',E12.4/
-     &         10X,'ASSUMED MAX WEIGHT =',E12.4//
-     &         10X,'PROCESS CODE IPROC = ',I11/
-     &         10X,'CROSS SECTION (PB) =',G12.4/
-     &         10X,'ERROR IN C-S  (PB) =',G12.4/
-     &         10X,'EFFICIENCY PERCENT =',G12.4)
- 12     FORMAT(1P,
-     &         10X,'N.B. NEGATIVE WEIGHTS ALLOWED'//
-     &         10X,'NUMBER OF EVENTS   = ',I11/
-     &         10X,'NEGATIVE  EVENTS   = ',I11/
-     &         10X,'NUMBER OF WEIGHTS  = ',I11/
-     &         10X,'NEGATIVE  WEIGHTS  = ',I11/
-     &         10X,'MEAN VALUE OF WGT  =',E12.4/
-     &         10X,'RMS SPREAD IN WGT  =',E12.4/
-     &         10X,'MEAN ABS WEIGHT    =',E12.4/
-     &         10X,'ACTUAL MAX ABS WGT =',E12.4/
-     &         10X,'ASSUMED MAXABS WGT =',E12.4//
-     &         10X,'PROCESS CODE IPROC = ',I11/
-     &         10X,'CROSS SECTION (PB) =',G12.4/
-     &         10X,'ERROR IN C-S  (PB) =',G12.4/
-     &         10X,'EFFICIENCY PERCENT =',G12.4)
       ENDIF
+C--PRINT OUT THE INFO
+      WRITE (6,1)
+ 1    FORMAT(/10X,'OUTPUT ON ELEMENTARY PROCESS'/)
+      IF (NEGWTS) THEN
+         WRITE (6,12) NEVHEP,NNEGEV,NWGTS,NNEGWT,AVWGT,SPWGT,
+     &        AVABW,WBIGST,WGTMAX,IPROC,
+     &        1000.*AVWGT,1000.*ERWGT,100.*AVWGT/WGTMAX
+      ELSE
+         WRITE (6,11) NEVHEP,NWGTS,AVWGT,SPWGT,WBIGST,WGTMAX,
+     &        IPROC,
+     &        1000.*AVWGT,1000.*ERWGT,100.*AVWGT/WGTMAX
+      ENDIF
+ 11   FORMAT(1P,
+     &     10X,'N.B. NEGATIVE WEIGHTS NOT ALLOWED'//
+     &     10X,'NUMBER OF EVENTS   = ',I11/
+     &     10X,'NUMBER OF WEIGHTS  = ',I11/
+     &     10X,'MEAN VALUE OF WGT  =',E12.4/
+     &     10X,'RMS SPREAD IN WGT  =',E12.4/
+     &     10X,'ACTUAL MAX WEIGHT  =',E12.4/
+     &     10X,'ASSUMED MAX WEIGHT =',E12.4//
+     &     10X,'PROCESS CODE IPROC = ',I11/
+     &     10X,'CROSS SECTION (PB) =',G12.4/
+     &     10X,'ERROR IN C-S  (PB) =',G12.4/
+     &     10X,'EFFICIENCY PERCENT =',G12.4)
+ 12   FORMAT(1P,
+     &     10X,'N.B. NEGATIVE WEIGHTS ALLOWED'//
+     &     10X,'NUMBER OF EVENTS   = ',I11/
+     &     10X,'NEGATIVE  EVENTS   = ',I11/
+     &     10X,'NUMBER OF WEIGHTS  = ',I11/
+     &     10X,'NEGATIVE  WEIGHTS  = ',I11/
+     &     10X,'MEAN VALUE OF WGT  =',E12.4/
+     &     10X,'RMS SPREAD IN WGT  =',E12.4/
+     &     10X,'MEAN ABS WEIGHT    =',E12.4/
+     &     10X,'ACTUAL MAX ABS WGT =',E12.4/
+     &     10X,'ASSUMED MAXABS WGT =',E12.4//
+     &     10X,'PROCESS CODE IPROC = ',I11/
+     &     10X,'CROSS SECTION (PB) =',G12.4/
+     &     10X,'ERROR IN C-S  (PB) =',G12.4/
+     &     10X,'EFFICIENCY PERCENT =',G12.4)
+ 13   FORMAT(/1P,10X,'OUTPUT ON LES HOUCHES EVENTS'/)
+ 14   FORMAT(/1P,5X,' PROC CODE',1X,' XSECT(pb)     ',1X,
+     &     '  XERR(pb)  ',1X,'   Max wgt(nb)',1X,'No. of events'/)
+ 15   FORMAT(5X,I7,E15.5,1X,E15.5,1X,E15.5,2X,I7)
       END
 CDECK  ID>, HWEGAM.
 *CMZ :-        -26/04/91  11.11.55  by  Bryan Webber
@@ -12503,7 +13534,7 @@ C-----------------------------------------------------------------------
 C     GENERATES A PHOTON IN WEIZSACKER-WILLIAMS (WWA=.TRUE.) OR
 C     ELSE EQUIVALENT PHOTON APPROX FROM INCOMING E+, E-, MU+ OR MU-
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRUNI,EGMIN,ZMIN,ZMAX,ZGAM,SS,ZMI,ZMA,
      & PPL,PMI,QT2,Q2,QQMIN,QQMAX,S0,A,RPM(2)
       INTEGER IHEP,IHADIS,HQ,I
@@ -12529,9 +13560,16 @@ C---DEFINE LIMITS FOR GAMMA MOMENTUM FRACTION
         ELSEIF (IPRO.EQ.17.OR.IPRO.EQ.51) THEN
           HQ = MOD(IPROC,100)
           S0 = 4.D0*(PTMIN**2+RMASS(HQ)**2)
-        ELSEIF (IPRO.EQ.16.OR.IPRO.EQ.19.OR.IPRO.EQ.25.OR.
-     &          IPRO.EQ.26.OR.IPRO.EQ.27.OR.IPRO.EQ.95) THEN
+        ELSEIF (IPRO.EQ.10.OR.IPRO.EQ.16.OR.IPRO.EQ.19.OR.
+     &          IPRO.EQ.25.OR.IPRO.EQ.26.OR.IPRO.EQ.27.OR.
+     &          IPRO.EQ.95) THEN
           S0 = MAX(2*RMASS(1),RMASS(201)-GAMMAX*GAMH)**2
+        ELSEIF (IPRO.EQ.11) THEN
+          IF(IPROC.GE.1140)THEN
+            S0 = MAX(2*RMASS(1),RMASS(206))**2
+          ELSE
+            S0 = MAX(2*RMASS(1),RMASS(201+IHIGGS))**2
+          END IF          
         ELSEIF ((IPRO.EQ.31).OR.(IPRO.EQ.32)) THEN
           S0 = MAX(2*RMASS(1),RMASS(201+IHIGGS))**2
         ELSEIF (IPRO.EQ.33) THEN
@@ -12762,7 +13800,7 @@ C-----------------------------------------------------------------------
 C     INITIALISES ELEMENTARY PROCESS
 C     Modified 28/03/01 by BRW to handle negative weights
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRSET,DUMMY,SAFETY
       EXTERNAL HWRSET
       PARAMETER (SAFETY=1.001)
@@ -12785,7 +13823,7 @@ C---NUMBER OF ERRORS UNREPORTED
       NUMERU=0
 C---FIND MAXIMUM ABSOLUTE WEIGHT IN CASES WHERE THIS IS REQUIRED
       IF (NOWGT) THEN
-        IF (WGTMAX.EQ.ZERO) THEN
+        IF (WGTMAX.EQ.ZERO.AND.IPROC.GT.0) THEN
           NBSH=IBSH
           DUMMY = HWRSET(IBRN)
           WRITE(6,10) IPROC,IBRN,NBSH
@@ -12827,7 +13865,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     GENERATES AN ISR PHOTON FROM INCOMING E+, E-, MU+ OR MU-
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION CIRCKP(2)
       COMMON /HWCIR2/CIRCKP
       DOUBLE PRECISION HWRGEN,QSQMAX,QSQMIN,A,B,B1,B2,B3,B4,B5,B6,B7,B8,
@@ -12837,7 +13875,7 @@ C-----------------------------------------------------------------------
       SAVE Z,QSQ,PHI
 C---IF ZMXISR IS ZERO, THERE CAN BE NO ISR
       IF (ZMXISR.EQ.ZERO.OR.(IPRO.GT.3.AND.IPRO.LT.6)
-     &     .OR.IPRO.GT.8.OR.IPROC.EQ.850) RETURN
+     &     .OR.IPRO.GT.12.OR.IPROC.EQ.850) RETURN
 C---CHECK CONSISTENCY OF TMNISR AND ZMXISR
       IF (ZMXISR**2.LT.TMNISR) CALL HWWARN('HWEISR',200,*999)
 C---CALCULATE VIRTUALITY LIMITS
@@ -12852,9 +13890,10 @@ C---DECIDE HOW MUCH WEIGHT TO GIVE THE Z RESONANCE
           AA=10
         ELSEIF (IPRO.EQ.2) THEN
           AA=0
-        ELSEIF (IPRO.EQ.3.OR.IPRO.EQ.7) THEN
+        ELSEIF (IPRO.EQ.3.OR.IPRO.EQ.7.OR.IPRO.EQ.10.OR.IPRO.EQ.11) THEN
           AA=1
         ELSEIF (IPRO.EQ.9) THEN
+          AA=0
           IF((MOD(IPROC,10000).EQ.960).OR.
      &       (MOD(IPROC,10000).EQ.970))THEN
             AA=1
@@ -13060,7 +14099,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     SETS UP 2->1 (COLOUR SINGLET) HARD SUBPROCESS
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION PA
       INTEGER ICMF,I,IBM,IHEP
 C---INCOMING LINES
@@ -13106,24 +14145,63 @@ C---SET UP COLOUR STRUCTURE LABELS
       NHEP=NHEP+3
   999 END
 CDECK  ID>, HWEPRO.
-*CMZ :-        -01/04/99  19.41.18  by  Mike Seymour
+*CMZ :-        -15/07/02  17.56.53  by  Peter Richardson
 *-- Author :    Bryan Webber
 C-----------------------------------------------------------------------
       SUBROUTINE HWEPRO
 C-----------------------------------------------------------------------
 C     WHEN NEVHEP=0, CHOOSES X VALUES AND FINDS WEIGHT FOR PROCESS IPROC
 C     OTHERWISE, CHOOSES AND LOADS ALL VARIABLES FOR HARD PROCESS
+C     modifications for Les Houches accord by PR (7/15/02)
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION CIRCKP(2)
       COMMON /HWCIR2/CIRCKP
       DOUBLE PRECISION Z1,Z2,C1,C2,B1,B2,CIRCEE,CIRCGG,RS,MISS,ETA,
-     $     HWUGAU,HWECIR,QMX1,QMN1,QMX2,QMN2
+     $     HWUGAU,HWECIR,QMX1,QMN1,QMX2,QMN2,TEST
       INTEGER IHAD
       SAVE MISS
       DOUBLE PRECISION HWRGEN
       EXTERNAL HWRGEN,HWECIR
+C--Les Houches Common Block
+      INTEGER MAXPUP
+      PARAMETER(MAXPUP=100)
+      INTEGER IDBMUP,PDFGUP,PDFSUP,IDWTUP,NPRUP,LPRUP
+      DOUBLE PRECISION EBMUP,XSECUP,XERRUP,XMAXUP
+      COMMON /HEPRUP/ IDBMUP(2),EBMUP(2),PDFGUP(2),PDFSUP(2),
+     &                IDWTUP,NPRUP,XSECUP(MAXPUP),XERRUP(MAXPUP),
+     &                XMAXUP(MAXPUP),LPRUP(MAXPUP)
       IF (IERROR.NE.0)  RETURN
+C--pick the type of event to generate if using Les Houches accord
+C--first choice according to maxiumum weight
+      IF(IPROC.LT.0) THEN
+        IF(ABS(IDWTUP).EQ.1) THEN
+          IF(ITYPLH.EQ.0) THEN
+            TEST = HWRGEN(1)*LHMXSM
+            DO ITYPLH=1,NPRUP
+              IF(TEST.LE.ABS(LHXMAX(ITYPLH))) GOTO 5
+              TEST = TEST-ABS(LHXMAX(ITYPLH))
+            ENDDO
+ 5          WGTMAX = ABS(LHXMAX(ITYPLH))
+            WBIGST = ABS(LHXMAX(ITYPLH))
+          ENDIF
+C--second choice according to cross section
+        ELSEIF(ABS(IDWTUP).EQ.2) THEN
+          IF(ITYPLH.EQ.0) THEN
+            TEST = HWRGEN(1)*LHMXSM
+            DO ITYPLH=1,NPRUP
+              IF(TEST.LE.ABS(LHXSCT(ITYPLH))) GOTO 6
+              TEST = TEST-ABS(LHXSCT(ITYPLH))
+            ENDDO
+ 6          WGTMAX = ABS(LHXMAX(ITYPLH))
+            WBIGST = ABS(LHXMAX(ITYPLH))
+          ENDIF
+        ELSE
+          WGTMAX = 1.0D0
+          WBIGST = 1.0D0
+          ITYPLH = 1
+        ENDIF
+      ENDIF
 C---ROUTINE LOOPS BACK TO HERE IF GENERATED WEIGHT WAS NOT ACCEPTED
    10 GENEV=.FALSE.
 C---FSTWGT IS .TRUE. DURING FIRST CALL TO HARD PROCESS ROUTINE
@@ -13183,7 +14261,7 @@ C Select a primary interaction point
 C---GENERATE PHOTONS (WEIZSACKER-WILLIAMS APPROX)
 C   FOR HADRONIC PROCESSES WITH LEPTON BEAMS
       GAMWT=ONE
-      IF (IPRO.GT.10.AND.IPRO.LT.90) THEN
+      IF (IPRO.GT.12.AND.IPRO.LT.90) THEN
         IF (CIRCOP.EQ.0) THEN
            IF (ABS(IDHEP(1)).EQ.11.OR.ABS(IDHEP(1)).EQ.13)
      &          CALL HWEGAM(1,ZERO, ONE,.FALSE.)
@@ -13232,7 +14310,7 @@ C---REPLACE IT BY THE SUM OF BEAM AND BREM STRAHLUNG
      &       CALL HWEGAM(2,ZERO, ONE,.FALSE.)
       ENDIF
 C---GENERATE ISR PHOTONS FOR LEPTONIC PROCESSES
-      IF (IPRO.LT.10) THEN
+      IF (IPRO.GT.0.AND.IPRO.LE.12) THEN
         IF (CIRCOP.EQ.0) THEN
            CALL HWEISR(1)
            CALL HWEISR(2)
@@ -13291,7 +14369,10 @@ C   BOOST EVENT RECORD BACK TO CMF
 C---ROUTINE LOOPS BACK TO HERE IF GENERATED WEIGHT WAS ACCEPTED
    20 CONTINUE
       IPRO=MOD(IPROC/100,100)
-      IF (IPRO.EQ.1) THEN
+C---PROCESS GENERATED BY LES HOUCHES INTERFACE
+      IF(IPRO.LE.0) THEN
+        CALL HWHGUP
+      ELSEIF (IPRO.EQ.1) THEN
         IF (IPROC.LT.110.OR.IPROC.GE.120) THEN
 C--- E+E- -> Q-QBAR OR L-LBAR
           CALL HWHEPA
@@ -13338,6 +14419,9 @@ C---MSSM scalar Higgs production from vector-vector fusion.
 C---MSSM scalar Higgs production from Higgs-strahlung.
           CALL HWHIGZ
         END IF
+      ELSEIF ((IPRO.EQ.10).OR.(IPRO.EQ.11)) THEN
+C---SM/MSSM Higgs production with heavy quark flavours via e+e-.
+        CALL HWHIGE
       ELSEIF (IPRO.EQ.13) THEN
 C---GAMMA/Z0/Z' DRELL-YAN PROCESS
         CALL HWHDYP
@@ -13485,8 +14569,8 @@ C---UNKNOWN PROCESS
 C--New call spin correlation code if needed
          IF(SYSPIN.AND.(IPRO.EQ. 1.OR.IPRO.EQ.13.OR.IPRO.EQ.14.OR.
      &                  IPRO.EQ.15.OR.IPRO.EQ.17.OR.IPRO.EQ.20.OR.
-     &                  IPRO.EQ. 7.OR.IPRO.EQ.30))
-     &        CALL HWHSPN
+     &                  IPRO.EQ. 7.OR.IPRO.EQ.30.OR.IPRO.EQ.40.OR.
+     &                  IPRO.EQ.41.OR.IPRO.EQ.8)) CALL HWHSPN
          RETURN
       ELSE
 C---IF AN EVENT IS CANCELLED BEFORE IT IS GENERATED, GIVE IT ZERO WEIGHT
@@ -13509,12 +14593,26 @@ C---IF AN EVENT IS CANCELLED BEFORE IT IS GENERATED, GIVE IT ZERO WEIGHT
         WGTSUM=WGTSUM+EVWGT
         WSQSUM=WSQSUM+EVWGT**2
         ABWSUM=ABWSUM+ABWGT
+C--weight addition for Les Houches accord
+        IF(IPROC.LE.0) THEN
+          IF(ABS(IDWTUP).EQ.1) THEN
+             LHWGT (ITYPLH) = LHWGT (ITYPLH)+EVWGT
+             LHWGTS(ITYPLH) = LHWGTS(ITYPLH)+EVWGT**2
+             LHIWGT(ITYPLH) = LHIWGT(ITYPLH)+1
+          ENDIF
+        ENDIF
         IF (ABWGT.GT.WBIGST) THEN
            WBIGST=ABWGT
            IF (NOWGT.AND.WBIGST.GT.WGTMAX) THEN
               IF (NEVHEP.NE.0) CALL HWWARN('HWEPRO',1,*999)
               WGTMAX=WBIGST*1.1
               WRITE (6,99) WGTMAX
+C--additional for Les Houche accord
+              IF(IPROC.LE.0) THEN
+                IF(ABS(IDWTUP).EQ.1) 
+     &                LHMXSM = LHMXSM-LHXMAX(ITYPLH)+ABWGT
+                LHXMAX(ITYPLH) = EVWGT
+              ENDIF
            ENDIF
         ENDIF
         IF (NEVHEP.NE.0) THEN
@@ -13534,7 +14632,7 @@ C   WARN AT 10*EFFMIN, STOP AT EFFMIN
           ELSE
             GENEV=ABWGT.NE.ZERO
           ENDIF
-          IF (GENEV) GOTO 20
+          IF (GENEV)  GOTO 20
           GOTO 10
         ENDIF
       ENDIF
@@ -13549,7 +14647,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     SETS UP 2->2 HARD SUBPROCESS
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWUMBW,HWUPCM,PA,PCM
       INTEGER ICMF,IBM,I,J,K,IHEP,NTRY
       EXTERNAL HWUPCM
@@ -13632,7 +14730,7 @@ C...It factorises (PIFAC*ALPHA/SWEIN/RMW/RMW/SQRT(2.))**2
 C
 C...First release:  1-APR-1998 by Stefano Moretti
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER I
       DOUBLE PRECISION P1(0:3),P2(0:3),P3(0:3),P4(0:3)
       DOUBLE PRECISION P(0:3)
@@ -13726,7 +14824,7 @@ C     SECTION ROUTINE
 C     I-L are the particles (all outgoing)
 C     Z1 and Z2 are the decay products of the Z
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER ND,I,J,K,L,Z1,Z2
       DOUBLE COMPLEX HWH2DD,ZI,S,D,F
       PARAMETER(ZI=(0.0D0,1.0D0))
@@ -13769,7 +14867,7 @@ C
 C...First release:  01-APR-1998 by Kosuke Odagiri
 C...First modified: 12-APR-1998 by Stefano Moretti
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER MU,IRES,IFL
       DOUBLE PRECISION P1(0:3),P2(0:3),P3(0:3),P4(0:3),P5(0:3)
       DOUBLE PRECISION EMB,EMT,EMW,EMH,EMH01,EMH02,EMH03
@@ -13876,7 +14974,7 @@ C-----------------------------------------------------------------------
 C     Subroutine to implement the F function of Eijk and Kliess
 C     fixed first momenta and all second momenta
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION P(5),MQ,PM(5),XMASS,PLAB,PRW,PCM,HWULDO,PDOT
       DOUBLE COMPLEX F(2,2,8),S,D,SIP(2),SJP(2)
       INTEGER I,J,NP
@@ -13914,7 +15012,7 @@ C-----------------------------------------------------------------------
 C     Subroutine to implement the F function of Eijk and Kliess
 C     fixed second momenta and all first momenta
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION P(5),MQ,PM(5),XMASS,PLAB,PRW,PCM,HWULDO,PDOT
       DOUBLE COMPLEX F(2,2,8),S,D,SIP(2),SJP(2)
       INTEGER I,J,NP
@@ -13952,7 +15050,7 @@ C-----------------------------------------------------------------------
 C     Subroutine to implement the F function of Eijk and Kliess
 C     All first and second momenta
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION P(5),MQ,PM(5),XMASS,PLAB,PRW,PCM,HWULDO,PDOT
       DOUBLE COMPLEX F(2,2,8,8),SIP(2),SJP(2),S,D
       INTEGER I,J,NP
@@ -13992,6 +15090,199 @@ C--calculate the F functions
         ENDDO
       ENDDO
       END
+CDECK  ID>, HWH2HE.
+*CMZ :-        -13/10/02  09.43.05  by  Peter Richardson
+*-- Author :    Kosuke Odagiri and Stefano Moretti
+C-----------------------------------------------------------------------
+      SUBROUTINE HWH2HE(FIRST,GAUGE,IFL,IH,HFC,HBC,
+     & E,S2W,TANB,AL,RMW,S,Q3, P3,P4,P5,
+     & RM3,YM3,GAM3,RM4,YM4,GAM4,RM5,GAM5,
+     & RML,GAML,RMH,GAMH,RMA,GAMA,
+     & RMZ,GAMZ,CFAC,RES)
+C-----------------------------------------------------------------------
+C     MATRIX ELEMENT SQUARED FOR 
+C     e-(1) e+(2) -> f(3) f(')bar(4) Higgs(5)
+C     (SAME QUARK MASSES IN YUKAWA AND KINEMATICS)
+C-----------------------------------------------------------------------
+      IMPLICIT NONE
+      LOGICAL FIRST,GAUGE
+      DOUBLE PRECISION HFC,HBC
+      DOUBLE PRECISION CFAC
+      DOUBLE PRECISION E,S2W,TANB,AL,RMW,S,Q3,RES
+      DOUBLE PRECISION P3(0:3),P4(0:3),P5(0:3)
+      DOUBLE PRECISION RM3,YM3,GAM3,RM4,YM4,GAM4,RM5,GAM5,RMZ,GAMZ
+      DOUBLE PRECISION RML,GAML,RMH,GAMH,RMA,GAMA,Q2
+      DOUBLE PRECISION XW,GE(-1:1),G3(-1:1),G4(-1:1),G5(-1:1)
+      DOUBLE PRECISION RM(-1:1),RN1(-1:1),RN2(-1:1),RN3
+      DOUBLE PRECISION SQS,TWOSQS,HLFSQS,P34,M34,PREFAC
+      DOUBLE PRECISION RLE,RLLE,EP3(-1:1),EP4(-1:1),ZERO,ONE,TWO,HLF
+      DOUBLE PRECISION BE,DUMMY(0:3),SA,CA,SB,CB
+      INTEGER I,LE,L,IFL,IH
+      DOUBLE COMPLEX PROPZ,PROP3(-1:1),PROP4(-1:1),PROP5,PROP6
+      DOUBLE COMPLEX PROP7(-1:1)
+      DOUBLE COMPLEX PP(-1:1),MM(-1:1),QQ(-1:1),ZP3,ZP4,ZP5
+      PARAMETER (ZERO=0.D0,ONE=1.D0,TWO=2.D0,HLF=.5D0)
+      SAVE XW,GE,G3,G4,G5,RM,PREFAC
+C QUANTITIES WHICH CAN BE COMPUTED ONLY ONCE
+      IF(FIRST)THEN
+C SOME COMMON INITIALISATIONS
+        DO I=-1,1
+          RM(I)=ZERO
+          RN1(I)=ZERO
+          RN2(I)=ZERO
+        END DO
+        DO I=0,3
+          DUMMY(I)=ZERO
+        END DO
+        RN3=ZERO
+        XW=TWO*S2W
+        GE( 0)=-ONE
+        GE(+1)=-GE(0)*XW
+        GE(-1)=-ONE+GE(1)
+        IF(IH.LE.3)THEN
+          G3( 0)=Q3
+          G3(+1)=-G3(0)*XW
+          G3(-1)=-ONE*(-Q3/ABS(Q3))+G3(1)
+          G4( 0)=G3( 0)
+          G4(+1)=G3(+1)
+          G4(-1)=G3(-1)      
+          G5( 0)=ZERO
+          G5(+1)=ONE
+          G5(-1)=ONE 
+C HIGGS ANGLES
+          BE=ATAN(TANB)
+          SA=SIN(AL)
+          CA=COS(AL)
+          SB=SIN(BE)
+          CB=COS(BE)
+C MSSM SCALING FACTORS FOR COUPLINGS
+          IF(IH.LE.2)THEN 
+            RM(-1)=+YM3/RMW*HFC
+            RM(+1)=+YM4/RMW*HFC
+          ELSE IF(IH.EQ.3)THEN 
+            RM(-1)=+YM3/RMW*HFC
+            RM(+1)=-YM4/RMW*HFC
+          END IF
+          IF(IH.LE.2)THEN 
+            IF(IH.EQ.1)RN1(-1)=+YM3/RMW*((2-IFL)*TANB+(IFL-1)/TANB)
+     &                        *(-SQRT(ABS(ONE-HBC**2)))
+            IF(IH.EQ.1)RN1(+1)=-YM4/RMW*((2-IFL)*TANB+(IFL-1)/TANB)
+     &                        *(-SQRT(ABS(ONE-HBC**2)))
+            IF(IH.EQ.2)RN1(-1)=-YM3/RMW*((2-IFL)*TANB+(IFL-1)/TANB)
+     &                        *(+SQRT(ABS(ONE-HBC**2)))
+            IF(IH.EQ.2)RN1(+1)=+YM4/RMW*((2-IFL)*TANB+(IFL-1)/TANB)
+     &                        *(+SQRT(ABS(ONE-HBC**2)))
+            RN2(-1)=ZERO
+            RN2(+1)=ZERO          
+            IF(IH.EQ.0)RN3=1.D0
+            IF(IH.EQ.1)RN3=HBC
+            IF(IH.EQ.2)RN3=HBC
+          ELSE IF(IH.EQ.3)THEN
+            RN1(-1)=+YM3/RMW*((2-IFL)*(-SA/CB)+(IFL-1)*(+CA/SB))
+     &                      *COS(BE-AL)
+            RN1(+1)=+YM4/RMW*((2-IFL)*(-SA/CB)+(IFL-1)*(+CA/SB))
+     &                      *COS(BE-AL)
+            RN2(-1)=+YM3/RMW*((2-IFL)*(+CA/CB)+(IFL-1)*(+SA/SB))
+     &                      *SIN(BE-AL)
+            RN2(+1)=+YM4/RMW*((2-IFL)*(+CA/CB)+(IFL-1)*(+SA/SB))
+     &                      *SIN(BE-AL) 
+            RN3=ZERO
+          END IF
+          PREFAC=E**6/(XW*S)*CFAC/TWO
+        ELSE
+          G3( 0)=Q3
+          G3(+1)=-G3(0)*XW
+          G3(-1)=-ONE+G3(1)
+          G4( 0)=ONE+G3(0)
+          G4(+1)=-G4(0)*XW
+          G4(-1)=ONE+G4(1)
+          G5( 0)=ONE
+          G5(+1)=ONE-XW
+          G5(-1)=ONE-XW
+          RM(-1)=YM3*TANB/RMW
+          RM(+1)=YM4/TANB/RMW
+          RN1(-1)=RM(-1)
+          RN1(+1)=RM(+1)
+          RN2(-1)=ZERO
+          RN2(+1)=ZERO
+          RN3=ZERO
+          PREFAC=E**6/(XW*S)*CFAC
+        END IF
+        FIRST=.FALSE.
+      END IF
+C SOME ENERGY CONSTANTS
+      SQS=DSQRT(S)
+      TWOSQS=TWO*SQS
+      HLFSQS=HLF*SQS
+      PROPZ=S/(XW*(TWO-XW)*DCMPLX(S-RMZ**2,-RMZ*GAMZ))
+C SOME KINEMATICS
+      P34=P3(0)*P4(0)-P3(1)*P4(1)-P3(2)*P4(2)-P3(3)*P4(3)
+      M34=RM3*RM4
+      RES=ZERO
+C FF(')-BAR PROPAGATOR
+      Q2=RM3**2+RM4**2+TWO*P34
+C CONSTRUCT AMPLITUDE
+      DO LE=-1,1,2
+        RLE=DFLOAT(LE)
+        IF(IH.LE.2)THEN
+          PROP5=(GE(0)*G5(0)+GE(LE)*G5(-1)*PROPZ)/
+     &                 DCMPLX(Q2-RMA**2,-RMA*GAMA)
+          PROP6=(0.D0,0.D0)
+        ELSE IF(IH.EQ.3)THEN
+          PROP5=(GE(0)*G5(0)+GE(LE)*G5(-1)*PROPZ)/
+     &                 DCMPLX(Q2-RML**2,-RML*GAML)
+          PROP6=(GE(0)*G5(0)+GE(LE)*G5(-1)*PROPZ)/
+     &                 DCMPLX(Q2-RMH**2,-RMH*GAMH)
+        ELSE
+          PROP5=(GE(0)*G5(0)+GE(LE)*G5(-1)*PROPZ)/
+     &                 DCMPLX(Q2-RM5**2,-RM5*GAM5)
+        END IF
+        ZP3=DCMPLX(P3(1),-RLE*P3(2))
+        ZP4=DCMPLX(P4(1),-RLE*P4(2))
+        ZP5=-ZP3-ZP4
+        DO L=-1,1,2
+          PROP3(L)=(GE(0)*G3(0)+GE(LE)*G3(L)*PROPZ)/
+     &               DCMPLX(S-TWOSQS*P3(0),-RM3*GAM3)
+          PROP4(L)=(GE(0)*G4(0)+GE(LE)*G4(L)*PROPZ)/
+     &               DCMPLX(S-TWOSQS*P4(0),-RM4*GAM4)
+          PROP7(L)=GE(LE)*G3(L)*PROPZ/DCMPLX(Q2-RMZ**2,-RMZ*GAMZ)
+        END DO
+        DO L=-1,1,2
+          PP(L)=-RM(-L)*SQS*(PROP3(L)+PROP4(-L))
+          MM(L)=RM3*RM(+L)*(PROP3(L)-PROP3(-L))
+     &         +RM4*RM(-L)*(PROP4(L)-PROP4(-L))
+     &         +TWO*RMZ**2/RMW*RN3*PROP7(L)
+          IF(GAUGE)THEN
+            ZP3=P3(0)-HLFSQS
+            ZP4=P4(0)-HLFSQS
+            ZP5=P5(0)-HLFSQS
+            PP(L)=DCMPLX(ZERO,ZERO)
+            MM(L)=MM(L)+PROPZ*GE(LE)*DFLOAT(L)/TWOSQS*
+     &                           (RM3*RM(L)/ZP3-RM4*RM(-L)/ZP4)
+          END IF
+          QQ(L)=RM(L)*(PROP3(-L)*ZP3-PROP4(L)*ZP4)
+     &         +RN1(L)*PROP5*ZP5
+     &         -RN2(L)*PROP6*ZP5
+     &         +RM3/RMW*RN3*(PROP7(L)-PROP7(-L))*ZP5
+          RLLE=DFLOAT(L*LE)
+          EP3(L)=P3(0)+RLLE*P3(3)
+          EP4(L)=P4(0)+RLLE*P4(3)
+        END DO
+        DO L=-1,1,2
+          RES=RES+DREAL(
+     &      EP3(+L)*EP4(+L)*DCONJG(PP(+L))*PP(+L)+
+     &      EP3(+L)*EP4(-L)*DCONJG(MM(+L))*MM(+L)-
+     &      TWO*RM3*EP4(+L)*DCONJG(PP(+L))*MM(-L)-
+     &      TWO*RM4*EP3(+L)*DCONJG(PP(+L))*MM(+L)+
+     &      M34*(DCONJG(PP(-L))*PP(+L)+DCONJG(MM(-L))*MM(+L))
+     &      +TWO*DCONJG(QQ(-L))
+     &      *((RM3*MM(-L)-EP3(+L)*PP(+L))*ZP4-
+     &        (RM4*MM(+L)-EP4(+L)*PP(+L))*ZP3+
+     &        P34*QQ(-L)-M34*QQ(+L)))
+        END DO
+      END DO
+      RES=PREFAC*RES
+ 999  END
 CDECK  ID>, HWH2M0.
 *CMZ :-        -14/03/01  09:03:25  by  Peter Richardson
 *-- Author :    Peter Richardson
@@ -14001,7 +15292,7 @@ C-----------------------------------------------------------------------
 C     Massless matrix elements for gg-->qqZ and qq-->qqZ
 C     using the matrix elements given in Nucl. Phys. B262 (1985) 235-242
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IQ,I,J,OZ(2,2),IDZ,P1,P2,P3,P4,IQI,ID(2),K
       DOUBLE PRECISION MG(2),MQ(2,5),G(12,2),FLOW(3,3),CQFC,CQIFC,
      &     CGFC,CGIFC
@@ -14147,7 +15438,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     Massive matrix elements for gg --> qqbarZ and qqbar --> qqbarZ
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IQ,I,IDZ,P1,P2,PL,PB,PBB,O(2),J,IQI
       DOUBLE PRECISION MG(2),MQ(2,5),G(12,2),CQFC,CQIFC,CGFC,CGIFC,
      &     PTMP(5,10),XMASS,PLAB,PRW,PCM,HWULDO,QBL,QBBL,Q2B,Q1B,Q2BB,
@@ -14302,6 +15593,8 @@ C--seventh amplitude from notes (first non-Abelian one)
      &                    -FBLL(O(PL),1,6,2)*FBBB(1,PBB,2)
      &                    -FBLL(O(PL),2,6,2)*FBBB(2,PBB,2)))
 C--eighth amplitude from notes (second non-Abelian one)
+C--bug fix 12/7/03 by PR (too many continuations for NAG)
+        MGAMP(3) = MGAMP(3)
      &        + DCF(8)*DL(P1,P2)*S(1,2,P1)*S(1,2,O(P1))*(
      &         G(IQ,O(PL))*FBBB(  PL ,PBB,5)*
      &                   ( FBB(PB,1,1)*FBBLL(1,PL,1,6)
@@ -14370,7 +15663,7 @@ C--second amplitide from notes
      &           +FBB(O(PB),O(P1),2)*FBBLL(O(P1),O(PL),1,5))))
 C--third amplitide from notes
         DO I=1,2
-           MQAMP(I,P1,PL,PB,PBB) = G(IDZ,PL)*(
+           MQAMP(I,P1,PL,PB,PBB) = 
      &     DCF(3)*(G(I,O(PL))*DL(P1,O(PL))*S(5,1,  PL )*(
      &          S(1,6,O(PL))*( FBB(O(PB),  P1 ,1)*FBBB(  P1 ,O(PBB),2)
      &                        +FBB(O(PB),O(P1),2)*FBBB(O(P1),O(PBB),1))
@@ -14382,6 +15675,7 @@ C--third amplitide from notes
      &      -S(6,5,  PL )*( FBB(O(PB),  P1 ,6)*FBBB(  P1 ,O(PBB),2)
      &                     +FBB(O(PB),O(P1),2)*FBBB(O(P1),O(PBB),6))))
 C--fourth amplitude from notes
+           MQAMP(I,P1,PL,PB,PBB) = MQAMP(I,P1,PL,PB,PBB)
      &    +DCF(4)*(G(I,O(PL))*DL(P1,O(PL))*S(2,6,  P1 )*(
      &          S(5,2,  PL )*( FBB(O(PB),  P1 ,1)*FBBB(  P1 ,O(PBB),2)
      &                        +FBB(O(PB),O(P1),2)*FBBB(O(P1),O(PBB),1))
@@ -14391,12 +15685,13 @@ C--fourth amplitude from notes
      &          S(6,2,O(PL))*( FBB(O(PB),  P1 ,1)*FBBB(  P1 ,O(PBB),2)
      &                        +FBB(O(PB),O(P1),2)*FBBB(O(P1),O(PBB),1))
      &        -S(6,5,O(PL))*( FBB(O(PB),  P1 ,1)*FBBB(  P1 ,O(PBB),5)
-     &                      +FBB(O(PB),O(P1),5)*FBBB(O(P1),O(PBB),1)))))
+     &                      +FBB(O(PB),O(P1),5)*FBBB(O(P1),O(PBB),1))))
+           MQAMP(I,P1,PL,PB,PBB) = G(IDZ,PL)*MQAMP(I,P1,PL,PB,PBB)
         ENDDO
 C--now the extra amplitudes for q qbar --> q qbar Z
         DO P2=1,2
 C--first amplitude for notes
-           MQQAMP(P1,P2,PL,PB,PBB) = G(IDZ,PL)*(
+           MQQAMP(P1,P2,PL,PB,PBB) =
      &   DCF(5)*(DL(P2,PBB)*S(8,4,PBB)*(
      &          G(IQ,O(PL))*DL(P1,O(PL))*S(5,1,  PL )*
      &             ( FBB(O(PB),  PBB,8)*F1LL(  P2  ,  PL ,2,6)
@@ -14412,6 +15707,7 @@ C--first amplitude for notes
      &             ( FBB(O(PB),O(PBB),8)*F1LL(  P2  ,O(PL),2,5)
      &              +FBB(O(PB), O(P2),2)*F1LL(  PBB ,O(PL),8,5))))
 C--second amplitude from notes
+           MQQAMP(P1,P2,PL,PB,PBB) = MQQAMP(P1,P2,PL,PB,PBB)
      &  +DCF(6)*(DL(P1,PB)*S(3,7,O(PB))*(
      &          G(IQ,O(PL))*DL(P2,O(PL))*S(2,6,  P2 )*
      &             ( F2LL(  PL ,  P1 ,5,1)*FBBB(  PB ,O(PBB),7)
@@ -14427,6 +15723,7 @@ C--second amplitude from notes
      &             ( F2LL(O(PL),  P1 ,6,1)*FBBB(O(PB),O(PBB),7)
      &              +F2LL(O(PL),  PB ,6,7)*FBBB(O(P1),O(PBB),1))))
 C--third  amplitude from notes
+           MQQAMP(P1,P2,PL,PB,PBB) = MQQAMP(P1,P2,PL,PB,PBB)
      &  +DCF(7)*(DL(P2,PBB)*S(8,4,PBB)*(
      &          G(IQ,O(PL))*FBB(O(PB),  PL ,6)*
      &             ( DL(P2,O(P1) )*S(2,1,  P2  )*FBLL(  PL , PBB ,5,8)
@@ -14442,6 +15739,7 @@ C--third  amplitude from notes
      &           ( DL(P2,O(PL) )*S(2,1,  P2  )*FBLL(O(PL),O(PBB),6,8)
      &            +DL(P1,O(PBB))*S(8,1,  PBB )*FBLL(O(PL),O(P2) ,6,2))))
 C--fourth amplitude from notes
+           MQQAMP(P1,P2,PL,PB,PBB) = MQQAMP(P1,P2,PL,PB,PBB)
      &  +DCF(8)*(DL(P1,PB)*S(3,7,O(PB))*(
      &          DL(P1,O(P2))*S(2,1,P2)*
      &           ( G(IQ,O(PL))*FBBLL(PB,  PL ,7,6)*FBBB(  PL ,O(PBB),5)
@@ -14455,7 +15753,8 @@ C--fourth amplitude from notes
      &         +G(IQ,  PL )*FBBLL(O(PB),O(PL),3,5)*FBBB(O(PL),O(PBB),6))
      &          +DL(P2,O(PB))*S(2,3,P2)*
      &      ( G(IQ,O(PL))*FBBLL(O(P1),  PL ,1,6)*FBBB(  PL ,O(PBB),5)
-     &      +G(IQ,  PL )*FBBLL(O(P1),O(PL),1,5)*FBBB(O(PL),O(PBB),6)))))
+     &      +G(IQ,  PL )*FBBLL(O(P1),O(PL),1,5)*FBBB(O(PL),O(PBB),6))))
+           MQQAMP(P1,P2,PL,PB,PBB) =  G(IDZ,PL)*MQQAMP(P1,P2,PL,PB,PBB)
         ENDDO
       ENDDO
       ENDDO
@@ -14535,7 +15834,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     Phase Space for vector boson plus 2 jets
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION WEIGHT,XMASS,PLAB,PRW,PCM,Y(3),Y35,Y34,Y45,RAND,
      &     HWRGEN,HWRUNI,M35,M35S,G(IMAXCH),DEM,MT(3),PT(3),MJAC,ETOT,
      &     STOT,MQ(3),MQ2(3),PS35,HWUPCM,TWOPI2,MT35,PTJ(3),MT2(3),A,C,
@@ -15007,7 +16306,7 @@ C     Subroutine to select virtual quark mass for HWH2PS
 C     IOPT=1 return the function at M2
 C     IOPT=2 calculate M2
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IOPT
       DOUBLE PRECISION FJAC,MPOW,MMN,MQ2,M2,A1,A01,RPOW,QPOW,HWRGEN,MMX
       EXTERNAL HWRGEN
@@ -15047,7 +16346,7 @@ C     Subroutine to select virtual quark mass for HWH2PS
 C     IOPT=1 return the function at M2
 C     IOPT=2 calculate M2
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IOPT
       DOUBLE PRECISION FJAC,MPOW,A1,A01,RPOW,QPOW,HWRGEN,PT2,
      &     PPOW,PTMN2,PTMX2,Z
@@ -15351,7 +16650,7 @@ C-----------------------------------------------------------------------
 C     Subroutine to calculate the spinor products in the notation of
 C     Kleiss and Strirling S(1) is S and S(2) is T
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION WRN(2),K(5),KK(5),P(5,2),Q1,Q2,EPS,QTI,PTI,
      &     PT,QT,DPM,DMP,QP,QM,P1,P2,PP,PM
       DOUBLE COMPLEX S(2),ZI,Z1,ZT,ZQ,ZQS,ZPS,ZP,ZDPM,ZDMP
@@ -15420,7 +16719,7 @@ C     I-L are the particles
 C     Z1 and Z2 are the decay products of the Z
 C     P1 is the polarization of the line I,J
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX HWH2T1,S,D
       INTEGER I,J,K,L,Z1,Z2,P1
       COMMON/HWHEWS/S(8,8,2),D(8,8)
@@ -15444,7 +16743,7 @@ C     Z1 and Z2 are the decay products of the Z
 C     P1 is the polarization of the line I,J
 C     P2 is the polarization of the gluon K
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX HWH2T2,S,D
       INTEGER I,J,K,L,Z1,Z2,P1,P2
       DOUBLE PRECISION B(6)
@@ -15476,7 +16775,7 @@ C     Z1 and Z2 are the decay products of the Z
 C     P1 is the polarization of the line I,J
 C     P2 is the polarization of the gluon K
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX HWH2T3,S,D
       INTEGER I,J,K,L,Z1,Z2,P1,P2
       DOUBLE PRECISION B(6)
@@ -15506,7 +16805,7 @@ C     Z1 and Z2 are the decay products of the Z
 C     P1 is the polarization of the line I,J
 C     P2 is the polarization of the line K,L
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX HWH2T4,AP,AM,S,D
       INTEGER I,J,K,L,Z1,Z2,J1,J2,J3,J4,P1,P2
       DOUBLE PRECISION B(6)
@@ -15540,7 +16839,7 @@ C     Z1 and Z2 are the decay products of the Z
 C     P1 is the polarization of the line I,J
 C     P2 is the polarization of the line K,L
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX HWH2T5,AP,AM,S,D
       INTEGER I,J,K,L,Z1,Z2,J1,J2,J3,J4,P1,P2
       DOUBLE PRECISION B(6)
@@ -15575,7 +16874,7 @@ C     P1 is the polarization of the line I,J
 C     P2 is the polarization of the gluon K
 C     P3 is the polarization of the gluon L
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX HWH2T6,S,D
       INTEGER I,J,K,L,Z1,Z2,J1,J2,P1,P2,P3
       DOUBLE PRECISION B(6)
@@ -15622,7 +16921,7 @@ C     P1 is the polarization of the line I,J
 C     P2 is the polarization of the gluon K
 C     P3 is the polarization of the gluon L
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX HWH2T7,S,D
       INTEGER I,J,K,L,Z1,Z2,J1,J2,P1,P2,P3
       DOUBLE PRECISION B(6)
@@ -15670,7 +16969,7 @@ C     P1 is the polarization of the line I,J
 C     P2 is the polarization of the gluon K
 C     P3 is the polarization of the gluon L
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX HWH2T8,S,D
       INTEGER I,J,K,L,Z1,Z2,J1,J2,P1,P2,P3
       DOUBLE PRECISION B(6)
@@ -15718,7 +17017,7 @@ C     P1 is the polarization of the line I,J
 C     P2 is the polarization of the gluon K
 C     P3 is the polarization of the gluon L
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX HWH2T9,S,D
       INTEGER I,J,K,L,Z1,Z2,J1,J2,P1,P2,P3
       DOUBLE PRECISION B(6)
@@ -15756,7 +17055,7 @@ C     P1 is the polarization of the line I,J
 C     P2 is the polarization of the gluon K
 C     P3 is the polarization of the gluon L
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX HWH2T0,S,D
       INTEGER I,J,K,L,Z1,Z2,J1,J2,P1,P2,P3
       DOUBLE PRECISION B(6)
@@ -15862,7 +17161,7 @@ C     Matrix elements based on Ellis Ross & Terrano and Catani & Seymour
 C
 C     WARNING:  Phase space factor inaccurate for JADE y_cut > 0.14.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER LM,LP,IQK,I,J,IDMN,IDMX,ID1,ID2,IST(4)
       DOUBLE PRECISION HWRGEN,HWUALF,HWUAEM,HWULDO,HWH4J1,HWH4J2,
      & HWH4J4,HWH4J5,HWH4J6,HWH4J7,QNOW,Q2NOW,QLST,SCUT,PSFAC,FACT,
@@ -16418,7 +17717,7 @@ C
 C      Mean EVWGT = cross section in nanoBarn
 C
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,Y,Q2,SHAT,Z,PHI,AJACOB,DSIGMA,ME,MP,
      & ML,MREMIF(18),MFIN1(18),MFIN2(18),RS,SMA,W2,RSHAT,FSIGMA(18),
      & SIGSUM,PROB,PRAN,PVRT(4),X
@@ -16742,7 +18041,7 @@ C     gives the fourmomenta in the laboratory system for the particles
 C     of the hard 2-->3 subprocess, to match with HERWIG routines of
 C     jet evolution.
 C----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWUECM,HWUPCM,HWUSQR,Y,Q2,SHAT,Z,PHI,AJACOB,
      & DSIGMA,ME,MP,ML,MREMIF(18),MFIN1(18),MFIN2(18),RS,SMA,W2,RSHAT,
      & PGAMMA(5),SG,MF1,MF2,EP,PP,EL,PL,E1,E2,Q1,COSBET,SINBET,COSTHE,
@@ -16934,7 +18233,7 @@ C     corresponding Jacobian factor AJACOB
 C     Fill the logical vector INSIDE to tag contributing subprocesses
 C     to the cross-section
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRUNI,HWRGEN,HWUPCM,Y,Q2,SHAT,Z,PHI,AJACOB,
      & DSIGMA,ME,MP,ML,MREMIF(18),MFIN1(18),MFIN2(18),RS,SMA,W2,RSHAT,
      & MF1,MF2,YMIN,YMAX,YJAC,Q2INF,Q2SUP,Q2JAC,EMW2,ZMIN,ZMAX,ZJAC,
@@ -17273,7 +18572,7 @@ C----------------------------------------------------------------------
 C     Returns differential cross section DSIGMA in (Y,Q2,ETA,Z,PHI)
 C     Scale for structure functions and alpha_s selected by BGSHAT
 C----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWUALF,HWUAEM,Y,Q2,SHAT,Z,PHI,AJACOB,DSIGMA,
      & ME,MP,ML,MREMIF(18),MFIN1(18),MFIN2(18),RS,SMA,W2,RSHAT,
      & SFUN(13),ALPHA,LDSIG,DLQ(7),SG,XG,MF1,MF2,MSUM,MDIF,MPRO,FFUN,
@@ -17453,7 +18752,7 @@ C----------------------------------------------------------------------
 C----------------------------------------------------------------------
 C     DEEP INELASTIC LEPTON-HADRON SCATTERING: MEAN EVWGT = SIGMA IN NB
 C----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRUNI,HWUPCM,PRAN,PROB,SAMP,SIG,Q2,
      & XBJ,Y,W,S,MLEP,MHAD,MLSCAT,YMIN,YMAX,XXMAX,Q2JAC,XXJAC,
      & JACOBI,A1,A2,A3,B1,B2,PCM,PCMEP,PCMLW,PCMEQ,PCMLQ,COSPHI,PA,
@@ -17736,7 +19035,7 @@ C
 C     Modified 16/01/01 by BRW to implement Peter Richardson's
 C     fix for bug in lepton mass effects on branching ratio
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRUNI,HWUAEM,EPS,C1,C2,C3,EMSQZ,EMGMZ,
      & EMSQZP,EMGMZP,CQF(7,6,16),QPOW,RPOW,A01,A1,A02,A2,A03,A3,CRAN,
      & EMJ1,EMJ2,EMJ3,EMJAC,FACT,QSQ,HCS,FACTR,RCS,EXTRA,PMAX,PTHETA
@@ -17916,11 +19215,11 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     Drell-Yan production with a q qbar pair
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER I,MAP(12),ORD,IFL,IDP(6),IFLOW,QCFL(2,2),GCFL(2),IDZ,IQ
       DOUBLE PRECISION HCS,RCS,MQ(2,5),HWRGEN,G(12,2),DIST(2),MG(2)
       LOGICAL FSTCLL,MASS
-      EXTERNAL HWRGEN,HWH2DD
+      EXTERNAL HWRGEN
       DATA MAP/1,2,3,4,5,6,11,12,13,14,15,16/
       DATA QCFL/2413,3142,4123,2341/
       DATA GCFL/2413,4123/
@@ -17990,7 +19289,7 @@ C     AFTER CUTS ON PT AND MASS OF CENTRE-OF-MASS SYSTEM
 C     AND COS(THETA) IN CENTRE-OF-MASS SYSTEM
 C     AND TIMES BRANCHING FRACTION IF WW
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWULDO,EMSQ,BETA,S,T,U,TMIN,TMAX,TRAT,
      & DSDT,PROB,X,Z(2),ZMIN,ZMAX,PCMIN,PCMAX,PCFAC,PLOGMI,PLOGMA,PTCMF,
      & Q,PC,BLOG,EMCMIN,EMCMAX,EMLMIN,EMLMAX,WGT(6),RWGT,CV,CA,BR,QT(2),
@@ -18251,7 +19550,7 @@ C----------------------------------------------------------------------
 C     W + GAMMA --> FF'BAR :  MEAN EVWGT = CROSS SECTION IN NANOBARN
 C     BASED ON BOSON GLUON FUSION OF ABBIENDI AND STANCO
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,GMASS,EV(3),RV,Y,Q2,SHAT,Z,PHI,AJACOB,
      & DSIGMA,ME,MP,ML,MREMIF(18),MFIN1(18),MFIN2(18),RS,SMA,W2,RSHAT
       INTEGER LEP
@@ -18453,7 +19752,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     COMPUTES DIFFERENTIAL CROSS SECTION DSIGMA IN (Y,Q2,ETA,Z,PHI)
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION TMAX,TMIN,A1,A2,B1,B2,I0,I1,I2,I3,I4,I5,MUSQ,
      & MDSQ,ETA,Q1,COSTHE,S,G,T,U,C1,C2,D1,D2,F1,F2,COSBET,WPROP,D(4,4),
      & C(4,4),QU,QD,QE,QW,PHOTON,EMWSQ,EMSSQ,CFAC,Y,Q2,SHAT,Z,PHI,
@@ -18574,14 +19873,14 @@ C     If IPROC=107: --> gg, distributed as sum of light quarks.
 C     If fermion flavour specified mass effects fully included.
 C     EVWGT=sig(e+e- --> ffbar) in nb
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRUNI,HWUPCM,HWUAEM,Q2NOW,Q2LST,FACTR,
      & VF2,VF,CLF(7),PRAN,PQWT,PMAX,PTHETA,SINTH2,CPHI,SPHI,C2PHI,S2PHI,
      & PPHI,SINTH,PCM,PP(5),EWGT
       INTEGER ID1,ID2,IDF,IQ,IQ1,I
       EXTERNAL HWRGEN,HWRUNI,HWUPCM,HWUAEM
       SAVE Q2LST,FACTR,ID1,ID2,VF2,VF,CLF,EWGT
-      DATA Q2LST/0./
+      DATA Q2LST/0.D0/
       IF (GENEV) THEN
         IF (ID2.EQ.0) THEN
 C Choose quark flavour
@@ -18719,7 +20018,7 @@ c     scheme, y_cut=1.-THMAX.
 C     If flavour specified mass effects fully included.
 C     EVWGT=sig(e^-e^+ --> qqbar g) in nb
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWUALF,HWUAEM,HWULDO,HWDPWT,Q2NOW,Q2LST,
      & PHASP,QGMAX,QGMIN,FACTR,QM2,CLF(7),ORDER,PRAN,PQWT,QQG,QBG,SUM,
      & RUT,QQLM,QQLP,QBLM,QBLP,DYN1,DYN2,DYN3,DYN4,DYN5,DYN6,XQ2,X2SUM,
@@ -18729,7 +20028,7 @@ C-----------------------------------------------------------------------
       EXTERNAL HWRGEN,HWUALF,HWUAEM,HWULDO,HWDPWT
       SAVE Q2NOW,Q2LST,QGMAX,QGMIN,FACTR,ORDER,ID1,MASS,QM2,CLF,LM,LP,
      & IQ1,QQG,QBG,SUM
-      DATA Q2LST/0./
+      DATA Q2LST/0.D0/
       IF (GENEV) THEN
 C Label produced partons and calculate gluon spin
         IDHW(NHEP+1)=200
@@ -18893,7 +20192,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     SUSY E+E- -> 2 SLEPTON PROCESSES
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWUAEM,EPS,HCS,RCS,S,PF,QPE,HWUPCM,PCM,
      & FACTR,SN2TH,MZ,MW,ME2(2,2,6),EMSC2,HWUMBW,HWRUNI,T,SQPE
       INTEGER ID1,ID2,IL,IL1,IL2,I,J,IG,IG1,IHEP,NTRY,IDL,ILP,IDLR(2),
@@ -19118,7 +20417,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     SUSY E+E- -> 2 GAUGINO PROCESSES
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWUAEM,HCS,RCS,MNU(4),MNU2(4),HWRUNI,
      &                 FACA,M1(4,4),S2W,XA(4),XB(4),XC(4),XD(4),MSNU,
      &                 MW,MZ,HWHSS2,U,T,QPE,SQPE,MSL,MSL2,MSR,MSR2,
@@ -19371,7 +20670,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     SUSY E+E- -> 2 SPARTICLE PROCESSES
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION SAVWT(3),RANWT,HWRGEN
       EXTERNAL HWRGEN
       SAVE SAVWT
@@ -19413,7 +20712,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     SUSY E+E- -> 2 SQUARK PROCESSES
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWUAEM,EPS,HCS,RCS,S,PF,QPE,HWUPCM,PCM,
      & FACTR,SN2TH,MZ,MW,ME2(2,2,6),EMSC2,HWUMBW,HWRUNI,SQPE
       INTEGER ID1,ID2,IQ,IQ1,IQ2,I,J,IHEP,IDL,IDLR(2),IDSQU(2),NTRY
@@ -19494,7 +20793,7 @@ c
                 CR = QMIXSS(IQ,2,I)*QMIXSS(IQ,2,J)
                 D  = (A+BL*LFCH(IDL))*CL+(A+BR*LFCH(IDL))*CR
                 E  = (A+BL*RFCH(IDL))*CL+(A+BR*RFCH(IDL))*CR
-                ME2(I,J,IQ)=FACTR*PF**3**DREAL(
+                ME2(I,J,IQ)=FACTR*PF**3*DREAL(
      &                  (ONE-EPOLN(3))*(ONE+PPOLN(3))*DCONJG(D)*D
      &                 +(ONE+EPOLN(3))*(ONE-PPOLN(3))*DCONJG(E)*E)
               ELSE
@@ -19572,7 +20871,7 @@ CDECK  ID>, HWHEW0.
 C-----------------------------------------------------------------------
       SUBROUTINE HWHEW0(IP,ETOT,XM,PR,WEIGHT,CR)
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,ETOT,XM(2),PR(5,2),WEIGHT,CR,XM1,XM2,S,
      & D1,PABS,D,CX,C,E,F,SC,G
       INTEGER IP,I
@@ -19741,7 +21040,7 @@ C NOTE: EXTERNAL FACTOR OF COLOR AVERAGE AND SPIN AVERAGE AND
 C COUPLING (E**8/4/9) MUST BE INCLUDED AS WELL AS COMPENSATION
 C FOR ON POLE APPROXIMATION AS DESIRED.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX HWHEW4,ZH,ZCH,ZD,ZAMP1,ZAMP2,ZAMP3,DWW,CWW,BWW,AWW,
      & AWWM,AWWP,AMPTEM,ZTWO,ZHALF
       DOUBLE PRECISION XW,ZMASS,T3,EQ1,RR,RL,ZM2,AMP2,RKW,COLFAC(4),
@@ -19751,7 +21050,7 @@ C-----------------------------------------------------------------------
       COMMON/HWHEWQ/ZH(8,8),ZCH(8,8),ZD(8,8)
       EQUIVALENCE (XW,SWEIN),(ZMASS,RMASS(200))
       DATA COLFAC/1.D0,3.D0,3.D0,9.D0/
-      DATA ZTWO,ZHALF/(2.0,0.0),(0.5,0.0)/
+      DATA ZTWO,ZHALF/(2.0D0,0.0D0),(0.5D0,0.0D0)/
       T3=-1.D0
       EQ1=-1.D0
       RR=-2.D0*EQ1*XW
@@ -19821,7 +21120,7 @@ C-----------------------------------------------------------------------
       EXTERNAL HWHEW4
       COMMON/HWHEWQ/ZH(8,8),ZCH(8,8),ZD(8,8)
       COMMON/HWHEWR/CPFAC(12,12,8),CPALL(8)
-      DATA ZTWO/(2.0,0.0)/
+      DATA ZTWO/(2.0D0,0.0D0)/
 C THE MATRIX ELEMENT DEPENDS ON
       ZS134=(ZD(N1,N3)+ZD(N1,N4)+ZD(N3,N4))*ZTWO
       ZS156=(ZD(N1,N5)+ZD(N1,N6)+ZD(N5,N6))*ZTWO
@@ -19860,7 +21159,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     E+E- -> W+W-/Z0Z0 (BASED ON ZOLTAN KUNSZT'S PROGRAM)
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX ZH,ZCH,ZD
       DOUBLE PRECISION HWUAEM,HWRGEN,HWUPCM,ETOT,STOT,FLUXW,GAMM,GIMM,
      & WM2,WXMIN,WX1MAX,WX2MAX,FJAC1,FJAC2,WX1,WX2,WMM1,WMM2,XXM,W2BO,
@@ -19876,7 +21175,7 @@ C-----------------------------------------------------------------------
       COMMON/HWHEWP/XMASS(10),PLAB(5,10),PRW(5,2),PCM(5,10)
       COMMON/HWHEWQ/ZH(8,8),ZCH(8,8),ZD(8,8)
       COMMON/HWHEWR/CPFAC(12,12,8),CPALL(8)
-      DATA ELST,ILST/0.,0/
+      DATA ELST,ILST/0.D0,0/
       DATA IDZOLT/4,3,8,7,12,11,4*0,2,1,6,5,10,9/
       DATA MAP/12,11,2,1,14,13,4,3,16,15,6,5/
       IF (IERROR.NE.0) RETURN
@@ -20052,7 +21351,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     Hadron-Hadron to WW/WZ/ZZ (BASED ON ZOLTAN KUNSZT'S PROGRAM)
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX ZH,ZCH,ZD
       DOUBLE PRECISION HWUAEM,HWRGEN,HWUPCM,FLUXW,CSW,WMASS(2),XMASS,
      &     PLAB,PRW,PCM,HWRUNI,P(5,10),AMPWW,DIST(4),MW2,CFAC1,AMP,
@@ -20309,7 +21608,7 @@ C     ICH returns the channel used is OPTM=.FALSE.
 C     ICH specifies the channel to be used if OPTM=.TRUE.
 C     This is used in optimising the weights for the different channels
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER ICH,IDBOS,ISM(2,IMAXCH),I,J,IB(2),IDRES,IDP,IOPT,IPRC,ID1
       DOUBLE PRECISION XMASS,PLAB,PRW,PCM,RAND,HWRGEN,BMS2(2),TJAC,PLM,
      &     MJAC(2),TWOPI2,SJAC,STOT,THAT,UHAT,TMIN,TMAX,UMIN,UMAX,PS(2),
@@ -20322,8 +21621,8 @@ C-----------------------------------------------------------------------
       SAVE ISM,IPRC
       PARAMETER(TWOPI2=39.4784176D0)
       DATA SIG/1.0D0,-1.0D0/
-      DATA BRZ/0.154,0.120,0.154,0.120,0.152,0.000,
-     &           0.033,0.067,0.033,0.067,0.033,0.067/
+      DATA BRZ/0.154D0,0.120D0,0.154D0,0.120D0,0.152D0,0.000D0,
+     &         0.033D0,0.067D0,0.033D0,0.067D0,0.033D0,0.067D0/
       DOUBLE PRECISION WI(IMAXCH)
       COMMON /HWPSOM/ WI
       IF(IERROR.NE.0) RETURN
@@ -20527,7 +21826,7 @@ C     ISM=2 select according to power law  for IDBOZ
 C     IOPT=1 return the function at MBOS2
 C     IOPT=2 calculate MBOS2
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IDBOZ,ISM,IOPT
       DOUBLE PRECISION MBOZ,FJAC,GBOZ,GMBOZ,MPOW,MMIN,
      &     MBOS2,A1,A2,A01,A02,RPOW,QPOW,HWRGEN,MMAX,EMSQ
@@ -20590,7 +21889,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     WW cross section in hadron hadron
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HCS,RCS,HWRGEN,DIST(2),CFAC,WAMP(2),S34,S56,KWW2,
      &     MW2,MZ2,GMW,GMZ,G(4,2),EE(4),CKM2(12),RF(2),LF(2),TAUI(2),
      &     CSW,CFAC1
@@ -20668,7 +21967,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     ZZ cross section in hadron hadron
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION AMP(2),RCS,HCS,HWRGEN,DIST(2),S34,S56,CFAC,
      &     MW2,MZ2,GMW,GMZ,G(4,2),EE(4),CKM2(12),RF(2),LF(2),TAUI(2),
      &     CSW,CFAC1
@@ -20779,7 +22078,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     WZ cross section in hadron hadron
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION AMP(2),HCS,RCS,HWRGEN,W34,DIST(2),S34,S56,CFAC,
      &     TCS,S12,MW2,MZ2,GMW,GMZ,G(4,2),EE(4),CKM2(12),RF(2),LF(2),
      &     TAUI(2),CSW,CFAC1
@@ -20899,7 +22198,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     Subroutine to select t or u for HWHGBP
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IOPT
       DOUBLE PRECISION FJAC,TPOW,TMIN,T,A1,A01,RPOW,QPOW,HWRGEN,TMAX,TN,
      &     TX,MT
@@ -20942,7 +22241,7 @@ C     viz L = - G(mu,nu) T(mu,nu) / GRVLAM
 C     If GAMGRV is zero, it is revaluated during the first run
 C     MEAN EVWGT = SIGMA IN NB
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRUNI,EPS,EMSQG,
      & EMGMG,S,CC,CC2,SS,SS2,M1(16),M2(16),M3,M4,M5(3),M6(3),
      & RNGLU,FACT,HCS,FACTR,RCS,A2,A02,QPE,SQPE,RGRV
@@ -21254,6 +22553,283 @@ C Set to zero for now
         CALL HWVZRO(7,GCOEF)
       END IF
   999 END
+CDECK  ID>, HWHGUP.
+*CMZ :-        -16/07/02  09.40.25  by  Peter Richardson
+*-- Author :    Peter Richardson
+C----------------------------------------------------------------------
+      SUBROUTINE HWHGUP
+C----------------------------------------------------------------------
+C     Use the GUPI (Generic User Process Interface) event common block
+C     as the hard process for HERWIG
+C----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+C--Les Houches Common Block
+      INTEGER MAXPUP
+      PARAMETER(MAXPUP=100)
+      INTEGER IDBMUP,PDFGUP,PDFSUP,IDWTUP,NPRUP,LPRUP
+      DOUBLE PRECISION EBMUP,XSECUP,XERRUP,XMAXUP
+      COMMON /HEPRUP/ IDBMUP(2),EBMUP(2),PDFGUP(2),PDFSUP(2),
+     &                IDWTUP,NPRUP,XSECUP(MAXPUP),XERRUP(MAXPUP),
+     &                XMAXUP(MAXPUP),LPRUP(MAXPUP)
+      INTEGER MAXNUP
+      PARAMETER (MAXNUP=500)
+      INTEGER NUP,IDPRUP,IDUP,ISTUP,MOTHUP,ICOLUP
+      DOUBLE PRECISION XWGTUP,SCALUP,AQEDUP,AQCDUP,PUP,VTIMUP,SPINUP
+      COMMON/HEPEUP/NUP,IDPRUP,XWGTUP,SCALUP,AQEDUP,AQCDUP,
+     &              IDUP(MAXNUP),ISTUP(MAXNUP),MOTHUP(2,MAXNUP),
+     &              ICOLUP(2,MAXNUP),PUP(5,MAXNUP),VTIMUP(MAXNUP),
+     &              SPINUP(MAXNUP)
+C--Local variables
+      COMMON /HWGUP/ILOC(NMXHEP),JLOC(MAXNUP)
+      INTEGER ILOC,JLOC,JHEP,ID
+      INTEGER IHEP,IDIN(2),I,IDRES(2,MAXPUP),IRES,ICMF,ISTART,JRES,J
+      CHARACTER *8 DUMMY
+      IRES = 0
+C--zero the variables
+      DO I=1,NUP
+         JLOC(I) = 0
+      ENDDO
+      DO I=1,NMXHEP
+         ILOC(I) = 0
+      ENDDO
+c---generate hard subprocess
+C--now do the event selection bit
+      IF(.NOT.GENEV) THEN
+        IDPRUP = LPRUP(ITYPLH)
+        CALL UPEVNT
+        IF(ABS(IDWTUP).EQ.1.OR.ABS(IDWTUP).EQ.2.OR.
+     &     ABS(IDWTUP).EQ.4) THEN
+          EVWGT = XWGTUP*1.0D-3
+        ELSEIF(ABS(IDWTUP).EQ.3) THEN
+          EVWGT = SIGN(ONE,XWGTUP)
+        ELSE
+          CALL HWWARN('HWHGUP',510,*999)
+        ENDIF
+C--check the sign of the weight
+        IF(IDWTUP.GT.ZERO.AND.EVWGT.LT.ZERO) 
+     &       CALL HWWARN('HWHGUP',520,*999)
+        RETURN
+      ENDIF
+C--update the number of events
+      LHNEVT(ITYPLH) = LHNEVT(ITYPLH)+1
+      ITYPLH = 0
+C--first search to see if there are incoming beam particles in the record
+      I = 0
+      DO IHEP=1,NUP
+        IF(ISTUP(IHEP).EQ.-9) THEN
+          I=I+1
+          IF(I.EQ.3) CALL HWWARN('HWHGUP',102,*999)
+          IDIN(I) = IHEP
+        ENDIF
+      ENDDO
+C--put the beam particles in the record
+C--require the soft event
+      GENSOF = LHSOFT
+C--if given for event from event common block
+      NHEP = 0
+      IF(I.EQ.2) THEN
+C--otherwise from the process common block
+      ELSEIF(I.EQ.0) THEN
+        DO I=1,2
+          CALL HWUIDT(1,IDBMUP(I),IDHW(I),DUMMY)
+          PHEP(1,I) = ZERO
+          PHEP(2,I) = ZERO
+          PHEP(4,I) = EBMUP(I)
+          PHEP(5,I) = RMASS(IDHW(I))
+          PHEP(3,I) = SQRT(EBMUP(I)**2-RMASS(IDHW(I))**2)
+          ISTHEP(I) = 100+I
+        ENDDO
+        PHEP(3,2) = -PHEP(3,2)
+        NHEP = NHEP+2
+C--if not correct issue warning
+      ELSE
+        CALL HWWARN('HWHGUP',103,*999)
+      ENDIF
+C--setup the centre-of-mass energy
+      CALL HWVSUM(4,PHEP(1,NHEP-1),PHEP(1,NHEP),PHEP(1,NHEP+1))
+      CALL HWUMAS(PHEP(1,NHEP+1))
+      JMOHEP(1,NHEP+1) = NHEP-1
+      JMOHEP(2,NHEP+1) = NHEP
+      IDHW(3) = 14
+      ISTHEP(3) = 103
+      NHEP = NHEP+1
+C--search for the incoming particles in collision
+      I = 0
+      DO IHEP=1,NUP
+        IF(ISTUP(IHEP).EQ.-1) THEN
+          I = I+1
+          IF(I.EQ.3) CALL HWWARN('HWHGUP',100,*999)
+          IDIN(I) = IHEP
+        ENDIF
+      ENDDO
+C--require two incoming particles
+      IF(I.NE.2) CALL HWWARN('HWHGUP',101,*999)
+C--Now write these particles into the event record
+      DO I=1,2
+        IDHEP(NHEP+I) = IDUP(IDIN(I)) 
+        ISTHEP(NHEP+I) = 110+I
+        CALL HWUIDT(1,IDUP(IDIN(I)),IDHW(NHEP+I),DUMMY)
+        CALL HWVEQU(5,PUP(1,IDIN(I)),PHEP(1,NHEP+I))
+        JMOHEP(1,NHEP+I) = NHEP+3
+        ILOC(NHEP+I) = IDIN(I)
+        JLOC(I) = NHEP+I
+C--special for pairtcles which are identical to the beam
+        DO J=1,2
+          IF(IDHEP(NHEP+I).EQ.IDHEP(J)) THEN
+            JDAHEP(1,J) = NHEP+I
+            JDAHEP(2,J) = NHEP+I
+          ENDIF
+        ENDDO
+      ENDDO
+      CALL HWVSUM(4,PHEP(1,NHEP+1),PHEP(1,NHEP+2),PHEP(1,NHEP+3))
+      CALL HWUMAS(PHEP(1,NHEP+3))
+C--add the hard entry
+      IDHW(NHEP+3) = 15
+      ISTHEP(NHEP+3) = 110
+      JMOHEP(1,NHEP+3) = NHEP+1
+      JMOHEP(2,NHEP+3) = NHEP+2
+      JDAHEP(1,NHEP+3) = NHEP+4
+      NHEP = NHEP+3
+      ICMF = NHEP
+C--now search for the outgoing particles and add them to the event record
+      DO I=1,NUP
+C--normal outgoing particles
+        IF(ISTUP(I).EQ.1.AND.
+     &        (MOTHUP(1,I).EQ.IDIN(1).OR.MOTHUP(2,I).EQ.IDIN(2))) THEN
+          NHEP = NHEP+1
+          IDHEP(NHEP) = IDUP(I)
+          CALL HWUIDT(1,IDUP(I),IDHW(NHEP),DUMMY)
+          CALL HWVEQU(5,PUP(1,I),PHEP(1,NHEP))
+          JMOHEP(1,NHEP) = ICMF
+          JMOHEP(2,NHEP) = 0
+          JDAHEP(2,NHEP) = 0
+          ILOC(NHEP) = I
+          JLOC(I) = NHEP
+C--resonances which must have mass preserved and resonances
+C-- which don't have to have mass preserved
+C--for the time being we won't disguish between these two options
+        ELSEIF((ISTUP(I).EQ.2.OR.ISTUP(I).EQ.3).AND.
+     &        (MOTHUP(1,I).EQ.IDIN(1).OR.MOTHUP(2,I).EQ.IDIN(2))) THEN
+          NHEP = NHEP+1
+          IDHEP(NHEP) = IDUP(I)
+          CALL HWUIDT(1,IDUP(I),IDHW(NHEP),DUMMY)
+          CALL HWVEQU(5,PUP(1,I),PHEP(1,NHEP))
+          IRES = IRES+1
+          IDRES(1,IRES) = NHEP
+          IDRES(2,IRES) = I
+          JMOHEP(1,NHEP) = ICMF
+          JMOHEP(2,NHEP) = 0
+          JDAHEP(2,NHEP) = 0
+          ILOC(NHEP) = I
+          JLOC(I) = NHEP
+        ELSEIF(ISTUP(I).NE.-9.AND.ISTUP(I).NE.-1.AND.ISTUP(I).NE.1.AND.
+     &         ISTUP(I).NE.2.AND.ISTUP(I).NE.3) THEN
+          CALL HWWARN('HWHGUP',500,*999)
+        ENDIF
+      ENDDO
+      JDAHEP(2,ICMF) = NHEP
+C--setup the status codes
+      ISTHEP(ICMF+1) = 113
+      DO IHEP=ICMF+2,NHEP
+        ISTHEP(IHEP) = 114
+      ENDDO
+      ISTART = ICMF-3
+      EMSCA = SCALUP
+C--generate parton shower
+      CALL HWBGUP(ISTART,ICMF)
+C--now we need to sort out the resonances
+      IF(IRES.EQ.0) RETURN
+      JRES = 1
+ 35   ID = IDHEP(IDRES(1,JRES))
+ 36   IF(JDAHEP(1,IDRES(1,JRES)).NE.0) THEN
+        IF(IDHEP(IDRES(1,JRES)).EQ.94) THEN
+          DO IHEP=JDAHEP(1,IDRES(1,JRES)),JDAHEP(2,IDRES(1,JRES))
+            IF(IDHEP(IHEP).EQ.ID) THEN
+              IDRES(1,JRES) = IHEP
+              GOTO 36
+            ENDIF
+          ENDDO
+        ELSE
+          IDRES(1,JRES) = JDAHEP(1,IDRES(1,JRES)) 
+        ENDIF
+        GOTO 36
+      ENDIF
+C--make a copy of this particle
+      IHEP = IDRES(1,JRES)
+      JMOHEP(1,NHEP+1) = JMOHEP(1,IDRES(1,JRES))
+      JMOHEP(2,NHEP+1) = JMOHEP(2,IDRES(1,JRES))
+      IDHEP(NHEP+1) = IDHEP(IDRES(1,JRES))
+      IDHW(NHEP+1)  =  IDHW(IDRES(1,JRES))
+      CALL HWVEQU(5,PHEP(1,IDRES(1,JRES)),PHEP(1,NHEP+1))
+      IDRES(1,JRES) = NHEP+1
+      JLOC(IDRES(2,JRES)) = IDRES(1,JRES)
+      ISTHEP(NHEP+1) = 155
+      NHEP = NHEP+1
+C Reset colour pointers (if set)
+      JHEP=JMOHEP(2,IHEP)
+      IF (JHEP.GT.0) THEN
+        IF (JDAHEP(2,JHEP).EQ.IHEP) JDAHEP(2,JHEP)=NHEP
+        IF(.NOT.RPARTY.AND.ISTHEP(JHEP).EQ.155
+     &    .AND.ABS(IDHEP(JHEP)).GT.1000000
+     &    .AND.JDAHEP(2,JHEP-1).EQ.IHEP) JDAHEP(2,JHEP-1) = NHEP
+      ENDIF
+      JHEP=JDAHEP(2,IHEP)
+      IF (JHEP.GT.0) THEN
+        IF (JMOHEP(2,JHEP).EQ.IHEP) JMOHEP(2,JHEP)=NHEP
+        IF(.NOT.RPARTY.AND.ISTHEP(JHEP).EQ.155
+     &    .AND.ABS(IDHEP(JHEP)).GT.1000000
+     &    .AND.JMOHEP(2,JHEP-1).EQ.IHEP) JMOHEP(2,JHEP-1) = NHEP
+      ENDIF
+C Relabel original track
+      IF (ISTHEP(IHEP).NE.120) ISTHEP(IHEP)=3
+      JMOHEP(2,IHEP)=JMOHEP(1,IHEP)
+      JDAHEP(1,IHEP)=NHEP
+      JDAHEP(2,IHEP)=NHEP
+C--look for all the particles which have this as a mother
+C--now search for the outgoing particles and add them to the event record
+      JDAHEP(1,NHEP) = NHEP+1
+      ISTHEP(NHEP+1) = 113
+      DO I=1,NUP
+        IF(ISTUP(I).EQ.1.AND.MOTHUP(1,I).EQ.IDRES(2,JRES)) THEN
+          NHEP = NHEP+1
+          IDHEP(NHEP) = IDUP(I)
+          CALL HWUIDT(1,IDUP(I),IDHW(NHEP),DUMMY)
+          CALL HWULOF(PUP(1,IDRES(2,JRES)),PUP(1,I),PHEP(1,NHEP))
+          CALL HWULOB(PHEP(1,IDRES(1,JRES)),PHEP(1,NHEP),PHEP(1,NHEP))
+          JMOHEP(1,NHEP) = IDRES(1,JRES)
+          JMOHEP(2,NHEP) = 0
+          JDAHEP(2,NHEP) = 0
+          ILOC(NHEP) = I
+          JLOC(I) = NHEP
+        ELSEIF((ISTUP(I).EQ.2.OR.ISTUP(I).EQ.3).AND.
+     &          MOTHUP(1,I).EQ.IDRES(2,JRES)) THEN
+          NHEP = NHEP+1
+          IDHEP(NHEP) = IDUP(I)
+          CALL HWUIDT(1,IDUP(I),IDHW(NHEP),DUMMY)
+          CALL HWULOF(PUP(1,IDRES(2,JRES)),PUP(1,I),PHEP(1,NHEP))
+          CALL HWULOB(PHEP(1,IDRES(1,JRES)),PHEP(1,NHEP),PHEP(1,NHEP))
+          IRES = IRES+1
+          IDRES(1,IRES) = NHEP
+          IDRES(2,IRES) = I
+          JMOHEP(1,NHEP) = IDRES(1,JRES)
+          JMOHEP(2,NHEP) = 0
+          JDAHEP(2,NHEP) = 0
+          ILOC(NHEP) = I
+          JLOC(I) = NHEP
+        ENDIF
+      ENDDO
+      DO IHEP=IDRES(1,JRES)+2,NHEP
+        ISTHEP(IHEP) = 114
+      ENDDO
+      JDAHEP(2,IDRES(1,JRES)) = NHEP
+      ISTART = IDRES(1,JRES)
+      EMSCA = PHEP(4,IDRES(1,JRES))
+      CALL HWBGUP(ISTART,0)
+      IF(JRES.NE.IRES) THEN
+        JRES = JRES+1
+        GOTO 35
+      ENDIF
+ 999  END
 CDECK  ID>, HWHHVY.
 *CMZ :-        -18/05/99  14.55.44  by  Kosuke Odagiri
 *-- Author :    Bryan Webber
@@ -21262,7 +22838,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     QCD HEAVY FLAVOUR PRODUCTION: MEAN EVWGT = SIGMA IN NB
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRUNI,HWUALF,EPS,RCS,Z1,Z2,ET,EJ,
      & QM2,QPE,FACTR,S,T,U,ST,TU,US,TUS,UST,EN,RN,AF,ASTU,
      & AUST,CF,CN,CS,CSTU,CSUT,CTSU,CTUS,HCS,UT,SU,GT,DIST,KK,KK2,
@@ -21494,7 +23070,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     HIGGS + HEAVY QUARK (BOTTOM & TOP) PRODUCTION (2HDM)
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN, HWUALF, HWUAEM, EPS, HCS, RCS,
      & DIST, SM, DM, QPE, PF, SQPE, EMSC2, FACTR, S, T3, U4,
      & SN2TH, ME2(0:4), MW, XWEIN, PT2MIN, PT2, GQH(0:4), G1, RMMIN,
@@ -21736,7 +23312,7 @@ C
 C-----------------------------------------------------------------------
 C     ASSOCIATE PRODUCTION W+H- FROM QUARK FUSION (2HDM)
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER I,J,IHEL
       DOUBLE PRECISION EMH,EMHWT,RMW,EMW
       DOUBLE PRECISION RMH01,RMH02,RMH03,RMH
@@ -21971,7 +23547,8 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     Amplitude for: q+qbar --> g+H
 C-----------------------------------------------------------------------
-      HWHIG5=DCMPLX(TWO+TWO*S/(S-EH2))*BI(I)+DCMPLX(FOUR*EQ2-U-T)*CI(K)
+      HWHIG5=DCMPLX(TWO)+DCMPLX(TWO*S/(S-EH2))*BI(I)
+     &      +DCMPLX(FOUR*EQ2-U-T)*CI(K)
       RETURN
       END
 CDECK  ID>, HWHIBQ.
@@ -21991,7 +23568,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     PRODUCTION OF MSSM CHARGED HIGGSES FROM B-QUARK+LIGHT-QUARK FUSION
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER I,J,K,L,M,N
       INTEGER II,JJ,ITMP
       INTEGER IFL,IRES
@@ -22015,7 +23592,7 @@ C-----------------------------------------------------------------------
       DOUBLE PRECISION WEIGHT
       SAVE HCS,M2B,M2BBAR,FACT,S,WCKM,P3,P4,P5
       LOGICAL HWRLOG
-      EXTERNAL HWRGEN,HWUAEM,HWUALF,HWH2BH,HWEONE,HWRLOG,
+      EXTERNAL HWRGEN,HWUAEM,HWH2BH,HWEONE,HWRLOG,
      &         HWUMAS,HWULOB
       EQUIVALENCE (EMB,RMASS(5)),(EMT,RMASS(6))
       EQUIVALENCE (EMW,RMASS(198))
@@ -22339,7 +23916,7 @@ C     IAPHIG (set in HWIGIN)=0: zero mass approximation =1: exact result
 C                           =2: infinite mass limit.
 C     Only top loop included. A factor (alpha_s**3*alpha_W) is extracted
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX HWHIGB,HWHIGC,HWHIGD,HWHIG5,HWHIG1,HWHIG2,BI(4),
      & CI(7),DI(3),EPSI,TAMP(7)
       DOUBLE PRECISION S,T,U,EMH2,WTQQ,WTQG,WTGQ,WTGG,EMW2,RNGLU,RNQRK,
@@ -22425,7 +24002,7 @@ C-----------------------------------------------------------------------
 C     One loop scalar integrals, used in HWHIGJ.
 C     If NOMASS=.TRUE. use a small mass approx. for particle in loop.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE COMPLEX HWHIGB,HWHIGC,HWHIGD,HWUCI2,HWULI2,EPSI,PII,Z1,Z2
       DOUBLE PRECISION S,T,EQ2,EH2,RAT,COSH,DLS,DLT,DLM,RZ12,DL1,DL2,
      & ST,ROOT,XP,XM
@@ -22518,6 +24095,554 @@ C-----------------------------------------------------------------------
       ENDIF
       RETURN
       END
+CDECK  ID>, HWHIGE.
+*CMZ :-        -13/10/02  09.43.05  by  Peter Richardson
+*-- Author :    Kosuke Odagiri and Stefano Moretti
+C-----------------------------------------------------------------------
+C...Generate completely differential cross section (EVWGT) in the variables
+C...X(I) with I=1,4 (see below) for the processes from IPROC=1000-1099 (SM),
+C...IPROC=1111-1139 (MSSM), as described in the HERWIG 6 documentation file.
+C...(For IPROC=1140-1145 it describes MSSM charged Higgs production.)
+C
+C...First release: 18-SEP-2002 by Stefano Moretti
+C
+      SUBROUTINE HWHIGE
+C--------------------------------------------------------------------------
+C     LEPTOPRODUCTION OF MS(SM) HIGGSES IN ASSOCIATION WITH HEAVY QUARK PAIRS
+C--------------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      INTEGER JHIGGS
+      INTEGER I,L,M,N,NN
+      INTEGER IH,IQ,JQ,IIQ,JJQ
+      INTEGER IAD
+      INTEGER IDEC,NC,FLIP
+      INTEGER ID1,ID2
+      DOUBLE PRECISION CV,CA,BR
+      DOUBLE PRECISION BRHIGQ,EMQ,ENQ,GMQ,EMQQ,EMH,GMH,EMHWT,EMW
+      DOUBLE PRECISION PTMMIN,PTNMIN
+      DOUBLE PRECISION T,TL,TLMIN,TLMAX,TTMIN,TTMAX,CTMP,RCM,RCM2
+      DOUBLE PRECISION X(4),XL(4),XU(4)
+      DOUBLE PRECISION Q4(0:3),Q34(0:3)
+      DOUBLE PRECISION CT5,ST5,CT4,ST4,CF4,SF4,RQ52,RQ5,RQ42,RQ4,PQ4
+      DOUBLE PRECISION P1(0:3),P2(0:3),P3(0:3),P4(0:3),P5(0:3)
+      DOUBLE PRECISION F(0:3),G(0:3)
+      DOUBLE PRECISION ECM,SHAT,S
+      DOUBLE PRECISION EMIN,EMIN1,EMIN2,PCM2,PCM
+      DOUBLE PRECISION HFC,HBC
+      DOUBLE PRECISION M2EE
+      DOUBLE PRECISION GRND,FACGPM(2)
+      DOUBLE PRECISION ALPHA,EMSC2
+      DOUBLE PRECISION HWRGEN,HWUAEM
+      DOUBLE PRECISION PHI,CPHI,SPHI,ROT(3,3)
+      DOUBLE PRECISION QAUX(0:3)
+      DOUBLE PRECISION EPS,HCS,RCS,FACT
+      DOUBLE PRECISION WEIGHT
+      INTEGER IFL,KHIGGS,JH,JFL
+      LOGICAL FIRST,GAUGE
+      DOUBLE PRECISION E,Q3,YM3,GAM3,YM4,GAM4,GAM5,COLOUR
+      DOUBLE PRECISION RM3,RM4,RM5
+      DOUBLE PRECISION S2W,RMW,RMZ
+      DOUBLE PRECISION RMHL,GAMHL
+      DOUBLE PRECISION RMHH,GAMHH
+      DOUBLE PRECISION RMHA,GAMHA
+      EQUIVALENCE (RMHL,RMASS(203)),(RMHH,RMASS(204)),(RMHA,RMASS(205))
+      LOGICAL HWRLOG
+      EXTERNAL HWHIGM,HWRGEN,HWUAEM,HWHQCP,HWH2HE,HWEONE,HWRLOG
+      PARAMETER (EPS=1.D-9)
+      EQUIVALENCE (EMW,RMASS(198)),(NC,NCOLO)
+      SAVE HCS,M2EE,FACT,S,SHAT,P3,P4,P5
+      SAVE IIQ,JJQ,JHIGGS
+C...ASSIGN Q/Q'-FLAVOUR.
+      IF(IPROC.GE.1140)THEN
+        IH=4 
+        IF(IPROC.EQ.1140)IQ=2
+        IF(IPROC.EQ.1141)IQ=4
+        IF(IPROC.EQ.1142)IQ=6
+        IF(IPROC.EQ.1143)IQ=7
+        IF(IPROC.EQ.1144)IQ=8
+        IF(IPROC.EQ.1145)IQ=9
+        IAD=7
+        JQ=IQ+5
+        GMQ=ZERO
+        IF(JQ.EQ.11)GMQ=HBAR/RLTIM(6)
+      ELSE
+        IF(IMSSM.EQ.0)THEN
+          IH=0
+          IQ=6
+        ELSE
+          IF(IPROC.LT.1140)IH=3
+          IF(IPROC.LT.1130)IH=2
+          IF(IPROC.LT.1120)IH=1
+          IQ=IPROC-1100-10*IH
+        END IF
+        IAD=6
+        JQ=IQ+6
+        GMQ=ZERO
+      END IF
+C...PROCESS EVENT.
+      IF(GENEV)THEN
+        RCS=HCS*HWRGEN(0)
+      ELSE
+        EVWGT=0.
+        HCS=0.
+C...ASSIGN FINAL STATE MASSES.
+        IF(IQ.LE.6)THEN
+          EMQ=RMASS(IQ)
+          ENQ=RMASS(JQ)
+        ELSE
+          EMQ=RMASS(2*IQ-7+114+IAD)
+          ENQ=RMASS(2*IQ-7+114    )
+        END IF
+        EMH=RMASS(201+IHIGGS)
+        GMH=HBAR/RLTIM(201+IHIGGS)
+        EMHWT=1.
+C...ENERGY AT PARTON LEVEL.
+        ECM=PBEAM1+PBEAM2
+        S=ECM*ECM
+        SHAT=S
+        IF((EMH.LE.0.).OR.(EMH.GE.ECM))RETURN
+C...PHASE SPACE VARIABLES.
+C...X(1)=(EMQQ**2-(EMQ+ENQ)**2)/((ECM-EMH)**2-(EMQ+ENQ)**2),
+C...LIGHT QUARKS -> X(2)=(LOG|T|-LOG|TMIN|)/(LOG|TMAX|-LOG|TMIN|),
+C...                X(3)=SIN(THETA4_CM_34),X(4)=COS(FI4_CM_34),
+C...HEAVY QUARKS -> X(2)=COS(THETA5_CM),
+C...                X(3)=COS(THETA4_CM_34),X(4)=FI4_CM_34,
+C...PHASE SPACE BORDERS.
+        XL(1)=0.
+        XU(1)=1.
+        IF((IQ+JQ).EQ.18)THEN
+          XL(2)=-1.
+          XL(4)=0.
+          XU(4)=2.*PIFAC
+        ELSE
+          XL(2)=0.
+          XL(4)=-1.
+          XU(4)=1.
+        END IF
+        XU(2)=1.
+        XL(3)=-1.
+        XU(3)=1.
+C...SINGLE PHASE SPACE POINT.
+ 100    CONTINUE
+        WEIGHT=1.
+        DO I=1,4
+          X(I)=XL(I)+(XU(I)-XL(I))*HWRGEN(0)
+          WEIGHT=WEIGHT*ABS(XU(I)-XL(I))
+        END DO
+C...ENERGY AT PARTON LEVEL.
+        PTMMIN=0.
+        PTNMIN=0.
+        IF(IMSSM.NE.0)THEN
+          IF(IPROC.GE.1140)THEN
+            PTNMIN=PTMIN
+          ELSE
+            IF((IQ.NE.6).AND.(IQ.NE.12).AND.
+     &         (JQ.NE.6).AND.(JQ.NE.12))THEN
+              PTMMIN=PTMIN
+              PTNMIN=PTMIN
+            ELSE
+              CONTINUE
+            END IF
+          END IF
+        END IF
+C...THREE PARTICLE KINEMATICS.
+        EMQQ=SQRT(X(1)*((ECM-EMH)**2-(EMQ+ENQ)**2)+(EMQ+ENQ)**2)
+C...INCOMING PARTONS: ALL MASSLESS.
+        EMIN=0.
+        IF((IQ+JQ).EQ.18)THEN
+          CT5=X(2)
+          CT4=X(3)
+          ST4=SQRT(1.-CT4*CT4)
+          CF4=COS(X(4))
+          SF4=SIN(X(4))
+        ELSE
+          PCM2=((ECM*ECM-EMIN*EMIN-EMIN*EMIN)**2
+     &        -(2.*EMIN*EMIN)**2)/(4.*ECM*ECM)
+          PCM=SQRT(PCM2)
+          RCM2=((ECM*ECM-EMQQ*EMQQ-EMH*EMH)**2
+     &        -(2.*EMQQ*EMH)**2)/(4.*ECM*ECM)
+          RCM=SQRT(RCM2)
+          TTMAX=EMIN**2+EMQQ**2-0.5D0/ECM/ECM
+     &        *((ECM*ECM+EMIN**2-EMIN**2)*(ECM*ECM+EMQQ**2-EMH**2)
+     &    -SQRT((ECM*ECM-(EMIN+EMIN)**2)*(ECM*ECM-(EMIN-EMIN)**2))
+     &    *SQRT((ECM*ECM-(EMQQ+EMH)**2)*(ECM*ECM-(EMQQ-EMH)**2)))
+          TTMIN=EMIN**2+EMQQ**2-0.5D0/ECM/ECM
+     &        *((ECM*ECM+EMIN**2-EMIN**2)*(ECM*ECM+EMQQ**2-EMH**2)
+     &    +SQRT((ECM*ECM-(EMIN+EMIN)**2)*(ECM*ECM-(EMIN-EMIN)**2))
+     &    *SQRT((ECM*ECM-(EMQQ+EMH)**2)*(ECM*ECM-(EMQQ-EMH)**2)))
+          TLMIN=LOG(ABS(TTMAX))
+          TLMAX=LOG(ABS(TTMIN))
+          TL=X(2)*(TLMAX-TLMIN)+TLMIN
+          T=EXP(ABS(TL))
+          CTMP=-T-EMIN**2-EMQQ**2
+     &       +2.*SQRT(PCM**2+EMIN**2)*SQRT(RCM**2+EMQQ**2)
+          CT5=CTMP/2./PCM/RCM
+          ST4=X(3)
+          CT4=SQRT(1.-ST4*ST4)
+          CF4=X(4)
+          SF4=SQRT(1.-CF4*CF4)
+        END IF
+        IF(HWRLOG(HALF))THEN
+          ST5=+SQRT(1.-CT5*CT5)
+        ELSE
+          ST5=-SQRT(1.-CT5*CT5)
+        END IF
+        RQ52=((ECM*ECM-EMH*EMH-EMQQ*EMQQ)**2-(2.*EMH*EMQQ)**2)/
+     &     (4.*ECM*ECM)
+        IF(RQ52.LT.0.)THEN
+          GOTO 100
+        ELSE
+          RQ5=SQRT(RQ52)
+        ENDIF
+        P5(1)=0.
+        P5(2)=RQ5*ST5
+        P5(3)=RQ5*CT5
+        P5(0)=SQRT(RQ52+EMH*EMH)
+        DO I=1,3
+          Q34(I)=-P5(I)
+        END DO
+        Q34(0)=SQRT(RQ52+EMQQ*EMQQ)
+        RQ42=((EMQQ*EMQQ-EMQ*EMQ-ENQ*ENQ)**2-(2.*EMQ*ENQ)**2)/
+     &     (4.*EMQQ*EMQQ)
+        IF(RQ42.LT.0.)THEN
+          GOTO 100
+        ELSE
+          RQ4=SQRT(RQ42)
+        ENDIF
+        Q4(1)=RQ4*ST4*CF4
+        Q4(2)=RQ4*ST4*SF4
+        Q4(3)=RQ4*CT4
+        Q4(0)=SQRT(RQ42+ENQ*ENQ)
+        PQ4=0.
+        DO I=1,3
+          PQ4=PQ4+Q34(I)*Q4(I)
+        END DO
+        P4(0)=(Q34(0)*Q4(0)+PQ4)/EMQQ
+        P3(0)=Q34(0)-P4(0)
+        DO I=1,3
+          P4(I)=Q4(I)+Q34(I)*(P4(0)+Q4(0))/(Q34(0)+EMQQ)
+          P3(I)=Q34(I)-P4(I)
+        END DO
+        IF(IMSSM.NE.0)THEN
+          IF(IPROC.GE.1140)THEN
+            IF(SQRT(P4(1)**2+P4(2)**2).LT.PTMIN)RETURN
+          ELSE
+            IF((IQ.NE.6).AND.(IQ.NE.12).AND.
+     &         (JQ.NE.6).AND.(JQ.NE.12))THEN
+              IF(SQRT(P3(1)**2+P3(2)**2).LT.PTMIN)RETURN
+              IF(SQRT(P4(1)**2+P4(2)**2).LT.PTMIN)RETURN
+            ELSE
+              CONTINUE
+            END IF
+          END IF
+        END IF
+C...INITIAL STATE MOMENTA IN THE PARTONIC CM.
+        PCM2=((SHAT-EMIN*EMIN-EMIN*EMIN)**2
+     &         -(2.*EMIN*EMIN)**2)/(4.*SHAT)
+        PCM=SQRT(PCM2)
+        P1(0)=SQRT(PCM2+EMIN*EMIN)
+        P1(1)=0.
+        P1(2)=0.
+        P1(3)=PCM
+        P2(0)=SQRT(PCM2+EMIN*EMIN)
+        P2(1)=0.
+        P2(2)=0.
+        P2(3)=-PCM
+C...COLOR STRUCTURED ME SUMMED/AVERAGED OVER FINAL/INITIAL SPINS AND COLORS.
+        IF(IPROC.GE.1140)THEN
+          GRND=TANB
+        ELSE
+          IF(IMSSM.NE.0)THEN
+            CONTINUE
+          END IF
+          GRND=ONE
+        END IF
+        FACGPM(1) = ENQ       *GRND
+        FACGPM(2) = EMQ*PARITY/GRND
+C...EW AND QCD COUPLINGS.
+        EMSCA=EMQ+ENQ+EMH
+        EMSC2=EMSCA*EMSCA
+        ALPHA=HWUAEM(EMSC2)
+        FIRST=.TRUE.
+        GAUGE=.FALSE.
+        E=SQRT(4.D0*PIFAC*ALPHA) 
+        IF(IPROC.GE.1140)THEN
+          IFL=IQ-1
+          IF(IQ.EQ.7)IFL=IQ
+          IF(IQ.EQ.8)IFL=IQ+1
+          IF(IQ.EQ.9)IFL=IQ+2
+          RM3=ENQ
+          YM3=ENQ
+          GAM3=0.D0
+          RM4=EMQ 
+          YM4=EMQ
+          GAM4=GMQ
+C...CHARGED HIGGSES
+          Q3=-1.D0
+          IF(IFL.LE.6)Q3=-1.D0/3.D0 
+          JFL=0
+          JH=IH
+C...ASSIGN FERMION MOMENTA
+          DO I=0,3
+            F(I)=P4(I)  
+            G(I)=P3(I)  
+          END DO
+        ELSE
+          IFL=IQ
+          IF(IQ.EQ.7)IFL=IQ
+          IF(IQ.EQ.8)IFL=IQ+1
+          IF(IQ.EQ.9)IFL=IQ+2
+          RM3=EMQ
+          YM3=EMQ
+          GAM3=0.D0
+          RM4=ENQ
+          YM4=ENQ
+          GAM4=0.D0
+C...NEUTRAL HIGGSES
+          IF((IFL.EQ.1).OR.(IFL.EQ.3).OR.(IFL.EQ.5 ))THEN
+            Q3=-1.D0/3.D0
+          ELSEIF((IFL.EQ.2).OR.(IFL.EQ.4).OR.(IFL.EQ.6 ))THEN
+            Q3=+2.D0/3.D0
+          ELSEIF((IFL.EQ.7).OR.(IFL.EQ.9).OR.(IFL.EQ.11))THEN
+            Q3=-1.D0
+          END IF 
+          IF((IFL.EQ.1).OR.(IFL.EQ.3).OR.(IFL.EQ. 5).OR.
+     &       (IFL.EQ.7).OR.(IFL.EQ.9).OR.(IFL.EQ.11))THEN
+            JFL=1
+          ELSEIF((IFL.EQ.2).OR.(IFL.EQ.4).OR.(IFL.EQ.6))THEN
+            JFL=2
+          END IF
+          KHIGGS=IHIGGS
+          IF(IHIGGS.NE.0)KHIGGS=IHIGGS-1
+          JH=KHIGGS
+C...ASSIGN FERMION MOMENTA
+          DO I=0,3
+            F(I)=P3(I)  
+            G(I)=P4(I)  
+          END DO
+        END IF
+        RM5=EMH
+        GAM5=GMH
+        S2W=SWEIN
+        RMW=RMASS(198) 
+        RMZ=RMASS(200) 
+        GAMHL=HBAR/RLTIM(203)
+        GAMHH=HBAR/RLTIM(204)
+        GAMHA=HBAR/RLTIM(205)
+        COLOUR=1.D0
+        IF(IFL.LE.6)COLOUR=3.D0
+C...MSSM COUPLINGS.
+        IF(JH.LE.3)THEN
+          HFC=ENHANC(IQ)
+          HBC=ENHANC(10)
+        ELSE
+          HFC=ONE
+          HBC=ONE
+        END IF
+C...ME.
+        CALL HWH2HE(FIRST,GAUGE,JFL,JH,HFC,HBC,
+     &     E,S2W,TANB,ALPHAH,RMW,S,Q3,F,G,P5,
+     &     RM3,YM3,GAM3,RM4,YM4,GAM4,RM5,GAM5,
+     &     RMHL,GAMHL,RMHH,GAMHH,RMHA,GAMHA,
+     &     RMZ,GAMZ,COLOUR,M2EE)
+C...CONSTANT FACTORS: PHI ALONG BEAM AND CONVERSION GEV^2->NB.
+        FACT=2.*PIFAC*GEV2NB
+C...PHASE SPACE JACOBIANS, PI'S AND FLUX.
+        FACT=FACT*RQ4*RQ5/PCM/32./(2.*PIFAC)**5
+     &      *((ECM-EMH)**2-(EMQ+ENQ)**2)
+     &      /2./EMQQ/S
+C...JACOBIANS FROM CT5 TO X(2).
+        IF((IQ+JQ).EQ.18)THEN
+          CONTINUE
+        ELSE
+          FACT=FACT*(TLMAX-TLMIN)/2./PCM/RCM*ABS(T)
+          FACT=FACT*2.*ABS(ST4/CT4/SF4)
+        END IF
+C...CHARGE CONJUGATION.
+        IF(IPROC.GE.1140)THEN
+C...YES FOR CHARGED HIGGS.
+          FACT=FACT*2.
+        ELSE
+C...NO FOR NEUTRAL HIGGSES.
+          CONTINUE
+        END IF
+C...HIGGS RESONANCE.
+        FACT=FACT*EMHWT
+C...CONSTANT WEIGHT.
+        FACT=FACT*WEIGHT
+C...INCLUDE BR OF HIGGS.
+        IF(IMSSM.EQ.0)THEN
+          IDEC=MOD(IPROC,100)
+          IF (IDEC.GT.0.AND.IDEC.LE.12) FACT=FACT*BRHIG(IDEC)
+          IF (IDEC.EQ.0) THEN
+            BRHIGQ=0.D0
+            DO I=1,6
+              BRHIGQ=BRHIGQ+BRHIG(I)
+            END DO
+            FACT=FACT*BRHIGQ
+          ENDIF
+          IF (IDEC.EQ.10) THEN
+            CALL HWDBOZ(198,ID1,ID2,CV,CA,BR,1)
+            CALL HWDBOZ(199,ID1,ID2,CV,CA,BR,1)
+            FACT=FACT*BR
+          ELSEIF (IDEC.EQ.11) THEN
+            CALL HWDBOZ(200,ID1,ID2,CV,CA,BR,1)
+            CALL HWDBOZ(200,ID1,ID2,CV,CA,BR,1)
+            FACT=FACT*BR
+          ENDIF
+        END IF
+      END IF
+C...SET UP FLAVOURS IN FINAL STATE.
+      IF(IPROC.GE.1140)THEN
+        IF(HWRGEN(0).LT.0.5)THEN
+          JHIGGS=207-201
+          IIQ=IQ
+          JJQ=JQ
+          FLIP=0
+        ELSE
+          JHIGGS=206-201
+          IIQ=IQ-1
+          JJQ=JQ+1
+          FLIP=1
+        END IF
+      ELSE
+        JHIGGS=IHIGGS
+        IIQ=IQ
+        JJQ=JQ
+        FLIP=0
+      END IF
+      HCS=FACT*M2EE
+      IF (GENEV.AND.HCS.GT.RCS) THEN
+C...GENERATE EVENT.
+        IDN(1)=IDHW(1)
+        IDN(2)=IDHW(2)
+        IF(IIQ.LE.12.AND.JJQ.LE.12)THEN
+          IDN(3)=IIQ
+          IDN(4)=JJQ
+        ELSE
+          IDN(3)=2*IIQ-7+114
+          IDN(4)=2*IIQ-7+114+IAD
+        END IF
+        IDN(5)=201+JHIGGS
+C...INCOMING PARTONS: NOW MASSIVE.
+        EMIN1=RMASS(IDN(1))
+        EMIN2=RMASS(IDN(2))
+C...REDO INITIAL STATE MOMENTA IN THE PARTONIC CM.
+        PCM2=((SHAT-EMIN1*EMIN1-EMIN2*EMIN2)**2
+     &         -(2.*EMIN1*EMIN2)**2)/(4.*SHAT)
+        PCM=SQRT(PCM2)
+        P1(0)=SQRT(PCM2+EMIN1*EMIN1)
+        P1(1)=0.
+        P1(2)=0.
+        P1(3)=PCM
+        P2(0)=SQRT(PCM2+EMIN2*EMIN2)
+        P2(1)=0.
+        P2(2)=0.
+        P2(3)=-PCM
+C...SETS UP INCOMING STATUS AND IDS ONLY FOR 2->1: USE HWEONE.
+        IDCMF=15
+        XX(1)=ONE
+        XX(2)=ONE
+        CALL HWEONE
+        JDAHEP(1,NHEP  )=NHEP+1
+        JDAHEP(2,NHEP  )=NHEP+3
+        JMOHEP(1,NHEP+1)=NHEP
+        JMOHEP(1,NHEP+2)=NHEP
+        JMOHEP(1,NHEP+3)=NHEP
+C...RANDOMLY ROTATE FINAL STATE MOMENTA AROUND BEAM AXIS.
+        PHI=2.*PIFAC*HWRGEN(0)
+        CPHI=COS(PHI)
+        SPHI=SIN(PHI)
+        ROT(1,1)=+CPHI
+        ROT(1,2)=+SPHI
+        ROT(1,3)=0.
+        ROT(2,1)=-SPHI
+        ROT(2,2)=+CPHI
+        ROT(2,3)=0.
+        ROT(3,1)=0.
+        ROT(3,2)=0.
+        ROT(3,3)=1.
+        DO L=1,3
+          DO M=1,3
+            QAUX(M)=0.
+            DO N=1,3
+              IF(L.EQ.1)QAUX(M)=QAUX(M)+ROT(M,N)*P3(N)
+              IF(L.EQ.2)QAUX(M)=QAUX(M)+ROT(M,N)*P4(N)
+              IF(L.EQ.3)QAUX(M)=QAUX(M)+ROT(M,N)*P5(N)
+            END DO
+          END DO
+          DO M=1,3
+            IF(L.EQ.1)P3(M)=QAUX(M)
+            IF(L.EQ.2)P4(M)=QAUX(M)
+            IF(L.EQ.3)P5(M)=QAUX(M)
+          END DO
+        END DO
+C...DO REAL INCOMING, OUTGOING MOMENTA IN THE LAB FRAME.
+        DO M=NHEP-2,NHEP+3
+          IF(M.EQ.NHEP  )GO TO 888
+          DO N=0,3
+            NN=N
+            IF(N.EQ.0)NN=4 
+            IF(M.EQ.NHEP-2)PHEP(NN,M)=P1(N)
+            IF(M.EQ.NHEP-1)PHEP(NN,M)=P2(N)
+            IF(M.EQ.NHEP+1)PHEP(NN,M)=P3(N)*(1-FLIP)+P4(N)*FLIP
+            IF(M.EQ.NHEP+2)PHEP(NN,M)=P4(N)*(1-FLIP)+P3(N)*FLIP
+            IF(M.EQ.NHEP+3)PHEP(NN,M)=P5(N)
+          END DO
+ 888      CONTINUE
+        END DO
+C...NEEDS TO SET ALL FINAL STATE MASSES.
+        PHEP(5,NHEP+1)=SQRT(ABS(PHEP(4,NHEP+1)**2
+     &                         -PHEP(3,NHEP+1)**2
+     &                         -PHEP(2,NHEP+1)**2
+     &                         -PHEP(1,NHEP+1)**2))
+        PHEP(5,NHEP+2)=SQRT(ABS(PHEP(4,NHEP+2)**2
+     &                         -PHEP(3,NHEP+2)**2
+     &                         -PHEP(2,NHEP+2)**2
+     &                         -PHEP(1,NHEP+2)**2))
+        PHEP(5,NHEP+3)=SQRT(ABS(PHEP(4,NHEP+3)**2
+     &                         -PHEP(3,NHEP+3)**2
+     &                         -PHEP(2,NHEP+3)**2
+     &                         -PHEP(1,NHEP+3)**2))
+C...SETS CMF.
+        DO I=1,4
+          PHEP(I,NHEP  )=PHEP(I,NHEP-2)+PHEP(I,NHEP-1)
+        END DO
+        PHEP(5,NHEP  )=SQRT(ABS(PHEP(4,NHEP  )**2
+     &                         -PHEP(3,NHEP  )**2
+     &                         -PHEP(2,NHEP  )**2
+     &                         -PHEP(1,NHEP  )**2))
+C...SETS UP OUTGOING STATUS AND IDS.
+        ISTHEP(NHEP+1)=113
+        ISTHEP(NHEP+2)=114
+        ISTHEP(NHEP+3)=114
+        IDHW(NHEP+1)=IDN(3)
+        IDHEP(NHEP+1)=IDPDG(IDN(3))
+        IDHW(NHEP+2)=IDN(4)
+        IDHEP(NHEP+2)=IDPDG(IDN(4))
+        IDHW(NHEP+3)=IDN(5)
+        IDHEP(NHEP+3)=IDPDG(IDN(5))
+C...SETS UP COLOUR CONNECTIONS.
+        JMOHEP(2,NHEP+1)=NHEP+2
+        JMOHEP(2,NHEP+2)=NHEP+1
+        JMOHEP(2,NHEP-1)=NHEP-2
+        JMOHEP(2,NHEP-2)=NHEP-1
+        JMOHEP(2,NHEP+3)=NHEP+3
+        JDAHEP(2,NHEP+1)=NHEP+2
+        JDAHEP(2,NHEP+2)=NHEP+1
+        JDAHEP(2,NHEP-1)=NHEP-1
+        JDAHEP(2,NHEP-2)=NHEP-2
+        JDAHEP(2,NHEP+3)=NHEP+3
+        NHEP=NHEP+3
+        IF(AZSPIN)THEN
+C...SET TO ZERO THE COEFFICIENTS OF THE SPIN DENSITY MATRICES.
+          CALL HWVZRO(7,GCOEF)
+        END IF
+      END IF
+C...COLLECT WEIGHT.
+      EVWGT=HCS
+      RETURN
+  999 END
 CDECK  ID>, HWHIGH.
 *CMZ :-        -26/11/00  17.21.55  by  Bryan Webber
 *-- Author :  Kosuke Odagiri & Stefano Moretti
@@ -22535,7 +24660,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     DRELL-YAN 2 PARTON -> 2 HIGGS PAIR (2HDM)
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN, HWUAEM, EPS, HCS, RCS, DIST, S, PF, QPE,
      & FACTR, SN2TH, MZ, MW, MNN(2,2), MCC(2), MCN(3), EMSC2, GW2, GZ2,
      & GHH(4), XWEIN, S2W, PT2MIN, ECM_MAX, X(3), XL(3),
@@ -22808,7 +24933,7 @@ C     QCD Higgs plus jet production; mean EVWGT = Sigma in nb*Higgs B.R.
 C     Adapted from the program of U. Baur and E.W.N. Glover
 C     See: Nucl. Phys. B339 (1990) 38
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRUNI,HWUALF,HWUAEM,EPS,RCS,EMH,EMHWT,
      & EMHTMP,BR,CV,CA,EMH2,ET,EJ,PT,EMT,EMAX,YMAX,YHINF,YHSUP,EXYH,
      & YMIN,YJINF,YJSUP,EXYJ,S,T,U,FACT,AMPQQ,AMPQG,AMPGQ,AMPGG,HCS,
@@ -22945,7 +25070,7 @@ C                   /  (EM**2-EMH**2)**2 + (GAM(EM)*EMH**2/EM)**2
 C       AS SUGGESTED IN M.H.SEYMOUR, PHYS.LETT.B354(1995)409.
 C     ENDIF
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRUNI,EM,WEIGHT,EMH,DIF,FUN,THETA,T,EMHLST,W0,
      & W1,EMM,GAMEM,T0,TMIN,TMAX,THEMIN,THEMAX,ZMIN,ZMAX,Z,F,GAMOFS
       INTEGER I
@@ -23032,7 +25157,7 @@ C
 C-----------------------------------------------------------------------
 C     PRODUCTION OF MSSM HIGGSES IN ASSOCIATION WITH HEAVY QUARK PAIRS
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER JHIGGS
       INTEGER I,J,K,L,M,N
       INTEGER IS,IH,IQ,JQ,IIQ,JJQ,IQMIN,IQMAX,IGG,IQQ
@@ -23337,15 +25462,15 @@ C...include BR of Higgs.
             END DO
             FACT=FACT*BRHIGQ
           ENDIF
-c bug fix 28/06/01 SM.
+c bug fix 11/10/02 SM.
           IF (IDEC.EQ.10) THEN
             CALL HWDBOZ(198,ID1,ID2,CV,CA,BR,1)
             CALL HWDBOZ(199,ID1,ID2,CV,CA,BR,1)
-            WEIGHT=WEIGHT*BR
+            FACT=FACT*BR
           ELSEIF (IDEC.EQ.11) THEN
             CALL HWDBOZ(200,ID1,ID2,CV,CA,BR,1)
             CALL HWDBOZ(200,ID1,ID2,CV,CA,BR,1)
-            WEIGHT=WEIGHT*BR
+            FACT=FACT*BR
           ENDIF
 c end of bug fix.
         END IF
@@ -23550,7 +25675,7 @@ C-----------------------------------------------------------------------
 C     HIGGS PRODUCTION VIA GLUON OR QUARK FUSION
 C     MEAN EVWGT = HIGGS PRODN C-S * BRANCHING FRACTION IN NB
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWUALF,HWHIGT,HWRGEN,HWUSQR,HWUAEM,BRHIGQ,EMH,
      & CSFAC(13),EVSUM(13),EMFAC,CV,CA,BR,RWGT,E1,E2,EMQ,GFACTR
       INTEGER IDEC,I,J,ID1,ID2
@@ -23643,7 +25768,7 @@ C  CALCULATE MOD SQUARED I DEFINED AS IN BARGER & PHILLIPS p433
 C  WARNING: THIS IS A FACTOR OF 3 GREATER THAN EHLQ'S ETA FUNCTION
 C  PARITY=+1 FOR SCALAR AND -1 FOR PSEUDOSCALAR
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWHIGT,RATIO,RAT2,EMH,FREAL,FIMAG,ETALOG,AIREAL,
      & AIIMAG
       INTEGER I,J,K,L
@@ -23716,7 +25841,7 @@ C
 C-----------------------------------------------------------------------
 C     MSSM NEUTRAL HIGGS PRODUCTION IN ASSOCIATION WITH GAUGE BOSON
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER I,J,K,L,M,N
       INTEGER IV,IDEC
       INTEGER ID1,ID2
@@ -23906,15 +26031,15 @@ C...include BR of Higgs.
             END DO
             FACT=FACT*BRHIGQ
           ENDIF
-c bug fix 28/06/01 SM.
+c bug fix 11/10/02 SM.
           IF (IDEC.EQ.10) THEN
             CALL HWDBOZ(198,ID1,ID2,CV,CA,BR,1)
             CALL HWDBOZ(199,ID1,ID2,CV,CA,BR,1)
-            WEIGHT=WEIGHT*BR
+            FACT=FACT*BR
           ELSEIF (IDEC.EQ.11) THEN
             CALL HWDBOZ(200,ID1,ID2,CV,CA,BR,1)
             CALL HWDBOZ(200,ID1,ID2,CV,CA,BR,1)
-            WEIGHT=WEIGHT*BR
+            FACT=FACT*BR
           ENDIF
 c end of bug fix.
         END IF
@@ -24002,7 +26127,7 @@ C-----------------------------------------------------------------------
 C     HIGGS PRODUCTION VIA W/Z BOSON FUSION
 C     MEAN EVWGT = HIGGS PRODN C-S * BRANCHING FRACTION IN NB
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWULDO,HWRUNI,HWRGEN,HWUAEM,K1MAX2,K1MIN2,K12,
      & K2MAX2,K2MIN2,K22,EMW2,EMW,ROOTS,EMH2,EMH,ROOTS2,P1,PHI1,PHI2,
      & COSPHI,COSTH1,SINTH1,COSTH2,SINTH2,P2,WEIGHT,TAU,TAULN,CSFAC,
@@ -24045,7 +26170,7 @@ C-----------------------------------------------------------------------
         CW=256*(PIFAC*HWUAEM(EH2)/SWEIN)**3*EMW2
         CZ=256.*(PIFAC*HWUAEM(EH2))**3*EMZ2/(SWEIN*(1.-SWEIN))
       ENDIF
-      EE=IPRO.LT.10
+      EE=IPRO.LE.12
       EP=IPRO.GE.90
       IF (.NOT.GENEV) THEN
 C---CHOOSE PARAMETERS
@@ -24400,7 +26525,7 @@ C     USES ALGORITHM OF BERENDS AND KLEISS: NUCL.PHYS. B260(1985)32
 C
 C     MEAN EVWGT = CROSS-SECTION (IN NB) * HIGGS BRANCHING FRACTION
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWUAEM,HWHIGY,HWRUNI,HWRGEN,HWULDO,EMZ,CVE,CAE,
      & POL1,POL2,CE1,CE2,CE3,PMAX,EMZ2,S,B,FACTR,EMH,EMFAC,EMH2,A,XP,
      & CV,CA,BRHIGQ,BR,X1,X2,FAC1,FAC2,XPP,XPPSQ,COEF,X,XSQ,PROB,C1,C2,
@@ -24600,7 +26725,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     PRODUCTION OF MSSM HIGGS PAIRS IN L+L- (L=E,MU)
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN, HWUAEM, HCS, RCS, S, PF, QPE,
      & FACTR, SN2TH, MZ, MNN(2), MCC, EMSC2, GZ2,
      & GHH(4), XWEIN, S2W, X(1), XL(1),
@@ -24760,7 +26885,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     PRODUCTION OF MSSM HIGGSES IN ASSOCIATION WITH B,T-SQUARK PAIRS
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       COMMON/SQSQH/JHIGGS,ILBL,JH,IF1MIN,IF1MAX,IF2MIN,IF2MAX
       INTEGER      JHIGGS,ILBL,JH,IF1MIN,IF1MAX,IF2MIN,IF2MAX
       INTEGER I,J,K,L,M,N
@@ -25142,7 +27267,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     QQD direct photon pair production: mean EVWGT = sigma in nb
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRUNI,HWUALF,HWHPPB,EPS,RCS,ET,EJ,KK,KK2,
      & YJ1INF,YJ1SUP,Z1,YJ2INF,YJ2SUP,Z2,FACT,FACTR,RS,S,T,U,CSTU,TQSQ,
      & DSTU,HCS
@@ -25225,7 +27350,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     QCD DIRECT PHOTON + JET PRODUCTION: MEAN EVWGT = SIGMA IN NB
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRUNI,HWUALF,HWHPPB,EPS,RCS,ET,EJ,KK,KK2,
      & YJ1INF,YJ1SUP,Z1,YJ2INF,YJ2SUP,Z2,FACT,FACTR,FACTF,RS,S,T,U,CF,
      & AF,CSTU,CTSU,CUST,DSTU,HCS,TQCH
@@ -25360,7 +27485,7 @@ C-----------------------------------------------------------------------
 C     point-like photon/QCD heavy flavour single excitation, using exact
 C     massive lightcone kinematics, mean EVWGT = sigma in nb.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRUNI,HWUALF,EPS,PP1,PP2,QM2,FACTR,
      & PT,PJ,PT2,PTM,EXY,T,CC,EXY2,S,U,C,SIGE,HCS,RCS
       INTEGER IQ1,IQ2,ID1,ID2,IHAD1,IHAD2
@@ -25436,7 +27561,7 @@ C-----------------------------------------------------------------------
 C     Point-like photon/gluon heavy flavour pair production, with
 C     exact lightcone massive kinematics, mean EVWGT = sigma in nb.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRUNI,HWUALF,EPS,PP1,PP2,QM2,FACTR,ET,EJ,ET2,
      & EXY,EXY2,S,T,U,C
       INTEGER IQ1,IHAD1,IHAD2
@@ -25506,7 +27631,7 @@ C     Point-like photon/QCD direct meson production
 C     See M. Benayoun, et al., Nucl. Phys. B282 (1987) 653 for details.
 C     mean EVWGT = sigma in nb
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRUNI,HWUALF,EPS,PP1,PP2,ET,EJ,EXY,EXY2,
      & FACT,FACTR,S,T,U,REDS,DELT(3,3),C1STU,C3STU,HCS,RCS,CMIX,SMIX,
      & C1WVFN,FPI,FETA8,FETA1,FRHO,FPHI8,FPHI1,FPI2,FETA2(3),FETAP2(3),
@@ -25519,7 +27644,8 @@ C-----------------------------------------------------------------------
       PARAMETER (EPS=1.D-20)
       DATA MNAME/21,38,42,30,21,34,50,46,0,23,39,43,31,23,35,51,47,0/
       DATA N4,SPIN0,SPIN1/3,3,2,.TRUE.,.TRUE./
-      DATA C1WVFN,FPI,FETA8,FETA1,FRHO,FPHI8,FPHI1/1.,3*0.093,3*0.107/
+      DATA C1WVFN,FPI,FETA8,FETA1,FRHO,FPHI8,FPHI1
+     &     /1.D0,3*0.093D0,3*0.107D0/
       IF (FSTWGT) THEN
          FPI2=FPI**2
          CMIX=COS(ETAMIX*PIFAC/180.D0)
@@ -25700,7 +27826,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     point-like photon/QCD di-jet production: mean EVWGT = sigma in nb
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRUNI,HWUALF,EPS,RCS,PP1,PP2,ET,EJ,
      & EXY,EXY2,FACTR,RS,S,T,U,CSTU,CTSU,HCS
       INTEGER ID1,ID2,ID3,ID4,IHAD1,IHAD2
@@ -25777,7 +27903,7 @@ C-----------------------------------------------------------------------
 C     Compton scattering of point-like photon and (anti)quark
 C     mean EVWGT = sigma in nb
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRUNI,EPS,RCS,PP1,PP2,ET,EJ,EXY,EXY2,
      & FACTR,S,T,U,CTSU,HCS
       INTEGER ID1,ID2,IHAD1,IHAD2
@@ -25841,7 +27967,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     QCD HARD 2->2 PROCESSES: MEAN EVWGT = SIGMA IN NB
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRUNI,HWUALF,RS,EPS,HF,RCS,Z1,Z2,ET,EJ,
      & FACTR,S,T,U,ST,TU,US,STU,TUS,UST,EN,RN,GFLA,AF,ASTU,ASUT,AUST,
      & BF,BSTU,BSUT,BUST,BUTS,CF,CSTU,CSUT,CTSU,CTUS,DF,DSTU,DTSU,DUTS,
@@ -26098,7 +28224,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     IDENTIFIES HARD SUBPROCESS
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER HWRINT,ID3,ID4,IPERM,IHPR,ND3
       EXTERNAL HWRINT
       IHPRO=IHPR
@@ -26131,7 +28257,7 @@ C-----------------------------------------------------------------------
 C     HARD PROCESS: GAMGAM --> QQBAR/LLBAR/W+W-
 C     MEAN EVENT WEIGHT = CROSS-SECTION IN NB AFTER CUTS ON PT
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION RCS,HCS,RS,S,EMSQ,BE,TMIN,TMAX,T,U,FACTR,Q,CFAC,
      $     HWRGEN
       INTEGER IHAD1,IHAD2,HQ,ID3,ID4,I1,I2
@@ -26215,7 +28341,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C  Subroutine for 2 parton -> 2 parton via UDD resonant squarks
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HCS,S,RCS,HWRGEN,MQ1,MQ2,TAU,LOWTLM,UPPTLM,RTAB,
      &                 SQSH,MATELM,SCF(12),CHANPB(2),HWRUNI,PCM,MIX(12),
      &                 ME(2,3,3,3,3),WD,MS(12),SWD(12),RAND,TAUA,
@@ -26326,7 +28452,6 @@ C--Calculate the prefactor due multichannel approach
       ENDIF
 C--loop over the quarks
       HCS = ZERO
-C--temp mod
       DO GN=1,2
         IF(GN.EQ.1) THEN
           MIG = 1
@@ -26440,7 +28565,7 @@ C-----------------------------------------------------------------------
 C  Subroutine for 2 parton -> parton SUSY particle via UDD resonant
 C  squarks.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HCS,S,RCS,HWRGEN,ME(4),CW,MER(6),MZ,TAU,TAUA,
      &                 TAUB,LOWTLM,UPPTLM,HWRUNI,SH,SQSH,SCF(12),MW2,
      &                 LAMC(3),CHANPB(2),PCM,ECM,RAND,MEN(7,6,3,3),
@@ -26457,7 +28582,7 @@ C-----------------------------------------------------------------------
       COMMON/HWRPIN/XMIN,XMAX,XPOW,FIRST
       SAVE HCS,MS,SWD,MX,CHAN,A,B,SPMN,SPMX,RAD,MEN,MEC,HIGGS,
      &     CHARMN,CHARMX,NEUT,CHAR,SQSH,MEH,SW,CW,MW,MZ,MER,SH,MH,
-     &     AS,EC,FAC,G,SCF,ZSQU,ZQRK,MW2,MZ2,MS2,MSWD
+     &     AS,EC,FAC,G,SCF,ZSQU,ZQRK,MW2,MZ2,MS2,MSWD,GUU,GDD
       PARAMETER(EPS=1D-20)
       DATA CONECT/ 4, 4, 2, 3, 0, 0, 1,-2,-1,-3,-4,-4,
      &             3, 4, 3, 3, 0, 0, 1,-3,-1,-4,-3,-3,
@@ -27271,14 +29396,15 @@ C--first stage of the colour connection corrections
       ENDIF
  999  END
 CDECK  ID>, HWHREE.
-*CMZ :-        -27/10/00  15:52:00  by  Peter Richardson
+*CMZ :-        -05/04/02  15:40:41  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
       SUBROUTINE HWHREE
 C-----------------------------------------------------------------------
 C     SUSY E+E- --> SM PARTICLES VIA RPV
+C     MODIFIED TO INCLUDE BEAM POLARIZATION EFFECTS BY PETER RICHARDSON
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRUNI,HWUPCM,HWUMBW,HWUAEM,HCS,RCS,FACA,
      &                 S,T,PCM,MQ1,MQ2,SP,TP,TPZ,TPN,TPN2,MSL2(3),MZ,
      &                 MZ2,MSU2(3,2),MWD(3),GL,GR,GLP,GRP,EC,EE,THTMIN,
@@ -27462,15 +29588,20 @@ C--Now add the RPV terms
               FTLL = FTLL+HALF*LAM(GN,I,IL,IL,K1,L1)*EE*SCF(I)
               FTRR = FTRR+HALF*LAM(GN,I,IL,IL,L1,K1)*EE*SCF(I)
             ENDDO
-C--now calculate the matrix element
-            MET = (ONE+COSTH)**2
-     &           *DREAL(DCONJG(FSLR)*FSLR+DCONJG(FSRL)*FSRL
-     &           +DCONJG(FTLR)*FTLR+DCONJG(FTRL)*FTRL
-     &                +TWO*FTLR*DCONJG(FSLR)
-     &                +TWO*FTRL*DCONJG(FSRL))
-     &           +(ONE-COSTH)**2*DREAL(DCONJG(FSLL)*FSLL
-     &                +DCONJG(FSRR)*FSRR)
-     &           +FOUR*DREAL(DCONJG(FTLL)*FTLL+DCONJG(FTRR)*FTRR)
+C--now calculate the matrix element (including beam polarization)
+            MET =(ONE+COSTH)**2*DREAL(
+     &              DCONJG(FSLR)*FSLR*(ONE-EPOLN(3))*(ONE+PPOLN(3))
+     &             +DCONJG(FSRL)*FSRL*(ONE+EPOLN(3))*(ONE-PPOLN(3))
+     &             +DCONJG(FTLR)*FTLR*(ONE-EPOLN(3))*(ONE+PPOLN(3))
+     &             +DCONJG(FTRL)*FTRL*(ONE+EPOLN(3))*(ONE-PPOLN(3))
+     &             +TWO*FTLR*DCONJG(FSLR)*(ONE-EPOLN(3))*(ONE+PPOLN(3))
+     &             +TWO*FTRL*DCONJG(FSRL)*(ONE+EPOLN(3))*(ONE-PPOLN(3)))
+     &          +(ONE-COSTH)**2*DREAL(
+     &               DCONJG(FSLL)*FSLL*(ONE-EPOLN(3))*(ONE+PPOLN(3))
+     &              +DCONJG(FSRR)*FSRR*(ONE+EPOLN(3))*(ONE-PPOLN(3)))
+     &          +FOUR*DREAL(
+     &               DCONJG(FTLL)*FTLL*(ONE+EPOLN(3))*(ONE+PPOLN(3))
+     &              +DCONJG(FTRR)*FTRR*(ONE-EPOLN(3))*(ONE-PPOLN(3)))
 C--final phase space factors
             ME(GN,K1,L1) = MET*CFAC*FACA*THTMIN
  60         HCS = HCS+ME(GN,K1,L1)
@@ -27540,7 +29671,7 @@ C-----------------------------------------------------------------------
 C     IDENTIFY THE REMNANTS OF THE HARD SCATTERING
 C     AND BREAK THEIR COLOUR CONNECTION IF NECESSARY
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION PCL(5)
       INTEGER IBEAM,ITARG,IHEP,NTEMP,I,ICOL,IANT
       LOGICAL LTEMP,T,COL,ANT
@@ -27596,7 +29727,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     SUSY E+E- RPV PRODUCTION
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       IF(IPROC.GE.800.AND.IPROC.LE.850) THEN
         CALL HWHRES
       ELSEIF(IPROC.GE.860.AND.IPROC.LT.890) THEN
@@ -27607,22 +29738,23 @@ C---UNRECOGNIZED PROCESS
       ENDIF
  999  END
 CDECK  ID>, HWHRES.
-*CMZ :-        -30/10/00  14:56:15  by  Peter Richardson
+*CMZ :-        -07/04/02  10:38:51  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
       SUBROUTINE HWHRES
 C-----------------------------------------------------------------------
 C     SUSY E+E- --> RPV SINGLE SPARTICLE PRODUCTION
+C     POLARZATION EFFECTS ADDED 5/4/02 BY PETER RICHARDSON
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWUAEM,HWRUNI,HWUPCM,HWUMBW,HCS,RCS,FACA,
-     &                 FACB,FACC,FACD,FACE,M1(4,4),M2(2,4),M3(8),M4(10),
+     &                 FACB,FACC,FACD,FACE,M1(4,4),M2(2,4),M3(8,2),
      &                 MW,MZ,MSCL(2,2),MSCL2(2,2),MZ2,MSL2,MSR2,MSNU2,
      &                 MW2,MCH(2),MCH2(2),MNU(4),MNU2(4),MLT(3),MLT2(3),
      &                 MNUT(2),MNUT2(2),RMNUT(2),S,U,T,QPE,SQPE,SM,DM,
      &                 PF,PCM,SCF(2),UP,TP,MH(4),MH2(4),THCOS(2),THTMIN,
      &                 A(6,4),B(6,4),SW,CW,MC,SIN2B,ZNU,RHO,HSL(2,2),
-     &                 HL(4),HNU(3)
+     &                 HL(4),M4(10,2),HNU(3)
       INTEGER I,SSNU,NTID(2),CHID(2),IG1,IG2,IHEP,SSCH,ISL,ISR,NTRY,
      &        ISN,IDL,J,L,RSID(2),K,L2,IL,IDZ,RADID(2,8),GMIN,GMAX
       LOGICAL NEUT,CHAR,RAD,HIGGS,THSGN
@@ -27861,14 +29993,29 @@ C--single neutralino production
               U    = -T-S+MNU2(L)
               UP   = ONE/(U-MSL2)
               TP   = ONE/(T-MSR2)
-              M1(L,J) = A(L,K)**2*S*(S-MNU2(L))*SCF(J)
-     &                 +U*(U-MNU2(L))*(A(L,1)**2+B(L,2)**2)*UP**2
-     &                 +T*(T-MNU2(L))*(A(L,2)**2+B(L,2)**2)*TP**2
-     &                 +TWO*S*U*(S-MNUT2(J))*UP*SCF(J)*A(L,K)*A(L,1)
-     &                 +TWO*S*T*(S-MNUT2(J))*TP*SCF(J)*A(L,K)*A(L,2)
-     &                 +TWO*U*T*UP*TP*A(L,1)*A(L,2)
+C--neutralino antineutrino production (including beam polarization)
+              M1(L,J) = (ONE-EPOLN(3))*(ONE-PPOLN(3))*(
+     &                      A(L,K)**2*S*(S-MNU2(L))*SCF(J)
+     &                     +TWO*S*U*(S-MNUT2(J))*UP*SCF(J)*A(L,K)*A(L,1)
+     &                     +TWO*S*T*(S-MNUT2(J))*TP*SCF(J)*A(L,K)*A(L,2)
+     &                     +TWO*U*T*UP*TP*A(L,1)*A(L,2))
+     &           +U*(U-MNU2(L))*UP**2*(ONE-PPOLN(3))*
+     &               (A(L,1)**2*(ONE-EPOLN(3))+B(L,1)**2*(ONE+EPOLN(3)))
+     &           +T*(T-MNU2(L))*TP**2*(ONE-EPOLN(3))*
+     &               (A(L,2)**2*(ONE-PPOLN(3))+B(L,2)**2*(ONE+PPOLN(3)))
+C--neutralino neutrino production (including beam polarization)
+              M1(L,K) = (ONE+EPOLN(3))*(ONE+PPOLN(3))*(
+     &                      A(L,K)**2*S*(S-MNU2(L))*SCF(J)
+     &                     +TWO*S*U*(S-MNUT2(J))*UP*SCF(J)*A(L,K)*A(L,1)
+     &                     +TWO*S*T*(S-MNUT2(J))*TP*SCF(J)*A(L,K)*A(L,2)
+     &                     +TWO*U*T*UP*TP*A(L,1)*A(L,2))
+     &           +U*(U-MNU2(L))*UP**2*(ONE+PPOLN(3))*
+     &               (A(L,1)**2*(ONE+EPOLN(3))+B(L,1)**2*(ONE-EPOLN(3)))
+     &           +T*(T-MNU2(L))*TP**2*(ONE+EPOLN(3))*
+     &               (A(L,2)**2*(ONE+PPOLN(3))+B(L,2)**2*(ONE-PPOLN(3)))
+C--final coefficients
               M1(L,J) = LAMDA1(RSID(J),IL,IL)**2*FACA*PF*M1(L,J)
-              M1(L,K) = M1(L,J)
+              M1(L,K) = LAMDA1(RSID(J),IL,IL)**2*FACA*PF*M1(L,K)
             ELSE
               M1(L,J) = ZERO
               M1(L,K) = ZERO
@@ -27897,13 +30044,25 @@ C--single chargino production
               T    = HALF*(SQPE*COSTH-S+MCH2(L)+MLT2(K))
               U    = -T-S+MCH2(L)+MLT2(K)
               UP   = ONE/(U-MSNU2)
+C--chargino antilepton (including beam polarization)
               M2(L,J) = S*SCF(J)*(-FOUR*MLT(K)*MCH(L)*A(L2,K)*B(L2,K)
-     &                  +(S-MLT2(K)-MCH2(L))*(A(L2,K)**2+B(L2,K)**2))
-     &          +(MLT2(K)-U)*(MCH2(L)-U)*UP**2*(A(L2,1)**2+B(L2,1)**2)
-     &          -TWO*S*(S-MNUT2(J))*UP*SCF(J)*A(L2,1)*
-     &                  (U*A(L2,K)+MLT2(K)*MCH(L)*B(L2,K))
-              M2(L,J)   = HALF*LAMDA1(RSID(J),IL,IL)**2*FACA*PF*M2(L,J)
-              M2(L,J+2) = M2(L,J)
+     &                  +(S-MLT2(K)-MCH2(L))*(A(L2,K)**2+B(L2,K)**2))*
+     &                    (ONE-EPOLN(3))*(ONE-PPOLN(3))
+     &          +(MLT2(K)-U)*(MCH2(L)-U)*UP**2*(ONE-PPOLN(3))*
+     &             (A(L2,1)**2*(ONE-EPOLN(3))+B(L2,1)**2*(ONE+EPOLN(3)))
+     &          -TWO*S*(S-MNUT2(J))*UP*SCF(J)*A(L2,1)*(ONE-EPOLN(3))*
+     &             (ONE-PPOLN(3))*(U*A(L2,K)+MLT(K)*MCH(L)*B(L2,K))
+C--chargino lepton (including beam polarization)
+              M2(L,J+2) = S*SCF(J)*(-FOUR*MLT(K)*MCH(L)*A(L2,K)*B(L2,K)
+     &                  +(S-MLT2(K)-MCH2(L))*(A(L2,K)**2+B(L2,K)**2))*
+     &                    (ONE+EPOLN(3))*(ONE+PPOLN(3))
+     &          +(MLT2(K)-U)*(MCH2(L)-U)*UP**2*(ONE+PPOLN(3))*
+     &             (A(L2,1)**2*(ONE+EPOLN(3))+B(L2,1)**2*(ONE-EPOLN(3)))
+     &          -TWO*S*(S-MNUT2(J))*UP*SCF(J)*A(L2,1)*(ONE+EPOLN(3))*
+     &             (ONE+PPOLN(3))*(U*A(L2,K)+MLT(K)*MCH(L)*B(L2,K)) 
+C--final coefficients
+              M2(L,J)  =HALF*LAMDA1(RSID(J),IL,IL)**2*FACA*PF*M2(L,J)
+              M2(L,J+2)=HALF*LAMDA1(RSID(J),IL,IL)**2*FACA*PF*M2(L,J+2)
             ELSE
               M2(L,J)   = ZERO
               M2(L,J+2) = ZERO
@@ -27913,7 +30072,9 @@ C--single chargino production
 C--Radiative processes
  200    IF(.NOT.RAD) THEN
           DO I=1,8
-            M3(I) = ZERO
+            DO J=1,2
+              M3(I,J) = ZERO
+            ENDDO
           ENDDO
           GOTO 300
         ENDIF
@@ -27929,14 +30090,22 @@ C--W charged slepton production
                 T    = HALF*(SQPE*COSTH-S+MW2+MSCL2(I,J))
                 U    = -T-S+MW2+MSCL2(I,J)
                 UP   = ONE/U
-                M3(2*I+J-2) = SCF(I)*S*SQPE**2
+C--W slepton 
+                M3(2*I+J-2,1) = SCF(I)*S*SQPE**2
      &            +UP**2*(TWO*MW2*(U*T-MW2*MSCL2(I,J))+U**2*S)
      &            -TWO*UP*SCF(I)*(S-MNUT2(I))*S*(MW2*(TWO*MSCL2(I,J)-U)+
      &                  U*(S-MSCL2(I,J)))
-                M3(2*I+J-2) = LAMDA1(RSID(I),IL,IL)**2*FACB*PF
-     &             *LMIXSS(2*RSID(I)-1,1,J)**2*M3(2*I+J-2)
+                M3(2*I+J-2,1) = LAMDA1(RSID(I),IL,IL)**2*FACB*PF
+     &             *LMIXSS(2*RSID(I)-1,1,J)**2*M3(2*I+J-2,1)
+C--W- antislepton (including beam polarization)
+                M3(2*I+J-2,2) = (ONE-EPOLN(3))*(ONE-PPOLN(3))*
+     &                           M3(2*I+J-2,1) 
+C--W+ antislepton (including beam polarization)
+                M3(2*I+J-2,1) = (ONE+EPOLN(3))*(ONE+PPOLN(3))*
+     &                           M3(2*I+J-2,1) 
               ELSE
-                M3(2*I+J-2) = ZERO
+                M3(2*I+J-2,1) = ZERO
+                M3(2*I+J-2,2) = ZERO
               ENDIF
             ENDDO
           ENDDO
@@ -27952,7 +30121,8 @@ C--Z sneutrino production
               UP    = ONE/U
               TP    = ONE/T
               IDZ   = 9+RSID(I)*2
-              M3(I+4) = SCF(I)*S*SQPE**2*ZNU**2
+C--Z sneutrino production
+              M3(I+4,1) = SCF(I)*S*SQPE**2*ZNU**2
      &           +TP**2*RFCH(IDZ)**2*(TWO*MZ2*(U*T-MNUT2(I)*MZ2)+S*T**2)
      &           +UP**2*LFCH(IDZ)**2*(TWO*MZ2*(U*T-MNUT2(I)*MZ2)+S*U**2)
      &           -TWO*ZNU*RFCH(IDZ)*TP*S*SCF(I)*(S-MNUT2(I))*
@@ -27961,13 +30131,19 @@ C--Z sneutrino production
      &               (MZ2*(TWO*MNUT2(I)-U)+U*(S-MNUT2(I)))
      &           +TWO*LFCH(IDZ)*RFCH(IDZ)*UP*TP*
      &               (TWO*MZ2*(MNUT2(I)-T)*(MNUT2(I)-U)-S*U*T)
-              M3(I+4) = LAMDA1(RSID(I),IL,IL)**2*FACC*PF*M3(I+4)
+              M3(I+4,1) = LAMDA1(RSID(I),IL,IL)**2*FACC*PF*M3(I+4,1)
+C--Z antisneutrino (including beam polarization)
+              M3(I+4,2) = (ONE-EPOLN(3))*(ONE-PPOLN(3))*M3(I+4,1)
+C--Z sneutrino     (including beam polarization)
+              M3(I+4,1) = (ONE+EPOLN(3))*(ONE+PPOLN(3))*M3(I+4,1)
             ELSE
-              M3(I+4) = ZERO
+              M3(I+4,1) = ZERO
+              M3(I+4,2) = ZERO
             ENDIF
           ENDDO
         ELSE
 C--gamma sneutrino production (includes Jacobian 1-costh**2)
+C--now includes polarization effects
           DO I=1,2
             SQPE = S-MNUT2(I)
             IF(SQPE.GE.ZERO) THEN
@@ -27983,18 +30159,23 @@ C--gamma sneutrino production (includes Jacobian 1-costh**2)
               U        = -T-S+MNUT2(I)
               UP       = ONE/U
               TP       = ONE/T
-              M3(I+6)  = U*TP+T*UP+TWO*UP*TP*(MNUT2(I)-U)*(MNUT2(I)-T)
-              M3(I+6)  = LAMDA1(RSID(I),IL,IL)**2*FACE*PF*M3(I+6)*
+              M3(I+6,1)  = U*TP+T*UP+TWO*UP*TP*(MNUT2(I)-U)*(MNUT2(I)-T)
+              M3(I+6,1)  = LAMDA1(RSID(I),IL,IL)**2*FACE*PF*M3(I+6,1)*
      &                   (ONE-THCOS(I)**2)*THTMIN
+              M3(I+6,2) = M3(I+6,1)*(ONE-EPOLN(3))*(ONE-PPOLN(3))
+              M3(I+6,1) = M3(I+6,1)*(ONE+EPOLN(3))*(ONE+PPOLN(3))
             ELSE
-              M3(I+2) = ZERO
+              M3(I+6,1) = ZERO
+              M3(I+6,2) = ZERO
             ENDIF
           ENDDO
         ENDIF
 C--Higgs processes
  300    IF(.NOT.HIGGS) THEN
           DO I=1,10
-            M4(I) = ZERO
+            DO J=1,2
+              M4(I,J) = ZERO
+            ENDDO
           ENDDO
           GOTO 500
         ENDIF
@@ -28008,12 +30189,26 @@ C--Charged Higgs charged slepton production
               PF   = SQPE/S
               T    = HALF*(SQPE*COSTH-S+MH2(4)+MSCL2(I,J))
               U    = -T-S+MH2(4)+MSCL2(I,J)
-              M4(2*I+J-2) = HSL(I,J)**2*S*SCF(I)
+C--charged Higgs antislepton
+              M4(2*I+J-2,1) = HSL(I,J)**2*S*SCF(I)*
+     &                          (ONE-EPOLN(3))*(ONE-PPOLN(3))
      &                     +FOUR*LMIXSS(2*RSID(I)-1,1,J)**2*HL(4)**2
-     &                          *(U*T-MSCL2(I,J)*MH2(4))/U**2
-              M4(2*I+J-2) = FACD*LAMDA1(RSID(I),IL,IL)**2*M4(2*I+J-2)*PF
+     &                          *(U*T-MSCL2(I,J)*MH2(4))/U**2*
+     &                          (ONE+EPOLN(3))*(ONE-PPOLN(3))
+C--charged Higgs slepton
+              M4(2*I+J-2,2) = HSL(I,J)**2*S*SCF(I)*
+     &                          (ONE+EPOLN(3))*(ONE+PPOLN(3))
+     &                     +FOUR*LMIXSS(2*RSID(I)-1,1,J)**2*HL(4)**2
+     &                          *(U*T-MSCL2(I,J)*MH2(4))/U**2*
+     &                          (ONE-EPOLN(3))*(ONE+PPOLN(3))
+C--final coefficients
+              M4(2*I+J-2,1) = FACD*LAMDA1(RSID(I),IL,IL)**2*
+     &                        M4(2*I+J-2,1)*PF
+              M4(2*I+J-2,2) = FACD*LAMDA1(RSID(I),IL,IL)**2*
+     &                        M4(2*I+J-2,2)*PF
             ELSE
-              M4(2*I+J-2) = ZERO
+              M4(2*I+J-2,1) = ZERO
+              M4(2*I+J-2,2) = ZERO
             ENDIF
           ENDDO
         ENDDO
@@ -28027,11 +30222,37 @@ C--neutral higgs sneutrino production
               PF   = SQPE/S
               T    = HALF*(SQPE*COSTH-S+MH2(L)+MNUT2(I))
               U    = -T-S+MH2(L)+MNUT2(I)
-              M4(2*L+I+2) = HNU(L)**2*S*SCF(I)
-     &             +HL(L)**2*(ONE/T**2+ONE/U**2)*(U*T-MH2(L)*MNUT2(I))
-              M4(2*L+I+2) = FACD*LAMDA1(RSID(I),IL,IL)**2*M4(2*L+I+2)*PF
+              IF(L.NE.3) THEN
+C--h0, H0 antisneutrino (including beam polarization)
+                M4(2*L+I+2,1) = HNU(L)**2*S*SCF(I)*
+     &                         (ONE-EPOLN(3))*(ONE-PPOLN(3))
+     &             +HL(L)**2*( ONE/T**2*(ONE+EPOLN(3))*(ONE-PPOLN(3))
+     &                        +ONE/U**2*(ONE-EPOLN(3))*(ONE+PPOLN(3)))
+     &                        *(U*T-MH2(L)*MNUT2(I))
+C--h0, H0 sneutrino (including beam polarization)
+                M4(2*L+I+2,2) = HNU(L)**2*S*SCF(I)*
+     &                         (ONE+EPOLN(3))*(ONE+PPOLN(3))
+     &             +HL(L)**2*( ONE/T**2*(ONE-EPOLN(3))*(ONE+PPOLN(3))
+     &                        +ONE/U**2*(ONE+EPOLN(3))*(ONE-PPOLN(3)))
+     &                        *(U*T-MH2(L)*MNUT2(I))
+             ELSE
+C--A0 antisneutrino (including beam polarization)
+                M4(2*L+I+2,1) = (ONE-EPOLN(3))*(ONE-PPOLN(3))*(
+     &              HNU(L)**2*S*SCF(I)
+     &             +HL(L)**2*(ONE/T**2+ONE/U**2)*(U*T-MH2(L)*MNUT2(I)))
+C--A0 sneutrino (including beam polarization)
+                M4(2*L+I+2,2) = (ONE+EPOLN(3))*(ONE+PPOLN(3))*(
+     &              HNU(L)**2*S*SCF(I)
+     &             +HL(L)**2*(ONE/T**2+ONE/U**2)*(U*T-MH2(L)*MNUT2(I)))
+             ENDIF
+C--final coefficients
+              M4(2*L+I+2,1) = FACD*LAMDA1(RSID(I),IL,IL)**2*
+     &                        M4(2*L+I+2,1)*PF
+              M4(2*L+I+2,2) = FACD*LAMDA1(RSID(I),IL,IL)**2*
+     &                        M4(2*L+I+2,2)*PF
             ELSE
-              M4(2*L+I+2) = ZERO
+              M4(2*L+I+2,1) = ZERO
+              M4(2*L+I+2,2) = ZERO
             ENDIF
           ENDDO
         ENDDO
@@ -28045,8 +30266,8 @@ C--single neutralino production
         DO J=1,4
           IG2 = 126+2*RSID(MOD(J-1,2)+1)-6*INT((J-1)/2)
           HCS = HCS+M1(L,J)
-          THSGN = (IDHEP(1).LT.IDHEP(2).AND.J.LE.2).OR.
-     &            (IDHEP(1).GT.IDHEP(2).AND.J.GE.3)
+          THSGN = (IDHEP(1).LT.IDHEP(2).AND.J.GT.2).OR.
+     &            (IDHEP(1).GT.IDHEP(2).AND.J.LE.2)
           IF(GENEV.AND.HCS.GT.RCS) GOTO 900
         ENDDO
       ENDDO
@@ -28057,8 +30278,8 @@ C--single chargino production
           IG1 = SSCH+L-2*INT((J-1)/2)
           IG2 = 125+2*RSID(MOD((J-1),2)+1)-6*INT((J-1)/2)
           HCS = HCS + M2(L,J)
-          THSGN = (IDHEP(1).LT.IDHEP(2).AND.J.LE.2).OR.
-     &            (IDHEP(1).GT.IDHEP(2).AND.J.GE.3)
+          THSGN = (IDHEP(1).LT.IDHEP(2).AND.J.GT.2).OR.
+     &            (IDHEP(1).GT.IDHEP(2).AND.J.LE.2)
           IF (GENEV.AND.HCS.GT.RCS) GOTO 900
         ENDDO
       ENDDO
@@ -28069,7 +30290,7 @@ C--gauge boson slepton production
         IG2 = RADID(2,I)
         IF(I.GE.7) COSTH = THCOS(I-6)
         DO J=1,2
-          HCS = HCS+M3(I)
+          HCS = HCS+M3(I,J)
           THSGN = (IDHEP(1).LT.IDHEP(2).AND.J.EQ.1).OR.
      &            (IDHEP(1).GT.IDHEP(2).AND.J.EQ.2)
           IF(GENEV.AND.HCS.GT.RCS) GOTO 900
@@ -28084,7 +30305,7 @@ C--charged Higgs slepton
         IG1 = 207
         IG2 = RADID(2,I)+6
         DO J=1,2
-          HCS=HCS+M4(I)
+          HCS=HCS+M4(I,J)
           THSGN = (IDHEP(1).LT.IDHEP(2).AND.J.EQ.1).OR.
      &            (IDHEP(1).GT.IDHEP(2).AND.J.EQ.2)
           IF(GENEV.AND.HCS.GT.RCS) GOTO 900
@@ -28098,7 +30319,7 @@ C--Neutral Higgs sneutrino
           IG1 = 202+L
           IG2 = 430+2*RSID(I)
           DO J=1,2
-            HCS = HCS+M4(2+2*L+I)
+            HCS = HCS+M4(2+2*L+I,J)
             THSGN = (IDHEP(1).LT.IDHEP(2).AND.J.EQ.1).OR.
      &              (IDHEP(1).GT.IDHEP(2).AND.J.EQ.2)
             IF(GENEV.AND.HCS.GT.RCS) GOTO 900
@@ -28162,14 +30383,16 @@ C--set up the rest of the momenta
       ENDIF
  999  END
 CDECK  ID>, HWHRLL.
-*CMZ :-        -13/12/99  15:12:21  by  Peter Richardson
+*CMZ :-        -08/04/02  09:00:27  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
       SUBROUTINE HWHRLL
 C-----------------------------------------------------------------------
 C  Subroutine for resonant sleptons to standard model particles
+C  slepton mass and mass*width added to save statement to 
+C  avoid problems with Linux by Peter Richardson
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HCS,S,RCS,HWRGEN,FAC,ECM,TH,PCM,CFAC,CHANPB,SH,
      &                 TAU,TAUA,TAUB,LOWTLM,UPPTLM,HWRUNI,MSL(12),
      &                 SQSH,MET(2),SCF(12),MIX(12),ME(4,3,3,3,3,2),
@@ -28181,7 +30404,8 @@ C-----------------------------------------------------------------------
       EXTERNAL HWRGEN,HWRUNI
       PARAMETER(EPS=1D-20)
       COMMON/HWRPIN/XMIN,XMAX,XPOW,FIRST
-      SAVE HCS,ME,MSL,SLWD,LAM,MIX,CHAN,GNMN,GNMX,SH,SQSH,FAC,SCF
+      SAVE HCS,ME,MSL,SLWD,LAM,MIX,CHAN,GNMN,GNMX,SH,SQSH,FAC,SCF,MSL2,
+     &     MSWD
       IF(GENEV) THEN
         RCS = HCS*HWRGEN(0)
       ELSE
@@ -28401,7 +30625,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C  Subroutine for 2 parton -> sparticle + X via LQD
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HCS,A(6,12),B(6,12),S,RCS,HWRGEN,CW,FAC2,EC,ME2,
      &               MW,G,TAU,TAUA,TAUB,LOWTLM,UPPTLM,HWRUNI,SW,SQSH,LC,
      &               SH,MSL(12),MSU(12),MST(6),C(2,6,12),D(2,6,12),UH,
@@ -28904,13 +31128,13 @@ C--charged slepton to sneutrino W
        UH = MW2-SQSH*(ECM+PCM*COSTH)
        ME2 = MXS(I)**4*SCF(I)*SH**2*PCM**2
      &       +HALF**2/TH**2*(TWO*MW2*(UH*TH-MSL2(I1)*MW2)+TH**2*SH)
-     &       -HALF*MXS(I)*SH*(SH-MSL2(I))*SCF(I)/TH*
+     &       -HALF*MXS(I)**2*SH*(SH-MSL2(I))*SCF(I)/TH*
      &         (MW2*(TWO*MSL2(I1)-TH)+(SH-MSL2(I1))*TH)
        IF(GN.EQ.3) ME2 = ME2+MXS(I+1)**4*SCF(I+1)*SH**2*PCM**2
-     &         +2*MXS(I)**2*MXS(I+1)**2*SCF(I)*SCF(I+1)*SH**2*PCM**2
+     &     +2.0D0*MXS(I)**2*MXS(I+1)**2*SCF(I)*SCF(I+1)*SH**2*PCM**2
      &         *((SH-MSL2(I))*(SH-MSL2(I+1))+MSWD(I)*MSWD(I+1))
-     &         +HALF*MXS(I+1)*SH*(SH-MSL2(I+1))*SCF(I+1)/TH*
-     &         (MW2*(TWO*MSL2(I1)-TH)+(SH-MSL2(I))*TH)
+     &         -HALF*MXS(I+1)**2*SH*(SH-MSL2(I+1))*SCF(I+1)/TH*
+     &         (MW2*(TWO*MSL2(I1)-TH)+(SH-MSL2(I1))*TH)
        MER(GN) = ME2*PCM/MW2
        ENDIF
 C--sneutrino to charged slepton W
@@ -28939,11 +31163,11 @@ C--now the decay stau_2 to stau_1 Z
      &              (SH-MSL2(6))+MSWD(5)*MSWD(6)))
      &      +MXS(5)**2*ZQRK(2)**2/TH**2*
      &              (TWO*MZ2*(UH*TH-MZ2*MSL2(5))+TH**2*SH)
-     &      -MXS(5)**2*ZQRK(1)**2/UH**2*
+     &      +MXS(5)**2*ZQRK(1)**2/UH**2*
      &              (TWO*MZ2*(UH*TH-MZ2*MSL2(5))+UH**2*SH)
      &      +MXS(5)*SH*(MXS(5)*SCF(5)*ZSLP(1)*(SH-MSL2(5))
      &              +MXS(6)*SCF(6)*ZSLP(2)*(SH-MSL2(6)))*
-     &              ( ZQRK(2)/TH*(MZ2*(TWO*MSL2(5)-TH)+TH*(SH-MSL2(5)))
+     &              (-ZQRK(2)/TH*(MZ2*(TWO*MSL2(5)-TH)+TH*(SH-MSL2(5)))
      &               +ZQRK(1)/UH*(MZ2*(TWO*MSL2(5)-UH)+UH*(SH-MSL2(5))))
      &      +TWO*MXS(5)**2*ZQRK(1)*ZQRK(2)/UH/TH*
      &               (TWO*MZ2*(MSL2(5)-UH)*(MSL2(5)-TH)-SH*UH*TH)
@@ -29122,7 +31346,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     Subroutine for all hadron-hadron Rparity violating processes
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       IF(IPROC.GE.4000.AND.IPROC.LT.4060) THEN
 C--SINGLE SPARTICLE VIA LQD
         CALL HWHRLS
@@ -29148,7 +31372,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     IDENTIDY HARD R-PARITY VIOLATING PROCESS
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER ID3, ID4, R4, IPERM,TYPE,ID1,ID2,NEUTD1(8),SLEPID(8),
      &        NEUTD2(13),SQUID(6),SGN,HWUANT,SQUID2(12),SLPID2(12),
      &        GAGID1(6),GAGID2(8)
@@ -29241,7 +31465,7 @@ C     3 = FAILED DUE TO ERROR IN PARTON EVOLUTION
 C     4 = FAILED DUE TO ENERGY CONSERVATION IN PARTON EVOLUTION
 C     5 = COMPLETELY FAILED (IERROR IS ALSO NON-ZERO TO CANCEL EVENT)
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,TMPWGT,PBOOST(5),RBOOST(3,3)
       INTEGER IHEP,IBM,ITG,IBMN,ITGN,IBMT,ITGT,I,REPORT
       LOGICAL COL
@@ -29410,7 +31634,7 @@ C     MEAN EVWGT = SIGMA IN NB
 C     TREATS ALL PARTONS ON EQUAL FOOTING WITH HWHSNM(ID1,ID2,S,T)
 C     PROVIDING THE MATRIX ELEMENT SQUARED FOR PARTON TYPES ID1 AND ID2
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER ID1,ID2
       DOUBLE PRECISION HWRGEN,HWRUNI,HWHSNM,EPS,RCS,ET,EJ,KK,KK2,
      & YJ1INF,YJ1SUP,Z1,YJ2INF,YJ2SUP,Z2,FACT,S,T,U,HCS
@@ -29475,7 +31699,7 @@ C     FOR PHOTON EXCHANGE, INTERFERENCE WITH U-CHANNEL CONTRIBUTION IS
 C     INCLUDED FOR IDENTICAL QUARKS AND LIKEWISE S-CHANNEL CONTRIBUTION
 C     FOR IDENTICAL QUARK-ANTIQUARK PAIRS.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWHSNM,HWUAEM,HWUALF,S,T,ASQ,AINU,AINS,Y,SOLD,
      $ TOLD,QQ(13,13),ZETA3
       INTEGER ID1,ID2
@@ -29539,18 +31763,27 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     Calculates the spin correlations for the hard process
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ZI,S,D,ME(2,2,2,2,NCFMAX),MED(2,2,2,2),F3(2,2,8),
      &     F4(2,2,8),F3M(2,2,8),F4M(2,2,8),FTP(2,2,8,8),FTM(2,2,8,8),
      &     FUP(2,2,8,8),FUM(2,2,8,8),FST(2,2,8)
-      DOUBLE PRECISION P(5,4),A(2,NDIAGR),B(2,NDIAGR),SW,CW,XMASS,PLAB,
-     &     PRW,PCM,MS(NDIAGR),MWD(NDIAGR),MR(NDIAGR),RT,ORT,HWULDO,
+      DOUBLE PRECISION P(5,4),A(2,NDIAHD),B(2,NDIAHD),XMASS,PLAB,
+     &     PRW,PCM,MS(NDIAHD),MWD(NDIAHD),MR(NDIAHD),HWULDO,EE,
      &     PREF(5),EPS,N(3),HWVDOT,PP,PRE,SH,TH,UH,PM(5,4),DIJ(2,2),
      &     MA(4),MA2(4),PTMP(5),WGT,WGTB(NCFMAX),WGTC,HWRGEN
       INTEGER ICM,IHEP,IST,JHEP,KHEP,ID,LHEP,MHEP,IK,IL,IM,IJ,L1,L2,I,J,
-     &     IDP(4+NDIAGR),DRTYPE(NDIAGR),NDIA,P1,P2,P3,P4,IFLOW(NDIAGR),
-     &     ID1,ID2
+     &     IDP(4+NDIAHD),DRTYPE(NDIAHD),NDIA,P1,P2,P3,P4,IFLOW(NDIAHD),
+     &     ID1,ID2,III,JJJ,KKK,O(2),LLL,MMM
+      DOUBLE PRECISION SW,CW,TW,E,G,RT,ORT,MW,MZ,GS,AFN(2,12,2,4),
+     &     AFG(2,6,2),AFC(2,12,2,2),OIJ(2,4,2),OIJP(2,2,2),OIJPP(2,4,4),
+     &     HNN(2,3,4,4),HCC(2,3,2,2),HNC(2,4,2),HFF(2,4,12),HWW(2),
+     &     HZZ(2),ZAB(12,2,2),HHB(2,3),HWUAEM
+      COMMON /HWSPNC/ SW,CW,TW,E,G,RT,ORT,MW,MZ,GS,AFN,AFG,AFC,OIJ,OIJP,
+     &               OIJPP,HNN,HCC,HNC,HFF,HWW,HZZ,ZAB,HHB
       LOGICAL SPIN,FIRST
+      EXTERNAL HWUAEM
       PARAMETER(ZI=(0.0D0,1.0D0))
       COMMON/HWHEWS/S(8,8,2),D(8,8)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
@@ -29558,18 +31791,14 @@ C-----------------------------------------------------------------------
       COMMON/HWHEWP/XMASS(10),PLAB(5,10),PRW(5,2),PCM(5,10)
       DATA PREF/1.0D0,0.0D0,0.0D0,1.0D0,0.0D0/
       DATA DIJ/1.0D0,0.0D0,0.0D0,1.0D0/
+      DATA O/2,1/
       DATA FIRST/.TRUE./
       PARAMETER(EPS=1D-20)
       EXTERNAL HWULDO,HWVDOT,HWRGEN
-      SAVE SW,CW,RT,ORT
+      SAVE FIRST
       IF(IERROR.NE.0) RETURN
-C--perform the initialisation when first called
       IF(FIRST) THEN
-C--the electroweak couplings
-        SW  = SQRT(SWEIN)
-        CW  = SQRT(ONE-SWEIN)
-        RT  = SQRT(TWO)
-        ORT = ONE/RT
+        CALL HWISPC
         FIRST = .FALSE.
       ENDIF
 C--search the event record for the hard process
@@ -29580,9 +31809,8 @@ C--search the event record for the hard process
         GOTO 2
       ENDIF
  1    CONTINUE
- 2    CONTINUE
 C--now decide whether or not to perform spin correlation
-      KHEP = JDAHEP(1,ICM)
+ 2    KHEP = JDAHEP(1,ICM)
       IK   = IDHW(KHEP)
       JHEP = JDAHEP(2,ICM)
       IJ   = IDHW(JHEP)
@@ -29593,6 +31821,8 @@ C--now decide whether or not to perform spin correlation
         IF(RSPIN(ID).EQ.0.5D0) SPIN=.TRUE.
  3    CONTINUE
       IF(.NOT.SPIN) RETURN
+      IF((RSPIN(IDHW(KHEP)).EQ.ONE.AND.RSPIN(IDHW(JHEP)).EQ.ZERO).OR.
+     &  (RSPIN(IDHW(KHEP)).EQ.ZERO.AND.RSPIN(IDHW(JHEP)).EQ.ONE)) RETURN 
       LHEP = JMOHEP(1,ICM)
       MHEP = JMOHEP(2,ICM)
 C--now identify the hard process
@@ -30088,12 +32318,11 @@ C--couplings of the various diagrams
           A(2,2) = ZERO
           B(1,2) = ZERO
           B(2,2) = RT
-          DO I=1,2
-            A(I,3) = A(I,1)
-            B(I,3) = B(I,1)
-            A(I,4) = A(I,2)
-            B(I,4) = B(I,2)
-          ENDDO
+          DO 4 I=1,2
+          A(I,3) = A(I,1)
+          B(I,3) = B(I,1)
+          A(I,4) = A(I,2)
+ 4        B(I,4) = B(I,2)
           A(1,5) = ONE
           A(2,5) = ONE
           B(1,5) = ONE
@@ -30183,9 +32412,8 @@ C--right handed (heavier) squark
             A(1,1) =-RT*SRFCH(IL,L1)*QMIXSS(IL,2,2)
             A(2,1) =-RT*ZSGNSS(L1)*SLFCH(IL,L1)*QMIXSS(IL,1,2)
           ENDIF
-          DO I=1,2
-             A(I,2) = A(I,1)
-          ENDDO
+          DO 5 I=1,2
+ 5        A(I,2) = A(I,1)
           IDP(5) = IJ
           IDP(6) = IL
 C--colour flow info
@@ -30227,9 +32455,8 @@ C--right handed (heavier) squark
             A(1,1) =-RT*ZSGNSS(L1)*SLFCH(IL,L1)*QMIXSS(IL,1,2)
             A(2,1) =-RT*SRFCH(IL,L1)*QMIXSS(IL,2,2)
           ENDIF
-          DO I=1,2
-            A(I,2) = A(I,1)
-          ENDDO
+          DO 6 I=1,2
+ 6        A(I,2) = A(I,1)
           IDP(5) = IJ
           IDP(6) = IL
 C--colour flow info
@@ -30278,9 +32505,8 @@ C--right handed (heavier) squark
               A(2,1) = -WSGNSS(L1)*WMXVSS(L1,1)*QMIXSS(IL+1,1,2)/SW
             ENDIF
           ENDIF
-          DO I=1,2
-            A(I,2) = A(I,1)
-          ENDDO
+          DO 7 I=1,2
+ 7        A(I,2) = A(I,1)
           IDP(5) = IJ
           IDP(6) = IL
 C--colour flow info
@@ -30329,9 +32555,8 @@ C--right handed (heavier) squark
               A(1,1) = -WMXVSS(L1,1)*QMIXSS(IL+1,1,2)/SW
             ENDIF
           ENDIF
-          DO I=1,2
-            A(I,2) = A(I,1)
-          ENDDO
+          DO 8 I=1,2
+ 8        A(I,2) = A(I,1)
           IDP(5) = IJ
           IDP(6) = IL
 C--colour flow info
@@ -30369,11 +32594,10 @@ C--change order in squark first
             A(1,1) = RT
             A(2,1) = ZERO
           ENDIF
-          DO I=1,2
-            A(I,2) =-A(I,1)
-            A(I,3) = A(I,1)
-            A(I,4) = A(I,1)
-          ENDDO
+          DO 9 I=1,2
+          A(I,2) =-A(I,1)
+          A(I,3) = A(I,1)
+ 9        A(I,4) = A(I,1)
           DRTYPE(1) = 12
           DRTYPE(2) = 12
           DRTYPE(3) = 8
@@ -30420,11 +32644,10 @@ C--change order in squark first
             A(1,1) = ZERO
             A(2,1) = RT
           ENDIF
-          DO I=1,2
-            A(I,2) =-A(I,1)
-            A(I,3) = A(I,1)
-            A(I,4) = A(I,1)
-          ENDDO
+          DO 10 I=1,2
+          A(I,2) =-A(I,1)
+          A(I,3) = A(I,1)
+ 10       A(I,4) = A(I,1)
           DRTYPE(1) = 13
           DRTYPE(2) = 13
           DRTYPE(3) = 9
@@ -30448,9 +32671,1477 @@ C--unrecognised SUSY process
         ELSE
           CALL HWWARN('HWHSPN',503,*999)
         ENDIF
+C--LLE processes
+      ELSEIF(IPRO.EQ.8) THEN
+C--neutralino antineutrino production
+        IF(IK.GE.450.AND.IK.LE.453.AND.
+     &     IJ.GE.127.AND.IJ.LE.132.AND.MOD(IJ,2).EQ.0) THEN
+C--ensure lepton first
+          IF(IDHEP(LHEP).LT.0) THEN
+            ID = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--RPV indices
+          III = (IJ-126)/2
+          JJJ = (IDHW(LHEP)-119)/2
+          KKK = (IDHW(MHEP)-125)/2
+          L1  = IK-449
+          IDP(5) = 424+2*III
+          DO 11 I=1,2
+          IDP(5+I) = 423+2*JJJ+(I-1)*12
+ 11       IDP(7+I) = 423+2*KKK+(I-1)*12
+C--types of diagram
+          DRTYPE(1) = 21
+          DRTYPE(2) = 22
+          DRTYPE(3) = 22
+          DRTYPE(4) = 23
+          DRTYPE(5) = 23
+C--RPV couplings
+          A(1,1) = ZERO 
+          A(2,1) = -LAMDA1(III,JJJ,KKK)
+          DO 12 I=1,2
+          B(1,I+1) = ZERO
+          B(2,I+1) = -LMIXSS(2*JJJ-1,1,I)*LAMDA1(III,JJJ,KKK)
+          A(1,I+3) = ZERO
+ 12       A(2,I+3) = -LMIXSS(2*KKK-1,2,I)*LAMDA1(III,JJJ,KKK)
+C--MSSM couplings
+          DO 13 J=1,2
+          B(J,1) = AFN(O(J),2*III+6,1,L1)
+          DO 13 I=1,2
+          A(J,I+1) = AFN(O(J),2*JJJ+5,I,L1)
+ 13       B(J,I+3) = AFN(  J ,2*KKK+5,I,L1)
+C--colour flows
+          NDIA = 5
+          NCFL(1) = 1
+          DO 14 I=1,5
+ 14       IFLOW(I) = 1
+          SPNCFC(1,1,1) = ONE
+C--neutralino neutrino production
+        ELSEIF(IK.GE.450.AND.IK.LE.453.AND.
+     &         IJ.GE.121.AND.IJ.LE.126.AND.MOD(IJ,2).EQ.0) THEN
+C--ensure lepton first
+          IF(IDHEP(LHEP).LT.0) THEN
+            ID = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--RPV indices
+          III = (IJ-120)/2
+          JJJ = (IDHW(MHEP)-125)/2
+          KKK = (IDHW(LHEP)-119)/2
+          L1  = IK-449
+          IDP(5) = 424+2*III
+          DO 15 I=1,2
+          IDP(5+I) = 423+2*JJJ+(I-1)*12
+ 15       IDP(7+I) = 423+2*KKK+(I-1)*12
+C--types of diagram
+          DRTYPE(1) = 24
+          DRTYPE(2) = 25
+          DRTYPE(3) = 25
+          DRTYPE(4) = 26
+          DRTYPE(5) = 26
+C--RPV couplings
+          A(1,1) = -LAMDA1(III,JJJ,KKK)
+          A(2,1) = ZERO 
+          DO 16 I=1,2
+          B(1,I+1) = -LMIXSS(2*JJJ-1,1,I)*LAMDA1(III,JJJ,KKK)
+          B(2,I+1) = ZERO
+          A(1,I+3) = -LMIXSS(2*KKK-1,2,I)*LAMDA1(III,JJJ,KKK)
+ 16       A(2,I+3) = ZERO
+C--MSSM couplings
+          DO 17 J=1,2
+          B(J,1) = AFN(  J ,2*III+6,1,L1)
+          DO 17 I=1,2
+          A(J,I+1) = AFN(  J ,2*JJJ+5,I,L1)
+ 17       B(J,I+3) = AFN(O(J),2*KKK+5,I,L1)
+C--colour flows
+          NDIA = 5
+          NCFL(1) = 1
+          DO 18 I=1,5
+ 18       IFLOW(I) = 1
+          SPNCFC(1,1,1) = ONE
+C--chargino antilepton
+        ELSEIF(IK.GE.456.AND.IK.LE.457.AND.
+     &         IJ.GE.127.AND.IJ.LE.132.AND.MOD(IJ,2).EQ.1) THEN
+C--ensure lepton first
+          IF(IDHEP(LHEP).LT.0) THEN
+            ID = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--RPV indices
+          III = (IJ-125)/2
+          JJJ = (IDHW(LHEP)-119)/2
+          KKK = (IDHW(MHEP)-125)/2
+          L1 = IK-455
+          IDP(5) = 2*III+424
+          IDP(6) = 2*JJJ+424
+C--RPV couplings
+          A(1,1) = ZERO
+          A(2,1) = LAMDA1(III,JJJ,KKK)
+          B(1,2) = ZERO
+          B(2,2) =-LAMDA1(III,JJJ,KKK)
+C--MSSM couplings
+          DO 19 J=1,2
+          B(J,1) = AFC(O(J),2*III+6,1,L1)
+ 19       A(J,2) = AFC(O(J),2*JJJ+6,1,L1)
+C--colour flows
+          DRTYPE(1) = 21
+          DRTYPE(2) = 22
+          NDIA = 2
+          NCFL(1) = 1
+          DO 20 I=1,2
+ 20       IFLOW(I) = 1
+          SPNCFC(1,1,1) = ONE
+C--chargino lepton
+        ELSEIF(IK.GE.454.AND.IK.LE.455.AND.
+     &         IJ.GE.121.AND.IJ.LE.126.AND.MOD(IJ,2).EQ.1) THEN
+C--ensure lepton first
+          IF(IDHEP(LHEP).LT.0) THEN
+            ID = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--RPV indices
+          III = (IJ-119)/2
+          JJJ = (IDHW(MHEP)-125)/2
+          KKK = (IDHW(LHEP)-119)/2
+          L1 = IK-453
+          IDP(5) = 2*III+424
+          IDP(6) = 2*JJJ+424
+C--RPV couplings
+          A(1,1) = LAMDA1(III,JJJ,KKK)
+          A(2,1) = ZERO
+          B(1,2) =-LAMDA1(III,JJJ,KKK)
+          B(2,2) = ZERO
+C--MSSM couplings
+          DO 21 J=1,2
+          B(J,1) = AFC(J,2*III+6,1,L1)
+ 21       A(J,2) = AFC(J,2*JJJ+6,1,L1)
+C--colour flows
+          DRTYPE(1) = 24
+          DRTYPE(2) = 25
+          NDIA = 2
+          NCFL(1) = 1
+          DO 22 I=1,2
+ 22       IFLOW(I) = 1
+          SPNCFC(1,1,1) = ONE
+C--e+e- production
+        ELSEIF(IK.GE.121.AND.IK.LE.132.AND.MOD(IK,2).EQ.1.AND.
+     &         IJ.GE.121.AND.IJ.LE.132.AND.MOD(IJ,2).EQ.1) THEN
+C--ensure incoming lepton first
+          IF(IDHEP(LHEP).LT.0) THEN
+            ID = MHEP
+            MHEP = LHEP
+            LHEP = ID
+          ENDIF
+C--ensure outgoing lepton first
+          IF(IDHEP(KHEP).LT.0) THEN
+            ID = IK
+            IK = IJ
+            IJ = ID
+            ID = KHEP
+            KHEP = JHEP
+            JHEP = ID
+          ENDIF
+C--only need the correlations for tau production
+          IF(IK.NE.125.AND.IJ.NE.131) RETURN
+C--find the RPV indices
+          III = (IDHW(LHEP)-119)/2
+          KKK = (IK-119)/2
+          LLL = (IJ-125)/2
+          NDIA = 0
+          EE = SQRT(HWUAEM(SH)*FOUR*PIFAC)
+C--s-channel photon and Z exchange if needed
+          IF(KKK.EQ.LLL) THEN
+            NDIA = 2
+            ID1 = 9+2*III
+            ID2 = 9+2*KKK
+C--photon first
+            A(1,1) = -EE*QFCH(ID1)
+            A(2,1) = -EE*QFCH(ID1)
+            B(1,1) = -EE*QFCH(ID2)
+            B(2,1) = -EE*QFCH(ID2)
+            IDP(5) = 59
+            DRTYPE(1) = 4
+C--then the Z exchange
+            A(1,2) = -EE*RFCH(ID1)
+            A(2,2) = -EE*LFCH(ID1)
+            B(1,2) = -EE*RFCH(ID2)
+            B(2,2) = -EE*LFCH(ID2)
+            IDP(6) = 200
+            DRTYPE(2) = 4
+          ENDIF
+          DO 23 JJJ=1,3
+C--s-channel sneutrino exchange
+            IF(ABS(LAMDA1(III,JJJ,III)*LAMDA1(LLL,JJJ,KKK)).GT.EPS) THEN
+              NDIA = NDIA+1
+              DRTYPE(NDIA) = 21
+              IDP(NDIA+4) = 424+2*JJJ
+              A(1,NDIA)   = LAMDA1(III,JJJ,III)
+              A(2,NDIA)   = ZERO
+              B(1,NDIA)   = ZERO
+              B(2,NDIA)   = LAMDA1(LLL,JJJ,KKK)
+            ENDIF
+C--s-channel antisneutrino exchange
+            IF(ABS(LAMDA1(III,JJJ,III)*LAMDA1(KKK,JJJ,LLL)).GT.EPS) THEN
+              NDIA = NDIA+1
+              DRTYPE(NDIA) = 21
+              IDP(NDIA+4)  = 424+2*JJJ
+              A(1,NDIA)    = ZERO
+              A(2,NDIA)    = LAMDA1(III,JJJ,III)
+              B(1,NDIA)    = LAMDA1(KKK,JJJ,LLL)
+              B(2,NDIA)    = ZERO
+            ENDIF
+C--t-channel sneutrino exchange
+            IF(ABS(LAMDA1(KKK,JJJ,III)*LAMDA1(LLL,JJJ,III)).GT.EPS) THEN
+              NDIA = NDIA+1
+              DRTYPE(NDIA) = 22
+              IDP(NDIA+4)  = 424+2*JJJ
+              A(1,NDIA)    = LAMDA1(KKK,JJJ,III)
+              A(2,NDIA)    = ZERO
+              B(1,NDIA)    = ZERO
+              B(2,NDIA)    = LAMDA1(LLL,JJJ,III)
+            ENDIF
+C--t-channel antisneutrino exchange
+            IF(ABS(LAMDA1(III,JJJ,KKK)*LAMDA1(III,JJJ,LLL)).GT.EPS) THEN
+              NDIA = NDIA+1
+              DRTYPE(NDIA) = 22
+              IDP(NDIA+4)  = 424+2*JJJ
+              A(1,NDIA)    = ZERO
+              A(2,NDIA)    = LAMDA1(III,JJJ,KKK)
+              B(1,NDIA)    = LAMDA1(III,JJJ,LLL)
+              B(2,NDIA)    = ZERO
+            ENDIF
+ 23       CONTINUE
+C--setup the colour flow
+          NCFL(1) = 1
+          SPNCFC(1,1,1) = ONE
+          DO 24 I=1,NDIA
+ 24       IFLOW(I) = 1
+C--d dbar production
+        ELSEIF(IK.LE.12.AND.IK.LE.12.AND.
+     &         MOD(IJ,2).EQ.1.AND.MOD(IK,2).EQ.1) THEN
+C--can't produce quark which decays before hadronization
+          RETURN
+C--unrecognised process
+        ELSE
+          CALL HWWARN('HWHSPN',504,*999)
+        ENDIF 
+C--LQD processes
+      ELSEIF(IPRO.EQ.40) THEN
+C--change outgoing order
+        ID = IJ
+        IJ = IK
+        IK = ID
+        ID = JHEP
+        JHEP = KHEP
+        KHEP = ID
+C--neutrino neutralino production
+        IF(IK.GE.450.AND.IK.LE.453.AND.MOD(IJ,2).EQ.0.AND.
+     &     IDPDG(IJ).GT.0) THEN
+C--change order if antiparticle first
+          IF(IDHEP(LHEP).LT.0) THEN
+            ID   = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--indices for RPV coupling
+          III = (IJ-120)/2
+          JJJ = (IDHW(MHEP)-5)/2
+          KKK = (IDHW(LHEP)+1)/2
+          L1  = IK - 449
+          IDP(5) = 424+2*III
+          DO 25 I=1,2
+          IDP(5+I) = 399+2*JJJ+(I-1)*12
+ 25       IDP(7+I) = 399+2*KKK+(I-1)*12
+C--types of diagram
+          DRTYPE(1) = 24
+          DRTYPE(2) = 25
+          DRTYPE(3) = 25
+          DRTYPE(4) = 26
+          DRTYPE(5) = 26
+C--RPV couplings
+          A(1,1) = -LAMDA2(III,JJJ,KKK)
+          A(2,1) = ZERO 
+          DO 26 I=1,2
+          B(1,I+1) = -QMIXSS(2*JJJ-1,1,I)*LAMDA2(III,JJJ,KKK)
+          B(2,I+1) = ZERO
+          A(1,I+3) = -QMIXSS(2*KKK-1,2,I)*LAMDA2(III,JJJ,KKK)
+ 26       A(2,I+3) = ZERO
+C--MSSM couplings
+          DO 27 J=1,2
+          B(J,1) = AFN(  J ,2*III+6,1,L1)
+          DO 27 I=1,2
+          A(J,I+1) = AFN(  J ,2*JJJ-1,I,L1)
+ 27       B(J,I+3) = AFN(O(J),2*KKK-1,I,L1)
+C--colour flows
+          NDIA = 5
+          NCFL(1) = 1
+          DO 28 I=1,5
+ 28       IFLOW(I) = 1
+          SPNCFC(1,1,1) = ONE/THREE
+C--antineutrino neutralino production
+        ELSEIF(IK.GE.450.AND.IK.LE.453.AND.MOD(IJ,2).EQ.0.AND.
+     &         IDPDG(IJ).LT.0) THEN
+C--change order if antiparticle first
+          IF(IDHEP(LHEP).LT.0) THEN
+            ID   = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--indices for RPV coupling
+          III = (IJ-126)/2
+          JJJ = (IDHW(LHEP)+1)/2
+          KKK = (IDHW(MHEP)-5)/2
+          L1  = IK - 449
+          IDP(5) = 424+2*III
+          DO 29 I=1,2
+          IDP(5+I) = 399+2*JJJ+(I-1)*12
+ 29       IDP(7+I) = 399+2*KKK+(I-1)*12
+C--types of diagram
+          DRTYPE(1) = 21
+          DRTYPE(2) = 22
+          DRTYPE(3) = 22
+          DRTYPE(4) = 23
+          DRTYPE(5) = 23
+C--RPV couplings
+          A(1,1) = ZERO 
+          A(2,1) = -LAMDA2(III,JJJ,KKK)
+          DO 30 I=1,2
+          B(1,I+1) = ZERO
+          B(2,I+1) = -QMIXSS(2*JJJ-1,1,I)*LAMDA2(III,JJJ,KKK)
+          A(1,I+3) = ZERO
+ 30       A(2,I+3) = -QMIXSS(2*KKK-1,2,I)*LAMDA2(III,JJJ,KKK)
+C--MSSM couplings
+          DO 31 J=1,2
+          B(J,1) = AFN(O(J),2*III+6,1,L1)
+          DO 31 I=1,2
+          A(J,I+1) = AFN(O(J),2*JJJ-1,I,L1)
+ 31       B(J,I+3) = AFN(  J ,2*KKK-1,I,L1)
+C--colour flows
+          NDIA = 5
+          NCFL(1) = 1
+          DO 32 I=1,5
+ 32       IFLOW(I) = 1
+          SPNCFC(1,1,1) = ONE/THREE
+C--lepton neutralino production
+        ELSEIF(IK.GE.450.AND.IK.LE.453.AND.MOD(IJ,2).EQ.1.AND.
+     &         IDPDG(IJ).GT.0) THEN
+C--change order if antiparticle first
+          IF(IDHEP(LHEP).LT.0) THEN
+            ID   = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--indices for RPV coupling
+          III = (IJ-119)/2
+          JJJ = (IDHW(MHEP)-6)/2
+          KKK = (IDHW(LHEP)+1)/2
+          L1  = IK - 449
+          DO 33 I=1,2
+          IDP(4+I) = 423+2*III+(I-1)*12
+          IDP(6+I) = 400+2*JJJ+(I-1)*12
+ 33       IDP(8+I) = 399+2*KKK+(I-1)*12
+C--types of diagram
+          DRTYPE(1) = 24
+          DRTYPE(2) = 24
+          DRTYPE(3) = 25
+          DRTYPE(4) = 25
+          DRTYPE(5) = 26
+          DRTYPE(6) = 26
+C--RPV couplings
+          DO 34 I=1,2
+          A(1,I  ) = LMIXSS(2*III-1,1,I)*LAMDA2(III,JJJ,KKK)
+          A(2,I  ) = 0.0D0
+          B(1,I+2) = QMIXSS(2*JJJ  ,1,I)*LAMDA2(III,JJJ,KKK)
+          B(2,I+2) = 0.0D0
+          A(1,I+4) = QMIXSS(2*KKK-1,2,I)*LAMDA2(III,JJJ,KKK)
+          A(2,I+4) = 0.0D0
+C--MSSM couplings
+          DO 34 J=1,2
+          B(J,I  ) = AFN(  J ,2*III+5,I,L1)
+          A(J,I+2) = AFN(  J ,2*JJJ  ,I,L1)
+ 34       B(J,I+4) = AFN(O(J),2*KKK-1,I,L1)
+C--colour flows
+          NDIA = 6
+          NCFL(1) = 1
+          DO 35 I=1,6
+ 35       IFLOW(I) = 1
+          SPNCFC(1,1,1) = ONE/THREE
+C--antilepton neutralino production
+        ELSEIF(IK.GE.450.AND.IK.LE.453.AND.MOD(IJ,2).EQ.1.AND.
+     &         IDPDG(IJ).LT.0) THEN
+C--change order if antiparticle first
+          IF(IDHEP(LHEP).LT.0) THEN
+            ID   = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--indices for RPV coupling
+          III = (IJ-125)/2
+          JJJ = IDHW(LHEP)/2
+          KKK = (IDHW(MHEP)-5)/2
+          L1  = IK - 449
+          DO 36 I=1,2
+          IDP(4+I) = 423+2*III+(I-1)*12
+          IDP(6+I) = 400+2*JJJ+(I-1)*12
+ 36       IDP(8+I) = 399+2*KKK+(I-1)*12
+C--types of diagram
+          DRTYPE(1) = 21
+          DRTYPE(2) = 21
+          DRTYPE(3) = 22
+          DRTYPE(4) = 22
+          DRTYPE(5) = 23
+          DRTYPE(6) = 23
+C--RPV couplings
+          DO 37 I=1,2
+          A(1,I  ) = 0.0D0
+          A(2,I  ) = LMIXSS(2*III-1,1,I)*LAMDA2(III,JJJ,KKK)
+          B(1,I+2) = 0.0D0
+          B(2,I+2) = QMIXSS(2*JJJ  ,1,I)*LAMDA2(III,JJJ,KKK)
+          A(1,I+4) = 0.0D0
+          A(2,I+4) = QMIXSS(2*KKK-1,2,I)*LAMDA2(III,JJJ,KKK)
+C--MSSM couplings
+          DO 37 J=1,2
+          B(J,I  ) = AFN(O(J),2*III+5,I,L1)
+          A(J,I+2) = AFN(O(J),2*JJJ  ,I,L1)
+ 37       B(J,I+4) = AFN(  J ,2*KKK-1,I,L1)
+C--colour flows
+          NDIA = 6
+          NCFL(1) = 1
+          DO 39 I=1,6
+ 39       IFLOW(I) = 1
+          SPNCFC(1,1,1) = ONE/THREE
+C-- +ve chargino antineutrino
+        ELSEIF(IK.GE.454.AND.IK.LE.455.AND.MOD(IJ,2).EQ.0) THEN
+C--change order if antiparticle first
+          IF(IDHEP(LHEP).LT.0) THEN
+            ID   = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--indices for RPV
+          III = (IJ-126)/2
+          JJJ =  IDHW(LHEP)/2
+          KKK = (IDHW(MHEP)-5)/2
+          L1 = IK-453
+          DO 40 I=1,2
+          IDP(4+I) = 423+2*III+(I-1)*12
+ 40       IDP(6+I) = 399+2*JJJ+(I-1)*12
+C--types of diagram
+          DRTYPE(1) = 21
+          DRTYPE(2) = 21
+          DRTYPE(3) = 22
+          DRTYPE(4) = 22
+          DO 41 I=1,2
+C--RPV couplings
+          A(1,I  ) = ZERO
+          A(2,I  ) = LMIXSS(2*III-1,1,I)*LAMDA2(III,JJJ,KKK)
+          B(1,I+2) = ZERO
+          B(2,I+2) =-QMIXSS(2*JJJ-1,1,I)*LAMDA2(III,JJJ,KKK)
+C--MSSM couplings
+          DO 41 J=1,2
+          B(J,I  ) = AFC(O(J),2*III+5,I,L1)
+ 41       A(J,I+2) = AFC(O(J),2*JJJ-1,I,L1)
+C--colour flows
+          NDIA = 4
+          NCFL(1) = 1
+          DO 42 I=1,4
+ 42       IFLOW(I) = 1
+          SPNCFC(1,1,1) = ONE/THREE
+C-- -ve chargino neutrino
+        ELSEIF(IK.GE.456.AND.IK.LE.457.AND.MOD(IJ,2).EQ.0) THEN
+C--change order if antiparticle first
+          IF(IDHEP(LHEP).LT.0) THEN
+            ID   = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--indices for RPV
+          III = (IJ-120)/2
+          JJJ = (IDHW(MHEP)-6)/2
+          KKK = (IDHW(LHEP)+1)/2
+          L1 = IK-455
+          DO 43 I=1,2
+          IDP(4+I) = 423+2*III+(I-1)*12
+ 43       IDP(6+I) = 399+2*JJJ+(I-1)*12
+C--types of diagram
+          DRTYPE(1) = 24
+          DRTYPE(2) = 24
+          DRTYPE(3) = 25
+          DRTYPE(4) = 25
+          DO 44 I=1,2
+C--RPV couplings
+          A(1,I  ) = LMIXSS(2*III-1,1,I)*LAMDA2(III,JJJ,KKK)
+          A(2,I  ) = ZERO
+          B(1,I+2) =-QMIXSS(2*JJJ-1,1,I)*LAMDA2(III,JJJ,KKK)
+          B(2,I+2) = ZERO
+C--MSSM couplings
+          DO 44 J=1,2
+          B(J,I  ) = AFC(J,2*III+5,I,L1)
+ 44       A(J,I+2) = AFC(J,2*JJJ-1,I,L1)
+C--colour flows
+          NDIA = 4
+          NCFL(1) = 1
+          DO 45 I=1,4
+ 45       IFLOW(I) = 1
+          SPNCFC(1,1,1) = ONE/THREE
+C-- -ve chargino antilepton
+        ELSEIF(IK.GE.456.AND.IK.LE.457.AND.MOD(IJ,2).EQ.1) THEN
+C--change order if antiparticle first
+          IF(IDHEP(LHEP).LT.0) THEN
+            ID   = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--indices for RPV
+          III = (IJ-125)/2
+          JJJ = (IDHW(LHEP)+1)/2
+          KKK = (IDHW(MHEP)-5)/2
+          L1 = IK-455
+          IDP(5) = 424+2*III
+          DO 46 I=1,2
+ 46       IDP(5+I) = 400+2*JJJ+(I-1)*12
+C--types of diagram
+          DRTYPE(1) = 21
+          DRTYPE(2) = 22
+          DRTYPE(3) = 22
+C--RPV couplings
+          A(1,1) = 0.0D0
+          A(2,1) =-LAMDA2(III,JJJ,KKK)
+          DO 47 I=1,2
+          B(1,I+1) = 0.0D0
+ 47       B(2,I+1) = QMIXSS(2*JJJ,1,I)*LAMDA2(III,JJJ,KKK)
+C--MSSM couplings
+          DO 48 J=1,2
+          B(J,1) = AFC(O(J),2*III+6,1,L1) 
+          DO 48 I=1,2
+ 48       A(J,I+1) = AFC(O(J),2*JJJ,I,L1)
+C--colour flows
+          NDIA = 3
+          NCFL(1) = 1
+          DO 49 I=1,3
+ 49       IFLOW(I) = 1
+          SPNCFC(1,1,1) = ONE/THREE
+C-- +ve chargino lepton
+        ELSEIF(IK.GE.454.AND.IK.LE.455.AND.MOD(IJ,2).EQ.1) THEN
+C--change order if antiparticle first
+          IF(IDHEP(LHEP).LT.0) THEN
+            ID   = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--indices for RPV
+          III = (IJ-119)/2
+          JJJ = (IDHW(MHEP)-5)/2
+          KKK = (IDHW(LHEP)+1)/2
+          L1 = IK-453
+          IDP(5) = 424+2*III
+          DO 50 I=1,2
+ 50       IDP(5+I) = 400+2*JJJ+(I-1)*12
+C--types of diagram
+          DRTYPE(1) = 24
+          DRTYPE(2) = 25
+          DRTYPE(3) = 25
+C--RPV couplings
+          A(1,1) =-LAMDA2(III,JJJ,KKK)
+          A(2,1) = 0.0D0
+          DO 51 I=1,2
+          B(1,I+1) = QMIXSS(2*JJJ,1,I)*LAMDA2(III,JJJ,KKK)
+ 51       B(2,I+1) = 0.0D0
+C--MSSM couplings
+          DO 52 J=1,2
+          B(J,1) = AFC(J,2*III+6,1,L1) 
+          DO 52 I=1,2
+ 52       A(J,I+1) = AFC(J,2*JJJ,I,L1)
+C--colour flows
+          NDIA = 3
+          NCFL(1) = 1
+          DO 53 I=1,3
+ 53       IFLOW(I) = 1
+          SPNCFC(1,1,1) = ONE/THREE
+C--d dbar d dbar
+        ELSEIF(IK.LE.12.AND.IJ.LE.12.AND.
+     &         MOD(IJ,2).EQ.1.AND.MOD(IK,2).EQ.1) THEN
+C--can't produce unstable quark (on hadronization timescale)
+          RETURN
+C--u    dbar --> u    dbar
+        ELSEIF((IJ.LE. 6.AND.MOD(IJ,2).EQ.0.AND.
+     &          IK.LE.12.AND.MOD(IK,2).EQ.1).OR.
+     &         (IK.LE.6 .AND.MOD(IK,2).EQ.0.AND.
+     &          IJ.LE.12.AND.MOD(IJ,2).EQ.1)) THEN
+C--ensure u first (incoming)
+          IF(MOD(IDHW(LHEP),2).EQ.1) THEN
+            ID   = MHEP
+            MHEP = LHEP
+            LHEP = ID
+          ENDIF
+C--ensure u first (outgoing)
+          IF(MOD(IK,2).EQ.1) THEN
+            ID = IJ
+            IJ = IK
+            IK = ID
+            ID = JHEP
+            JHEP = KHEP
+            KHEP = ID
+          ENDIF
+C--can't produce unstable quark (on hadronization timescale)
+          IF(IK.NE.6) RETURN
+C--RPV indices
+          JJJ = IDHW(LHEP)/2
+          KKK = (IDHW(MHEP)-5)/2
+          LLL = IK/2
+          MMM = (IJ-5)/2
+          NDIA = 0
+          DO 54 III=1,3
+          IF(ABS(LAMDA2(III,JJJ,KKK)*LAMDA2(III,LLL,MMM)).LT.EPS) 
+     &            GOTO 54
+          DO 55 J=1,2
+          IFLOW(NDIA+J) = 1
+          IDP(4+NDIA+J) = 423+2*III+12*(J-1)
+          A(1,NDIA+J) = ZERO
+          A(2,NDIA+J) = LAMDA2(III,JJJ,KKK)*LMIXSS(2*III-1,1,J)
+          B(1,NDIA+J) = LAMDA2(III,LLL,MMM)*LMIXSS(2*III-1,1,J)
+          B(2,NDIA+J) = ZERO
+ 55       DRTYPE(NDIA+J) = 21
+          NDIA = NDIA+2
+ 54       CONTINUE
+          NCFL(1) = 1
+          SPNCFC(1,1,1) = ONE
+C--ubar d    --> ubar d
+        ELSEIF((IJ.LE.12.AND.MOD(IJ,2).EQ.0.AND.
+     &          IK.LE. 6.AND.MOD(IK,2).EQ.1).OR.
+     &         (IK.LE.12.AND.MOD(IK,2).EQ.0.AND.
+     &          IJ.LE. 6.AND.MOD(IJ,2).EQ.1)) THEN
+C--ensure d first (incoming)
+          IF(MOD(IDHW(LHEP),2).EQ.0) THEN
+            ID   = MHEP
+            MHEP = LHEP
+            LHEP = ID
+          ENDIF
+C--ensure d first (outgoing)
+          IF(MOD(IK,2).EQ.0) THEN
+            ID = IJ
+            IJ = IK
+            IK = ID
+            ID = JHEP
+            JHEP = KHEP
+            KHEP = ID
+          ENDIF
+C--can't produce unstable quark (on hadronization timescale)
+          IF(IJ.NE.12) RETURN
+C--RPV indices
+          JJJ = (IDHW(MHEP)-6)/2
+          KKK = (IDHW(LHEP)+1)/2
+          LLL = (IJ-6)/2
+          MMM = (IK+1)/2
+          NDIA = 0
+          DO 56 III=1,3
+          IF(ABS(LAMDA2(III,JJJ,KKK)*LAMDA2(III,LLL,MMM)).LT.EPS)
+     &             GOTO 56
+          DO 57 J=1,2
+          IFLOW(NDIA+J) = 1
+          IDP(4+NDIA+J) = 423+2*III+12*(J-1)
+          A(1,NDIA+J) = LAMDA2(III,JJJ,KKK)*LMIXSS(2*III-1,1,J)
+          A(2,NDIA+J) = ZERO
+          B(1,NDIA+J) = ZERO
+          B(2,NDIA+J) = LAMDA2(III,LLL,MMM)*LMIXSS(2*III-1,1,J)
+ 57       DRTYPE(NDIA+J) = 21
+          NDIA = NDIA+2
+ 56       CONTINUE
+          NCFL(1) = 1
+          SPNCFC(1,1,1) = ONE
+C--d dbar --> ell- ell+
+        ELSEIF(IDHW(LHEP).LE.12.AND.MOD(IDHW(LHEP),2).EQ.1.AND.
+     &         IDHW(MHEP).LE.12.AND.MOD(IDHW(MHEP),2).EQ.1.AND.
+     &         IK.GE.127.AND.IK.LE.132.AND.MOD(IK,2).EQ.1.AND.
+     &         IJ.GE.121.AND.IJ.LE.126.AND.MOD(IJ,2).EQ.1) THEN
+C--change outgoing order
+          ID = IK
+          IK = IJ
+          IJ = ID
+          ID = JHEP
+          JHEP = KHEP
+          KHEP = ID
+C--change order if dbar first
+          IF(IDHEP(LHEP).LT.0) THEN
+            ID = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--don't do correlations if no taus
+          IF(IK.NE.125.AND.IJ.NE.131) RETURN
+C--RPV couplings
+          JJJ = (IDHW(LHEP)+1)/2
+          KKK = (IDHW(MHEP)-5)/2
+          LLL = (IK-119)/2
+          MMM = (IJ-125)/2
+          NDIA = 0
+          DO 58 III=1,3
+          IF(ABS(LAMDA2(III,JJJ,KKK)*LAMDA1(III,LLL,MMM)).LT.EPS)
+     &             GOTO 58
+          NDIA = NDIA+1
+          IFLOW(NDIA) = 1
+          IDP(4+NDIA) = 424+2*III
+          A(1,NDIA) = ZERO
+          A(2,NDIA) = LAMDA2(III,JJJ,KKK)
+          B(1,NDIA) = LAMDA1(III,LLL,MMM)
+          B(2,NDIA) = ZERO
+          DRTYPE(NDIA) = 21
+ 58       CONTINUE
+          NCFL(1) = 1
+          SPNCFC(1,1,1) = ONE/THREE
+C--dbar d --> ell+ ell-
+        ELSEIF(IDHW(LHEP).LE.12.AND.MOD(IDHW(LHEP),2).EQ.1.AND.
+     &         IDHW(MHEP).LE.12.AND.MOD(IDHW(MHEP),2).EQ.1.AND.
+     &         IK.GE.121.AND.IK.LE.126.AND.MOD(IK,2).EQ.1.AND.
+     &         IJ.GE.127.AND.IJ.LE.132.AND.MOD(IJ,2).EQ.1) THEN
+C--change order if dbar first
+          IF(IDHEP(LHEP).LT.0) THEN
+            ID = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--don't do correlations if no taus
+          IF(IK.NE.125.AND.IJ.NE.131) RETURN
+C--RPV couplings
+          JJJ = (IDHW(MHEP)-5)/2
+          KKK = (IDHW(LHEP)+1)/2
+          LLL = (IJ-125)/2
+          MMM = (IK-119)/2
+          NDIA = 0
+          DO 59 III=1,3
+          IF(ABS(LAMDA2(III,JJJ,KKK)*LAMDA1(III,LLL,MMM)).LT.EPS)
+     &             GOTO 59
+          NDIA = NDIA+1
+          IFLOW(NDIA) = 1
+          IDP(4+NDIA) = 424+2*III
+          A(1,NDIA) = LAMDA2(III,JJJ,KKK)
+          A(2,NDIA) = ZERO
+          B(1,NDIA) = ZERO
+          B(2,NDIA) = LAMDA1(III,LLL,MMM)
+          DRTYPE(NDIA) = 21
+ 59       CONTINUE
+          NCFL(1) = 1
+          SPNCFC(1,1,1) = ONE/THREE
+C--u dbar --> nu ell+
+        ELSEIF((IK.GE.121.AND.IK.LE.126.AND.MOD(IK,2).EQ.0.AND.
+     &          IJ.GE.127.AND.IJ.LE.132.AND.MOD(IJ,2).EQ.1).OR.
+     &         (IK.GE.127.AND.IK.LE.132.AND.MOD(IK,2).EQ.1.AND.
+     &          IJ.GE.121.AND.IJ.LE.126.AND.MOD(IJ,2).EQ.0)) THEN
+C--ensure u first
+          IF(MOD(IDHW(LHEP),2).NE.0) THEN
+            ID = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--ensure nu first
+          IF(MOD(IK,2).NE.0) THEN
+            ID = IK
+            IK = IJ
+            IJ = ID
+            ID = JHEP
+            JHEP = KHEP
+            KHEP = ID
+          ENDIF
+C--only need correlations if tau
+          IF(IJ.NE.131) RETURN
+C--RPV couplings
+          JJJ = IDHW(LHEP)/2 
+          KKK = (IDHW(MHEP)-5)/2
+          LLL = (IK-120)/2
+          MMM = (IJ-125)/2
+          NDIA = 0
+          DO 60 III=1,3
+          IF(ABS(LAMDA2(III,JJJ,KKK)*LAMDA1(III,LLL,MMM)).LT.EPS)
+     &             GOTO 60
+          DO 61 J=1,2
+          IFLOW(NDIA+J) = 1
+          IDP(4+NDIA+J) = 423+2*III+12*(J-1)
+          A(1,NDIA+J) = ZERO
+          A(2,NDIA+J) = LAMDA2(III,JJJ,KKK)*LMIXSS(2*III-1,1,J)
+          B(1,NDIA+J) = LAMDA1(III,LLL,MMM)*LMIXSS(2*III-1,1,J)
+          B(2,NDIA+J) = ZERO
+ 61       DRTYPE(NDIA+J) = 21
+          NDIA = NDIA+2
+ 60       CONTINUE
+          NCFL(1) = 1
+          SPNCFC(1,1,1) = ONE/THREE
+C--ubar d --> ell nubar
+        ELSEIF((IK.GE.127.AND.IK.LE.132.AND.MOD(IK,2).EQ.0.AND.
+     &          IJ.GE.121.AND.IJ.LE.126.AND.MOD(IJ,2).EQ.1).OR.
+     &         (IK.GE.121.AND.IK.LE.126.AND.MOD(IK,2).EQ.1.AND.
+     &          IJ.GE.127.AND.IJ.LE.132.AND.MOD(IJ,2).EQ.0)) THEN
+C--ensure u second
+          IF(MOD(IDHW(MHEP),2).NE.0) THEN
+            ID = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--   ensure nu second
+          IF(MOD(IJ,2).NE.0) THEN
+            ID = IK
+            IK = IJ
+            IJ = ID
+            ID = JHEP
+            JHEP = KHEP
+            KHEP = ID
+          ENDIF
+C--only need correlations if tau
+          IF(IK.NE.125) RETURN
+C--RPV couplings
+          JJJ = (IDHW(MHEP)-6)/2 
+          KKK = (IDHW(LHEP)+1)/2
+          LLL = (IJ-126)/2
+          MMM = (IK-119)/2
+          NDIA = 0
+          DO 62 III=1,3
+          IF(ABS(LAMDA2(III,JJJ,KKK)*LAMDA1(III,LLL,MMM)).LT.EPS)
+     &             GOTO 62
+          DO 63 J=1,2
+          IFLOW(NDIA+J) = 1
+          IDP(4+NDIA+J) = 423+2*III+12*(J-1)
+          A(1,NDIA+J) = LAMDA2(III,JJJ,KKK)*LMIXSS(2*III-1,1,J)
+          A(2,NDIA+J) = ZERO
+          B(1,NDIA+J) = ZERO
+          B(2,NDIA+J) = LAMDA1(III,LLL,MMM)*LMIXSS(2*III-1,1,J)
+ 63       DRTYPE(NDIA+J) = 21
+          NDIA = NDIA+2
+ 62       CONTINUE
+          NCFL(1) = 1
+          SPNCFC(1,1,1) = ONE/THREE
+C--unrecognized process
+        ELSE
+          CALL HWWARN('HWHSPN',505,*999)
+        ENDIF
+C--UDD processes
+      ELSEIF(IPRO.EQ.41) THEN
+C--change outgoing order
+        ID = IJ
+        IJ = IK
+        IK = ID
+        ID = JHEP
+        JHEP = KHEP
+        KHEP = ID
+C--ubar neutralino
+        IF(IK.GE.450.AND.IK.LE.453.AND.MOD(IJ,2).EQ.0.AND.
+     &     IDPDG(IJ).LT.0) THEN
+C--indices for RPV
+          III = (IJ-6)/2
+          JJJ = (IDHW(LHEP)+1)/2
+          KKK = (IDHW(MHEP)+1)/2
+          L1  = IK - 449
+C--types of diagram
+          DRTYPE(1) = 27
+          DRTYPE(2) = 27
+          DRTYPE(3) = 28
+          DRTYPE(4) = 28
+          DRTYPE(5) = 29
+          DRTYPE(6) = 29
+C--RPV couplings
+          DO 64 J=1,2
+          A(1,J  ) = QMIXSS(2*III,2,J)*LAMDA3(III,JJJ,KKK)
+          A(2,J  ) = ZERO
+          B(1,J+2) = QMIXSS(2*JJJ-1,2,J)*LAMDA3(III,JJJ,KKK)
+          B(2,J+2) = ZERO
+          A(1,J+4) = QMIXSS(2*KKK-1,2,J)*LAMDA3(III,JJJ,KKK)
+          A(2,J+4) = ZERO
+C--particles
+          IDP(4+J) = 400+2*III+12*(J-1)
+          IDP(6+J) = 399+2*JJJ+12*(J-1)
+          IDP(8+J) = 399+2*KKK+12*(J-1)
+C--MSSM couplings
+          DO 64 I=1,2
+          B(I,J)   = AFN(O(I),2*III,J,L1)
+          A(I,J+2) = AFN(O(I),2*JJJ-1,J,L1)
+ 64       B(I,J+4) = AFN(O(I),2*KKK-1,J,L1)
+C--colour flows
+          NDIA = 6
+          NCFL(1) = 1
+          DO 65 I=1,6
+ 65       IFLOW(I) = 1
+          SPNCFC(1,1,1) = TWO/THREE
+C--u    neutralino
+        ELSEIF(IK.GE.450.AND.IK.LE.453.AND.MOD(IJ,2).EQ.0.AND.
+     &         IDPDG(IJ).GT.0) THEN
+C--indices for RPV
+          III = IJ/2
+          JJJ = (IDHW(LHEP)-5)/2
+          KKK = (IDHW(MHEP)-5)/2
+          L1  = IK - 449 
+C--types of diagram
+          DRTYPE(1) = 30
+          DRTYPE(2) = 30
+          DRTYPE(3) = 31
+          DRTYPE(4) = 31
+          DRTYPE(5) = 32
+          DRTYPE(6) = 32
+C--RPV couplings
+          DO 66 J=1,2
+          A(1,J  ) = ZERO
+          A(2,J  ) = QMIXSS(2*III,2,J)*LAMDA3(III,JJJ,KKK)
+          B(1,J+2) = ZERO
+          B(2,J+2) = QMIXSS(2*JJJ-1,2,J)*LAMDA3(III,JJJ,KKK)
+          A(1,J+4) = ZERO
+          A(2,J+4) = QMIXSS(2*KKK-1,2,J)*LAMDA3(III,JJJ,KKK)
+C--particles
+          IDP(4+J) = 400+2*III+12*(J-1)
+          IDP(6+J) = 399+2*JJJ+12*(J-1)
+          IDP(8+J) = 399+2*KKK+12*(J-1)
+C--MSSM couplings
+          DO 66 I=1,2
+          B(I,J)   = AFN(I,2*III,J,L1)
+          A(I,J+2) = AFN(I,2*JJJ-1,J,L1)
+ 66       B(I,J+4) = AFN(I,2*KKK-1,J,L1)
+C--colour flows
+          NDIA = 6
+          NCFL(1) = 1
+          DO 67 I=1,6
+ 67       IFLOW(I) = 1
+          SPNCFC(1,1,1) = TWO/THREE
+C--dbar neutralino
+        ELSEIF(IK.GE.450.AND.IK.LE.453.AND.MOD(IJ,2).EQ.1.AND.
+     &         IDPDG(IJ).LT.0) THEN
+C--ensure u type first
+          IF(MOD(IDHW(LHEP),2).NE.0) THEN
+            ID   = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--RPV indices
+          III = IDHW(LHEP)/2
+          JJJ = (IDHW(MHEP)+1)/2
+          KKK = (IJ-5)/2
+          L1  = IK - 449 
+C--types of diagram
+          DRTYPE(1) = 27
+          DRTYPE(2) = 27
+          DRTYPE(3) = 28
+          DRTYPE(4) = 28
+          DRTYPE(5) = 29
+          DRTYPE(6) = 29
+C--RPV couplings
+          DO 68 I=1,2
+          A(1,I  ) = QMIXSS(2*KKK-1,2,I)*LAMDA3(III,JJJ,KKK)
+          A(2,I  ) = ZERO
+          B(1,I+2) = QMIXSS(2*III,2,I)*LAMDA3(III,JJJ,KKK)
+          B(2,I+2) = ZERO
+          A(1,I+4) = QMIXSS(2*JJJ-1,2,I)*LAMDA3(III,JJJ,KKK)
+          A(2,I+4) = ZERO
+C--particles
+          IDP(4+I) = 399+2*KKK+12*(I-1)
+          IDP(6+I) = 400+2*III+12*(I-1)
+          IDP(8+I) = 399+2*JJJ+12*(I-1)
+C--MSSM couplings
+          DO 68 J=1,2
+          B(J,I  ) = AFN(O(J),2*KKK-1,I,L1)
+          A(J,I+2) = AFN(O(J),2*III  ,I,L1)
+ 68       B(J,I+4) = AFN(O(J),2*JJJ-1,I,L1)
+C--colour flows
+          NDIA = 6
+          NCFL(1) = 1
+          DO 69 I=1,6
+ 69       IFLOW(I) = 1
+          SPNCFC(1,1,1) = TWO/THREE
+C--d    neutralino
+        ELSEIF(IK.GE.450.AND.IK.LE.453.AND.MOD(IJ,2).EQ.1.AND.
+     &         IDPDG(IJ).GT.0) THEN
+C--ensure u type first
+          IF(MOD(IDHW(LHEP),2).NE.0) THEN
+            ID   = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--RPV indices
+          III = (IDHW(LHEP)-6)/2
+          JJJ = (IDHW(MHEP)-5)/2
+          KKK = (IJ+1)/2
+          L1  = IK - 449 
+C--types of diagram
+          DRTYPE(1) = 30
+          DRTYPE(2) = 30
+          DRTYPE(3) = 31
+          DRTYPE(4) = 31
+          DRTYPE(5) = 32
+          DRTYPE(6) = 32
+C--RPV couplings
+          DO 70 I=1,2
+          A(1,I  ) = ZERO
+          A(2,I  ) = QMIXSS(2*KKK-1,2,I)*LAMDA3(III,JJJ,KKK)
+          B(1,I+2) = ZERO
+          B(2,I+2) = QMIXSS(2*III,2,I)*LAMDA3(III,JJJ,KKK)
+          A(1,I+4) = ZERO
+          A(2,I+4) = QMIXSS(2*JJJ-1,2,I)*LAMDA3(III,JJJ,KKK)
+C--particles
+          IDP(4+I) = 399+2*KKK+12*(I-1)
+          IDP(6+I) = 400+2*III+12*(I-1)
+          IDP(8+I) = 399+2*JJJ+12*(I-1)
+C--MSSM couplings
+          DO 70 J=1,2
+          B(J,I  ) = AFN(J,2*KKK-1,I,L1)
+          A(J,I+2) = AFN(J,2*III  ,I,L1)
+ 70       B(J,I+4) = AFN(J,2*JJJ-1,I,L1)
+C--colour flows
+          NDIA = 6
+          NCFL(1) = 1
+          DO 71 I=1,6
+ 71       IFLOW(I) = 1
+          SPNCFC(1,1,1) = TWO/THREE
+C--ubar gluino
+        ELSEIF(IK.EQ.449.AND.MOD(IJ,2).EQ.0.AND.IDPDG(IJ).LT.0) THEN
+C--indices for RPV
+          III = (IJ-6)/2
+          JJJ = (IDHW(LHEP)+1)/2
+          KKK = (IDHW(MHEP)+1)/2
+C--types of diagram
+          DRTYPE(1) = 27
+          DRTYPE(2) = 27
+          DRTYPE(3) = 28
+          DRTYPE(4) = 28
+          DRTYPE(5) = 29
+          DRTYPE(6) = 29
+C--RPV couplings
+          DO 72 J=1,2
+          A(1,J  ) = QMIXSS(2*III,2,J)*LAMDA3(III,JJJ,KKK)
+          A(2,J  ) = ZERO
+          B(1,J+2) = QMIXSS(2*JJJ-1,2,J)*LAMDA3(III,JJJ,KKK)
+          B(2,J+2) = ZERO
+          A(1,J+4) = QMIXSS(2*KKK-1,2,J)*LAMDA3(III,JJJ,KKK)
+          A(2,J+4) = ZERO
+C--particles
+          IDP(4+J) = 400+2*III+12*(J-1)
+          IDP(6+J) = 399+2*JJJ+12*(J-1)
+          IDP(8+J) = 399+2*KKK+12*(J-1)
+C--MSSM couplings
+          DO 72 I=1,2
+          B(I,J)   = AFG(O(I),2*III,J)
+          A(I,J+2) = AFG(O(I),2*JJJ-1,J)
+ 72       B(I,J+4) = AFG(O(I),2*KKK-1,J)
+C--colour flows
+          NDIA = 6
+          NCFL(1) = 3
+          DO 73 I=1,2
+          IFLOW(I  ) = 1
+          IFLOW(I+2) = 2
+ 73       IFLOW(I+4) = 3
+          DO 74 I=1,3
+          DO 74 J=1,3
+          IF(I.EQ.J) THEN
+            SPNCFC(I,J,1) = 8.0D0/9.0D0
+          ELSE
+            SPNCFC(I,J,1) =-4.0D0/9.0D0
+          ENDIF
+ 74       CONTINUE
+C--u    gluino
+        ELSEIF(IK.EQ.449.AND.MOD(IJ,2).EQ.0.AND.IDPDG(IJ).GT.0) THEN
+C--indices for RPV
+          III = IJ/2
+          JJJ = (IDHW(LHEP)-5)/2
+          KKK = (IDHW(MHEP)-5)/2
+C--types of diagram
+          DRTYPE(1) = 30
+          DRTYPE(2) = 30
+          DRTYPE(3) = 31
+          DRTYPE(4) = 31
+          DRTYPE(5) = 32
+          DRTYPE(6) = 32
+C--RPV couplings
+          DO 75 J=1,2
+          A(1,J  ) = ZERO
+          A(2,J  ) = QMIXSS(2*III,2,J)*LAMDA3(III,JJJ,KKK)
+          B(1,J+2) = ZERO
+          B(2,J+2) = QMIXSS(2*JJJ-1,2,J)*LAMDA3(III,JJJ,KKK)
+          A(1,J+4) = ZERO
+          A(2,J+4) = QMIXSS(2*KKK-1,2,J)*LAMDA3(III,JJJ,KKK)
+C--particles
+          IDP(4+J) = 400+2*III+12*(J-1)
+          IDP(6+J) = 399+2*JJJ+12*(J-1)
+          IDP(8+J) = 399+2*KKK+12*(J-1)
+C--MSSM couplings
+          DO 75 I=1,2
+          B(I,J)   = AFG(I,2*III,J)
+          A(I,J+2) = AFG(I,2*JJJ-1,J)
+ 75       B(I,J+4) = AFG(I,2*KKK-1,J)
+C--colour flows
+          NDIA = 6
+          NCFL(1) = 3
+          DO 76 I=1,2
+          IFLOW(I  ) = 1
+          IFLOW(I+2) = 2
+ 76       IFLOW(I+4) = 3
+          DO 77 I=1,3
+          DO 77 J=1,3
+          IF(I.EQ.J) THEN
+            SPNCFC(I,J,1) = 8.0D0/9.0D0
+          ELSE
+            SPNCFC(I,J,1) =-4.0D0/9.0D0
+          ENDIF
+ 77       CONTINUE
+C--dbar gluino
+        ELSEIF(IK.EQ.449.AND.MOD(IJ,2).EQ.1.AND.IDPDG(IJ).LT.0) THEN
+C--ensure u type first
+          IF(MOD(IDHW(LHEP),2).NE.0) THEN
+            ID   = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--RPV indices
+          III = IDHW(LHEP)/2
+          JJJ = (IDHW(MHEP)+1)/2
+          KKK = (IJ-5)/2 
+C--types of diagram
+          DRTYPE(1) = 27
+          DRTYPE(2) = 27
+          DRTYPE(3) = 28
+          DRTYPE(4) = 28
+          DRTYPE(5) = 29
+          DRTYPE(6) = 29
+C--RPV couplings
+          DO 78 I=1,2
+          A(1,I  ) = QMIXSS(2*KKK-1,2,I)*LAMDA3(III,JJJ,KKK)
+          A(2,I  ) = ZERO
+          B(1,I+2) = QMIXSS(2*III,2,I)*LAMDA3(III,JJJ,KKK)
+          B(2,I+2) = ZERO
+          A(1,I+4) = QMIXSS(2*JJJ-1,2,I)*LAMDA3(III,JJJ,KKK)
+          A(2,I+4) = ZERO
+C--particles
+          IDP(4+I) = 399+2*KKK+12*(I-1)
+          IDP(6+I) = 400+2*III+12*(I-1)
+          IDP(8+I) = 399+2*JJJ+12*(I-1)
+C--MSSM couplings
+          DO 78 J=1,2
+          B(J,I  ) = AFG(O(J),2*KKK-1,I)
+          A(J,I+2) = AFG(O(J),2*III  ,I)
+ 78       B(J,I+4) = AFG(O(J),2*JJJ-1,I)
+C--colour flows
+          NDIA = 6
+          NCFL(1) = 3
+          DO 79 I=1,2
+          IFLOW(I  ) = 1
+          IFLOW(I+2) = 2
+ 79       IFLOW(I+4) = 3
+          DO 80 I=1,3
+          DO 80 J=1,3
+          IF(I.EQ.J) THEN
+            SPNCFC(I,J,1) = 8.0D0/9.0D0
+          ELSE
+            SPNCFC(I,J,1) =-4.0D0/9.0D0
+          ENDIF
+ 80       CONTINUE
+C--d    gluino
+        ELSEIF(IK.EQ.449.AND.MOD(IJ,2).EQ.1.AND.IDPDG(IJ).GT.0) THEN
+C--ensure u type first
+          IF(MOD(IDHW(LHEP),2).NE.0) THEN
+            ID   = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--RPV indices
+          III = (IDHW(LHEP)-6)/2
+          JJJ = (IDHW(MHEP)-5)/2
+          KKK = (IJ+1)/2 
+C--types of diagram
+          DRTYPE(1) = 30
+          DRTYPE(2) = 30
+          DRTYPE(3) = 31
+          DRTYPE(4) = 31
+          DRTYPE(5) = 32
+          DRTYPE(6) = 32
+C--RPV couplings
+          DO 81 I=1,2
+          A(1,I  ) = ZERO
+          A(2,I  ) = QMIXSS(2*KKK-1,2,I)*LAMDA3(III,JJJ,KKK)
+          B(1,I+2) = ZERO
+          B(2,I+2) = QMIXSS(2*III,2,I)*LAMDA3(III,JJJ,KKK)
+          A(1,I+4) = ZERO
+          A(2,I+4) = QMIXSS(2*JJJ-1,2,I)*LAMDA3(III,JJJ,KKK)
+C--particles
+          IDP(4+I) = 399+2*KKK+12*(I-1)
+          IDP(6+I) = 400+2*III+12*(I-1)
+          IDP(8+I) = 399+2*JJJ+12*(I-1)
+C--MSSM couplings
+          DO 81 J=1,2
+          B(J,I  ) = AFG(J,2*KKK-1,I)
+          A(J,I+2) = AFG(J,2*III  ,I)
+ 81       B(J,I+4) = AFG(J,2*JJJ-1,I)
+C--colour flows
+          NDIA = 6
+          NCFL(1) = 3
+          DO 82 I=1,2
+          IFLOW(I  ) = 1
+          IFLOW(I+2) = 2
+ 82       IFLOW(I+4) = 3
+          DO 83 I=1,3
+          DO 83 J=1,3
+          IF(I.EQ.J) THEN
+            SPNCFC(I,J,1) = 8.0D0/9.0D0
+          ELSE
+            SPNCFC(I,J,1) =-4.0D0/9.0D0
+          ENDIF
+ 83       CONTINUE
+C--dbar -ve chargino
+        ELSEIF(IK.GE.456.AND.IK.LE.457.AND.MOD(IJ,2).EQ.1) THEN
+C--change order so highest generation first
+          IF(IDHW(MHEP).GT.IDHW(LHEP)) THEN
+            ID = MHEP
+            MHEP = LHEP
+            LHEP = ID
+          ENDIF
+C--RPV indices
+          III = (IJ-5)/2
+          JJJ = (IDHW(LHEP)+1)/2
+          KKK = (IDHW(MHEP)+1)/2
+          L1  = IK-455
+C--types of diagram
+          DRTYPE(1) = 27
+          DRTYPE(2) = 27
+          DRTYPE(3) = 28
+          DRTYPE(4) = 28
+          DRTYPE(5) = 29
+          DRTYPE(6) = 29
+C--RPV couplings
+          DO 84 I=1,2
+          A(1,I  ) = QMIXSS(2*III,2,I)*LAMDA3(III,JJJ,KKK)
+          A(2,I  ) = ZERO
+          B(1,I+2) = QMIXSS(2*JJJ,2,I)*LAMDA3(JJJ,KKK,III)
+          B(2,I+2) = ZERO
+          A(1,I+4) = QMIXSS(2*KKK,2,I)*LAMDA3(KKK,III,JJJ)
+          A(2,I+4) = ZERO
+C--particles
+          IDP(4+I) = 400+2*III+12*(I-1)
+          IDP(6+I) = 400+2*JJJ+12*(I-1)
+          IDP(8+I) = 400+2*KKK+12*(I-1)
+C--MSSM couplings
+          DO 84 J=1,2
+          B(J,I  ) = AFC(O(J),2*III,I,L1)
+          A(J,I+2) = AFC(O(J),2*JJJ,I,L1)
+ 84       B(J,I+4) = AFC(O(J),2*KKK,I,L1)
+C--colour flows
+          NDIA = 6
+          NCFL(1) = 1
+          DO 85 I=1,6
+ 85       IFLOW(I) = 1
+          SPNCFC(1,1,1) = TWO/THREE
+C--d    +ve chargino
+        ELSEIF(IK.GE.454.AND.IK.LE.455.AND.MOD(IJ,2).EQ.1) THEN
+C--change order so highest generation first
+          IF(IDHW(MHEP).GT.IDHW(LHEP)) THEN
+            ID = MHEP
+            MHEP = LHEP
+            LHEP = ID
+          ENDIF
+C--RPV indices
+          III = (IJ+1)/2
+          JJJ = (IDHW(LHEP)-5)/2
+          KKK = (IDHW(MHEP)-5)/2
+          L1  = IK-453
+C--types of diagram
+          DRTYPE(1) = 30
+          DRTYPE(2) = 30
+          DRTYPE(3) = 31
+          DRTYPE(4) = 31
+          DRTYPE(5) = 32
+          DRTYPE(6) = 32
+C--RPV couplings
+          DO 86 I=1,2
+          A(1,I  ) = ZERO
+          A(2,I  ) = QMIXSS(2*III,2,I)*LAMDA3(III,JJJ,KKK)
+          B(1,I+2) = ZERO
+          B(2,I+2) = QMIXSS(2*JJJ,2,I)*LAMDA3(JJJ,KKK,III)
+          A(1,I+4) = ZERO
+          A(2,I+4) = QMIXSS(2*KKK,2,I)*LAMDA3(KKK,III,JJJ)
+C--particles
+          IDP(4+I) = 400+2*III+12*(I-1)
+          IDP(6+I) = 400+2*JJJ+12*(I-1)
+          IDP(8+I) = 400+2*KKK+12*(I-1)
+C--MSSM couplings
+          DO 86 J=1,2
+          B(J,I  ) = AFC(J,2*III,I,L1)
+          A(J,I+2) = AFC(J,2*JJJ,I,L1)
+ 86       B(J,I+4) = AFC(J,2*KKK,I,L1)
+C--colour flows
+          NDIA = 6
+          NCFL(1) = 1
+          DO 87 I=1,6
+ 87       IFLOW(I) = 1
+          SPNCFC(1,1,1) = TWO/THREE
+C--ubar +ve chargino
+        ELSEIF(IK.GE.454.AND.IK.LE.455.AND.MOD(IJ,2).EQ.0) THEN
+C--ensure u type first
+          IF(MOD(IDHW(LHEP),2).NE.0) THEN
+            ID   = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--RPV indices
+          III = IDHW(LHEP)/2
+          JJJ = (IDHW(MHEP)+1)/2
+          KKK = (IJ-6)/2
+          L1  = IK-453
+C--types of diagram
+          DRTYPE(1) = 27
+          DRTYPE(2) = 27
+          DRTYPE(3) = 28
+          DRTYPE(4) = 28
+C--RPV couplings
+          DO 88 I=1,2
+          A(1,I  ) = QMIXSS(2*KKK-1,2,I)*LAMDA3(III,JJJ,KKK)
+          A(2,I  ) = ZERO
+          B(1,I+2) = QMIXSS(2*III-1,2,I)*LAMDA3(KKK,III,JJJ)
+          B(2,I+2) = ZERO
+C--particles
+          IDP(4+I) = 399+2*KKK+12*(I-1)
+          IDP(6+I) = 399+2*III+12*(I-1)
+C--MSSM couplings
+          DO 88 J=1,2
+          B(J,I  ) = AFC(O(J),2*KKK-1,I,L1)
+ 88       A(J,I+2) = AFC(O(J),2*III-1,I,L1)
+C--colour flows
+          NDIA = 4
+          NCFL(1) = 1
+          DO 89 I=1,4
+ 89       IFLOW(I) = 1
+          SPNCFC(1,1,1) = TWO/THREE
+C--u    -ve chargino
+        ELSEIF(IK.GE.456.AND.IK.LE.457.AND.MOD(IJ,2).EQ.0) THEN
+C--ensure u type first
+          IF(MOD(IDHW(LHEP),2).NE.0) THEN
+            ID   = LHEP
+            LHEP = MHEP
+            MHEP = ID
+          ENDIF
+C--RPV indices
+          III = (IDHW(LHEP)-6)/2
+          JJJ = (IDHW(MHEP)-5)/2
+          KKK = IJ/2
+          L1  = IK-455
+C--types of diagram
+          DRTYPE(1) = 30
+          DRTYPE(2) = 30
+          DRTYPE(3) = 31
+          DRTYPE(4) = 31
+C--RPV couplings
+          DO 90 I=1,2
+          A(1,I  ) = ZERO
+          A(2,I  ) = QMIXSS(2*KKK-1,2,I)*LAMDA3(III,JJJ,KKK)
+          B(1,I+2) = ZERO
+          B(2,I+2) = QMIXSS(2*III-1,2,I)*LAMDA3(KKK,III,JJJ)
+C--particles
+          IDP(4+I) = 399+2*KKK+12*(I-1)
+          IDP(6+I) = 399+2*III+12*(I-1)
+C--MSSM couplings
+          DO 90 J=1,2
+          B(J,I  ) = AFC(J,2*KKK-1,I,L1)
+ 90       A(J,I+2) = AFC(J,2*III-1,I,L1)
+C--colour flows
+          NDIA = 4
+          NCFL(1) = 1
+          DO 91 I=1,4
+ 91       IFLOW(I) = 1
+          SPNCFC(1,1,1) = TWO/THREE
+C--d d --> d d 
+        ELSEIF(IDPDG(IK).GT.0.AND.IDPDG(IK).GT.0.AND.
+     &         MOD(IK,2).EQ.1.AND.MOD(IJ,2).EQ.1) THEN
+C--can't produce unstable quark on hadronisation timescale
+          RETURN
+C--dbar dbar --> dbar dbar
+        ELSEIF(IDPDG(IK).LT.0.AND.IDPDG(IJ).LT.0.AND.
+     &         MOD(IJ,2).EQ.1.AND.MOD(IK,2).EQ.1) THEN
+C--can't produce unstable quark on hadronisation timescale
+          RETURN
+C--u d --> u d
+        ELSEIF(IDPDG(IK).GT.0.AND.IDPDG(IJ).GT.0.AND.
+     &         ((MOD(IJ,2).EQ.1.AND.MOD(IK,2).EQ.0).OR.
+     &          (MOD(IJ,2).EQ.0.AND.MOD(IK,2).EQ.1))) THEN 
+C--ensure u first (incoming)
+          IF(MOD(IDHW(LHEP),2).EQ.1) THEN
+            ID   = MHEP
+            MHEP = LHEP
+            LHEP = ID
+          ENDIF
+C--ensure u first (outgoing)
+          IF(MOD(IK,2).EQ.1) THEN
+            ID = IJ
+            IJ = IK
+            IK = ID
+            ID = JHEP
+            JHEP = KHEP
+            KHEP = ID
+          ENDIF
+C--can't produce unstable quark on hadronisation timescale
+          IF(IK.NE.6) RETURN
+C--RPV indices
+          III = IDHW(LHEP)/2
+          KKK = (IDHW(MHEP)+1)/2
+          LLL = IK/2
+          MMM = (IJ+1)/2
+          NDIA = 0
+          DO 92 JJJ=1,3
+          IF(ABS(LAMDA3(III,JJJ,KKK)*LAMDA3(LLL,JJJ,MMM)).LT.EPS)
+     &            GOTO 92
+          DO 93 J=1,2
+          IFLOW(NDIA+J) = 1
+          IDP(4+NDIA+J) = 399+2*JJJ+12*(J-1)
+          A(1,NDIA+J) = LAMDA3(III,JJJ,KKK)*QMIXSS(2*JJJ-1,2,J)
+          A(2,NDIA+J) = ZERO
+          B(1,NDIA+J) = ZERO
+          B(2,NDIA+J) = LAMDA3(LLL,JJJ,MMM)*QMIXSS(2*JJJ-1,2,J)
+ 93       DRTYPE(NDIA+J) = 33
+          NDIA = NDIA+2
+ 92       CONTINUE
+          NCFL(1) = 1
+          SPNCFC(1,1,1) = ONE/THREE
+C--ubar dbar --> ubar dbar
+        ELSEIF(IDPDG(IK).LT.0.AND.IDPDG(IJ).LT.0.AND.
+     &         ((MOD(IJ,2).EQ.1.AND.MOD(IK,2).EQ.0).OR.
+     &          (MOD(IJ,2).EQ.0.AND.MOD(IK,2).EQ.1))) THEN 
+C--ensure u first (incoming)
+          IF(MOD(IDHW(LHEP),2).EQ.1) THEN
+            ID   = MHEP
+            MHEP = LHEP
+            LHEP = ID
+          ENDIF
+C--ensure u first (outgoing)
+          IF(MOD(IK,2).EQ.1) THEN
+            ID = IJ
+            IJ = IK
+            IK = ID
+            ID = JHEP
+            JHEP = KHEP
+            KHEP = ID
+          ENDIF
+C--can't produce unstable quark on hadronisation timescale
+          IF(IK.NE.6) RETURN
+C--RPV indices
+          III = (IDHW(LHEP)-6)/2
+          KKK = (IDHW(MHEP)-5)/2
+          LLL = (IK-6)/2
+          MMM = (IJ-5)/2
+          NDIA = 0
+          DO 94 JJJ=1,3
+          IF(ABS(LAMDA3(III,JJJ,KKK)*LAMDA3(LLL,JJJ,MMM)).LT.EPS)
+     &             GOTO 94
+          DO 95 J=1,2
+          IFLOW(NDIA+J) = 1
+          IDP(4+NDIA+J) = 399+2*JJJ+12*(J-1)
+          A(1,NDIA+J) = ZERO
+          A(2,NDIA+J) = LAMDA3(III,JJJ,KKK)*QMIXSS(2*JJJ-1,2,J)
+          B(1,NDIA+J) = LAMDA3(LLL,JJJ,MMM)*QMIXSS(2*JJJ-1,2,J)
+          B(2,NDIA+J) = ZERO
+ 95       DRTYPE(NDIA+J) = 34
+          NDIA = NDIA+2
+ 94       CONTINUE
+          NCFL(1) = 1
+          SPNCFC(1,1,1) = ONE/THREE
+C--unrecognized process
+        ELSE
+          CALL HWWARN('HWHSPN',506,*999)
+        ENDIF
 C--unrecognized process
       ELSE
-        CALL HWWARN('HWHSPN',504,*999)
+        CALL HWWARN('HWHSPN',507,*999)
       ENDIF
 C--copy the momenta into the internal array
       CALL HWVEQU(5,PHEP(1,LHEP),P(1,1))
@@ -30462,10 +34153,10 @@ C--now compute the masses etc for the diagrams
       IDP(2) = IDHW(MHEP)
       IDP(3) = IDHW(KHEP)
       IDP(4) = IDHW(JHEP)
-      DO 4 I=1,4
+      DO 104 I=1,4
       MA (I) = P(5,I)
- 4    MA2(I) = MA(I)**2
-      DO 5 I=1,NDIA
+ 104  MA2(I) = SIGN(MA(I)**2,MA(I))
+      DO 105 I=1,NDIA
       MR(I) = RMASS(IDP(4+I))
       MS(I) = MR(I)**2
       IF(IDP(I+4).EQ.200) THEN
@@ -30480,7 +34171,7 @@ C--now compute the masses etc for the diagrams
       ELSE
         MWD(I) = MR(I)*HBAR/RLTIM(IDP(I+4))
       ENDIF
- 5    CONTINUE
+ 105  CONTINUE
 C--set up the mandelstam variables
       SH = TWO*HWULDO(P(1,1),P(1,2))
       CALL HWVSCA(4,-ONE,P(1,3),PLAB(1,2))
@@ -30488,52 +34179,46 @@ C--set up the mandelstam variables
       TH = P(5,3)**2-TWO*HWULDO(P(1,1),P(1,3))
       UH = P(5,4)**2-TWO*HWULDO(P(1,1),P(1,4))
 C--copy the momenta into the common block for spinor computation
-      DO I=1,4
-        IF(IDP(I).LT.400.AND.(IDP(I).NE.6.AND.IDP(I).NE.12
-     &                  .AND.IDP(I).NE.125.AND.IDP(I).NE.131)) THEN
-          CALL HWVEQU(5,PREF,PLAB(1,I+4))
+      DO 106 I=1,4
+      IF(IDP(I).LT.400.AND.(IDP(I).NE.6.AND.IDP(I).NE.12
+     &                .AND.IDP(I).NE.125.AND.IDP(I).NE.131)) THEN
+        CALL HWVEQU(5,PREF,PLAB(1,I+4))
 C--all other particles
-        ELSE
-          PP = SQRT(HWVDOT(3,P(1,I),P(1,I)))
-          CALL HWVSCA(3,ONE/PP,P(1,I),N)
-          PLAB(4,I+4) = HALF*(P(4,I)-PP)
-          PP = HALF*(PP-P(5,I)-PP**2/(P(5,I)+P(4,I)))
-          CALL HWVSCA(3,PP,N,PLAB(1,I+4))
-          CALL HWUMAS(PLAB(1,I+4))
-          PP = HWVDOT(3,PLAB(1,I+4),PLAB(1,I+4))
+      ELSE
+        PP = SQRT(HWVDOT(3,P(1,I),P(1,I)))
+        CALL HWVSCA(3,ONE/PP,P(1,I),N)
+        PLAB(4,I+4) = HALF*(P(4,I)-PP)
+        PP = HALF*(PP-P(5,I)-PP**2/(P(5,I)+P(4,I)))
+        CALL HWVSCA(3,PP,N,PLAB(1,I+4))
+        CALL HWUMAS(PLAB(1,I+4))
+        PP = HWVDOT(3,PLAB(1,I+4),PLAB(1,I+4))
 C--fix to avoid problems if approx massless due to energy
-          IF(PP.LT.EPS) CALL HWVEQU(5,PREF,PLAB(1,I+4))
-        ENDIF
+        IF(PP.LT.EPS) CALL HWVEQU(5,PREF,PLAB(1,I+4))
+      ENDIF
 C--now the massless vectors
-        PP = HALF*MA2(I)/HWULDO(PLAB(1,I+4),P(1,I))
-        DO J=1,4
-          PLAB(J,I) = P(J,I)-PP*PLAB(J,I+4)
-        ENDDO
-        CALL HWUMAS(PLAB(1,I))
-      ENDDO
+      PP = HALF*MA2(I)/HWULDO(PLAB(1,I+4),P(1,I))
+      DO 107 J=1,4
+ 107  PLAB(J,I) = P(J,I)-PP*PLAB(J,I+4)
+ 106  CALL HWUMAS(PLAB(1,I))
 C--change order of momenta for call to HE code
-      DO I=1,4
-        PM(1,I) = P(3,I)
-        PM(2,I) = P(1,I)
-        PM(3,I) = P(2,I)
-        PM(4,I) = P(4,I)
-        PM(5,I) = P(5,I)
-      ENDDO
-      DO I=1,8
-        PCM(1,I)=PLAB(3,I)
-        PCM(2,I)=PLAB(1,I)
-        PCM(3,I)=PLAB(2,I)
-        PCM(4,I)=PLAB(4,I)
-        PCM(5,I)=PLAB(5,I)
-      ENDDO
+      DO 108 I=1,4
+      PM(1,I) = P(3,I)
+      PM(2,I) = P(1,I)
+      PM(3,I) = P(2,I)
+      PM(4,I) = P(4,I)
+ 108  PM(5,I) = P(5,I)
+      DO 109 I=1,8
+      PCM(1,I)=PLAB(3,I)
+      PCM(2,I)=PLAB(1,I)
+      PCM(3,I)=PLAB(2,I)
+      PCM(4,I)=PLAB(4,I)
+ 109  PCM(5,I)=PLAB(5,I)
 C--compute the S functions
       CALL HWHEW2(8,PCM(1,1),S(1,1,2),S(1,1,1),D)
-      DO I=1,8
-        DO J=1,8
-          S(I,J,2) = -S(I,J,2)
-          D(I,J)   = TWO*D(I,J)
-        ENDDO
-      ENDDO
+      DO 110 I=1,8
+      DO 110 J=1,8
+      S(I,J,2) = -S(I,J,2)
+ 110  D(I,J)   = TWO*D(I,J)
 C--compute the F functions
       CALL HWH2F1(8,F3 ,7,PM(1,3), MA(3))
       CALL HWH2F2(8,F4 ,8,PM(1,4),-MA(4))
@@ -30560,93 +34245,134 @@ C--compute the prefactor for all diagrams
       PRE = HWULDO(PCM(1,7),PM(1,3))*HWULDO(PCM(1,8),PM(1,4))
       PRE = ONE/SQRT(PRE)
 C--zero the matrix element
-      DO 6 P1=1,2
-      DO 6 P2=1,2
-      DO 6 P3=1,2
-      DO 6 P4=1,2
-      DO 6 I=1,NCFL(1)
- 6    ME(P1,P2,P3,P4,I) = (0.0D0,0.0D0)
+      DO 200 P1=1,2
+      DO 200 P2=1,2
+      DO 200 P3=1,2
+      DO 200 P4=1,2
+      DO 200 I=1,NCFL(1)
+ 200  ME(P1,P2,P3,P4,I) = (0.0D0,0.0D0)
 C--now call the subroutines to compute the individual diagrams
-      DO I=1,NDIA
+      DO 210 I=1,NDIA
 C--s-channel vector boson exchange diagram (f fbar to fermion fermion)
-        IF(DRTYPE(I).EQ.1) THEN
-          CALL HWHSP1(I,MED)
+      IF(DRTYPE(I).EQ.1) THEN
+        CALL HWHS01(I,MED)
 C--t-channel sfermion exchange diagram (f fbar to fermion fermion)
-        ELSEIF(DRTYPE(I).EQ.2) THEN
-          CALL HWHSP2(I,MED)
+      ELSEIF(DRTYPE(I).EQ.2) THEN
+        CALL HWHS02(I,MED)
 C--u-channel sfermion exchange diagram(f fbar to fermion fermion)
-        ELSEIF(DRTYPE(I).EQ.3) THEN
-          CALL HWHSP3(I,MED)
+      ELSEIF(DRTYPE(I).EQ.3) THEN 
+        CALL HWHS03(I,MED)
 C--s-channel vector boson (f fbar to fermion antifermion)
-        ELSEIF(DRTYPE(I).EQ.4) THEN
-          CALL HWHSP4(I,MED)
+      ELSEIF(DRTYPE(I).EQ.4) THEN
+        CALL HWHS04(I,MED)
 C--t-channel fermion exchange (g g to fermion antifermion)
-        ELSEIF(DRTYPE(I).EQ.5) THEN
-          CALL HWHSP5(I,MED)
+      ELSEIF(DRTYPE(I).EQ.5) THEN
+        CALL HWHS05(I,MED)
 C--u-channel fermion exchange (g g to fermion antifermion)
-        ELSEIF(DRTYPE(I).EQ.6) THEN
-          CALL HWHSP6(I,MED)
+      ELSEIF(DRTYPE(I).EQ.6) THEN
+        CALL HWHS06(I,MED)
 C--s-channel gluon exchange (g g to fermion antifermion)
-        ELSEIF(DRTYPE(I).EQ.7) THEN
-          CALL HWHSP7(I,MED)
+      ELSEIF(DRTYPE(I).EQ.7) THEN
+        CALL HWHS07(I,MED)
 C--t-channel sfermion exchange (g q to fermion sfermion)
-        ELSEIF(DRTYPE(I).EQ.8) THEN
-          CALL HWHSP8(I,MED)
+      ELSEIF(DRTYPE(I).EQ.8) THEN
+        CALL HWHS08(I,MED)
 C--t-channel sfermion exchange  (g qbar to fermion antisfermion)
-        ELSEIF(DRTYPE(I).EQ.9) THEN
-          CALL HWHSP9(I,MED)
+      ELSEIF(DRTYPE(I).EQ.9) THEN
+        CALL HWHS09(I,MED)
 C--s-channel quark exchange     (g q to fermion antisfermion)
-        ELSEIF(DRTYPE(I).EQ.10) THEN
-          CALL HWHSP0(I,MED)
+      ELSEIF(DRTYPE(I).EQ.10) THEN
+        CALL HWHS10(I,MED)
 C--s-channel antiquark exchange (g qbar to fermion antisfermion)
-        ELSEIF(DRTYPE(I).EQ.11) THEN
-          CALL HWHSPA(I,MED)
+      ELSEIF(DRTYPE(I).EQ.11) THEN
+        CALL HWHS11(I,MED)
 C--u-channel gluino exchange (g q to fermion antisfermion)
-        ELSEIF(DRTYPE(I).EQ.12) THEN
-          CALL HWHSPB(I,MED)
+      ELSEIF(DRTYPE(I).EQ.12) THEN
+        CALL HWHS12(I,MED)
 C--u-channel gluino exchange (g qbar to fermion antisfermion)
-        ELSEIF(DRTYPE(I).EQ.13) THEN
-          CALL HWHSPC(I,MED)
+      ELSEIF(DRTYPE(I).EQ.13) THEN
+        CALL HWHS13(I,MED)
 C--t-channel fermion exchange (g g to fermion fermion)
-        ELSEIF(DRTYPE(I).EQ.14) THEN
-          CALL HWHSPD(I,MED)
+      ELSEIF(DRTYPE(I).EQ.14) THEN
+        CALL HWHS14(I,MED)
 C--u-channel fermion exchange (g g to fermion fermion)
-        ELSEIF(DRTYPE(I).EQ.15) THEN
-          CALL HWHSPE(I,MED)
+      ELSEIF(DRTYPE(I).EQ.15) THEN
+        CALL HWHS15(I,MED)
 C--s-channel gluon exchange (g g to fermion fermion)
-        ELSEIF(DRTYPE(I).EQ.16) THEN
-          CALL HWHSPF(I,MED)
+      ELSEIF(DRTYPE(I).EQ.16) THEN
+        CALL HWHS16(I,MED)
 C--t-channel gauge boson exchange (fermion fermion)
-        ELSEIF(DRTYPE(I).EQ.17) THEN
-          CALL HWHSPG(I,MED)
+      ELSEIF(DRTYPE(I).EQ.17) THEN
+        CALL HWHS17(I,MED)
 C--t-channel gauge boson exchange (fermion antifermion)
-        ELSEIF(DRTYPE(I).EQ.18) THEN
-          CALL HWHSPH(I,MED)
+      ELSEIF(DRTYPE(I).EQ.18) THEN
+        CALL HWHS18(I,MED)
 C--t-channel gauge boson exchange (antifermion fermion)
-        ELSEIF(DRTYPE(I).EQ.19) THEN
-          CALL HWHSPI(I,MED)
+      ELSEIF(DRTYPE(I).EQ.19) THEN
+        CALL HWHS19(I,MED)
 C--t-channel gauge boson exchange (antifermion antifermion)
-        ELSEIF(DRTYPE(I).EQ.20) THEN
-          CALL HWHSPJ(I,MED)
+      ELSEIF(DRTYPE(I).EQ.20) THEN
+        CALL HWHS20(I,MED)
+C--s-channel scalar exchange (f fbar --> f fbar)
+      ELSEIF(DRTYPE(I).EQ.21) THEN
+        CALL HWHS21(I,MED)
+C--t-channel scalar exchange (f fbar --> f fbar)
+      ELSEIF(DRTYPE(I).EQ.22) THEN
+        CALL HWHS22(I,MED)
+C--u-channel scalar exchange (f fbar --> f fbar)
+      ELSEIF(DRTYPE(I).EQ.23) THEN
+        CALL HWHS23(I,MED)
+C--s-channel scalar exchange (fbar f --> f f)
+      ELSEIF(DRTYPE(I).EQ.24) THEN
+        CALL HWHS24(I,MED)
+C--t-channel scalar exchange (fbar f --> f f)
+      ELSEIF(DRTYPE(I).EQ.25) THEN
+        CALL HWHS25(I,MED)
+C--u-channel scalar exchange (fbar f --> f f)
+      ELSEIF(DRTYPE(I).EQ.26) THEN
+        CALL HWHS26(I,MED)
+C--s-channel scalar exchange (f f --> f fbar)
+      ELSEIF(DRTYPE(I).EQ.27) THEN
+        CALL HWHS27(I,MED)
+C--t-channel scalar exchange (f f --> f fbar)
+      ELSEIF(DRTYPE(I).EQ.28) THEN
+        CALL HWHS28(I,MED)
+C--u-channel scalar exchange (f f --> f fbar)
+      ELSEIF(DRTYPE(I).EQ.29) THEN
+        CALL HWHS29(I,MED)
+C--s-channel scalar exchange (fbar fbar --> f f)
+      ELSEIF(DRTYPE(I).EQ.30) THEN
+        CALL HWHS30(I,MED)
+C--t-channel scalar exchange (fbar fbar --> f f)
+      ELSEIF(DRTYPE(I).EQ.31) THEN
+        CALL HWHS31(I,MED)
+C--u-channel scalar exchange (fbar fbar --> f f)
+      ELSEIF(DRTYPE(I).EQ.32) THEN
+        CALL HWHS32(I,MED)
+C--s-channel scalar exchange (f f --> f f)
+      ELSEIF(DRTYPE(I).EQ.33) THEN
+        CALL HWHS33(I,MED)
+C--s-channel scalar exchange (fbar fbar --> fbar fbar)
+      ELSEIF(DRTYPE(I).EQ.34) THEN
+        CALL HWHS34(I,MED)
 C--error not known
-        ELSE
-          CALL HWWARN('HWHSPN',505,*999)
-        ENDIF
+      ELSE
+        CALL HWWARN('HWHSPN',508,*999)
+      ENDIF
 C--add up the matrix elements
-        DO 10 P1=1,2
-        DO 10 P2=1,2
-        DO 10 P3=1,2
-        DO 10 P4=1,2
- 10     ME(P1,P2,P3,P4,IFLOW(I)) = ME(P1,P2,P3,P4,IFLOW(I))
+      DO 210 P1=1,2
+      DO 210 P2=1,2
+      DO 210 P3=1,2
+      DO 210 P4=1,2
+ 210  ME(P1,P2,P3,P4,IFLOW(I)) = ME(P1,P2,P3,P4,IFLOW(I))
      &                             +MED(P1,P2,P3,P4)
-      ENDDO
 C--preform the final normalisation
-      DO 15 P1=1,2
-      DO 15 P2=1,2
-      DO 15 P3=1,2
-      DO 15 P4=1,2
-      DO 15 I=1,NCFL(1)
- 15   ME(P1,P2,P3,P4,I) = PRE*ME(P1,P2,P3,P4,I)
+      DO 215 P1=1,2
+      DO 215 P2=1,2
+      DO 215 P3=1,2
+      DO 215 P4=1,2
+      DO 215 I=1,NCFL(1)
+ 215  ME(P1,P2,P3,P4,I) = PRE*ME(P1,P2,P3,P4,I)
 C--now enter the matrix element in the spin common block
       NSPN        = 1
       IDSPN(1)    = ICM
@@ -30655,12 +34381,12 @@ C--now enter the matrix element in the spin common block
       JDASPN(1,1) = 2
       JDASPN(2,1) = 3
       DECSPN(1) = .FALSE.
-      DO 25 P1=1,2
-      DO 25 P2=1,2
-      DO 25 P3=1,2
-      DO 25 P4=1,2
-      DO 25 I=1,NCFL(1)
- 25   MESPN(P1,P2,P3,P4,I,1) = ME(P1,P2,P3,P4,I)
+      DO 225 P1=1,2
+      DO 225 P2=1,2
+      DO 225 P3=1,2
+      DO 225 P4=1,2
+      DO 225 I=1,NCFL(1)
+ 225  MESPN(P1,P2,P3,P4,I,1) = ME(P1,P2,P3,P4,I)
 C--now enter the daughter particles
       NSPN         = NSPN+2
       IDSPN(2)     = KHEP
@@ -30670,13 +34396,13 @@ C--now enter the daughter particles
       JMOSPN(2)    = 1
       JMOSPN(3)    = 1
 C--spin density matrices for daughter particles
-      DO 30 P1=1,2
-      DO 30 P2=1,2
-      DO 30 I=1,3
+      DO 230 P1=1,2
+      DO 230 P2=1,2
+      DO 230 I=1,3
       RHOSPN(1,1,I) = HALF
       RHOSPN(1,2,I) = ZERO
       RHOSPN(2,1,I) = ZERO
- 30   RHOSPN(2,2,I) = HALF
+ 230  RHOSPN(2,2,I) = HALF
       DECSPN(2) = .FALSE.
       DECSPN(3) = .FALSE.
 C--select the colour flow if needed
@@ -30684,49 +34410,51 @@ C--select the colour flow if needed
         WGT = ZERO
 C--assume no incoming polarization, no processes with more than one
 C--colour flow in e+e-
-        DO 35 I =1,NCFL(1)
+        DO 335 I =1,NCFL(1)
         WGTB(I) = ZERO
-        DO 35 P1=1,2
-        DO 35 P2=1,2
-        DO 35 P3=1,2
-        DO 35 P4=1,2
+        DO 335 P1=1,2
+        DO 335 P2=1,2
+        DO 335 P3=1,2
+        DO 335 P4=1,2
         WGTB(I) = WGTB(I)+SPNCFC(I,I,1)*MESPN(P1,P2,P3,P4,I,1)*
      &                           DCONJG(MESPN(P1,P2,P3,P4,I,1))
-        DO 35 J =1,NCFL(1)
- 35     WGT = WGT+SPNCFC(I,J,1)*MESPN(P1,P2,P3,P4,I,1)*
+        DO 335 J =1,NCFL(1)
+ 335    WGT = WGT+SPNCFC(I,J,1)*MESPN(P1,P2,P3,P4,I,1)*
      &                   DCONJG(MESPN(P1,P2,P3,P4,J,1))
         WGTC = ZERO
-        DO 40 I=1,NCFL(1)
- 40     WGTC = WGTC+WGTB(I)
+        DO 340 I=1,NCFL(1)
+ 340    WGTC = WGTC+WGTB(I)
         WGTC = WGT/WGTC
-        DO 45 I=1,NCFL(1)
- 45     WGTB(I) = WGTB(I)*WGTC
+        DO 345 I=1,NCFL(1)
+ 345    WGTB(I) = WGTB(I)*WGTC
         WGTC = WGT*HWRGEN(0)
-        DO 50 I=1,NCFL(1)
+        DO 350 I=1,NCFL(1)
         IF(WGTB(I).GE.WGTC) THEN
           NCFL(1) = I
           RETURN
         ENDIF
- 50     WGTC =WGTC-WGTB(I)
+ 350    WGTC =WGTC-WGTB(I)
       ENDIF
  999  END
-CDECK  ID>, HWHSP1.
+CDECK  ID>, HWHS01.
 *CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
-      SUBROUTINE HWHSP1(ID,ME)
+      SUBROUTINE HWHS01(ID,ME)
 C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
 C  section f fbar --> gauge boson --> fermion fermion
 C  This diagram 1 from DAMTP-2001-83 with opposite sign of P4
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE,ZI
      &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),
      &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
-      DOUBLE PRECISION A(2,NDIAGR),B(2,NDIAGR),MS(NDIAGR),MWD(NDIAGR),
-     &     MA(4),MA2(4),MR(NDIAGR),SH,TH,UH
-      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
      &     MA2,SH,TH,UH,IDP,DRTYPE
       PARAMETER(ZI=(0.0D0,1.0D0))
@@ -30747,23 +34475,25 @@ C--compute the propagator factor
         ENDIF
  10   CONTINUE
       END
-CDECK  ID>, HWHSP2.
+CDECK  ID>, HWHS02.
 *CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
-      SUBROUTINE HWHSP2(ID,ME)
+      SUBROUTINE HWHS02(ID,ME)
 C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
 C  section  f fbar ---> fermion fermion via t-channel scalar exchange
 C  This diagram 2 from DAMTP-2001-83 with opposite sign of P4
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE
      &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),
      &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
-      DOUBLE PRECISION A(2,NDIAGR),B(2,NDIAGR),MS(NDIAGR),MWD(NDIAGR),
-     &     MA(4),MA2(4),MR(NDIAGR),SH,TH,UH
-      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
      &     MA2,SH,TH,UH,IDP,DRTYPE
       COMMON/HWHEWS/S(8,8,2),D(8,8)
@@ -30777,23 +34507,25 @@ C--compute the propagator factor
  10   ME(P1,P2,P3,P4) = PRE*A(P1,ID)*B(O(P2),ID)*
      &        F3(O(P3),P1,1)*F4(P2,P4,2)
       END
-CDECK  ID>, HWHSP3.
+CDECK  ID>, HWHS03.
 *CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
-      SUBROUTINE HWHSP3(ID,ME)
+      SUBROUTINE HWHS03(ID,ME)
 C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
 C  section  f fbar ---> fermion fermion via u-channel scalar exchange
 C  This diagram 3 from DAMTP-2001-83 with opposite sign of P4
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE,
      &     F3M(2,2,8),F4M(2,2,8),FST(2,2,8),
      &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
-      DOUBLE PRECISION A(2,NDIAGR),B(2,NDIAGR),MS(NDIAGR),MWD(NDIAGR),
-     &     MA(4),MA2(4),MR(NDIAGR),SH,TH,UH
-      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
      &     MA2,SH,TH,UH,IDP,DRTYPE
       COMMON/HWHEWS/S(8,8,2),D(8,8)
@@ -30807,23 +34539,25 @@ C--compute the propagator factor
  10   ME(P1,P2,P3,P4) = PRE*A(P1,ID)*B(O(P2),ID)*
      &        F4M(O(P4),P1,1)*F3M(P2,P3,2)
       END
-CDECK  ID>, HWHSP4.
+CDECK  ID>, HWHS04.
 *CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
-      SUBROUTINE HWHSP4(ID,ME)
+      SUBROUTINE HWHS04(ID,ME)
 C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
 C  section f fbar --> gauge boson --> fermion antifermion
 C  This diagram 1 from DAMTP-2001-83
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE,ZI
      &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),
      &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
-      DOUBLE PRECISION A(2,NDIAGR),B(2,NDIAGR),MS(NDIAGR),MWD(NDIAGR),
-     &     MA(4),MA2(4),MR(NDIAGR),SH,TH,UH
-      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
      &     MA2,SH,TH,UH,IDP,DRTYPE
       PARAMETER(ZI=(0.0D0,1.0D0))
@@ -30844,24 +34578,26 @@ C--compute the propagator factor
         ENDIF
  10   CONTINUE
       END
-CDECK  ID>, HWHSP5.
+CDECK  ID>, HWHS05.
 *CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
-      SUBROUTINE HWHSP5(ID,ME)
+      SUBROUTINE HWHS05(ID,ME)
 C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
 C  section gluon gluon --> fermion antifermion (1st colour flow)
 C  N.B. a gauge choice has been made to simplify the triple gluon vertex
 C  This diagram 4 from DAMTP-2001-83 with the gauge choice L1=2 L2=1
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE,ZI
      &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),
      &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
-      DOUBLE PRECISION A(2,NDIAGR),B(2,NDIAGR),MS(NDIAGR),MWD(NDIAGR),
-     &     MA(4),MA2(4),MR(NDIAGR),SH,TH,UH
-      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
      &     MA2,SH,TH,UH,IDP,DRTYPE
       PARAMETER(ZI=(0.0D0,1.0D0))
@@ -30879,24 +34615,26 @@ C--compute the propagator factor
      & +F3(O(P3),O(P1),1)*( FTP(O(P1),  P2 ,2,1)*F4(  P2 ,O(P4),2)
      &                     +FTP(O(P1),O(P2),2,2)*F4(O(P2),O(P4),1)))
       END
-CDECK  ID>, HWHSP6.
+CDECK  ID>, HWHS06.
 *CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
-      SUBROUTINE HWHSP6(ID,ME)
+      SUBROUTINE HWHS06(ID,ME)
 C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
 C  section gluon gluon --> fermion antifermion (2st colour flow)
 C  N.B. a gauge choice has been made to simplify the triple gluon vertex
 C  This diagram 5 from DAMTP-2001-83 with the gauge choice L1=2 L2=1
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE,ZI
      &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),
      &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
-      DOUBLE PRECISION A(2,NDIAGR),B(2,NDIAGR),MS(NDIAGR),MWD(NDIAGR),
-     &     MA(4),MA2(4),MR(NDIAGR),SH,TH,UH
-      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
      &     MA2,SH,TH,UH,IDP,DRTYPE
       PARAMETER(ZI=(0.0D0,1.0D0))
@@ -30914,24 +34652,26 @@ C--compute the propagator factor
      &    +F3(O(P3),O(P2),2)*( FUP(O(P2),  P1 ,1,2)*F4(  P1 ,O(P4),1)
      &                        +FUP(O(P2),O(P1),1,1)*F4(O(P1),O(P4),2)))
       END
-CDECK  ID>, HWHSP7.
+CDECK  ID>, HWHS07.
 *CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
-      SUBROUTINE HWHSP7(ID,ME)
+      SUBROUTINE HWHS07(ID,ME)
 C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
 C  section gluon gluon --> fermion antifermion (triple gluon piece)
 C  N.B. a gauge choice has been made to simplify the triple gluon vertex
 C  This diagram 6 from DAMTP-2001-83 with the gauge choice L1=2 L2=1
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE,ZI
      &     ,F3M(2,2,8),F4M(2,2,8),MET,FST(2,2,8),
      &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
-      DOUBLE PRECISION A(2,NDIAGR),B(2,NDIAGR),MS(NDIAGR),MWD(NDIAGR),
-     &     MA(4),MA2(4),MR(NDIAGR),SH,TH,UH
-      INTEGER I,P1,P2,P3,P4,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER I,P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
      &     MA2,SH,TH,UH,IDP,DRTYPE
       PARAMETER(ZI=(0.0D0,1.0D0))
@@ -30953,23 +34693,25 @@ C--compute the propagator factor
       ENDIF
  10   CONTINUE
       END
-CDECK  ID>, HWHSP8.
+CDECK  ID>, HWHS08.
 *CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
-      SUBROUTINE HWHSP8(ID,ME)
+      SUBROUTINE HWHS08(ID,ME)
 C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
 C  section quark gluon --> fermion sfermion
 C  This diagram 7 from DAMTP-2001-83 with the gauge choice L2=1
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE,ZI
      &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),
      &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
-      DOUBLE PRECISION A(2,NDIAGR),B(2,NDIAGR),MS(NDIAGR),MWD(NDIAGR),
-     &     MA(4),MA2(4),MR(NDIAGR),SH,TH,UH,HWULDO,XMASS,PLAB,PRW,PCM
-      INTEGER P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH,HWULDO,XMASS,PLAB,PRW,PCM
+      INTEGER P1,P2,P3,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
      &     MA2,SH,TH,UH,IDP,DRTYPE
       PARAMETER(ZI=(0.0D0,1.0D0))
@@ -30987,23 +34729,25 @@ C--compute the propagator factor
       ME(P1,P2,P3,2) = ZERO
  10   ME(P1,P2,P3,1) = A(P1,ID)*PRE*FST(P2,P2,1)*F3(O(P3),  P1,1)
       END
-CDECK  ID>, HWHSP9.
+CDECK  ID>, HWHS09.
 *CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
-      SUBROUTINE HWHSP9(ID,ME)
+      SUBROUTINE HWHS09(ID,ME)
 C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
 C  section antiquark gluon --> fermion antisfermion
 C  This diagram 10 from DAMTP-2001-83 with the gauge choice L2=1
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE,ZI
      &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),
      &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
-      DOUBLE PRECISION A(2,NDIAGR),B(2,NDIAGR),MS(NDIAGR),MWD(NDIAGR),
-     &     MA(4),MA2(4),MR(NDIAGR),SH,TH,UH,HWULDO,XMASS,PLAB,PRW,PCM
-      INTEGER P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH,HWULDO,XMASS,PLAB,PRW,PCM
+      INTEGER P1,P2,P3,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
      &     MA2,SH,TH,UH,IDP,DRTYPE
       PARAMETER(ZI=(0.0D0,1.0D0))
@@ -31021,23 +34765,25 @@ C--compute the propagator factor
       ME(P1,P2,P3,2) = ZERO
   10  ME(P1,P2,P3,1) = A(O(P1),ID)*PRE*FST(P2,P2,1)*F3M(P1,P3,1)
       END
-CDECK  ID>, HWHSP0.
+CDECK  ID>, HWHS10.
 *CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
-      SUBROUTINE HWHSP0(ID,ME)
+      SUBROUTINE HWHS10(ID,ME)
 C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
 C  section quark gluon --> fermion antisfermion (s-channel quark)
 C  This is diagram 8 from DAMTP-2001-83 with the gauge choice L2=1
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE,ZI
      &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),
      &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
-      DOUBLE PRECISION A(2,NDIAGR),B(2,NDIAGR),MS(NDIAGR),MWD(NDIAGR),
-     &     MA(4),MA2(4),MR(NDIAGR),SH,TH,UH,HWULDO,XMASS,PLAB,PRW,PCM
-      INTEGER P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH,HWULDO,XMASS,PLAB,PRW,PCM
+      INTEGER P1,P2,P3,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
      &     MA2,SH,TH,UH,IDP,DRTYPE
       PARAMETER(ZI=(0.0D0,1.0D0))
@@ -31061,23 +34807,25 @@ C--compute the propagator factor
       ENDIF
  10   ME(P1,P2,P3,2) = ZERO
       END
-CDECK  ID>, HWHSPA.
+CDECK  ID>, HWHS11.
 *CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
-      SUBROUTINE HWHSPA(ID,ME)
+      SUBROUTINE HWHS11(ID,ME)
 C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
 C  section quark gluon --> fermion antisfermion (s-channel quark)
 C  This is diagram 11 from DAMTP-2001-83 with the gauge choice L2=1
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE,ZI
      &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),
      &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
-      DOUBLE PRECISION A(2,NDIAGR),B(2,NDIAGR),MS(NDIAGR),MWD(NDIAGR),
-     &     MA(4),MA2(4),MR(NDIAGR),SH,TH,UH,HWULDO,XMASS,PLAB,PRW,PCM
-      INTEGER P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH,HWULDO,XMASS,PLAB,PRW,PCM
+      INTEGER P1,P2,P3,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
      &     MA2,SH,TH,UH,IDP,DRTYPE
       PARAMETER(ZI=(0.0D0,1.0D0))
@@ -31099,23 +34847,25 @@ C--compute the propagator factor
       ENDIF
  10   ME(P1,P2,P3,2) = ZERO
       END
-CDECK  ID>, HWHSPB.
+CDECK  ID>, HWHS12.
 *CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
-      SUBROUTINE HWHSPB(ID,ME)
+      SUBROUTINE HWHS12(ID,ME)
 C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
 C  section quark gluon --> fermion antisfermion (s-channel quark)
 C  This is diagram 9 from DAMTP-2001-83 with the gauge choice L2=1
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE,ZI
      &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),
      &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
-      DOUBLE PRECISION A(2,NDIAGR),B(2,NDIAGR),MS(NDIAGR),MWD(NDIAGR),
-     &     MA(4),MA2(4),MR(NDIAGR),SH,TH,UH,HWULDO,XMASS,PLAB,PRW,PCM
-      INTEGER P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH,HWULDO,XMASS,PLAB,PRW,PCM
+      INTEGER P1,P2,P3,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
      &     MA2,SH,TH,UH,IDP,DRTYPE
       PARAMETER(ZI=(0.0D0,1.0D0))
@@ -31134,23 +34884,25 @@ C--compute the propagator factor
      &                      +F3(O(P3),O(P2), 2)*FUP(O(P2),P1,1,1))
  10   ME(P1,P2,P3,2) = ZERO
       END
-CDECK  ID>, HWHSPC.
+CDECK  ID>, HWHS13.
 *CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
-      SUBROUTINE HWHSPC(ID,ME)
+      SUBROUTINE HWHS13(ID,ME)
 C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
 C  section quark gluon --> fermion antisfermion (s-channel quark)
 C  This is diagram 12 from DAMTP-2001-83 with the gauge choice L2=1
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE,ZI
      &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),
      &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
-      DOUBLE PRECISION A(2,NDIAGR),B(2,NDIAGR),MS(NDIAGR),MWD(NDIAGR),
-     &     MA(4),MA2(4),MR(NDIAGR),SH,TH,UH,HWULDO,XMASS,PLAB,PRW,PCM
-      INTEGER P1,P2,P3,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH,HWULDO,XMASS,PLAB,PRW,PCM
+      INTEGER P1,P2,P3,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
      &     MA2,SH,TH,UH,IDP,DRTYPE
       PARAMETER(ZI=(0.0D0,1.0D0))
@@ -31169,11 +34921,11 @@ C--compute the propagator factor
      &                      +FUM(P1,O(P2),1, 2)*F3M(O(P2),P3,1))
  10   ME(P1,P2,P3,2) = ZERO
       END
-CDECK  ID>, HWHSPD.
+CDECK  ID>, HWHS14.
 *CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
-      SUBROUTINE HWHSPD(ID,ME)
+      SUBROUTINE HWHS14(ID,ME)
 C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
 C  section gluon gluon --> fermion antifermion (1st colour flow)
@@ -31181,13 +34933,15 @@ C  N.B. a gauge choice has been made to simplify the triple gluon vertex
 C  This diagram 4 from DAMTP-2001-83 with opposite helicity for 4
 C  and gauge choice L1=2 L2=1
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE,ZI,
      &     F3M(2,2,8),F4M(2,2,8),FST(2,2,8),FTP(2,2,8,8),FTM(2,2,8,8),
      &     FUP(2,2,8,8),FUM(2,2,8,8)
-      DOUBLE PRECISION A(2,NDIAGR),B(2,NDIAGR),MS(NDIAGR),MWD(NDIAGR),
-     &     MA(4),MA2(4),MR(NDIAGR),SH,TH,UH
-      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
      &     MA2,SH,TH,UH,IDP,DRTYPE
       PARAMETER(ZI=(0.0D0,1.0D0))
@@ -31206,11 +34960,11 @@ C--matrix element
      & +F3(O(P3),O(P1),1)*( FTP(O(P1),  P2 ,2,1)*F4(  P2 ,P4,2)
      &                     +FTP(O(P1),O(P2),2,2)*F4(O(P2),P4,1)))
       END
-CDECK  ID>, HWHSPE.
+CDECK  ID>, HWHS15.
 *CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
-      SUBROUTINE HWHSPE(ID,ME)
+      SUBROUTINE HWHS15(ID,ME)
 C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
 C  section gluon gluon --> fermion antifermion (2st colour flow)
@@ -31218,13 +34972,15 @@ C  N.B. a gauge choice has been made to simplify the triple gluon vertex
 C  This diagram 5 from DAMTP-2001-83 with opposite helicity for 4
 C  and gauge choice L1=2 L2=1
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE,ZI,
      &     F3M(2,2,8),F4M(2,2,8),FST(2,2,8),FTP(2,2,8,8),FTM(2,2,8,8),
      &     FUP(2,2,8,8),FUM(2,2,8,8)
-      DOUBLE PRECISION A(2,NDIAGR),B(2,NDIAGR),MS(NDIAGR),MWD(NDIAGR),
-     &     MA(4),MA2(4),MR(NDIAGR),SH,TH,UH
-      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST, A,B,MS,MWD,MR,MA,
      &    MA2,SH,TH,UH,IDP,DRTYPE
       PARAMETER(ZI=(0.0D0,1.0D0))
@@ -31243,11 +34999,11 @@ C--matrix element
      &+F3(O(P3),O(P2),2)*( FUP(O(P2),  P1 ,1,2)*F4(  P1 ,P4,1)
      &                    +FUP(O(P2),O(P1),1,1)*F4(O(P1),P4,2)))
       END
-CDECK  ID>, HWHSPF.
+CDECK  ID>, HWHS16.
 *CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
-      SUBROUTINE HWHSPF(ID,ME)
+      SUBROUTINE HWHS16(ID,ME)
 C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
 C  section gluon gluon --> fermion antifermion (triple gluon piece)
@@ -31255,19 +35011,20 @@ C  N.B. a gauge choice has been made to simplify the triple gluon vertex
 C  This diagram 6 from DAMTP-2001-83 with opposite helicity for 4
 C  and gauge choice L1=2 L2=1
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE,ZI
      &     ,F3M(2,2,8),F4M(2,2,8),MET,FST(2,2,8),
      &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
-      DOUBLE PRECISION A(2,NDIAGR),B(2,NDIAGR),MS(NDIAGR),MWD(NDIAGR),
-     &     MA(4),MA2(4),MR(NDIAGR),SH,TH,UH
-      INTEGER I,P1,P2,P3,P4,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER I,P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
      &     MA2,SH,TH,UH,IDP,DRTYPE
       PARAMETER(ZI=(0.0D0,1.0D0))
       COMMON/HWHEWS/S(8,8,2),D(8,8)
       DATA O/2,1/
-      EXTERNAL HWULDO
 C--compute the propagator factor
       PRE = HALF/SH**2
 C--matrix element
@@ -31285,23 +35042,25 @@ C--matrix element
       ENDIF
  10   CONTINUE
       END
-CDECK  ID>, HWHSPG.
+CDECK  ID>, HWHS17.
 *CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
-      SUBROUTINE HWHSPG(ID,ME)
+      SUBROUTINE HWHS17(ID,ME)
 C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
 C  section fermion fermion --> fermion fermion (t-channel boson)
 C  This diagram 13 from DAMTP-2001-83
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE,ZI,
      &     F3M(2,2,8),F4M(2,2,8),FST(2,2,8),
      &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8),DL(2,2)
-      DOUBLE PRECISION A(2,NDIAGR),B(2,NDIAGR),MS(NDIAGR),MWD(NDIAGR),
-     &     MA(4),MA2(4),MR(NDIAGR),SH,TH,UH,HWULDO,XMASS,PLAB,PRW,PCM
-      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH,HWULDO,XMASS,PLAB,PRW,PCM
+      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
      &     MA2,SH,TH,UH,IDP,DRTYPE
       PARAMETER(ZI=(0.0D0,1.0D0))
@@ -31325,23 +35084,25 @@ C--compute the propagator factor
         ENDIF
  10   CONTINUE
       END
-CDECK  ID>, HWHSPH.
+CDECK  ID>, HWHS18.
 *CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
-      SUBROUTINE HWHSPH(ID,ME)
+      SUBROUTINE HWHS18(ID,ME)
 C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
 C  section fermion antifermion --> fermion antifermion (t-channel boson)
 C  This diagram 14 from DAMTP-2001-83
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE,ZI,
      &     F3M(2,2,8),F4M(2,2,8),FST(2,2,8),
      &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8),DL(2,2)
-      DOUBLE PRECISION A(2,NDIAGR),B(2,NDIAGR),MS(NDIAGR),MWD(NDIAGR),
-     &     MA(4),MA2(4),MR(NDIAGR),SH,TH,UH,HWULDO,XMASS,PLAB,PRW,PCM
-      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH,HWULDO,XMASS,PLAB,PRW,PCM
+      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
      &     MA2,SH,TH,UH,IDP,DRTYPE
       PARAMETER(ZI=(0.0D0,1.0D0))
@@ -31365,23 +35126,25 @@ C--compute the propagator factor
         ENDIF
  10   CONTINUE
       END
-CDECK  ID>, HWHSPI.
+CDECK  ID>, HWHS19.
 *CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
-      SUBROUTINE HWHSPI(ID,ME)
+      SUBROUTINE HWHS19(ID,ME)
 C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
 C  section antifermion fermion --> antifermion fermion (t-channel boson)
 C  This diagram 15 from DAMTP-2001-83
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE,ZI,
      &     F3M(2,2,8),F4M(2,2,8),FST(2,2,8),
      &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8),DL(2,2)
-      DOUBLE PRECISION A(2,NDIAGR),B(2,NDIAGR),MS(NDIAGR),MWD(NDIAGR),
-     &     MA(4),MA2(4),MR(NDIAGR),SH,TH,UH,HWULDO,XMASS,PLAB,PRW,PCM
-      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH,HWULDO,XMASS,PLAB,PRW,PCM
+      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
      &     MA2,SH,TH,UH,IDP,DRTYPE
       PARAMETER(ZI=(0.0D0,1.0D0))
@@ -31405,23 +35168,25 @@ C--compute the propagator factor
         ENDIF
  10   CONTINUE
       END
-CDECK  ID>, HWHSPJ.
+CDECK  ID>, HWHS20.
 *CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
-      SUBROUTINE HWHSPJ(ID,ME)
+      SUBROUTINE HWHS20(ID,ME)
 C-----------------------------------------------------------------------
 C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
 C  section antifermion fermion --> antifermion fermion (t-channel boson)
 C  This diagram 16 from DAMTP-2001-83
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
       DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE,ZI,
      &     F3M(2,2,8),F4M(2,2,8),FST(2,2,8),
      &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8),DL(2,2)
-      DOUBLE PRECISION A(2,NDIAGR),B(2,NDIAGR),MS(NDIAGR),MWD(NDIAGR),
-     &     MA(4),MA2(4),MR(NDIAGR),SH,TH,UH,HWULDO,XMASS,PLAB,PRW,PCM
-      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAGR),DRTYPE(NDIAGR)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH,HWULDO,XMASS,PLAB,PRW,PCM
+      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
       COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
      &     MA2,SH,TH,UH,IDP,DRTYPE
       PARAMETER(ZI=(0.0D0,1.0D0))
@@ -31445,6 +35210,470 @@ C--compute the propagator factor
         ENDIF
  10   CONTINUE
       END
+CDECK  ID>, HWHS21.
+*CMZ :-        -02/10/01  10:17:10  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWHS21(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
+C  section  f fbar ---> f fbar via s-channel scalar exchange
+C  This is diagram 1 from RPV notes
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE
+     &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),ZI,
+     &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
+      COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
+     &     MA2,SH,TH,UH,IDP,DRTYPE
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      DATA O/2,1/
+      PARAMETER(ZI=(0.0D0,1.0D0))
+C--compute the propagator factor
+      PRE = HALF/(SH-MS(ID)+ZI*MWD(ID))
+      DO 10 P1=1,2
+      DO 10 P3=1,2
+      DO 10 P4=1,2
+      ME(P1,  P1 ,P3,P4) = (0.0D0,0.0D0)
+ 10   ME(P1,O(P1),P3,P4) = PRE*A(P1,ID)*S(2,1,O(P1))*
+     &     ( B(  P4 ,ID)*F3(O(P3),  P4 ,4)*S(4,8,P4)
+     &      -B(O(P4),ID)*F3(O(P3),O(P4),8)*MA(4))
+      END
+CDECK  ID>, HWHS22.
+*CMZ :-        -08/04/02  11:54:39  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWHS22(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
+C  section  f fbar ---> f fbar via t-channel scalar exchange
+C  This is diagram 2 from RPV notes
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE
+     &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),
+     &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
+      COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
+     &     MA2,SH,TH,UH,IDP,DRTYPE
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      DATA O/2,1/
+C--compute the propagator factor
+      PRE = -HALF/(TH-MS(ID))
+      DO 10 P1=1,2
+      DO 10 P2=1,2
+      DO 10 P3=1,2
+      DO 10 P4=1,2
+ 10   ME(P1,P2,P3,P4) = PRE*B(O(P2),ID)*A(  P1 ,ID)*
+     &                  F4(P2,O(P4),2)*F3(O(P3),P1,1)
+      END
+CDECK  ID>, HWHS23.
+*CMZ :-        -08/04/02  11:54:39  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWHS23(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
+C  section  f fbar ---> fermion fermion via t-channel scalar exchange
+C  This is diagram 3 from RPV notes
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE
+     &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),
+     &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
+      COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
+     &     MA2,SH,TH,UH,IDP,DRTYPE
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      DATA O/2,1/
+C--compute the propagator factor
+      PRE = HALF/(UH-MS(ID))
+      DO 10 P1=1,2
+      DO 10 P2=1,2
+      DO 10 P3=1,2
+      DO 10 P4=1,2
+ 10   ME(P1,P2,P3,P4) = PRE*B(O(P2),ID)*A(  P1 ,ID)*
+     &                  F4M(P4,P1,1)*F3M(P2,P3,2)
+      END
+CDECK  ID>, HWHS24.
+*CMZ :-        -08/04/02  11:54:39  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWHS24(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
+C  section  f fbar ---> f f via s-channel scalar exchange
+C  This is diagram 4 from RPV notes
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE
+     &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),ZI,
+     &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
+      COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
+     &     MA2,SH,TH,UH,IDP,DRTYPE
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      DATA O/2,1/
+      PARAMETER(ZI=(0.0D0,1.0D0))
+C--compute the propagator factor
+      PRE = HALF/(SH-MS(ID)+ZI*MWD(ID))
+      DO 10 P1=1,2
+      DO 10 P3=1,2
+      DO 10 P4=1,2
+      ME(P1,  P1 ,P3,P4) = (0.0D0,0.0D0)
+ 10   ME(P1,O(P1),P3,P4) = PRE*A(P1,ID)*S(2,1,O(P1))*
+     &                    ( B(O(P3),ID)*F4M(O(P4),O(P3),3)*S(3,7,O(P3))
+     &                     -B(  P3 ,ID)*F4M(O(P4),  P3 ,7)*MA(3))
+      END
+CDECK  ID>, HWHS25.
+*CMZ :-        -08/04/02  11:54:39  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWHS25(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
+C  section  f fbar ---> f f via u-channel scalar exchange
+C  This is diagram 5 from RPV notes
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE
+     &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),
+     &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
+      COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
+     &     MA2,SH,TH,UH,IDP,DRTYPE
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      DATA O/2,1/
+C--compute the propagator factor
+      PRE = -HALF/(UH-MS(ID))
+      DO 10 P1=1,2
+      DO 10 P2=1,2
+      DO 10 P3=1,2
+      DO 10 P4=1,2
+ 10   ME(P1,P2,P3,P4) = PRE*B(P1,ID)*A(O(P2),ID)*
+     &                  F4M(O(P4),P1,1)*F3M(P2,P3,2)
+      END
+CDECK  ID>, HWHS26.
+*CMZ :-        -08/04/02  11:54:39  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWHS26(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
+C  section  f fbar ---> f f via t-channel scalar exchange
+C  This is diagram 6 from RPV notes
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE
+     &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),
+     &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
+      COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
+     &     MA2,SH,TH,UH,IDP,DRTYPE
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      DATA O/2,1/
+C--compute the propagator factor
+      PRE = HALF/(TH-MS(ID))
+      DO 10 P1=1,2
+      DO 10 P2=1,2
+      DO 10 P3=1,2
+      DO 10 P4=1,2
+ 10   ME(P1,P2,P3,P4) = PRE*B(P1,ID)*A(O(P2),ID)*
+     &                  F4(P2,P4,2)*F3(O(P3),P1,1)
+      END
+CDECK  ID>, HWHS27.
+*CMZ :-        -08/04/02  11:54:39  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWHS27(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
+C  section  f f ---> f fbar via s-channel scalar exchange
+C  This is diagram 7 from RPV notes
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE
+     &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),ZI,
+     &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
+      COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
+     &     MA2,SH,TH,UH,IDP,DRTYPE
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      DATA O/2,1/
+      PARAMETER(ZI=(0.0D0,1.0D0))
+C--compute the propagator factor
+      PRE =-HALF/(SH-MS(ID)+ZI*MWD(ID))
+      DO 10 P1=1,2
+      DO 10 P3=1,2
+      DO 10 P4=1,2
+      ME(P1,O(P1),P3,P4) = (0.0D0,0.0D0)
+ 10   ME(P1,  P1 ,P3,P4) = PRE*A(P1,ID)*S(1,2,O(P1))*
+     &     ( B(  P4 ,ID)*F3(O(P3),  P4 ,4)*S(4,8,P4)
+     &      -B(O(P4),ID)*F3(O(P3),O(P4),8)*MA(4))
+      END
+CDECK  ID>, HWHS28.
+*CMZ :-        -08/04/02  11:54:39  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWHS28(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
+C  section  f f ---> f fbar via t-channel scalar exchange
+C  This is diagram 8 from RPV notes
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE
+     &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),ZI,
+     &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
+      COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
+     &     MA2,SH,TH,UH,IDP,DRTYPE
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      DATA O/2,1/
+      PARAMETER(ZI=(0.0D0,1.0D0))
+C--compute the propagator factor
+      PRE = -HALF/(TH-MS(ID))
+      DO 10 P1=1,2
+      DO 10 P2=1,2
+      DO 10 P3=1,2
+      DO 10 P4=1,2
+ 10   ME(P1,P2,P3,P4) = PRE*B(P2,ID)*A(  P1 ,ID)*
+     &                  F4(O(P2),O(P4),2)*F3(O(P3),P1,1)
+      END
+CDECK  ID>, HWHS29.
+*CMZ :-        -08/04/02  11:54:39  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWHS29(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
+C  section  f f ---> f fbar via u-channel scalar exchange
+C  This is diagram 9 from RPV notes
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE
+     &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),ZI,
+     &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
+      COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
+     &     MA2,SH,TH,UH,IDP,DRTYPE
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      DATA O/2,1/
+      PARAMETER(ZI=(0.0D0,1.0D0))
+C--compute the propagator factor
+      PRE = HALF/(UH-MS(ID))
+      DO 10 P1=1,2
+      DO 10 P2=1,2
+      DO 10 P3=1,2
+      DO 10 P4=1,2
+ 10   ME(P1,P2,P3,P4) = PRE*B(P2,ID)*A(P1,ID)*
+     &                  F3(O(P3),P2,2)*F4(O(P1),O(P4),1)
+      END
+CDECK  ID>, HWHS30.
+*CMZ :-        -08/04/02  11:54:39  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWHS30(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
+C  section  fbar fbar ---> f f via s-channel scalar exchange
+C  This is diagram 10 from RPV notes
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE
+     &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),ZI,
+     &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
+      COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
+     &     MA2,SH,TH,UH,IDP,DRTYPE
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      DATA O/2,1/
+      PARAMETER(ZI=(0.0D0,1.0D0))
+C--compute the propagator factor
+      PRE = HALF/(SH-MS(ID)+ZI*MWD(ID))
+      DO 10 P1=1,2
+      DO 10 P3=1,2
+      DO 10 P4=1,2
+      ME(P1,O(P1),P3,P4) = (0.0D0,0.0D0)
+ 10   ME(P1,  P1 ,P3,P4) = PRE*A(O(P1),ID)*S(2,1,P1)*
+     &                    ( B(O(P3),ID)*F4M(O(P4),O(P3),3)*S(3,7,O(P3))
+     &                     -B(  P3 ,ID)*F4M(O(P4),  P3 ,7)*MA(3))
+      END
+CDECK  ID>, HWHS31.
+*CMZ :-        -08/04/02  11:54:39  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWHS31(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
+C  section  fbar fbar ---> f f via t-channel scalar exchange
+C  This is diagram 11 from RPV notes
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE
+     &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),ZI,
+     &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
+      COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
+     &     MA2,SH,TH,UH,IDP,DRTYPE
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      DATA O/2,1/
+      PARAMETER(ZI=(0.0D0,1.0D0))
+C--compute the propagator factor
+      PRE = HALF/(TH-MS(ID))
+      DO 10 P1=1,2
+      DO 10 P2=1,2
+      DO 10 P3=1,2
+      DO 10 P4=1,2
+ 10   ME(P1,P2,P3,P4) = PRE*B(O(P2),ID)*A(O(P1),ID)*
+     &                  F4M(O(P4),O(P2),2)*F3M(P1,P3,1)
+      END
+CDECK  ID>, HWHS32.
+*CMZ :-        -08/04/02  11:54:39  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWHS32(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
+C  section  fbar fbar ---> f f via u-channel scalar exchange
+C  This is diagram 12 from RPV notes
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE
+     &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),ZI,
+     &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P2,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
+      COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
+     &     MA2,SH,TH,UH,IDP,DRTYPE
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      DATA O/2,1/
+      PARAMETER(ZI=(0.0D0,1.0D0))
+C--compute the propagator factor
+      PRE =-HALF/(UH-MS(ID))
+      DO 10 P1=1,2
+      DO 10 P2=1,2
+      DO 10 P3=1,2
+      DO 10 P4=1,2
+ 10   ME(P1,P2,P3,P4) = PRE*B(O(P2),ID)*A(O(P1),ID)*
+     &                   F4M(O(P4),O(P1),1)*F3M(P2,P3,2)
+      END
+CDECK  ID>, HWHS33.
+*CMZ :-        -08/04/02  11:54:39  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWHS33(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
+C  section  f f ---> f f via s-channel scalar exchange
+C  This is diagram 13 from RPV
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE
+     &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),ZI,
+     &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
+      COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
+     &     MA2,SH,TH,UH,IDP,DRTYPE
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      DATA O/2,1/
+      PARAMETER(ZI=(0.0D0,1.0D0))
+C--compute the propagator factor
+      PRE = HALF/(SH-MS(ID)+ZI*MWD(ID))
+      DO 10 P1=1,2
+      DO 10 P3=1,2
+      DO 10 P4=1,2
+      ME(P1,O(P1),P3,P4) = (0.0D0,0.0D0)
+ 10   ME(P1,  P1 ,P3,P4) = PRE*A(P1,ID)*S(1,2,O(P1))*
+     &     ( B(O(P3),ID)*F4M(O(P4),O(P3),3)*S(3,7,O(P3))
+     &      -B(  P3 ,ID)*F4M(O(P4),  P3 ,7)*MA(3))
+      END
+CDECK  ID>, HWHS34.
+*CMZ :-        -08/04/02  11:54:39  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWHS34(ID,ME)
+C-----------------------------------------------------------------------
+C  Subroutine to calculate the helicity amplitudes for the 2-to-2 cross
+C  section  fbar fbar ---> fbar fbar via t-channel scalar exchange
+C  This is diagram 14 from RPV notes
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      INTEGER NDIAHD
+      PARAMETER(NDIAHD=10)
+      DOUBLE COMPLEX ME(2,2,2,2),S,D,F3(2,2,8),F4(2,2,8),PRE
+     &     ,F3M(2,2,8),F4M(2,2,8),FST(2,2,8),ZI,
+     &     FTP(2,2,8,8),FTM(2,2,8,8),FUP(2,2,8,8),FUM(2,2,8,8)
+      DOUBLE PRECISION A(2,NDIAHD),B(2,NDIAHD),MS(NDIAHD),MWD(NDIAHD),
+     &     MA(4),MA2(4),MR(NDIAHD),SH,TH,UH
+      INTEGER P1,P3,P4,ID,O(2),IDP(4+NDIAHD),DRTYPE(NDIAHD)
+      COMMON/HWSPHC/F3,F4,F3M,F4M,FTP,FTM,FUP,FUM,FST,A,B,MS,MWD,MR,MA,
+     &     MA2,SH,TH,UH,IDP,DRTYPE
+      COMMON/HWHEWS/S(8,8,2),D(8,8)
+      DATA O/2,1/
+      PARAMETER(ZI=(0.0D0,1.0D0))
+C--compute the propagator factor
+      PRE = HALF/(SH-MS(ID)+ZI*MWD(ID))
+      DO 10 P1=1,2
+      DO 10 P3=1,2
+      DO 10 P4=1,2
+      ME(P1,O(P1),P3,P4) = (0.0D0,0.0D0)
+ 10   ME(P1,  P1 ,P3,P4) = PRE*A(O(P1),ID)*S(2,1,P1)*
+     &     ( B(  P4 ,ID)*F3(P3,  P4 ,4)*S(4,8,P4)
+     &      -B(O(P4),ID)*F3(P3,O(P4),8)*MA(4))
+      END 
 CDECK  ID>, HWHSS1.
 *CMZ :-        -18/05/99  20.33.45  by  Kosuke Odagiri
 *-- Author :    Kosuke Odagiri
@@ -31470,7 +35699,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     LL(BAR) -> GAUGINOS (including beam polarization)
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWHSS2, S, T, U, M3, M4, SGN
       DOUBLE COMPLEX CLL, CLR, CRL, CRR
       HWHSS2 =
@@ -31495,7 +35724,7 @@ C-----------------------------------------------------------------------
 C     SUSY 2 PARTON -> 2 GAUGINOS PROCESSES        (1 - 3)
 C                   -> GAUGINO + SPARTON PROCESSES (4 - 7)
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN, HWUALF, HWUAEM, EPS, HCS, RCS, DIST,
      & ML(6), ML2(6), MR(6), MR2(6), MCH(2), MCH2(2), MNU(4), MNU2(4),
      & MSQK, MG, MG2, SM, DM, DAB, QPE, SGN, PF, SQPE, EMSC2,
@@ -32087,7 +36316,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     SUSY 2 PARTON -> 2 SLEPTON PROCESSES
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN, HWUAEM, EPS, HCS, RCS, DIST, S, PF, QPE,
      & FACTR, SN2TH, MZ, MW, ME2(2,2,6,2), ME2W(2,3), EMSC2, GW2
       INTEGER IQ, IQ1, IQ2, ID1, ID2, IL, IL1, IL2, I, J
@@ -32280,7 +36509,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     SUSY HARD 2 PARTON -> 2 SPARTON PROCESSES
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN, HWUALF, EPS, HCS, RCS, DIST, NC, NC2,
      & NC2C, ML2(6), ML4(6), MR2(6), MR4(6), MG2, SM, DM, QPE,
      & SQPE, FACTR, AFAC, AF, BONE, CFAC, CFC2, CFC3, CONE,
@@ -32955,7 +37184,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     SUSY HARD 2 PARTON -> 2 SPARTON/GAUGINO/SLEPTON PROCESSES
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION SAVWT(3),RANWT,HWRGEN,HWRUNI,Z1,Z2,ET,EJ,
      & QPE,S,T,U,KK,KK2,YJ1INF,YJ1SUP,YJ2INF,YJ2SUP,SVEMSC
       INTEGER ISP
@@ -33032,7 +37261,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     IDENTIFIES HARD SUSY SUBPROCESS
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER ID3, R3, ID4, R4, IPERM, IHPR, SSL
       PARAMETER (SSL = 400)
        IHPRO  = 3000 + IHPR
@@ -33054,7 +37283,7 @@ C   V + 1 JET PRODUCTION, WHERE V=W (IHPRO.LT.5) OR Z (IHPRO.GE.5).
 C   USES CROSS-SECTIONS OF EHLQ FOR ANNIHILATION AND COMPTON SCATTERING
 C   IHPRO=0 FOR BOTH, 1 FOR ANNIHILATION, AND 2 FOR COMPTON.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRUNI,DISFAC(2,12,2),EMV2,DISMAX,S,T,U,
      & SHAT,THAT,UHAT,Z,HWUALF,PT,EMT,GFACTR,SIGANN,SIGCOM(2),CSFAC,ET,
      & EJ,YMIN,YMAX,VYMIN,VYMAX,EMAX,CV,CA,BR,EMV,GAMV
@@ -33071,7 +37300,7 @@ C   POSSIBLE SUB-PROCESS.
 C   INDEX1=INITIAL STATE PERMUTATION (1=AS IDINIT/QG;2=OPPOSITE/GQ),
 C        2=QUARK (FOR ANNIHILATION, >6 IMPLIES CABIBBO ROTATED PAIR),
 C        3=PROCESS (1=ANNIHILATION, 2=COMPTON)
-      DATA ICOFLO,DISFAC/2,4,3,1,4,1,3,2,48*0./
+      DATA ICOFLO,DISFAC/2,4,3,1,4,1,3,2,48*0.D0/
       IF (GENEV) THEN
         DISMAX=0
         DO 110 I=1,2
@@ -33241,7 +37470,7 @@ C     Vector Boson production with two hard jets
 C     Master subroutine for all vector boson + 2 jet processes
 C     Currently implemented qqbar Z only
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER I,J,K,IDBS,IPRC,IDP(6),ORD,IB,ICMF,IHEP,IFLOW,IZ,IBRAD,
      &     ICOL(5),IDZ,IQ
       DOUBLE PRECISION HWRGEN,HWRUNI,XMASS,PLAB,PRW,PCM,HWUAEM,BR,FLUX,
@@ -33256,8 +37485,8 @@ C-----------------------------------------------------------------------
       COMMON/HWHZBB/F(8,8)
       COMMON /HWPSOM/ WI
       DATA B/-1.0D0,-1.0D0,1.0D0,1.0D0,1.0D0,1.0D0/
-      DATA BRZED/0.154,0.120,0.154,0.120,0.152,0.000,
-     &           0.033,0.067,0.033,0.067,0.033,0.067/
+      DATA BRZED/0.154D0,0.120D0,0.154D0,0.120D0,0.152D0,0.000D0,
+     &           0.033D0,0.067D0,0.033D0,0.067D0,0.033D0,0.067D0/
       SAVE ME,MBOS,MBOS2,GMBS,IDBS,IPRC,IDP,FSTCLL,MQ,MQ2,TWOPI2,FPI4,
      &     IQ,MASS
 C--generate the event
@@ -33525,7 +37754,7 @@ C     UNLESS USER SPECIFIES OTHERWISE BY MOD(IPROC,100)=1-8 RESPECTIVELY
 C---DSDCOS HOLDS THE CROSS-SECTIONS FOR THE PROCESSES LISTED ABOVE
 C   (1-8) ARE WITH B FROM BEAM 1, (9-16) ARE WITH B FROM BEAM 2.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRUNI,DSDCOS(16),EMT2,EMT,EMW2,EMW,
      & CMFMIN,TAUMIN,TAUMLN,S,T,U,ROOTS,DSMAX
       INTEGER HWRINT,IDHWEX(2,16),I
@@ -33605,7 +37834,7 @@ C-----------------------------------------------------------------------
 C     W+/- PRODUCTION AND DECAY VIA DRELL-YAN PROCESS
 C     MEAN EVWGT IS SIG(W+/-)*(BRANCHING FRACTION) IN NB
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRUNI,HWUPCM,PRAN,PROB,COEF,CSFAC,EMW,
      & FTQK,PTOP,ETOP,EBOT,PMAX,FHAD,FTOT,BRAF,FLEP,TMIN,HWUAEM
       INTEGER HWRINT,ICH,IC,IL,ID,IDEC,JDEC,IWP(2,16)
@@ -33748,7 +37977,7 @@ C     =1 PDG; =2 HERWIG numeric; =3 HERWIG character name.
 C     When reading in if IME =1 matrix element codes >= 100 are accepted
 C                             0                            are set zero.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IUNIT,IOPT,IME,JUNIT,I,J,K,L,IDKY,ITMP(5),IDUM
       CHARACTER*8 CDK(NMXDKS),CDKPRD(5,NMXDKS),CDUM
       JUNIT=ABS(IUNIT)
@@ -33825,11 +38054,11 @@ C----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     SETS INPUT PARAMETERS
 C----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION FAC,ANGLE
       INTEGER I,J,N,L
       CHARACTER*28 TITLE
-      DATA TITLE/'HERWIG 6.400    21 Jan 2002'/
+      DATA TITLE/'HERWIG 6.500    16 Oct 2002'/
       WRITE (6,10) TITLE
   10  FORMAT(//10X,A28//,
      &         10X,'Please reference:  G. Marchesini, B.R. Webber,',/,
@@ -34411,7 +38640,114 @@ C   EG CIRCAC=1=SBAND, CIRCAC=2=TESLA, CIRCAC=3=XBAND
       CIRCRV=9999 12 31
       CIRCCH=0
 C---END OF CIRCE VARIABLES
+C--options for Les Houches Accord
+C--allow self connected gluons (.TRUE.) or forbid (.FALSE.)
+      LHGLSF = .FALSE.
+C--generate the soft event (.TRUE.) or don't (.FALSE.)
+      LHSOFT = .TRUE.
+C--conserve longitudinal momentum (.true.) or rapidity of hard process
+      PRESPL = .TRUE.
   999 END
+CDECK  ID>, HWIGUP.
+*CMZ :-        -15/07/02  16.42.23  by  Peter Richardson
+*-- Author :    Peter Richardson
+C----------------------------------------------------------------------
+      SUBROUTINE HWIGUP
+C----------------------------------------------------------------------
+C     Use the GUPI (Generic User Process Interface) run common block
+C     to initialise HERWIG
+C----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      INTEGER MAXPUP
+      PARAMETER(MAXPUP=100)
+      INTEGER IDBMUP,PDFGUP,PDFSUP,IDWTUP,NPRUP,LPRUP
+      DOUBLE PRECISION EBMUP,XSECUP,XERRUP,XMAXUP
+      COMMON /HEPRUP/ IDBMUP(2),EBMUP(2),PDFGUP(2),PDFSUP(2),
+     &                IDWTUP,NPRUP,XSECUP(MAXPUP),XERRUP(MAXPUP),
+     &                XMAXUP(MAXPUP),LPRUP(MAXPUP)
+      CHARACTER *8 DUMMY,PDFNUC(9),PDFPI(9),PDFPHT(9)
+      DATA PDFNUC/ 'DO','DFLM','MRS','CTEQ','GRV','ABFOW','BM',
+     &             '        ','         '/
+      DATA PDFPI / 'OW-P','        ','SMRS-P','        ','GRV-P',
+     &             'ABFKW-P','        ','        ','        '/
+      DATA PDFPHT /'DO-G','DG-G','LAC-G','GS-G','GRV-G','ACG-G',
+     &             '         ','WHIT-G','SaSph'/
+      INTEGER I,IDB(2)
+C--call the user routine to do the initialisation
+      CALL UPINIT
+C--setup the beam particles and momentum
+      CALL HWUIDT(1,IDBMUP(1),IDB(1),DUMMY)
+      PART1=DUMMY
+      CALL HWUIDT(1,IDBMUP(2),IDB(2),DUMMY)
+      PART2=DUMMY
+      PBEAM1 = SQRT(EBMUP(1)**2-RMASS(IDB(1))**2)
+      PBEAM2 = SQRT(EBMUP(2)**2-RMASS(IDB(2))**2)
+C--set up for PDFLIB if need
+      DO I=1,2
+        IF(PDFGUP(I).NE.-1) THEN
+          IF(PDFGUP(I).LT.1.OR.PDFGUP(I).GT.9) 
+     &          CALL HWWARN('HWIGUP',500,*999)
+          MODPDF(I) = PDFSUP(I)
+C--proton/neutron beams
+          IF(ABS(IDBMUP(I)).EQ.2212.OR.ABS(IDBMUP(I)).EQ.2112) THEN
+            AUTPDF(I) = PDFNUC(PDFGUP(I))
+C--photon beams
+          ELSEIF(ABS(IDBMUP(I)).EQ.22) THEN
+            AUTPDF(I) = PDFPHT(PDFGUP(I))
+C--pion beams
+          ELSEIF(ABS(IDBMUP(I)).EQ.211) THEN
+            AUTPDF(I) = PDFPI(PDFGUP(I))
+C--unknown beam type
+          ELSE
+            CALL HWWARN('HWIGUP',500,*999)
+          ENDIF
+        ENDIF
+      ENDDO
+C--decide what to do about the weights
+      IF(ABS(IDWTUP).EQ.1) THEN
+        WGTMAX = ZERO
+        AVWGT  = ONE
+        AVABW  = ONE
+        NOWGT  = .TRUE.
+C--sum up the magnitudes of the maximum weight
+        LHMXSM = ZERO
+        DO I=1,NPRUP
+          LHXMAX(I) = XMAXUP(I)*1.0D-3
+          LHMXSM    = LHMXSM+ABS(LHXMAX(I))
+        ENDDO
+        ITYPLH = 0
+      ELSEIF(ABS(IDWTUP).EQ.2) THEN
+        WGTMAX = ZERO
+        AVWGT  = ONE
+        AVABW  = ONE
+        NOWGT = .TRUE.
+C--sum the cross sections and obtain the total
+        LHMXSM = ZERO
+        DO I=1,NPRUP
+          LHXSCT(I) = XSECUP(I)*1.0D-3
+          LHXMAX(I) = XMAXUP(I)*1.0D-3
+          LHMXSM = LHMXSM+ABS(LHXSCT(I))
+        ENDDO
+        ITYPLH = 0
+      ELSEIF(ABS(IDWTUP).EQ.3) THEN
+        WGTMAX = ONE
+        AVWGT  = ONE
+        AVABW  = ONE
+        NOWGT = .TRUE.
+      ELSEIF(ABS(IDWTUP).EQ.4) THEN
+        WGTMAX = ONE
+        AVWGT  = ONE
+        NOWGT = .FALSE.
+      ENDIF
+      IF(IDWTUP.LT.0) NEGWTS = .TRUE.
+C--zero the weight
+      DO I=1,NPRUP
+        LHWGT (I) = ZERO
+        LHWGTS(I) = ZERO
+        LHIWGT(I) = 0
+        LHNEVT(I) = 0
+      ENDDO
+ 999  END
 CDECK  ID>, HWIMDE.
 *CMZ :-        -12/10/01  17.14.22  by  Peter Richardson
 *-- Author :    Peter Richardson
@@ -34420,7 +38756,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     Subroutine to merge Higgs WW/ZZ decay modes for four body ME
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IH,I,NMODE,J,IMAX,K
       LOGICAL REMOVE
       DOUBLE PRECISION BR
@@ -34531,7 +38867,7 @@ C     IOPT = 1 sets the weights for the different channels to their
 C              default values
 C     IOPT = 2 optimises the weights for the process selected
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER I,IPRC,ICH,IOPT,ISTP,IWGT,IFER,IANT,IGAU,IQRK
       LOGICAL CALLED,TEV,LHC
       DOUBLE PRECISION CHNPST(IMAXCH,IMAXOP),D(IMAXOP),CHWGTS(IMAXCH),
@@ -34799,7 +39135,7 @@ C-----------------------------------------------------------------------
 C     Calculates the couplings for the SUSY decays for spin correlations
 C     and 3/4 body matrix elements
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWUALF,PRE,MCHAR(2),QIJPP(4,4),SIJPP(4,4),
      &     DIJ(2,2),QIJ(2,2),R(4,2),SIJ(2,2)
       INTEGER I,J,K,L,IH,IK,IL,IQ
@@ -35018,7 +39354,7 @@ C-----------------------------------------------------------------------
 C     Initialise all the decay modes for three/four body MEs and spin
 C     correlations
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER I,J,K,NDKYST
 C--set the number of two and three body modes to zero
       N2MODE = 0
@@ -35135,22 +39471,23 @@ C--finally write the matrix element codes
       RETURN
  999  END
 CDECK  ID>, HWISP2.
-*CMZ :-        -12/10/01  12.08.10  by  Peter Richardson
+*CMZ :-        -30/09/02  14:05:28  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
       SUBROUTINE HWISP2
 C-----------------------------------------------------------------------
 C     Initialise the SUSY two body modes for spin correlations
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
-      INTEGER I,J,IL,IH,L,L1,IM,O(2),II,JJ
+      INCLUDE 'HERWIG65.INC'
+      INTEGER I,J,IL,IH,L,L1,IM,O(2),II,JJ,III,JJJ,KKK
       COMMON /HWSPNC/ SW,CW,TW,E,G,RT,ORT,MW,MZ,GS,AFN,AFG,AFC,OIJ,OIJP,
      &               OIJPP,HNN,HCC,HNC,HFF,HWW,HZZ,ZAB,HHB
       DOUBLE PRECISION SW,CW,TW,E,G,RT,ORT,MW,MZ,GS,AFN(2,12,2,4),
      &     AFG(2,6,2),AFC(2,12,2,2),OIJ(2,4,2),OIJP(2,2,2),OIJPP(2,4,4),
      &     HNN(2,3,4,4),HCC(2,3,2,2),HNC(2,4,2),HFF(2,4,12),HWW(2),
-     &     HZZ(2),ZAB(12,2,2),HHB(2,3)
+     &     HZZ(2),ZAB(12,2,2),HHB(2,3),FPI
       DATA O/2,1/
+      DATA FPI/0.09298D0/
       IF(IERROR.NE.0.OR..NOT.SUSYIN) RETURN
 C--now the two body modes for spin corrections
       DO 1000 JJ=1,NRES
@@ -35163,13 +39500,35 @@ C--now the two body modes for spin corrections
         IF(IDKPRD(2,I).EQ.0.OR.IDKPRD(3,I).NE.0.OR.
      &        (NME(I).GT.10000.AND.NME(I).LT.50000)) GOTO 1000
         L1 = IDK(I)-449
+C--two body top to charged higgs decay 
+        IF(IDK(I).EQ.6.AND.IDKPRD(1,I).EQ.206.AND.
+     &                     IDKPRD(2,I).EQ.5) THEN
+            N2MODE = N2MODE+1
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',100,*999)
+            NME(I) = 30000+N2MODE
+            ID2PRT(N2MODE) = I
+            I2DRTP(N2MODE) = 2
+            P2MODE(N2MODE) = ONE
+            DO 201 J=1,2
+ 201        A2MODE(J,N2MODE) = HFF(O(J),4,3)
+C--two body antitop to charged higgs
+        ELSEIF(IDK(I).EQ.12.AND.IDKPRD(1,I).EQ.207.AND.
+     &                          IDKPRD(2,I).EQ.11) THEN
+            N2MODE = N2MODE+1
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',101,*999)
+            NME(I) = 30000+N2MODE
+            ID2PRT(N2MODE) = I
+            I2DRTP(N2MODE) = 14
+            P2MODE(N2MODE) = ONE
+            DO 202 J=1,2
+ 202        A2MODE(J,N2MODE) = HFF(  J ,4,3)
 C--two body modes of the gluino
-        IF(L1.EQ.0) THEN
+        ELSEIF(L1.EQ.0) THEN
           L = IDKPRD(1,I)-449
 C--gluino to antisfermion fermion
           IF(IDPDG(IDKPRD(2,I)).GT.0.AND.L.GE.-48.AND.L.LE.-1) THEN
             N2MODE = N2MODE+1
-            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',100,*999)
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',102,*999)
             NME(I) = 30000+N2MODE
             ID2PRT(N2MODE) = I
             I2DRTP(N2MODE) = 2
@@ -35181,7 +39540,7 @@ C--gluino to antisfermion fermion
 C--gluino to sfermion antifermion
           ELSEIF(IDPDG(IDKPRD(2,I)).LT.0.AND.L.GE.-48.AND.L.LE.-1) THEN
             N2MODE = N2MODE+1
-            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',101,*999)
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',103,*999)
             NME(I) = 30000+N2MODE
             ID2PRT(N2MODE) = I
             I2DRTP(N2MODE) = 3
@@ -35193,7 +39552,7 @@ C--gluino to sfermion antifermion
 C--gluino to neutralino gluon
           ELSEIF(L.GE.1.AND.L.LE.4.AND.IDKPRD(2,I).EQ.13) THEN
             N2MODE = N2MODE+1
-            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',102,*999)
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',104,*999)
             NME(I) = 30000+N2MODE
             ID2PRT(N2MODE) = I
             I2DRTP(N2MODE) = 4
@@ -35201,6 +39560,14 @@ C--gluino to neutralino gluon
      &           (RMASS(IDK(I))**2-RMASS(IDKPRD(1,I))**2)**3*
      &           HBAR/RLTIM(IDK(I))*BRFRAC(I)
             A2MODE(1,N2MODE) = ZSGNSS(L)
+C--gluino to gravitino gluon
+          ELSEIF(IDKPRD(1,I).EQ.458.AND.IDKPRD(2,I).EQ.13) THEN
+            N2MODE = N2MODE+1
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',105,*999)
+            NME(I) = 30000+N2MODE
+            ID2PRT(N2MODE) = I
+            I2DRTP(N2MODE) = 9
+            P2MODE(N2MODE) = ONE/24.0D0
           ENDIF
 C--two body modes of the neutralinos
         ELSEIF(L1.GE.1.AND.L1.LE.4) THEN
@@ -35209,7 +39576,7 @@ C--two body modes of the neutralinos
 C--first the neutralino modes to neutralino Higgs
           IF(L.GE.1.AND.L.LE.4.AND.IH.GE.1.AND.IH.LE.3) THEN
             N2MODE = N2MODE+1
-            IF(N2MODE.GE.NMODE2) CALL HWWARN('HWISP2',103,*999)
+            IF(N2MODE.GE.NMODE2) CALL HWWARN('HWISP2',106,*999)
             NME(I) = 30000+N2MODE
             ID2PRT(N2MODE) = I
             I2DRTP(N2MODE) = 1
@@ -35220,7 +39587,7 @@ C--neutralino to positive chargino negative Higgs
           ELSEIF((L.EQ.5.OR.L.EQ.6).AND.IH.EQ.5) THEN
             L = L-4
             N2MODE = N2MODE+1
-            IF(N2MODE.GE.NMODE2) CALL HWWARN('HWISP2',104,*999)
+            IF(N2MODE.GE.NMODE2) CALL HWWARN('HWISP2',107,*999)
             NME(I) = 30000+N2MODE
             ID2PRT(N2MODE) = I
             I2DRTP(N2MODE) = 1
@@ -35228,10 +39595,10 @@ C--neutralino to positive chargino negative Higgs
             DO 4 J=1,2
  4          A2MODE(J,N2MODE) = HNC(O(J),L1,L)
 C--neutralino to negative chargino positive Higgs
-          ELSEIF(L.EQ.7.OR.L.EQ.8.AND.IH.EQ.6) THEN
+          ELSEIF((L.EQ.7.OR.L.EQ.8).AND.IH.EQ.6) THEN
             L = L-6
             N2MODE = N2MODE+1
-            IF(N2MODE.GE.NMODE2) CALL HWWARN('HWISP2',105,*999)
+            IF(N2MODE.GE.NMODE2) CALL HWWARN('HWISP2',108,*999)
             NME(I) = 30000+N2MODE
             ID2PRT(N2MODE) = I
             I2DRTP(N2MODE) = 1
@@ -35241,7 +39608,7 @@ C--neutralino to negative chargino positive Higgs
 C--neutralino to antisfermion sfermion
           ELSEIF(IDPDG(IDKPRD(2,I)).GT.0.AND.L.GE.-48.AND.L.LE.-1) THEN
             N2MODE = N2MODE+1
-            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',106,*999)
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',109,*999)
             NME(I) = 30000+N2MODE
             ID2PRT(N2MODE) = I
             I2DRTP(N2MODE) = 2
@@ -35254,7 +39621,7 @@ C--neutralino to antisfermion sfermion
 C--neutralino to sfermion antifermion
           ELSEIF(IDPDG(IDKPRD(2,I)).LT.0.AND.L.GE.-48.AND.L.LE.-1) THEN
             N2MODE = N2MODE+1
-            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',107,*999)
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',110,*999)
             NME(I) = 30000+N2MODE
             ID2PRT(N2MODE) = I
             I2DRTP(N2MODE) = 3
@@ -35267,7 +39634,7 @@ C--neutralino to sfermion antifermion
 C--neutralino to neutralino photon
           ELSEIF(L.GE.1.AND.L.LE.4.AND.IDKPRD(2,I).EQ.59) THEN
             N2MODE = N2MODE+1
-            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',108,*999)
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',111,*999)
             NME(I) = 30000+N2MODE
             ID2PRT(N2MODE) = I
             I2DRTP(N2MODE) = 4
@@ -35275,8 +39642,31 @@ C--neutralino to neutralino photon
      &           (RMASS(IDK(I))**2-RMASS(IDKPRD(1,I))**2)**3*
      &           HBAR/RLTIM(IDK(I))*BRFRAC(I)
             A2MODE(1,N2MODE) = ZSGNSS(L)*ZSGNSS(L1)
+C--neutralino to gravitino photon for GMSB
+          ELSEIF(IDKPRD(1,I).EQ.458.AND.IDKPRD(2,I).EQ.59) THEN
+            N2MODE = N2MODE+1
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',112,*999)
+            NME(I) = 30000+N2MODE
+            ID2PRT(N2MODE) = I
+            I2DRTP(N2MODE) = 9
+            P2MODE(N2MODE) = ZMIXSS(L1,1)**2/24.0D0
+C--neutralino to gravitino Higgs for GMSB
+          ELSEIF(IDKPRD(1,I).EQ.458.AND.IH.GE.1.AND.IH.LE.3) THEN
+            N2MODE = N2MODE+1
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',113,*999)
+            NME(I) = 30000+N2MODE
+            ID2PRT(N2MODE) = I
+            I2DRTP(N2MODE) = 10
+            IF(IH.EQ.1) THEN
+              P2MODE(N2MODE) = ZMIXSS(L1,3)*SINA-ZMIXSS(L1,4)*COSA
+            ELSEIF(IH.EQ.2) THEN
+              P2MODE(N2MODE) = ZMIXSS(L1,3)*COSA+ZMIXSS(L1,4)*SINA
+            ELSE
+              P2MODE(N2MODE) = ZMIXSS(L1,3)*SINB+ZMIXSS(L1,4)*COSB
+            ENDIF
+            P2MODE(N2MODE) = P2MODE(N2MODE)**2/3.0D0
           ELSE
-            CALL HWWARN('HWISP2',500,*999)
+            CALL HWWARN('HWISP2',1,*999)
           ENDIF
 C--two body modes of the positive charginos
         ELSEIF(L1.EQ.5.OR.L1.EQ.6) THEN
@@ -35287,7 +39677,7 @@ C--first the chargino modes to chargino Higgs
           IF((L.EQ.5.OR.L.EQ.6).AND.IH.GE.1.AND.IH.LE.3) THEN
             L = L-4
             N2MODE = N2MODE+1
-            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',109,*999)
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',114,*999)
             NME(I) = 30000+N2MODE
             ID2PRT(N2MODE) = I
             I2DRTP(N2MODE) = 1
@@ -35297,7 +39687,7 @@ C--first the chargino modes to chargino Higgs
 C--then the chargino modes to neutralino Higgs
           ELSEIF(L.GE.1.AND.L.LE.4.AND.IH.EQ.4) THEN
             N2MODE = N2MODE+1
-            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',110,*999)
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',115,*999)
             NME(I) = 30000+N2MODE
             ID2PRT(N2MODE) = I
             I2DRTP(N2MODE) = 1
@@ -35307,7 +39697,7 @@ C--then the chargino modes to neutralino Higgs
 C--chargino modes to antisfermion fermion
           ELSEIF(IDPDG(IDKPRD(2,I)).GT.0.AND.L.GE.-48.AND.L.LE.-1) THEN
             N2MODE = N2MODE+1
-            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',111,*999)
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',116,*999)
             NME(I) = 30000+N2MODE
             ID2PRT(N2MODE) = I
             I2DRTP(N2MODE) = 2
@@ -35320,7 +39710,7 @@ C--chargino modes to antisfermion fermion
 C--chargino modes to sfermion antifermion
           ELSEIF(IDPDG(IDKPRD(2,I)).LT.0.AND.L.GE.-48.AND.L.LE.-1) THEN
             N2MODE = N2MODE+1
-            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',112,*999)
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',117,*999)
             NME(I) = 30000+N2MODE
             ID2PRT(N2MODE) = I
             I2DRTP(N2MODE) = 3
@@ -35333,11 +39723,11 @@ C--chargino modes to sfermion antifermion
 C--chargino --> neutralino pi+
           ELSEIF(L.GE.1.AND.L.LE.4.AND.IDKPRD(2,I).EQ.38) THEN
             N2MODE = N2MODE+1
-            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',113,*999)
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',118,*999)
             NME(I) = 30000+N2MODE
             ID2PRT(N2MODE) = I
             I2DRTP(N2MODE) = 7
-            P2MODE(N2MODE) = ONE
+            P2MODE(N2MODE) = FPI**2*G**2
             DO 12 J=1,2
  12         A2MODE(J,N2MODE) = OIJ(J,L,L1)
           ENDIF
@@ -35350,7 +39740,7 @@ C--first the chargino modes to chargino Higgs
           IF((L.EQ.7.OR.L.EQ.8).AND.IH.GE.1.AND.IH.LE.3) THEN
             L = L-6
             N2MODE = N2MODE+1
-            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',114,*999)
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',119,*999)
             NME(I) = 30000+N2MODE
             ID2PRT(N2MODE) = I
             I2DRTP(N2MODE) = 1
@@ -35360,7 +39750,7 @@ C--first the chargino modes to chargino Higgs
 C--then the chargino modes to neutralino Higgs
           ELSEIF(L.GE.1.AND.L.LE.4.AND.IH.EQ.5) THEN
             N2MODE = N2MODE+1
-            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',115,*999)
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',120,*999)
             NME(I) = 30000+N2MODE
             ID2PRT(N2MODE) = I
             I2DRTP(N2MODE) = 1
@@ -35370,7 +39760,7 @@ C--then the chargino modes to neutralino Higgs
 C--chargino to antisfermion fermion
           ELSEIF(IDPDG(IDKPRD(2,I)).GT.0.AND.L.GE.-48.AND.L.LE.-1) THEN
             N2MODE = N2MODE+1
-            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',116,*999)
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',121,*999)
             NME(I) = 30000+N2MODE
             ID2PRT(N2MODE) = I
             I2DRTP(N2MODE) = 2
@@ -35383,7 +39773,7 @@ C--chargino to antisfermion fermion
 C--chargino to sfermion antifermion
           ELSEIF(IDPDG(IDKPRD(2,I)).LT.0.AND.L.GE.-48.AND.L.LE.-1) THEN
             N2MODE = N2MODE+1
-            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',117,*999)
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',122,*999)
             NME(I) = 30000+N2MODE
             ID2PRT(N2MODE) = I
             I2DRTP(N2MODE) = 3
@@ -35396,11 +39786,11 @@ C--chargino to sfermion antifermion
 C--chargino --> neutralino pi-
           ELSEIF(L.GE.1.AND.L.LE.4.AND.IDKPRD(2,I).EQ.30) THEN
             N2MODE = N2MODE+1
-            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',118,*999)
+            IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',123,*999)
             NME(I) = 30000+N2MODE
             ID2PRT(N2MODE) = I
             I2DRTP(N2MODE) = 7
-            P2MODE(N2MODE) = ONE
+            P2MODE(N2MODE) = FPI**2*G**2
             DO 17 J=1,2
  17         A2MODE(J,N2MODE) =-OIJ(O(J),L,L1)
           ENDIF
@@ -35412,7 +39802,7 @@ C--first sfermion modes to gluinos
 C--first sfermion --> fermion gluino
             IF(IDPDG(IDKPRD(2,I)).GT.0) THEN
               N2MODE = N2MODE+1
-              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',119,*999)
+              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',124,*999)
               NME(I) = 30000+N2MODE
               ID2PRT(N2MODE) = I
               I2DRTP(N2MODE) = 6
@@ -35424,7 +39814,7 @@ C--first sfermion --> fermion gluino
 C--then antisfermion --> antifermion gluino
             ELSE
               N2MODE = N2MODE+1
-              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',120,*999)
+              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',125,*999)
               NME(I) = 30000+N2MODE
               ID2PRT(N2MODE) = I
               I2DRTP(N2MODE) = 5
@@ -35439,7 +39829,7 @@ C--then sfermion modes to neutralinos
 C--first sfermion --> fermion neutralino
             IF(IDPDG(IDKPRD(2,I)).GT.0) THEN
               N2MODE = N2MODE+1
-              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',121,*999)
+              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',126,*999)
               NME(I) = 30000+N2MODE
               ID2PRT(N2MODE) = I
               I2DRTP(N2MODE) = 6
@@ -35451,7 +39841,7 @@ C--first sfermion --> fermion neutralino
 C--then antisfermion --> fermion neutralino
             ELSE
               N2MODE = N2MODE+1
-              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',122,*999)
+              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',127,*999)
               NME(I) = 30000+N2MODE
               ID2PRT(N2MODE) = I
               I2DRTP(N2MODE) = 5
@@ -35467,7 +39857,7 @@ C--sfermion modes to charginos
 C--first sfermion --> fermion chargino
             IF(IDPDG(IDKPRD(2,I)).GT.0) THEN
               N2MODE = N2MODE+1
-              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',123,*999)
+              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',128,*999)
               NME(I) = 30000+N2MODE
               ID2PRT(N2MODE) = I
               I2DRTP(N2MODE) = 6
@@ -35479,7 +39869,7 @@ C--first sfermion --> fermion chargino
 C--then antisfermion --> fermion chargino
             ELSE
               N2MODE = N2MODE+1
-              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',124,*999)
+              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',129,*999)
               NME(I) = 30000+N2MODE
               ID2PRT(N2MODE) = I
               I2DRTP(N2MODE) = 5
@@ -35489,9 +39879,491 @@ C--then antisfermion --> fermion chargino
               DO 23 J=1,2
  23           A2MODE(J,N2MODE) = AFC(O(J),IL,IM,L)
             ENDIF
+C--sfermion modes to  fermion gravitino
+          ELSEIF(IDKPRD(2,I).EQ.458) THEN
+            IF(IDPDG(IDKPRD(1,I)).GT.0) THEN
+              N2MODE = N2MODE+1
+              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',130,*999)
+              NME(I) = 30000+N2MODE
+              ID2PRT(N2MODE) = I
+              I2DRTP(N2MODE) = 11
+              P2MODE(N2MODE) = ONE/THREE
+              IM = MOD(INT((IDK(I)-389)/12)+1,2)+1
+              IL = 6*INT((IDK(I)-401)/24)+MOD(IDK(I)-401,6)+1
+              IF(IL.LE.6) THEN
+                DO 40 J=1,2
+ 40             A2MODE(J,N2MODE) = QMIXSS(IL,O(J),IM)
+              ELSE
+                DO 41 J=1,2
+ 41             A2MODE(J,N2MODE) = LMIXSS(IL-6,O(J),IM) 
+              ENDIF
+            ELSE
+              N2MODE = N2MODE+1
+              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',131,*999)
+              NME(I) = 30000+N2MODE
+              ID2PRT(N2MODE) = I
+              I2DRTP(N2MODE) = 12
+              P2MODE(N2MODE) = ONE/THREE
+              IM = MOD(INT((IDK(I)-389)/12)+1,2)+1
+              IL = 6*INT((IDK(I)-401)/24)+MOD(IDK(I)-401,6)+1
+              IF(IL.LE.6) THEN
+                DO 42 J=1,2
+ 42             A2MODE(J,N2MODE) = QMIXSS(IL,O(J),IM)
+              ELSE
+                DO 43 J=1,2
+ 43             A2MODE(J,N2MODE) = LMIXSS(IL-6,O(J),IM) 
+              ENDIF
+            ENDIF
+C--R-parity violating decay modes
+C--LLE modes
+          ELSEIF(IDK(I).GE.425.AND.IDK(I).LE.448.AND.
+     &           IDKPRD(1,I).GE.121.AND.IDKPRD(1,I).LE.132.AND.
+     &           IDKPRD(2,I).GE.121.AND.IDKPRD(2,I).LE.132) THEN
+C--charged slepton decays
+            IF(MOD(IDK(I),2).EQ.1) THEN
+C--right slepton decay
+              IF(IDPDG(IDKPRD(1,I))/ABS(IDPDG(IDKPRD(1,I))).EQ.
+     &           IDPDG(IDKPRD(2,I))/ABS(IDPDG(IDKPRD(2,I)))) THEN
+C--particle decay 
+                N2MODE = N2MODE+1
+                IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',132,*999)
+                NME(I) = 30000+N2MODE
+                ID2PRT(N2MODE) = I
+                P2MODE(N2MODE) = ONE
+                IF(IDPDG(IDK(I)).GT.0) THEN
+                  KKK = (IDK(I)-423)/2
+                  IF(KKK.GT.3) THEN 
+                     KKK = KKK-6
+                     IM = 2
+                  ELSE
+                     IM = 1
+                  ENDIF
+                  IF(MOD(IDKPRD(1,I),2).EQ.0) THEN
+                    III = (IDKPRD(1,I)-120)/2
+                    JJJ = (IDKPRD(2,I)-119)/2
+                  ELSE
+                    III = (IDKPRD(2,I)-120)/2
+                    JJJ = (IDKPRD(1,I)-119)/2
+                  ENDIF
+                  I2DRTP(N2MODE) = 6
+                  A2MODE(1,N2MODE) = LMIXSS(2*KKK-1,2,IM)*
+     &                 LAMDA1(III,JJJ,KKK)
+                  A2MODE(2,N2MODE) = 0.0D0
+                ELSE
+C--antiparticle decay
+                  KKK = (IDK(I)-429)/2
+                  IF(KKK.GT.3) THEN
+                     KKK = KKK-6
+                     IM = 2
+                  ELSE
+                     IM = 1
+                  ENDIF
+                  IF(MOD(IDKPRD(1,I),2).EQ.0) THEN
+                    III = (IDKPRD(1,I)-126)/2
+                    JJJ = (IDKPRD(2,I)-125)/2
+                  ELSE
+                    III = (IDKPRD(2,I)-126)/2
+                    JJJ = (IDKPRD(1,I)-125)/2
+                  ENDIF
+                  I2DRTP(N2MODE) = 13
+                  A2MODE(1,N2MODE) = 0.0D0
+                  A2MODE(2,N2MODE) = LMIXSS(2*KKK-1,2,IM)*
+     &                 LAMDA1(III,JJJ,KKK)
+                ENDIF
+C--left slepton decay
+              ELSE
+                N2MODE = N2MODE+1
+                IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',133,*999)
+                NME(I) = 30000+N2MODE
+                ID2PRT(N2MODE) = I
+                P2MODE(N2MODE) = ONE
+                IF(IDPDG(IDK(I)).GT.0) THEN
+                  JJJ = (IDK(I)-423)/2
+                  IF(JJJ.GT.3) THEN
+                    JJJ = JJJ-6
+                    IM = 2
+                  ELSE
+                    IM = 1
+                  ENDIF
+                  IF(MOD(IDKPRD(1,I),2).EQ.0) THEN
+                    III = (IDKPRD(1,I)-126)/2
+                    KKK = (IDKPRD(2,I)-119)/2
+                    I2DRTP(N2MODE) = 8
+                  ELSE
+                    III = (IDKPRD(2,I)-126)/2
+                    KKK = (IDKPRD(1,I)-119)/2
+                    I2DRTP(N2MODE) = 5
+                  ENDIF
+                  A2MODE(1,N2MODE) = 0.0D0
+                  A2MODE(2,N2MODE) = LMIXSS(2*JJJ-1,1,IM)*
+     &                 LAMDA1(III,JJJ,KKK)
+                ELSE
+                  JJJ = (IDK(I)-429)/2
+                  IF(JJJ.GT.3) THEN
+                    JJJ = JJJ-6
+                    IM = 2
+                  ELSE
+                    IM = 1
+                  ENDIF
+                  IF(MOD(IDKPRD(1,I),2).EQ.0) THEN
+                    III = (IDKPRD(1,I)-120)/2
+                    KKK = (IDKPRD(2,I)-125)/2
+                    I2DRTP(N2MODE) = 5
+                  ELSE
+                    III = (IDKPRD(2,I)-120)/2
+                    KKK = (IDKPRD(1,I)-125)/2
+                    I2DRTP(N2MODE) = 8
+                  ENDIF
+                  A2MODE(1,N2MODE) = LMIXSS(2*JJJ-1,1,IM)*
+     &                 LAMDA1(III,JJJ,KKK)
+                  A2MODE(2,N2MODE) = 0.0D0
+                ENDIF
+              ENDIF
+C--sneutrino decays
+            ELSEIF(MOD(IDK(I),2).EQ.0.AND.IDK(I).LE.436) THEN
+C--sneutrino decay
+              N2MODE = N2MODE+1
+              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',134,*999)
+              NME(I) = 30000+N2MODE
+              ID2PRT(N2MODE) = I
+              P2MODE(N2MODE) = ONE
+              IF(IDPDG(IDK(I)).GT.0) THEN
+                III = (IDK(I)-424)/2
+                IF(IDPDG(IDKPRD(1,I)).GT.0) THEN
+                  KKK = (IDKPRD(1,I)-119)/2
+                  JJJ = (IDKPRD(2,I)-125)/2
+                  I2DRTP(N2MODE) = 5
+                ELSE
+                  JJJ = (IDKPRD(1,I)-125)/2
+                  KKK = (IDKPRD(2,I)-119)/2
+                  I2DRTP(N2MODE) = 8
+                ENDIF
+                A2MODE(1,N2MODE) = 0.0D0
+                A2MODE(2,N2MODE) = LAMDA1(III,JJJ,KKK)
+C--antisneutrino decay
+              ELSE
+                III = (IDK(I)-430)/2
+                IF(IDPDG(IDKPRD(1,I)).LT.0) THEN
+                  KKK = (IDKPRD(1,I)-125)/2
+                  JJJ = (IDKPRD(2,I)-119)/2
+                  I2DRTP(N2MODE) = 8
+                ELSE
+                  JJJ = (IDKPRD(1,I)-119)/2
+                  KKK = (IDKPRD(2,I)-125)/2
+                  I2DRTP(N2MODE) = 5
+                ENDIF
+                A2MODE(1,N2MODE) = LAMDA1(III,JJJ,KKK)
+                A2MODE(2,N2MODE) = 0.0D0
+              ENDIF
+            ENDIF
+C--LQD modes
+C--squark decays
+          ELSEIF(IDK(I).GE.401.AND.IDK(I).LE.424.AND.
+     &           IDKPRD(1,I).GE.121.AND.IDKPRD(2,I).LE.132.AND.
+     &           IDKPRD(2,I).LE.12) THEN
+C--up type squark decay
+            IF(MOD(IDK(I),2).EQ.0) THEN
+              N2MODE = N2MODE+1
+              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',135,*999)
+              NME(I) = 30000+N2MODE
+              ID2PRT(N2MODE) = I
+              P2MODE(N2MODE) = ONE
+              IF(IDPDG(IDK(I)).GT.0) THEN
+                JJJ = (IDK(I)-400)/2
+                IF(JJJ.GT.3) THEN
+                  JJJ = JJJ-6
+                  IM  = 2
+                ELSE
+                  IM = 1
+                ENDIF
+                III = (IDKPRD(1,I)-125)/2
+                KKK = (IDKPRD(2,I)+1)/2
+                I2DRTP(N2MODE) = 8
+                A2MODE(1,N2MODE) = ZERO
+                A2MODE(2,N2MODE) = QMIXSS(2*JJJ,1,IM)*
+     &                             LAMDA2(III,JJJ,KKK)
+              ELSE
+                JJJ = (IDK(I)-406)/2
+                IF(JJJ.GT.3) THEN
+                  JJJ = JJJ-6
+                  IM  = 2
+                ELSE
+                  IM = 1
+                ENDIF
+                III = (IDKPRD(1,I)-119)/2
+                KKK = (IDKPRD(2,I)-5)/2
+                I2DRTP(N2MODE) = 5
+                A2MODE(1,N2MODE) = QMIXSS(2*JJJ,1,IM)*
+     &                             LAMDA2(III,JJJ,KKK)
+                A2MODE(2,N2MODE) = ZERO
+              ENDIF
+C--down type squark to lepton up
+            ELSEIF(MOD(IDK(I),2).EQ.1.AND.MOD(IDKPRD(1,I),2).EQ.1) THEN
+              N2MODE = N2MODE+1
+              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',136,*999)
+              NME(I) = 30000+N2MODE
+              ID2PRT(N2MODE) = I
+              P2MODE(N2MODE) = ONE
+C--particle
+              IF(IDPDG(IDK(I)).GT.0) THEN
+                KKK = (IDK(I)-399)/2
+                IF(KKK.GT.3) THEN
+                  KKK = KKK-6
+                  IM  = 2
+                ELSE
+                  IM  = 1
+                ENDIF
+                III = (IDKPRD(1,I)-119)/2
+                JJJ = IDKPRD(2,I)/2
+                I2DRTP(N2MODE) = 6
+                A2MODE(1,N2MODE) = QMIXSS(2*KKK-1,2,IM)*
+     &                             LAMDA2(III,JJJ,KKK)
+                A2MODE(2,N2MODE) = ZERO
+C--antiparticle
+              ELSE
+                KKK = (IDK(I)-405)/2
+                IF(KKK.GT.3) THEN
+                  KKK = KKK-6
+                  IM  = 2
+                ELSE
+                  IM  = 1
+                ENDIF
+                III = (IDKPRD(1,I)-125)/2
+                JJJ = (IDKPRD(2,I)-6)/2
+                I2DRTP(N2MODE) = 13
+                A2MODE(1,N2MODE) = ZERO
+                A2MODE(2,N2MODE) = QMIXSS(2*KKK-1,2,IM)*
+     &                             LAMDA2(III,JJJ,KKK)
+              ENDIF
+C--down (left) squark --> nu d
+            ELSEIF(MOD(IDK(I),2).EQ.1.AND.
+     &           IDPDG(IDK(I))/ABS(IDPDG(IDK(I))).EQ.
+     &          -IDPDG(IDKPRD(1,I))/ABS(IDPDG(IDKPRD(1,I)))) THEN
+               
+              N2MODE = N2MODE+1
+              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',137,*999)
+              NME(I) = 30000+N2MODE
+              ID2PRT(N2MODE) = I
+              P2MODE(N2MODE) = ONE
+              IF(IDPDG(IDK(I)).GT.0) THEN
+                JJJ = (IDK(I)-399)/2
+                IF(JJJ.GT.3) THEN
+                  JJJ = JJJ-6
+                  IM  = 2
+                ELSE
+                  IM  = 1
+                ENDIF
+                III = (IDKPRD(1,I)-126)/2
+                KKK = (IDKPRD(2,I)+1)/2
+                I2DRTP(N2MODE) = 8
+                A2MODE(1,N2MODE) = ZERO
+                A2MODE(2,N2MODE) = QMIXSS(2*JJJ-1,1,IM)*
+     &                             LAMDA2(III,JJJ,KKK)
+              ELSE
+                JJJ = (IDK(I)-405)/2
+                IF(JJJ.GT.3) THEN
+                  JJJ = JJJ-6
+                  IM = 2
+                ELSE
+                  IM = 1
+                ENDIF
+                III = (IDKPRD(1,I)-120)/2
+                KKK = (IDKPRD(2,I)-5)/2
+                I2DRTP(N2MODE) = 5
+                A2MODE(1,N2MODE) = QMIXSS(2*JJJ-1,1,IM)*
+     &                             LAMDA2(III,JJJ,KKK)
+                A2MODE(2,N2MODE) = ZERO
+              ENDIF
+C--down (right) squark --> nu d
+            ELSEIF(MOD(IDK(I),2).EQ.1.AND.
+     &           IDPDG(IDK(I))/ABS(IDPDG(IDK(I))).EQ.
+     &           IDPDG(IDKPRD(1,I))/ABS(IDPDG(IDKPRD(1,I)))) THEN
+              N2MODE = N2MODE+1
+              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',138,*999)
+              NME(I) = 30000+N2MODE
+              ID2PRT(N2MODE) = I
+              P2MODE(N2MODE) = ONE
+              IF(IDPDG(IDK(I)).GT.0) THEN
+                KKK = (IDK(I)-399)/2
+                IF(KKK.GT.3) THEN
+                  KKK = KKK-6
+                  IM  = 2
+                ELSE
+                  IM  = 1
+                ENDIF
+                III = (IDKPRD(1,I)-120)/2
+                JJJ = (IDKPRD(2,I)+1)/2
+                I2DRTP(N2MODE) = 6
+                A2MODE(1,N2MODE) = QMIXSS(2*KKK-1,2,IM)*
+     &                             LAMDA2(III,JJJ,KKK)
+                A2MODE(2,N2MODE) = ZERO
+              ELSE
+                KKK = (IDK(I)-405)/2
+                IF(KKK.GT.3) THEN
+                  KKK = KKK-6
+                  IM  = 2
+                ELSE
+                  IM  = 1
+                ENDIF
+                III = (IDKPRD(1,I)-126)/2
+                JJJ = (IDKPRD(2,I)-5)/2
+                I2DRTP(N2MODE) = 13
+                A2MODE(1,N2MODE) = ZERO
+                A2MODE(2,N2MODE) = QMIXSS(2*KKK-1,2,IM)*
+     &                             LAMDA2(III,JJJ,KKK)
+              ENDIF
+            ELSE
+              CALL HWWARN('HWISP2',2,*999)
+            ENDIF
+C--slepton decays
+          ELSEIF(IDK(I).GE.425.AND.IDK(I).LE.448.AND.
+     &           IDKPRD(1,I).LE.12.AND.IDKPRD(2,I).LE.12) THEN
+C--sneutrino decay
+            IF(MOD(IDK(I),2).EQ.0) THEN
+              N2MODE = N2MODE+1
+              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',140,*999)
+              NME(I) = 30000+N2MODE
+              ID2PRT(N2MODE) = I
+              P2MODE(N2MODE) = THREE
+C--particle 
+              IF(IDPDG(IDK(I)).GT.0) THEN
+                III = (IDK(I)-424)/2
+                JJJ = (IDKPRD(1,I)-5)/2
+                KKK = (IDKPRD(2,I)+1)/2
+                I2DRTP(N2MODE) = 8
+                A2MODE(1,N2MODE) = 0.0D0
+                A2MODE(2,N2MODE) = LAMDA2(III,JJJ,KKK)
+C--antiparticle
+              ELSE
+                III = (IDK(I)-430)/2
+                JJJ = (IDKPRD(1,I)+1)/2
+                KKK = (IDKPRD(2,I)-5)/2
+                I2DRTP(N2MODE) = 5
+                A2MODE(1,N2MODE) = LAMDA2(III,JJJ,KKK)
+                A2MODE(2,N2MODE) = 0.0D0
+              ENDIF
+C--slepton decay
+            ELSEIF(MOD(IDK(I),2).EQ.1) THEN
+              N2MODE = N2MODE+1
+              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',141,*999)
+              NME(I) = 30000+N2MODE
+              ID2PRT(N2MODE) = I
+              P2MODE(N2MODE) = THREE
+C--particle
+              IF(IDPDG(IDK(I)).GT.0) THEN
+                III = (IDK(I)-423)/2
+                IF(III.GT.3) THEN
+                   III = III -6
+                   IM = 2
+                ELSE
+                   IM = 1
+                ENDIF
+                JJJ = (IDKPRD(1,I)-6)/2
+                KKK = (IDKPRD(2,I)+1)/2
+                I2DRTP(N2MODE) = 8
+                A2MODE(1,N2MODE) = 0.0D0
+                A2MODE(2,N2MODE) = LMIXSS(2*III-1,1,IM)*
+     &                             LAMDA2(III,JJJ,KKK)
+C--antiparticle
+              ELSE
+                III = (IDK(I)-429)/2
+                IF(III.GT.3) THEN
+                   III = III -6
+                   IM = 2
+                ELSE
+                   IM = 1
+                ENDIF
+                JJJ = IDKPRD(1,I)/2
+                KKK = (IDKPRD(2,I)-5)/2
+                I2DRTP(N2MODE) = 5
+                A2MODE(1,N2MODE) = LMIXSS(2*III-1,1,IM)*
+     &                             LAMDA2(III,JJJ,KKK)
+                A2MODE(2,N2MODE) = 0.0D0
+              ENDIF
+            ELSE
+              CALL HWWARN('HWISP2',3,*999)
+            ENDIF
+C--UDD modes
+          ELSEIF(IDK(I).GE.401.AND.IDK(I).LE.424.AND.
+     &           IDKPRD(1,I).LE.12.AND.IDKPRD(2,I).LE.12) THEN
+C--up type squark decay
+            IF(MOD(IDK(I),2).EQ.0) THEN
+              N2MODE = N2MODE+1
+              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',143,*999)
+              NME(I) = 30000+N2MODE
+              ID2PRT(N2MODE) = I
+              P2MODE(N2MODE) = 2.0D0
+C--squark decay
+              IF(IDPDG(IDK(I)).GT.0) THEN
+                III = (IDK(I)-400)/2 
+                IF(III.GT.3) THEN
+                  III = III-6
+                  IM = 2
+                ELSE
+                  IM = 1
+                ENDIF
+                JJJ = (IDKPRD(1,I)-5)/2
+                KKK = (IDKPRD(2,I)-5)/2
+                I2DRTP(N2MODE) = 13
+                A2MODE(1,N2MODE)=QMIXSS(2*III,2,IM)*LAMDA3(III,JJJ,KKK)
+                A2MODE(2,N2MODE)=0.0D0 
+C--antisquark decay
+              ELSE
+                III = (IDK(I)-406)/2 
+                IF(III.GT.3) THEN
+                  III = III-6
+                  IM = 2
+                ELSE
+                  IM = 1
+                ENDIF
+                JJJ = (IDKPRD(1,I)+1)/2
+                KKK = (IDKPRD(2,I)+1)/2
+                I2DRTP(N2MODE) = 6
+                A2MODE(1,N2MODE) =0.0D0
+                A2MODE(2,N2MODE) =QMIXSS(2*III,2,IM)*LAMDA3(III,JJJ,KKK)
+              ENDIF
+            ELSE
+C--down type squark decay
+              N2MODE = N2MODE+1
+              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',144,*999)
+              NME(I) = 30000+N2MODE
+              ID2PRT(N2MODE) = I
+              P2MODE(N2MODE) = 2.0D0
+C--squark decay
+              IF(IDPDG(IDK(I)).GT.0) THEN
+                JJJ = (IDK(I)-399)/2 
+                IF(JJJ.GT.3) THEN
+                  JJJ = JJJ-6
+                  IM = 2
+                ELSE
+                  IM = 1
+                ENDIF
+                III = (IDKPRD(1,I)-6)/2
+                KKK = (IDKPRD(2,I)-5)/2
+                I2DRTP(N2MODE) = 13
+                A2MODE(1,N2MODE)= QMIXSS(2*JJJ-1,2,IM)*
+     &                            LAMDA3(III,JJJ,KKK)
+                A2MODE(2,N2MODE)= 0.0D0 
+C--antisquark decay
+              ELSE
+                JJJ = (IDK(I)-405)/2 
+                IF(JJJ.GT.3) THEN
+                  JJJ = JJJ-6
+                  IM = 2
+                ELSE
+                  IM = 1
+                ENDIF
+                III = IDKPRD(1,I)/2
+                KKK = (IDKPRD(2,I)+1)/2
+                I2DRTP(N2MODE) = 6
+                A2MODE(1,N2MODE) = 0.0D0
+                A2MODE(2,N2MODE) = QMIXSS(2*JJJ-1,2,IM)*
+     &                             LAMDA3(III,JJJ,KKK)
+              ENDIF
+            ENDIF
           ELSE
             IF(.NOT.(RSPIN(IDKPRD(1,I)).EQ.ZERO.AND.
-     &      RSPIN(IDKPRD(2,I)).EQ.ZERO)) CALL HWWARN('HWISP2',125,*999)
+     &      RSPIN(IDKPRD(2,I)).EQ.ZERO)) CALL HWWARN('HWISP2',4,*999)
           ENDIF
         ELSEIF(IDK(I).GE.203.AND.IDK(I).LE.207) THEN
           IH = IDK(I)-202
@@ -35502,7 +40374,7 @@ C--Neutral Higgs decays
 C--Higgs to neutralino neutralino
             IF(L.GE.1.AND.L.LE.4) THEN
               N2MODE = N2MODE+1
-              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',126,*999)
+              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',146,*999)
               NME(I) = 30000+N2MODE
               ID2PRT(N2MODE) = I
               I2DRTP(N2MODE) = 6
@@ -35515,7 +40387,7 @@ C--Higgs to chargino chargino
               L  = MOD(L -5,2)+1
               L1 = MOD(L1-5,2)+1
               N2MODE = N2MODE+1
-              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',127,*999)
+              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',147,*999)
               NME(I) = 30000+N2MODE
               ID2PRT(N2MODE) = I
               I2DRTP(N2MODE) = 6
@@ -35531,7 +40403,7 @@ C--Higgs to fermion antifermion
             ELSEIF((L.GE.-448.AND.L.LE.-437)
      &         .OR.(L.GE.-328.AND.L.LE.-317)) THEN
               N2MODE = N2MODE+1
-              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',128,*999)
+              IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',148,*999)
               NME(I) = 30000+N2MODE
               ID2PRT(N2MODE) = I
               I2DRTP(N2MODE) = 5
@@ -35548,7 +40420,7 @@ C--Higgs to fermion antifermion
      &        .AND..NOT.(IDKPRD(1,I).EQ.59.AND.IDKPRD(2,I).EQ.59)
      &        .AND..NOT.(IDKPRD(1,I).GE.198.AND.IDKPRD(1,I).LE.200.AND.
      &                   IDKPRD(2,I).GE.198.AND.IDKPRD(2,I).LE.200))
-     &        CALL HWWARN('HWISP2',501,*999)
+     &        CALL HWWARN('HWISP2',5,*999)
             ENDIF
 C--charged Higgs decays
           ELSE
@@ -35561,7 +40433,7 @@ C--decay to chargino neutralino
               IF(L.EQ.5.OR.L.EQ.6) THEN
                 L = L-4
                 N2MODE = N2MODE+1
-                IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',129,*999)
+                IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',149,*999)
                 NME(I) = 30000+N2MODE
                 ID2PRT(N2MODE) = I
                 I2DRTP(N2MODE) = 6
@@ -35572,7 +40444,7 @@ C--decay to neutralino chargino
               ELSEIF(L.GE.1.AND.L.LE.4) THEN
                 L1 = L1-4
                 N2MODE = N2MODE+1
-                IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',130,*999)
+                IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',150,*999)
                 NME(I) = 30000+N2MODE
                 ID2PRT(N2MODE) = I
                 I2DRTP(N2MODE) = 6
@@ -35583,7 +40455,7 @@ C--fermion antifermion decay modes
               ELSEIF((L.GE.-448.AND.L.LE.-437)
      &               .OR.(L.GE.-328.AND.L.LE.-317)) THEN
                 N2MODE = N2MODE+1
-                IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',131,*999)
+                IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',151,*999)
                 NME(I) = 30000+N2MODE
                 ID2PRT(N2MODE) = I
                 I2DRTP(N2MODE) = 5
@@ -35596,7 +40468,7 @@ C--fermion antifermion decay modes
  29             A2MODE(J,N2MODE) = HFF(J,4,IL)
               ELSE
                 IF(RSPIN(IDKPRD(1,I)).NE.ZERO.OR.RSPIN(IDKPRD(2,I)).NE.
-     &           ZERO) CALL HWWARN('HWISP2',502,*999)
+     &           ZERO) CALL HWWARN('HWISP2',6,*999)
               ENDIF
 C--negative Higgs decays
             ELSE
@@ -35604,7 +40476,7 @@ C--Higgs to chargino neutralino
               IF(L.EQ.7.OR.L.EQ.8) THEN
                 L = L-6
                 N2MODE = N2MODE+1
-                IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',132,*999)
+                IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',152,*999)
                 NME(I) = 30000+N2MODE
                 ID2PRT(N2MODE) = I
                 I2DRTP(N2MODE) = 6
@@ -35615,7 +40487,7 @@ C--Higgs to neutralino chargino
               ELSEIF(L.GE.1.AND.L.LE.4) THEN
                 L1 = L1-6
                 N2MODE = N2MODE+1
-                IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',133,*999)
+                IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',153,*999)
                 NME(I) = 30000+N2MODE
                 ID2PRT(N2MODE) = I
                 I2DRTP(N2MODE) = 6
@@ -35626,7 +40498,7 @@ C--fermion antifermion decay modes
               ELSEIF((L.GE.-448.AND.L.LE.-437)
      &               .OR.(L.GE.-328.AND.L.LE.-317)) THEN
                 N2MODE = N2MODE+1
-                IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',134,*999)
+                IF(N2MODE.GT.NMODE2) CALL HWWARN('HWISP2',154,*999)
                 NME(I) = 30000+N2MODE
                 ID2PRT(N2MODE) = I
                 I2DRTP(N2MODE) = 8
@@ -35639,7 +40511,7 @@ C--fermion antifermion decay modes
  32             A2MODE(J,N2MODE) = HFF(O(J),4,IL)
               ELSE
                 IF(RSPIN(IDKPRD(1,I)).NE.ZERO.OR.RSPIN(IDKPRD(1,I)).NE.
-     &           ZERO) CALL HWWARN('HWISP2',503,*999)
+     &           ZERO) CALL HWWARN('HWISP2',7,*999)
               ENDIF
             ENDIF
           ENDIF
@@ -35655,15 +40527,17 @@ C--now find the maximum weights and compute the decay rates
      &     A8,' --> ',A8,' ',A8/)
  999  END
 CDECK  ID>, HWISP3.
-*CMZ :-        -12/10/01  14.34.50  by  Peter Richardson
+*CMZ :-        -30/09/02  14:05:28  by  Peter Richardson
 *-- Author :    Peter Richardson
 C-----------------------------------------------------------------------
       SUBROUTINE HWISP3
 C-----------------------------------------------------------------------
 C     Initialise the top/SUSY three body decay modes
+C     gravitino and RPV modes added by Peter Richardson
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
-      INTEGER I,J,K,L,L1,IL,IQ,IQ1,IQ2,IFR,SIFR,IH,IH1,IM,O(2),II,JJ
+      INCLUDE 'HERWIG65.INC'
+      INTEGER I,J,K,L,L1,IL,IQ,IQ1,IQ2,IFR,SIFR,IH,IH1,IM,O(2),II,JJ,
+     &     III,JJJ,KKK
       DOUBLE PRECISION SW,CW,TW,E,G,RT,ORT,MW,MZ,GS,AFN(2,12,2,4),
      &     AFG(2,6,2),AFC(2,12,2,2),OIJ(2,4,2),OIJP(2,2,2),OIJPP(2,4,4),
      &     HNN(2,3,4,4),HCC(2,3,2,2),HNC(2,4,2),HFF(2,4,12),HWW(2),
@@ -35681,6 +40555,7 @@ C--loop over the decays and find the top decays
         ELSE
           I = LNEXT(I)
         ENDIF
+C--top decay via W
         IF(IDK(I).EQ.6.AND.NME(I).EQ.100) THEN
           N3MODE = N3MODE+1
           IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',100,*999)
@@ -35698,6 +40573,7 @@ C--loop over the decays and find the top decays
           A3MODE(2,1,N3MODE) = -G*ORT
           B3MODE(1,1,N3MODE) = ZERO
           B3MODE(2,1,N3MODE) = -G*ORT
+C--antitop decay via W
         ELSEIF(IDK(I).EQ.12.AND.NME(I).EQ.100) THEN
           N3MODE = N3MODE+1
           IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',101,*999)
@@ -35715,6 +40591,46 @@ C--loop over the decays and find the top decays
           A3MODE(2,1,N3MODE) = -G*ORT
           B3MODE(1,1,N3MODE) = ZERO
           B3MODE(2,1,N3MODE) = -G*ORT
+C--top decay via charged Higgs
+        ELSEIF(IDK(I).EQ.6.AND.NME(I).EQ.200) THEN
+          N3MODE = N3MODE+1
+          IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',102,*999)
+          P3MODE(N3MODE) = ONE
+          IF(IDKPRD(1,I).LE.12) P3MODE(N3MODE) = THREE
+          SPN3CF(1,1,N3MODE) = ONE
+          N3NCFL(N3MODE) = 1
+          ID3PRT(N3MODE) = I
+          NME(I) = 10000+N3MODE
+          NDI3BY(N3MODE)   = 1
+          I3DRTP(1,N3MODE) = 2
+          I3DRCF(1,N3MODE) = 1
+          I3MODE(1,N3MODE) = 206
+          IL = IDKPRD(1,I)
+          IL = IL-6*INT((IL-1)/6)+6*INT((IL-1)/120)
+          IL = INT((IL+1)/2)
+          DO 201 J=1,2
+          A3MODE(J,1,N3MODE) = HFF(O(J),4,3)
+ 201      B3MODE(J,1,N3MODE) = HFF(  J ,4,IL)
+C--antitop decay via charged Higgs 
+        ELSEIF(IDK(I).EQ.12.AND.NME(I).EQ.200) THEN
+          N3MODE = N3MODE+1
+          IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',103,*999)
+          P3MODE(N3MODE) = ONE
+          IF(IDKPRD(1,I).LE.12) P3MODE(N3MODE) = THREE
+          SPN3CF(1,1,N3MODE) = ONE
+          N3NCFL(N3MODE) = 1
+          ID3PRT(N3MODE) = I
+          NME(I) = 10000+N3MODE
+          NDI3BY(N3MODE)   = 1
+          I3DRTP(1,N3MODE) = 17
+          I3DRCF(1,N3MODE) = 1
+          I3MODE(1,N3MODE) = 207
+          IL = IDKPRD(1,I)
+          IL = IL-6*INT((IL-1)/6)+6*INT((IL-1)/120)
+          IL = INT((IL+1)/2)
+          DO 202 J=1,2
+          A3MODE(J,1,N3MODE) = HFF(  J ,4,3) 
+ 202      B3MODE(J,1,N3MODE) = HFF(O(J),4,IL)
         ENDIF
  1000 CONTINUE
       IF(.NOT.SUSYIN) GOTO 2999
@@ -35732,12 +40648,13 @@ C--first the true three body gaugino decays
 C--gluino modes first
         IF(IDK(I).EQ.449) THEN
 C--first the gluino modes to quark-antiquark neutralino
-          IF(L.GE.1.AND.L.LE.4) THEN
+          IF(L.GE.1.AND.L.LE.4.AND.(IDKPRD(2,I).LE.12.OR.
+     &       (IDKPRD(2,I).GE.121.AND.IDKPRD(2,I).LE.132))) THEN
             IQ = IDKPRD(2,I)
             IF(IQ.GT.6) IQ=IQ-6
-            IF(IQ.GT.6.OR.IQ.LT.1) CALL HWWARN('HWISP3',150,*2000)
+            IF(IQ.GT.6.OR.IQ.LT.1) CALL HWWARN('HWISP3',200,*2000)
             N3MODE = N3MODE+1
-            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',102,*999)
+            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',104,*999)
             P3MODE(N3MODE) = HALF
             SPN3CF(1,1,N3MODE) = ONE
             N3NCFL(N3MODE) = 1
@@ -35758,16 +40675,17 @@ C--only squark exchange diagrams
             A3MODE(J,K+2,N3MODE) = AFG(O(J),IQ,K)
  1          B3MODE(J,K+2,N3MODE) = ZSGNSS(L)*AFN(  J ,IQ,K,L)
 C--then the gluino modes to quark-antiquark +ve chargino
-          ELSEIF(L.EQ.5.OR.L.EQ.6) THEN
+          ELSEIF(L.EQ.5.OR.L.EQ.6.AND.(IDKPRD(2,I).LE.12.OR.
+     &       (IDKPRD(2,I).GE.121.AND.IDKPRD(2,I).LE.132))) THEN
             L = L-4
             IQ = IDKPRD(2,I)
             IF(IQ.GT.6) IQ=IQ-6
-            IF(IQ.GT.6.OR.IQ.LT.1) CALL HWWARN('HWISP3',151,*2000)
+            IF(IQ.GT.6.OR.IQ.LT.1) CALL HWWARN('HWISP3',201,*2000)
             IQ = (IQ+MOD(IQ,2))/2
             IQ1 = 2*IQ-1
             IQ2 = 2*IQ
             N3MODE = N3MODE+1
-            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',103,*999)
+            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',105,*999)
             P3MODE(N3MODE) = HALF
             SPN3CF(1,1,N3MODE) = ONE
             N3NCFL(N3MODE) = 1
@@ -35788,16 +40706,17 @@ C--only squark exchange diagrams
             A3MODE(J,K+2,N3MODE) = AFG(O(J),IQ2,K)
  2          B3MODE(J,K+2,N3MODE) = AFC(  J ,IQ2,K,L)
 C--then the gluino modes to quark-antiquark -ve chargino
-          ELSEIF(L.EQ.7.OR.L.EQ.8) THEN
+          ELSEIF(L.EQ.7.OR.L.EQ.8.AND.(IDKPRD(2,I).LE.12.OR.
+     &       (IDKPRD(2,I).GE.121.AND.IDKPRD(2,I).LE.132))) THEN
             L = L-6
             IQ = IDKPRD(2,I)
             IF(IQ.GT.6) IQ=IQ-6
-            IF(IQ.GT.6.OR.IQ.LT.1) CALL HWWARN('HWISP3',152,*2000)
+            IF(IQ.GT.6.OR.IQ.LT.1) CALL HWWARN('HWISP3',202,*2000)
             IQ = (IQ+MOD(IQ,2))/2
             IQ1 = 2*IQ
             IQ2 = 2*IQ-1
             N3MODE = N3MODE+1
-            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',104,*999)
+            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',106,*999)
             P3MODE(N3MODE) = HALF
             SPN3CF(1,1,N3MODE) = ONE
             N3NCFL(N3MODE) = 1
@@ -35817,14 +40736,187 @@ C--only squark exchange diagrams
             B3MODE(J,K  ,N3MODE) = AFC(O(J),IQ1,K,L)
             A3MODE(J,K+2,N3MODE) = AFG(O(J),IQ2,K)
  3          B3MODE(J,K+2,N3MODE) = AFC(  J ,IQ2,K,L)
+C--RPV decay modes
+C--LQD first
+          ELSEIF(IDKPRD(1,I).GE.121.AND.IDKPRD(1,I).LE.132.AND.
+     &           IDKPRD(2,I).LE.12 .AND.IDKPRD(3,I).LE.12) THEN
+            N3MODE = N3MODE+1
+            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',107,*999)
+            ID3PRT(N3MODE) = I
+            NME(I) = 10000+N3MODE
+            P3MODE(N3MODE) = HALF
+            SPN3CF(1,1,N3MODE) = ONE
+            N3NCFL(N3MODE) = 1
+            NDI3BY(N3MODE) = 4
+            DO 98 J=1,4
+ 98         I3DRCF(J,N3MODE) = 1
+C--first the neutrino mode
+            IF(MOD(IDKPRD(1,I),2).EQ.0) THEN
+C--particle mode
+              IF(IDPDG(IDKPRD(1,I)).GT.0) THEN
+                III = (IDKPRD(1,I)-120)/2
+                JJJ = (IDKPRD(2,I)+1)/2
+                KKK = (IDKPRD(3,I)-5)/2
+                DO 99 K=1,2
+                I3DRTP(K  ,N3MODE) = 3
+                I3DRTP(K+2,N3MODE) = 4
+                I3MODE(K  ,N3MODE) = 399+2*JJJ+(K-1)*12
+                I3MODE(K+2,N3MODE) = 399+2*KKK+(K-1)*12
+                B3MODE(2,K  ,N3MODE) = 0.0D0
+                B3MODE(1,K  ,N3MODE) = -QMIXSS(2*JJJ-1,1,K)*
+     &                                 LAMDA2(III,JJJ,KKK)
+                B3MODE(2,K+2,N3MODE) = 0.0D0
+                B3MODE(1,K+2,N3MODE) = -QMIXSS(2*KKK-1,2,K)*
+     &                                 LAMDA2(III,JJJ,KKK)
+                DO 99 J=1,2
+                A3MODE(J,K  ,N3MODE) = AFG(  J ,2*JJJ-1,K)
+ 99             A3MODE(J,K+2,N3MODE) = AFG(O(J),2*KKK-1,K)
+C--antiparticle mode
+              ELSE
+                III = (IDKPRD(1,I)-126)/2
+                JJJ = (IDKPRD(2,I)-5)/2
+                KKK = (IDKPRD(3,I)+1)/2
+                DO 101 K=1,2
+                I3DRTP(K  ,N3MODE) = 9
+                I3DRTP(K+2,N3MODE) = 10
+                I3MODE(K  ,N3MODE) = 399+2*JJJ+(K-1)*12
+                I3MODE(K+2,N3MODE) = 399+2*KKK+(K-1)*12
+                B3MODE(1,K  ,N3MODE) = 0.0D0
+                B3MODE(2,K  ,N3MODE) = -QMIXSS(2*JJJ-1,1,K)*
+     &                                 LAMDA2(III,JJJ,KKK)
+                B3MODE(1,K+2,N3MODE) = 0.0D0
+                B3MODE(2,K+2,N3MODE) = -QMIXSS(2*KKK-1,2,K)*
+     &                                 LAMDA2(III,JJJ,KKK)
+                DO 101 J=1,2
+                A3MODE(J,K  ,N3MODE) = AFG(O(J),2*JJJ-1,K)
+ 101            A3MODE(J,K+2,N3MODE) = AFG(  J ,2*KKK-1,K)
+              ENDIF
+C--then the charged lepton mode
+            ELSE
+C--particle mode
+              IF(IDPDG(IDKPRD(1,I)).GT.0) THEN
+                III = (IDKPRD(1,I)-119)/2
+                JJJ = IDKPRD(2,I)/2
+                KKK = (IDKPRD(3,I)-5)/2
+                DO 102 K=1,2
+                I3DRTP(K  ,N3MODE) = 3
+                I3DRTP(K+2,N3MODE) = 4
+                I3MODE(K  ,N3MODE) = 400+2*JJJ+(K-1)*12
+                I3MODE(K+2,N3MODE) = 399+2*KKK+(K-1)*12
+                B3MODE(2,K  ,N3MODE) = 0.0D0
+                B3MODE(1,K  ,N3MODE) = QMIXSS(2*JJJ,1,K)*
+     &                                 LAMDA2(III,JJJ,KKK)
+                B3MODE(2,K+2,N3MODE) = 0.0D0
+                B3MODE(1,K+2,N3MODE) = QMIXSS(2*KKK-1,2,K)*
+     &                                 LAMDA2(III,JJJ,KKK)
+                DO 102 J=1,2
+                A3MODE(J,K  ,N3MODE) = AFG(  J ,2*JJJ  ,K)
+ 102            A3MODE(J,K+2,N3MODE) = AFG(O(J),2*KKK-1,K)
+C--antiparticle mode
+              ELSE
+                III = (IDKPRD(1,I)-125)/2
+                JJJ = (IDKPRD(2,I)-6)/2
+                KKK = (IDKPRD(3,I)+1)/2
+                DO 103 K=1,2
+                I3DRTP(K  ,N3MODE) = 9
+                I3DRTP(K+2,N3MODE) = 10
+                I3MODE(K  ,N3MODE) = 400+2*JJJ+(K-1)*12
+                I3MODE(K+2,N3MODE) = 399+2*KKK+(K-1)*12
+                B3MODE(1,K  ,N3MODE) = 0.0D0
+                B3MODE(2,K  ,N3MODE) = QMIXSS(2*JJJ,1,K)*
+     &                                 LAMDA2(III,JJJ,KKK)
+                B3MODE(1,K+2,N3MODE) = 0.0D0
+                B3MODE(2,K+2,N3MODE) = QMIXSS(2*KKK-1,2,K)*
+     &                                 LAMDA2(III,JJJ,KKK)
+                DO 103 J=1,2
+                A3MODE(J,K  ,N3MODE) = AFG(O(J),2*JJJ  ,K)
+ 103            A3MODE(J,K+2,N3MODE) = AFG(  J ,2*KKK-1,K)
+              ENDIF
+            ENDIF
+C--then UDD
+          ELSEIF(IDKPRD(1,I).LE.12.AND.IDKPRD(2,I).LE.12.AND.
+     &           IDKPRD(3,I).LE.12) THEN
+            N3MODE = N3MODE+1
+            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',108,*999)
+            P3MODE(N3MODE) = ONE
+            N3NCFL(N3MODE) = 3
+            ID3PRT(N3MODE) = I
+            NME(I) = 10000+N3MODE
+            NDI3BY(N3MODE)   = 6
+            DO 70 J=1,3
+            DO 70 K=1,3
+              IF(J.NE.K) THEN
+                SPN3CF(J,K,N3MODE) = -HALF
+              ELSE
+                SPN3CF(J,K,N3MODE) =  ONE
+              ENDIF
+ 70         CONTINUE
+C--particle mode
+            IF(IDKPRD(1,I).LE.6) THEN
+C--antiparticle mode
+              III =  IDKPRD(1,I)/2
+              JJJ = (IDKPRD(2,I)+1)/2
+              KKK = (IDKPRD(3,I)+1)/2
+              DO 71 K=1,2
+              I3DRTP(K  ,N3MODE) = 11
+              I3DRCF(K  ,N3MODE) = 1
+              I3DRTP(K+2,N3MODE) = 12
+              I3DRCF(K+2,N3MODE) = 2
+              I3DRTP(K+4,N3MODE) = 13
+              I3DRCF(K+4,N3MODE) = 3
+              I3MODE(K  ,N3MODE) = 400+2*III+(K-1)*12
+              I3MODE(K+2,N3MODE) = 399+2*JJJ+(K-1)*12
+              I3MODE(K+4,N3MODE) = 399+2*KKK+(K-1)*12
+              B3MODE(2,K  ,N3MODE) = QMIXSS(2*III,2,K)*
+     &                               LAMDA3(III,JJJ,KKK)
+              B3MODE(2,K+2,N3MODE) = QMIXSS(2*JJJ-1,2,K)*
+     &                               LAMDA3(III,JJJ,KKK)
+              B3MODE(2,K+4,N3MODE) = QMIXSS(2*KKK-1,2,K)*
+     &                               LAMDA3(III,JJJ,KKK)
+              B3MODE(1,K  ,N3MODE) = 0.0D0
+              B3MODE(1,K+2,N3MODE) = 0.0D0
+              B3MODE(1,K+4,N3MODE) = 0.0D0
+              DO 71 J=1,2
+              A3MODE(J,K  ,N3MODE) = AFG(J,2*III  ,K) 
+              A3MODE(J,K+2,N3MODE) = AFG(J,2*JJJ-1,K)
+ 71           A3MODE(J,K+4,N3MODE) = AFG(J,2*KKK-1,K)
+            ELSE
+              III = (IDKPRD(1,I)-6)/2
+              JJJ = (IDKPRD(2,I)-5)/2
+              KKK = (IDKPRD(3,I)-5)/2
+              DO 72 K=1,2
+              I3DRTP(K  ,N3MODE) = 14
+              I3DRCF(K  ,N3MODE) = 1
+              I3DRTP(K+2,N3MODE) = 15
+              I3DRCF(K+2,N3MODE) = 2
+              I3DRTP(K+4,N3MODE) = 16
+              I3DRCF(K+4,N3MODE) = 3
+              I3MODE(K  ,N3MODE) = 400+2*III+(K-1)*12
+              I3MODE(K+2,N3MODE) = 399+2*JJJ+(K-1)*12
+              I3MODE(K+4,N3MODE) = 399+2*KKK+(K-1)*12
+              B3MODE(1,K  ,N3MODE) = QMIXSS(2*III,2,K)*
+     &                               LAMDA3(III,JJJ,KKK)
+              B3MODE(1,K+2,N3MODE) = QMIXSS(2*JJJ-1,2,K)*
+     &                               LAMDA3(III,JJJ,KKK)
+              B3MODE(1,K+4,N3MODE) = QMIXSS(2*KKK-1,2,K)*
+     &                               LAMDA3(III,JJJ,KKK)
+              B3MODE(2,K  ,N3MODE) = 0.0D0
+              B3MODE(2,K+2,N3MODE) = 0.0D0
+              B3MODE(2,K+4,N3MODE) = 0.0D0
+              DO 72 J=1,2
+              A3MODE(J,K  ,N3MODE) = AFG(O(J),2*III  ,K) 
+              A3MODE(J,K+2,N3MODE) = AFG(O(J),2*JJJ-1,K)
+ 72           A3MODE(J,K+4,N3MODE) = AFG(O(J),2*KKK-1,K)
+            ENDIF
 C--unrecognized decay issue warning
           ELSE
-            CALL HWWARN('HWISP3',153,*2000)
+            CALL HWWARN('HWISP3',1,*2000)
           ENDIF
         ELSEIF(IDK(I).GE.450.AND.IDK(I).LE.453) THEN
           L1 = IDK(I)-449
 C--neutralino modes next
-          IF(L.GE.1.AND.L.LE.4) THEN
+          IF(L.GE.1.AND.L.LE.4.AND.(IDKPRD(2,I).LE.12.OR.
+     &       (IDKPRD(2,I).GE.121.AND.IDKPRD(2,I).LE.132))) THEN
 C--first the neutralino modes to fermion-antifermion neutralino
             IFR  = IDKPRD(2,I)
             J    = INT((IFR-1)/120)
@@ -35832,7 +40924,7 @@ C--first the neutralino modes to fermion-antifermion neutralino
             IL   = IFR+4*J
             SIFR = IFR+18*J
             N3MODE = N3MODE+1
-            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',105,*999)
+            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',109,*999)
             P3MODE(N3MODE) = ONE
             IF(IFR.LE.6) P3MODE(N3MODE)=THREE
             SPN3CF(1,1,N3MODE) = ONE
@@ -35879,13 +40971,14 @@ C-- and gauge boson diagrams if Z not on-shell
               B3MODE(1,NDI3BY(N3MODE),N3MODE) = -E*RFCH(IL)
               B3MODE(2,NDI3BY(N3MODE),N3MODE) = -E*LFCH(IL)
             ENDIF
-          ELSEIF(L.EQ.5.OR.L.EQ.6) THEN
+          ELSEIF(L.EQ.5.OR.L.EQ.6.AND.(IDKPRD(2,I).LE.12.OR.
+     &       (IDKPRD(2,I).GE.121.AND.IDKPRD(2,I).LE.132))) THEN
 C--then  the neutralino modes to fermion-antifermion +ve chargino
 C--NB ISAJET ONLY HAS W EXCHANGE AND THEREFORE SO DO WE
             IF(RMASS(IDK(I)).GT.MW+RMASS(IDKPRD(1,I))) GOTO 2000
             L = L-4
             N3MODE = N3MODE+1
-            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',106,*999)
+            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',110,*999)
             ID3PRT(N3MODE) = I
             NME(I) = 10000+N3MODE
             NDI3BY(N3MODE) = 1
@@ -35901,13 +40994,14 @@ C--gauge boson diagram
  8          A3MODE(J,1,N3MODE) = OIJ(J,L1,L)
             B3MODE(1,1,N3MODE) = ZERO
             B3MODE(2,1,N3MODE) = -G*ORT
-          ELSEIF(L.EQ.7.OR.L.EQ.8) THEN
+          ELSEIF(L.EQ.7.OR.L.EQ.8.AND.(IDKPRD(2,I).LE.12.OR.
+     &       (IDKPRD(2,I).GE.121.AND.IDKPRD(2,I).LE.132))) THEN
 C--then  the neutralino modes to fermion-antifermion -ve chargino
 C--NB ISAJET ONLY HAS W EXCHANGE AND THEREFORE SO DO WE
             IF(RMASS(IDK(I)).GT.MW+RMASS(IDKPRD(1,I))) GOTO 2000
             L = L-6
             N3MODE = N3MODE+1
-            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',107,*999)
+            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',111,*999)
             ID3PRT(N3MODE) = I
             NME(I) = 10000+N3MODE
             NDI3BY(N3MODE) = 1
@@ -35923,14 +41017,290 @@ C--gauge boson diagram
  9          A3MODE(J,1,N3MODE) =-OIJ(O(J),L1,L)
             B3MODE(1,1,N3MODE) = ZERO
             B3MODE(2,1,N3MODE) = -G*ORT
+C--gravitino E+e- modes
+          ELSEIF(L.EQ.9.AND.(IDKPRD(2,I).LE.12.OR.
+     &       (IDKPRD(2,I).GE.121.AND.IDKPRD(2,I).LE.132))) THEN
+            IFR  = IDKPRD(2,I)
+            J    = INT((IFR-1)/120)
+            IFR  = IFR-6*INT((IFR-1)/6)+6*J
+            IL   = IFR+4*J
+            N3MODE = N3MODE+1
+            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',112,*999)
+            ID3PRT(N3MODE) = I
+            NME(I) = 10000+N3MODE
+            NDI3BY(N3MODE) = 1
+            P3MODE(N3MODE) = ONE
+            IF(IDKPRD(2,I).LE.12) P3MODE(N3MODE) = THREE
+            SPN3CF(1,1,N3MODE) = ONE
+            N3NCFL(N3MODE) = 1
+C--diagram
+            I3DRTP(1,N3MODE) = 7
+            I3DRCF(1,N3MODE) = 1
+            I3MODE(1,N3MODE) = 59
+            A3MODE(1,1,N3MODE) = 2.0D0/SQRT(6.0D0)*ZMIXSS(L1,1)
+            A3MODE(2,1,N3MODE) = 0
+            B3MODE(1,1,N3MODE) = -E*QFCH(IL)
+            B3MODE(2,1,N3MODE) = -E*QFCH(IL)
+C--R-parity violating modes
+C--LLE modes
+          ELSEIF(IDKPRD(1,I).GE.121.AND.IDKPRD(1,I).LE.132.AND.
+     &           IDKPRD(2,I).GE.121.AND.IDKPRD(2,I).LE.132.AND.
+     &           IDKPRD(3,I).GE.121.AND.IDKPRD(3,I).LE.132) THEN
+            N3MODE = N3MODE+1
+            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',113,*999)
+            ID3PRT(N3MODE) = I
+            NME(I) = 10000+N3MODE
+            NDI3BY(N3MODE) = 5
+            P3MODE(N3MODE) = ONE
+            SPN3CF(1,1,N3MODE) = ONE
+            N3NCFL(N3MODE) = 1
+C--particle mode
+            DO 53 J=1,6
+ 53         I3DRCF(J,N3MODE) = 1
+            IF(IDPDG(IDKPRD(1,I)).GT.0) THEN
+              III = (IDKPRD(1,I)-119)/2
+              JJJ = (IDKPRD(2,I)-120)/2
+              KKK = (IDKPRD(3,I)-125)/2
+              DO 51 J=1,2
+              I3DRTP(J  ,N3MODE) = 2
+              I3DRTP(J+2,N3MODE) = 4
+              I3MODE(J  ,N3MODE) = 423+2*III+(J-1)*12
+              I3MODE(J+2,N3MODE) = 423+2*KKK+(J-1)*12
+              B3MODE(1,J  ,N3MODE) = LMIXSS(2*III-1,1,J)*
+     &             LAMDA1(III,JJJ,KKK)
+              B3MODE(2,J  ,N3MODE) = 0.0D0
+              B3MODE(1,J+2,N3MODE) = LMIXSS(2*KKK-1,2,J)*
+     &             LAMDA1(III,JJJ,KKK)
+              B3MODE(2,J+2,N3MODE) = 0.0D0
+              DO 51 K=1,2
+              A3MODE(K,J  ,N3MODE) = AFN(  K ,5+2*III,J,L1)
+ 51           A3MODE(K,J+2,N3MODE) = AFN(O(K),5+2*KKK,J,L1)
+              DO 48 K=1,2
+ 48           A3MODE(K,5,N3MODE) = AFN(  K ,6+2*JJJ,1,L1)
+              I3DRTP(5,N3MODE) = 3
+              I3MODE(5,N3MODE) = 430+2*JJJ
+              B3MODE(1,5,N3MODE) = LAMDA1(III,JJJ,KKK)
+              B3MODE(2,5,N3MODE) = 0.0D0
+C--antiparticle mode
+            ELSE
+              III = (IDKPRD(1,I)-125)/2
+              JJJ = (IDKPRD(2,I)-126)/2
+              KKK = (IDKPRD(3,I)-119)/2
+              DO 52 J=1,2
+              I3DRTP(J  ,N3MODE) = 8
+              I3DRTP(J+2,N3MODE) = 10
+              I3MODE(J  ,N3MODE) = 423+2*III+(J-1)*12
+              I3MODE(J+2,N3MODE) = 423+2*KKK+(J-1)*12
+              B3MODE(2,J  ,N3MODE) = LMIXSS(2*III-1,1,J)*
+     &             LAMDA1(III,JJJ,KKK)
+              B3MODE(1,J  ,N3MODE) = 0.0D0
+              B3MODE(2,J+2,N3MODE) = LMIXSS(2*KKK-1,2,J)*
+     &             LAMDA1(III,JJJ,KKK)
+              B3MODE(1,J+2,N3MODE) = 0.0D0
+              DO 52 K=1,2
+              A3MODE(K,J  ,N3MODE) = AFN(O(K),5+2*III,J,L1)
+ 52           A3MODE(K,J+2,N3MODE) = AFN(  K ,5+2*KKK,J,L1)
+              DO 49 K=1,2
+ 49           A3MODE(K,5,N3MODE) = AFN(O(K),6+2*JJJ,1,L1)
+              I3DRTP(5,N3MODE) = 9
+              I3MODE(5,N3MODE) = 430+2*JJJ
+              B3MODE(2,5,N3MODE) = LAMDA1(III,JJJ,KKK)
+              B3MODE(1,5,N3MODE) = 0.0D0
+            ENDIF
+C--LQD modes
+          ELSEIF(IDKPRD(1,I).GE.121.AND.IDKPRD(1,I).LE.132.AND.
+     &           IDKPRD(2,I).LE.12 .AND.IDKPRD(3,I).LE.12) THEN
+            N3MODE = N3MODE+1
+            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',114,*999)
+            ID3PRT(N3MODE) = I
+            NME(I) = 10000+N3MODE
+            P3MODE(N3MODE) = 3.0D0
+            SPN3CF(1,1,N3MODE) = ONE
+            N3NCFL(N3MODE) = 1
+            DO 81 J=1,6
+ 81         I3DRCF(J,N3MODE) = 1
+C--first the neutrino mode
+            IF(MOD(IDKPRD(1,I),2).EQ.0) THEN
+              NDI3BY(N3MODE) = 5
+C--particle mode
+              IF(IDPDG(IDKPRD(1,I)).GT.0) THEN
+                III = (IDKPRD(1,I)-120)/2
+                JJJ = (IDKPRD(2,I)+1)/2
+                KKK = (IDKPRD(3,I)-5)/2
+                DO 82 K=1,2
+                I3DRTP(K  ,N3MODE) = 3
+                I3DRTP(K+2,N3MODE) = 4
+                I3MODE(K  ,N3MODE) = 399+2*JJJ+(K-1)*12
+                I3MODE(K+2,N3MODE) = 399+2*KKK+(K-1)*12
+                B3MODE(2,K  ,N3MODE) = 0.0D0
+                B3MODE(1,K  ,N3MODE) = -QMIXSS(2*JJJ-1,1,K)*
+     &                                 LAMDA2(III,JJJ,KKK)
+                B3MODE(2,K+2,N3MODE) = 0.0D0
+                B3MODE(1,K+2,N3MODE) = -QMIXSS(2*KKK-1,2,K)*
+     &                                 LAMDA2(III,JJJ,KKK)
+                DO 82 J=1,2
+                A3MODE(J,K  ,N3MODE) = AFN(  J ,2*JJJ-1,K,L1)
+ 82             A3MODE(J,K+2,N3MODE) = AFN(O(J),2*KKK-1,K,L1)
+                I3DRTP(5,N3MODE) = 2
+                I3MODE(5,N3MODE) = 424+2*III
+                B3MODE(2,5,N3MODE) = 0.0D0
+                B3MODE(1,5,N3MODE) = -LAMDA2(III,JJJ,KKK)
+                DO 83 J=1,2
+ 83             A3MODE(J,5,N3MODE) = AFN(J,6+2*III,1,L1)
+C--antiparticle mode
+              ELSE
+                III = (IDKPRD(1,I)-126)/2
+                JJJ = (IDKPRD(2,I)-5)/2
+                KKK = (IDKPRD(3,I)+1)/2
+                DO 84 K=1,2
+                I3DRTP(K  ,N3MODE) = 9
+                I3DRTP(K+2,N3MODE) = 10
+                I3MODE(K  ,N3MODE) = 399+2*JJJ+(K-1)*12
+                I3MODE(K+2,N3MODE) = 399+2*KKK+(K-1)*12
+                B3MODE(1,K  ,N3MODE) = 0.0D0
+                B3MODE(2,K  ,N3MODE) = -QMIXSS(2*JJJ-1,1,K)*
+     &                                 LAMDA2(III,JJJ,KKK)
+                B3MODE(1,K+2,N3MODE) = 0.0D0
+                B3MODE(2,K+2,N3MODE) = -QMIXSS(2*KKK-1,2,K)*
+     &                                 LAMDA2(III,JJJ,KKK)
+                DO 84 J=1,2
+                A3MODE(J,K  ,N3MODE) = AFN(O(J),2*JJJ-1,K,L1)
+ 84             A3MODE(J,K+2,N3MODE) = AFN(  J ,2*KKK-1,K,L1)
+                I3DRTP(5,N3MODE) = 8
+                I3MODE(5,N3MODE) = 424+2*III
+                B3MODE(1,5,N3MODE) = 0.0D0
+                B3MODE(2,5,N3MODE) = -LAMDA2(III,JJJ,KKK)
+                DO 85 J=1,2
+ 85             A3MODE(J,5,N3MODE) = AFN(O(J),6+2*III,1,L1)
+              ENDIF
+C--then the charged lepton mode
+            ELSE
+              NDI3BY(N3MODE) = 6
+C--particle mode
+              IF(IDPDG(IDKPRD(1,I)).GT.0) THEN
+                III = (IDKPRD(1,I)-119)/2
+                JJJ = IDKPRD(2,I)/2
+                KKK = (IDKPRD(3,I)-5)/2
+                DO 86 K=1,2
+                I3DRTP(K  ,N3MODE) = 2
+                I3DRTP(K+2,N3MODE) = 3
+                I3DRTP(K+4,N3MODE) = 4
+                I3MODE(K  ,N3MODE) = 423+2*III+(K-1)*12
+                I3MODE(K+2,N3MODE) = 400+2*JJJ+(K-1)*12
+                I3MODE(K+4,N3MODE) = 399+2*KKK+(K-1)*12
+                B3MODE(2,K  ,N3MODE) = 0.0D0
+                B3MODE(1,K  ,N3MODE) = LMIXSS(2*III-1,1,K)*
+     &                                 LAMDA2(III,JJJ,KKK)
+                B3MODE(2,K+2,N3MODE) = 0.0D0
+                B3MODE(1,K+2,N3MODE) = QMIXSS(2*JJJ,1,K)*
+     &                                 LAMDA2(III,JJJ,KKK)
+                B3MODE(2,K+4,N3MODE) = 0.0D0
+                B3MODE(1,K+4,N3MODE) = QMIXSS(2*KKK-1,2,K)*
+     &                                 LAMDA2(III,JJJ,KKK)
+                DO 86 J=1,2
+                A3MODE(J,K  ,N3MODE) = AFN(  J ,2*III+5,K,L1)
+                A3MODE(J,K+2,N3MODE) = AFN(  J ,2*JJJ  ,K,L1)
+ 86             A3MODE(J,K+4,N3MODE) = AFN(O(J),2*KKK-1,K,L1)
+C--antiparticle mode
+              ELSE
+                III = (IDKPRD(1,I)-125)/2
+                JJJ = (IDKPRD(2,I)-6)/2
+                KKK = (IDKPRD(3,I)+1)/2
+                DO 87 K=1,2
+                I3DRTP(K  ,N3MODE) = 8
+                I3DRTP(K+2,N3MODE) = 9
+                I3DRTP(K+4,N3MODE) = 10
+                I3MODE(K  ,N3MODE) = 423+2*III+(K-1)*12
+                I3MODE(K+2,N3MODE) = 400+2*JJJ+(K-1)*12
+                I3MODE(K+4,N3MODE) = 399+2*KKK+(K-1)*12
+                B3MODE(1,K  ,N3MODE) = 0.0D0
+                B3MODE(2,K  ,N3MODE) = LMIXSS(2*III-1,1,K)*
+     &                                 LAMDA2(III,JJJ,KKK)
+                B3MODE(1,K+2,N3MODE) = 0.0D0
+                B3MODE(2,K+2,N3MODE) = QMIXSS(2*JJJ,1,K)*
+     &                                 LAMDA2(III,JJJ,KKK)
+                B3MODE(1,K+4,N3MODE) = 0.0D0
+                B3MODE(2,K+4,N3MODE) = QMIXSS(2*KKK-1,2,K)*
+     &                                 LAMDA2(III,JJJ,KKK)
+                DO 87 J=1,2
+                A3MODE(J,K  ,N3MODE) = AFN(O(J),2*III+5,K,L1)
+                A3MODE(J,K+2,N3MODE) = AFN(O(J),2*JJJ  ,K,L1)
+ 87             A3MODE(J,K+4,N3MODE) = AFN(  J ,2*KKK-1,K,L1)
+              ENDIF
+            ENDIF
+C--UDD modes
+          ELSEIF(IDKPRD(1,I).LE.12.AND.IDKPRD(2,I).LE.12.AND.
+     &           IDKPRD(3,I).LE.12) THEN
+            N3MODE = N3MODE+1
+            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',115,*999)
+            ID3PRT(N3MODE) = I
+            NME(I) = 10000+N3MODE
+            NDI3BY(N3MODE) = 6
+            P3MODE(N3MODE) = 6.0D0
+            SPN3CF(1,1,N3MODE) = ONE
+            N3NCFL(N3MODE) = 1
+            DO 61 J=1,6
+ 61         I3DRCF(J,N3MODE) = 1
+C--particle mode
+            IF(IDPDG(IDKPRD(1,I)).GT.0) THEN
+              III = IDKPRD(1,I)/2
+              JJJ = (IDKPRD(2,I)+1)/2
+              KKK = (IDKPRD(3,I)+1)/2
+              DO 62 J=1,2
+              I3DRTP(J  ,N3MODE) = 11
+              I3DRTP(J+2,N3MODE) = 12
+              I3DRTP(J+4,N3MODE) = 13
+              I3MODE(J  ,N3MODE) = 400+2*III+(J-1)*12
+              I3MODE(J+2,N3MODE) = 399+2*JJJ+(J-1)*12
+              I3MODE(J+4,N3MODE) = 399+2*KKK+(J-1)*12
+              B3MODE(2,J  ,N3MODE) = QMIXSS(2*III,2,J)*
+     &                               LAMDA3(III,JJJ,KKK)
+              B3MODE(2,J+2,N3MODE) = QMIXSS(2*JJJ-1,2,J)*
+     &                               LAMDA3(III,JJJ,KKK)
+              B3MODE(2,J+4,N3MODE) = QMIXSS(2*KKK-1,2,J)*
+     &                               LAMDA3(III,JJJ,KKK)
+              B3MODE(1,J  ,N3MODE) = 0.0D0
+              B3MODE(1,J+2,N3MODE) = 0.0D0
+              B3MODE(1,J+4,N3MODE) = 0.0D0
+              DO 62 K=1,2
+              A3MODE(K,J  ,N3MODE) = AFN(K,2*III  ,J,L1)
+              A3MODE(K,J+2,N3MODE) = AFN(K,2*JJJ-1,J,L1)
+ 62           A3MODE(K,J+4,N3MODE) = AFN(K,2*KKK-1,J,L1)
+C--antiparticle mode
+            ELSE
+              III = (IDKPRD(1,I)-6)/2
+              JJJ = (IDKPRD(2,I)-5)/2
+              KKK = (IDKPRD(3,I)-5)/2
+              DO 63 J=1,2
+              I3DRTP(J  ,N3MODE) = 14
+              I3DRTP(J+2,N3MODE) = 15
+              I3DRTP(J+4,N3MODE) = 16
+              I3MODE(J  ,N3MODE) = 400+2*III+(J-1)*12
+              I3MODE(J+2,N3MODE) = 399+2*JJJ+(J-1)*12
+              I3MODE(J+4,N3MODE) = 399+2*KKK+(J-1)*12
+              B3MODE(2,J  ,N3MODE) = 0.0D0
+              B3MODE(2,J+2,N3MODE) = 0.0D0
+              B3MODE(2,J+4,N3MODE) = 0.0D0
+              B3MODE(1,J  ,N3MODE) = QMIXSS(2*III,2,J)*
+     &                               LAMDA3(III,JJJ,KKK)
+              B3MODE(1,J+2,N3MODE) = QMIXSS(2*JJJ-1,2,J)*
+     &                               LAMDA3(III,JJJ,KKK)
+              B3MODE(1,J+4,N3MODE) = QMIXSS(2*KKK-1,2,J)*
+     &                               LAMDA3(III,JJJ,KKK)
+              DO 63 K=1,2
+              A3MODE(K,J  ,N3MODE) = AFN(O(K),2*III  ,J,L1)
+              A3MODE(K,J+2,N3MODE) = AFN(O(K),2*JJJ-1,J,L1)
+ 63           A3MODE(K,J+4,N3MODE) = AFN(O(K),2*KKK-1,J,L1)
+            ENDIF
 C--unrecognized decay issue warning
           ELSE
-            CALL HWWARN('HWISP3',155,*2000)
+            CALL HWWARN('HWISP3',2,*2000)
           ENDIF
         ELSEIF(IDK(I).GE.454.AND.IDK(I).LE.455) THEN
 C--+ve chargino modes
 C--first the chargino modes to fermion-antifermion neutralino
-          IF(L.GE.1.AND.L.LE.4) THEN
+          IF(L.GE.1.AND.L.LE.4.AND.(IDKPRD(2,I).LE.12.OR.
+     &       (IDKPRD(2,I).GE.121.AND.IDKPRD(2,I).LE.132))) THEN
             IFR = IDKPRD(2,I)
             IFR = IFR+MOD(IFR,2)
             J    = INT((IFR-1)/120)
@@ -35939,7 +41309,7 @@ C--first the chargino modes to fermion-antifermion neutralino
             SIFR = IFR+18*J
             L1 = IDK(I)-453
             N3MODE = N3MODE+1
-            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',108,*999)
+            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',116,*999)
             ID3PRT(N3MODE) = I
             NME(I) = 10000+N3MODE
             NDI3BY(N3MODE) = 4
@@ -35972,7 +41342,8 @@ C--gauge boson diagram
               B3MODE(2,NDI3BY(N3MODE),N3MODE) = -G*ORT
             ENDIF
 C--then  the chargino modes to fermion-antifermion chargino
-          ELSEIF(L.GE.5.AND.L.LE.8) THEN
+          ELSEIF(L.GE.5.AND.L.LE.8.AND.(IDKPRD(2,I).LE.12.OR.
+     &       (IDKPRD(2,I).GE.121.AND.IDKPRD(2,I).LE.132))) THEN
             L = L-4
             IFR = IDKPRD(2,I)
             J    = INT((IFR-1)/120)
@@ -35988,7 +41359,7 @@ C--then  the chargino modes to fermion-antifermion chargino
             ENDIF
             L1 = IDK(I)-453
             N3MODE = N3MODE+1
-            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',109,*999)
+            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',117,*999)
             ID3PRT(N3MODE) = I
             NME(I) = 10000+N3MODE
             NDI3BY(N3MODE) = 2
@@ -36025,14 +41396,295 @@ C--gauge boson diagram
               B3MODE(1,NDI3BY(N3MODE),N3MODE) = -E*RFCH(IL)
               B3MODE(2,NDI3BY(N3MODE),N3MODE) = -E*LFCH(IL)
             ENDIF
+C--R-parity violating decays
+C--LLE first
+          ELSEIF(IDKPRD(1,I).GE.121.AND.IDKPRD(1,I).LE.132.AND.
+     &           IDKPRD(2,I).GE.121.AND.IDKPRD(2,I).LE.132.AND.
+     &           IDKPRD(1,I).GE.121.AND.IDKPRD(3,I).LE.132) THEN
+            L1 = IDK(I)-453
+C--neutrino lepton neutrino
+            IF(MOD(IDKPRD(1,I),2).EQ.0.AND.MOD(IDKPRD(2,I),2).EQ.1.AND.
+     &         MOD(IDKPRD(3,I),2).EQ.0) THEN
+              N3MODE = N3MODE+1
+              IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',118,*999)
+              ID3PRT(N3MODE) = I
+              NME(I) = 10000+N3MODE
+              NDI3BY(N3MODE) = 2
+              P3MODE(N3MODE) = ONE
+              N3NCFL(N3MODE) = 1
+              SPN3CF(1,1,N3MODE) = ONE
+              III = (IDKPRD(1,I)-126)/2
+              JJJ = (IDKPRD(2,I)-125)/2
+              KKK = (IDKPRD(3,I)-120)/2
+              DO 54 K=1,2
+              I3DRTP(K,N3MODE) = 10
+              I3DRCF(K,N3MODE) = 1
+              I3MODE(K,N3MODE) = 423+2*KKK+12*(K-1)
+              B3MODE(1,K,N3MODE) = 0.0D0
+              B3MODE(2,K,N3MODE)=LAMDA1(III,JJJ,KKK)*LMIXSS(2*KKK-1,2,K)
+              DO 54 J=1,2
+ 54           A3MODE(J,K,N3MODE) = AFC(J,5+2*KKK,K,L1)
+C--neutrino neutrino lepton
+            ELSEIF(MOD(IDKPRD(1,I),2).EQ.0.AND.MOD(IDKPRD(2,I),2).EQ.0
+     &             .AND.MOD(IDKPRD(3,I),2).EQ.1) THEN
+              N3MODE = N3MODE+1
+              IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',119,*999)
+              ID3PRT(N3MODE) = I
+              NME(I) = 10000+N3MODE
+              NDI3BY(N3MODE) = 4
+              P3MODE(N3MODE) = ONE
+              N3NCFL(N3MODE) = 1
+              SPN3CF(1,1,N3MODE) = ONE
+              III = (IDKPRD(1,I)-120)/2
+              JJJ = (IDKPRD(2,I)-120)/2
+              KKK = (IDKPRD(3,I)-125)/2
+              DO 55 K=1,2
+              I3DRTP(K  ,N3MODE) = 2
+              I3DRTP(K+2,N3MODE) = 3
+              I3DRCF(K  ,N3MODE) = 1
+              I3DRCF(K+2,N3MODE) = 1
+              I3MODE(K  ,N3MODE) = 423+2*III+12*(K-1)
+              I3MODE(K+2,N3MODE) = 423+2*JJJ+12*(K-1)
+              B3MODE(1,K,N3MODE) = LAMDA1(III,JJJ,KKK)*
+     &             LMIXSS(2*III-1,1,K)
+              B3MODE(2,K,N3MODE) = 0.0D0
+              B3MODE(1,K+2,N3MODE) =-LAMDA1(III,JJJ,KKK)*
+     &             LMIXSS(2*JJJ-1,1,K)
+              B3MODE(2,K+2,N3MODE) = 0.0D0
+              DO 55 J=1,2
+              A3MODE(J,K,N3MODE)   = AFC(J,5+2*III,K,L1)
+ 55           A3MODE(J,K+2,N3MODE) = AFC(J,5+2*JJJ,K,L1)
+C--lepton lepton lepton
+            ELSEIF(MOD(IDKPRD(1,I),2).EQ.1.AND.MOD(IDKPRD(2,I),2).EQ.1
+     &             .AND.MOD(IDKPRD(3,I),2).EQ.1) THEN
+              N3MODE = N3MODE+1
+              IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',120,*999)
+              ID3PRT(N3MODE) = I
+              NME(I) = 10000+N3MODE
+              NDI3BY(N3MODE) = 2
+              P3MODE(N3MODE) = ONE
+              N3NCFL(N3MODE) = 1
+              SPN3CF(1,1,N3MODE) = ONE
+              III = (IDKPRD(1,I)-125)/2
+              JJJ = (IDKPRD(2,I)-125)/2
+              KKK = (IDKPRD(3,I)-119)/2
+              I3DRTP(1,N3MODE) = 8
+              I3DRTP(2,N3MODE) = 9
+              I3DRCF(1,N3MODE) = 1
+              I3DRCF(2,N3MODE) = 1
+              I3MODE(1,N3MODE) = 424+2*III
+              I3MODE(2,N3MODE) = 424+2*JJJ
+              B3MODE(1,1,N3MODE) = 0.0D0
+              B3MODE(2,1,N3MODE) = LAMDA1(III,JJJ,KKK)
+              B3MODE(1,2,N3MODE) = 0.0D0
+              B3MODE(2,2,N3MODE) =-LAMDA1(III,JJJ,KKK)
+              DO 56 J=1,2
+              A3MODE(J,1,N3MODE) = AFC(O(J),6+2*III,1,L1)
+ 56           A3MODE(J,2,N3MODE) = AFC(O(J),6+2*JJJ,1,L1)
+            ELSE
+              CALL HWWARN('HWISP3',3,*2000)
+            ENDIF
+C--LQD decays
+          ELSEIF(IDKPRD(1,I).GE.121.AND.IDKPRD(1,I).LE.132.AND.
+     &           IDKPRD(2,I).LE.12 .AND.IDKPRD(3,I).LE. 12) THEN
+            L1 = IDK(I)-453
+C--nubar dbar u
+            IF(IDKPRD(1,I).GE.128.AND.MOD(IDKPRD(1,I),2).EQ.0) THEN
+              N3MODE = N3MODE+1
+              IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',121,*999)
+              ID3PRT(N3MODE) = I
+              NME(I) = 10000+N3MODE
+              NDI3BY(N3MODE) = 2
+              P3MODE(N3MODE) = THREE
+              N3NCFL(N3MODE) = 1
+              SPN3CF(1,1,N3MODE) = ONE
+              III = (IDKPRD(1,I)-126)/2
+              JJJ = (IDKPRD(2,I)-5)/2
+              KKK = IDKPRD(3,I)/2
+              DO 88 K=1,2
+              I3DRTP(K,N3MODE) = 10
+              I3DRCF(K,N3MODE) = 1
+              I3MODE(K,N3MODE) = 399+2*KKK+12*(K-1)
+              B3MODE(1,K,N3MODE) = 0.0D0
+              B3MODE(2,K,N3MODE) = QMIXSS(2*KKK-1,2,K)*
+     &                             LAMDA2(III,JJJ,KKK)
+              DO 88 J=1,2
+ 88           A3MODE(J,K,N3MODE) = AFC(J,2*KKK-1,K,L1)
+C--l+ ubar u
+            ELSEIF(IDKPRD(1,I).GE.127.AND.MOD(IDKPRD(1,I),2).EQ.1.AND.
+     &             MOD(IDKPRD(2,I),2).EQ.0) THEN
+              N3MODE = N3MODE+1
+              IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',122,*999)
+              ID3PRT(N3MODE) = I
+              NME(I) = 10000+N3MODE
+              NDI3BY(N3MODE) = 2
+              P3MODE(N3MODE) = THREE
+              N3NCFL(N3MODE) = 1
+              SPN3CF(1,1,N3MODE) = ONE
+              III = (IDKPRD(1,I)-125)/2
+              JJJ = (IDKPRD(2,I)-6)/2
+              KKK = IDKPRD(3,I)/2
+              DO 89 K=1,2
+              I3DRTP(K,N3MODE) = 10
+              I3DRCF(K,N3MODE) = 1
+              I3MODE(K,N3MODE) = 399+2*KKK+12*(K-1)
+              B3MODE(1,K,N3MODE) = 0.0D0
+              B3MODE(2,K,N3MODE) = QMIXSS(2*KKK-1,2,K)*
+     &                             LAMDA2(III,JJJ,KKK)
+              DO 89 J=1,2
+ 89           A3MODE(J,K,N3MODE) = AFC(J,2*KKK-1,K,L1)
+C--l+ dbar d
+            ELSEIF(IDKPRD(1,I).GE.127.AND.MOD(IDKPRD(1,I),2).EQ.1.AND.
+     &             MOD(IDKPRD(2,I),2).EQ.1) THEN
+              N3MODE = N3MODE+1
+              IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',123,*999)
+              ID3PRT(N3MODE) = I
+              NME(I) = 10000+N3MODE
+              NDI3BY(N3MODE) = 3
+              P3MODE(N3MODE) = THREE
+              N3NCFL(N3MODE) = 1
+              SPN3CF(1,1,N3MODE) = ONE
+              III = (IDKPRD(1,I)-125)/2
+              JJJ = (IDKPRD(2,I)-5)/2
+              KKK = (IDKPRD(3,I)+1)/2
+              I3DRTP(1,N3MODE) = 8
+              I3DRCF(1,N3MODE) = 1
+              I3MODE(1,N3MODE) = 424+2*III
+              B3MODE(1,1,N3MODE) = 0.0D0
+              B3MODE(2,1,N3MODE) = -LAMDA2(III,JJJ,KKK)
+              DO 91 J=1,2
+ 91           A3MODE(J,1,N3MODE) = AFC(O(J),2*III+6,1,L1)
+              DO 92 K=1,2
+              I3DRTP(K+1,N3MODE) = 9
+              I3DRCF(K+1,N3MODE) = 1
+              I3MODE(K+1,N3MODE) = 400+2*JJJ+12*(K-1)
+              B3MODE(1,K+1,N3MODE) = 0.0D0
+              B3MODE(2,K+1,N3MODE) = QMIXSS(2*JJJ,1,K)*
+     &                               LAMDA2(III,JJJ,KKK)
+              DO 92 J=1,2
+ 92           A3MODE(J,K+1,N3MODE) = AFC(O(J),2*JJJ,K,L1)
+C--nu u dbar
+            ELSEIF(IDKPRD(1,I).LE.126.AND.MOD(IDKPRD(1,I),2).EQ.0) THEN
+              N3MODE = N3MODE+1
+              IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',124,*999)
+              ID3PRT(N3MODE) = I
+              NME(I) = 10000+N3MODE
+              NDI3BY(N3MODE) = 4
+              P3MODE(N3MODE) = THREE
+              N3NCFL(N3MODE) = 1
+              SPN3CF(1,1,N3MODE) = ONE
+              III = (IDKPRD(1,I)-120)/2
+              JJJ = IDKPRD(2,I)/2
+              KKK = (IDKPRD(3,I)-5)/2
+              DO 90 K=1,2
+              I3DRTP(K  ,N3MODE) = 2
+              I3DRTP(K+2,N3MODE) = 3
+              I3DRCF(K  ,N3MODE) = 1
+              I3DRCF(K+2,N3MODE) = 1
+              I3MODE(K  ,N3MODE) = 423+2*III+12*(K-1)
+              I3MODE(K+2,N3MODE) = 399+2*JJJ+12*(K-1)
+              B3MODE(1,K  ,N3MODE) = LMIXSS(2*III-1,1,K)*
+     &                               LAMDA2(III,JJJ,KKK)
+              B3MODE(2,K  ,N3MODE) = 0.0D0
+              B3MODE(1,K+2,N3MODE) = -QMIXSS(2*JJJ-1,1,K)*
+     &                               LAMDA2(III,JJJ,KKK)
+              B3MODE(2,K+2,N3MODE) = 0.0D0
+              DO 90 J=1,2
+              A3MODE(J,K  ,N3MODE) = AFC(J,2*III+5,K,L1)
+ 90           A3MODE(J,K+2,N3MODE) = AFC(J,2*JJJ-1,K,L1)
+C--unrecognised
+            ELSE
+              CALL HWWARN('HWISP3',4,*2000)
+            ENDIF
+C--UDD decays
+          ELSEIF(IDKPRD(1,I).LE.12.AND.IDKPRD(2,I).LE.12.AND.
+     &           IDKPRD(3,I).LE.12) THEN
+             L1 = IDK(I)-453
+C--dbar dbar dbar mode
+            IF(MOD(IDKPRD(1,I),2).EQ.1.AND.MOD(IDKPRD(2,I),2).EQ.1.AND.
+     &         MOD(IDKPRD(3,I),2).EQ.1) THEN
+              N3MODE = N3MODE+1
+              IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',125,*999)
+              ID3PRT(N3MODE) = I
+              NME(I) = 10000+N3MODE
+              NDI3BY(N3MODE) = 6
+              N3NCFL(N3MODE) = 1
+              SPN3CF(1,1,N3MODE) = ONE
+              III = (IDKPRD(1,I)-5)/2
+              JJJ = (IDKPRD(2,I)-5)/2
+              KKK = (IDKPRD(3,I)-5)/2
+              P3MODE(N3MODE) = ONE
+              IF(III.EQ.JJJ) P3MODE(N3MODE) = P3MODE(N3MODE)+ONE
+              IF(JJJ.EQ.KKK) P3MODE(N3MODE) = P3MODE(N3MODE)+ONE
+              IF(III.EQ.KKK) P3MODE(N3MODE) = P3MODE(N3MODE)+ONE
+              P3MODE(N3MODE) = 6.0D0/P3MODE(N3MODE)
+              DO 66 K=1,6
+ 66           I3DRCF(K,N3MODE) = 1
+              DO 65 K=1,2
+              I3DRTP(K  ,N3MODE) = 14 
+              I3DRTP(K+2,N3MODE) = 15
+              I3DRTP(K+4,N3MODE) = 16
+              I3MODE(K  ,N3MODE) = 400+2*III+(K-1)*12
+              I3MODE(K+2,N3MODE) = 400+2*JJJ+(K-1)*12
+              I3MODE(K+4,N3MODE) = 400+2*KKK+(K-1)*12
+              B3MODE(1,K  ,N3MODE) = QMIXSS(2*III,2,K)*
+     &                               LAMDA3(III,JJJ,KKK)
+              B3MODE(2,K  ,N3MODE) = 0.0D0
+              B3MODE(1,K+2,N3MODE) =-QMIXSS(2*JJJ,2,K)*
+     &                               LAMDA3(JJJ,III,KKK)
+              B3MODE(2,K+2,N3MODE) = 0.0D0
+              B3MODE(1,K+4,N3MODE) = QMIXSS(2*KKK,2,K)*
+     &                               LAMDA3(KKK,III,JJJ)
+              B3MODE(2,K+4,N3MODE) = 0.0D0
+              DO 65 J=1,2
+              A3MODE(J,K  ,N3MODE) = AFC(O(J),2*III,K,L1)
+              A3MODE(J,K+2,N3MODE) = AFC(O(J),2*JJJ,K,L1)
+ 65           A3MODE(J,K+4,N3MODE) = AFC(O(J),2*KKK,K,L1)
+C--u u d mode
+            ELSEIF(MOD(IDKPRD(1,I),2).EQ.0.AND.MOD(IDKPRD(2,I),2).EQ.0
+     &              .AND.MOD(IDKPRD(3,I),2).EQ.1) THEN
+              N3MODE = N3MODE+1
+              IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',126,*999)
+              ID3PRT(N3MODE) = I
+              NME(I) = 10000+N3MODE
+              NDI3BY(N3MODE) = 4
+              P3MODE(N3MODE) = 6.0D0
+              N3NCFL(N3MODE) = 1
+              SPN3CF(1,1,N3MODE) = ONE
+              III = IDKPRD(1,I)/2
+              JJJ = IDKPRD(2,I)/2
+              KKK = (IDKPRD(3,I)+1)/2
+              IF(III.EQ.JJJ) P3MODE(N3MODE) = HALF*P3MODE(N3MODE)
+              DO 64 K=1,2
+              I3DRTP(K  ,N3MODE) = 11
+              I3DRTP(K+2,N3MODE) = 12
+              I3DRCF(K  ,N3MODE) = 1
+              I3DRCF(K+2,N3MODE) = 1
+              I3MODE(K  ,N3MODE) = 399+2*III+(K-1)*12
+              I3MODE(K+2,N3MODE) = 399+2*JJJ+(K-1)*12
+              B3MODE(1,K  ,N3MODE) = 0.0D0
+              B3MODE(2,K  ,N3MODE) = QMIXSS(2*III-1,2,K)*
+     &                               LAMDA3(JJJ,III,KKK)
+c              B3MODE(2,K,N3MODE) = 0.0D0
+              B3MODE(1,K+2,N3MODE) = 0.0D0
+              B3MODE(2,K+2,N3MODE) =-QMIXSS(2*JJJ-1,2,K)*
+     &                               LAMDA3(III,JJJ,KKK)
+              DO 64 J=1,2
+              A3MODE(J,K  ,N3MODE) = AFC(J,2*III-1,K,L1)
+ 64           A3MODE(J,K+2,N3MODE) = AFC(J,2*JJJ-1,K,L1)
+C--unrecognized decay issue warning
+            ELSE
+              CALL HWWARN('HWISP3',5,*2000)
+            ENDIF
 C--unrecognized decay issue warning
           ELSE
-            CALL HWWARN('HWISP3',158,*2000)
+            CALL HWWARN('HWISP3',6,*2000)
           ENDIF
         ELSEIF(IDK(I).GE.456.AND.IDK(I).LE.457) THEN
 C-- -ve chargino modes last
 C--first the chargino modes to fermion-antifermion neutralino
-          IF(L.GE.1.AND.L.LE.4) THEN
+          IF(L.GE.1.AND.L.LE.4.AND.(IDKPRD(2,I).LE.12.OR.
+     &       (IDKPRD(2,I).GE.121.AND.IDKPRD(2,I).LE.132))) THEN
             IFR = IDKPRD(2,I)
             IFR = IFR+MOD(IFR,2)
             J    = INT((IFR-1)/120)
@@ -36041,7 +41693,7 @@ C--first the chargino modes to fermion-antifermion neutralino
             SIFR = IFR+18*J
             L1 = IDK(I)-455
             N3MODE = N3MODE+1
-            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',110,*999)
+            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',127,*999)
             ID3PRT(N3MODE) = I
             NME(I) = 10000+N3MODE
             NDI3BY(N3MODE) = 4
@@ -36074,7 +41726,8 @@ C--gauge boson diagram
               B3MODE(2,NDI3BY(N3MODE),N3MODE) = -G*ORT
             ENDIF
 C--then  the chargino modes to fermion-antifermion chargino
-          ELSEIF(L.GE.5.AND.L.LE.8) THEN
+          ELSEIF(L.GE.5.AND.L.LE.8.AND.(IDKPRD(2,I).LE.12.OR.
+     &       (IDKPRD(2,I).GE.121.AND.IDKPRD(2,I).LE.132))) THEN
             L = L-6
             IFR = IDKPRD(2,I)
             J    = INT((IFR-1)/120)
@@ -36090,7 +41743,7 @@ C--then  the chargino modes to fermion-antifermion chargino
             ENDIF
             L1 = IDK(I)-455
             N3MODE = N3MODE+1
-            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',111,*999)
+            IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',128,*999)
             ID3PRT(N3MODE) = I
             NME(I) = 10000+N3MODE
             NDI3BY(N3MODE) = 2
@@ -36127,9 +41780,288 @@ C--gauge boson diagram
               B3MODE(1,NDI3BY(N3MODE),N3MODE) = -E*RFCH(IL)
               B3MODE(2,NDI3BY(N3MODE),N3MODE) = -E*LFCH(IL)
             ENDIF
+C--R-parity violating decays
+C--LLE first
+          ELSEIF(IDKPRD(1,I).GE.121.AND.IDKPRD(1,I).LE.132.AND.
+     &           IDKPRD(2,I).GE.121.AND.IDKPRD(2,I).LE.132.AND.
+     &           IDKPRD(1,I).GE.121.AND.IDKPRD(3,I).LE.132) THEN
+             L1 = IDK(I)-455
+C--neutrino lepton neutrino
+            IF(MOD(IDKPRD(1,I),2).EQ.0.AND.MOD(IDKPRD(2,I),2).EQ.1.AND.
+     &         MOD(IDKPRD(3,I),2).EQ.0) THEN
+              N3MODE = N3MODE+1
+              IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',129,*999)
+              ID3PRT(N3MODE) = I
+              NME(I) = 10000+N3MODE
+              NDI3BY(N3MODE) = 2
+              P3MODE(N3MODE) = ONE
+              N3NCFL(N3MODE) = 1
+              SPN3CF(1,1,N3MODE) = ONE
+              III = (IDKPRD(1,I)-120)/2
+              JJJ = (IDKPRD(2,I)-119)/2
+              KKK = (IDKPRD(3,I)-126)/2
+              DO 57 K=1,2
+              I3DRTP(K,N3MODE) = 4
+              I3DRCF(K,N3MODE) = 1
+              I3MODE(K,N3MODE) = 423+2*KKK+12*(K-1)
+              B3MODE(2,K,N3MODE) = 0.0D0
+              B3MODE(1,K,N3MODE)=LAMDA1(III,JJJ,KKK)*LMIXSS(2*KKK-1,2,K)
+              DO 57 J=1,2
+ 57           A3MODE(J,K,N3MODE) = AFC(O(J),5+2*KKK,K,L1)
+C--neutrino neutrino lepton
+            ELSEIF(MOD(IDKPRD(1,I),2).EQ.0.AND.MOD(IDKPRD(2,I),2).EQ.0
+     &             .AND.MOD(IDKPRD(3,I),2).EQ.1) THEN
+              N3MODE = N3MODE+1
+              IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',130,*999)
+              ID3PRT(N3MODE) = I
+              NME(I) = 10000+N3MODE
+              NDI3BY(N3MODE) = 4
+              P3MODE(N3MODE) = ONE
+              N3NCFL(N3MODE) = 1
+              SPN3CF(1,1,N3MODE) = ONE
+              III = (IDKPRD(1,I)-126)/2
+              JJJ = (IDKPRD(2,I)-126)/2
+              KKK = (IDKPRD(3,I)-119)/2
+              DO 58 K=1,2
+              I3DRTP(K  ,N3MODE) = 8
+              I3DRTP(K+2,N3MODE) = 9
+              I3DRCF(K  ,N3MODE) = 1
+              I3DRCF(K+2,N3MODE) = 1
+              I3MODE(K  ,N3MODE) = 423+2*III+12*(K-1)
+              I3MODE(K+2,N3MODE) = 423+2*JJJ+12*(K-1)
+              B3MODE(2,K,N3MODE) = LAMDA1(III,JJJ,KKK)*
+     &             LMIXSS(2*III-1,1,K)
+              B3MODE(1,K,N3MODE) = 0.0D0
+              B3MODE(2,K+2,N3MODE) =-LAMDA1(III,JJJ,KKK)*
+     &             LMIXSS(2*JJJ-1,1,K)
+              B3MODE(1,K+2,N3MODE) = 0.0D0
+              DO 58 J=1,2
+              A3MODE(J,K,N3MODE)   = AFC(O(J),5+2*III,K,L1)
+ 58           A3MODE(J,K+2,N3MODE) = AFC(O(J),5+2*JJJ,K,L1)
+C--lepton lepton lepton
+            ELSEIF(MOD(IDKPRD(1,I),2).EQ.1.AND.MOD(IDKPRD(2,I),2).EQ.1
+     &             .AND.MOD(IDKPRD(3,I),2).EQ.1) THEN
+              N3MODE = N3MODE+1
+              IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',131,*999)
+              ID3PRT(N3MODE) = I
+              NME(I) = 10000+N3MODE
+              NDI3BY(N3MODE) = 2
+              P3MODE(N3MODE) = ONE
+              N3NCFL(N3MODE) = 1
+              SPN3CF(1,1,N3MODE) = ONE
+              III = (IDKPRD(1,I)-119)/2
+              JJJ = (IDKPRD(2,I)-119)/2
+              KKK = (IDKPRD(3,I)-125)/2
+              I3DRTP(1,N3MODE) = 2
+              I3DRTP(2,N3MODE) = 3
+              I3DRCF(1,N3MODE) = 1
+              I3DRCF(2,N3MODE) = 1
+              I3MODE(1,N3MODE) = 424+2*III
+              I3MODE(2,N3MODE) = 424+2*JJJ
+              B3MODE(1,1,N3MODE) = LAMDA1(III,JJJ,KKK)
+              B3MODE(2,1,N3MODE) = 0.0D0
+              B3MODE(1,2,N3MODE) =-LAMDA1(III,JJJ,KKK)
+              B3MODE(2,2,N3MODE) = 0.0D0
+              DO 59 J=1,2
+              A3MODE(J,1,N3MODE) = AFC(J,6+2*III,1,L1)
+ 59           A3MODE(J,2,N3MODE) = AFC(J,6+2*JJJ,1,L1)
+            ELSE
+              CALL HWWARN('HWISP3',7,*2000)
+            ENDIF
+C--LQD decays
+          ELSEIF(IDKPRD(1,I).GE.121.AND.IDKPRD(1,I).LE.132.AND.
+     &           IDKPRD(2,I).LE.12 .AND.IDKPRD(3,I).LE. 12) THEN
+            L1 = IDK(I)-455
+C--nu d ubar
+            IF(IDKPRD(1,I).LE.126.AND.MOD(IDKPRD(1,I),2).EQ.0) THEN
+              N3MODE = N3MODE+1
+              IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',132,*999)
+              ID3PRT(N3MODE) = I
+              NME(I) = 10000+N3MODE
+              NDI3BY(N3MODE) = 2
+              P3MODE(N3MODE) = THREE
+              N3NCFL(N3MODE) = 1
+              SPN3CF(1,1,N3MODE) = ONE
+              III = (IDKPRD(1,I)-120)/2
+              JJJ = (IDKPRD(2,I)+1)/2
+              KKK = (IDKPRD(3,I)-6)/2
+              DO 93 K=1,2
+              I3DRTP(K,N3MODE) = 4
+              I3DRCF(K,N3MODE) = 1
+              I3MODE(K,N3MODE) = 399+2*KKK+12*(K-1)
+              B3MODE(2,K,N3MODE) = 0.0D0
+              B3MODE(1,K,N3MODE) = QMIXSS(2*KKK-1,2,K)*
+     &                             LAMDA2(III,JJJ,KKK)
+              DO 93 J=1,2
+ 93           A3MODE(J,K,N3MODE) = AFC(O(J),2*KKK-1,K,L1)
+C--l- u ubar
+            ELSEIF(IDKPRD(1,I).LE.125.AND.MOD(IDKPRD(1,I),2).EQ.1.AND.
+     &             MOD(IDKPRD(2,I),2).EQ.0) THEN
+              N3MODE = N3MODE+1
+              IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',133,*999)
+              ID3PRT(N3MODE) = I
+              NME(I) = 10000+N3MODE
+              NDI3BY(N3MODE) = 2
+              P3MODE(N3MODE) = THREE
+              N3NCFL(N3MODE) = 1
+              SPN3CF(1,1,N3MODE) = ONE
+              III = (IDKPRD(1,I)-119)/2
+              JJJ = IDKPRD(2,I)/2
+              KKK = (IDKPRD(3,I)-6)/2
+              DO 94 K=1,2
+              I3DRTP(K,N3MODE) = 4
+              I3DRCF(K,N3MODE) = 1
+              I3MODE(K,N3MODE) = 399+2*KKK+12*(K-1)
+              B3MODE(2,K,N3MODE) = 0.0D0
+              B3MODE(1,K,N3MODE) = QMIXSS(2*KKK-1,2,K)*
+     &                             LAMDA2(III,JJJ,KKK)
+              DO 94 J=1,2
+ 94           A3MODE(J,K,N3MODE) = AFC(J,2*KKK-1,K,L1)
+C--l- d dbar
+            ELSEIF(IDKPRD(1,I).LE.125.AND.MOD(IDKPRD(1,I),2).EQ.1.AND.
+     &             MOD(IDKPRD(2,I),2).EQ.1) THEN
+              N3MODE = N3MODE+1
+              IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',134,*999)
+              ID3PRT(N3MODE) = I
+              NME(I) = 10000+N3MODE
+              NDI3BY(N3MODE) = 3
+              P3MODE(N3MODE) = THREE
+              N3NCFL(N3MODE) = 1
+              SPN3CF(1,1,N3MODE) = ONE
+              III = (IDKPRD(1,I)-119)/2
+              JJJ = (IDKPRD(2,I)+1)/2
+              KKK = (IDKPRD(3,I)-5)/2
+              I3DRTP(1,N3MODE) = 2
+              I3DRCF(1,N3MODE) = 1
+              I3MODE(1,N3MODE) = 424+2*III
+              B3MODE(2,1,N3MODE) = 0.0D0
+              B3MODE(1,1,N3MODE) = -LAMDA2(III,JJJ,KKK)
+              DO 95 J=1,2
+ 95           A3MODE(J,1,N3MODE) = AFC(J,2*III+6,1,L1)
+              DO 96 K=1,2
+              I3DRTP(K+1,N3MODE) = 3
+              I3DRCF(K+1,N3MODE) = 1
+              I3MODE(K+1,N3MODE) = 400+2*JJJ+12*(K-1)
+              B3MODE(2,K+1,N3MODE) = 0.0D0
+              B3MODE(1,K+1,N3MODE) = QMIXSS(2*JJJ,1,K)*
+     &                               LAMDA2(III,JJJ,KKK)
+              DO 96 J=1,2
+ 96           A3MODE(J,K+1,N3MODE) = AFC(J,2*JJJ,K,L1)
+C--nubar ubar d
+            ELSEIF(IDKPRD(1,I).GE.128.AND.MOD(IDKPRD(1,I),2).EQ.0) THEN
+              N3MODE = N3MODE+1
+              IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',135,*999)
+              ID3PRT(N3MODE) = I
+              NME(I) = 10000+N3MODE
+              NDI3BY(N3MODE) = 4
+              P3MODE(N3MODE) = THREE
+              N3NCFL(N3MODE) = 1
+              SPN3CF(1,1,N3MODE) = ONE
+              III = (IDKPRD(1,I)-126)/2
+              JJJ = (IDKPRD(2,I)-6)/2
+              KKK = (IDKPRD(3,I)+1)/2
+              DO 97 K=1,2
+              I3DRTP(K  ,N3MODE) = 8
+              I3DRTP(K+2,N3MODE) = 9
+              I3DRCF(K  ,N3MODE) = 1
+              I3DRCF(K+2,N3MODE) = 1
+              I3MODE(K  ,N3MODE) = 423+2*III+12*(K-1)
+              I3MODE(K+2,N3MODE) = 399+2*JJJ+12*(K-1)
+              B3MODE(2,K  ,N3MODE) = LMIXSS(2*III-1,1,K)*
+     &                               LAMDA2(III,JJJ,KKK)
+              B3MODE(1,K  ,N3MODE) = 0.0D0
+              B3MODE(2,K+2,N3MODE) = -QMIXSS(2*JJJ-1,1,K)*
+     &                               LAMDA2(III,JJJ,KKK)
+              B3MODE(1,K+2,N3MODE) = 0.0D0
+              DO 97 J=1,2
+              A3MODE(J,K  ,N3MODE) = AFC(O(J),2*III+5,K,L1)
+ 97           A3MODE(J,K+2,N3MODE) = AFC(O(J),2*JJJ-1,K,L1)
+C--unrecognised
+            ELSE
+              CALL HWWARN('HWISP3',8,*2000)
+            ENDIF
+C-- UDD modes
+          ELSEIF(IDKPRD(1,I).LE.12.AND.IDKPRD(2,I).LE.12.AND.
+     &           IDKPRD(3,I).LE.12) THEN
+             L1 = IDK(I)-455
+C-- d d d mode
+            IF(MOD(IDKPRD(1,I),2).EQ.1.AND.MOD(IDKPRD(2,I),2).EQ.1.AND.
+     &         MOD(IDKPRD(3,I),2).EQ.1) THEN
+              N3MODE = N3MODE+1
+              IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',136,*999)
+              ID3PRT(N3MODE) = I
+              NME(I) = 10000+N3MODE
+              NDI3BY(N3MODE) = 6
+              N3NCFL(N3MODE) = 1
+              SPN3CF(1,1,N3MODE) = ONE
+              III = (IDKPRD(1,I)+1)/2
+              JJJ = (IDKPRD(2,I)+1)/2
+              KKK = (IDKPRD(3,I)+1)/2
+              P3MODE(N3MODE) = ONE
+              IF(III.EQ.JJJ) P3MODE(N3MODE) = P3MODE(N3MODE)+ONE
+              IF(JJJ.EQ.KKK) P3MODE(N3MODE) = P3MODE(N3MODE)+ONE
+              IF(III.EQ.KKK) P3MODE(N3MODE) = P3MODE(N3MODE)+ONE
+              P3MODE(N3MODE) = 6.0D0/P3MODE(N3MODE)
+              DO 68 K=1,6
+ 68           I3DRCF(K,N3MODE) = 1
+              DO 67 K=1,2
+              I3DRTP(K  ,N3MODE) = 12
+              I3DRTP(K+2,N3MODE) = 13
+              I3DRTP(K+4,N3MODE) = 14
+              I3MODE(K  ,N3MODE) = 400+2*III+(K-1)*12
+              I3MODE(K+2,N3MODE) = 400+2*JJJ+(K-1)*12
+              I3MODE(K+4,N3MODE) = 400+2*KKK+(K-1)*12
+              B3MODE(1,K  ,N3MODE) = 0.0D0
+              B3MODE(1,K+2,N3MODE) = 0.0D0
+              B3MODE(1,K+4,N3MODE) = 0.0D0
+              B3MODE(2,K  ,N3MODE) = QMIXSS(2*III,2,K)*
+     &                               LAMDA3(III,JJJ,KKK)
+              B3MODE(2,K+2,N3MODE) =-QMIXSS(2*JJJ,2,K)*
+     &                               LAMDA3(JJJ,III,KKK)
+              B3MODE(2,K+4,N3MODE) = QMIXSS(2*KKK,2,K)*
+     &                               LAMDA3(KKK,III,JJJ)
+              DO 67 J=1,2
+              A3MODE(J,K  ,N3MODE) = AFC(J,2*III,K,L1)
+              A3MODE(J,K+2,N3MODE) = AFC(J,2*JJJ,K,L1)
+ 67           A3MODE(J,K+4,N3MODE) = AFC(J,2*KKK,K,L1)
+C--u u d mode
+            ELSEIF(MOD(IDKPRD(1,I),2).EQ.0.AND.MOD(IDKPRD(2,I),2).EQ.0
+     &              .AND.MOD(IDKPRD(3,I),2).EQ.1) THEN
+              N3MODE = N3MODE+1
+              IF(N3MODE.GT.NMODE3) CALL HWWARN('HWISP3',137,*999)
+              ID3PRT(N3MODE) = I
+              NME(I) = 10000+N3MODE
+              NDI3BY(N3MODE) = 4
+              P3MODE(N3MODE) = 6.0D0
+              N3NCFL(N3MODE) = 1
+              SPN3CF(1,1,N3MODE) = ONE
+              III = (IDKPRD(1,I)-6)/2
+              JJJ = (IDKPRD(2,I)-6)/2
+              KKK = (IDKPRD(3,I)-5)/2
+              IF(III.EQ.JJJ) P3MODE(N3MODE) = HALF*P3MODE(N3MODE)
+              DO 69 K=1,2
+              I3DRTP(K  ,N3MODE) = 11
+              I3DRTP(K+2,N3MODE) = 12
+              I3DRCF(K  ,N3MODE) = 1
+              I3DRCF(K+2,N3MODE) = 1
+              I3MODE(K  ,N3MODE) = 399+2*III+(K-1)*12
+              I3MODE(K+2,N3MODE) = 399+2*JJJ+(K-1)*12
+              B3MODE(1,K  ,N3MODE) = QMIXSS(2*III-1,2,K)*
+     &                               LAMDA3(JJJ,III,KKK)
+              B3MODE(1,K+2,N3MODE) =-QMIXSS(2*JJJ-1,2,K)*
+     &                               LAMDA3(III,JJJ,KKK)
+              B3MODE(2,K+2,N3MODE) = 0.0D0
+              B3MODE(2,K+2,N3MODE) = 0.0D0
+              DO 69 J=1,2
+              A3MODE(J,K  ,N3MODE) = AFC(O(J),2*III-1,K,L1)
+ 69           A3MODE(J,K+2,N3MODE) = AFC(O(J),2*JJJ-1,K,L1)
+C--unrecognized decay issue warning
+            ELSE
+              CALL HWWARN('HWISP3',9,*2000)
+            ENDIF
 C--unrecognized decay issue warning
           ELSE
-            CALL HWWARN('HWISP3',161,*2000)
+            CALL HWWARN('HWISP3',10,*2000)
           ENDIF
         ENDIF
 C--NOW FIND THE TWO BODY MODES WE WILL TREAT AS THREE BODY
@@ -36143,7 +42075,7 @@ C--first the neutralino decay modes
 C--neutralino --> neutralino Z
           IF(L.GE.1.AND.L.LE.4.AND.IDKPRD(2,I).EQ.200) THEN
             NBMODE = NBMODE+1
-            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',112,*999)
+            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',138,*999)
             NME(I) = 20000+NBMODE
             IDBPRT(NBMODE) = I
             IBMODE(NBMODE) = 200
@@ -36164,7 +42096,7 @@ C--neutralino --> chargino+ W-
           ELSEIF((L.EQ.5.OR.L.EQ.6).AND.IDKPRD(2,I).EQ.199) THEN
             L = L-4
             NBMODE = NBMODE+1
-            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',113,*999)
+            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',139,*999)
             NME(I) = 20000+NBMODE
             IDBPRT(NBMODE) = I
             IBMODE(NBMODE) = 199
@@ -36180,7 +42112,7 @@ C--neutralino --> chargino- W+
           ELSEIF((L.EQ.7.OR.L.EQ.8).AND.IDKPRD(2,I).EQ.198) THEN
             L = L-6
             NBMODE = NBMODE+1
-            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',114,*999)
+            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',140,*999)
             NME(I) = 20000+NBMODE
             IDBPRT(NBMODE) = I
             IBMODE(NBMODE) = 198
@@ -36192,9 +42124,30 @@ C--neutralino --> chargino- W+
             IF(K.LE.3) PBMODE(K,NBMODE) = THREE
             BBMODE(1,K,NBMODE) = ZERO
  25         BBMODE(2,K,NBMODE) = -G*ORT
+C--gravitino Z modes
+          ELSEIF(L.EQ.9.AND.IDKPRD(2,I).EQ.200) THEN
+            NBMODE = NBMODE+1
+            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',141,*999)
+            NME(I) = 20000+NBMODE
+            IDBPRT(NBMODE) = I
+            IBMODE(NBMODE) = 200
+            IBDRTP(NBMODE) = 7
+            ABMODE(1,NBMODE) = 2.0D0/SQRT(6.0D0)*ZMIXSS(L1,2)
+            ABMODE(2,NBMODE) = 2.0D0/SQRT(6.0D0)*RMASS(200)*
+     &                         (ZMIXSS(L1,3)*COSB-ZMIXSS(L1,4)*SINB)
+            DO 41 K=1,12
+            IF(K.LE.6) THEN
+              IL = K
+              PBMODE(K,NBMODE) = THREE
+            ELSE
+              IL=K+4
+              PBMODE(K,NBMODE) = ONE
+            ENDIF
+            BBMODE(1,K,NBMODE) = -E*RFCH(IL)
+ 41         BBMODE(2,K,NBMODE) = -E*LFCH(IL)
 C--unrecognized decay issue warning
           ELSE
-            CALL HWWARN('HWISP3',162,*2000)
+            CALL HWWARN('HWISP3',11,*2000)
           ENDIF
 C--then the +ve chargino decay modes
         ELSEIF((L1.EQ.5.OR.L1.EQ.6)
@@ -36204,7 +42157,7 @@ C--chargino --> chargino Z
           IF((L.EQ.5.OR.L.EQ.6).AND.IDKPRD(2,I).EQ.200) THEN
             L = L-4
             NBMODE = NBMODE+1
-            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',115,*999)
+            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',142,*999)
             NME(I) = 20000+NBMODE
             IDBPRT(NBMODE) = I
             IBMODE(NBMODE) = 200
@@ -36224,7 +42177,7 @@ C--chargino --> chargino Z
 C--chargino --> neutralino W+
           ELSEIF(L.GE.1.AND.L.LE.4.AND.IDKPRD(2,I).EQ.198) THEN
             NBMODE = NBMODE+1
-            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',116,*999)
+            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',143,*999)
             NME(I) = 20000+NBMODE
             IDBPRT(NBMODE) = I
             IBMODE(NBMODE) = 198
@@ -36238,7 +42191,7 @@ C--chargino --> neutralino W+
  29         BBMODE(2,K,NBMODE) = -G*ORT
 C--unrecognised decay issue warning
           ELSE
-            CALL HWWARN('HWISP3',163,*2000)
+            CALL HWWARN('HWISP3',12,*2000)
           ENDIF
 C--then the -ve chargino decay modes
         ELSEIF((L1.EQ.7.OR.L1.EQ.8)
@@ -36248,7 +42201,7 @@ C--chargino --> chargino Z
           IF((L.EQ.7.OR.L.EQ.8).AND.IDKPRD(2,I).EQ.200) THEN
             L = L-6
             NBMODE = NBMODE+1
-            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',117,*999)
+            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',144,*999)
             NME(I) = 20000+NBMODE
             IDBPRT(NBMODE) = I
             IBMODE(NBMODE) = 200
@@ -36268,7 +42221,7 @@ C--chargino --> chargino Z
 C--chargino --> neutralino W-
           ELSEIF(L.GE.1.AND.L.LE.4.AND.IDKPRD(2,I).EQ.199) THEN
             NBMODE = NBMODE+1
-            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',118,*999)
+            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',145,*999)
             NME(I) = 20000+NBMODE
             IDBPRT(NBMODE) = I
             IBMODE(NBMODE) = 199
@@ -36282,7 +42235,7 @@ C--chargino --> neutralino W-
  33         BBMODE(2,K,NBMODE) = -G*ORT
 C--unrecognised decay issue warning
           ELSE
-            CALL HWWARN('HWISP3',164,*2000)
+            CALL HWWARN('HWISP3',13,*2000)
           ENDIF
 C--gauge boson decay modes of the Higgs
         ELSEIF(IH.GE.1.AND.IH.LE.5.AND.IH1.GE.1.AND.IH1.LE.5.AND.
@@ -36290,7 +42243,7 @@ C--gauge boson decay modes of the Higgs
 C--decay of the A0 to scalar Higgs and Z boson
           IF(IH1.EQ.3.AND.IH.LE.2) THEN
             NBMODE = NBMODE+1
-            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',119,*999)
+            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',146,*999)
             NME(I) = 20000+NBMODE
             IDBPRT(NBMODE) = I
             IBMODE(NBMODE) = 200
@@ -36310,7 +42263,7 @@ C--decay of the A0 to scalar Higgs and Z boson
 C--decay of scalar Higgs to A0 and Z
           ELSEIF(IH.EQ.3.AND.IH1.LE.3) THEN
             NBMODE = NBMODE+1
-            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',120,*999)
+            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',147,*999)
             NME(I) = 20000+NBMODE
             IDBPRT(NBMODE) = I
             IBMODE(NBMODE) = 200
@@ -36330,7 +42283,7 @@ C--decay of scalar Higgs to A0 and Z
 C--decay of the positively charged Higgs
           ELSEIF(IH1.EQ.4.AND.IH.LE.3) THEN
             NBMODE = NBMODE+1
-            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',121,*999)
+            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',148,*999)
             NME(I) = 20000+NBMODE
             IDBPRT(NBMODE) = I
             IBMODE(NBMODE) = 198
@@ -36345,7 +42298,7 @@ C--decay of the positively charged Higgs
 C--decay of the negatively charged Higgs
           ELSEIF(IH1.EQ.5.AND.IH.LE.3) THEN
             NBMODE = NBMODE+1
-            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',122,*999)
+            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',149,*999)
             NME(I) = 20000+NBMODE
             IDBPRT(NBMODE) = I
             IBMODE(NBMODE) = 199
@@ -36370,7 +42323,7 @@ C--change the order of the decay products
 C--first the Z decay modes
           IF(IDKPRD(1,I).EQ.200) THEN
             NBMODE = NBMODE+1
-            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',123,*999)
+            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',150,*999)
             NME(I) = 20000+NBMODE
             IDBPRT(NBMODE) = I
             IBMODE(NBMODE) = 200
@@ -36390,7 +42343,7 @@ C--first the Z decay modes
 C--then  the W+ decay modes
           ELSEIF(IDKPRD(1,I).EQ.198) THEN
             NBMODE = NBMODE+1
-            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',124,*999)
+            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',151,*999)
             NME(I) = 20000+NBMODE
             IDBPRT(NBMODE) = I
             IBMODE(NBMODE) = 198
@@ -36409,7 +42362,7 @@ C--then  the W+ decay modes
  39         BBMODE(2,K,NBMODE) = -G*ORT
           ELSEIF(IDKPRD(1,I).EQ.199) THEN
             NBMODE = NBMODE+1
-            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',125,*999)
+            IF(NBMODE.GT.NMODEB) CALL HWWARN('HWISP3',152,*999)
             NME(I) = 20000+NBMODE
             IDBPRT(NBMODE) = I
             IBMODE(NBMODE) = 199
@@ -36491,7 +42444,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     Initialise the Higgs four body modes
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER I,J,K,IL,IH,II,JJ
       DOUBLE PRECISION COL(2),SW,CW,TW,E,G,RT,ORT,MW,MZ,AFN(2,12,2,4),
      &     AFG(2,6,2),AFC(2,12,2,2),OIJ(2,4,2),OIJP(2,2,2),OIJPP(2,4,4),
@@ -36586,7 +42539,7 @@ C-----------------------------------------------------------------------
 C  Reads in SUSY particle properties and decays,
 C  in format generated by ISAWIG
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER I,J,K,IH,IHW,NSSP,NDEC,MDKYS
       DOUBLE PRECISION BETAH, WEINCOS,WEINSIN, MW,MZ, RMMAX
       DOUBLE PRECISION FTM,FTMUU(4),FTMDD(4),FTMTT(4),FTMBB(4),FTMU,FTMD
@@ -36607,6 +42560,12 @@ C--reset susy input flag
 C
 C  Input SUSY particle + top quark table
 C
+      WRITE (6,9)       '                           '
+  9   FORMAT(//10X,A28//,
+     &         10X,'Since SUSY processes are called,'
+     & ,/,     10X,'please also reference: S.Moretti, K.Odagiri,'
+     & ,/,     10X,'P.Richardson, M.H.Seymour & B.R.Webber,'
+     & ,/,     10X,'JHEP 0204 (2002) 028')
       WRITE (6,10) LRSUSY
  10   FORMAT (/10X,'Reading in SUSY data from unit',I3)
       READ (LRSUSY,'(I4)') NSSP
@@ -36823,7 +42782,7 @@ C     IPROC = 1000,... ADDS SOFT UNDERLYING EVENT
 C           = 8000:  CREATES MINIMUM-BIAS EVENT
 C     SUPPRESSED BY ADDING 10000 TO IPROC
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWREXP,ENFAC,TECM,SECM,SUMM,EMCL,BMP(5),BMR(3,3)
       INTEGER HWRINT,NETC,IBT,IDBT,ID1,ID2,ID3,KHEP,LHEP,NTRY,ICMS,
      & NPPBAR,MCHT,JCL,JD1,JD2,JD3,ICH,MODC,NCHT,INHEP(2),
@@ -37074,7 +43033,7 @@ C-----------------------------------------------------------------------
 C     GENERATES CYLINDRICAL PHASE SPACE USING THE METHOD OF JADACH
 C     RETURNS WITH NCL=0 IF UNSUCCESSFUL
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWREXT,HWRUNG,HWUSQR,TECM,ESS,ALOGS,EPS,SUMX,
      & SUMY,PT,PX,PY,PT2,SUMPT2,SUMTM,XIMIN,XIMAX,YY,SUM1,SUM2,SUM3,
      & SUM4,EX,FY,DD,DYY,ZZ,E1,TM,SLOP,XI(NMXCL)
@@ -37211,7 +43170,7 @@ C     adjusts pointers,  sets CMMOM (for two-body mode) and resets RSTAB
 C     if necessary.  The branching ratios of any other IDKTMP decays are
 C     scaled by (1.-BRTMP)/(1.-BR_OLD)
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWUPCM,BRTMP,SCALE,EPS
       INTEGER IDKTMP,IMETMP,IATMP,IBTMP,ICTMP,IDTMP,IETMP,IDKY,ITMP(5),
      & L,I,J,K,JPREV
@@ -37360,7 +43319,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     Chooses charged multiplicity NCHT at the p-pbar c.m. energy EPPBAR
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWMNBI,HWRGEN,EPPBAR,E0,ALOGS,RK,EK,AVN,SUM,R,
      & CUM(500)
       INTEGER NCHT,IMAX,I,N
@@ -37414,7 +43373,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C COMPUTES WEIGHT FOR MINIMUM-BIAS EVENT
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION S,X,Y
       INTEGER IDB,IDT,IDBT
       IF (IERROR.NE.0) RETURN
@@ -37560,7 +43519,7 @@ C-----------------------------------------------------------------------
 C     Gaussian random number, mean A, standard deviation B.
 C     Generates uncorrelated pairs and throws one of them away.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGAU,HWRGEN,A,B,X,TRASH
       INTEGER J
       EXTERNAL HWRGEN
@@ -37651,7 +43610,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     Generates a random primary IP using a triple Gaussian distribution
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGAU
       INTEGER I
       EXTERNAL HWRGAU
@@ -37735,7 +43694,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     DOES BRANCHING OF SPACELIKE PARTON KPAR
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWBVMC,HWRGEN,HWRUNI,HWSTAB,HWUALF,HWUTAB,HWSGQQ,
      & HWSSUD,XLAST,QNOW,QLST,QP,QMIN,QLAM,QSAV,SMAX,SLST,SNOW,RN,SUDA,
      & SUDB,ZZ,ENOW,XI,PMOM,DIST(13),DMIN,X1,X2,REJFAC,OTHXI,OTHZ,QTMP,
@@ -37919,8 +43878,8 @@ C--BRANCHING HAS OCCURRED
           ENOW=PPAR(4,KPAR)/ZZ
           XI=(QNOW/ENOW)**2
           QLAM=QNOW*(1.-ZZ)
-          IF (SUDORD.EQ.1.AND.HWUALF(2,QLAM).LT.HWRGEN(0) .OR.
-     &        (2.-XI)*QLAM**2.GT.EMSCA**2.AND..NOT.FORCE) THEN
+          IF ((SUDORD.EQ.1.AND.HWUALF(2,QLAM).LT.HWRGEN(0) .OR.
+     &        (2.-XI)*QLAM**2.GT.EMSCA**2).AND..NOT.FORCE) THEN
 C--BRANCHING REJECTED: REDUCE Q AND REPEAT
               IF (NTRY.GT.NBTRY) CALL HWWARN('HWSBRN',104,*999)
               QLST=QNOW
@@ -38267,7 +44226,7 @@ C
 C     ID1.LT.0 ON RETURN MEANS NO PHASE SPACE
 C     ID1.EQ.0 ON RETURN FLAGS REJECTED BRANCHINGS
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWBVMC,HWRGEN,HWUALF,HWUAEM,QP,X,QQ,Z,WQG,WQV,
      & WQP,XQV,ZMIN,ZMAX,YMIN,YMAX,DELY,YY,PSUM,EZ,WQN,WR,ZR,WZ,ZZ,AZ,
      & PVAL,EY,DIST(13),PROB(13,100),PPHO
@@ -38472,7 +44431,7 @@ C
 C   FOR CERN PDFLIB DETAILS SEE PDFLIB DOC Q ON CERNVM OR
 C   CERN_ROOT:[DOC]PDFLIB.TXT ON VXCERN
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWSGAM,X,SCALE,XOLD,QOLD,XMWN,QSCA,SS,SMIN,S,T,
      & TMIN,TMAX,VX,AA,VT,WT,UPV,DNV,SEA,STR,CHM,BTM,TOP,GLU,WX,XQSUM,
      & DMIN,TPMIN,TPMAX,DIST(13),G(2),Q0(5),QL(5),F(5),A(6,5),
@@ -38492,290 +44451,299 @@ C-----------------------------------------------------------------------
       SAVE QOLD,IOLD,NOLD,XOLD,SS,S,T,TMIN,TMAX,G,A,TX,TT,TB,IP,NX
       DATA PDFWRX,PDFWRQ/8*.TRUE./
       DATA (((B(I,J,K,1),I=1,3),J=1,6),K=1,5)/
-     &3.,0.,0.,.419,.004383,-.007412,
-     &3.46,.72432,-.065998,4.4,-4.8644,1.3274,
-     &6*0.,1.,
-     &0.,0.,.763,-.23696,.025836,4.,.62664,-.019163,
-     &0.,-.42068,.032809,6*0.,1.265,-1.1323,.29268,
-     &0.,-.37162,-.028977,8.05,1.5877,-.15291,
-     &0.,6.3059,-.27342,0.,-10.543,-3.1674,
-     &0.,14.698,9.798,0.,.13479,-.074693,
-     &-.0355,-.22237,-.057685,6.3494,3.2649,-.90945,
-     &0.,-3.0331,1.5042,0.,17.431,-11.255,
-     &0.,-17.861,15.571,1.564,-1.7112,.63751,
-     &0.,-.94892,.32505,6.,1.4345,-1.0485,
-     &9.,-7.1858,.25494,0.,-16.457,10.947,
-     &0.,15.261,-10.085/
+     &3.D0,0.D0,0.D0,.419D0,.004383D0,-.007412D0,
+     &3.46D0,.72432D0,-.065998D0,4.4D0,-4.8644D0,1.3274D0,
+     &6*0.D0,1.D0,
+     &0.D0,0.D0,.763D0,-.23696D0,.025836D0,4.D0,.62664D0,-.019163D0,
+     &0.D0,-.42068D0,.032809D0,6*0.D0,1.265D0,-1.1323D0,.29268D0,
+     &0.D0,-.37162D0,-.028977D0,8.05D0,1.5877D0,-.15291D0,
+     &0.D0,6.3059D0,-.27342D0,0.D0,-10.543D0,-3.1674D0,
+     &0.D0,14.698D0,9.798D0,0.D0,.13479D0,-.074693D0,
+     &-.0355D0,-.22237D0,-.057685D0,6.3494D0,3.2649D0,-.90945D0,
+     &0.D0,-3.0331D0,1.5042D0,0.D0,17.431D0,-11.255D0,
+     &0.D0,-17.861D0,15.571D0,1.564D0,-1.7112D0,.63751D0,
+     &0.D0,-.94892D0,.32505D0,6.D0,1.4345D0,-1.0485D0,
+     &9.D0,-7.1858D0,.25494D0,0.D0,-16.457D0,10.947D0,
+     &0.D0,15.261D0,-10.085D0/
       DATA (((B(I,J,K,2),I=1,3),J=1,6),K=1,5)/
-     &3.,0.,0.,.3743,.013946,-.00031695,
-     &3.329,.75343,-.076125,6.032,-6.2153,1.5561,
-     &6*0.,1.,0.,
-     &0.,.7608,-.2317,.023232,3.83,.62746,-.019155,
-     &0.,-.41843,.035972,6*0.,1.6714,-1.9168,.58175,
-     &0.,-.27307,-.16392,9.145,.53045,-.76271,
-     &0.,15.665,-2.8341,0.,-100.63,44.658,
-     &0.,223.24,-116.76,0.,.067368,-.030574,
-     &-.11989,-.23293,-.023273,3.5087,3.6554,-.45313,
-     &0.,-.47369,.35793,0.,9.5041,-5.4303,
-     &0.,-16.563,15.524,.8789,-.97093,.43388,
-     &0.,-1.1612,.4759,4.,1.2271,-.25369,
-     &9.,-5.6354,-.81747,0.,-7.5438,5.5034,
-     &0.,-.59649,.12611/
+     &3.D0,0.D0,0.D0,.3743D0,.013946D0,-.00031695D0,
+     &3.329D0,.75343D0,-.076125D0,6.032D0,-6.2153D0,1.5561D0,
+     &6*0.D0,1.D0,0.D0,
+     &0.D0,.7608D0,-.2317D0,.023232D0,3.83D0,.62746D0,-.019155D0,
+     &0.D0,-.41843D0,.035972D0,6*0.D0,1.6714D0,-1.9168D0,.58175D0,
+     &0.D0,-.27307D0,-.16392D0,9.145D0,.53045D0,-.76271D0,
+     &0.D0,15.665D0,-2.8341D0,0.D0,-100.63D0,44.658D0,
+     &0.D0,223.24D0,-116.76D0,0.D0,.067368D0,-.030574D0,
+     &-.11989D0,-.23293D0,-.023273D0,3.5087D0,3.6554D0,-.45313D0,
+     &0.D0,-.47369D0,.35793D0,0.D0,9.5041D0,-5.4303D0,
+     &0.D0,-16.563D0,15.524D0,.8789D0,-.97093D0,.43388D0,
+     &0.D0,-1.1612D0,.4759D0,4.D0,1.2271D0,-.25369D0,
+     &9.D0,-5.6354D0,-.81747D0,0.D0,-7.5438D0,5.5034D0,
+     &0.D0,-.59649D0,.12611D0/
       DATA (((B(I,J,K,3),I=1,3),J=1,6),K=1,5)/
-     &1.,0.,0.,0.4,-0.06212,-0.007109,0.7,0.6478,0.01335,27*0.,
-     &0.9,-0.2428,0.1386,0.,-0.2120,0.003671,5.0,0.8673,0.04747,
-     &0.,1.266,-2.215,0.,2.382,0.3482,3*0.,
-     &0.,0.07928,-0.06134,-0.02212,-0.3785,-0.1088,2.894,9.433,
-     &-10.852,0.,5.248,-7.187,0.,8.388,-11.61,3*0.,
-     &0.888,-1.802,1.812,0.,-1.576,1.20,3.11,-0.1317,0.5068,
-     &6.0,2.801,-12.16,0.,-17.28,20.49,3*0./
+     &1.D0,0.D0,0.D0,0.4D0,-0.06212D0,-0.007109D0,0.7D0,0.6478D0,
+     &0.01335D0,27*0.D0,0.9D0,-0.2428D0,0.1386D0,0.D0,-0.2120D0,
+     &0.003671D0,5.0D0,0.8673D0,0.04747D0,
+     &0.D0,1.266D0,-2.215D0,0.D0,2.382D0,0.3482D0,3*0.D0,
+     &0.D0,0.07928D0,-0.06134D0,-0.02212D0,-0.3785D0,-0.1088D0,2.894D0,
+     &9.433D0,
+     &-10.852D0,0.D0,5.248D0,-7.187D0,0.D0,8.388D0,-11.61D0,3*0.D0,
+     &0.888D0,-1.802D0,1.812D0,0.D0,-1.576D0,1.20D0,3.11D0,-0.1317D0,
+     &0.5068D0,6.0D0,2.801D0,-12.16D0,0.D0,-17.28D0,20.49D0,3*0.D0/
       DATA (((B(I,J,K,4),I=1,3),J=1,6),K=1,5)/
-     &1.,0.,0.,0.4,-0.05909,-0.006524,0.628,0.6436,0.01451,27*0.,
-     &0.90,-0.1417,-0.1740,0.,-0.1697,-0.09623,5.0,-2.474,1.575,
-     &0.,-2.534,1.378,0.,0.5621,-0.2701,3*0.,
-     &0.,0.06229,-0.04099,-0.0882,-0.2892,-0.1082,1.924,0.2424,
-     &2.036,0.,-4.463,5.209,0.,-0.8367,-0.04840,3*0.,
-     &0.794,-0.9144,0.5966,0.,-1.237,0.6582,2.89,0.5966,-0.2550,
-     &6.0,-3.671,-2.304,0.,-8.191,7.758,3*0./
+     &1.D0,0.D0,0.D0,0.4D0,-0.05909D0,-0.006524D0,0.628D0,0.6436D0,
+     &0.01451D0,27*0.D0,
+     &0.90D0,-0.1417D0,-0.1740D0,0.D0,-0.1697D0,-0.09623D0,5.0D0,
+     &-2.474D0,1.575D0,
+     &0.D0,-2.534D0,1.378D0,0.D0,0.5621D0,-0.2701D0,3*0.D0,
+     &0.D0,0.06229D0,-0.04099D0,-0.0882D0,-0.2892D0,-0.1082D0,1.924D0,
+     &0.2424D0,
+     &2.036D0,0.D0,-4.463D0,5.209D0,0.D0,-0.8367D0,-0.04840D0,3*0.D0,
+     &0.794D0,-0.9144D0,0.5966D0,0.D0,-1.237D0,0.6582D0,2.89D0,0.5966D0,
+     &-0.2550D0,
+     &6.0D0,-3.671D0,-2.304D0,0.D0,-8.191D0,7.758D0,3*0.D0/
 C---COEFFTS FOR NEW OWENS 1.1 SET
-      DATA BB/3.,3*0.,.665,-.1097,-.002442,0.,
-     &3.614,.8395,-.02186,0.,.8673,-1.6637,.342,0.,
-     &0.,1.1049,-.2369,5*0.,1.,3*0.,
-     &.8388,-.2092,.02657,0.,4.667,.7951,.1081,0.,
-     &0.,-1.0232,.05799,0.,0.,.8616,.153,5*0.,
-     &.909,-.4023,.006305,0.,
-     &0.,-.3823,.02766,0.,7.278,-.7904,.8108,0.,
-     &0.,-1.6629,.5719,0.,0.,-.01333,.5299,0.,
-     &0.,.1211,-.1739,0.,0.,.09469,-.07066,.01236,
-     &-.1447,-.402,.1533,-.06479,6.7599,1.6596,.6798,-.8525,
-     &0.,-4.4559,3.3756,-.9468,
-     &0.,7.862,-3.6591,.03672,0.,-.2472,-.751,.0487,
-     &3.017,-4.7347,3.3594,-.9443,0.,-.9342,.5454,-.1668,
-     &5.304,1.4654,-1.4292,.7569,0.,-3.9141,2.8445,-.8411,
-     &0.,9.0176,-10.426,4.0983,0.,-5.9602,7.515,-2.7329/
+      DATA BB/3.D0,3*0.D0,.665D0,-.1097D0,-.002442D0,0.D0,
+     &3.614D0,.8395D0,-.02186D0,0.D0,.8673D0,-1.6637D0,.342D0,0.D0,
+     &0.D0,1.1049D0,-.2369D0,5*0.D0,1.D0,3*0.D0,
+     &.8388D0,-.2092D0,.02657D0,0.D0,4.667D0,.7951D0,.1081D0,0.D0,
+     &0.D0,-1.0232D0,.05799D0,0.D0,0.D0,.8616D0,.153D0,5*0.D0,
+     &.909D0,-.4023D0,.006305D0,0.D0,
+     &0.D0,-.3823D0,.02766D0,0.D0,7.278D0,-.7904D0,.8108D0,0.D0,
+     &0.D0,-1.6629D0,.5719D0,0.D0,0.D0,-.01333D0,.5299D0,0.D0,
+     &0.D0,.1211D0,-.1739D0,0.D0,0.D0,.09469D0,-.07066D0,.01236D0,
+     &-.1447D0,-.402D0,.1533D0,-.06479D0,6.7599D0,1.6596D0,.6798D0,
+     &-.8525D0,0.D0,-4.4559D0,3.3756D0,-.9468D0,
+     &0.D0,7.862D0,-3.6591D0,.03672D0,0.D0,-.2472D0,-.751D0,.0487D0,
+     &3.017D0,-4.7347D0,3.3594D0,-.9443D0,0.D0,-.9342D0,.5454D0,
+     &-.1668D0,
+     &5.304D0,1.4654D0,-1.4292D0,.7569D0,0.D0,-3.9141D0,2.8445D0,
+     &-.8411D0,
+     &0.D0,9.0176D0,-10.426D0,4.0983D0,0.D0,-5.9602D0,7.515D0,-2.7329D0/
 C...THE FOLLOWING DATA LINES ARE COEFFICIENTS NEEDED IN THE
 C...EICHTEN, HINCHLIFFE, LANE, QUIGG PROTON STRUCTURE FUNCTION
 C...POWERS OF 1-X IN DIFFERENT CASES
       DATA NEHLQ/3,4,7,5,7,7,7,7,3,4,7,6,7,7,7,7/
 C...EXPANSION COEFFICIENTS FOR UP VALENCE QUARK DISTRIBUTION
       DATA (((CEHLQ(IX,IT,NX,1,1),IX=1,6),IT=1,6),NX=1,2)/
-     1 7.677E-01,-2.087E-01,-3.303E-01,-2.517E-02,-1.570E-02,-1.000E-04,
-     2-5.326E-01,-2.661E-01, 3.201E-01, 1.192E-01, 2.434E-02, 7.620E-03,
-     3 2.162E-01, 1.881E-01,-8.375E-02,-6.515E-02,-1.743E-02,-5.040E-03,
-     4-9.211E-02,-9.952E-02, 1.373E-02, 2.506E-02, 8.770E-03, 2.550E-03,
-     5 3.670E-02, 4.409E-02, 9.600E-04,-7.960E-03,-3.420E-03,-1.050E-03,
-     6-1.549E-02,-2.026E-02,-3.060E-03, 2.220E-03, 1.240E-03, 4.100E-04,
-     1 2.395E-01, 2.905E-01, 9.778E-02, 2.149E-02, 3.440E-03, 5.000E-04,
-     2 1.751E-02,-6.090E-03,-2.687E-02,-1.916E-02,-7.970E-03,-2.750E-03,
-     3-5.760E-03,-5.040E-03, 1.080E-03, 2.490E-03, 1.530E-03, 7.500E-04,
-     4 1.740E-03, 1.960E-03, 3.000E-04,-3.400E-04,-2.900E-04,-1.800E-04,
-     5-5.300E-04,-6.400E-04,-1.700E-04, 4.000E-05, 6.000E-05, 4.000E-05,
-     6 1.700E-04, 2.200E-04, 8.000E-05, 1.000E-05,-1.000E-05,-1.000E-05/
+     1 7.677D-01,-2.087D-01,-3.303D-01,-2.517D-02,-1.570D-02,-1.000D-04,
+     2-5.326D-01,-2.661D-01, 3.201D-01, 1.192D-01, 2.434D-02, 7.620D-03,
+     3 2.162D-01, 1.881D-01,-8.375D-02,-6.515D-02,-1.743D-02,-5.040D-03,
+     4-9.211D-02,-9.952D-02, 1.373D-02, 2.506D-02, 8.770D-03, 2.550D-03,
+     5 3.670D-02, 4.409D-02, 9.600D-04,-7.960D-03,-3.420D-03,-1.050D-03,
+     6-1.549D-02,-2.026D-02,-3.060D-03, 2.220D-03, 1.240D-03, 4.100D-04,
+     1 2.395D-01, 2.905D-01, 9.778D-02, 2.149D-02, 3.440D-03, 5.000D-04,
+     2 1.751D-02,-6.090D-03,-2.687D-02,-1.916D-02,-7.970D-03,-2.750D-03,
+     3-5.760D-03,-5.040D-03, 1.080D-03, 2.490D-03, 1.530D-03, 7.500D-04,
+     4 1.740D-03, 1.960D-03, 3.000D-04,-3.400D-04,-2.900D-04,-1.800D-04,
+     5-5.300D-04,-6.400D-04,-1.700D-04, 4.000D-05, 6.000D-05, 4.000D-05,
+     6 1.700D-04, 2.200D-04, 8.000D-05, 1.000D-05,-1.000D-05,-1.000D-05/
       DATA (((CEHLQ(IX,IT,NX,1,2),IX=1,6),IT=1,6),NX=1,2)/
-     1 7.237E-01,-2.189E-01,-2.995E-01,-1.909E-02,-1.477E-02, 2.500E-04,
-     2-5.314E-01,-2.425E-01, 3.283E-01, 1.119E-01, 2.223E-02, 7.070E-03,
-     3 2.289E-01, 1.890E-01,-9.859E-02,-6.900E-02,-1.747E-02,-5.080E-03,
-     4-1.041E-01,-1.084E-01, 2.108E-02, 2.975E-02, 9.830E-03, 2.830E-03,
-     5 4.394E-02, 5.116E-02,-1.410E-03,-1.055E-02,-4.230E-03,-1.270E-03,
-     6-1.991E-02,-2.539E-02,-2.780E-03, 3.430E-03, 1.720E-03, 5.500E-04,
-     1 2.410E-01, 2.884E-01, 9.369E-02, 1.900E-02, 2.530E-03, 2.400E-04,
-     2 1.765E-02,-9.220E-03,-3.037E-02,-2.085E-02,-8.440E-03,-2.810E-03,
-     3-6.450E-03,-5.260E-03, 1.720E-03, 3.110E-03, 1.830E-03, 8.700E-04,
-     4 2.120E-03, 2.320E-03, 2.600E-04,-4.900E-04,-3.900E-04,-2.300E-04,
-     5-6.900E-04,-8.200E-04,-2.000E-04, 7.000E-05, 9.000E-05, 6.000E-05,
-     6 2.400E-04, 3.100E-04, 1.100E-04, 0.000E+00,-2.000E-05,-2.000E-05/
+     1 7.237D-01,-2.189D-01,-2.995D-01,-1.909D-02,-1.477D-02, 2.500D-04,
+     2-5.314D-01,-2.425D-01, 3.283D-01, 1.119D-01, 2.223D-02, 7.070D-03,
+     3 2.289D-01, 1.890D-01,-9.859D-02,-6.900D-02,-1.747D-02,-5.080D-03,
+     4-1.041D-01,-1.084D-01, 2.108D-02, 2.975D-02, 9.830D-03, 2.830D-03,
+     5 4.394D-02, 5.116D-02,-1.410D-03,-1.055D-02,-4.230D-03,-1.270D-03,
+     6-1.991D-02,-2.539D-02,-2.780D-03, 3.430D-03, 1.720D-03, 5.500D-04,
+     1 2.410D-01, 2.884D-01, 9.369D-02, 1.900D-02, 2.530D-03, 2.400D-04,
+     2 1.765D-02,-9.220D-03,-3.037D-02,-2.085D-02,-8.440D-03,-2.810D-03,
+     3-6.450D-03,-5.260D-03, 1.720D-03, 3.110D-03, 1.830D-03, 8.700D-04,
+     4 2.120D-03, 2.320D-03, 2.600D-04,-4.900D-04,-3.900D-04,-2.300D-04,
+     5-6.900D-04,-8.200D-04,-2.000D-04, 7.000D-05, 9.000D-05, 6.000D-05,
+     6 2.400D-04, 3.100D-04, 1.100D-04, 0.000D+00,-2.000D-05,-2.000D-05/
 C...EXPANSION COEFFICIENTS FOR DOWN VALENCE QUARK DISTRIBUTION
       DATA (((CEHLQ(IX,IT,NX,2,1),IX=1,6),IT=1,6),NX=1,2)/
-     1 3.813E-01,-8.090E-02,-1.634E-01,-2.185E-02,-8.430E-03,-6.200E-04,
-     2-2.948E-01,-1.435E-01, 1.665E-01, 6.638E-02, 1.473E-02, 4.080E-03,
-     3 1.252E-01, 1.042E-01,-4.722E-02,-3.683E-02,-1.038E-02,-2.860E-03,
-     4-5.478E-02,-5.678E-02, 8.900E-03, 1.484E-02, 5.340E-03, 1.520E-03,
-     5 2.220E-02, 2.567E-02,-3.000E-05,-4.970E-03,-2.160E-03,-6.500E-04,
-     6-9.530E-03,-1.204E-02,-1.510E-03, 1.510E-03, 8.300E-04, 2.700E-04,
-     1 1.261E-01, 1.354E-01, 3.958E-02, 8.240E-03, 1.660E-03, 4.500E-04,
-     2 3.890E-03,-1.159E-02,-1.625E-02,-9.610E-03,-3.710E-03,-1.260E-03,
-     3-1.910E-03,-5.600E-04, 1.590E-03, 1.590E-03, 8.400E-04, 3.900E-04,
-     4 6.400E-04, 4.900E-04,-1.500E-04,-2.900E-04,-1.800E-04,-1.000E-04,
-     5-2.000E-04,-1.900E-04, 0.000E+00, 6.000E-05, 4.000E-05, 3.000E-05,
-     6 7.000E-05, 8.000E-05, 2.000E-05,-1.000E-05,-1.000E-05,-1.000E-05/
+     1 3.813D-01,-8.090D-02,-1.634D-01,-2.185D-02,-8.430D-03,-6.200D-04,
+     2-2.948D-01,-1.435D-01, 1.665D-01, 6.638D-02, 1.473D-02, 4.080D-03,
+     3 1.252D-01, 1.042D-01,-4.722D-02,-3.683D-02,-1.038D-02,-2.860D-03,
+     4-5.478D-02,-5.678D-02, 8.900D-03, 1.484D-02, 5.340D-03, 1.520D-03,
+     5 2.220D-02, 2.567D-02,-3.000D-05,-4.970D-03,-2.160D-03,-6.500D-04,
+     6-9.530D-03,-1.204D-02,-1.510D-03, 1.510D-03, 8.300D-04, 2.700D-04,
+     1 1.261D-01, 1.354D-01, 3.958D-02, 8.240D-03, 1.660D-03, 4.500D-04,
+     2 3.890D-03,-1.159D-02,-1.625D-02,-9.610D-03,-3.710D-03,-1.260D-03,
+     3-1.910D-03,-5.600D-04, 1.590D-03, 1.590D-03, 8.400D-04, 3.900D-04,
+     4 6.400D-04, 4.900D-04,-1.500D-04,-2.900D-04,-1.800D-04,-1.000D-04,
+     5-2.000D-04,-1.900D-04, 0.000D+00, 6.000D-05, 4.000D-05, 3.000D-05,
+     6 7.000D-05, 8.000D-05, 2.000D-05,-1.000D-05,-1.000D-05,-1.000D-05/
       DATA (((CEHLQ(IX,IT,NX,2,2),IX=1,6),IT=1,6),NX=1,2)/
-     1 3.578E-01,-8.622E-02,-1.480E-01,-1.840E-02,-7.820E-03,-4.500E-04,
-     2-2.925E-01,-1.304E-01, 1.696E-01, 6.243E-02, 1.353E-02, 3.750E-03,
-     3 1.318E-01, 1.041E-01,-5.486E-02,-3.872E-02,-1.038E-02,-2.850E-03,
-     4-6.162E-02,-6.143E-02, 1.303E-02, 1.740E-02, 5.940E-03, 1.670E-03,
-     5 2.643E-02, 2.957E-02,-1.490E-03,-6.450E-03,-2.630E-03,-7.700E-04,
-     6-1.218E-02,-1.497E-02,-1.260E-03, 2.240E-03, 1.120E-03, 3.500E-04,
-     1 1.263E-01, 1.334E-01, 3.732E-02, 7.070E-03, 1.260E-03, 3.400E-04,
-     2 3.660E-03,-1.357E-02,-1.795E-02,-1.031E-02,-3.880E-03,-1.280E-03,
-     3-2.100E-03,-3.600E-04, 2.050E-03, 1.920E-03, 9.800E-04, 4.400E-04,
-     4 7.700E-04, 5.400E-04,-2.400E-04,-3.900E-04,-2.400E-04,-1.300E-04,
-     5-2.600E-04,-2.300E-04, 2.000E-05, 9.000E-05, 6.000E-05, 4.000E-05,
-     6 9.000E-05, 1.000E-04, 2.000E-05,-2.000E-05,-2.000E-05,-1.000E-05/
+     1 3.578D-01,-8.622D-02,-1.480D-01,-1.840D-02,-7.820D-03,-4.500D-04,
+     2-2.925D-01,-1.304D-01, 1.696D-01, 6.243D-02, 1.353D-02, 3.750D-03,
+     3 1.318D-01, 1.041D-01,-5.486D-02,-3.872D-02,-1.038D-02,-2.850D-03,
+     4-6.162D-02,-6.143D-02, 1.303D-02, 1.740D-02, 5.940D-03, 1.670D-03,
+     5 2.643D-02, 2.957D-02,-1.490D-03,-6.450D-03,-2.630D-03,-7.700D-04,
+     6-1.218D-02,-1.497D-02,-1.260D-03, 2.240D-03, 1.120D-03, 3.500D-04,
+     1 1.263D-01, 1.334D-01, 3.732D-02, 7.070D-03, 1.260D-03, 3.400D-04,
+     2 3.660D-03,-1.357D-02,-1.795D-02,-1.031D-02,-3.880D-03,-1.280D-03,
+     3-2.100D-03,-3.600D-04, 2.050D-03, 1.920D-03, 9.800D-04, 4.400D-04,
+     4 7.700D-04, 5.400D-04,-2.400D-04,-3.900D-04,-2.400D-04,-1.300D-04,
+     5-2.600D-04,-2.300D-04, 2.000D-05, 9.000D-05, 6.000D-05, 4.000D-05,
+     6 9.000D-05, 1.000D-04, 2.000D-05,-2.000D-05,-2.000D-05,-1.000D-05/
 C...EXPANSION COEFFICIENTS FOR UP AND DOWN SEA QUARK DISTRIBUTIONS
       DATA (((CEHLQ(IX,IT,NX,3,1),IX=1,6),IT=1,6),NX=1,2)/
-     1 6.870E-02,-6.861E-02, 2.973E-02,-5.400E-03, 3.780E-03,-9.700E-04,
-     2-1.802E-02, 1.400E-04, 6.490E-03,-8.540E-03, 1.220E-03,-1.750E-03,
-     3-4.650E-03, 1.480E-03,-5.930E-03, 6.000E-04,-1.030E-03,-8.000E-05,
-     4 6.440E-03, 2.570E-03, 2.830E-03, 1.150E-03, 7.100E-04, 3.300E-04,
-     5-3.930E-03,-2.540E-03,-1.160E-03,-7.700E-04,-3.600E-04,-1.900E-04,
-     6 2.340E-03, 1.930E-03, 5.300E-04, 3.700E-04, 1.600E-04, 9.000E-05,
-     1 1.014E+00,-1.106E+00, 3.374E-01,-7.444E-02, 8.850E-03,-8.700E-04,
-     2 9.233E-01,-1.285E+00, 4.475E-01,-9.786E-02, 1.419E-02,-1.120E-03,
-     3 4.888E-02,-1.271E-01, 8.606E-02,-2.608E-02, 4.780E-03,-6.000E-04,
-     4-2.691E-02, 4.887E-02,-1.771E-02, 1.620E-03, 2.500E-04,-6.000E-05,
-     5 7.040E-03,-1.113E-02, 1.590E-03, 7.000E-04,-2.000E-04, 0.000E+00,
-     6-1.710E-03, 2.290E-03, 3.800E-04,-3.500E-04, 4.000E-05, 1.000E-05/
+     1 6.870D-02,-6.861D-02, 2.973D-02,-5.400D-03, 3.780D-03,-9.700D-04,
+     2-1.802D-02, 1.400D-04, 6.490D-03,-8.540D-03, 1.220D-03,-1.750D-03,
+     3-4.650D-03, 1.480D-03,-5.930D-03, 6.000D-04,-1.030D-03,-8.000D-05,
+     4 6.440D-03, 2.570D-03, 2.830D-03, 1.150D-03, 7.100D-04, 3.300D-04,
+     5-3.930D-03,-2.540D-03,-1.160D-03,-7.700D-04,-3.600D-04,-1.900D-04,
+     6 2.340D-03, 1.930D-03, 5.300D-04, 3.700D-04, 1.600D-04, 9.000D-05,
+     1 1.014D+00,-1.106D+00, 3.374D-01,-7.444D-02, 8.850D-03,-8.700D-04,
+     2 9.233D-01,-1.285D+00, 4.475D-01,-9.786D-02, 1.419D-02,-1.120D-03,
+     3 4.888D-02,-1.271D-01, 8.606D-02,-2.608D-02, 4.780D-03,-6.000D-04,
+     4-2.691D-02, 4.887D-02,-1.771D-02, 1.620D-03, 2.500D-04,-6.000D-05,
+     5 7.040D-03,-1.113D-02, 1.590D-03, 7.000D-04,-2.000D-04, 0.000D+00,
+     6-1.710D-03, 2.290D-03, 3.800D-04,-3.500D-04, 4.000D-05, 1.000D-05/
       DATA (((CEHLQ(IX,IT,NX,3,2),IX=1,6),IT=1,6),NX=1,2)/
-     1 1.008E-01,-7.100E-02, 1.973E-02,-5.710E-03, 2.930E-03,-9.900E-04,
-     2-5.271E-02,-1.823E-02, 1.792E-02,-6.580E-03, 1.750E-03,-1.550E-03,
-     3 1.220E-02, 1.763E-02,-8.690E-03,-8.800E-04,-1.160E-03,-2.100E-04,
-     4-1.190E-03,-7.180E-03, 2.360E-03, 1.890E-03, 7.700E-04, 4.100E-04,
-     5-9.100E-04, 2.040E-03,-3.100E-04,-1.050E-03,-4.000E-04,-2.400E-04,
-     6 1.190E-03,-1.700E-04,-2.000E-04, 4.200E-04, 1.700E-04, 1.000E-04,
-     1 1.081E+00,-1.189E+00, 3.868E-01,-8.617E-02, 1.115E-02,-1.180E-03,
-     2 9.917E-01,-1.396E+00, 4.998E-01,-1.159E-01, 1.674E-02,-1.720E-03,
-     3 5.099E-02,-1.338E-01, 9.173E-02,-2.885E-02, 5.890E-03,-6.500E-04,
-     4-3.178E-02, 5.703E-02,-2.070E-02, 2.440E-03, 1.100E-04,-9.000E-05,
-     5 8.970E-03,-1.392E-02, 2.050E-03, 6.500E-04,-2.300E-04, 2.000E-05,
-     6-2.340E-03, 3.010E-03, 5.000E-04,-3.900E-04, 6.000E-05, 1.000E-05/
+     1 1.008D-01,-7.100D-02, 1.973D-02,-5.710D-03, 2.930D-03,-9.900D-04,
+     2-5.271D-02,-1.823D-02, 1.792D-02,-6.580D-03, 1.750D-03,-1.550D-03,
+     3 1.220D-02, 1.763D-02,-8.690D-03,-8.800D-04,-1.160D-03,-2.100D-04,
+     4-1.190D-03,-7.180D-03, 2.360D-03, 1.890D-03, 7.700D-04, 4.100D-04,
+     5-9.100D-04, 2.040D-03,-3.100D-04,-1.050D-03,-4.000D-04,-2.400D-04,
+     6 1.190D-03,-1.700D-04,-2.000D-04, 4.200D-04, 1.700D-04, 1.000D-04,
+     1 1.081D+00,-1.189D+00, 3.868D-01,-8.617D-02, 1.115D-02,-1.180D-03,
+     2 9.917D-01,-1.396D+00, 4.998D-01,-1.159D-01, 1.674D-02,-1.720D-03,
+     3 5.099D-02,-1.338D-01, 9.173D-02,-2.885D-02, 5.890D-03,-6.500D-04,
+     4-3.178D-02, 5.703D-02,-2.070D-02, 2.440D-03, 1.100D-04,-9.000D-05,
+     5 8.970D-03,-1.392D-02, 2.050D-03, 6.500D-04,-2.300D-04, 2.000D-05,
+     6-2.340D-03, 3.010D-03, 5.000D-04,-3.900D-04, 6.000D-05, 1.000D-05/
 C...EXPANSION COEFFICIENTS FOR GLUON DISTRIBUTION
       DATA (((CEHLQ(IX,IT,NX,4,1),IX=1,6),IT=1,6),NX=1,2)/
-     1 9.482E-01,-9.578E-01, 1.009E-01,-1.051E-01, 3.456E-02,-3.054E-02,
-     2-9.627E-01, 5.379E-01, 3.368E-01,-9.525E-02, 1.488E-02,-2.051E-02,
-     3 4.300E-01,-8.306E-02,-3.372E-01, 4.902E-02,-9.160E-03, 1.041E-02,
-     4-1.925E-01,-1.790E-02, 2.183E-01, 7.490E-03, 4.140E-03,-1.860E-03,
-     5 8.183E-02, 1.926E-02,-1.072E-01,-1.944E-02,-2.770E-03,-5.200E-04,
-     6-3.884E-02,-1.234E-02, 5.410E-02, 1.879E-02, 3.350E-03, 1.040E-03,
-     1 2.948E+01,-3.902E+01, 1.464E+01,-3.335E+00, 5.054E-01,-5.915E-02,
-     2 2.559E+01,-3.955E+01, 1.661E+01,-4.299E+00, 6.904E-01,-8.243E-02,
-     3-1.663E+00, 1.176E+00, 1.118E+00,-7.099E-01, 1.948E-01,-2.404E-02,
-     4-2.168E-01, 8.170E-01,-7.169E-01, 1.851E-01,-1.924E-02,-3.250E-03,
-     5 2.088E-01,-4.355E-01, 2.239E-01,-2.446E-02,-3.620E-03, 1.910E-03,
-     6-9.097E-02, 1.601E-01,-5.681E-02,-2.500E-03, 2.580E-03,-4.700E-04/
+     1 9.482D-01,-9.578D-01, 1.009D-01,-1.051D-01, 3.456D-02,-3.054D-02,
+     2-9.627D-01, 5.379D-01, 3.368D-01,-9.525D-02, 1.488D-02,-2.051D-02,
+     3 4.300D-01,-8.306D-02,-3.372D-01, 4.902D-02,-9.160D-03, 1.041D-02,
+     4-1.925D-01,-1.790D-02, 2.183D-01, 7.490D-03, 4.140D-03,-1.860D-03,
+     5 8.183D-02, 1.926D-02,-1.072D-01,-1.944D-02,-2.770D-03,-5.200D-04,
+     6-3.884D-02,-1.234D-02, 5.410D-02, 1.879D-02, 3.350D-03, 1.040D-03,
+     1 2.948D+01,-3.902D+01, 1.464D+01,-3.335D+00, 5.054D-01,-5.915D-02,
+     2 2.559D+01,-3.955D+01, 1.661D+01,-4.299D+00, 6.904D-01,-8.243D-02,
+     3-1.663D+00, 1.176D+00, 1.118D+00,-7.099D-01, 1.948D-01,-2.404D-02,
+     4-2.168D-01, 8.170D-01,-7.169D-01, 1.851D-01,-1.924D-02,-3.250D-03,
+     5 2.088D-01,-4.355D-01, 2.239D-01,-2.446D-02,-3.620D-03, 1.910D-03,
+     6-9.097D-02, 1.601D-01,-5.681D-02,-2.500D-03, 2.580D-03,-4.700D-04/
       DATA (((CEHLQ(IX,IT,NX,4,2),IX=1,6),IT=1,6),NX=1,2)/
-     1 2.367E+00, 4.453E-01, 3.660E-01, 9.467E-02, 1.341E-01, 1.661E-02,
-     2-3.170E+00,-1.795E+00, 3.313E-02,-2.874E-01,-9.827E-02,-7.119E-02,
-     3 1.823E+00, 1.457E+00,-2.465E-01, 3.739E-02, 6.090E-03, 1.814E-02,
-     4-1.033E+00,-9.827E-01, 2.136E-01, 1.169E-01, 5.001E-02, 1.684E-02,
-     5 5.133E-01, 5.259E-01,-1.173E-01,-1.139E-01,-4.988E-02,-2.021E-02,
-     6-2.881E-01,-3.145E-01, 5.667E-02, 9.161E-02, 4.568E-02, 1.951E-02,
-     1 3.036E+01,-4.062E+01, 1.578E+01,-3.699E+00, 6.020E-01,-7.031E-02,
-     2 2.700E+01,-4.167E+01, 1.770E+01,-4.804E+00, 7.862E-01,-1.060E-01,
-     3-1.909E+00, 1.357E+00, 1.127E+00,-7.181E-01, 2.232E-01,-2.481E-02,
-     4-2.488E-01, 9.781E-01,-8.127E-01, 2.094E-01,-2.997E-02,-4.710E-03,
-     5 2.506E-01,-5.427E-01, 2.672E-01,-3.103E-02,-1.800E-03, 2.870E-03,
-     6-1.128E-01, 2.087E-01,-6.972E-02,-2.480E-03, 2.630E-03,-8.400E-04/
+     1 2.367D+00, 4.453D-01, 3.660D-01, 9.467D-02, 1.341D-01, 1.661D-02,
+     2-3.170D+00,-1.795D+00, 3.313D-02,-2.874D-01,-9.827D-02,-7.119D-02,
+     3 1.823D+00, 1.457D+00,-2.465D-01, 3.739D-02, 6.090D-03, 1.814D-02,
+     4-1.033D+00,-9.827D-01, 2.136D-01, 1.169D-01, 5.001D-02, 1.684D-02,
+     5 5.133D-01, 5.259D-01,-1.173D-01,-1.139D-01,-4.988D-02,-2.021D-02,
+     6-2.881D-01,-3.145D-01, 5.667D-02, 9.161D-02, 4.568D-02, 1.951D-02,
+     1 3.036D+01,-4.062D+01, 1.578D+01,-3.699D+00, 6.020D-01,-7.031D-02,
+     2 2.700D+01,-4.167D+01, 1.770D+01,-4.804D+00, 7.862D-01,-1.060D-01,
+     3-1.909D+00, 1.357D+00, 1.127D+00,-7.181D-01, 2.232D-01,-2.481D-02,
+     4-2.488D-01, 9.781D-01,-8.127D-01, 2.094D-01,-2.997D-02,-4.710D-03,
+     5 2.506D-01,-5.427D-01, 2.672D-01,-3.103D-02,-1.800D-03, 2.870D-03,
+     6-1.128D-01, 2.087D-01,-6.972D-02,-2.480D-03, 2.630D-03,-8.400D-04/
 C...EXPANSION COEFFICIENTS FOR STRANGE SEA QUARK DISTRIBUTION
       DATA (((CEHLQ(IX,IT,NX,5,1),IX=1,6),IT=1,6),NX=1,2)/
-     1 4.968E-02,-4.173E-02, 2.102E-02,-3.270E-03, 3.240E-03,-6.700E-04,
-     2-6.150E-03,-1.294E-02, 6.740E-03,-6.890E-03, 9.000E-04,-1.510E-03,
-     3-8.580E-03, 5.050E-03,-4.900E-03,-1.600E-04,-9.400E-04,-1.500E-04,
-     4 7.840E-03, 1.510E-03, 2.220E-03, 1.400E-03, 7.000E-04, 3.500E-04,
-     5-4.410E-03,-2.220E-03,-8.900E-04,-8.500E-04,-3.600E-04,-2.000E-04,
-     6 2.520E-03, 1.840E-03, 4.100E-04, 3.900E-04, 1.600E-04, 9.000E-05,
-     1 9.235E-01,-1.085E+00, 3.464E-01,-7.210E-02, 9.140E-03,-9.100E-04,
-     2 9.315E-01,-1.274E+00, 4.512E-01,-9.775E-02, 1.380E-02,-1.310E-03,
-     3 4.739E-02,-1.296E-01, 8.482E-02,-2.642E-02, 4.760E-03,-5.700E-04,
-     4-2.653E-02, 4.953E-02,-1.735E-02, 1.750E-03, 2.800E-04,-6.000E-05,
-     5 6.940E-03,-1.132E-02, 1.480E-03, 6.500E-04,-2.100E-04, 0.000E+00,
-     6-1.680E-03, 2.340E-03, 4.200E-04,-3.400E-04, 5.000E-05, 1.000E-05/
+     1 4.968D-02,-4.173D-02, 2.102D-02,-3.270D-03, 3.240D-03,-6.700D-04,
+     2-6.150D-03,-1.294D-02, 6.740D-03,-6.890D-03, 9.000D-04,-1.510D-03,
+     3-8.580D-03, 5.050D-03,-4.900D-03,-1.600D-04,-9.400D-04,-1.500D-04,
+     4 7.840D-03, 1.510D-03, 2.220D-03, 1.400D-03, 7.000D-04, 3.500D-04,
+     5-4.410D-03,-2.220D-03,-8.900D-04,-8.500D-04,-3.600D-04,-2.000D-04,
+     6 2.520D-03, 1.840D-03, 4.100D-04, 3.900D-04, 1.600D-04, 9.000D-05,
+     1 9.235D-01,-1.085D+00, 3.464D-01,-7.210D-02, 9.140D-03,-9.100D-04,
+     2 9.315D-01,-1.274D+00, 4.512D-01,-9.775D-02, 1.380D-02,-1.310D-03,
+     3 4.739D-02,-1.296D-01, 8.482D-02,-2.642D-02, 4.760D-03,-5.700D-04,
+     4-2.653D-02, 4.953D-02,-1.735D-02, 1.750D-03, 2.800D-04,-6.000D-05,
+     5 6.940D-03,-1.132D-02, 1.480D-03, 6.500D-04,-2.100D-04, 0.000D+00,
+     6-1.680D-03, 2.340D-03, 4.200D-04,-3.400D-04, 5.000D-05, 1.000D-05/
       DATA (((CEHLQ(IX,IT,NX,5,2),IX=1,6),IT=1,6),NX=1,2)/
-     1 6.478E-02,-4.537E-02, 1.643E-02,-3.490E-03, 2.710E-03,-6.700E-04,
-     2-2.223E-02,-2.126E-02, 1.247E-02,-6.290E-03, 1.120E-03,-1.440E-03,
-     3-1.340E-03, 1.362E-02,-6.130E-03,-7.900E-04,-9.000E-04,-2.000E-04,
-     4 5.080E-03,-3.610E-03, 1.700E-03, 1.830E-03, 6.800E-04, 4.000E-04,
-     5-3.580E-03, 6.000E-05,-2.600E-04,-1.050E-03,-3.800E-04,-2.300E-04,
-     6 2.420E-03, 9.300E-04,-1.000E-04, 4.500E-04, 1.700E-04, 1.100E-04,
-     1 9.868E-01,-1.171E+00, 3.940E-01,-8.459E-02, 1.124E-02,-1.250E-03,
-     2 1.001E+00,-1.383E+00, 5.044E-01,-1.152E-01, 1.658E-02,-1.830E-03,
-     3 4.928E-02,-1.368E-01, 9.021E-02,-2.935E-02, 5.800E-03,-6.600E-04,
-     4-3.133E-02, 5.785E-02,-2.023E-02, 2.630E-03, 1.600E-04,-8.000E-05,
-     5 8.840E-03,-1.416E-02, 1.900E-03, 5.800E-04,-2.500E-04, 1.000E-05,
-     6-2.300E-03, 3.080E-03, 5.500E-04,-3.700E-04, 7.000E-05, 1.000E-05/
+     1 6.478D-02,-4.537D-02, 1.643D-02,-3.490D-03, 2.710D-03,-6.700D-04,
+     2-2.223D-02,-2.126D-02, 1.247D-02,-6.290D-03, 1.120D-03,-1.440D-03,
+     3-1.340D-03, 1.362D-02,-6.130D-03,-7.900D-04,-9.000D-04,-2.000D-04,
+     4 5.080D-03,-3.610D-03, 1.700D-03, 1.830D-03, 6.800D-04, 4.000D-04,
+     5-3.580D-03, 6.000D-05,-2.600D-04,-1.050D-03,-3.800D-04,-2.300D-04,
+     6 2.420D-03, 9.300D-04,-1.000D-04, 4.500D-04, 1.700D-04, 1.100D-04,
+     1 9.868D-01,-1.171D+00, 3.940D-01,-8.459D-02, 1.124D-02,-1.250D-03,
+     2 1.001D+00,-1.383D+00, 5.044D-01,-1.152D-01, 1.658D-02,-1.830D-03,
+     3 4.928D-02,-1.368D-01, 9.021D-02,-2.935D-02, 5.800D-03,-6.600D-04,
+     4-3.133D-02, 5.785D-02,-2.023D-02, 2.630D-03, 1.600D-04,-8.000D-05,
+     5 8.840D-03,-1.416D-02, 1.900D-03, 5.800D-04,-2.500D-04, 1.000D-05,
+     6-2.300D-03, 3.080D-03, 5.500D-04,-3.700D-04, 7.000D-05, 1.000D-05/
 C...EXPANSION COEFFICIENTS FOR CHARM SEA QUARK DISTRIBUTION
       DATA (((CEHLQ(IX,IT,NX,6,1),IX=1,6),IT=1,6),NX=1,2)/
-     1 9.270E-03,-1.817E-02, 9.590E-03,-6.390E-03, 1.690E-03,-1.540E-03,
-     2 5.710E-03,-1.188E-02, 6.090E-03,-4.650E-03, 1.240E-03,-1.310E-03,
-     3-3.960E-03, 7.100E-03,-3.590E-03, 1.840E-03,-3.900E-04, 3.400E-04,
-     4 1.120E-03,-1.960E-03, 1.120E-03,-4.800E-04, 1.000E-04,-4.000E-05,
-     5 4.000E-05,-3.000E-05,-1.800E-04, 9.000E-05,-5.000E-05,-2.000E-05,
-     6-4.200E-04, 7.300E-04,-1.600E-04, 5.000E-05, 5.000E-05, 5.000E-05,
-     1 8.098E-01,-1.042E+00, 3.398E-01,-6.824E-02, 8.760E-03,-9.000E-04,
-     2 8.961E-01,-1.217E+00, 4.339E-01,-9.287E-02, 1.304E-02,-1.290E-03,
-     3 3.058E-02,-1.040E-01, 7.604E-02,-2.415E-02, 4.600E-03,-5.000E-04,
-     4-2.451E-02, 4.432E-02,-1.651E-02, 1.430E-03, 1.200E-04,-1.000E-04,
-     5 1.122E-02,-1.457E-02, 2.680E-03, 5.800E-04,-1.200E-04, 3.000E-05,
-     6-7.730E-03, 7.330E-03,-7.600E-04,-2.400E-04, 1.000E-05, 0.000E+00/
+     1 9.270D-03,-1.817D-02, 9.590D-03,-6.390D-03, 1.690D-03,-1.540D-03,
+     2 5.710D-03,-1.188D-02, 6.090D-03,-4.650D-03, 1.240D-03,-1.310D-03,
+     3-3.960D-03, 7.100D-03,-3.590D-03, 1.840D-03,-3.900D-04, 3.400D-04,
+     4 1.120D-03,-1.960D-03, 1.120D-03,-4.800D-04, 1.000D-04,-4.000D-05,
+     5 4.000D-05,-3.000D-05,-1.800D-04, 9.000D-05,-5.000D-05,-2.000D-05,
+     6-4.200D-04, 7.300D-04,-1.600D-04, 5.000D-05, 5.000D-05, 5.000D-05,
+     1 8.098D-01,-1.042D+00, 3.398D-01,-6.824D-02, 8.760D-03,-9.000D-04,
+     2 8.961D-01,-1.217D+00, 4.339D-01,-9.287D-02, 1.304D-02,-1.290D-03,
+     3 3.058D-02,-1.040D-01, 7.604D-02,-2.415D-02, 4.600D-03,-5.000D-04,
+     4-2.451D-02, 4.432D-02,-1.651D-02, 1.430D-03, 1.200D-04,-1.000D-04,
+     5 1.122D-02,-1.457D-02, 2.680D-03, 5.800D-04,-1.200D-04, 3.000D-05,
+     6-7.730D-03, 7.330D-03,-7.600D-04,-2.400D-04, 1.000D-05, 0.000D+00/
       DATA (((CEHLQ(IX,IT,NX,6,2),IX=1,6),IT=1,6),NX=1,2)/
-     1 9.980E-03,-1.945E-02, 1.055E-02,-6.870E-03, 1.860E-03,-1.560E-03,
-     2 5.700E-03,-1.203E-02, 6.250E-03,-4.860E-03, 1.310E-03,-1.370E-03,
-     3-4.490E-03, 7.990E-03,-4.170E-03, 2.050E-03,-4.400E-04, 3.300E-04,
-     4 1.470E-03,-2.480E-03, 1.460E-03,-5.700E-04, 1.200E-04,-1.000E-05,
-     5-9.000E-05, 1.500E-04,-3.200E-04, 1.200E-04,-6.000E-05,-4.000E-05,
-     6-4.200E-04, 7.600E-04,-1.400E-04, 4.000E-05, 7.000E-05, 5.000E-05,
-     1 8.698E-01,-1.131E+00, 3.836E-01,-8.111E-02, 1.048E-02,-1.300E-03,
-     2 9.626E-01,-1.321E+00, 4.854E-01,-1.091E-01, 1.583E-02,-1.700E-03,
-     3 3.057E-02,-1.088E-01, 8.022E-02,-2.676E-02, 5.590E-03,-5.600E-04,
-     4-2.845E-02, 5.164E-02,-1.918E-02, 2.210E-03,-4.000E-05,-1.500E-04,
-     5 1.311E-02,-1.751E-02, 3.310E-03, 5.100E-04,-1.200E-04, 5.000E-05,
-     6-8.590E-03, 8.380E-03,-9.200E-04,-2.600E-04, 1.000E-05,-1.000E-05/
+     1 9.980D-03,-1.945D-02, 1.055D-02,-6.870D-03, 1.860D-03,-1.560D-03,
+     2 5.700D-03,-1.203D-02, 6.250D-03,-4.860D-03, 1.310D-03,-1.370D-03,
+     3-4.490D-03, 7.990D-03,-4.170D-03, 2.050D-03,-4.400D-04, 3.300D-04,
+     4 1.470D-03,-2.480D-03, 1.460D-03,-5.700D-04, 1.200D-04,-1.000D-05,
+     5-9.000D-05, 1.500D-04,-3.200D-04, 1.200D-04,-6.000D-05,-4.000D-05,
+     6-4.200D-04, 7.600D-04,-1.400D-04, 4.000D-05, 7.000D-05, 5.000D-05,
+     1 8.698D-01,-1.131D+00, 3.836D-01,-8.111D-02, 1.048D-02,-1.300D-03,
+     2 9.626D-01,-1.321D+00, 4.854D-01,-1.091D-01, 1.583D-02,-1.700D-03,
+     3 3.057D-02,-1.088D-01, 8.022D-02,-2.676D-02, 5.590D-03,-5.600D-04,
+     4-2.845D-02, 5.164D-02,-1.918D-02, 2.210D-03,-4.000D-05,-1.500D-04,
+     5 1.311D-02,-1.751D-02, 3.310D-03, 5.100D-04,-1.200D-04, 5.000D-05,
+     6-8.590D-03, 8.380D-03,-9.200D-04,-2.600D-04, 1.000D-05,-1.000D-05/
 C...EXPANSION COEFFICIENTS FOR BOTTOM SEA QUARK DISTRIBUTION
       DATA (((CEHLQ(IX,IT,NX,7,1),IX=1,6),IT=1,6),NX=1,2)/
-     1 9.010E-03,-1.401E-02, 7.150E-03,-4.130E-03, 1.260E-03,-1.040E-03,
-     2 6.280E-03,-9.320E-03, 4.780E-03,-2.890E-03, 9.100E-04,-8.200E-04,
-     3-2.930E-03, 4.090E-03,-1.890E-03, 7.600E-04,-2.300E-04, 1.400E-04,
-     4 3.900E-04,-1.200E-03, 4.400E-04,-2.500E-04, 2.000E-05,-2.000E-05,
-     5 2.600E-04, 1.400E-04,-8.000E-05, 1.000E-04, 1.000E-05, 1.000E-05,
-     6-2.600E-04, 3.200E-04, 1.000E-05,-1.000E-05, 1.000E-05,-1.000E-05,
-     1 8.029E-01,-1.075E+00, 3.792E-01,-7.843E-02, 1.007E-02,-1.090E-03,
-     2 7.903E-01,-1.099E+00, 4.153E-01,-9.301E-02, 1.317E-02,-1.410E-03,
-     3-1.704E-02,-1.130E-02, 2.882E-02,-1.341E-02, 3.040E-03,-3.600E-04,
-     4-7.200E-04, 7.230E-03,-5.160E-03, 1.080E-03,-5.000E-05,-4.000E-05,
-     5 3.050E-03,-4.610E-03, 1.660E-03,-1.300E-04,-1.000E-05, 1.000E-05,
-     6-4.360E-03, 5.230E-03,-1.610E-03, 2.000E-04,-2.000E-05, 0.000E+00/
+     1 9.010D-03,-1.401D-02, 7.150D-03,-4.130D-03, 1.260D-03,-1.040D-03,
+     2 6.280D-03,-9.320D-03, 4.780D-03,-2.890D-03, 9.100D-04,-8.200D-04,
+     3-2.930D-03, 4.090D-03,-1.890D-03, 7.600D-04,-2.300D-04, 1.400D-04,
+     4 3.900D-04,-1.200D-03, 4.400D-04,-2.500D-04, 2.000D-05,-2.000D-05,
+     5 2.600D-04, 1.400D-04,-8.000D-05, 1.000D-04, 1.000D-05, 1.000D-05,
+     6-2.600D-04, 3.200D-04, 1.000D-05,-1.000D-05, 1.000D-05,-1.000D-05,
+     1 8.029D-01,-1.075D+00, 3.792D-01,-7.843D-02, 1.007D-02,-1.090D-03,
+     2 7.903D-01,-1.099D+00, 4.153D-01,-9.301D-02, 1.317D-02,-1.410D-03,
+     3-1.704D-02,-1.130D-02, 2.882D-02,-1.341D-02, 3.040D-03,-3.600D-04,
+     4-7.200D-04, 7.230D-03,-5.160D-03, 1.080D-03,-5.000D-05,-4.000D-05,
+     5 3.050D-03,-4.610D-03, 1.660D-03,-1.300D-04,-1.000D-05, 1.000D-05,
+     6-4.360D-03, 5.230D-03,-1.610D-03, 2.000D-04,-2.000D-05, 0.000D+00/
       DATA (((CEHLQ(IX,IT,NX,7,2),IX=1,6),IT=1,6),NX=1,2)/
-     1 8.980E-03,-1.459E-02, 7.510E-03,-4.410E-03, 1.310E-03,-1.070E-03,
-     2 5.970E-03,-9.440E-03, 4.800E-03,-3.020E-03, 9.100E-04,-8.500E-04,
-     3-3.050E-03, 4.440E-03,-2.100E-03, 8.500E-04,-2.400E-04, 1.400E-04,
-     4 5.300E-04,-1.300E-03, 5.600E-04,-2.700E-04, 3.000E-05,-2.000E-05,
-     5 2.000E-04, 1.400E-04,-1.100E-04, 1.000E-04, 0.000E+00, 0.000E+00,
-     6-2.600E-04, 3.200E-04, 0.000E+00,-3.000E-05, 1.000E-05,-1.000E-05,
-     1 8.672E-01,-1.174E+00, 4.265E-01,-9.252E-02, 1.244E-02,-1.460E-03,
-     2 8.500E-01,-1.194E+00, 4.630E-01,-1.083E-01, 1.614E-02,-1.830E-03,
-     3-2.241E-02,-5.630E-03, 2.815E-02,-1.425E-02, 3.520E-03,-4.300E-04,
-     4-7.300E-04, 8.030E-03,-5.780E-03, 1.380E-03,-1.300E-04,-4.000E-05,
-     5 3.460E-03,-5.380E-03, 1.960E-03,-2.100E-04, 1.000E-05, 1.000E-05,
-     6-4.850E-03, 5.950E-03,-1.890E-03, 2.600E-04,-3.000E-05, 0.000E+00/
+     1 8.980D-03,-1.459D-02, 7.510D-03,-4.410D-03, 1.310D-03,-1.070D-03,
+     2 5.970D-03,-9.440D-03, 4.800D-03,-3.020D-03, 9.100D-04,-8.500D-04,
+     3-3.050D-03, 4.440D-03,-2.100D-03, 8.500D-04,-2.400D-04, 1.400D-04,
+     4 5.300D-04,-1.300D-03, 5.600D-04,-2.700D-04, 3.000D-05,-2.000D-05,
+     5 2.000D-04, 1.400D-04,-1.100D-04, 1.000D-04, 0.000D+00, 0.000D+00,
+     6-2.600D-04, 3.200D-04, 0.000D+00,-3.000D-05, 1.000D-05,-1.000D-05,
+     1 8.672D-01,-1.174D+00, 4.265D-01,-9.252D-02, 1.244D-02,-1.460D-03,
+     2 8.500D-01,-1.194D+00, 4.630D-01,-1.083D-01, 1.614D-02,-1.830D-03,
+     3-2.241D-02,-5.630D-03, 2.815D-02,-1.425D-02, 3.520D-03,-4.300D-04,
+     4-7.300D-04, 8.030D-03,-5.780D-03, 1.380D-03,-1.300D-04,-4.000D-05,
+     5 3.460D-03,-5.380D-03, 1.960D-03,-2.100D-04, 1.000D-05, 1.000D-05,
+     6-4.850D-03, 5.950D-03,-1.890D-03, 2.600D-04,-3.000D-05, 0.000D+00/
 C...EXPANSION COEFFICIENTS FOR TOP SEA QUARK DISTRIBUTION
       DATA (((CEHLQ(IX,IT,NX,8,1),IX=1,6),IT=1,6),NX=1,2)/
-     1 4.410E-03,-7.480E-03, 3.770E-03,-2.580E-03, 7.300E-04,-7.100E-04,
-     2 3.840E-03,-6.050E-03, 3.030E-03,-2.030E-03, 5.800E-04,-5.900E-04,
-     3-8.800E-04, 1.660E-03,-7.500E-04, 4.700E-04,-1.000E-04, 1.000E-04,
-     4-8.000E-05,-1.500E-04, 1.200E-04,-9.000E-05, 3.000E-05, 0.000E+00,
-     5 1.300E-04,-2.200E-04,-2.000E-05,-2.000E-05,-2.000E-05,-2.000E-05,
-     6-7.000E-05, 1.900E-04,-4.000E-05, 2.000E-05, 0.000E+00, 0.000E+00,
-     1 6.623E-01,-9.248E-01, 3.519E-01,-7.930E-02, 1.110E-02,-1.180E-03,
-     2 6.380E-01,-9.062E-01, 3.582E-01,-8.479E-02, 1.265E-02,-1.390E-03,
-     3-2.581E-02, 2.125E-02, 4.190E-03,-4.980E-03, 1.490E-03,-2.100E-04,
-     4 7.100E-04, 5.300E-04,-1.270E-03, 3.900E-04,-5.000E-05,-1.000E-05,
-     5 3.850E-03,-5.060E-03, 1.860E-03,-3.500E-04, 4.000E-05, 0.000E+00,
-     6-3.530E-03, 4.460E-03,-1.500E-03, 2.700E-04,-3.000E-05, 0.000E+00/
+     1 4.410D-03,-7.480D-03, 3.770D-03,-2.580D-03, 7.300D-04,-7.100D-04,
+     2 3.840D-03,-6.050D-03, 3.030D-03,-2.030D-03, 5.800D-04,-5.900D-04,
+     3-8.800D-04, 1.660D-03,-7.500D-04, 4.700D-04,-1.000D-04, 1.000D-04,
+     4-8.000D-05,-1.500D-04, 1.200D-04,-9.000D-05, 3.000D-05, 0.000D+00,
+     5 1.300D-04,-2.200D-04,-2.000D-05,-2.000D-05,-2.000D-05,-2.000D-05,
+     6-7.000D-05, 1.900D-04,-4.000D-05, 2.000D-05, 0.000D+00, 0.000D+00,
+     1 6.623D-01,-9.248D-01, 3.519D-01,-7.930D-02, 1.110D-02,-1.180D-03,
+     2 6.380D-01,-9.062D-01, 3.582D-01,-8.479D-02, 1.265D-02,-1.390D-03,
+     3-2.581D-02, 2.125D-02, 4.190D-03,-4.980D-03, 1.490D-03,-2.100D-04,
+     4 7.100D-04, 5.300D-04,-1.270D-03, 3.900D-04,-5.000D-05,-1.000D-05,
+     5 3.850D-03,-5.060D-03, 1.860D-03,-3.500D-04, 4.000D-05, 0.000D+00,
+     6-3.530D-03, 4.460D-03,-1.500D-03, 2.700D-04,-3.000D-05, 0.000D+00/
       DATA (((CEHLQ(IX,IT,NX,8,2),IX=1,6),IT=1,6),NX=1,2)/
-     1 4.260E-03,-7.530E-03, 3.830E-03,-2.680E-03, 7.600E-04,-7.300E-04,
-     2 3.640E-03,-6.050E-03, 3.030E-03,-2.090E-03, 5.900E-04,-6.000E-04,
-     3-9.200E-04, 1.710E-03,-8.200E-04, 5.000E-04,-1.200E-04, 1.000E-04,
-     4-5.000E-05,-1.600E-04, 1.300E-04,-9.000E-05, 3.000E-05, 0.000E+00,
-     5 1.300E-04,-2.100E-04,-1.000E-05,-2.000E-05,-2.000E-05,-1.000E-05,
-     6-8.000E-05, 1.800E-04,-5.000E-05, 2.000E-05, 0.000E+00, 0.000E+00,
-     1 7.146E-01,-1.007E+00, 3.932E-01,-9.246E-02, 1.366E-02,-1.540E-03,
-     2 6.856E-01,-9.828E-01, 3.977E-01,-9.795E-02, 1.540E-02,-1.790E-03,
-     3-3.053E-02, 2.758E-02, 2.150E-03,-4.880E-03, 1.640E-03,-2.500E-04,
-     4 9.200E-04, 4.200E-04,-1.340E-03, 4.600E-04,-8.000E-05,-1.000E-05,
-     5 4.230E-03,-5.660E-03, 2.140E-03,-4.300E-04, 6.000E-05, 0.000E+00,
-     6-3.890E-03, 5.000E-03,-1.740E-03, 3.300E-04,-4.000E-05, 0.000E+00/
-      DATA TBMIN,TTMIN/8.1905,7.4474,11.5528,10.8097/
-      DATA XOLD,QOLD,IOLD,NOLD/-1.,0.,0,0/
-      DATA DMIN,Q0,QL/0.,2*2.,2*2.236,2.,.2,.4,.2,.29,.177/
+     1 4.260D-03,-7.530D-03, 3.830D-03,-2.680D-03, 7.600D-04,-7.300D-04,
+     2 3.640D-03,-6.050D-03, 3.030D-03,-2.090D-03, 5.900D-04,-6.000D-04,
+     3-9.200D-04, 1.710D-03,-8.200D-04, 5.000D-04,-1.200D-04, 1.000D-04,
+     4-5.000D-05,-1.600D-04, 1.300D-04,-9.000D-05, 3.000D-05, 0.000D+00,
+     5 1.300D-04,-2.100D-04,-1.000D-05,-2.000D-05,-2.000D-05,-1.000D-05,
+     6-8.000D-05, 1.800D-04,-5.000D-05, 2.000D-05, 0.000D+00, 0.000D+00,
+     1 7.146D-01,-1.007D+00, 3.932D-01,-9.246D-02, 1.366D-02,-1.540D-03,
+     2 6.856D-01,-9.828D-01, 3.977D-01,-9.795D-02, 1.540D-02,-1.790D-03,
+     3-3.053D-02, 2.758D-02, 2.150D-03,-4.880D-03, 1.640D-03,-2.500D-04,
+     4 9.200D-04, 4.200D-04,-1.340D-03, 4.600D-04,-8.000D-05,-1.000D-05,
+     5 4.230D-03,-5.660D-03, 2.140D-03,-4.300D-04, 6.000D-05, 0.000D+00,
+     6-3.890D-03, 5.000D-03,-1.740D-03, 3.300D-04,-4.000D-05, 0.000D+00/
+      DATA TBMIN,TTMIN/8.1905D0,7.4474D0,11.5528D0,10.8097D0/
+      DATA XOLD,QOLD,IOLD,NOLD/-1.D0,0.D0,0,0/
+      DATA DMIN,Q0,QL/0.D0,2*2.D0,2*2.236D0,2.D0,.2D0,
+     &                .4D0,.2D0,.29D0,.177D0/
       IF (X.LE.ZERO) CALL HWWARN('HWSFUN',100,*999)
       XMWN=ONE-X
       IF (XMWN.LE.ZERO) THEN
@@ -39215,7 +45183,7 @@ C-----------------------------------------------------------------------
 C     GENERATES X VALUES (IF GENEX)
 C     EVALUATES STRUCTURE FUNCTIONS AND ENFORCES CUTOFFS ON X
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWBVMC,HWRUNI,X,QL
       INTEGER I,J
       LOGICAL GENEX
@@ -39243,7 +45211,7 @@ C-----------------------------------------------------------------------
 C     CORRECTION TO GLUON STRUCTURE FUNCTION FOR BACKWARD EVOLUTION:
 C     G->Q-QBAR PART OF FORM FACTOR
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWSGQQ,HWUALF,QSCA,GG
       EXTERNAL HWUALF
       GG=HWUALF(1,QSCA)**(-ONE/BETAF)
@@ -39266,7 +45234,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     MRST98 Leading order PDF's central and higher gluon + average
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION X,Q,UPV,DNV,USEA,DSEA,STR,CHM,BOT,GLU,XMIN,XMAX,
      &     QSQMIN,QSQMAX,Q2,QQ(NQMRS),XXMRS(NXMRS),G(NPMRS),N0(NPMRS),
      &     XSAVE,Q2SAVE,XXX,A,B,FAC
@@ -39389,7 +45357,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     REPLACES SPACELIKE PARTONS BY SPECTATORS
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWUSQR,EMSQ,EMTR,EPAR,XPAR,QSQ,PCL(5)
       INTEGER KHEP,IP,JP,IDH,IDP,ISP,IDSPC,JHEP
       EXTERNAL HWUSQR
@@ -39492,7 +45460,7 @@ CDECK  ID>, HWSSUD.
 C-----------------------------------------------------------------------
       FUNCTION HWSSUD(I)
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWSSUD,HWSGQQ,DMIN,QSCA,XLAST,DIST(13)
       INTEGER I,N0,IS,ID
       EXTERNAL HWSGQQ
@@ -39581,7 +45549,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     TRUE FOR VALENCE PARTON ID IN INCOMING HADRON INHAD
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER ID,IDHAD
       LOGICAL HWSVAL
       HWSVAL=.FALSE.
@@ -39612,17 +45580,17 @@ C     Running electromagnetic coupling constant.
 C     See R. Kleiss et al.: CERN yellow report 89-08, vol.3 p.129
 C     Hadronic component from: H. Burkhardt et al.: Z. Phys C43 (89) 497
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWUAEM,HWUAER,Q2,EPS,A1,B1,C1,A2,B2,C2,A3,B3,C3,
      & A4,B4,C4,AEMPI,EEL2,EMU2,ETAU2,ETOP2,REPIGG,X
       LOGICAL FIRST
       EXTERNAL HWUAER
       SAVE FIRST,AEMPI,EEL2,EMU2,ETAU2,ETOP2
       PARAMETER (EPS=1.D-6)
-      DATA A1,B1,C1/0.0    ,0.00835,1.000/
-      DATA A2,B2,C2/0.0    ,0.00238,3.927/
-      DATA A3,B3,C3/0.00165,0.00299,1.000/
-      DATA A4,B4,C4/0.00221,0.00293,1.000/
+      DATA A1,B1,C1/0.0    D0,0.00835D0,1.000D0/
+      DATA A2,B2,C2/0.0    D0,0.00238D0,3.927D0/
+      DATA A3,B3,C3/0.00165D0,0.00299D0,1.000D0/
+      DATA A4,B4,C4/0.00221D0,0.00293D0,1.000D0/
       DATA FIRST/.TRUE./
       IF (FIRST) THEN
          AEMPI=ALPHEM/(THREE*PIFAC)
@@ -39695,7 +45663,7 @@ C         .EQ.2  RATIO OF ABOVE TO ONE-LOOP
 C                WITH 5-FLAVOUR BETA, LAMBDA=QCDL3
 C         .EQ.3  ONE-LOOP WITH 5-FLAVOUR BETA, LAMBDA=QCDL3
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWUALF,SCALE,KAFAC,B3,B4,B5,B6,C3,C4,C5,C6,C35,
      & C45,C65,D35,RHO,RAT,RLF,DRH,EPS
       INTEGER IOPT,ITN
@@ -39774,7 +45742,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     Returns the antiparticle of IPART; uses HERWIG numbering
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER HWUANT,IPART,IPDG,IANTI,OLDERR
       CHARACTER*8 CDUM
       OLDERR=IERROR
@@ -39810,9 +45778,9 @@ CDECK  ID>, HWUATS.
 C-----------------------------------------------------------------------
       SUBROUTINE HWUATS
 C-----------------------------------------------------------------------
-C     Replaces all &'s in TXNAME by \'s
+C     Replaces all &'s in TXNAME by backslashes
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER I,J,L
       CHARACTER*1 Z
       Z=CHAR(92)
@@ -39831,7 +45799,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     PRINTS OUT DATA ON PARTON SHOWER
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER I,J
       IF (PRVTX) THEN
         WRITE(6,10) INHAD,XFACT
@@ -39863,7 +45831,7 @@ C-----------------------------------------------------------------------
 C     BOOST THE ENTIRE EVENT RECORD TO (IOPT=1) OR FROM (IOPT=0) ITS
 C     CENTRE-OF-MASS FRAME, WITH INCOMING HADRONS ON Z-AXIS
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION PBOOST(5),RBOOST(3,3)
       INTEGER IOPT,IHEP,BOOSTD,IHAD
       SAVE BOOSTD,PBOOST,RBOOST
@@ -39916,7 +45884,7 @@ C     labels final fermion; type given as:
 C        I,J= 1- 6: d,u,s,c,b,t
 C           =11-16: e,nu_e,mu,nu_mu,tau,nu_tau
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION QSQ,CLF(7),POL1,POL2,QIF,VI,AI,VF,AF,PG,DQM,PMW,
      & DEN,XRE,XIM,XSQ,VI2,AI2,VF2,AF2,PG2,PG12,DQM2,PMW2,DEN2,XRE2,
      & XIM2,XSQ2,XRE12,XIM12
@@ -40033,7 +46001,7 @@ C       QORQQB(I) = .TRUE. if it is a quark or an antidiquark
 C       QBORQQ(I) = .TRUE. if it is an antiquark or a diquark
 C     And stores the particle decay tables: call HWUDPR to print them
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER NLAST,NNEXT,NLEFT,NREST,I,J,MMWIDE,MMLONG,MMHOFF,MMVOFF
       COMMON/PAPER/MMWIDE,MMLONG,MMHOFF,MMVOFF
       PARAMETER (NLAST=458,NNEXT=458+1,NLEFT=NMXRES-458)
@@ -40043,521 +46011,521 @@ C Don't forget to change the three occurances above as well
       DATA MMWIDE,MMLONG,MMHOFF,MMVOFF/190,280,-39,-35/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=0,16)/
-     & '        ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & 'DQRK    ',       1,   0,-1,0.3200,0.000D+00,0.5,
-     & 'UQRK    ',       2,   0,+2,0.3200,0.000D+00,0.5,
-     & 'SQRK    ',       3,   0,-1,0.5000,0.000D+00,0.5,
-     & 'CQRK    ',       4,   0,+2,1.5500,0.000D+00,0.5,
-     & 'BQRK    ',       5,   0,-1,4.9500,0.000D+00,0.5,
-     & 'TQRK    ',       6,   0,+2,174.30,0.000D+00,0.5,
-     & 'DBAR    ',      -1,   0,+1,0.3200,0.000D+00,0.5,
-     & 'UBAR    ',      -2,   0,-2,0.3200,0.000D+00,0.5,
-     & 'SBAR    ',      -3,   0,+1,0.5000,0.000D+00,0.5,
-     & 'CBAR    ',      -4,   0,-2,1.5500,0.000D+00,0.5,
-     & 'BBAR    ',      -5,   0,+1,4.9500,0.000D+00,0.5,
-     & 'TBAR    ',      -6,   0,-2,174.30,0.000D+00,0.5,
-     & 'GLUON   ',      21,   0, 0,0.7500,0.000D+00,1.0,
-     & 'CMF     ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & 'HARD    ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & 'SOFT    ',       0,   0, 0,0.0000,0.000D+00,0.0/
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & 'DQRK    ',       1,   0,-1,0.3200D0,0.000D+00,0.5D0,
+     & 'UQRK    ',       2,   0,+2,0.3200D0,0.000D+00,0.5D0,
+     & 'SQRK    ',       3,   0,-1,0.5000D0,0.000D+00,0.5D0,
+     & 'CQRK    ',       4,   0,+2,1.5500D0,0.000D+00,0.5D0,
+     & 'BQRK    ',       5,   0,-1,4.9500D0,0.000D+00,0.5D0,
+     & 'TQRK    ',       6,   0,+2,174.30D0,0.000D+00,0.5D0,
+     & 'DBAR    ',      -1,   0,+1,0.3200D0,0.000D+00,0.5D0,
+     & 'UBAR    ',      -2,   0,-2,0.3200D0,0.000D+00,0.5D0,
+     & 'SBAR    ',      -3,   0,+1,0.5000D0,0.000D+00,0.5D0,
+     & 'CBAR    ',      -4,   0,-2,1.5500D0,0.000D+00,0.5D0,
+     & 'BBAR    ',      -5,   0,+1,4.9500D0,0.000D+00,0.5D0,
+     & 'TBAR    ',      -6,   0,-2,174.30D0,0.000D+00,0.5D0,
+     & 'GLUON   ',      21,   0, 0,0.7500D0,0.000D+00,1.0D0,
+     & 'CMF     ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & 'HARD    ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & 'SOFT    ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=17,32)/
-     & 'CONE    ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & 'HEAVY   ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & 'CLUS    ',      91,   0, 0,0.0000,0.000D+00,0.0,
-     & '****    ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & 'PI0     ',     111,  11, 0,.13498,8.400D-17,0.0,
-     & 'ETA     ',     221,  33, 0,.54730,0.000D+00,0.0,
-     & 'RHO0    ',     113,  11, 0,.77000,0.000D+00,1.0,
-     & 'OMEGA   ',     223,  33, 0,.78194,0.000D+00,1.0,
-     & 'ETAP    ',     331,  33, 0,.95778,0.000D+00,0.0,
-     & 'F_2     ',     225,  33, 0,1.2750,0.000D+00,2.0,
-     & 'A_10    ',   20113,  11, 0,1.2300,0.000D+00,1.0,
-     & 'FL_1    ',   20223,  33, 0,1.2819,0.000D+00,1.0,
-     & 'A_20    ',     115,  11, 0,1.3181,0.000D+00,2.0,
-     & 'PI-     ',    -211,  12,-1,.13957,2.603D-08,0.0,
-     & 'RHO-    ',    -213,  12,-1,.77000,0.000D+00,1.0,
-     & 'A_1-    ',  -20213,  12,-1,1.2300,0.000D+00,1.0/
+     & 'CONE    ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & 'HEAVY   ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & 'CLUS    ',      91,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & '****    ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & 'PI0     ',     111,  11, 0,.13498D0,8.400D-17,0.0D0,
+     & 'ETA     ',     221,  33, 0,.54730D0,0.000D+00,0.0D0,
+     & 'RHO0    ',     113,  11, 0,.77000D0,0.000D+00,1.0D0,
+     & 'OMEGA   ',     223,  33, 0,.78194D0,0.000D+00,1.0D0,
+     & 'ETAP    ',     331,  33, 0,.95778D0,0.000D+00,0.0D0,
+     & 'F_2     ',     225,  33, 0,1.2750D0,0.000D+00,2.0D0,
+     & 'A_10    ',   20113,  11, 0,1.2300D0,0.000D+00,1.0D0,
+     & 'FL_1    ',   20223,  33, 0,1.2819D0,0.000D+00,1.0D0,
+     & 'A_20    ',     115,  11, 0,1.3181D0,0.000D+00,2.0D0,
+     & 'PI-     ',    -211,  12,-1,.13957D0,2.603D-08,0.0D0,
+     & 'RHO-    ',    -213,  12,-1,.77000D0,0.000D+00,1.0D0,
+     & 'A_1-    ',  -20213,  12,-1,1.2300D0,0.000D+00,1.0D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=33,48)/
-     & 'A_2-    ',    -215,  12,-1,1.3181,0.000D+00,2.0,
-     & 'K-      ',    -321,  32,-1,.49368,1.237D-08,0.0,
-     & 'K*-     ',    -323,  32,-1,.89166,0.000D+00,1.0,
-     & 'KH_1-   ',  -20323,  32,-1,1.8500,0.000D+00,1.0,
-     & 'K*_2-   ',    -325,  32,-1,1.4256,0.000D+00,2.0,
-     & 'PI+     ',     211,  21,+1,.13957,2.603D-08,0.0,
-     & 'RHO+    ',     213,  21,+1,.77000,0.000D+00,1.0,
-     & 'A_1+    ',   20213,  21,+1,1.2300,0.000D+00,1.0,
-     & 'A_2+    ',     215,  21,+1,1.3181,0.000D+00,2.0,
-     & 'KBAR0   ',    -311,  31, 0,.49767,0.000D+00,0.0,
-     & 'K*BAR0  ',    -313,  31, 0,.89610,0.000D+00,1.0,
-     & 'KH_1BAR0',  -20313,  31, 0,1.8500,0.000D+00,1.0,
-     & 'K*_2BAR0',    -315,  31, 0,1.4324,0.000D+00,2.0,
-     & 'K+      ',     321,  23,+1,.49368,1.237D-08,0.0,
-     & 'K*+     ',     323,  23,+1,.89166,0.000D+00,1.0,
-     & 'KH_1+   ',   20323,  23,+1,1.8500,0.000D+00,1.0/
+     & 'A_2-    ',    -215,  12,-1,1.3181D0,0.000D+00,2.0D0,
+     & 'K-      ',    -321,  32,-1,.49368D0,1.237D-08,0.0D0,
+     & 'K*-     ',    -323,  32,-1,.89166D0,0.000D+00,1.0D0,
+     & 'KH_1-   ',  -20323,  32,-1,1.8500D0,0.000D+00,1.0D0,
+     & 'K*_2-   ',    -325,  32,-1,1.4256D0,0.000D+00,2.0D0,
+     & 'PI+     ',     211,  21,+1,.13957D0,2.603D-08,0.0D0,
+     & 'RHO+    ',     213,  21,+1,.77000D0,0.000D+00,1.0D0,
+     & 'A_1+    ',   20213,  21,+1,1.2300D0,0.000D+00,1.0D0,
+     & 'A_2+    ',     215,  21,+1,1.3181D0,0.000D+00,2.0D0,
+     & 'KBAR0   ',    -311,  31, 0,.49767D0,0.000D+00,0.0D0,
+     & 'K*BAR0  ',    -313,  31, 0,.89610D0,0.000D+00,1.0D0,
+     & 'KH_1BAR0',  -20313,  31, 0,1.8500D0,0.000D+00,1.0D0,
+     & 'K*_2BAR0',    -315,  31, 0,1.4324D0,0.000D+00,2.0D0,
+     & 'K+      ',     321,  23,+1,.49368D0,1.237D-08,0.0D0,
+     & 'K*+     ',     323,  23,+1,.89166D0,0.000D+00,1.0D0,
+     & 'KH_1+   ',   20323,  23,+1,1.8500D0,0.000D+00,1.0D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=49,64)/
-     & 'K*_2+   ',     325,  23,+1,1.4256,0.000D+00,2.0,
-     & 'K0      ',     311,  13, 0,.49767,0.000D+00,0.0,
-     & 'K*0     ',     313,  13, 0,.89610,0.000D+00,1.0,
-     & 'KH_10   ',   20313,  13, 0,1.8500,0.000D+00,1.0,
-     & 'K*_20   ',     315,  13, 0,1.4324,0.000D+00,2.0,
-     & '        ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & '        ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & 'PHI     ',     333,  33, 0,1.0194,0.000D+00,1.0,
-     & 'FH_1    ',   20333,  33, 0,1.4262,0.000D+00,1.0,
-     & 'FP_2    ',     335,  33, 0,1.5250,0.000D+00,2.0,
-     & 'GAMMA   ',      22,   0, 0,0.0000,1.000D+30,1.0,
-     & 'K_S0    ',     310,   0, 0,.49767,8.926D-11,0.0,
-     & 'K_L0    ',     130,   0, 0,.49767,5.170D-08,0.0,
-     & 'A_0(H)0 ',   10111,  11, 0,1.4740,0.000D+00,0.0,
-     & 'A_0(H)+ ',   10211,  21,+1,1.4740,0.000D+00,0.0,
-     & 'A_0(H)- ',  -10211,  12,-1,1.4740,0.000D+00,0.0/
+     & 'K*_2+   ',     325,  23,+1,1.4256D0,0.000D+00,2.0D0,
+     & 'K0      ',     311,  13, 0,.49767D0,0.000D+00,0.0D0,
+     & 'K*0     ',     313,  13, 0,.89610D0,0.000D+00,1.0D0,
+     & 'KH_10   ',   20313,  13, 0,1.8500D0,0.000D+00,1.0D0,
+     & 'K*_20   ',     315,  13, 0,1.4324D0,0.000D+00,2.0D0,
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & 'PHI     ',     333,  33, 0,1.0194D0,0.000D+00,1.0D0,
+     & 'FH_1    ',   20333,  33, 0,1.4262D0,0.000D+00,1.0D0,
+     & 'FP_2    ',     335,  33, 0,1.5250D0,0.000D+00,2.0D0,
+     & 'GAMMA   ',      22,   0, 0,0.0000D0,1.000D+30,1.0D0,
+     & 'K_S0    ',     310,   0, 0,.49767D0,8.926D-11,0.0D0,
+     & 'K_L0    ',     130,   0, 0,.49767D0,5.170D-08,0.0D0,
+     & 'A_0(H)0 ',   10111,  11, 0,1.4740D0,0.000D+00,0.0D0,
+     & 'A_0(H)+ ',   10211,  21,+1,1.4740D0,0.000D+00,0.0D0,
+     & 'A_0(H)- ',  -10211,  12,-1,1.4740D0,0.000D+00,0.0D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=65,80)/
-     & '        ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & '        ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & '        ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & '        ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & '        ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & '        ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & 'REMG    ',      98,   0, 0,0.0000,0.000D+00,0.0,
-     & 'REMN    ',      99,   0, 0,0.0000,0.000D+00,0.0,
-     & 'P       ',    2212, 122,+1,.93827,1.000D+30,0.5,
-     & 'DELTA+  ',    2214, 122,+1,1.2320,0.000D+00,1.5,
-     & 'N       ',    2112, 112, 0,.93957,8.870D+02,0.5,
-     & 'DELTA0  ',    2114, 112, 0,1.2320,0.000D+00,1.5,
-     & 'DELTA-  ',    1114, 111,-1,1.2320,0.000D+00,1.5,
-     & 'LAMBDA  ',    3122, 123, 0,1.1157,2.632D-10,0.5,
-     & 'SIGMA0  ',    3212, 123, 0,1.1926,7.400D-20,0.5,
-     & 'SIGMA*0 ',    3214, 123, 0,1.3837,0.000D+00,1.5/
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & 'REMG    ',      98,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & 'REMN    ',      99,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & 'P       ',    2212, 122,+1,.93827D0,1.000D+30,0.5D0,
+     & 'DELTA+  ',    2214, 122,+1,1.2320D0,0.000D+00,1.5D0,
+     & 'N       ',    2112, 112, 0,.93957D0,8.870D+02,0.5D0,
+     & 'DELTA0  ',    2114, 112, 0,1.2320D0,0.000D+00,1.5D0,
+     & 'DELTA-  ',    1114, 111,-1,1.2320D0,0.000D+00,1.5D0,
+     & 'LAMBDA  ',    3122, 123, 0,1.1157D0,2.632D-10,0.5D0,
+     & 'SIGMA0  ',    3212, 123, 0,1.1926D0,7.400D-20,0.5D0,
+     & 'SIGMA*0 ',    3214, 123, 0,1.3837D0,0.000D+00,1.5D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=81,96)/
-     & 'SIGMA-  ',    3112, 113,-1,1.1974,1.479D-10,0.5,
-     & 'SIGMA*- ',    3114, 113,-1,1.3872,0.000D+00,1.5,
-     & 'XI-     ',    3312, 133,-1,1.3213,1.639D-10,0.5,
-     & 'XI*-    ',    3314, 133,-1,1.5350,0.000D+00,1.5,
-     & 'DELTA++ ',    2224, 222,+2,1.2320,0.000D+00,1.5,
-     & 'SIGMA+  ',    3222, 223,+1,1.1894,7.990D-11,0.5,
-     & 'SIGMA*+ ',    3224, 223,+1,1.3828,0.000D+00,1.5,
-     & 'XI0     ',    3322, 233, 0,1.3149,2.900D-10,0.5,
-     & 'XI*0    ',    3324, 233, 0,1.5318,0.000D+00,1.5,
-     & 'OMEGA-  ',    3334, 333,-1,1.6725,8.220D-11,1.5,
-     & 'PBAR    ',   -2212,-122,-1,.93827,1.000D+30,0.5,
-     & 'DELTABR-',   -2214,-122,-1,1.2320,0.000D+00,1.5,
-     & 'NBAR    ',   -2112,-112, 0,.93957,8.870D+02,0.5,
-     & 'DELTABR0',   -2114,-112, 0,1.2320,0.000D+00,1.5,
-     & 'DELTABR+',   -1114,-111,+1,1.2320,0.000D+00,1.5,
-     & 'LAMBDABR',   -3122,-123, 0,1.1157,2.632D-10,0.5/
+     & 'SIGMA-  ',    3112, 113,-1,1.1974D0,1.479D-10,0.5D0,
+     & 'SIGMA*- ',    3114, 113,-1,1.3872D0,0.000D+00,1.5D0,
+     & 'XI-     ',    3312, 133,-1,1.3213D0,1.639D-10,0.5D0,
+     & 'XI*-    ',    3314, 133,-1,1.5350D0,0.000D+00,1.5D0,
+     & 'DELTA++ ',    2224, 222,+2,1.2320D0,0.000D+00,1.5D0,
+     & 'SIGMA+  ',    3222, 223,+1,1.1894D0,7.990D-11,0.5D0,
+     & 'SIGMA*+ ',    3224, 223,+1,1.3828D0,0.000D+00,1.5D0,
+     & 'XI0     ',    3322, 233, 0,1.3149D0,2.900D-10,0.5D0,
+     & 'XI*0    ',    3324, 233, 0,1.5318D0,0.000D+00,1.5D0,
+     & 'OMEGA-  ',    3334, 333,-1,1.6725D0,8.220D-11,1.5D0,
+     & 'PBAR    ',   -2212,-122,-1,.93827D0,1.000D+30,0.5D0,
+     & 'DELTABR-',   -2214,-122,-1,1.2320D0,0.000D+00,1.5D0,
+     & 'NBAR    ',   -2112,-112, 0,.93957D0,8.870D+02,0.5D0,
+     & 'DELTABR0',   -2114,-112, 0,1.2320D0,0.000D+00,1.5D0,
+     & 'DELTABR+',   -1114,-111,+1,1.2320D0,0.000D+00,1.5D0,
+     & 'LAMBDABR',   -3122,-123, 0,1.1157D0,2.632D-10,0.5D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=97,112)/
-     & 'SIGMABR0',   -3212,-123, 0,1.1926,7.400D-20,0.5,
-     & 'SGMA*BR0',   -3214,-123, 0,1.3837,0.000D+00,1.5,
-     & 'SIGMABR+',   -3112,-113,+1,1.1974,1.479D-10,0.5,
-     & 'SGMA*BR+',   -3114,-113,+1,1.3872,0.000D+00,1.5,
-     & 'XIBAR+  ',   -3312,-133,+1,1.3213,1.639D-10,0.5,
-     & 'XI*BAR+ ',   -3314,-133,+1,1.5350,0.000D+00,1.5,
-     & 'DLTABR--',   -2224,-222,-2,1.2320,0.000D+00,1.5,
-     & 'SIGMABR-',   -3222,-223,-1,1.1894,7.990D-11,0.5,
-     & 'SGMA*BR-',   -3224,-223,-1,1.3828,0.000D+00,1.5,
-     & 'XIBAR0  ',   -3322,-233, 0,1.3149,2.900D-10,0.5,
-     & 'XI*BAR  ',   -3324,-233, 0,1.5318,0.000D+00,1.5,
-     & 'OMEGABR+',   -3334,-333,+1,1.6725,8.220D-11,1.5,
-     & 'UU      ',    2203,   0,+4,0.6400,0.000D+00,0.0,
-     & 'UD      ',    2101,   0,+1,0.6400,0.000D+00,0.0,
-     & 'DD      ',    1103,   0,-2,0.6400,0.000D+00,0.0,
-     & 'US      ',    3201,   0,+1,0.8200,0.000D+00,0.0/
+     & 'SIGMABR0',   -3212,-123, 0,1.1926D0,7.400D-20,0.5D0,
+     & 'SGMA*BR0',   -3214,-123, 0,1.3837D0,0.000D+00,1.5D0,
+     & 'SIGMABR+',   -3112,-113,+1,1.1974D0,1.479D-10,0.5D0,
+     & 'SGMA*BR+',   -3114,-113,+1,1.3872D0,0.000D+00,1.5D0,
+     & 'XIBAR+  ',   -3312,-133,+1,1.3213D0,1.639D-10,0.5D0,
+     & 'XI*BAR+ ',   -3314,-133,+1,1.5350D0,0.000D+00,1.5D0,
+     & 'DLTABR--',   -2224,-222,-2,1.2320D0,0.000D+00,1.5D0,
+     & 'SIGMABR-',   -3222,-223,-1,1.1894D0,7.990D-11,0.5D0,
+     & 'SGMA*BR-',   -3224,-223,-1,1.3828D0,0.000D+00,1.5D0,
+     & 'XIBAR0  ',   -3322,-233, 0,1.3149D0,2.900D-10,0.5D0,
+     & 'XI*BAR  ',   -3324,-233, 0,1.5318D0,0.000D+00,1.5D0,
+     & 'OMEGABR+',   -3334,-333,+1,1.6725D0,8.220D-11,1.5D0,
+     & 'UU      ',    2203,   0,+4,0.6400D0,0.000D+00,0.0D0,
+     & 'UD      ',    2101,   0,+1,0.6400D0,0.000D+00,0.0D0,
+     & 'DD      ',    1103,   0,-2,0.6400D0,0.000D+00,0.0D0,
+     & 'US      ',    3201,   0,+1,0.8200D0,0.000D+00,0.0D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=113,128)/
-     & 'DS      ',    3101,   0,-2,0.8200,0.000D+00,0.0,
-     & 'SS      ',    3303,   0,-2,1.0000,0.000D+00,0.0,
-     & 'UBARUBAR',   -2203,   0,-4,0.6400,0.000D+00,0.0,
-     & 'UBARDBAR',   -2101,   0,-1,0.6400,0.000D+00,0.0,
-     & 'DBARDBAR',   -1103,   0,+2,0.6400,0.000D+00,0.0,
-     & 'UBARSBAR',   -3201,   0,-1,0.8200,0.000D+00,0.0,
-     & 'DBARSBAR',   -3101,   0,+2,0.8200,0.000D+00,0.0,
-     & 'SBARSBAR',   -3303,   0,+2,1.0000,0.000D+00,0.0,
-     & 'E-      ',      11,   0,-1,5.11D-4,1.00D+30,0.5,
-     & 'NU_E    ',      12,   0, 0,0.0000,1.000D+30,0.5,
-     & 'MU-     ',      13,   0,-1,.10566,2.197D-06,0.5,
-     & 'NU_MU   ',      14,   0, 0,0.0000,1.000D+30,0.5,
-     & 'TAU-    ',      15,   0,-1,1.7771,2.916D-13,0.5,
-     & 'NU_TAU  ',      16,   0, 0,0.0000,1.000D+30,0.5,
-     & 'E+      ',     -11,   0,+1,5.11D-4,1.00D+30,0.5,
-     & 'NU_EBAR ',     -12,   0, 0,0.0000,1.000D+30,0.5/
+     & 'DS      ',    3101,   0,-2,0.8200D0,0.000D+00,0.0D0,
+     & 'SS      ',    3303,   0,-2,1.0000D0,0.000D+00,0.0D0,
+     & 'UBARUBAR',   -2203,   0,-4,0.6400D0,0.000D+00,0.0D0,
+     & 'UBARDBAR',   -2101,   0,-1,0.6400D0,0.000D+00,0.0D0,
+     & 'DBARDBAR',   -1103,   0,+2,0.6400D0,0.000D+00,0.0D0,
+     & 'UBARSBAR',   -3201,   0,-1,0.8200D0,0.000D+00,0.0D0,
+     & 'DBARSBAR',   -3101,   0,+2,0.8200D0,0.000D+00,0.0D0,
+     & 'SBARSBAR',   -3303,   0,+2,1.0000D0,0.000D+00,0.0D0,
+     & 'E-      ',      11,   0,-1,5.11D-04,1.000D+30,0.5D0,
+     & 'NU_E    ',      12,   0, 0,0.0000D0,1.000D+30,0.5D0,
+     & 'MU-     ',      13,   0,-1,.10566D0,2.197D-06,0.5D0,
+     & 'NU_MU   ',      14,   0, 0,0.0000D0,1.000D+30,0.5D0,
+     & 'TAU-    ',      15,   0,-1,1.7771D0,2.916D-13,0.5D0,
+     & 'NU_TAU  ',      16,   0, 0,0.0000D0,1.000D+30,0.5D0,
+     & 'E+      ',     -11,   0,+1,5.11D-04,1.000D+30,0.5D0,
+     & 'NU_EBAR ',     -12,   0, 0,0.0000D0,1.000D+30,0.5D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=129,144)/
-     & 'MU+     ',     -13,   0,+1,.10566,2.197D-06,0.5,
-     & 'NU_MUBAR',     -14,   0, 0,0.0000,1.000D+30,0.5,
-     & 'TAU+    ',     -15,   0,+1,1.7771,2.916D-13,0.5,
-     & 'NU_TAUBR',     -16,   0, 0,0.0000,1.000D+30,0.5,
-     & '        ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & '        ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & '        ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & 'D+      ',     411,  41,+1,1.8693,1.057D-12,0.0,
-     & 'D*+     ',     413,  41,+1,2.0100,0.000D+00,1.0,
-     & 'DH_1+   ',   20413,  41,+1,2.4270,0.000D+00,1.0,
-     & 'D*_2+   ',     415,  41,+1,2.4590,0.000D+00,2.0,
-     & 'D0      ',     421,  42, 0,1.8646,4.150D-13,0.0,
-     & 'D*0     ',     423,  42, 0,2.0067,0.000D+00,1.0,
-     & 'DH_10   ',   20423,  42, 0,2.4222,0.000D+00,1.0,
-     & 'D*_20   ',     425,  42, 0,2.4589,0.000D+00,2.0,
-     & 'D_S+    ',     431,  43,+1,1.9685,4.670D-13,0.0/
+     & 'MU+     ',     -13,   0,+1,.10566D0,2.197D-06,0.5D0,
+     & 'NU_MUBAR',     -14,   0, 0,0.0000D0,1.000D+30,0.5D0,
+     & 'TAU+    ',     -15,   0,+1,1.7771D0,2.916D-13,0.5D0,
+     & 'NU_TAUBR',     -16,   0, 0,0.0000D0,1.000D+30,0.5D0,
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & 'D+      ',     411,  41,+1,1.8693D0,1.057D-12,0.0D0,
+     & 'D*+     ',     413,  41,+1,2.0100D0,0.000D+00,1.0D0,
+     & 'DH_1+   ',   20413,  41,+1,2.4270D0,0.000D+00,1.0D0,
+     & 'D*_2+   ',     415,  41,+1,2.4590D0,0.000D+00,2.0D0,
+     & 'D0      ',     421,  42, 0,1.8646D0,4.150D-13,0.0D0,
+     & 'D*0     ',     423,  42, 0,2.0067D0,0.000D+00,1.0D0,
+     & 'DH_10   ',   20423,  42, 0,2.4222D0,0.000D+00,1.0D0,
+     & 'D*_20   ',     425,  42, 0,2.4589D0,0.000D+00,2.0D0,
+     & 'D_S+    ',     431,  43,+1,1.9685D0,4.670D-13,0.0D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=145,160)/
-     & 'D*_S+   ',     433,  43,+1,2.1124,0.000D+00,1.0,
-     & 'DH_S1+  ',   20433,  43,+1,2.5354,0.000D+00,1.0,
-     & 'D*_S2+  ',     435,  43,+1,2.5735,0.000D+00,2.0,
-     & 'SGMA_C++',    4222, 224,+2,2.4528,0.000D+00,0.5,
-     & 'SGM*_C++',    4224, 224,+2,2.5194,0.000D+00,1.5,
-     & 'LMBDA_C+',    4122, 124,+1,2.2849,2.060D-13,0.5,
-     & 'SIGMA_C+',    4212, 124,+1,2.4536,0.000D+00,0.5,
-     & 'SGMA*_C+',    4214, 124,+1,2.5185,0.000D+00,1.5,
-     & 'SIGMA_C0',    4112, 114, 0,2.4522,0.000D+00,0.5,
-     & 'SGMA*_C0',    4114, 114, 0,2.5175,0.000D+00,1.5,
-     & 'XI_C+   ',    4232, 234,+1,2.4656,3.500D-13,0.5,
-     & 'XIP_C+  ',    4322, 234,+1,2.5750,0.000D+00,0.5,
-     & 'XI*_C+  ',    4324, 234,+1,2.6446,0.000D+00,1.5,
-     & 'XI_C0   ',    4132, 134, 0,2.4703,9.800D-14,0.5,
-     & 'XIP_C0  ',    4312, 134, 0,2.5800,0.000D+00,0.5,
-     & 'XI*_C0  ',    4314, 134, 0,2.6438,0.000D+00,1.5/
+     & 'D*_S+   ',     433,  43,+1,2.1124D0,0.000D+00,1.0D0,
+     & 'DH_S1+  ',   20433,  43,+1,2.5354D0,0.000D+00,1.0D0,
+     & 'D*_S2+  ',     435,  43,+1,2.5735D0,0.000D+00,2.0D0,
+     & 'SGMA_C++',    4222, 224,+2,2.4528D0,0.000D+00,0.5D0,
+     & 'SGM*_C++',    4224, 224,+2,2.5194D0,0.000D+00,1.5D0,
+     & 'LMBDA_C+',    4122, 124,+1,2.2849D0,2.060D-13,0.5D0,
+     & 'SIGMA_C+',    4212, 124,+1,2.4536D0,0.000D+00,0.5D0,
+     & 'SGMA*_C+',    4214, 124,+1,2.5185D0,0.000D+00,1.5D0,
+     & 'SIGMA_C0',    4112, 114, 0,2.4522D0,0.000D+00,0.5D0,
+     & 'SGMA*_C0',    4114, 114, 0,2.5175D0,0.000D+00,1.5D0,
+     & 'XI_C+   ',    4232, 234,+1,2.4656D0,3.500D-13,0.5D0,
+     & 'XIP_C+  ',    4322, 234,+1,2.5750D0,0.000D+00,0.5D0,
+     & 'XI*_C+  ',    4324, 234,+1,2.6446D0,0.000D+00,1.5D0,
+     & 'XI_C0   ',    4132, 134, 0,2.4703D0,9.800D-14,0.5D0,
+     & 'XIP_C0  ',    4312, 134, 0,2.5800D0,0.000D+00,0.5D0,
+     & 'XI*_C0  ',    4314, 134, 0,2.6438D0,0.000D+00,1.5D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=161,176)/
-     & 'OMEGA_C0',    4332, 334, 0,2.7040,6.400D-14,0.5,
-     & 'OMGA*_C0',    4334, 334, 0,2.7300,0.000D+00,1.5,
-     & 'ETA_C   ',     441,  44, 0,2.9798,0.000D+00,0.0,
-     & 'JPSI    ',     443,  44, 0,3.0969,0.000D+00,1.0,
-     & 'CHI_C1  ',   10441,  44, 0,3.4173,0.000D+00,0.0,
-     & 'PSI2S   ',  100443,  44, 0,3.6860,0.000D+00,1.0,
-     & 'PSID    ',   30443,  44, 0,3.7699,0.000D+00,1.0,
-     & '        ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & '        ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & '        ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & 'D-      ',    -411,  14,-1,1.8693,1.057D-12,0.0,
-     & 'D*-     ',    -413,  14,-1,2.0100,0.000D+00,1.0,
-     & 'DH_1-   ',  -20413,  14,-1,2.4270,0.000D+00,1.0,
-     & 'D*_2-   ',    -415,  14,-1,2.4590,0.000D+00,2.0,
-     & 'DBAR0   ',    -421,  24, 0,1.8646,4.140D-13,0.0,
-     & 'D*BAR0  ',    -423,  24, 0,2.0067,0.000D+00,1.0/
+     & 'OMEGA_C0',    4332, 334, 0,2.7040D0,6.400D-14,0.5D0,
+     & 'OMGA*_C0',    4334, 334, 0,2.7300D0,0.000D+00,1.5D0,
+     & 'ETA_C   ',     441,  44, 0,2.9798D0,0.000D+00,0.0D0,
+     & 'JPSI    ',     443,  44, 0,3.0969D0,0.000D+00,1.0D0,
+     & 'CHI_C1  ',   10441,  44, 0,3.4173D0,0.000D+00,0.0D0,
+     & 'PSI2S   ',  100443,  44, 0,3.6860D0,0.000D+00,1.0D0,
+     & 'PSID    ',   30443,  44, 0,3.7699D0,0.000D+00,1.0D0,
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & 'D-      ',    -411,  14,-1,1.8693D0,1.057D-12,0.0D0,
+     & 'D*-     ',    -413,  14,-1,2.0100D0,0.000D+00,1.0D0,
+     & 'DH_1-   ',  -20413,  14,-1,2.4270D0,0.000D+00,1.0D0,
+     & 'D*_2-   ',    -415,  14,-1,2.4590D0,0.000D+00,2.0D0,
+     & 'DBAR0   ',    -421,  24, 0,1.8646D0,4.140D-13,0.0D0,
+     & 'D*BAR0  ',    -423,  24, 0,2.0067D0,0.000D+00,1.0D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=177,192)/
-     & 'DH_1BAR0',  -20423,  24, 0,2.4222,0.000D+00,1.0,
-     & 'D*_2BAR0',    -425,  24, 0,2.4589,0.000D+00,2.0,
-     & 'D_S-    ',    -431,  34,-1,1.9685,4.670D-13,0.0,
-     & 'D*_S-   ',    -433,  34,-1,2.1124,0.000D+00,1.0,
-     & 'DH_S1-  ',  -20433,  34,-1,2.5354,0.000D+00,1.0,
-     & 'D*_S2-  ',    -435,  34,-1,2.5735,0.000D+00,2.0,
-     & 'SGMA_C--',   -4222,-224,-2,2.4528,0.000D+00,0.5,
-     & 'SGM*_C--',   -4224,-224,-2,2.5194,0.000D+00,1.5,
-     & 'LMBDA_C-',   -4122,-124,-1,2.2849,2.060D-13,0.5,
-     & 'SIGMA_C-',   -4212,-124,-1,2.4536,0.000D+00,0.5,
-     & 'SGMA*_C-',   -4214,-124,-1,2.5185,0.000D+00,1.5,
-     & 'SGM_CBR0',   -4112,-114, 0,2.4522,0.000D+00,0.5,
-     & 'SG*_CBR0',   -4114,-114, 0,2.5175,0.000D+00,1.5,
-     & 'XI_C-   ',   -4232,-234,-1,2.4656,3.500D-13,0.5,
-     & 'XIP_C-  ',   -4322,-234,-1,2.5750,0.000D+00,0.5,
-     & 'XI*_C-  ',   -4324,-234,-1,2.6446,0.000D+00,1.5/
+     & 'DH_1BAR0',  -20423,  24, 0,2.4222D0,0.000D+00,1.0D0,
+     & 'D*_2BAR0',    -425,  24, 0,2.4589D0,0.000D+00,2.0D0,
+     & 'D_S-    ',    -431,  34,-1,1.9685D0,4.670D-13,0.0D0,
+     & 'D*_S-   ',    -433,  34,-1,2.1124D0,0.000D+00,1.0D0,
+     & 'DH_S1-  ',  -20433,  34,-1,2.5354D0,0.000D+00,1.0D0,
+     & 'D*_S2-  ',    -435,  34,-1,2.5735D0,0.000D+00,2.0D0,
+     & 'SGMA_C--',   -4222,-224,-2,2.4528D0,0.000D+00,0.5D0,
+     & 'SGM*_C--',   -4224,-224,-2,2.5194D0,0.000D+00,1.5D0,
+     & 'LMBDA_C-',   -4122,-124,-1,2.2849D0,2.060D-13,0.5D0,
+     & 'SIGMA_C-',   -4212,-124,-1,2.4536D0,0.000D+00,0.5D0,
+     & 'SGMA*_C-',   -4214,-124,-1,2.5185D0,0.000D+00,1.5D0,
+     & 'SGM_CBR0',   -4112,-114, 0,2.4522D0,0.000D+00,0.5D0,
+     & 'SG*_CBR0',   -4114,-114, 0,2.5175D0,0.000D+00,1.5D0,
+     & 'XI_C-   ',   -4232,-234,-1,2.4656D0,3.500D-13,0.5D0,
+     & 'XIP_C-  ',   -4322,-234,-1,2.5750D0,0.000D+00,0.5D0,
+     & 'XI*_C-  ',   -4324,-234,-1,2.6446D0,0.000D+00,1.5D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=193,208)/
-     & 'XI_CBAR0',   -4132,-134, 0,2.4703,9.800D-14,0.5,
-     & 'XIP_CBR0',   -4312,-134, 0,2.5800,0.000D+00,0.5,
-     & 'XI*_CBR0',   -4314,-134, 0,2.6438,0.000D+00,1.5,
-     & 'OMG_CBR0',   -4332,-334, 0,2.7040,6.400D-14,0.5,
-     & 'OM*_CBR0',   -4334,-334, 0,2.7300,0.000D+00,1.5,
-     & 'W+      ',      24,   0,+1,80.420,0.000D+00,1.0,
-     & 'W-      ',     -24,   0,-1,80.420,0.000D+00,1.0,
-     & 'Z0/GAMA*',      23,   0, 0,91.188,0.000D+00,1.0,
-     & 'HIGGS   ',      25,   0, 0,115.00,0.000D+00,0.0,
-     & 'Z0P     ',      32,   0, 0,500.00,0.000D+00,1.0,
-     & 'HIGGSL0 ',      26,   0, 0,0.0000,1.000D+30,0.0,
-     & 'HIGGSH0 ',      35,   0, 0,0.0000,1.000D+30,0.0,
-     & 'HIGGSA0 ',      36,   0, 0,0.0000,1.000D+30,0.0,
-     & 'HIGGS+  ',      37,   0,+1,0.0000,1.000D+30,0.0,
-     & 'HIGGS-  ',     -37,   0,-1,0.0000,1.000D+30,0.0,
-     & 'GRAVITON',      39,   0, 0,0.0000,1.000D+30,2.0/
+     & 'XI_CBAR0',   -4132,-134, 0,2.4703D0,9.800D-14,0.5D0,
+     & 'XIP_CBR0',   -4312,-134, 0,2.5800D0,0.000D+00,0.5D0,
+     & 'XI*_CBR0',   -4314,-134, 0,2.6438D0,0.000D+00,1.5D0,
+     & 'OMG_CBR0',   -4332,-334, 0,2.7040D0,6.400D-14,0.5D0,
+     & 'OM*_CBR0',   -4334,-334, 0,2.7300D0,0.000D+00,1.5D0,
+     & 'W+      ',      24,   0,+1,80.420D0,0.000D+00,1.0D0,
+     & 'W-      ',     -24,   0,-1,80.420D0,0.000D+00,1.0D0,
+     & 'Z0/GAMA*',      23,   0, 0,91.188D0,0.000D+00,1.0D0,
+     & 'HIGGS   ',      25,   0, 0,115.00D0,0.000D+00,0.0D0,
+     & 'Z0P     ',      32,   0, 0,500.00D0,0.000D+00,1.0D0,
+     & 'HIGGSL0 ',      26,   0, 0,0.0000D0,1.000D+30,0.0D0,
+     & 'HIGGSH0 ',      35,   0, 0,0.0000D0,1.000D+30,0.0D0,
+     & 'HIGGSA0 ',      36,   0, 0,0.0000D0,1.000D+30,0.0D0,
+     & 'HIGGS+  ',      37,   0,+1,0.0000D0,1.000D+30,0.0D0,
+     & 'HIGGS-  ',     -37,   0,-1,0.0000D0,1.000D+30,0.0D0,
+     & 'GRAVITON',      39,   0, 0,0.0000D0,1.000D+30,2.0D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=209,224)/
-     & 'VQRK    ',       7,   0,-1,200.00,0.000D+00,0.5,
-     & 'AQRK    ',       8,   0,+2,400.00,0.000D+00,0.5,
-     & 'HQRK    ',       7,   0,-1,400.00,0.000D+00,0.5,
-     & 'HPQK    ',       8,   0,+2,600.00,0.000D+00,0.5,
-     & '        ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & '        ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & 'VBAR    ',      -7,   0,+1,200.00,0.000D+00,0.5,
-     & 'ABAR    ',      -8,   0,-2,400.00,0.000D+00,0.5,
-     & 'HBAR    ',      -7,   0,+1,400.00,0.000D+00,0.5,
-     & 'HPBR    ',      -8,   0,-2,600.00,0.000D+00,0.5,
-     & '        ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & '        ',       0,   0, 0,0.0000,0.000D+00,0.0,
-     & 'B_DBAR0 ',    -511,  51, 0,5.2792,1.614D-12,0.0,
-     & 'B-      ',    -521,  52,-1,5.2789,1.652D-12,0.0,
-     & 'B_SBAR0 ',    -531,  53, 0,5.3693,1.540D-12,0.0,
-     & 'SIGMA_B+',    5222, 225,+1,5.8200,1.070D-12,0.5/
+     & 'VQRK    ',       7,   0,-1,200.00D0,0.000D+00,0.5D0,
+     & 'AQRK    ',       8,   0,+2,400.00D0,0.000D+00,0.5D0,
+     & 'HQRK    ',       7,   0,-1,400.00D0,0.000D+00,0.5D0,
+     & 'HPQK    ',       8,   0,+2,600.00D0,0.000D+00,0.5D0,
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & 'VBAR    ',      -7,   0,+1,200.00D0,0.000D+00,0.5D0,
+     & 'ABAR    ',      -8,   0,-2,400.00D0,0.000D+00,0.5D0,
+     & 'HBAR    ',      -7,   0,+1,400.00D0,0.000D+00,0.5D0,
+     & 'HPBR    ',      -8,   0,-2,600.00D0,0.000D+00,0.5D0,
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,0.0D0,
+     & 'B_DBAR0 ',    -511,  51, 0,5.2792D0,1.614D-12,0.0D0,
+     & 'B-      ',    -521,  52,-1,5.2789D0,1.652D-12,0.0D0,
+     & 'B_SBAR0 ',    -531,  53, 0,5.3693D0,1.540D-12,0.0D0,
+     & 'SIGMA_B+',    5222, 225,+1,5.8200D0,1.070D-12,0.5D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=225,240)/
-     & 'LMBDA_B0',    5122, 125, 0,5.6240,1.070D-12,0.5,
-     & 'SIGMA_B-',    5112, 115,-1,5.8200,1.070D-12,0.5,
-     & 'XI_B0   ',    5232, 235, 0,5.8000,1.070D-12,0.5,
-     & 'XI_B-   ',    5132, 135,-1,5.8000,1.070D-12,0.5,
-     & 'OMEGA_B-',    5332, 335,-1,6.0400,1.070D-12,0.5,
-     & 'B_C-    ',    -541,  54,-1,6.2500,1.000D-12,0.5,
-     & 'UPSLON1S',     553,  55, 0,9.4604,0.000D+00,1.0,
-     & 'T_B-    ',    -651,  56,-1,0.0000,0.000D+00,0.0,
-     & 'T+      ',     611,  61,+1,0.0000,0.000D+00,0.0,
-     & 'T0      ',     621,  62, 0,0.0000,0.000D+00,0.0,
-     & 'T_S+    ',     631,  63,+1,0.0000,0.000D+00,0.0,
-     & 'SGMA_T++',    6222, 226,+2,0.0000,0.000D+00,0.5,
-     & 'LMBDA_T0',    6122, 126,+1,0.0000,0.000D+00,0.5,
-     & 'SIGMA_T0',    6112, 116, 0,0.0000,0.000D+00,0.5,
-     & 'XI_T+   ',    6232, 236,+1,0.0000,0.000D+00,0.5,
-     & 'XI_T0   ',    6132, 136, 0,0.0000,0.000D+00,0.5/
+     & 'LMBDA_B0',    5122, 125, 0,5.6240D0,1.070D-12,0.5D0,
+     & 'SIGMA_B-',    5112, 115,-1,5.8200D0,1.070D-12,0.5D0,
+     & 'XI_B0   ',    5232, 235, 0,5.8000D0,1.070D-12,0.5D0,
+     & 'XI_B-   ',    5132, 135,-1,5.8000D0,1.070D-12,0.5D0,
+     & 'OMEGA_B-',    5332, 335,-1,6.0400D0,1.070D-12,0.5D0,
+     & 'B_C-    ',    -541,  54,-1,6.2500D0,1.000D-12,0.5D0,
+     & 'UPSLON1S',     553,  55, 0,9.4604D0,0.000D+00,1.0D0,
+     & 'T_B-    ',    -651,  56,-1,0.0000D0,0.000D+00,0.0D0,
+     & 'T+      ',     611,  61,+1,0.0000D0,0.000D+00,0.0D0,
+     & 'T0      ',     621,  62, 0,0.0000D0,0.000D+00,0.0D0,
+     & 'T_S+    ',     631,  63,+1,0.0000D0,0.000D+00,0.0D0,
+     & 'SGMA_T++',    6222, 226,+2,0.0000D0,0.000D+00,0.5D0,
+     & 'LMBDA_T0',    6122, 126,+1,0.0000D0,0.000D+00,0.5D0,
+     & 'SIGMA_T0',    6112, 116, 0,0.0000D0,0.000D+00,0.5D0,
+     & 'XI_T+   ',    6232, 236,+1,0.0000D0,0.000D+00,0.5D0,
+     & 'XI_T0   ',    6132, 136, 0,0.0000D0,0.000D+00,0.5D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=241,256)/
-     & 'OMEGA_T0',    6332, 336, 0,0.0000,0.000D+00,0.5,
-     & 'T_C0    ',     641,  64, 0,0.0000,0.000D+00,0.0,
-     & 'T_B+    ',     651,  65,+1,0.0000,0.000D+00,0.0,
-     & 'TOPONIUM',     663,  66, 0,0.0000,0.000D+00,1.0,
-     & 'B_D0    ',     511,  15, 0,5.2792,1.614D-12,0.0,
-     & 'B+      ',     521,  25,+1,5.2789,1.652D-12,0.0,
-     & 'B_S0    ',     531,  35, 0,5.3693,1.540D-12,0.0,
-     & 'SGM_BBR-',   -5222,-225,-1,5.8200,1.070D-12,0.5,
-     & 'LMD_BBR0',   -5122,-125, 0,5.6240,1.070D-12,0.5,
-     & 'SGM_BBR+',   -5112,-115,+1,5.8200,1.070D-12,0.5,
-     & 'XI_BBAR0',   -5232,-235, 0,5.8000,1.070D-12,0.5,
-     & 'XI_B+   ',   -5132,-135,+1,5.8000,1.070D-12,0.5,
-     & 'OMG_BBR+',   -5332,-335,+1,6.0400,1.070D-12,0.5,
-     & 'B_C+    ',     541,  45,+1,6.2500,1.000D-12,0.5,
-     & 'T-      ',    -611,  16,-1,0.0000,0.000D+00,0.0,
-     & 'TBAR0   ',    -621,  26, 0,0.0000,0.000D+00,0.0/
+     & 'OMEGA_T0',    6332, 336, 0,0.0000D0,0.000D+00,0.5D0,
+     & 'T_C0    ',     641,  64, 0,0.0000D0,0.000D+00,0.0D0,
+     & 'T_B+    ',     651,  65,+1,0.0000D0,0.000D+00,0.0D0,
+     & 'TOPONIUM',     663,  66, 0,0.0000D0,0.000D+00,1.0D0,
+     & 'B_D0    ',     511,  15, 0,5.2792D0,1.614D-12,0.0D0,
+     & 'B+      ',     521,  25,+1,5.2789D0,1.652D-12,0.0D0,
+     & 'B_S0    ',     531,  35, 0,5.3693D0,1.540D-12,0.0D0,
+     & 'SGM_BBR-',   -5222,-225,-1,5.8200D0,1.070D-12,0.5D0,
+     & 'LMD_BBR0',   -5122,-125, 0,5.6240D0,1.070D-12,0.5D0,
+     & 'SGM_BBR+',   -5112,-115,+1,5.8200D0,1.070D-12,0.5D0,
+     & 'XI_BBAR0',   -5232,-235, 0,5.8000D0,1.070D-12,0.5D0,
+     & 'XI_B+   ',   -5132,-135,+1,5.8000D0,1.070D-12,0.5D0,
+     & 'OMG_BBR+',   -5332,-335,+1,6.0400D0,1.070D-12,0.5D0,
+     & 'B_C+    ',     541,  45,+1,6.2500D0,1.000D-12,0.5D0,
+     & 'T-      ',    -611,  16,-1,0.0000D0,0.000D+00,0.0D0,
+     & 'TBAR0   ',    -621,  26, 0,0.0000D0,0.000D+00,0.0D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=257,272)/
-     & 'T_S-    ',    -631,  36,-1,0.0000,0.000D+00,0.0,
-     & 'SGMA_T--',   -6222,-226,-2,0.0000,0.000D+00,0.5,
-     & 'LAMDA_T-',   -6122,-126,-1,0.0000,0.000D+00,0.5,
-     & 'SGM_TBR0',   -6112,-116, 0,0.0000,0.000D+00,0.5,
-     & 'XI_T-   ',   -6232,-236,-1,0.0000,0.000D+00,0.5,
-     & 'XI_TBAR0',   -6132,-136, 0,0.0000,0.000D+00,0.5,
-     & 'OMG_TBR0',   -6332,-336, 0,0.0000,0.000D+00,0.5,
-     & 'T_CBAR0 ',    -641,  46, 0,0.0000,0.000D+00,0.0,
-     & 'B*BAR0  ',    -513,  51, 0,5.3249,0.000D+00,1.0,
-     & 'B*-     ',    -523,  52,-1,5.3249,0.000D+00,1.0,
-     & 'B*_SBAR0',    -533,  53, 0,5.4163,0.000D+00,1.0,
-     & 'BH_1BAR0',  -20513,  51, 0,5.7600,0.000D+00,1.0,
-     & 'BH_1-   ',  -20523,  52,-1,5.7600,0.000D+00,1.0,
-     & 'BH_S1BR0',  -20533,  53, 0,5.8550,0.000D+00,1.0,
-     & 'B*_2BAR0',    -515,  51, 0,5.7700,0.000D+00,2.0,
-     & 'B*_2-   ',    -525,  52,-1,5.7700,0.000D+00,2.0/
+     & 'T_S-    ',    -631,  36,-1,0.0000D0,0.000D+00,0.0D0,
+     & 'SGMA_T--',   -6222,-226,-2,0.0000D0,0.000D+00,0.5D0,
+     & 'LAMDA_T-',   -6122,-126,-1,0.0000D0,0.000D+00,0.5D0,
+     & 'SGM_TBR0',   -6112,-116, 0,0.0000D0,0.000D+00,0.5D0,
+     & 'XI_T-   ',   -6232,-236,-1,0.0000D0,0.000D+00,0.5D0,
+     & 'XI_TBAR0',   -6132,-136, 0,0.0000D0,0.000D+00,0.5D0,
+     & 'OMG_TBR0',   -6332,-336, 0,0.0000D0,0.000D+00,0.5D0,
+     & 'T_CBAR0 ',    -641,  46, 0,0.0000D0,0.000D+00,0.0D0,
+     & 'B*BAR0  ',    -513,  51, 0,5.3249D0,0.000D+00,1.0D0,
+     & 'B*-     ',    -523,  52,-1,5.3249D0,0.000D+00,1.0D0,
+     & 'B*_SBAR0',    -533,  53, 0,5.4163D0,0.000D+00,1.0D0,
+     & 'BH_1BAR0',  -20513,  51, 0,5.7600D0,0.000D+00,1.0D0,
+     & 'BH_1-   ',  -20523,  52,-1,5.7600D0,0.000D+00,1.0D0,
+     & 'BH_S1BR0',  -20533,  53, 0,5.8550D0,0.000D+00,1.0D0,
+     & 'B*_2BAR0',    -515,  51, 0,5.7700D0,0.000D+00,2.0D0,
+     & 'B*_2-   ',    -525,  52,-1,5.7700D0,0.000D+00,2.0D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=273,288)/
-     & 'B*_S2BR0',    -535,  53, 0,5.8650,0.000D+00,2.0,
-     & 'B*0     ',     513,  15, 0,5.3249,0.000D+00,1.0,
-     & 'B*+     ',     523,  25,+1,5.3249,0.000D+00,1.0,
-     & 'B*_S0   ',     533,  35, 0,5.4163,0.000D+00,1.0,
-     & 'BH_10   ',   20513,  15, 0,5.7600,0.000D+00,1.0,
-     & 'BH_1+   ',   20523,  25,+1,5.7600,0.000D+00,1.0,
-     & 'BH_S10  ',   20533,  35, 0,5.8550,0.000D+00,1.0,
-     & 'B*_20   ',     515,  15, 0,5.7700,0.000D+00,2.0,
-     & 'B*_2+   ',     525,  25,+1,5.7700,0.000D+00,2.0,
-     & 'B*_S20  ',     535,  35, 0,5.8650,0.000D+00,2.0,
-     & '        ',       0,   0, 0,0.0000,0.000D+00,  0,
-     & '        ',       0,   0, 0,0.0000,0.000D+00,  0,
-     & 'B_10    ',   10113,  11, 0,1.2295,0.000D+00,1.0,
-     & 'B_1+    ',   10213,  21,+1,1.2295,0.000D+00,1.0,
-     & 'B_1-    ',  -10213,  12,-1,1.2295,0.000D+00,1.0,
-     & 'HL_10   ',   10223,  33, 0,1.1700,0.000D+00,1.0/
+     & 'B*_S2BR0',    -535,  53, 0,5.8650D0,0.000D+00,2.0D0,
+     & 'B*0     ',     513,  15, 0,5.3249D0,0.000D+00,1.0D0,
+     & 'B*+     ',     523,  25,+1,5.3249D0,0.000D+00,1.0D0,
+     & 'B*_S0   ',     533,  35, 0,5.4163D0,0.000D+00,1.0D0,
+     & 'BH_10   ',   20513,  15, 0,5.7600D0,0.000D+00,1.0D0,
+     & 'BH_1+   ',   20523,  25,+1,5.7600D0,0.000D+00,1.0D0,
+     & 'BH_S10  ',   20533,  35, 0,5.8550D0,0.000D+00,1.0D0,
+     & 'B*_20   ',     515,  15, 0,5.7700D0,0.000D+00,2.0D0,
+     & 'B*_2+   ',     525,  25,+1,5.7700D0,0.000D+00,2.0D0,
+     & 'B*_S20  ',     535,  35, 0,5.8650D0,0.000D+00,2.0D0,
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,  0D0,
+     & '        ',       0,   0, 0,0.0000D0,0.000D+00,  0D0,
+     & 'B_10    ',   10113,  11, 0,1.2295D0,0.000D+00,1.0D0,
+     & 'B_1+    ',   10213,  21,+1,1.2295D0,0.000D+00,1.0D0,
+     & 'B_1-    ',  -10213,  12,-1,1.2295D0,0.000D+00,1.0D0,
+     & 'HL_10   ',   10223,  33, 0,1.1700D0,0.000D+00,1.0D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=289,304)/
-     & 'HH_10   ',   10333,  33, 0,1.3950,0.000D+00,1.0,
-     & 'A_00    ', 9000111,  11, 0,.99600,0.000D+00,0.0,
-     & 'A_0+    ', 9000211,  21,+1,.99600,0.000D+00,0.0,
-     & 'A_0-    ',-9000211,  12,-1,.99600,0.000D+00,0.0,
-     & 'F0P0    ', 9010221,  33, 0,.99600,0.000D+00,0.0,
-     & 'FH_00   ',   10221,  33, 0,1.3500,0.000D+00,0.0,
-     & 'B*_C+   ',     543,  45,+1,6.2950,0.000D+00,1.0,
-     & 'B*_C-   ',    -543,  54,-1,6.2950,0.000D+00,1.0,
-     & 'BH_C1+  ',   20543,  45,+1,6.7300,0.000D+00,1.0,
-     & 'BH_C1-  ',  -20543,  54,-1,6.7300,0.000D+00,1.0,
-     & 'B*_C2+  ',     545,  45,+1,6.7400,0.000D+00,2.0,
-     & 'B*_C2-  ',    -545,  54,-1,6.7400,0.000D+00,2.0,
-     & 'H_C     ',   10443,  44, 0,3.5261,0.000D+00,1.0,
-     & 'CHI_C0  ',   20443,  44, 0,3.5105,0.000D+00,0.0,
-     & 'CHI_C2  ',     445,  44, 0,3.5562,0.000D+00,2.0,
-     & 'ETA_B   ',     551,  55, 0,9.0000,0.000D+00,0.0/
+     & 'HH_10   ',   10333,  33, 0,1.3950D0,0.000D+00,1.0D0,
+     & 'A_00    ', 9000111,  11, 0,.99600D0,0.000D+00,0.0D0,
+     & 'A_0+    ', 9000211,  21,+1,.99600D0,0.000D+00,0.0D0,
+     & 'A_0-    ',-9000211,  12,-1,.99600D0,0.000D+00,0.0D0,
+     & 'F0P0    ', 9010221,  33, 0,.99600D0,0.000D+00,0.0D0,
+     & 'FH_00   ',   10221,  33, 0,1.3500D0,0.000D+00,0.0D0,
+     & 'B*_C+   ',     543,  45,+1,6.2950D0,0.000D+00,1.0D0,
+     & 'B*_C-   ',    -543,  54,-1,6.2950D0,0.000D+00,1.0D0,
+     & 'BH_C1+  ',   20543,  45,+1,6.7300D0,0.000D+00,1.0D0,
+     & 'BH_C1-  ',  -20543,  54,-1,6.7300D0,0.000D+00,1.0D0,
+     & 'B*_C2+  ',     545,  45,+1,6.7400D0,0.000D+00,2.0D0,
+     & 'B*_C2-  ',    -545,  54,-1,6.7400D0,0.000D+00,2.0D0,
+     & 'H_C     ',   10443,  44, 0,3.5261D0,0.000D+00,1.0D0,
+     & 'CHI_C0  ',   20443,  44, 0,3.5105D0,0.000D+00,0.0D0,
+     & 'CHI_C2  ',     445,  44, 0,3.5562D0,0.000D+00,2.0D0,
+     & 'ETA_B   ',     551,  55, 0,9.0000D0,0.000D+00,0.0D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=305,320)/
-     & 'H_B     ',   10553,  55, 0,9.8880,0.000D+00,1.0,
-     & 'CHI_B0  ',   10551,  55, 0,9.8598,0.000D+00,0.0,
-     & 'CHI_B1  ',   20553,  55, 0,9.8919,0.000D+00,1.0,
-     & 'CHI_B2  ',     555,  55, 0,9.9132,0.000D+00,2.0,
-     & 'KL_10   ',   10313,  13, 0,1.5700,0.000D+00,1.0,
-     & 'KL_1+   ',   10323,  23,+1,1.5700,0.000D+00,1.0,
-     & 'KL_1BAR0',  -10313,  31, 0,1.5700,0.000D+00,1.0,
-     & 'KL_1-   ',  -10323,  32,-1,1.5700,0.000D+00,1.0,
-     & 'DL_1+   ',   10413,  41,+1,2.4270,0.000D+00,1.0,
-     & 'DL_10   ',   10423,  42, 0,2.4222,0.000D+00,1.0,
-     & 'DL_S1+  ',   10433,  43,+1,2.5354,0.000D+00,1.0,
-     & 'DL_1-   ',  -10413,  14,-1,2.4270,0.000D+00,1.0,
-     & 'DL_1BAR0',  -10423,  24, 0,2.4222,0.000D+00,1.0,
-     & 'DL_S1-  ',  -10433,  34,-1,2.5354,0.000D+00,1.0,
-     & 'BL_10   ',   10513,  15, 0,5.7600,0.000D+00,1.0,
-     & 'BL_1+   ',   10523,  25,+1,5.7600,0.000D+00,1.0/
+     & 'H_B     ',   10553,  55, 0,9.8880D0,0.000D+00,1.0D0,
+     & 'CHI_B0  ',   10551,  55, 0,9.8598D0,0.000D+00,0.0D0,
+     & 'CHI_B1  ',   20553,  55, 0,9.8919D0,0.000D+00,1.0D0,
+     & 'CHI_B2  ',     555,  55, 0,9.9132D0,0.000D+00,2.0D0,
+     & 'KL_10   ',   10313,  13, 0,1.5700D0,0.000D+00,1.0D0,
+     & 'KL_1+   ',   10323,  23,+1,1.5700D0,0.000D+00,1.0D0,
+     & 'KL_1BAR0',  -10313,  31, 0,1.5700D0,0.000D+00,1.0D0,
+     & 'KL_1-   ',  -10323,  32,-1,1.5700D0,0.000D+00,1.0D0,
+     & 'DL_1+   ',   10413,  41,+1,2.4270D0,0.000D+00,1.0D0,
+     & 'DL_10   ',   10423,  42, 0,2.4222D0,0.000D+00,1.0D0,
+     & 'DL_S1+  ',   10433,  43,+1,2.5354D0,0.000D+00,1.0D0,
+     & 'DL_1-   ',  -10413,  14,-1,2.4270D0,0.000D+00,1.0D0,
+     & 'DL_1BAR0',  -10423,  24, 0,2.4222D0,0.000D+00,1.0D0,
+     & 'DL_S1-  ',  -10433,  34,-1,2.5354D0,0.000D+00,1.0D0,
+     & 'BL_10   ',   10513,  15, 0,5.7600D0,0.000D+00,1.0D0,
+     & 'BL_1+   ',   10523,  25,+1,5.7600D0,0.000D+00,1.0D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=321,336)/
-     & 'BL_S10  ',   10533,  35, 0,5.8530,0.000D+00,1.0,
-     & 'BL_C1+  ',   10543,  45,+1,6.7300,0.000D+00,1.0,
-     & 'BL_1BAR0',  -10513,  51, 0,5.7600,0.000D+00,1.0,
-     & 'BL_1-   ',  -10523,  52,-1,5.7600,0.000D+00,1.0,
-     & 'BL_S1BR0',  -10533,  53, 0,5.8530,0.000D+00,1.0,
-     & 'BL_C1-  ',  -10543,  54,-1,6.7300,0.000D+00,1.0,
-     & 'K*_0+   ',   10321,  23,+1,1.4290,0.000D+00,0.0,
-     & 'K*_00   ',   10311,  13, 0,1.4290,0.000D+00,0.0,
-     & 'K*_0BAR0',  -10311,  31, 0,1.4290,0.000D+00,0.0,
-     & 'K*_0-   ',  -10321,  32,-1,1.4290,0.000D+00,0.0,
-     & 'D*_0+   ',   10411,  41,+1,2.4230,0.000D+00,0.0,
-     & 'D*_00   ',   10421,  42, 0,2.4230,0.000D+00,0.0,
-     & 'D*_S0+  ',   10431,  43,+1,2.5250,0.000D+00,0.0,
-     & 'D*_0-   ',  -10411,  14,-1,2.4230,0.000D+00,0.0,
-     & 'D*_0BAR0',  -10421,  24, 0,2.4230,0.000D+00,0.0,
-     & 'D*_S0-  ',  -10431,  34,-1,2.5250,0.000D+00,0.0/
+     & 'BL_S10  ',   10533,  35, 0,5.8530D0,0.000D+00,1.0D0,
+     & 'BL_C1+  ',   10543,  45,+1,6.7300D0,0.000D+00,1.0D0,
+     & 'BL_1BAR0',  -10513,  51, 0,5.7600D0,0.000D+00,1.0D0,
+     & 'BL_1-   ',  -10523,  52,-1,5.7600D0,0.000D+00,1.0D0,
+     & 'BL_S1BR0',  -10533,  53, 0,5.8530D0,0.000D+00,1.0D0,
+     & 'BL_C1-  ',  -10543,  54,-1,6.7300D0,0.000D+00,1.0D0,
+     & 'K*_0+   ',   10321,  23,+1,1.4290D0,0.000D+00,0.0D0,
+     & 'K*_00   ',   10311,  13, 0,1.4290D0,0.000D+00,0.0D0,
+     & 'K*_0BAR0',  -10311,  31, 0,1.4290D0,0.000D+00,0.0D0,
+     & 'K*_0-   ',  -10321,  32,-1,1.4290D0,0.000D+00,0.0D0,
+     & 'D*_0+   ',   10411,  41,+1,2.4230D0,0.000D+00,0.0D0,
+     & 'D*_00   ',   10421,  42, 0,2.4230D0,0.000D+00,0.0D0,
+     & 'D*_S0+  ',   10431,  43,+1,2.5250D0,0.000D+00,0.0D0,
+     & 'D*_0-   ',  -10411,  14,-1,2.4230D0,0.000D+00,0.0D0,
+     & 'D*_0BAR0',  -10421,  24, 0,2.4230D0,0.000D+00,0.0D0,
+     & 'D*_S0-  ',  -10431,  34,-1,2.5250D0,0.000D+00,0.0D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=337,352)/
-     & 'B*_00   ',   10511,  15, 0,5.7600,0.000D+00,0.0,
-     & 'B*_0+   ',   10521,  25,+1,5.7600,0.000D+00,0.0,
-     & 'B*_S00  ',   10531,  35, 0,5.8550,0.000D+00,0.0,
-     & 'B*_C0+  ',   10541,  45,+1,6.7300,0.000D+00,0.0,
-     & 'B*_0BAR0',  -10511,  51, 0,5.7600,0.000D+00,0.0,
-     & 'B*_0-   ',  -10521,  52,-1,5.7600,0.000D+00,0.0,
-     & 'B*_S0BR0',  -10531,  53, 0,5.8550,0.000D+00,0.0,
-     & 'B*_C0-  ',  -10541,  54,-1,6.7300,0.000D+00,0.0,
-     & 'SGMA*_B-',    5114, 115,-1,5.8400,0.000D+00,1.5,
-     & 'SIGMA_B0',    5212, 125, 0,5.8200,0.000D+00,0.5,
-     & 'SGMA*_B0',    5214, 125, 0,5.8400,0.000D+00,1.5,
-     & 'SGMA*_B+',    5224, 225,+1,5.8400,0.000D+00,1.5,
-     & 'XIP_B0  ',    5322, 235, 0,5.9450,0.000D+00,0.5,
-     & 'XI*_B0  ',    5324, 235, 0,5.9450,0.000D+00,1.5,
-     & 'XIP_B-  ',    5312, 135,-1,5.9450,0.000D+00,0.5,
-     & 'XI*_B-  ',    5314, 135,-1,5.9450,0.000D+00,1.5/
+     & 'B*_00   ',   10511,  15, 0,5.7600D0,0.000D+00,0.0D0,
+     & 'B*_0+   ',   10521,  25,+1,5.7600D0,0.000D+00,0.0D0,
+     & 'B*_S00  ',   10531,  35, 0,5.8550D0,0.000D+00,0.0D0,
+     & 'B*_C0+  ',   10541,  45,+1,6.7300D0,0.000D+00,0.0D0,
+     & 'B*_0BAR0',  -10511,  51, 0,5.7600D0,0.000D+00,0.0D0,
+     & 'B*_0-   ',  -10521,  52,-1,5.7600D0,0.000D+00,0.0D0,
+     & 'B*_S0BR0',  -10531,  53, 0,5.8550D0,0.000D+00,0.0D0,
+     & 'B*_C0-  ',  -10541,  54,-1,6.7300D0,0.000D+00,0.0D0,
+     & 'SGMA*_B-',    5114, 115,-1,5.8400D0,0.000D+00,1.5D0,
+     & 'SIGMA_B0',    5212, 125, 0,5.8200D0,0.000D+00,0.5D0,
+     & 'SGMA*_B0',    5214, 125, 0,5.8400D0,0.000D+00,1.5D0,
+     & 'SGMA*_B+',    5224, 225,+1,5.8400D0,0.000D+00,1.5D0,
+     & 'XIP_B0  ',    5322, 235, 0,5.9450D0,0.000D+00,0.5D0,
+     & 'XI*_B0  ',    5324, 235, 0,5.9450D0,0.000D+00,1.5D0,
+     & 'XIP_B-  ',    5312, 135,-1,5.9450D0,0.000D+00,0.5D0,
+     & 'XI*_B-  ',    5314, 135,-1,5.9450D0,0.000D+00,1.5D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=353,368)/
-     & '0MGA*_B-',    5334, 335,-1,6.0600,0.000D+00,1.5,
-     & 'SG*_BBR+',   -5114,-115,+1,5.8400,0.000D+00,1.5,
-     & 'SGM_BBR0',   -5212,-125, 0,5.8200,0.000D+00,0.5,
-     & 'SG*_BBR0',   -5214,-125, 0,5.8400,0.000D+00,1.5,
-     & 'SG*_BBR-',   -5224,-225,-1,5.8400,0.000D+00,1.5,
-     & 'XIP_BBR0',   -5322,-235, 0,5.9450,0.000D+00,0.5,
-     & 'XI*_BBR0',   -5324,-235, 0,5.9450,0.000D+00,1.5,
-     & 'XIP_B+  ',   -5312,-135,+1,5.9450,0.000D+00,0.5,
-     & 'XI*_B+  ',   -5314,-135,+1,5.9450,0.000D+00,1.5,
-     & '0MGA*_B+',   -5334,-335,+1,6.0600,0.000D+00,1.5,
-     & 'KDL_2+  ',   10325,  23,+1,1.7730,0.000D+00,2.0,
-     & 'KDL_20  ',   10315,  13, 0,1.7730,0.000D+00,2.0,
-     & 'KDL_2BR0',  -10315,  31, 0,1.7730,0.000D+00,2.0,
-     & 'KDL_2-  ',  -10325,  32,-1,1.7730,0.000D+00,2.0,
-     & 'KD*+    ',   30323,  23,+1,1.717,0.000D+00,1.0,
-     & 'KD*0    ',   30313,  13, 0,1.717,0.000D+00,1.0/
+     & '0MGA*_B-',    5334, 335,-1,6.0600D0,0.000D+00,1.5D0,
+     & 'SG*_BBR+',   -5114,-115,+1,5.8400D0,0.000D+00,1.5D0,
+     & 'SGM_BBR0',   -5212,-125, 0,5.8200D0,0.000D+00,0.5D0,
+     & 'SG*_BBR0',   -5214,-125, 0,5.8400D0,0.000D+00,1.5D0,
+     & 'SG*_BBR-',   -5224,-225,-1,5.8400D0,0.000D+00,1.5D0,
+     & 'XIP_BBR0',   -5322,-235, 0,5.9450D0,0.000D+00,0.5D0,
+     & 'XI*_BBR0',   -5324,-235, 0,5.9450D0,0.000D+00,1.5D0,
+     & 'XIP_B+  ',   -5312,-135,+1,5.9450D0,0.000D+00,0.5D0,
+     & 'XI*_B+  ',   -5314,-135,+1,5.9450D0,0.000D+00,1.5D0,
+     & '0MGA*_B+',   -5334,-335,+1,6.0600D0,0.000D+00,1.5D0,
+     & 'KDL_2+  ',   10325,  23,+1,1.7730D0,0.000D+00,2.0D0,
+     & 'KDL_20  ',   10315,  13, 0,1.7730D0,0.000D+00,2.0D0,
+     & 'KDL_2BR0',  -10315,  31, 0,1.7730D0,0.000D+00,2.0D0,
+     & 'KDL_2-  ',  -10325,  32,-1,1.7730D0,0.000D+00,2.0D0,
+     & 'KD*+    ',   30323,  23,+1,1.7170D0,0.000D+00,1.0D0,
+     & 'KD*0    ',   30313,  13, 0,1.7170D0,0.000D+00,1.0D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=369,384)/
-     & 'KD*BAR0 ',  -30313,  31, 0,1.717,0.000D+00,1.0,
-     & 'KD*-    ',  -30323,  32,-1,1.717,0.000D+00,1.0,
-     & 'KDH_2+  ',   20325,  23,+1,1.8160,0.000D+00,2.0,
-     & 'KDH_20  ',   20315,  13, 0,1.8160,0.000D+00,2.0,
-     & 'KDH_2BR0',  -20315,  31, 0,1.8160,0.000D+00,2.0,
-     & 'KDH_2-  ',  -20325,  32,-1,1.8160,0.000D+00,2.0,
-     & 'KD_3+   ',     327,  23,+1,1.7730,0.000D+00,3.0,
-     & 'KD_30   ',     317,  13, 0,1.7730,0.000D+00,3.0,
-     & 'KD_3BAR0',    -317,  31, 0,1.7730,0.000D+00,3.0,
-     & 'KD_3-   ',    -327,  32,-1,1.7730,0.000D+00,3.0,
-     & 'PI_2+   ',   10215,  21,+1,1.6700,0.000D+00,2.0,
-     & 'PI_20   ',   10115,  11, 0,1.6700,0.000D+00,2.0,
-     & 'PI_2-   ',  -10215,  12,-1,1.6700,0.000D+00,2.0,
-     & 'RHOD+   ',   30213,  21,+1,1.7000,0.000D+00,1.0,
-     & 'RHOD0   ',   30113,  11, 0,1.7000,0.000D+00,1.0,
-     & 'RHOD-   ',  -30213,  12,-1,1.7000,0.000D+00,1.0/
+     & 'KD*BAR0 ',  -30313,  31, 0,1.7170D0,0.000D+00,1.0D0,
+     & 'KD*-    ',  -30323,  32,-1,1.7170D0,0.000D+00,1.0D0,
+     & 'KDH_2+  ',   20325,  23,+1,1.8160D0,0.000D+00,2.0D0,
+     & 'KDH_20  ',   20315,  13, 0,1.8160D0,0.000D+00,2.0D0,
+     & 'KDH_2BR0',  -20315,  31, 0,1.8160D0,0.000D+00,2.0D0,
+     & 'KDH_2-  ',  -20325,  32,-1,1.8160D0,0.000D+00,2.0D0,
+     & 'KD_3+   ',     327,  23,+1,1.7730D0,0.000D+00,3.0D0,
+     & 'KD_30   ',     317,  13, 0,1.7730D0,0.000D+00,3.0D0,
+     & 'KD_3BAR0',    -317,  31, 0,1.7730D0,0.000D+00,3.0D0,
+     & 'KD_3-   ',    -327,  32,-1,1.7730D0,0.000D+00,3.0D0,
+     & 'PI_2+   ',   10215,  21,+1,1.6700D0,0.000D+00,2.0D0,
+     & 'PI_20   ',   10115,  11, 0,1.6700D0,0.000D+00,2.0D0,
+     & 'PI_2-   ',  -10215,  12,-1,1.6700D0,0.000D+00,2.0D0,
+     & 'RHOD+   ',   30213,  21,+1,1.7000D0,0.000D+00,1.0D0,
+     & 'RHOD0   ',   30113,  11, 0,1.7000D0,0.000D+00,1.0D0,
+     & 'RHOD-   ',  -30213,  12,-1,1.7000D0,0.000D+00,1.0D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=385,400)/
-     & 'RHO_3+  ',     217,  21,+1,1.6910,0.000D+00,3.0,
-     & 'RHO_30  ',     117,  11, 0,1.6910,0.000D+00,3.0,
-     & 'RHO_3-  ',    -217,  12,-1,1.6910,0.000D+00,3.0,
-     & 'UPSLON2S',  100553,  55, 0,10.023,0.000D+00,1.0,
-     & 'CHI2P_B0',  110551,  55, 0,10.232,0.000D+00,0.0,
-     & 'CHI2P_B1',  120553,  55, 0,10.255,0.000D+00,1.0,
-     & 'CHI2P_B2',  100555,  55, 0,10.269,0.000D+00,2.0,
-     & 'UPSLON3S',  200553,  55, 0,10.355,0.000D+00,1.0,
-     & 'UPSLON4S',  300553,  55, 0,10.580,0.000D+00,1.0,
-     & '        ',       0,   0, 0,0.0   ,  0.0D+00,  0,
-     & 'OMEGA_3 ',     227,  33, 0,1.6670,0.000D+00,3.0,
-     & 'PHI_3   ',     337,  33, 0,1.8540,0.000D+00,3.0,
-     & 'ETA_2(L)',   10225,  33, 0,1.6320,0.000D+00,2.0,
-     & 'ETA_2(H)',   10335,  33, 0,1.8540,0.000D+00,2.0,
-     & 'OMEGA(H)',   30223,  33, 0,1.6490,0.000D+00,1.0,
-     & '        ',       0,   0, 0,0.0   ,0.0D+00  ,  0/
+     & 'RHO_3+  ',     217,  21,+1,1.6910D0,0.000D+00,3.0D0,
+     & 'RHO_30  ',     117,  11, 0,1.6910D0,0.000D+00,3.0D0,
+     & 'RHO_3-  ',    -217,  12,-1,1.6910D0,0.000D+00,3.0D0,
+     & 'UPSLON2S',  100553,  55, 0,10.023D0,0.000D+00,1.0D0,
+     & 'CHI2P_B0',  110551,  55, 0,10.232D0,0.000D+00,0.0D0,
+     & 'CHI2P_B1',  120553,  55, 0,10.255D0,0.000D+00,1.0D0,
+     & 'CHI2P_B2',  100555,  55, 0,10.269D0,0.000D+00,2.0D0,
+     & 'UPSLON3S',  200553,  55, 0,10.355D0,0.000D+00,1.0D0,
+     & 'UPSLON4S',  300553,  55, 0,10.580D0,0.000D+00,1.0D0,
+     & '        ',       0,   0, 0,0.0   D0,  0.0D+00,  0D0,
+     & 'OMEGA_3 ',     227,  33, 0,1.6670D0,0.000D+00,3.0D0,
+     & 'PHI_3   ',     337,  33, 0,1.8540D0,0.000D+00,3.0D0,
+     & 'ETA_2(L)',   10225,  33, 0,1.6320D0,0.000D+00,2.0D0,
+     & 'ETA_2(H)',   10335,  33, 0,1.8540D0,0.000D+00,2.0D0,
+     & 'OMEGA(H)',   30223,  33, 0,1.6490D0,0.000D+00,1.0D0,
+     & '        ',       0,   0, 0,0.0   D0,0.0D+00  ,  0D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=401,416)/
-     & 'SSDL    ', 1000001,   0,-1,0.00D0,1.000D+30,0.0,
-     & 'SSUL    ', 1000002,   0,+2,0.00D0,1.000D+30,0.0,
-     & 'SSSL    ', 1000003,   0,-1,0.00D0,1.000D+30,0.0,
-     & 'SSCL    ', 1000004,   0,+2,0.00D0,1.000D+30,0.0,
-     & 'SSB1    ', 1000005,   0,-1,0.00D0,1.000D+30,0.0,
-     & 'SST1    ', 1000006,   0,+2,0.00D0,1.000D+30,0.0,
-     & 'SSDLBR  ',-1000001,   0,+1,0.00D0,1.000D+30,0.0,
-     & 'SSULBR  ',-1000002,   0,-2,0.00D0,1.000D+30,0.0,
-     & 'SSSLBR  ',-1000003,   0,+1,0.00D0,1.000D+30,0.0,
-     & 'SSCLBR  ',-1000004,   0,-2,0.00D0,1.000D+30,0.0,
-     & 'SSB1BR  ',-1000005,   0,+1,0.00D0,1.000D+30,0.0,
-     & 'SST1BR  ',-1000006,   0,-2,0.00D0,1.000D+30,0.0,
-     & 'SSDR    ', 2000001,   0,-1,0.00D0,1.000D+30,0.0,
-     & 'SSUR    ', 2000002,   0,+2,0.00D0,1.000D+30,0.0,
-     & 'SSSR    ', 2000003,   0,-1,0.00D0,1.000D+30,0.0,
-     & 'SSCR    ', 2000004,   0,+2,0.00D0,1.000D+30,0.0/
+     & 'SSDL    ', 1000001,   0,-1,0.00D0,1.000D+30,0.0D0,
+     & 'SSUL    ', 1000002,   0,+2,0.00D0,1.000D+30,0.0D0,
+     & 'SSSL    ', 1000003,   0,-1,0.00D0,1.000D+30,0.0D0,
+     & 'SSCL    ', 1000004,   0,+2,0.00D0,1.000D+30,0.0D0,
+     & 'SSB1    ', 1000005,   0,-1,0.00D0,1.000D+30,0.0D0,
+     & 'SST1    ', 1000006,   0,+2,0.00D0,1.000D+30,0.0D0,
+     & 'SSDLBR  ',-1000001,   0,+1,0.00D0,1.000D+30,0.0D0,
+     & 'SSULBR  ',-1000002,   0,-2,0.00D0,1.000D+30,0.0D0,
+     & 'SSSLBR  ',-1000003,   0,+1,0.00D0,1.000D+30,0.0D0,
+     & 'SSCLBR  ',-1000004,   0,-2,0.00D0,1.000D+30,0.0D0,
+     & 'SSB1BR  ',-1000005,   0,+1,0.00D0,1.000D+30,0.0D0,
+     & 'SST1BR  ',-1000006,   0,-2,0.00D0,1.000D+30,0.0D0,
+     & 'SSDR    ', 2000001,   0,-1,0.00D0,1.000D+30,0.0D0,
+     & 'SSUR    ', 2000002,   0,+2,0.00D0,1.000D+30,0.0D0,
+     & 'SSSR    ', 2000003,   0,-1,0.00D0,1.000D+30,0.0D0,
+     & 'SSCR    ', 2000004,   0,+2,0.00D0,1.000D+30,0.0D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=417,432)/
-     & 'SSB2    ', 2000005,   0,-1,0.00D0,1.000D+30,0.0,
-     & 'SST2    ', 2000006,   0,+2,0.00D0,1.000D+30,0.0,
-     & 'SSDRBR  ',-2000001,   0,+1,0.00D0,1.000D+30,0.0,
-     & 'SSURBR  ',-2000002,   0,-2,0.00D0,1.000D+30,0.0,
-     & 'SSSRBR  ',-2000003,   0,+1,0.00D0,1.000D+30,0.0,
-     & 'SSCRBR  ',-2000004,   0,-2,0.00D0,1.000D+30,0.0,
-     & 'SSB2BR  ',-2000005,   0,+1,0.00D0,1.000D+30,0.0,
-     & 'SST2BR  ',-2000006,   0,-2,0.00D0,1.000D+30,0.0,
-     & 'SSEL-   ', 1000011,   0,-1,0.00D0,1.000D+30,0.0,
-     & 'SSNUEL  ', 1000012,   0, 0,0.00D0,1.000D+30,0.0,
-     & 'SSMUL-  ', 1000013,   0,-1,0.00D0,1.000D+30,0.0,
-     & 'SSNUMUL ', 1000014,   0, 0,0.00D0,1.000D+30,0.0,
-     & 'SSTAU1- ', 1000015,   0,-1,0.00D0,1.000D+30,0.0,
-     & 'SSNUTL  ', 1000016,   0, 0,0.00D0,1.000D+30,0.0,
-     & 'SSEL+   ',-1000011,   0,+1,0.00D0,1.000D+30,0.0,
-     & 'SSNUELBR',-1000012,   0, 0,0.00D0,1.000D+30,0.0/
+     & 'SSB2    ', 2000005,   0,-1,0.00D0,1.000D+30,0.0D0,
+     & 'SST2    ', 2000006,   0,+2,0.00D0,1.000D+30,0.0D0,
+     & 'SSDRBR  ',-2000001,   0,+1,0.00D0,1.000D+30,0.0D0,
+     & 'SSURBR  ',-2000002,   0,-2,0.00D0,1.000D+30,0.0D0,
+     & 'SSSRBR  ',-2000003,   0,+1,0.00D0,1.000D+30,0.0D0,
+     & 'SSCRBR  ',-2000004,   0,-2,0.00D0,1.000D+30,0.0D0,
+     & 'SSB2BR  ',-2000005,   0,+1,0.00D0,1.000D+30,0.0D0,
+     & 'SST2BR  ',-2000006,   0,-2,0.00D0,1.000D+30,0.0D0,
+     & 'SSEL-   ', 1000011,   0,-1,0.00D0,1.000D+30,0.0D0,
+     & 'SSNUEL  ', 1000012,   0, 0,0.00D0,1.000D+30,0.0D0,
+     & 'SSMUL-  ', 1000013,   0,-1,0.00D0,1.000D+30,0.0D0,
+     & 'SSNUMUL ', 1000014,   0, 0,0.00D0,1.000D+30,0.0D0,
+     & 'SSTAU1- ', 1000015,   0,-1,0.00D0,1.000D+30,0.0D0,
+     & 'SSNUTL  ', 1000016,   0, 0,0.00D0,1.000D+30,0.0D0,
+     & 'SSEL+   ',-1000011,   0,+1,0.00D0,1.000D+30,0.0D0,
+     & 'SSNUELBR',-1000012,   0, 0,0.00D0,1.000D+30,0.0D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=433,448)/
-     & 'SSMUL+  ',-1000013,   0,+1,0.00D0,1.000D+30,0.0,
-     & 'SSNUMLBR',-1000014,   0, 0,0.00D0,1.000D+30,0.0,
-     & 'SSTAU1+ ',-1000015,   0,+1,0.00D0,1.000D+30,0.0,
-     & 'SSNUTLBR',-1000016,   0, 0,0.00D0,1.000D+30,0.0,
-     & 'SSER-   ', 2000011,   0,-1,0.00D0,1.000D+30,0.0,
-     & 'SSNUER  ', 2000012,   0, 0,0.00D0,1.000D+30,0.0,
-     & 'SSMUR-  ', 2000013,   0,-1,0.00D0,1.000D+30,0.0,
-     & 'SSNUMUR ', 2000014,   0, 0,0.00D0,1.000D+30,0.0,
-     & 'SSTAU2- ', 2000015,   0,-1,0.00D0,1.000D+30,0.0,
-     & 'SSNUTR  ', 2000016,   0, 0,0.00D0,1.000D+30,0.0,
-     & 'SSER+   ',-2000011,   0,+1,0.00D0,1.000D+30,0.0,
-     & 'SSNUERBR',-2000012,   0, 0,0.00D0,1.000D+30,0.0,
-     & 'SSMUR+  ',-2000013,   0,+1,0.00D0,1.000D+30,0.0,
-     & 'SSNUMRBR',-2000014,   0, 0,0.00D0,1.000D+30,0.0,
-     & 'SSTAU2+ ',-2000015,   0,+1,0.00D0,1.000D+30,0.0,
-     & 'SSNUTRBR',-2000016,   0, 0,0.00D0,1.000D+30,0.0/
+     & 'SSMUL+  ',-1000013,   0,+1,0.00D0,1.000D+30,0.0D0,
+     & 'SSNUMLBR',-1000014,   0, 0,0.00D0,1.000D+30,0.0D0,
+     & 'SSTAU1+ ',-1000015,   0,+1,0.00D0,1.000D+30,0.0D0,
+     & 'SSNUTLBR',-1000016,   0, 0,0.00D0,1.000D+30,0.0D0,
+     & 'SSER-   ', 2000011,   0,-1,0.00D0,1.000D+30,0.0D0,
+     & 'SSNUER  ', 2000012,   0, 0,0.00D0,1.000D+30,0.0D0,
+     & 'SSMUR-  ', 2000013,   0,-1,0.00D0,1.000D+30,0.0D0,
+     & 'SSNUMUR ', 2000014,   0, 0,0.00D0,1.000D+30,0.0D0,
+     & 'SSTAU2- ', 2000015,   0,-1,0.00D0,1.000D+30,0.0D0,
+     & 'SSNUTR  ', 2000016,   0, 0,0.00D0,1.000D+30,0.0D0,
+     & 'SSER+   ',-2000011,   0,+1,0.00D0,1.000D+30,0.0D0,
+     & 'SSNUERBR',-2000012,   0, 0,0.00D0,1.000D+30,0.0D0,
+     & 'SSMUR+  ',-2000013,   0,+1,0.00D0,1.000D+30,0.0D0,
+     & 'SSNUMRBR',-2000014,   0, 0,0.00D0,1.000D+30,0.0D0,
+     & 'SSTAU2+ ',-2000015,   0,+1,0.00D0,1.000D+30,0.0D0,
+     & 'SSNUTRBR',-2000016,   0, 0,0.00D0,1.000D+30,0.0D0/
       DATA (RNAME(I),IDPDG(I),IFLAV(I),ICHRG(I),RMASS(I),RLTIM(I),
      &      RSPIN(I),I=449,NLAST)/
-     & 'GLUINO  ', 1000021,   0, 0,0.00D0,1.000D+30,0.5,
-     & 'NTLINO1 ', 1000022,   0, 0,0.00D0,1.000D+30,0.5,
-     & 'NTLINO2 ', 1000023,   0, 0,0.00D0,1.000D+30,0.5,
-     & 'NTLINO3 ', 1000025,   0, 0,0.00D0,1.000D+30,0.5,
-     & 'NTLINO4 ', 1000035,   0, 0,0.00D0,1.000D+30,0.5,
-     & 'CHGINO1+', 1000024,   0,+1,0.00D0,1.000D+30,0.5,
-     & 'CHGINO2+', 1000037,   0,+1,0.00D0,1.000D+30,0.5,
-     & 'CHGINO1-',-1000024,   0,-1,0.00D0,1.000D+30,0.5,
-     & 'CHGINO2-',-1000037,   0,-1,0.00D0,1.000D+30,0.5,
-     & 'GRAVTINO', 1000039,   0, 0,0.00D0,1.000D+30,1.5/
+     & 'GLUINO  ', 1000021,   0, 0,0.00D0,1.000D+30,0.5D0,
+     & 'NTLINO1 ', 1000022,   0, 0,0.00D0,1.000D+30,0.5D0,
+     & 'NTLINO2 ', 1000023,   0, 0,0.00D0,1.000D+30,0.5D0,
+     & 'NTLINO3 ', 1000025,   0, 0,0.00D0,1.000D+30,0.5D0,
+     & 'NTLINO4 ', 1000035,   0, 0,0.00D0,1.000D+30,0.5D0,
+     & 'CHGINO1+', 1000024,   0,+1,0.00D0,1.000D+30,0.5D0,
+     & 'CHGINO2+', 1000037,   0,+1,0.00D0,1.000D+30,0.5D0,
+     & 'CHGINO1-',-1000024,   0,-1,0.00D0,1.000D+30,0.5D0,
+     & 'CHGINO2-',-1000037,   0,-1,0.00D0,1.000D+30,0.5D0,
+     & 'GRAVTINO', 1000039,   0, 0,0.00D0,1.000D+30,1.5D0/
 C
       DATA QORQQB/.FALSE.,
      & 6*.TRUE.,6*.FALSE.,96*.FALSE.,6*.FALSE.,6*.TRUE.,NREST*.FALSE./
@@ -40565,7 +46533,7 @@ C
      & 6*.FALSE.,6*.TRUE.,96*.FALSE.,6*.TRUE.,6*.FALSE.,NREST*.FALSE./
 C
 C     In the character strings use an ampersand to represent a backslash
-C     to avoid compiler problems with the C escape character i.e. & = \
+C     to avoid compiler problems with the C escape character
       DATA ((TXNAME(J,I),J=1,2),I=0,8)/
      & '                                     ',
      & '                                     ',
@@ -41546,9 +47514,9 @@ C
       DATA (RNAME(I),I=NNEXT,NMXRES)/NLEFT*'        '/
       DATA (IDPDG(I),I=NNEXT,NMXRES)/NLEFT*0/
       DATA (IFLAV(I),I=NNEXT,NMXRES)/NLEFT*0/
-      DATA (RMASS(I),I=NNEXT,NMXRES)/NLEFT*0.0000/
+      DATA (RMASS(I),I=NNEXT,NMXRES)/NLEFT*0.0000D0/
       DATA (RLTIM(I),I=NNEXT,NMXRES)/NLEFT*0.000D+00/
-      DATA (RSPIN(I),I=NNEXT,NMXRES)/NLEFT*0.0/
+      DATA (RSPIN(I),I=NNEXT,NMXRES)/NLEFT*0.0D0/
       DATA (TXNAME(1,I),I=NNEXT,NMXRES)/
      & NLEFT*'                                    '/
       DATA (TXNAME(2,I),I=NNEXT,NMXRES)/
@@ -41559,2388 +47527,2388 @@ C
 C
       DATA NDKYS/2263/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=   1,  19)/
-     &   6,0.334,100,  2,  7,  5,  0,  0,
-     &   6,0.333,100,  4,  9,  5,  0,  0,
-     &   6,0.111,100,122,127,  5,  0,  0,
-     &   6,0.111,100,124,129,  5,  0,  0,
-     &   6,0.111,100,126,131,  5,  0,  0,
-     &  12,0.334,100,  8,  1, 11,  0,  0,
-     &  12,0.333,100, 10,  3, 11,  0,  0,
-     &  12,0.111,100,128,121, 11,  0,  0,
-     &  12,0.111,100,130,123, 11,  0,  0,
-     &  12,0.111,100,132,125, 11,  0,  0,
-     &  21,0.988,  0, 59, 59,  0,  0,  0,
-     &  21,0.012,  0,127,121, 59,  0,  0,
-     &  22,0.388,  0, 59, 59,  0,  0,  0,
-     &  22,0.319,  0, 21, 21, 21,  0,  0,
-     &  22,0.001,  0, 21, 59, 59,  0,  0,
-     &  22,0.236,  0, 38, 30, 21,  0,  0,
-     &  22,0.049,  0, 38, 30, 59,  0,  0,
-     &  22,0.005,  0,127,121, 59,  0,  0,
-     &  22,0.002,  0, 38, 30,127,121,  0/
+     &   6,0.334D0,100,  2,  7,  5,  0,  0,
+     &   6,0.333D0,100,  4,  9,  5,  0,  0,
+     &   6,0.111D0,100,122,127,  5,  0,  0,
+     &   6,0.111D0,100,124,129,  5,  0,  0,
+     &   6,0.111D0,100,126,131,  5,  0,  0,
+     &  12,0.334D0,100,  8,  1, 11,  0,  0,
+     &  12,0.333D0,100, 10,  3, 11,  0,  0,
+     &  12,0.111D0,100,128,121, 11,  0,  0,
+     &  12,0.111D0,100,130,123, 11,  0,  0,
+     &  12,0.111D0,100,132,125, 11,  0,  0,
+     &  21,0.988D0,  0, 59, 59,  0,  0,  0,
+     &  21,0.012D0,  0,127,121, 59,  0,  0,
+     &  22,0.388D0,  0, 59, 59,  0,  0,  0,
+     &  22,0.319D0,  0, 21, 21, 21,  0,  0,
+     &  22,0.001D0,  0, 21, 59, 59,  0,  0,
+     &  22,0.236D0,  0, 38, 30, 21,  0,  0,
+     &  22,0.049D0,  0, 38, 30, 59,  0,  0,
+     &  22,0.005D0,  0,127,121, 59,  0,  0,
+     &  22,0.002D0,  0, 38, 30,127,121,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=  20,  38)/
-     &  23,0.989,  0, 38, 30,  0,  0,  0,
-     &  23,0.010,  0, 38, 30, 59,  0,  0,
-     &  23,0.001,  0, 21, 59,  0,  0,  0,
-     &  24,0.888,  0, 38, 30, 21,  0,  0,
-     &  24,0.085,  0, 21, 59,  0,  0,  0,
-     &  24,0.022,  0, 38, 30,  0,  0,  0,
-     &  24,0.001,  0, 22, 59,  0,  0,  0,
-     &  24,0.001,  0, 21,127,121,  0,  0,
-     &  24,0.003,  0, 38, 30, 21, 21,  0,
-     &  25,0.437,  0, 38, 30, 22,  0,  0,
-     &  25,0.302,  0, 23, 59,  0,  0,  0,
-     &  25,0.208,  0, 21, 21, 22,  0,  0,
-     &  25,0.030,  0, 24, 59,  0,  0,  0,
-     &  25,0.021,  0, 59, 59,  0,  0,  0,
-     &  25,0.002,  0, 21, 21, 21,  0,  0,
-     &  26,0.566,  0, 38, 30,  0,  0,  0,
-     &  26,0.283,  0, 21, 21,  0,  0,  0,
-     &  26,0.069,  0, 38, 30, 21, 21,  0,
-     &  26,0.023,  0, 46, 34,  0,  0,  0/
+     &  23,0.989D0,  0, 38, 30,  0,  0,  0,
+     &  23,0.010D0,  0, 38, 30, 59,  0,  0,
+     &  23,0.001D0,  0, 21, 59,  0,  0,  0,
+     &  24,0.888D0,  0, 38, 30, 21,  0,  0,
+     &  24,0.085D0,  0, 21, 59,  0,  0,  0,
+     &  24,0.022D0,  0, 38, 30,  0,  0,  0,
+     &  24,0.001D0,  0, 22, 59,  0,  0,  0,
+     &  24,0.001D0,  0, 21,127,121,  0,  0,
+     &  24,0.003D0,  0, 38, 30, 21, 21,  0,
+     &  25,0.437D0,  0, 38, 30, 22,  0,  0,
+     &  25,0.302D0,  0, 23, 59,  0,  0,  0,
+     &  25,0.208D0,  0, 21, 21, 22,  0,  0,
+     &  25,0.030D0,  0, 24, 59,  0,  0,  0,
+     &  25,0.021D0,  0, 59, 59,  0,  0,  0,
+     &  25,0.002D0,  0, 21, 21, 21,  0,  0,
+     &  26,0.566D0,  0, 38, 30,  0,  0,  0,
+     &  26,0.283D0,  0, 21, 21,  0,  0,  0,
+     &  26,0.069D0,  0, 38, 30, 21, 21,  0,
+     &  26,0.023D0,  0, 46, 34,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=  39,  57)/
-     &  26,0.023,  0, 50, 42,  0,  0,  0,
-     &  26,0.028,  0, 38, 38, 30, 30,  0,
-     &  26,0.005,  0, 22, 22,  0,  0,  0,
-     &  26,0.003,  0, 21, 21, 21, 21,  0,
-     &  27,0.499,  0, 39, 30,  0,  0,  0,
-     &  27,0.499,  0, 31, 38,  0,  0,  0,
-     &  27,0.002,  0, 21, 59, 59,  0,  0,
-     &  28,0.148,  0, 21, 21, 38, 30,  0,
-     &  28,0.148,  0, 23, 38, 30,  0,  0,
-     &  28,0.147,  0,291, 30,  0,  0,  0,
-     &  28,0.147,  0,290, 21,  0,  0,  0,
-     &  28,0.147,  0,292, 38,  0,  0,  0,
-     &  28,0.067,  0, 22, 38, 30,  0,  0,
-     &  28,0.033,  0, 22, 21, 21,  0,  0,
-     &  28,0.032,  0, 46, 42, 30,  0,  0,
-     &  28,0.016,  0, 46, 34, 21,  0,  0,
-     &  28,0.016,  0, 50, 42, 21,  0,  0,
-     &  28,0.032,  0, 50, 34, 38,  0,  0,
-     &  28,0.066,  0, 59, 23,  0,  0,  0/
+     &  26,0.023D0,  0, 50, 42,  0,  0,  0,
+     &  26,0.028D0,  0, 38, 38, 30, 30,  0,
+     &  26,0.005D0,  0, 22, 22,  0,  0,  0,
+     &  26,0.003D0,  0, 21, 21, 21, 21,  0,
+     &  27,0.499D0,  0, 39, 30,  0,  0,  0,
+     &  27,0.499D0,  0, 31, 38,  0,  0,  0,
+     &  27,0.002D0,  0, 21, 59, 59,  0,  0,
+     &  28,0.148D0,  0, 21, 21, 38, 30,  0,
+     &  28,0.148D0,  0, 23, 38, 30,  0,  0,
+     &  28,0.147D0,  0,291, 30,  0,  0,  0,
+     &  28,0.147D0,  0,290, 21,  0,  0,  0,
+     &  28,0.147D0,  0,292, 38,  0,  0,  0,
+     &  28,0.067D0,  0, 22, 38, 30,  0,  0,
+     &  28,0.033D0,  0, 22, 21, 21,  0,  0,
+     &  28,0.032D0,  0, 46, 42, 30,  0,  0,
+     &  28,0.016D0,  0, 46, 34, 21,  0,  0,
+     &  28,0.016D0,  0, 50, 42, 21,  0,  0,
+     &  28,0.032D0,  0, 50, 34, 38,  0,  0,
+     &  28,0.066D0,  0, 59, 23,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=  58,  76)/
-     &  28,0.001,  0, 56, 59,  0,  0,  0,
-     &  29,0.349,  0, 39, 30,  0,  0,  0,
-     &  29,0.349,  0, 31, 38,  0,  0,  0,
-     &  29,0.144,  0, 22, 21,  0,  0,  0,
-     &  29,0.104,  0, 24, 38, 30,  0,  0,
-     &  29,0.024,  0, 46, 34,  0,  0,  0,
-     &  29,0.024,  0, 50, 42,  0,  0,  0,
-     &  29,0.006,  0, 25, 21,  0,  0,  0,
-     &  30,1.000,  0,123,130,  0,  0,  0,
-     &  31,1.000,  0, 30, 21,  0,  0,  0,
-     &  32,0.499,  0, 31, 21,  0,  0,  0,
-     &  32,0.499,  0, 23, 30,  0,  0,  0,
-     &  32,0.002,  0, 30, 59,  0,  0,  0,
-     &  33,0.349,  0, 31, 21,  0,  0,  0,
-     &  33,0.349,  0, 23, 30,  0,  0,  0,
-     &  33,0.144,  0, 22, 30,  0,  0,  0,
-     &  33,0.101,  0, 24, 30, 21,  0,  0,
-     &  33,0.048,  0, 50, 34,  0,  0,  0,
-     &  33,0.006,  0, 25, 30,  0,  0,  0/
+     &  28,0.001D0,  0, 56, 59,  0,  0,  0,
+     &  29,0.349D0,  0, 39, 30,  0,  0,  0,
+     &  29,0.349D0,  0, 31, 38,  0,  0,  0,
+     &  29,0.144D0,  0, 22, 21,  0,  0,  0,
+     &  29,0.104D0,  0, 24, 38, 30,  0,  0,
+     &  29,0.024D0,  0, 46, 34,  0,  0,  0,
+     &  29,0.024D0,  0, 50, 42,  0,  0,  0,
+     &  29,0.006D0,  0, 25, 21,  0,  0,  0,
+     &  30,1.000D0,  0,123,130,  0,  0,  0,
+     &  31,1.000D0,  0, 30, 21,  0,  0,  0,
+     &  32,0.499D0,  0, 31, 21,  0,  0,  0,
+     &  32,0.499D0,  0, 23, 30,  0,  0,  0,
+     &  32,0.002D0,  0, 30, 59,  0,  0,  0,
+     &  33,0.349D0,  0, 31, 21,  0,  0,  0,
+     &  33,0.349D0,  0, 23, 30,  0,  0,  0,
+     &  33,0.144D0,  0, 22, 30,  0,  0,  0,
+     &  33,0.101D0,  0, 24, 30, 21,  0,  0,
+     &  33,0.048D0,  0, 50, 34,  0,  0,  0,
+     &  33,0.006D0,  0, 25, 30,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=  77,  95)/
-     &  33,0.003,  0, 30, 59,  0,  0,  0,
-     &  34,0.629,  0,123,130,  0,  0,  0,
-     &  34,0.212,  0, 30, 21,  0,  0,  0,
-     &  34,0.056,  0, 30, 38, 30,  0,  0,
-     &  34,0.017,  0, 30, 21, 21,  0,  0,
-     &  34,0.048,101,121,128, 21,  0,  0,
-     &  34,0.032,101,123,130, 21,  0,  0,
-     &  34,0.006,  0,123,130, 59,  0,  0,
-     &  35,0.666,  0, 42, 30,  0,  0,  0,
-     &  35,0.333,  0, 34, 21,  0,  0,  0,
-     &  35,0.001,  0, 34, 59,  0,  0,  0,
-     &  36,0.627,  0, 43, 30,  0,  0,  0,
-     &  36,0.313,  0, 35, 21,  0,  0,  0,
-     &  36,0.020,  0, 42, 31,  0,  0,  0,
-     &  36,0.010,  0, 34, 23,  0,  0,  0,
-     &  36,0.020,  0, 34,294,  0,  0,  0,
-     &  36,0.010,  0, 34, 24,  0,  0,  0,
-     &  37,0.331,  0, 42, 30,  0,  0,  0,
-     &  37,0.166,  0, 34, 21,  0,  0,  0/
+     &  33,0.003D0,  0, 30, 59,  0,  0,  0,
+     &  34,0.629D0,  0,123,130,  0,  0,  0,
+     &  34,0.212D0,  0, 30, 21,  0,  0,  0,
+     &  34,0.056D0,  0, 30, 38, 30,  0,  0,
+     &  34,0.017D0,  0, 30, 21, 21,  0,  0,
+     &  34,0.048D0,101,121,128, 21,  0,  0,
+     &  34,0.032D0,101,123,130, 21,  0,  0,
+     &  34,0.006D0,  0,123,130, 59,  0,  0,
+     &  35,0.666D0,  0, 42, 30,  0,  0,  0,
+     &  35,0.333D0,  0, 34, 21,  0,  0,  0,
+     &  35,0.001D0,  0, 34, 59,  0,  0,  0,
+     &  36,0.627D0,  0, 43, 30,  0,  0,  0,
+     &  36,0.313D0,  0, 35, 21,  0,  0,  0,
+     &  36,0.020D0,  0, 42, 31,  0,  0,  0,
+     &  36,0.010D0,  0, 34, 23,  0,  0,  0,
+     &  36,0.020D0,  0, 34,294,  0,  0,  0,
+     &  36,0.010D0,  0, 34, 24,  0,  0,  0,
+     &  37,0.331D0,  0, 42, 30,  0,  0,  0,
+     &  37,0.166D0,  0, 34, 21,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=  96, 114)/
-     &  37,0.168,  0, 43, 30,  0,  0,  0,
-     &  37,0.084,  0, 35, 21,  0,  0,  0,
-     &  37,0.087,  0, 35, 38, 30,  0,  0,
-     &  37,0.044,  0, 35, 21, 21,  0,  0,
-     &  37,0.059,  0, 42, 31,  0,  0,  0,
-     &  37,0.029,  0, 34, 23,  0,  0,  0,
-     &  37,0.029,  0, 34, 24,  0,  0,  0,
-     &  37,0.002,  0, 34, 59,  0,  0,  0,
-     &  37,0.001,  0, 34, 22,  0,  0,  0,
-     &  38,1.000,  0,129,124,  0,  0,  0,
-     &  39,1.000,  0, 38, 21,  0,  0,  0,
-     &  40,0.499,  0, 39, 21,  0,  0,  0,
-     &  40,0.499,  0, 23, 38,  0,  0,  0,
-     &  40,0.002,  0, 38, 59,  0,  0,  0,
-     &  41,0.349,  0, 39, 21,  0,  0,  0,
-     &  41,0.349,  0, 23, 38,  0,  0,  0,
-     &  41,0.144,  0, 22, 38,  0,  0,  0,
-     &  41,0.101,  0, 24, 38, 21,  0,  0,
-     &  41,0.048,  0, 46, 42,  0,  0,  0/
+     &  37,0.168D0,  0, 43, 30,  0,  0,  0,
+     &  37,0.084D0,  0, 35, 21,  0,  0,  0,
+     &  37,0.087D0,  0, 35, 38, 30,  0,  0,
+     &  37,0.044D0,  0, 35, 21, 21,  0,  0,
+     &  37,0.059D0,  0, 42, 31,  0,  0,  0,
+     &  37,0.029D0,  0, 34, 23,  0,  0,  0,
+     &  37,0.029D0,  0, 34, 24,  0,  0,  0,
+     &  37,0.002D0,  0, 34, 59,  0,  0,  0,
+     &  37,0.001D0,  0, 34, 22,  0,  0,  0,
+     &  38,1.000D0,  0,129,124,  0,  0,  0,
+     &  39,1.000D0,  0, 38, 21,  0,  0,  0,
+     &  40,0.499D0,  0, 39, 21,  0,  0,  0,
+     &  40,0.499D0,  0, 23, 38,  0,  0,  0,
+     &  40,0.002D0,  0, 38, 59,  0,  0,  0,
+     &  41,0.349D0,  0, 39, 21,  0,  0,  0,
+     &  41,0.349D0,  0, 23, 38,  0,  0,  0,
+     &  41,0.144D0,  0, 22, 38,  0,  0,  0,
+     &  41,0.101D0,  0, 24, 38, 21,  0,  0,
+     &  41,0.048D0,  0, 46, 42,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 115, 133)/
-     &  41,0.006,  0, 25, 38,  0,  0,  0,
-     &  41,0.003,  0, 38, 59,  0,  0,  0,
-     &  42,0.500,  0, 60,  0,  0,  0,  0,
-     &  42,0.500,  0, 61,  0,  0,  0,  0,
-     &  43,0.665,  0, 34, 38,  0,  0,  0,
-     &  43,0.333,  0, 42, 21,  0,  0,  0,
-     &  43,0.002,  0, 42, 59,  0,  0,  0,
-     &  44,0.627,  0, 35, 38,  0,  0,  0,
-     &  44,0.313,  0, 43, 21,  0,  0,  0,
-     &  44,0.020,  0, 34, 39,  0,  0,  0,
-     &  44,0.010,  0, 42, 23,  0,  0,  0,
-     &  44,0.020,  0, 42,294,  0,  0,  0,
-     &  44,0.010,  0, 42, 24,  0,  0,  0,
-     &  45,0.331,  0, 34, 38,  0,  0,  0,
-     &  45,0.166,  0, 42, 21,  0,  0,  0,
-     &  45,0.168,  0, 35, 38,  0,  0,  0,
-     &  45,0.084,  0, 43, 21,  0,  0,  0,
-     &  45,0.089,  0, 42, 38, 30,  0,  0,
-     &  45,0.044,  0, 42, 21, 21,  0,  0/
+     &  41,0.006D0,  0, 25, 38,  0,  0,  0,
+     &  41,0.003D0,  0, 38, 59,  0,  0,  0,
+     &  42,0.500D0,  0, 60,  0,  0,  0,  0,
+     &  42,0.500D0,  0, 61,  0,  0,  0,  0,
+     &  43,0.665D0,  0, 34, 38,  0,  0,  0,
+     &  43,0.333D0,  0, 42, 21,  0,  0,  0,
+     &  43,0.002D0,  0, 42, 59,  0,  0,  0,
+     &  44,0.627D0,  0, 35, 38,  0,  0,  0,
+     &  44,0.313D0,  0, 43, 21,  0,  0,  0,
+     &  44,0.020D0,  0, 34, 39,  0,  0,  0,
+     &  44,0.010D0,  0, 42, 23,  0,  0,  0,
+     &  44,0.020D0,  0, 42,294,  0,  0,  0,
+     &  44,0.010D0,  0, 42, 24,  0,  0,  0,
+     &  45,0.331D0,  0, 34, 38,  0,  0,  0,
+     &  45,0.166D0,  0, 42, 21,  0,  0,  0,
+     &  45,0.168D0,  0, 35, 38,  0,  0,  0,
+     &  45,0.084D0,  0, 43, 21,  0,  0,  0,
+     &  45,0.089D0,  0, 42, 38, 30,  0,  0,
+     &  45,0.044D0,  0, 42, 21, 21,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 134, 152)/
-     &  45,0.059,  0, 34, 39,  0,  0,  0,
-     &  45,0.029,  0, 42, 23,  0,  0,  0,
-     &  45,0.029,  0, 42, 24,  0,  0,  0,
-     &  45,0.001,  0, 42, 22,  0,  0,  0,
-     &  46,0.629,  0,129,124,  0,  0,  0,
-     &  46,0.212,  0, 38, 21,  0,  0,  0,
-     &  46,0.056,  0, 38, 38, 30,  0,  0,
-     &  46,0.017,  0, 38, 21, 21,  0,  0,
-     &  46,0.032,101,129,124, 21,  0,  0,
-     &  46,0.048,101,127,122, 21,  0,  0,
-     &  46,0.006,  0,129,124, 59,  0,  0,
-     &  47,0.666,  0, 50, 38,  0,  0,  0,
-     &  47,0.333,  0, 46, 21,  0,  0,  0,
-     &  47,0.001,  0, 46, 59,  0,  0,  0,
-     &  48,0.627,  0, 51, 38,  0,  0,  0,
-     &  48,0.313,  0, 47, 21,  0,  0,  0,
-     &  48,0.020,  0, 50, 39,  0,  0,  0,
-     &  48,0.010,  0, 46, 23,  0,  0,  0,
-     &  48,0.020,  0, 46,294,  0,  0,  0/
+     &  45,0.059D0,  0, 34, 39,  0,  0,  0,
+     &  45,0.029D0,  0, 42, 23,  0,  0,  0,
+     &  45,0.029D0,  0, 42, 24,  0,  0,  0,
+     &  45,0.001D0,  0, 42, 22,  0,  0,  0,
+     &  46,0.629D0,  0,129,124,  0,  0,  0,
+     &  46,0.212D0,  0, 38, 21,  0,  0,  0,
+     &  46,0.056D0,  0, 38, 38, 30,  0,  0,
+     &  46,0.017D0,  0, 38, 21, 21,  0,  0,
+     &  46,0.032D0,101,129,124, 21,  0,  0,
+     &  46,0.048D0,101,127,122, 21,  0,  0,
+     &  46,0.006D0,  0,129,124, 59,  0,  0,
+     &  47,0.666D0,  0, 50, 38,  0,  0,  0,
+     &  47,0.333D0,  0, 46, 21,  0,  0,  0,
+     &  47,0.001D0,  0, 46, 59,  0,  0,  0,
+     &  48,0.627D0,  0, 51, 38,  0,  0,  0,
+     &  48,0.313D0,  0, 47, 21,  0,  0,  0,
+     &  48,0.020D0,  0, 50, 39,  0,  0,  0,
+     &  48,0.010D0,  0, 46, 23,  0,  0,  0,
+     &  48,0.020D0,  0, 46,294,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 153, 171)/
-     &  48,0.010,  0, 46, 24,  0,  0,  0,
-     &  49,0.331,  0, 50, 38,  0,  0,  0,
-     &  49,0.166,  0, 46, 21,  0,  0,  0,
-     &  49,0.168,  0, 51, 38,  0,  0,  0,
-     &  49,0.084,  0, 47, 21,  0,  0,  0,
-     &  49,0.087,  0, 47, 38, 30,  0,  0,
-     &  49,0.044,  0, 47, 21, 21,  0,  0,
-     &  49,0.059,  0, 50, 39,  0,  0,  0,
-     &  49,0.029,  0, 46, 23,  0,  0,  0,
-     &  49,0.029,  0, 46, 24,  0,  0,  0,
-     &  49,0.002,  0, 46, 59,  0,  0,  0,
-     &  49,0.001,  0, 46, 22,  0,  0,  0,
-     &  50,0.500,  0, 60,  0,  0,  0,  0,
-     &  50,0.500,  0, 61,  0,  0,  0,  0,
-     &  51,0.665,  0, 46, 30,  0,  0,  0,
-     &  51,0.333,  0, 50, 21,  0,  0,  0,
-     &  51,0.002,  0, 50, 59,  0,  0,  0,
-     &  52,0.627,  0, 47, 30,  0,  0,  0,
-     &  52,0.313,  0, 51, 21,  0,  0,  0/
+     &  48,0.010D0,  0, 46, 24,  0,  0,  0,
+     &  49,0.331D0,  0, 50, 38,  0,  0,  0,
+     &  49,0.166D0,  0, 46, 21,  0,  0,  0,
+     &  49,0.168D0,  0, 51, 38,  0,  0,  0,
+     &  49,0.084D0,  0, 47, 21,  0,  0,  0,
+     &  49,0.087D0,  0, 47, 38, 30,  0,  0,
+     &  49,0.044D0,  0, 47, 21, 21,  0,  0,
+     &  49,0.059D0,  0, 50, 39,  0,  0,  0,
+     &  49,0.029D0,  0, 46, 23,  0,  0,  0,
+     &  49,0.029D0,  0, 46, 24,  0,  0,  0,
+     &  49,0.002D0,  0, 46, 59,  0,  0,  0,
+     &  49,0.001D0,  0, 46, 22,  0,  0,  0,
+     &  50,0.500D0,  0, 60,  0,  0,  0,  0,
+     &  50,0.500D0,  0, 61,  0,  0,  0,  0,
+     &  51,0.665D0,  0, 46, 30,  0,  0,  0,
+     &  51,0.333D0,  0, 50, 21,  0,  0,  0,
+     &  51,0.002D0,  0, 50, 59,  0,  0,  0,
+     &  52,0.627D0,  0, 47, 30,  0,  0,  0,
+     &  52,0.313D0,  0, 51, 21,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 172, 190)/
-     &  52,0.020,  0, 46, 31,  0,  0,  0,
-     &  52,0.010,  0, 50, 23,  0,  0,  0,
-     &  52,0.020,  0, 50,294,  0,  0,  0,
-     &  52,0.010,  0, 50, 24,  0,  0,  0,
-     &  53,0.331,  0, 46, 30,  0,  0,  0,
-     &  53,0.166,  0, 50, 21,  0,  0,  0,
-     &  53,0.168,  0, 47, 30,  0,  0,  0,
-     &  53,0.084,  0, 51, 21,  0,  0,  0,
-     &  53,0.089,  0, 50, 38, 30,  0,  0,
-     &  53,0.044,  0, 50, 21, 21,  0,  0,
-     &  53,0.059,  0, 46, 31,  0,  0,  0,
-     &  53,0.029,  0, 50, 23,  0,  0,  0,
-     &  53,0.029,  0, 50, 24,  0,  0,  0,
-     &  53,0.001,  0, 50, 22,  0,  0,  0,
-     &  56,0.490,  0, 46, 34,  0,  0,  0,
-     &  56,0.342,  0, 61, 60,  0,  0,  0,
-     &  56,0.043,  0, 39, 30,  0,  0,  0,
-     &  56,0.043,  0, 23, 21,  0,  0,  0,
-     &  56,0.043,  0, 31, 38,  0,  0,  0/
+     &  52,0.020D0,  0, 46, 31,  0,  0,  0,
+     &  52,0.010D0,  0, 50, 23,  0,  0,  0,
+     &  52,0.020D0,  0, 50,294,  0,  0,  0,
+     &  52,0.010D0,  0, 50, 24,  0,  0,  0,
+     &  53,0.331D0,  0, 46, 30,  0,  0,  0,
+     &  53,0.166D0,  0, 50, 21,  0,  0,  0,
+     &  53,0.168D0,  0, 47, 30,  0,  0,  0,
+     &  53,0.084D0,  0, 51, 21,  0,  0,  0,
+     &  53,0.089D0,  0, 50, 38, 30,  0,  0,
+     &  53,0.044D0,  0, 50, 21, 21,  0,  0,
+     &  53,0.059D0,  0, 46, 31,  0,  0,  0,
+     &  53,0.029D0,  0, 50, 23,  0,  0,  0,
+     &  53,0.029D0,  0, 50, 24,  0,  0,  0,
+     &  53,0.001D0,  0, 50, 22,  0,  0,  0,
+     &  56,0.490D0,  0, 46, 34,  0,  0,  0,
+     &  56,0.342D0,  0, 61, 60,  0,  0,  0,
+     &  56,0.043D0,  0, 39, 30,  0,  0,  0,
+     &  56,0.043D0,  0, 23, 21,  0,  0,  0,
+     &  56,0.043D0,  0, 31, 38,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 191, 209)/
-     &  56,0.025,  0, 38, 30, 21,  0,  0,
-     &  56,0.013,  0, 22, 59,  0,  0,  0,
-     &  56,0.001,  0, 21, 59,  0,  0,  0,
-     &  57,0.250,  0, 50, 43,  0,  0,  0,
-     &  57,0.250,  0, 34, 47,  0,  0,  0,
-     &  57,0.250,  0, 42, 51,  0,  0,  0,
-     &  57,0.250,  0, 46, 35,  0,  0,  0,
-     &  58,0.356,  0, 46, 34,  0,  0,  0,
-     &  58,0.356,  0, 50, 42,  0,  0,  0,
-     &  58,0.279,  0, 22, 22,  0,  0,  0,
-     &  58,0.006,  0, 38, 30,  0,  0,  0,
-     &  58,0.003,  0, 21, 21,  0,  0,  0,
-     &  60,0.684,  0, 38, 30,  0,  0,  0,
-     &  60,0.314,  0, 21, 21,  0,  0,  0,
-     &  60,0.002,  0, 38, 30, 59,  0,  0,
-     &  61,0.216,  0, 21, 21, 21,  0,  0,
-     &  61,0.124,  0, 38, 30, 21,  0,  0,
-     &  61,0.135,101,123,130, 38,  0,  0,
-     &  61,0.135,101,124,129, 30,  0,  0/
+     &  56,0.025D0,  0, 38, 30, 21,  0,  0,
+     &  56,0.013D0,  0, 22, 59,  0,  0,  0,
+     &  56,0.001D0,  0, 21, 59,  0,  0,  0,
+     &  57,0.250D0,  0, 50, 43,  0,  0,  0,
+     &  57,0.250D0,  0, 34, 47,  0,  0,  0,
+     &  57,0.250D0,  0, 42, 51,  0,  0,  0,
+     &  57,0.250D0,  0, 46, 35,  0,  0,  0,
+     &  58,0.356D0,  0, 46, 34,  0,  0,  0,
+     &  58,0.356D0,  0, 50, 42,  0,  0,  0,
+     &  58,0.279D0,  0, 22, 22,  0,  0,  0,
+     &  58,0.006D0,  0, 38, 30,  0,  0,  0,
+     &  58,0.003D0,  0, 21, 21,  0,  0,  0,
+     &  60,0.684D0,  0, 38, 30,  0,  0,  0,
+     &  60,0.314D0,  0, 21, 21,  0,  0,  0,
+     &  60,0.002D0,  0, 38, 30, 59,  0,  0,
+     &  61,0.216D0,  0, 21, 21, 21,  0,  0,
+     &  61,0.124D0,  0, 38, 30, 21,  0,  0,
+     &  61,0.135D0,101,123,130, 38,  0,  0,
+     &  61,0.135D0,101,124,129, 30,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 210, 228)/
-     &  61,0.187,101,121,128, 38,  0,  0,
-     &  61,0.187,101,122,127, 30,  0,  0,
-     &  61,0.006,  0,121,128, 38, 59,  0,
-     &  61,0.006,  0,122,127, 30, 59,  0,
-     &  61,0.002,  0, 38, 30,  0,  0,  0,
-     &  61,0.001,  0, 21, 21,  0,  0,  0,
-     &  61,0.001,  0, 59, 59,  0,  0,  0,
-     &  74,0.663,  0, 73, 21,  0,  0,  0,
-     &  74,0.331,  0, 75, 38,  0,  0,  0,
-     &  74,0.006,  0, 73, 59,  0,  0,  0,
-     &  75,1.000,101,121,128, 73,  0,  0,
-     &  76,0.663,  0, 75, 21,  0,  0,  0,
-     &  76,0.331,  0, 73, 30,  0,  0,  0,
-     &  76,0.006,  0, 75, 59,  0,  0,  0,
-     &  77,1.000,  0, 75, 30,  0,  0,  0,
-     &  78,0.638,  0, 73, 30,  0,  0,  0,
-     &  78,0.358,  0, 75, 21,  0,  0,  0,
-     &  78,0.002,  0, 75, 59,  0,  0,  0,
-     &  78,0.001,  0, 73, 30, 59,  0,  0/
+     &  61,0.187D0,101,121,128, 38,  0,  0,
+     &  61,0.187D0,101,122,127, 30,  0,  0,
+     &  61,0.006D0,  0,121,128, 38, 59,  0,
+     &  61,0.006D0,  0,122,127, 30, 59,  0,
+     &  61,0.002D0,  0, 38, 30,  0,  0,  0,
+     &  61,0.001D0,  0, 21, 21,  0,  0,  0,
+     &  61,0.001D0,  0, 59, 59,  0,  0,  0,
+     &  74,0.663D0,  0, 73, 21,  0,  0,  0,
+     &  74,0.331D0,  0, 75, 38,  0,  0,  0,
+     &  74,0.006D0,  0, 73, 59,  0,  0,  0,
+     &  75,1.000D0,101,121,128, 73,  0,  0,
+     &  76,0.663D0,  0, 75, 21,  0,  0,  0,
+     &  76,0.331D0,  0, 73, 30,  0,  0,  0,
+     &  76,0.006D0,  0, 75, 59,  0,  0,  0,
+     &  77,1.000D0,  0, 75, 30,  0,  0,  0,
+     &  78,0.638D0,  0, 73, 30,  0,  0,  0,
+     &  78,0.358D0,  0, 75, 21,  0,  0,  0,
+     &  78,0.002D0,  0, 75, 59,  0,  0,  0,
+     &  78,0.001D0,  0, 73, 30, 59,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 229, 247)/
-     &  78,0.001,101,121,128, 73,  0,  0,
-     &  79,0.995,  0, 78, 59,  0,  0,  0,
-     &  79,0.005,  0, 78,127,121,  0,  0,
-     &  80,0.880,  0, 78, 21,  0,  0,  0,
-     &  80,0.060,  0, 86, 30,  0,  0,  0,
-     &  80,0.060,  0, 81, 38,  0,  0,  0,
-     &  81,0.998,  0, 75, 30,  0,  0,  0,
-     &  81,0.001,  0, 75, 30, 59,  0,  0,
-     &  81,0.001,101,121,128, 75,  0,  0,
-     &  82,0.880,  0, 78, 30,  0,  0,  0,
-     &  82,0.060,  0, 79, 30,  0,  0,  0,
-     &  82,0.060,  0, 81, 21,  0,  0,  0,
-     &  83,0.999,  0, 78, 30,  0,  0,  0,
-     &  83,0.001,101,121,128, 78,  0,  0,
-     &  84,0.667,  0, 88, 30,  0,  0,  0,
-     &  84,0.333,  0, 83, 21,  0,  0,  0,
-     &  85,1.000,  0, 73, 38,  0,  0,  0,
-     &  86,0.516,  0, 73, 21,  0,  0,  0,
-     &  86,0.483,  0, 75, 38,  0,  0,  0/
+     &  78,0.001D0,101,121,128, 73,  0,  0,
+     &  79,0.995D0,  0, 78, 59,  0,  0,  0,
+     &  79,0.005D0,  0, 78,127,121,  0,  0,
+     &  80,0.880D0,  0, 78, 21,  0,  0,  0,
+     &  80,0.060D0,  0, 86, 30,  0,  0,  0,
+     &  80,0.060D0,  0, 81, 38,  0,  0,  0,
+     &  81,0.998D0,  0, 75, 30,  0,  0,  0,
+     &  81,0.001D0,  0, 75, 30, 59,  0,  0,
+     &  81,0.001D0,101,121,128, 75,  0,  0,
+     &  82,0.880D0,  0, 78, 30,  0,  0,  0,
+     &  82,0.060D0,  0, 79, 30,  0,  0,  0,
+     &  82,0.060D0,  0, 81, 21,  0,  0,  0,
+     &  83,0.999D0,  0, 78, 30,  0,  0,  0,
+     &  83,0.001D0,101,121,128, 78,  0,  0,
+     &  84,0.667D0,  0, 88, 30,  0,  0,  0,
+     &  84,0.333D0,  0, 83, 21,  0,  0,  0,
+     &  85,1.000D0,  0, 73, 38,  0,  0,  0,
+     &  86,0.516D0,  0, 73, 21,  0,  0,  0,
+     &  86,0.483D0,  0, 75, 38,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 248, 266)/
-     &  86,0.001,  0, 73, 59,  0,  0,  0,
-     &  87,0.880,  0, 78, 38,  0,  0,  0,
-     &  87,0.060,  0, 86, 21,  0,  0,  0,
-     &  87,0.060,  0, 79, 38,  0,  0,  0,
-     &  88,0.995,  0, 78, 21,  0,  0,  0,
-     &  88,0.001,  0, 78, 59,  0,  0,  0,
-     &  88,0.004,  0, 79, 59,  0,  0,  0,
-     &  89,0.667,  0, 83, 38,  0,  0,  0,
-     &  89,0.333,  0, 88, 21,  0,  0,  0,
-     &  90,0.675,  0, 78, 34,  0,  0,  0,
-     &  90,0.233,  0, 88, 30,  0,  0,  0,
-     &  90,0.086,  0, 83, 21,  0,  0,  0,
-     &  90,0.006,101,121,128, 88,  0,  0,
-     &  92,0.663,  0, 91, 21,  0,  0,  0,
-     &  92,0.331,  0, 93, 30,  0,  0,  0,
-     &  92,0.006,  0, 91, 59,  0,  0,  0,
-     &  93,1.000,101,127,122, 91,  0,  0,
-     &  94,0.663,  0, 93, 21,  0,  0,  0,
-     &  94,0.331,  0, 91, 38,  0,  0,  0/
+     &  86,0.001D0,  0, 73, 59,  0,  0,  0,
+     &  87,0.880D0,  0, 78, 38,  0,  0,  0,
+     &  87,0.060D0,  0, 86, 21,  0,  0,  0,
+     &  87,0.060D0,  0, 79, 38,  0,  0,  0,
+     &  88,0.995D0,  0, 78, 21,  0,  0,  0,
+     &  88,0.001D0,  0, 78, 59,  0,  0,  0,
+     &  88,0.004D0,  0, 79, 59,  0,  0,  0,
+     &  89,0.667D0,  0, 83, 38,  0,  0,  0,
+     &  89,0.333D0,  0, 88, 21,  0,  0,  0,
+     &  90,0.675D0,  0, 78, 34,  0,  0,  0,
+     &  90,0.233D0,  0, 88, 30,  0,  0,  0,
+     &  90,0.086D0,  0, 83, 21,  0,  0,  0,
+     &  90,0.006D0,101,121,128, 88,  0,  0,
+     &  92,0.663D0,  0, 91, 21,  0,  0,  0,
+     &  92,0.331D0,  0, 93, 30,  0,  0,  0,
+     &  92,0.006D0,  0, 91, 59,  0,  0,  0,
+     &  93,1.000D0,101,127,122, 91,  0,  0,
+     &  94,0.663D0,  0, 93, 21,  0,  0,  0,
+     &  94,0.331D0,  0, 91, 38,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 267, 285)/
-     &  94,0.006,  0, 93, 59,  0,  0,  0,
-     &  95,1.000,  0, 93, 38,  0,  0,  0,
-     &  96,0.638,  0, 91, 38,  0,  0,  0,
-     &  96,0.358,  0, 93, 21,  0,  0,  0,
-     &  96,0.002,  0, 93, 59,  0,  0,  0,
-     &  96,0.001,  0, 91, 38, 59,  0,  0,
-     &  96,0.001,101,127,122, 91,  0,  0,
-     &  97,0.995,  0, 96, 59,  0,  0,  0,
-     &  97,0.005,  0, 96,127,121,  0,  0,
-     &  98,0.880,  0, 96, 21,  0,  0,  0,
-     &  98,0.060,  0,104, 38,  0,  0,  0,
-     &  98,0.060,  0, 99, 30,  0,  0,  0,
-     &  99,0.998,  0, 93, 38,  0,  0,  0,
-     &  99,0.001,  0, 93, 38, 59,  0,  0,
-     &  99,0.001,101,127,122, 93,  0,  0,
-     & 100,0.880,  0, 96, 38,  0,  0,  0,
-     & 100,0.060,  0, 97, 38,  0,  0,  0,
-     & 100,0.060,  0, 99, 21,  0,  0,  0,
-     & 101,0.999,  0, 96, 38,  0,  0,  0/
+     &  94,0.006D0,  0, 93, 59,  0,  0,  0,
+     &  95,1.000D0,  0, 93, 38,  0,  0,  0,
+     &  96,0.638D0,  0, 91, 38,  0,  0,  0,
+     &  96,0.358D0,  0, 93, 21,  0,  0,  0,
+     &  96,0.002D0,  0, 93, 59,  0,  0,  0,
+     &  96,0.001D0,  0, 91, 38, 59,  0,  0,
+     &  96,0.001D0,101,127,122, 91,  0,  0,
+     &  97,0.995D0,  0, 96, 59,  0,  0,  0,
+     &  97,0.005D0,  0, 96,127,121,  0,  0,
+     &  98,0.880D0,  0, 96, 21,  0,  0,  0,
+     &  98,0.060D0,  0,104, 38,  0,  0,  0,
+     &  98,0.060D0,  0, 99, 30,  0,  0,  0,
+     &  99,0.998D0,  0, 93, 38,  0,  0,  0,
+     &  99,0.001D0,  0, 93, 38, 59,  0,  0,
+     &  99,0.001D0,101,127,122, 93,  0,  0,
+     & 100,0.880D0,  0, 96, 38,  0,  0,  0,
+     & 100,0.060D0,  0, 97, 38,  0,  0,  0,
+     & 100,0.060D0,  0, 99, 21,  0,  0,  0,
+     & 101,0.999D0,  0, 96, 38,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 286, 304)/
-     & 101,0.001,101,127,122, 96,  0,  0,
-     & 102,0.667,  0,106, 38,  0,  0,  0,
-     & 102,0.333,  0,101, 21,  0,  0,  0,
-     & 103,1.000,  0, 91, 30,  0,  0,  0,
-     & 104,0.516,  0, 91, 21,  0,  0,  0,
-     & 104,0.483,  0, 93, 30,  0,  0,  0,
-     & 104,0.001,  0, 91, 59,  0,  0,  0,
-     & 105,0.880,  0, 96, 30,  0,  0,  0,
-     & 105,0.060,  0,104, 21,  0,  0,  0,
-     & 105,0.060,  0, 97, 30,  0,  0,  0,
-     & 106,0.995,  0, 96, 21,  0,  0,  0,
-     & 106,0.001,  0, 96, 59,  0,  0,  0,
-     & 106,0.004,  0, 97, 59,  0,  0,  0,
-     & 107,0.667,  0,101, 30,  0,  0,  0,
-     & 107,0.333,  0,106, 21,  0,  0,  0,
-     & 108,0.675,  0, 96, 46,  0,  0,  0,
-     & 108,0.233,  0,106, 38,  0,  0,  0,
-     & 108,0.086,  0,101, 21,  0,  0,  0,
-     & 108,0.006,101,127,122,106,  0,  0/
+     & 101,0.001D0,101,127,122, 96,  0,  0,
+     & 102,0.667D0,  0,106, 38,  0,  0,  0,
+     & 102,0.333D0,  0,101, 21,  0,  0,  0,
+     & 103,1.000D0,  0, 91, 30,  0,  0,  0,
+     & 104,0.516D0,  0, 91, 21,  0,  0,  0,
+     & 104,0.483D0,  0, 93, 30,  0,  0,  0,
+     & 104,0.001D0,  0, 91, 59,  0,  0,  0,
+     & 105,0.880D0,  0, 96, 30,  0,  0,  0,
+     & 105,0.060D0,  0,104, 21,  0,  0,  0,
+     & 105,0.060D0,  0, 97, 30,  0,  0,  0,
+     & 106,0.995D0,  0, 96, 21,  0,  0,  0,
+     & 106,0.001D0,  0, 96, 59,  0,  0,  0,
+     & 106,0.004D0,  0, 97, 59,  0,  0,  0,
+     & 107,0.667D0,  0,101, 30,  0,  0,  0,
+     & 107,0.333D0,  0,106, 21,  0,  0,  0,
+     & 108,0.675D0,  0, 96, 46,  0,  0,  0,
+     & 108,0.233D0,  0,106, 38,  0,  0,  0,
+     & 108,0.086D0,  0,101, 21,  0,  0,  0,
+     & 108,0.006D0,101,127,122,106,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 305, 323)/
-     & 123,0.986,100,121,128,124,  0,  0,
-     & 123,0.014,  0,121,128,124, 59,  0,
-     & 125,0.178,100,121,128,126,  0,  0,
-     & 125,0.171,100,123,130,126,  0,  0,
-     & 125,0.002,  0,123,130, 59,126,  0,
-     & 125,0.111,  0, 30,126,  0,  0,  0,
-     & 125,0.253,  0, 31,126,  0,  0,  0,
-     & 125,0.181,  0, 32,126,  0,  0,  0,
-     & 125,0.002,  0, 30, 22, 21,126,  0,
-     & 125,0.018,  0, 30, 24,126,  0,  0,
-     & 125,0.004,  0, 30, 24, 21,126,  0,
-     & 125,0.015,  0, 31, 23,126,  0,  0,
-     & 125,0.001,  0, 31, 24, 21,126,  0,
-     & 125,0.024,  0, 32, 21,126,  0,  0,
-     & 125,0.002,  0, 32, 38, 30,126,  0,
-     & 125,0.007,  0, 34,126,  0,  0,  0,
-     & 125,0.014,  0, 35,126,  0,  0,  0,
-     & 125,0.003,  0, 35, 21,126,  0,  0,
-     & 125,0.001,  0, 34, 38, 30,126,  0/
+     & 123,0.986D0,100,121,128,124,  0,  0,
+     & 123,0.014D0,  0,121,128,124, 59,  0,
+     & 125,0.178D0,100,121,128,126,  0,  0,
+     & 125,0.171D0,100,123,130,126,  0,  0,
+     & 125,0.002D0,  0,123,130, 59,126,  0,
+     & 125,0.111D0,  0, 30,126,  0,  0,  0,
+     & 125,0.253D0,  0, 31,126,  0,  0,  0,
+     & 125,0.181D0,  0, 32,126,  0,  0,  0,
+     & 125,0.002D0,  0, 30, 22, 21,126,  0,
+     & 125,0.018D0,  0, 30, 24,126,  0,  0,
+     & 125,0.004D0,  0, 30, 24, 21,126,  0,
+     & 125,0.015D0,  0, 31, 23,126,  0,  0,
+     & 125,0.001D0,  0, 31, 24, 21,126,  0,
+     & 125,0.024D0,  0, 32, 21,126,  0,  0,
+     & 125,0.002D0,  0, 32, 38, 30,126,  0,
+     & 125,0.007D0,  0, 34,126,  0,  0,  0,
+     & 125,0.014D0,  0, 35,126,  0,  0,  0,
+     & 125,0.003D0,  0, 35, 21,126,  0,  0,
+     & 125,0.001D0,  0, 34, 38, 30,126,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 324, 342)/
-     & 125,0.004,  0, 30, 43,126,  0,  0,
-     & 125,0.003,  0, 34, 50,126,  0,  0,
-     & 125,0.003,  0, 34, 51,126,  0,  0,
-     & 125,0.003,  0, 30, 50, 42,126,  0,
-     & 129,0.986,100,127,122,130,  0,  0,
-     & 129,0.014,  0,127,122,130, 59,  0,
-     & 131,0.178,100,127,122,132,  0,  0,
-     & 131,0.171,100,129,124,132,  0,  0,
-     & 131,0.002,  0,129,124, 59,132,  0,
-     & 131,0.111,  0, 38,132,  0,  0,  0,
-     & 131,0.253,  0, 39,132,  0,  0,  0,
-     & 131,0.181,  0, 40,132,  0,  0,  0,
-     & 131,0.002,  0, 38, 22, 21,132,  0,
-     & 131,0.018,  0, 38, 24,132,  0,  0,
-     & 131,0.004,  0, 38, 24, 21,132,  0,
-     & 131,0.015,  0, 39, 23,132,  0,  0,
-     & 131,0.001,  0, 39, 24, 21,132,  0,
-     & 131,0.024,  0, 40, 21,132,  0,  0,
-     & 131,0.002,  0, 40, 38, 30,132,  0/
+     & 125,0.004D0,  0, 30, 43,126,  0,  0,
+     & 125,0.003D0,  0, 34, 50,126,  0,  0,
+     & 125,0.003D0,  0, 34, 51,126,  0,  0,
+     & 125,0.003D0,  0, 30, 50, 42,126,  0,
+     & 129,0.986D0,100,127,122,130,  0,  0,
+     & 129,0.014D0,  0,127,122,130, 59,  0,
+     & 131,0.178D0,100,127,122,132,  0,  0,
+     & 131,0.171D0,100,129,124,132,  0,  0,
+     & 131,0.002D0,  0,129,124, 59,132,  0,
+     & 131,0.111D0,  0, 38,132,  0,  0,  0,
+     & 131,0.253D0,  0, 39,132,  0,  0,  0,
+     & 131,0.181D0,  0, 40,132,  0,  0,  0,
+     & 131,0.002D0,  0, 38, 22, 21,132,  0,
+     & 131,0.018D0,  0, 38, 24,132,  0,  0,
+     & 131,0.004D0,  0, 38, 24, 21,132,  0,
+     & 131,0.015D0,  0, 39, 23,132,  0,  0,
+     & 131,0.001D0,  0, 39, 24, 21,132,  0,
+     & 131,0.024D0,  0, 40, 21,132,  0,  0,
+     & 131,0.002D0,  0, 40, 38, 30,132,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 343, 361)/
-     & 131,0.007,  0, 46,132,  0,  0,  0,
-     & 131,0.014,  0, 47,132,  0,  0,  0,
-     & 131,0.003,  0, 47, 21,132,  0,  0,
-     & 131,0.001,  0, 46, 38, 30,132,  0,
-     & 131,0.004,  0, 38, 51,132,  0,  0,
-     & 131,0.003,  0, 46, 42,132,  0,  0,
-     & 131,0.003,  0, 46, 43,132,  0,  0,
-     & 131,0.003,  0, 38, 50, 42,132,  0,
-     & 136,0.067,101,122,127, 42,  0,  0,
-     & 136,0.067,101,124,129, 42,  0,  0,
-     & 136,0.048,101,122,127, 43,  0,  0,
-     & 136,0.048,101,124,129, 43,  0,  0,
-     & 136,0.003,  0, 34, 38,122,127,  0,
-     & 136,0.003,  0, 34, 38,124,129,  0,
-     & 136,0.006,101,122,127, 21,  0,  0,
-     & 136,0.006,101,124,129, 21,  0,  0,
-     & 136,0.002,101,122,127, 23,  0,  0,
-     & 136,0.002,101,124,129, 23,  0,  0,
-     & 136,0.055,  0, 34, 38, 38,  0,  0/
+     & 131,0.007D0,  0, 46,132,  0,  0,  0,
+     & 131,0.014D0,  0, 47,132,  0,  0,  0,
+     & 131,0.003D0,  0, 47, 21,132,  0,  0,
+     & 131,0.001D0,  0, 46, 38, 30,132,  0,
+     & 131,0.004D0,  0, 38, 51,132,  0,  0,
+     & 131,0.003D0,  0, 46, 42,132,  0,  0,
+     & 131,0.003D0,  0, 46, 43,132,  0,  0,
+     & 131,0.003D0,  0, 38, 50, 42,132,  0,
+     & 136,0.067D0,101,122,127, 42,  0,  0,
+     & 136,0.067D0,101,124,129, 42,  0,  0,
+     & 136,0.048D0,101,122,127, 43,  0,  0,
+     & 136,0.048D0,101,124,129, 43,  0,  0,
+     & 136,0.003D0,  0, 34, 38,122,127,  0,
+     & 136,0.003D0,  0, 34, 38,124,129,  0,
+     & 136,0.006D0,101,122,127, 21,  0,  0,
+     & 136,0.006D0,101,124,129, 21,  0,  0,
+     & 136,0.002D0,101,122,127, 23,  0,  0,
+     & 136,0.002D0,101,124,129, 23,  0,  0,
+     & 136,0.055D0,  0, 34, 38, 38,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 362, 380)/
-     & 136,0.031,  0, 34, 39, 38,  0,  0,
-     & 136,0.042,  0, 34, 38, 38, 21, 21,
-     & 136,0.002,  0, 34, 38, 38, 38, 31,
-     & 136,0.021,  0, 35, 38, 38,  0,  0,
-     & 136,0.027,  0, 42, 38,  0,  0,  0,
-     & 136,0.066,  0, 42, 39,  0,  0,  0,
-     & 136,0.081,  0, 42, 40,  0,  0,  0,
-     & 136,0.024,  0, 42, 38, 21,  0,  0,
-     & 136,0.004,  0, 42, 38, 23,  0,  0,
-     & 136,0.069,  0, 42, 38, 38, 30, 21,
-     & 136,0.001,  0, 42, 38, 38, 30, 23,
-     & 136,0.022,  0, 43, 38,  0,  0,  0,
-     & 136,0.021,  0, 43, 39,  0,  0,  0,
-     & 136,0.042,  0, 43, 38, 21,  0,  0,
-     & 136,0.008,  0, 43, 38, 23,  0,  0,
-     & 136,0.010,  0, 43, 38, 38, 30,  0,
-     & 136,0.050,  0,311, 38,  0,  0,  0,
-     & 136,0.034,  0,329, 38,  0,  0,  0,
-     & 136,0.010,  0,369, 38,  0,  0,  0/
+     & 136,0.031D0,  0, 34, 39, 38,  0,  0,
+     & 136,0.042D0,  0, 34, 38, 38, 21, 21,
+     & 136,0.002D0,  0, 34, 38, 38, 38, 31,
+     & 136,0.021D0,  0, 35, 38, 38,  0,  0,
+     & 136,0.027D0,  0, 42, 38,  0,  0,  0,
+     & 136,0.066D0,  0, 42, 39,  0,  0,  0,
+     & 136,0.081D0,  0, 42, 40,  0,  0,  0,
+     & 136,0.024D0,  0, 42, 38, 21,  0,  0,
+     & 136,0.004D0,  0, 42, 38, 23,  0,  0,
+     & 136,0.069D0,  0, 42, 38, 38, 30, 21,
+     & 136,0.001D0,  0, 42, 38, 38, 30, 23,
+     & 136,0.022D0,  0, 43, 38,  0,  0,  0,
+     & 136,0.021D0,  0, 43, 39,  0,  0,  0,
+     & 136,0.042D0,  0, 43, 38, 21,  0,  0,
+     & 136,0.008D0,  0, 43, 38, 23,  0,  0,
+     & 136,0.010D0,  0, 43, 38, 38, 30,  0,
+     & 136,0.050D0,  0,311, 38,  0,  0,  0,
+     & 136,0.034D0,  0,329, 38,  0,  0,  0,
+     & 136,0.010D0,  0,369, 38,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 381, 399)/
-     & 136,0.031,  0, 46, 42, 42,  0,  0,
-     & 136,0.003,  0, 38, 21,  0,  0,  0,
-     & 136,0.001,  0, 38, 23,  0,  0,  0,
-     & 136,0.002,  0, 38, 38, 30,  0,  0,
-     & 136,0.008,  0, 38, 22,  0,  0,  0,
-     & 136,0.001,  0, 38, 38, 38, 30, 30,
-     & 136,0.003,  0, 38, 38, 38, 30, 31,
-     & 136,0.008,  0, 46, 42,  0,  0,  0,
-     & 136,0.005,  0, 46, 43,  0,  0,  0,
-     & 136,0.026,  0, 47, 43,  0,  0,  0,
-     & 136,0.005,  0, 46, 34, 38,  0,  0,
-     & 136,0.007,  0, 38, 56,  0,  0,  0,
-     & 136,0.023,  0, 38, 56, 21,  0,  0,
-     & 136,0.005,  0, 46, 46, 34,  0,  0,
-     & 137,0.683,  0,140, 38,  0,  0,  0,
-     & 137,0.306,  0,136, 21,  0,  0,  0,
-     & 137,0.011,  0,136, 59,  0,  0,  0,
-     & 138,0.667,  0,141, 38,  0,  0,  0,
-     & 138,0.333,  0,137, 21,  0,  0,  0/
+     & 136,0.031D0,  0, 46, 42, 42,  0,  0,
+     & 136,0.003D0,  0, 38, 21,  0,  0,  0,
+     & 136,0.001D0,  0, 38, 23,  0,  0,  0,
+     & 136,0.002D0,  0, 38, 38, 30,  0,  0,
+     & 136,0.008D0,  0, 38, 22,  0,  0,  0,
+     & 136,0.001D0,  0, 38, 38, 38, 30, 30,
+     & 136,0.003D0,  0, 38, 38, 38, 30, 31,
+     & 136,0.008D0,  0, 46, 42,  0,  0,  0,
+     & 136,0.005D0,  0, 46, 43,  0,  0,  0,
+     & 136,0.026D0,  0, 47, 43,  0,  0,  0,
+     & 136,0.005D0,  0, 46, 34, 38,  0,  0,
+     & 136,0.007D0,  0, 38, 56,  0,  0,  0,
+     & 136,0.023D0,  0, 38, 56, 21,  0,  0,
+     & 136,0.005D0,  0, 46, 46, 34,  0,  0,
+     & 137,0.683D0,  0,140, 38,  0,  0,  0,
+     & 137,0.306D0,  0,136, 21,  0,  0,  0,
+     & 137,0.011D0,  0,136, 59,  0,  0,  0,
+     & 138,0.667D0,  0,141, 38,  0,  0,  0,
+     & 138,0.333D0,  0,137, 21,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 400, 418)/
-     & 139,0.220,  0,140, 38,  0,  0,  0,
-     & 139,0.110,  0,136, 21,  0,  0,  0,
-     & 139,0.380,  0,141, 38,  0,  0,  0,
-     & 139,0.190,  0,137, 21,  0,  0,  0,
-     & 139,0.004,  0,136, 22,  0,  0,  0,
-     & 139,0.064,  0,141, 38, 21,  0,  0,
-     & 139,0.032,  0,137, 38, 30,  0,  0,
-     & 140,0.037,101,122,127, 34,  0,  0,
-     & 140,0.037,101,124,129, 34,  0,  0,
-     & 140,0.016,101,122,127, 35,  0,  0,
-     & 140,0.016,101,124,129, 35,  0,  0,
-     & 140,0.013,  0, 34, 21,122,127,  0,
-     & 140,0.013,  0, 34, 21,124,129,  0,
-     & 140,0.012,  0, 42, 30,122,127,  0,
-     & 140,0.012,  0, 42, 30,124,129,  0,
-     & 140,0.003,101,122,127, 30,  0,  0,
-     & 140,0.003,101,124,129, 30,  0,  0,
-     & 140,0.039,  0, 34, 38,  0,  0,  0,
-     & 140,0.091,  0, 34, 39,  0,  0,  0/
+     & 139,0.220D0,  0,140, 38,  0,  0,  0,
+     & 139,0.110D0,  0,136, 21,  0,  0,  0,
+     & 139,0.380D0,  0,141, 38,  0,  0,  0,
+     & 139,0.190D0,  0,137, 21,  0,  0,  0,
+     & 139,0.004D0,  0,136, 22,  0,  0,  0,
+     & 139,0.064D0,  0,141, 38, 21,  0,  0,
+     & 139,0.032D0,  0,137, 38, 30,  0,  0,
+     & 140,0.037D0,101,122,127, 34,  0,  0,
+     & 140,0.037D0,101,124,129, 34,  0,  0,
+     & 140,0.016D0,101,122,127, 35,  0,  0,
+     & 140,0.016D0,101,124,129, 35,  0,  0,
+     & 140,0.013D0,  0, 34, 21,122,127,  0,
+     & 140,0.013D0,  0, 34, 21,124,129,  0,
+     & 140,0.012D0,  0, 42, 30,122,127,  0,
+     & 140,0.012D0,  0, 42, 30,124,129,  0,
+     & 140,0.003D0,101,122,127, 30,  0,  0,
+     & 140,0.003D0,101,124,129, 30,  0,  0,
+     & 140,0.039D0,  0, 34, 38,  0,  0,  0,
+     & 140,0.091D0,  0, 34, 39,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 419, 437)/
-     & 140,0.067,  0, 34, 40,  0,  0,  0,
-     & 140,0.004,  0, 34, 38, 21,  0,  0,
-     & 140,0.100,  0, 34, 38, 21, 21,  0,
-     & 140,0.058,  0, 34, 38, 23,  0,  0,
-     & 140,0.020,  0, 34, 38, 24,  0,  0,
-     & 140,0.006,  0, 34, 38, 25,  0,  0,
-     & 140,0.043,  0, 35, 38,  0,  0,  0,
-     & 140,0.035,  0, 35, 39,  0,  0,  0,
-     & 140,0.007,  0,312, 38,  0,  0,  0,
-     & 140,0.007,  0,330, 38,  0,  0,  0,
-     & 140,0.020,  0, 42, 21,  0,  0,  0,
-     & 140,0.006,  0, 42, 22,  0,  0,  0,
-     & 140,0.009,  0, 42, 23,  0,  0,  0,
-     & 140,0.016,  0, 42, 24,  0,  0,  0,
-     & 140,0.014,  0, 42, 25,  0,  0,  0,
-     & 140,0.003,  0, 42,293,  0,  0,  0,
-     & 140,0.007,  0, 42, 56,  0,  0,  0,
-     & 140,0.003,  0, 42, 26,  0,  0,  0,
-     & 140,0.004,  0, 42,294,  0,  0,  0/
+     & 140,0.067D0,  0, 34, 40,  0,  0,  0,
+     & 140,0.004D0,  0, 34, 38, 21,  0,  0,
+     & 140,0.100D0,  0, 34, 38, 21, 21,  0,
+     & 140,0.058D0,  0, 34, 38, 23,  0,  0,
+     & 140,0.020D0,  0, 34, 38, 24,  0,  0,
+     & 140,0.006D0,  0, 34, 38, 25,  0,  0,
+     & 140,0.043D0,  0, 35, 38,  0,  0,  0,
+     & 140,0.035D0,  0, 35, 39,  0,  0,  0,
+     & 140,0.007D0,  0,312, 38,  0,  0,  0,
+     & 140,0.007D0,  0,330, 38,  0,  0,  0,
+     & 140,0.020D0,  0, 42, 21,  0,  0,  0,
+     & 140,0.006D0,  0, 42, 22,  0,  0,  0,
+     & 140,0.009D0,  0, 42, 23,  0,  0,  0,
+     & 140,0.016D0,  0, 42, 24,  0,  0,  0,
+     & 140,0.014D0,  0, 42, 25,  0,  0,  0,
+     & 140,0.003D0,  0, 42,293,  0,  0,  0,
+     & 140,0.007D0,  0, 42, 56,  0,  0,  0,
+     & 140,0.003D0,  0, 42, 26,  0,  0,  0,
+     & 140,0.004D0,  0, 42,294,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 438, 456)/
-     & 140,0.006,  0, 42, 21, 21,  0,  0,
-     & 140,0.042,  0, 42, 38, 30, 21,  0,
-     & 140,0.004,  0, 42, 38, 38, 30, 30,
-     & 140,0.076,  0, 42, 38, 30, 21, 21,
-     & 140,0.026,  0, 43, 21,  0,  0,  0,
-     & 140,0.014,  0, 43, 22,  0,  0,  0,
-     & 140,0.014,  0, 43, 23,  0,  0,  0,
-     & 140,0.011,  0, 43, 24,  0,  0,  0,
-     & 140,0.018,  0, 43, 38, 30,  0,  0,
-     & 140,0.004,  0, 42, 46, 34,  0,  0,
-     & 140,0.004,  0, 42, 46, 34, 21,  0,
-     & 140,0.005,  0, 42, 42, 50,  0,  0,
-     & 140,0.002,  0, 38, 30,  0,  0,  0,
-     & 140,0.001,  0, 21, 21,  0,  0,  0,
-     & 140,0.008,  0, 38, 30, 21,  0,  0,
-     & 140,0.007,  0, 38, 38, 30, 30,  0,
-     & 140,0.015,  0, 38, 38, 30, 30, 21,
-     & 140,0.004,  0, 46, 34,  0,  0,  0,
-     & 140,0.003,  0, 47, 34,  0,  0,  0/
+     & 140,0.006D0,  0, 42, 21, 21,  0,  0,
+     & 140,0.042D0,  0, 42, 38, 30, 21,  0,
+     & 140,0.004D0,  0, 42, 38, 38, 30, 30,
+     & 140,0.076D0,  0, 42, 38, 30, 21, 21,
+     & 140,0.026D0,  0, 43, 21,  0,  0,  0,
+     & 140,0.014D0,  0, 43, 22,  0,  0,  0,
+     & 140,0.014D0,  0, 43, 23,  0,  0,  0,
+     & 140,0.011D0,  0, 43, 24,  0,  0,  0,
+     & 140,0.018D0,  0, 43, 38, 30,  0,  0,
+     & 140,0.004D0,  0, 42, 46, 34,  0,  0,
+     & 140,0.004D0,  0, 42, 46, 34, 21,  0,
+     & 140,0.005D0,  0, 42, 42, 50,  0,  0,
+     & 140,0.002D0,  0, 38, 30,  0,  0,  0,
+     & 140,0.001D0,  0, 21, 21,  0,  0,  0,
+     & 140,0.008D0,  0, 38, 30, 21,  0,  0,
+     & 140,0.007D0,  0, 38, 38, 30, 30,  0,
+     & 140,0.015D0,  0, 38, 38, 30, 30, 21,
+     & 140,0.004D0,  0, 46, 34,  0,  0,  0,
+     & 140,0.003D0,  0, 47, 34,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 457, 475)/
-     & 140,0.002,  0, 46, 35,  0,  0,  0,
-     & 140,0.001,  0, 50, 42,  0,  0,  0,
-     & 140,0.002,  0, 51, 43,  0,  0,  0,
-     & 140,0.003,  0, 50, 34, 38,  0,  0,
-     & 140,0.003,  0, 42, 46, 30,  0,  0,
-     & 140,0.001,  0, 46, 34, 38, 30, 21,
-     & 140,0.002,  0, 56, 23,  0,  0,  0,
-     & 140,0.001,  0, 56, 38, 30,  0,  0,
-     & 141,0.636,  0,140, 21,  0,  0,  0,
-     & 141,0.364,  0,140, 59,  0,  0,  0,
-     & 142,0.667,  0,137, 30,  0,  0,  0,
-     & 142,0.333,  0,141, 21,  0,  0,  0,
-     & 143,0.220,  0,136, 30,  0,  0,  0,
-     & 143,0.110,  0,140, 21,  0,  0,  0,
-     & 143,0.380,  0,137, 30,  0,  0,  0,
-     & 143,0.190,  0,141, 21,  0,  0,  0,
-     & 143,0.004,  0,140, 22,  0,  0,  0,
-     & 143,0.064,  0,137, 30, 21,  0,  0,
-     & 143,0.032,  0,141, 38, 30,  0,  0/
+     & 140,0.002D0,  0, 46, 35,  0,  0,  0,
+     & 140,0.001D0,  0, 50, 42,  0,  0,  0,
+     & 140,0.002D0,  0, 51, 43,  0,  0,  0,
+     & 140,0.003D0,  0, 50, 34, 38,  0,  0,
+     & 140,0.003D0,  0, 42, 46, 30,  0,  0,
+     & 140,0.001D0,  0, 46, 34, 38, 30, 21,
+     & 140,0.002D0,  0, 56, 23,  0,  0,  0,
+     & 140,0.001D0,  0, 56, 38, 30,  0,  0,
+     & 141,0.636D0,  0,140, 21,  0,  0,  0,
+     & 141,0.364D0,  0,140, 59,  0,  0,  0,
+     & 142,0.667D0,  0,137, 30,  0,  0,  0,
+     & 142,0.333D0,  0,141, 21,  0,  0,  0,
+     & 143,0.220D0,  0,136, 30,  0,  0,  0,
+     & 143,0.110D0,  0,140, 21,  0,  0,  0,
+     & 143,0.380D0,  0,137, 30,  0,  0,  0,
+     & 143,0.190D0,  0,141, 21,  0,  0,  0,
+     & 143,0.004D0,  0,140, 22,  0,  0,  0,
+     & 143,0.064D0,  0,137, 30, 21,  0,  0,
+     & 143,0.032D0,  0,141, 38, 30,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 476, 494)/
-     & 144,0.009,  0,124,129,  0,  0,  0,
-     & 144,0.019,101,122,127, 56,  0,  0,
-     & 144,0.019,101,124,129, 56,  0,  0,
-     & 144,0.025,101,122,127, 22,  0,  0,
-     & 144,0.025,101,124,129, 22,  0,  0,
-     & 144,0.009,101,122,127, 25,  0,  0,
-     & 144,0.009,101,124,129, 25,  0,  0,
-     & 144,0.036,  0, 46, 42,  0,  0,  0,
-     & 144,0.034,  0, 46, 43,  0,  0,  0,
-     & 144,0.007,  0, 46,329,  0,  0,  0,
-     & 144,0.043,  0, 47, 42,  0,  0,  0,
-     & 144,0.058,  0, 47, 43,  0,  0,  0,
-     & 144,0.011,  0, 46, 34, 38,  0,  0,
-     & 144,0.055,  0, 46, 34, 38, 21,  0,
-     & 144,0.003,  0, 46, 34, 38, 38, 30,
-     & 144,0.014,  0, 46, 42, 38, 30,  0,
-     & 144,0.017,  0, 50, 34, 38, 38,  0,
-     & 144,0.036,  0, 56, 38,  0,  0,  0,
-     & 144,0.067,  0, 56, 39,  0,  0,  0/
+     & 144,0.009D0,  0,124,129,  0,  0,  0,
+     & 144,0.019D0,101,122,127, 56,  0,  0,
+     & 144,0.019D0,101,124,129, 56,  0,  0,
+     & 144,0.025D0,101,122,127, 22,  0,  0,
+     & 144,0.025D0,101,124,129, 22,  0,  0,
+     & 144,0.009D0,101,122,127, 25,  0,  0,
+     & 144,0.009D0,101,124,129, 25,  0,  0,
+     & 144,0.036D0,  0, 46, 42,  0,  0,  0,
+     & 144,0.034D0,  0, 46, 43,  0,  0,  0,
+     & 144,0.007D0,  0, 46,329,  0,  0,  0,
+     & 144,0.043D0,  0, 47, 42,  0,  0,  0,
+     & 144,0.058D0,  0, 47, 43,  0,  0,  0,
+     & 144,0.011D0,  0, 46, 34, 38,  0,  0,
+     & 144,0.055D0,  0, 46, 34, 38, 21,  0,
+     & 144,0.003D0,  0, 46, 34, 38, 38, 30,
+     & 144,0.014D0,  0, 46, 42, 38, 30,  0,
+     & 144,0.017D0,  0, 50, 34, 38, 38,  0,
+     & 144,0.036D0,  0, 56, 38,  0,  0,  0,
+     & 144,0.067D0,  0, 56, 39,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 495, 513)/
-     & 144,0.023,  0, 56, 38, 21,  0,  0,
-     & 144,0.018,  0, 56, 38, 38, 30,  0,
-     & 144,0.020,  0, 22, 38,  0,  0,  0,
-     & 144,0.001,  0, 23, 38,  0,  0,  0,
-     & 144,0.009,  0, 24, 38,  0,  0,  0,
-     & 144,0.049,  0, 25, 38,  0,  0,  0,
-     & 144,0.011,  0,293, 38,  0,  0,  0,
-     & 144,0.015,  0, 22, 38, 21,  0,  0,
-     & 144,0.016,  0, 25, 38, 21,  0,  0,
-     & 144,0.103,  0, 22, 39,  0,  0,  0,
-     & 144,0.120,  0, 25, 39,  0,  0,  0,
-     & 144,0.010,  0, 38, 38, 30,  0,  0,
-     & 144,0.046,  0, 38, 38, 30, 21,  0,
-     & 144,0.003,  0, 38, 38, 38, 30, 30,
-     & 144,0.042,  0, 38, 30, 30, 38, 39,
-     & 144,0.001,  0, 46, 23,  0,  0,  0,
-     & 144,0.005,  0, 46, 38, 30,  0,  0,
-     & 144,0.001,  0, 46, 56,  0,  0,  0,
-     & 144,0.004,  0, 50, 38,  0,  0,  0/
+     & 144,0.023D0,  0, 56, 38, 21,  0,  0,
+     & 144,0.018D0,  0, 56, 38, 38, 30,  0,
+     & 144,0.020D0,  0, 22, 38,  0,  0,  0,
+     & 144,0.001D0,  0, 23, 38,  0,  0,  0,
+     & 144,0.009D0,  0, 24, 38,  0,  0,  0,
+     & 144,0.049D0,  0, 25, 38,  0,  0,  0,
+     & 144,0.011D0,  0,293, 38,  0,  0,  0,
+     & 144,0.015D0,  0, 22, 38, 21,  0,  0,
+     & 144,0.016D0,  0, 25, 38, 21,  0,  0,
+     & 144,0.103D0,  0, 22, 39,  0,  0,  0,
+     & 144,0.120D0,  0, 25, 39,  0,  0,  0,
+     & 144,0.010D0,  0, 38, 38, 30,  0,  0,
+     & 144,0.046D0,  0, 38, 38, 30, 21,  0,
+     & 144,0.003D0,  0, 38, 38, 38, 30, 30,
+     & 144,0.042D0,  0, 38, 30, 30, 38, 39,
+     & 144,0.001D0,  0, 46, 23,  0,  0,  0,
+     & 144,0.005D0,  0, 46, 38, 30,  0,  0,
+     & 144,0.001D0,  0, 46, 56,  0,  0,  0,
+     & 144,0.004D0,  0, 50, 38,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 514, 532)/
-     & 144,0.007,  0, 51, 38,  0,  0,  0,
-     & 145,0.900,  0,144, 59,  0,  0,  0,
-     & 145,0.100,  0,144, 21,  0,  0,  0,
-     & 146,0.500,  0,137, 50,  0,  0,  0,
-     & 146,0.500,  0,141, 46,  0,  0,  0,
-     & 147,0.440,  0,136, 50,  0,  0,  0,
-     & 147,0.440,  0,140, 46,  0,  0,  0,
-     & 147,0.055,  0,137, 50,  0,  0,  0,
-     & 147,0.055,  0,141, 46,  0,  0,  0,
-     & 147,0.010,  0,144, 22,  0,  0,  0,
-     & 148,1.000,  0,150, 38,  0,  0,  0,
-     & 149,1.000,  0,150, 38,  0,  0,  0,
-     & 150,0.028,101,122,127, 78,  0,  0,
-     & 150,0.010,101,122,127, 80,  0,  0,
-     & 150,0.028,101,124,129, 78,  0,  0,
-     & 150,0.010,101,124,129, 80,  0,  0,
-     & 150,0.026,  0, 73, 42,  0,  0,  0,
-     & 150,0.030,  0, 73, 42, 21,  0,  0,
-     & 150,0.029,  0, 73, 42, 38, 30,  0/
+     & 144,0.007D0,  0, 51, 38,  0,  0,  0,
+     & 145,0.900D0,  0,144, 59,  0,  0,  0,
+     & 145,0.100D0,  0,144, 21,  0,  0,  0,
+     & 146,0.500D0,  0,137, 50,  0,  0,  0,
+     & 146,0.500D0,  0,141, 46,  0,  0,  0,
+     & 147,0.440D0,  0,136, 50,  0,  0,  0,
+     & 147,0.440D0,  0,140, 46,  0,  0,  0,
+     & 147,0.055D0,  0,137, 50,  0,  0,  0,
+     & 147,0.055D0,  0,141, 46,  0,  0,  0,
+     & 147,0.010D0,  0,144, 22,  0,  0,  0,
+     & 148,1.000D0,  0,150, 38,  0,  0,  0,
+     & 149,1.000D0,  0,150, 38,  0,  0,  0,
+     & 150,0.028D0,101,122,127, 78,  0,  0,
+     & 150,0.010D0,101,122,127, 80,  0,  0,
+     & 150,0.028D0,101,124,129, 78,  0,  0,
+     & 150,0.010D0,101,124,129, 80,  0,  0,
+     & 150,0.026D0,  0, 73, 42,  0,  0,  0,
+     & 150,0.030D0,  0, 73, 42, 21,  0,  0,
+     & 150,0.029D0,  0, 73, 42, 38, 30,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 533, 551)/
-     & 150,0.014,  0, 73, 42, 22,  0,  0,
-     & 150,0.020,  0, 73, 43,  0,  0,  0,
-     & 150,0.029,  0, 73, 34, 38,  0,  0,
-     & 150,0.039,  0, 73, 34, 38, 21,  0,
-     & 150,0.002,  0, 73, 34, 38, 38, 30,
-     & 150,0.010,  0, 73, 34, 38, 21, 21,
-     & 150,0.014,  0, 73, 35, 38,  0,  0,
-     & 150,0.010,  0, 74, 42,  0,  0,  0,
-     & 150,0.020,  0, 74, 43,  0,  0,  0,
-     & 150,0.010,  0, 74, 43, 21,  0,  0,
-     & 150,0.007,  0, 85, 34,  0,  0,  0,
-     & 150,0.014,  0, 85, 35,  0,  0,  0,
-     & 150,0.004,  0, 73,293,  0,  0,  0,
-     & 150,0.003,  0, 73, 38, 30,  0,  0,
-     & 150,0.003,  0, 73, 38, 30, 38, 30,
-     & 150,0.001,  0, 73, 56,  0,  0,  0,
-     & 150,0.002,  0, 73, 46, 34,  0,  0,
-     & 150,0.010,  0, 78, 38,  0,  0,  0,
-     & 150,0.020,  0, 78, 39,  0,  0,  0/
+     & 150,0.014D0,  0, 73, 42, 22,  0,  0,
+     & 150,0.020D0,  0, 73, 43,  0,  0,  0,
+     & 150,0.029D0,  0, 73, 34, 38,  0,  0,
+     & 150,0.039D0,  0, 73, 34, 38, 21,  0,
+     & 150,0.002D0,  0, 73, 34, 38, 38, 30,
+     & 150,0.010D0,  0, 73, 34, 38, 21, 21,
+     & 150,0.014D0,  0, 73, 35, 38,  0,  0,
+     & 150,0.010D0,  0, 74, 42,  0,  0,  0,
+     & 150,0.020D0,  0, 74, 43,  0,  0,  0,
+     & 150,0.010D0,  0, 74, 43, 21,  0,  0,
+     & 150,0.007D0,  0, 85, 34,  0,  0,  0,
+     & 150,0.014D0,  0, 85, 35,  0,  0,  0,
+     & 150,0.004D0,  0, 73,293,  0,  0,  0,
+     & 150,0.003D0,  0, 73, 38, 30,  0,  0,
+     & 150,0.003D0,  0, 73, 38, 30, 38, 30,
+     & 150,0.001D0,  0, 73, 56,  0,  0,  0,
+     & 150,0.002D0,  0, 73, 46, 34,  0,  0,
+     & 150,0.010D0,  0, 78, 38,  0,  0,  0,
+     & 150,0.020D0,  0, 78, 39,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 552, 570)/
-     & 150,0.030,  0, 78, 38, 21,  0,  0,
-     & 150,0.010,  0, 78, 38, 22,  0,  0,
-     & 150,0.020,  0, 78, 38, 24,  0,  0,
-     & 150,0.035,  0, 78, 38, 38, 30,  0,
-     & 150,0.020,  0, 78, 38, 21, 21,  0,
-     & 150,0.010,  0, 78, 38, 38, 30, 21,
-     & 150,0.010,  0, 78, 38, 21, 21, 21,
-     & 150,0.007,  0, 78, 46, 42,  0,  0,
-     & 150,0.011,  0, 79, 38,  0,  0,  0,
-     & 150,0.022,  0, 79, 38, 21,  0,  0,
-     & 150,0.013,  0, 79, 38, 38, 30,  0,
-     & 150,0.010,  0, 79, 38, 21, 21,  0,
-     & 150,0.007,  0, 79, 38, 38, 30, 21,
-     & 150,0.005,  0, 79, 38, 21, 21, 21,
-     & 150,0.005,  0, 80, 38,  0,  0,  0,
-     & 150,0.015,  0, 80, 39,  0,  0,  0,
-     & 150,0.011,  0, 86, 21,  0,  0,  0,
-     & 150,0.007,  0, 86, 22,  0,  0,  0,
-     & 150,0.010,  0, 86, 23,  0,  0,  0/
+     & 150,0.030D0,  0, 78, 38, 21,  0,  0,
+     & 150,0.010D0,  0, 78, 38, 22,  0,  0,
+     & 150,0.020D0,  0, 78, 38, 24,  0,  0,
+     & 150,0.035D0,  0, 78, 38, 38, 30,  0,
+     & 150,0.020D0,  0, 78, 38, 21, 21,  0,
+     & 150,0.010D0,  0, 78, 38, 38, 30, 21,
+     & 150,0.010D0,  0, 78, 38, 21, 21, 21,
+     & 150,0.007D0,  0, 78, 46, 42,  0,  0,
+     & 150,0.011D0,  0, 79, 38,  0,  0,  0,
+     & 150,0.022D0,  0, 79, 38, 21,  0,  0,
+     & 150,0.013D0,  0, 79, 38, 38, 30,  0,
+     & 150,0.010D0,  0, 79, 38, 21, 21,  0,
+     & 150,0.007D0,  0, 79, 38, 38, 30, 21,
+     & 150,0.005D0,  0, 79, 38, 21, 21, 21,
+     & 150,0.005D0,  0, 80, 38,  0,  0,  0,
+     & 150,0.015D0,  0, 80, 39,  0,  0,  0,
+     & 150,0.011D0,  0, 86, 21,  0,  0,  0,
+     & 150,0.007D0,  0, 86, 22,  0,  0,  0,
+     & 150,0.010D0,  0, 86, 23,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 571, 589)/
-     & 150,0.031,  0, 86, 24,  0,  0,  0,
-     & 150,0.010,  0, 86, 25,  0,  0,  0,
-     & 150,0.004,  0, 86, 56,  0,  0,  0,
-     & 150,0.026,  0, 86, 38, 30,  0,  0,
-     & 150,0.005,  0, 86, 38, 38, 30, 30,
-     & 150,0.005,  0, 86, 38, 30, 21, 21,
-     & 150,0.005,  0, 87, 21,  0,  0,  0,
-     & 150,0.006,  0, 87, 23,  0,  0,  0,
-     & 150,0.004,  0, 86, 46, 34,  0,  0,
-     & 150,0.002,  0, 86, 46, 30,  0,  0,
-     & 150,0.001,  0, 86, 46, 30, 21,  0,
-     & 150,0.016,  0, 81, 38, 38,  0,  0,
-     & 150,0.003,  0, 88, 46,  0,  0,  0,
-     & 150,0.002,  0, 89, 46,  0,  0,  0,
-     & 150,0.003,  0, 83, 46, 38,  0,  0,
-     & 150,0.040,  0, 75, 46, 21,  0,  0,
-     & 150,0.040,  0, 75, 46, 38, 30,  0,
-     & 150,0.020,  0, 75, 46, 21, 21,  0,
-     & 150,0.010,  0, 75, 46, 38, 30, 21/
+     & 150,0.031D0,  0, 86, 24,  0,  0,  0,
+     & 150,0.010D0,  0, 86, 25,  0,  0,  0,
+     & 150,0.004D0,  0, 86, 56,  0,  0,  0,
+     & 150,0.026D0,  0, 86, 38, 30,  0,  0,
+     & 150,0.005D0,  0, 86, 38, 38, 30, 30,
+     & 150,0.005D0,  0, 86, 38, 30, 21, 21,
+     & 150,0.005D0,  0, 87, 21,  0,  0,  0,
+     & 150,0.006D0,  0, 87, 23,  0,  0,  0,
+     & 150,0.004D0,  0, 86, 46, 34,  0,  0,
+     & 150,0.002D0,  0, 86, 46, 30,  0,  0,
+     & 150,0.001D0,  0, 86, 46, 30, 21,  0,
+     & 150,0.016D0,  0, 81, 38, 38,  0,  0,
+     & 150,0.003D0,  0, 88, 46,  0,  0,  0,
+     & 150,0.002D0,  0, 89, 46,  0,  0,  0,
+     & 150,0.003D0,  0, 83, 46, 38,  0,  0,
+     & 150,0.040D0,  0, 75, 46, 21,  0,  0,
+     & 150,0.040D0,  0, 75, 46, 38, 30,  0,
+     & 150,0.020D0,  0, 75, 46, 21, 21,  0,
+     & 150,0.010D0,  0, 75, 46, 38, 30, 21/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 590, 608)/
-     & 150,0.010,  0, 75, 46, 21, 21, 21,
-     & 150,0.020,  0, 75, 47, 21,  0,  0,
-     & 150,0.040,  0, 75, 42, 38,  0,  0,
-     & 150,0.020,  0, 75, 42, 39,  0,  0,
-     & 150,0.010,  0, 75, 42, 38, 38, 30,
-     & 150,0.010,  0, 75, 42, 38, 21, 21,
-     & 150,0.006,  0, 75, 43, 38,  0,  0,
-     & 151,1.000,  0,150, 21,  0,  0,  0,
-     & 152,1.000,  0,150, 21,  0,  0,  0,
-     & 153,1.000,  0,150, 30,  0,  0,  0,
-     & 154,1.000,  0,150, 30,  0,  0,  0,
-     & 155,0.045,101,122,127, 88,  0,  0,
-     & 155,0.005,101,122,127, 89,  0,  0,
-     & 155,0.045,101,124,129, 88,  0,  0,
-     & 155,0.005,101,124,129, 89,  0,  0,
-     & 155,0.021,  0, 86, 42,  0,  0,  0,
-     & 155,0.032,  0, 87, 42,  0,  0,  0,
-     & 155,0.032,  0, 79, 38, 42,  0,  0,
-     & 155,0.045,  0, 86, 43,  0,  0,  0/
+     & 150,0.010D0,  0, 75, 46, 21, 21, 21,
+     & 150,0.020D0,  0, 75, 47, 21,  0,  0,
+     & 150,0.040D0,  0, 75, 42, 38,  0,  0,
+     & 150,0.020D0,  0, 75, 42, 39,  0,  0,
+     & 150,0.010D0,  0, 75, 42, 38, 38, 30,
+     & 150,0.010D0,  0, 75, 42, 38, 21, 21,
+     & 150,0.006D0,  0, 75, 43, 38,  0,  0,
+     & 151,1.000D0,  0,150, 21,  0,  0,  0,
+     & 152,1.000D0,  0,150, 21,  0,  0,  0,
+     & 153,1.000D0,  0,150, 30,  0,  0,  0,
+     & 154,1.000D0,  0,150, 30,  0,  0,  0,
+     & 155,0.045D0,101,122,127, 88,  0,  0,
+     & 155,0.005D0,101,122,127, 89,  0,  0,
+     & 155,0.045D0,101,124,129, 88,  0,  0,
+     & 155,0.005D0,101,124,129, 89,  0,  0,
+     & 155,0.021D0,  0, 86, 42,  0,  0,  0,
+     & 155,0.032D0,  0, 87, 42,  0,  0,  0,
+     & 155,0.032D0,  0, 79, 38, 42,  0,  0,
+     & 155,0.045D0,  0, 86, 43,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 609, 627)/
-     & 155,0.065,  0, 87, 43,  0,  0,  0,
-     & 155,0.065,  0, 79, 38, 43,  0,  0,
-     & 155,0.055,  0, 88, 38,  0,  0,  0,
-     & 155,0.160,  0, 88, 39,  0,  0,  0,
-     & 155,0.105,  0, 89, 38,  0,  0,  0,
-     & 155,0.320,  0, 89, 39,  0,  0,  0,
-     & 156,1.000,  0,155, 59,  0,  0,  0,
-     & 157,0.667,  0,158, 38,  0,  0,  0,
-     & 157,0.333,  0,155, 21,  0,  0,  0,
-     & 158,0.045,101,122,127, 83,  0,  0,
-     & 158,0.045,101,124,129, 83,  0,  0,
-     & 158,0.005,101,122,127, 84,  0,  0,
-     & 158,0.005,101,124,129, 84,  0,  0,
-     & 158,0.020,  0, 79, 42,  0,  0,  0,
-     & 158,0.020,  0, 79, 21, 42,  0,  0,
-     & 158,0.020,  0, 80, 42,  0,  0,  0,
-     & 158,0.060,  0, 79, 43,  0,  0,  0,
-     & 158,0.060,  0, 79, 21, 43,  0,  0,
-     & 158,0.060,  0, 80, 43,  0,  0,  0/
+     & 155,0.065D0,  0, 87, 43,  0,  0,  0,
+     & 155,0.065D0,  0, 79, 38, 43,  0,  0,
+     & 155,0.055D0,  0, 88, 38,  0,  0,  0,
+     & 155,0.160D0,  0, 88, 39,  0,  0,  0,
+     & 155,0.105D0,  0, 89, 38,  0,  0,  0,
+     & 155,0.320D0,  0, 89, 39,  0,  0,  0,
+     & 156,1.000D0,  0,155, 59,  0,  0,  0,
+     & 157,0.667D0,  0,158, 38,  0,  0,  0,
+     & 157,0.333D0,  0,155, 21,  0,  0,  0,
+     & 158,0.045D0,101,122,127, 83,  0,  0,
+     & 158,0.045D0,101,124,129, 83,  0,  0,
+     & 158,0.005D0,101,122,127, 84,  0,  0,
+     & 158,0.005D0,101,124,129, 84,  0,  0,
+     & 158,0.020D0,  0, 79, 42,  0,  0,  0,
+     & 158,0.020D0,  0, 79, 21, 42,  0,  0,
+     & 158,0.020D0,  0, 80, 42,  0,  0,  0,
+     & 158,0.060D0,  0, 79, 43,  0,  0,  0,
+     & 158,0.060D0,  0, 79, 21, 43,  0,  0,
+     & 158,0.060D0,  0, 80, 43,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 628, 646)/
-     & 158,0.020,  0, 86, 34,  0,  0,  0,
-     & 158,0.060,  0, 86, 35,  0,  0,  0,
-     & 158,0.040,  0, 87, 34,  0,  0,  0,
-     & 158,0.120,  0, 87, 35,  0,  0,  0,
-     & 158,0.020,  0, 83, 38,  0,  0,  0,
-     & 158,0.060,  0, 83, 39,  0,  0,  0,
-     & 158,0.040,  0, 84, 38,  0,  0,  0,
-     & 158,0.120,  0, 84, 39,  0,  0,  0,
-     & 158,0.010,  0, 88, 21,  0,  0,  0,
-     & 158,0.030,  0, 88, 23,  0,  0,  0,
-     & 158,0.020,  0, 89, 21,  0,  0,  0,
-     & 158,0.060,  0, 89, 23,  0,  0,  0,
-     & 158,0.030,  0, 88, 56,  0,  0,  0,
-     & 158,0.030,  0, 90, 46,  0,  0,  0,
-     & 159,1.000,  0,158, 59,  0,  0,  0,
-     & 160,0.670,  0,155, 30,  0,  0,  0,
-     & 160,0.330,  0,158, 21,  0,  0,  0,
-     & 161,0.050,101,122,127, 90,  0,  0,
-     & 161,0.050,101,124,129, 90,  0,  0/
+     & 158,0.020D0,  0, 86, 34,  0,  0,  0,
+     & 158,0.060D0,  0, 86, 35,  0,  0,  0,
+     & 158,0.040D0,  0, 87, 34,  0,  0,  0,
+     & 158,0.120D0,  0, 87, 35,  0,  0,  0,
+     & 158,0.020D0,  0, 83, 38,  0,  0,  0,
+     & 158,0.060D0,  0, 83, 39,  0,  0,  0,
+     & 158,0.040D0,  0, 84, 38,  0,  0,  0,
+     & 158,0.120D0,  0, 84, 39,  0,  0,  0,
+     & 158,0.010D0,  0, 88, 21,  0,  0,  0,
+     & 158,0.030D0,  0, 88, 23,  0,  0,  0,
+     & 158,0.020D0,  0, 89, 21,  0,  0,  0,
+     & 158,0.060D0,  0, 89, 23,  0,  0,  0,
+     & 158,0.030D0,  0, 88, 56,  0,  0,  0,
+     & 158,0.030D0,  0, 90, 46,  0,  0,  0,
+     & 159,1.000D0,  0,158, 59,  0,  0,  0,
+     & 160,0.670D0,  0,155, 30,  0,  0,  0,
+     & 160,0.330D0,  0,158, 21,  0,  0,  0,
+     & 161,0.050D0,101,122,127, 90,  0,  0,
+     & 161,0.050D0,101,124,129, 90,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 647, 665)/
-     & 161,0.075,  0, 88, 42,  0,  0,  0,
-     & 161,0.225,  0, 88, 43,  0,  0,  0,
-     & 161,0.150,  0, 89, 42,  0,  0,  0,
-     & 161,0.450,  0, 89, 43,  0,  0,  0,
-     & 162,1.000,  0,161, 59,  0,  0,  0,
-     & 163,0.028,  0, 25, 38, 30,  0,  0,
-     & 163,0.014,  0, 25, 21, 21,  0,  0,
-     & 163,0.018,  0, 39, 31,  0,  0,  0,
-     & 163,0.009,  0, 23, 23,  0,  0,  0,
-     & 163,0.010,  0, 51, 34, 38,  0,  0,
-     & 163,0.010,  0, 43, 47, 30,  0,  0,
-     & 163,0.004,  0, 51, 43,  0,  0,  0,
-     & 163,0.004,  0, 47, 35,  0,  0,  0,
-     & 163,0.007,  0, 56, 56,  0,  0,  0,
-     & 163,0.022,  0, 46, 42, 30,  0,  0,
-     & 163,0.011,  0, 46, 34, 21,  0,  0,
-     & 163,0.011,  0, 50, 42, 21,  0,  0,
-     & 163,0.022,  0, 50, 34, 38,  0,  0,
-     & 163,0.032,  0, 22, 38, 30,  0,  0/
+     & 161,0.075D0,  0, 88, 42,  0,  0,  0,
+     & 161,0.225D0,  0, 88, 43,  0,  0,  0,
+     & 161,0.150D0,  0, 89, 42,  0,  0,  0,
+     & 161,0.450D0,  0, 89, 43,  0,  0,  0,
+     & 162,1.000D0,  0,161, 59,  0,  0,  0,
+     & 163,0.028D0,  0, 25, 38, 30,  0,  0,
+     & 163,0.014D0,  0, 25, 21, 21,  0,  0,
+     & 163,0.018D0,  0, 39, 31,  0,  0,  0,
+     & 163,0.009D0,  0, 23, 23,  0,  0,  0,
+     & 163,0.010D0,  0, 51, 34, 38,  0,  0,
+     & 163,0.010D0,  0, 43, 47, 30,  0,  0,
+     & 163,0.004D0,  0, 51, 43,  0,  0,  0,
+     & 163,0.004D0,  0, 47, 35,  0,  0,  0,
+     & 163,0.007D0,  0, 56, 56,  0,  0,  0,
+     & 163,0.022D0,  0, 46, 42, 30,  0,  0,
+     & 163,0.011D0,  0, 46, 34, 21,  0,  0,
+     & 163,0.011D0,  0, 50, 42, 21,  0,  0,
+     & 163,0.022D0,  0, 50, 34, 38,  0,  0,
+     & 163,0.032D0,  0, 22, 38, 30,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 666, 684)/
-     & 163,0.016,  0, 22, 21, 21,  0,  0,
-     & 163,0.020,  0, 38, 30, 46, 34,  0,
-     & 163,0.012,  0, 38, 30, 38, 30,  0,
-     & 163,0.001,  0, 73, 91,  0,  0,  0,
-     & 163,0.001,  0, 59, 59,  0,  0,  0,
-     & 163,0.748,  0, 13, 13,  0,  0,  0,
-     & 164,0.060,  0,121,127,  0,  0,  0,
-     & 164,0.060,  0,123,129,  0,  0,  0,
-     & 164,0.004,  0, 39, 30,  0,  0,  0,
-     & 164,0.004,  0, 23, 21,  0,  0,  0,
-     & 164,0.004,  0, 31, 38,  0,  0,  0,
-     & 164,0.003,  0, 41, 31,  0,  0,  0,
-     & 164,0.003,  0, 29, 23,  0,  0,  0,
-     & 164,0.003,  0, 33, 39,  0,  0,  0,
-     & 164,0.009,  0, 24, 38, 38, 30, 30,
-     & 164,0.007,  0, 24, 38, 30,  0,  0,
-     & 164,0.003,  0, 51, 45,  0,  0,  0,
-     & 164,0.003,  0, 43, 53,  0,  0,  0,
-     & 164,0.003,  0, 24, 51, 42,  0,  0/
+     & 163,0.016D0,  0, 22, 21, 21,  0,  0,
+     & 163,0.020D0,  0, 38, 30, 46, 34,  0,
+     & 163,0.012D0,  0, 38, 30, 38, 30,  0,
+     & 163,0.001D0,  0, 73, 91,  0,  0,  0,
+     & 163,0.001D0,  0, 59, 59,  0,  0,  0,
+     & 163,0.748D0,  0, 13, 13,  0,  0,  0,
+     & 164,0.060D0,  0,121,127,  0,  0,  0,
+     & 164,0.060D0,  0,123,129,  0,  0,  0,
+     & 164,0.004D0,  0, 39, 30,  0,  0,  0,
+     & 164,0.004D0,  0, 23, 21,  0,  0,  0,
+     & 164,0.004D0,  0, 31, 38,  0,  0,  0,
+     & 164,0.003D0,  0, 41, 31,  0,  0,  0,
+     & 164,0.003D0,  0, 29, 23,  0,  0,  0,
+     & 164,0.003D0,  0, 33, 39,  0,  0,  0,
+     & 164,0.009D0,  0, 24, 38, 38, 30, 30,
+     & 164,0.007D0,  0, 24, 38, 30,  0,  0,
+     & 164,0.003D0,  0, 51, 45,  0,  0,  0,
+     & 164,0.003D0,  0, 43, 53,  0,  0,  0,
+     & 164,0.003D0,  0, 24, 51, 42,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 685, 703)/
-     & 164,0.003,  0, 24, 43, 50,  0,  0,
-     & 164,0.004,  0, 24, 26,  0,  0,  0,
-     & 164,0.003,  0, 46, 35,  0,  0,  0,
-     & 164,0.003,  0, 34, 47,  0,  0,  0,
-     & 164,0.002,  0, 50, 43,  0,  0,  0,
-     & 164,0.002,  0, 42, 51,  0,  0,  0,
-     & 164,0.003,  0, 24, 21, 21,  0,  0,
-     & 164,0.002,  0,286, 30,  0,  0,  0,
-     & 164,0.002,  0,287, 38,  0,  0,  0,
-     & 164,0.003,  0, 24, 46, 42, 30,  0,
-     & 164,0.003,  0, 24, 34, 50, 38,  0,
-     & 164,0.002,  0,285, 21,  0,  0,  0,
-     & 164,0.001,  0, 56, 51, 42,  0,  0,
-     & 164,0.001,  0, 56, 43, 50,  0,  0,
-     & 164,0.001,  0, 24, 50, 42,  0,  0,
-     & 164,0.001,  0, 24, 46, 34,  0,  0,
-     & 164,0.002,  0, 56, 38, 30, 38, 30,
-     & 164,0.002,  0, 85, 91, 30,  0,  0,
-     & 164,0.002,  0,103, 73, 38,  0,  0/
+     & 164,0.003D0,  0, 24, 43, 50,  0,  0,
+     & 164,0.004D0,  0, 24, 26,  0,  0,  0,
+     & 164,0.003D0,  0, 46, 35,  0,  0,  0,
+     & 164,0.003D0,  0, 34, 47,  0,  0,  0,
+     & 164,0.002D0,  0, 50, 43,  0,  0,  0,
+     & 164,0.002D0,  0, 42, 51,  0,  0,  0,
+     & 164,0.003D0,  0, 24, 21, 21,  0,  0,
+     & 164,0.002D0,  0,286, 30,  0,  0,  0,
+     & 164,0.002D0,  0,287, 38,  0,  0,  0,
+     & 164,0.003D0,  0, 24, 46, 42, 30,  0,
+     & 164,0.003D0,  0, 24, 34, 50, 38,  0,
+     & 164,0.002D0,  0,285, 21,  0,  0,  0,
+     & 164,0.001D0,  0, 56, 51, 42,  0,  0,
+     & 164,0.001D0,  0, 56, 43, 50,  0,  0,
+     & 164,0.001D0,  0, 24, 50, 42,  0,  0,
+     & 164,0.001D0,  0, 24, 46, 34,  0,  0,
+     & 164,0.002D0,  0, 56, 38, 30, 38, 30,
+     & 164,0.002D0,  0, 85, 91, 30,  0,  0,
+     & 164,0.002D0,  0,103, 73, 38,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 704, 722)/
-     & 164,0.002,  0, 24, 22,  0,  0,  0,
-     & 164,0.001,  0, 56, 50, 42,  0,  0,
-     & 164,0.001,  0, 56, 46, 34,  0,  0,
-     & 164,0.001,  0, 73, 91, 24,  0,  0,
-     & 164,0.001,  0, 85,103,  0,  0,  0,
-     & 164,0.001,  0, 82,100,  0,  0,  0,
-     & 164,0.001,  0, 87,105,  0,  0,  0,
-     & 164,0.001,  0, 73, 91, 25,  0,  0,
-     & 164,0.001,  0, 56, 58,  0,  0,  0,
-     & 164,0.001,  0, 56, 38, 30,  0,  0,
-     & 164,0.001,  0, 56, 46, 42, 30,  0,
-     & 164,0.001,  0, 56, 34, 50, 38,  0,
-     & 164,0.001,  0, 56, 22,  0,  0,  0,
-     & 164,0.001,  0, 84,102,  0,  0,  0,
-     & 164,0.001,  0, 73, 34, 98,  0,  0,
-     & 164,0.001,  0, 91, 46, 80,  0,  0,
-     & 164,0.034,  0, 38, 38, 30, 30, 21,
-     & 164,0.029,  0, 23, 23, 23, 21,  0,
-     & 164,0.015,  0, 38, 30, 21,  0,  0/
+     & 164,0.002D0,  0, 24, 22,  0,  0,  0,
+     & 164,0.001D0,  0, 56, 50, 42,  0,  0,
+     & 164,0.001D0,  0, 56, 46, 34,  0,  0,
+     & 164,0.001D0,  0, 73, 91, 24,  0,  0,
+     & 164,0.001D0,  0, 85,103,  0,  0,  0,
+     & 164,0.001D0,  0, 82,100,  0,  0,  0,
+     & 164,0.001D0,  0, 87,105,  0,  0,  0,
+     & 164,0.001D0,  0, 73, 91, 25,  0,  0,
+     & 164,0.001D0,  0, 56, 58,  0,  0,  0,
+     & 164,0.001D0,  0, 56, 38, 30,  0,  0,
+     & 164,0.001D0,  0, 56, 46, 42, 30,  0,
+     & 164,0.001D0,  0, 56, 34, 50, 38,  0,
+     & 164,0.001D0,  0, 56, 22,  0,  0,  0,
+     & 164,0.001D0,  0, 84,102,  0,  0,  0,
+     & 164,0.001D0,  0, 73, 34, 98,  0,  0,
+     & 164,0.001D0,  0, 91, 46, 80,  0,  0,
+     & 164,0.034D0,  0, 38, 38, 30, 30, 21,
+     & 164,0.029D0,  0, 23, 23, 23, 21,  0,
+     & 164,0.015D0,  0, 38, 30, 21,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 723, 741)/
-     & 164,0.012,  0, 38, 30, 21, 34, 46,
-     & 164,0.009,  0, 23, 23, 23, 24,  0,
-     & 164,0.007,  0, 38, 30, 34, 46,  0,
-     & 164,0.002,  0, 46, 42, 30,  0,  0,
-     & 164,0.001,  0, 46, 34, 21,  0,  0,
-     & 164,0.001,  0, 50, 42, 21,  0,  0,
-     & 164,0.002,  0, 50, 34, 38,  0,  0,
-     & 164,0.006,  0, 73, 91, 38, 30,  0,
-     & 164,0.004,  0, 38, 30, 38, 30,  0,
-     & 164,0.004,  0, 38, 30, 38, 30, 23,
-     & 164,0.004,  0, 75, 93, 38, 30,  0,
-     & 164,0.001,  0, 86,104,  0,  0,  0,
-     & 164,0.001,  0, 79, 97,  0,  0,  0,
-     & 164,0.001,  0, 81, 99,  0,  0,  0,
-     & 164,0.003,  0, 23, 23, 34, 46,  0,
-     & 164,0.002,  0, 73, 91, 38, 30, 21,
-     & 164,0.002,  0, 73, 91,  0,  0,  0,
-     & 164,0.002,  0, 73, 91, 22,  0,  0,
-     & 164,0.002,  0, 73, 93, 30,  0,  0/
+     & 164,0.012D0,  0, 38, 30, 21, 34, 46,
+     & 164,0.009D0,  0, 23, 23, 23, 24,  0,
+     & 164,0.007D0,  0, 38, 30, 34, 46,  0,
+     & 164,0.002D0,  0, 46, 42, 30,  0,  0,
+     & 164,0.001D0,  0, 46, 34, 21,  0,  0,
+     & 164,0.001D0,  0, 50, 42, 21,  0,  0,
+     & 164,0.002D0,  0, 50, 34, 38,  0,  0,
+     & 164,0.006D0,  0, 73, 91, 38, 30,  0,
+     & 164,0.004D0,  0, 38, 30, 38, 30,  0,
+     & 164,0.004D0,  0, 38, 30, 38, 30, 23,
+     & 164,0.004D0,  0, 75, 93, 38, 30,  0,
+     & 164,0.001D0,  0, 86,104,  0,  0,  0,
+     & 164,0.001D0,  0, 79, 97,  0,  0,  0,
+     & 164,0.001D0,  0, 81, 99,  0,  0,  0,
+     & 164,0.003D0,  0, 23, 23, 34, 46,  0,
+     & 164,0.002D0,  0, 73, 91, 38, 30, 21,
+     & 164,0.002D0,  0, 73, 91,  0,  0,  0,
+     & 164,0.002D0,  0, 73, 91, 22,  0,  0,
+     & 164,0.002D0,  0, 73, 93, 30,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 742, 760)/
-     & 164,0.002,  0, 75, 93,  0,  0,  0,
-     & 164,0.001,  0, 83,102,  0,  0,  0,
-     & 164,0.001,  0, 88,106,  0,  0,  0,
-     & 164,0.001,  0, 78, 96,  0,  0,  0,
-     & 164,0.001,  0, 73, 91, 21,  0,  0,
-     & 164,0.001,  0, 78,104, 38,  0,  0,
-     & 164,0.001,  0, 96, 86, 30,  0,  0,
-     & 164,0.001,  0, 73, 34, 96,  0,  0,
-     & 164,0.001,  0, 91, 46, 78,  0,  0,
-     & 164,0.001,  0, 46, 34, 46, 34,  0,
-     & 164,0.013,  0, 59,163,  0,  0,  0,
-     & 164,0.008,  0, 59, 38, 30, 21, 21,
-     & 164,0.004,  0, 59, 22, 38, 30,  0,
-     & 164,0.002,  0, 59, 22, 21, 21,  0,
-     & 164,0.003,  0, 59, 39, 31,  0,  0,
-     & 164,0.002,  0, 59, 23, 23,  0,  0,
-     & 164,0.004,  0, 59, 25,  0,  0,  0,
-     & 164,0.003,  0, 59, 38, 30, 38, 30,
-     & 164,0.002,  0, 59, 24, 24,  0,  0/
+     & 164,0.002D0,  0, 75, 93,  0,  0,  0,
+     & 164,0.001D0,  0, 83,102,  0,  0,  0,
+     & 164,0.001D0,  0, 88,106,  0,  0,  0,
+     & 164,0.001D0,  0, 78, 96,  0,  0,  0,
+     & 164,0.001D0,  0, 73, 91, 21,  0,  0,
+     & 164,0.001D0,  0, 78,104, 38,  0,  0,
+     & 164,0.001D0,  0, 96, 86, 30,  0,  0,
+     & 164,0.001D0,  0, 73, 34, 96,  0,  0,
+     & 164,0.001D0,  0, 91, 46, 78,  0,  0,
+     & 164,0.001D0,  0, 46, 34, 46, 34,  0,
+     & 164,0.013D0,  0, 59,163,  0,  0,  0,
+     & 164,0.008D0,  0, 59, 38, 30, 21, 21,
+     & 164,0.004D0,  0, 59, 22, 38, 30,  0,
+     & 164,0.002D0,  0, 59, 22, 21, 21,  0,
+     & 164,0.003D0,  0, 59, 39, 31,  0,  0,
+     & 164,0.002D0,  0, 59, 23, 23,  0,  0,
+     & 164,0.004D0,  0, 59, 25,  0,  0,  0,
+     & 164,0.003D0,  0, 59, 38, 30, 38, 30,
+     & 164,0.002D0,  0, 59, 24, 24,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 761, 779)/
-     & 164,0.001,  0, 59, 26,  0,  0,  0,
-     & 164,0.001,  0, 59, 22,  0,  0,  0,
-     & 164,0.001,  0, 59, 28,  0,  0,  0,
-     & 164,0.001,  0, 59, 58,  0,  0,  0,
-     & 164,0.020,  0,  1,  7,  0,  0,  0,
-     & 164,0.080,  0,  2,  8,  0,  0,  0,
-     & 164,0.020,  0,  3,  9,  0,  0,  0,
-     & 164,0.364,130, 13, 13, 13,  0,  0,
-     & 164,0.091,130, 13, 13, 59,  0,  0,
-     & 165,0.037,  0, 38, 30, 38, 30,  0,
-     & 165,0.030,  0, 38, 30, 46, 34,  0,
-     & 165,0.016,  0, 23, 38, 30,  0,  0,
-     & 165,0.015,  0, 23, 38, 30, 38, 30,
-     & 165,0.004,  0, 46, 43, 30,  0,  0,
-     & 165,0.002,  0, 46, 35, 21,  0,  0,
-     & 165,0.002,  0, 51, 43, 21,  0,  0,
-     & 165,0.004,  0, 51, 35, 38,  0,  0,
-     & 165,0.008,  0, 38, 30,  0,  0,  0,
-     & 165,0.007,  0, 46, 34,  0,  0,  0/
+     & 164,0.001D0,  0, 59, 26,  0,  0,  0,
+     & 164,0.001D0,  0, 59, 22,  0,  0,  0,
+     & 164,0.001D0,  0, 59, 28,  0,  0,  0,
+     & 164,0.001D0,  0, 59, 58,  0,  0,  0,
+     & 164,0.020D0,  0,  1,  7,  0,  0,  0,
+     & 164,0.080D0,  0,  2,  8,  0,  0,  0,
+     & 164,0.020D0,  0,  3,  9,  0,  0,  0,
+     & 164,0.364D0,130, 13, 13, 13,  0,  0,
+     & 164,0.091D0,130, 13, 13, 59,  0,  0,
+     & 165,0.037D0,  0, 38, 30, 38, 30,  0,
+     & 165,0.030D0,  0, 38, 30, 46, 34,  0,
+     & 165,0.016D0,  0, 23, 38, 30,  0,  0,
+     & 165,0.015D0,  0, 23, 38, 30, 38, 30,
+     & 165,0.004D0,  0, 46, 43, 30,  0,  0,
+     & 165,0.002D0,  0, 46, 35, 21,  0,  0,
+     & 165,0.002D0,  0, 51, 43, 21,  0,  0,
+     & 165,0.004D0,  0, 51, 35, 38,  0,  0,
+     & 165,0.008D0,  0, 38, 30,  0,  0,  0,
+     & 165,0.007D0,  0, 46, 34,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 780, 798)/
-     & 165,0.005,  0, 38, 30, 73, 91,  0,
-     & 165,0.003,  0, 21, 21,  0,  0,  0,
-     & 165,0.003,  0, 22, 22,  0,  0,  0,
-     & 165,0.007,  0, 59,164,  0,  0,  0,
-     & 165,0.857,  0, 13, 13,  0,  0,  0,
-     & 166,0.008,  0,121,127,  0,  0,  0,
-     & 166,0.008,  0,123,129,  0,  0,  0,
-     & 166,0.001,  0,125,131,  0,  0,  0,
-     & 166,0.338,  0,164, 38, 30,  0,  0,
-     & 166,0.169,  0,164, 21, 21,  0,  0,
-     & 166,0.027,  0,164, 22,  0,  0,  0,
-     & 166,0.001,  0,164, 21,  0,  0,  0,
-     & 166,0.004,  0, 23, 23, 23, 21,  0,
-     & 166,0.003,  0, 23, 23, 21,  0,  0,
-     & 166,0.002,  0, 38, 30, 46, 34,  0,
-     & 166,0.001,  0, 38, 30, 73, 91,  0,
-     & 166,0.093,  0, 59,165,  0,  0,  0,
-     & 166,0.087,  0, 59,302,  0,  0,  0,
-     & 166,0.078,  0, 59,303,  0,  0,  0/
+     & 165,0.005D0,  0, 38, 30, 73, 91,  0,
+     & 165,0.003D0,  0, 21, 21,  0,  0,  0,
+     & 165,0.003D0,  0, 22, 22,  0,  0,  0,
+     & 165,0.007D0,  0, 59,164,  0,  0,  0,
+     & 165,0.857D0,  0, 13, 13,  0,  0,  0,
+     & 166,0.008D0,  0,121,127,  0,  0,  0,
+     & 166,0.008D0,  0,123,129,  0,  0,  0,
+     & 166,0.001D0,  0,125,131,  0,  0,  0,
+     & 166,0.338D0,  0,164, 38, 30,  0,  0,
+     & 166,0.169D0,  0,164, 21, 21,  0,  0,
+     & 166,0.027D0,  0,164, 22,  0,  0,  0,
+     & 166,0.001D0,  0,164, 21,  0,  0,  0,
+     & 166,0.004D0,  0, 23, 23, 23, 21,  0,
+     & 166,0.003D0,  0, 23, 23, 21,  0,  0,
+     & 166,0.002D0,  0, 38, 30, 46, 34,  0,
+     & 166,0.001D0,  0, 38, 30, 73, 91,  0,
+     & 166,0.093D0,  0, 59,165,  0,  0,  0,
+     & 166,0.087D0,  0, 59,302,  0,  0,  0,
+     & 166,0.078D0,  0, 59,303,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 799, 817)/
-     & 166,0.003,  0, 59,163,  0,  0,  0,
-     & 166,0.003,  0,  1,  7,  0,  0,  0,
-     & 166,0.012,  0,  2,  8,  0,  0,  0,
-     & 166,0.003,  0,  3,  9,  0,  0,  0,
-     & 166,0.127,130, 13, 13, 13,  0,  0,
-     & 166,0.032,130, 13, 13, 59,  0,  0,
-     & 167,0.500,  0,136,171,  0,  0,  0,
-     & 167,0.500,  0,140,175,  0,  0,  0,
-     & 171,0.067,101,128,121, 50,  0,  0,
-     & 171,0.067,101,130,123, 50,  0,  0,
-     & 171,0.048,101,128,121, 51,  0,  0,
-     & 171,0.048,101,130,123, 51,  0,  0,
-     & 171,0.003,  0,128,121, 46, 30,  0,
-     & 171,0.003,  0,130,123, 46, 30,  0,
-     & 171,0.006,101,128,121, 21,  0,  0,
-     & 171,0.006,101,130,123, 21,  0,  0,
-     & 171,0.002,101,128,121, 23,  0,  0,
-     & 171,0.002,101,130,123, 23,  0,  0,
-     & 171,0.055,  0, 46, 30, 30,  0,  0/
+     & 166,0.003D0,  0, 59,163,  0,  0,  0,
+     & 166,0.003D0,  0,  1,  7,  0,  0,  0,
+     & 166,0.012D0,  0,  2,  8,  0,  0,  0,
+     & 166,0.003D0,  0,  3,  9,  0,  0,  0,
+     & 166,0.127D0,130, 13, 13, 13,  0,  0,
+     & 166,0.032D0,130, 13, 13, 59,  0,  0,
+     & 167,0.500D0,  0,136,171,  0,  0,  0,
+     & 167,0.500D0,  0,140,175,  0,  0,  0,
+     & 171,0.067D0,101,128,121, 50,  0,  0,
+     & 171,0.067D0,101,130,123, 50,  0,  0,
+     & 171,0.048D0,101,128,121, 51,  0,  0,
+     & 171,0.048D0,101,130,123, 51,  0,  0,
+     & 171,0.003D0,  0,128,121, 46, 30,  0,
+     & 171,0.003D0,  0,130,123, 46, 30,  0,
+     & 171,0.006D0,101,128,121, 21,  0,  0,
+     & 171,0.006D0,101,130,123, 21,  0,  0,
+     & 171,0.002D0,101,128,121, 23,  0,  0,
+     & 171,0.002D0,101,130,123, 23,  0,  0,
+     & 171,0.055D0,  0, 46, 30, 30,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 818, 836)/
-     & 171,0.031,  0, 46, 31, 30,  0,  0,
-     & 171,0.042,  0, 46, 30, 30, 21, 21,
-     & 171,0.002,  0, 46, 30, 30, 30, 39,
-     & 171,0.021,  0, 47, 30, 30,  0,  0,
-     & 171,0.027,  0, 50, 30,  0,  0,  0,
-     & 171,0.066,  0, 50, 31,  0,  0,  0,
-     & 171,0.081,  0, 50, 32,  0,  0,  0,
-     & 171,0.024,  0, 50, 30, 21,  0,  0,
-     & 171,0.004,  0, 50, 30, 23,  0,  0,
-     & 171,0.069,  0, 50, 30, 30, 38, 21,
-     & 171,0.001,  0, 50, 30, 30, 38, 23,
-     & 171,0.022,  0, 51, 30,  0,  0,  0,
-     & 171,0.021,  0, 51, 31,  0,  0,  0,
-     & 171,0.042,  0, 51, 30, 21,  0,  0,
-     & 171,0.008,  0, 51, 30, 23,  0,  0,
-     & 171,0.010,  0, 51, 30, 30, 38,  0,
-     & 171,0.050,  0,309, 30,  0,  0,  0,
-     & 171,0.034,  0,328, 30,  0,  0,  0,
-     & 171,0.010,  0,368, 30,  0,  0,  0/
+     & 171,0.031D0,  0, 46, 31, 30,  0,  0,
+     & 171,0.042D0,  0, 46, 30, 30, 21, 21,
+     & 171,0.002D0,  0, 46, 30, 30, 30, 39,
+     & 171,0.021D0,  0, 47, 30, 30,  0,  0,
+     & 171,0.027D0,  0, 50, 30,  0,  0,  0,
+     & 171,0.066D0,  0, 50, 31,  0,  0,  0,
+     & 171,0.081D0,  0, 50, 32,  0,  0,  0,
+     & 171,0.024D0,  0, 50, 30, 21,  0,  0,
+     & 171,0.004D0,  0, 50, 30, 23,  0,  0,
+     & 171,0.069D0,  0, 50, 30, 30, 38, 21,
+     & 171,0.001D0,  0, 50, 30, 30, 38, 23,
+     & 171,0.022D0,  0, 51, 30,  0,  0,  0,
+     & 171,0.021D0,  0, 51, 31,  0,  0,  0,
+     & 171,0.042D0,  0, 51, 30, 21,  0,  0,
+     & 171,0.008D0,  0, 51, 30, 23,  0,  0,
+     & 171,0.010D0,  0, 51, 30, 30, 38,  0,
+     & 171,0.050D0,  0,309, 30,  0,  0,  0,
+     & 171,0.034D0,  0,328, 30,  0,  0,  0,
+     & 171,0.010D0,  0,368, 30,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 837, 855)/
-     & 171,0.031,  0, 34, 50, 50,  0,  0,
-     & 171,0.003,  0, 30, 21,  0,  0,  0,
-     & 171,0.001,  0, 30, 23,  0,  0,  0,
-     & 171,0.002,  0, 30, 30, 38,  0,  0,
-     & 171,0.008,  0, 30, 22,  0,  0,  0,
-     & 171,0.001,  0, 30, 30, 30, 38, 38,
-     & 171,0.003,  0, 30, 30, 30, 38, 39,
-     & 171,0.008,  0, 34, 50,  0,  0,  0,
-     & 171,0.005,  0, 34, 51,  0,  0,  0,
-     & 171,0.026,  0, 35, 51,  0,  0,  0,
-     & 171,0.005,  0, 34, 46, 30,  0,  0,
-     & 171,0.007,  0, 30, 56,  0,  0,  0,
-     & 171,0.023,  0, 30, 56, 21,  0,  0,
-     & 171,0.005,  0, 34, 34, 46,  0,  0,
-     & 172,0.683,  0,175, 30,  0,  0,  0,
-     & 172,0.306,  0,171, 21,  0,  0,  0,
-     & 172,0.011,  0,171, 59,  0,  0,  0,
-     & 173,0.667,  0,176, 30,  0,  0,  0,
-     & 173,0.333,  0,172, 21,  0,  0,  0/
+     & 171,0.031D0,  0, 34, 50, 50,  0,  0,
+     & 171,0.003D0,  0, 30, 21,  0,  0,  0,
+     & 171,0.001D0,  0, 30, 23,  0,  0,  0,
+     & 171,0.002D0,  0, 30, 30, 38,  0,  0,
+     & 171,0.008D0,  0, 30, 22,  0,  0,  0,
+     & 171,0.001D0,  0, 30, 30, 30, 38, 38,
+     & 171,0.003D0,  0, 30, 30, 30, 38, 39,
+     & 171,0.008D0,  0, 34, 50,  0,  0,  0,
+     & 171,0.005D0,  0, 34, 51,  0,  0,  0,
+     & 171,0.026D0,  0, 35, 51,  0,  0,  0,
+     & 171,0.005D0,  0, 34, 46, 30,  0,  0,
+     & 171,0.007D0,  0, 30, 56,  0,  0,  0,
+     & 171,0.023D0,  0, 30, 56, 21,  0,  0,
+     & 171,0.005D0,  0, 34, 34, 46,  0,  0,
+     & 172,0.683D0,  0,175, 30,  0,  0,  0,
+     & 172,0.306D0,  0,171, 21,  0,  0,  0,
+     & 172,0.011D0,  0,171, 59,  0,  0,  0,
+     & 173,0.667D0,  0,176, 30,  0,  0,  0,
+     & 173,0.333D0,  0,172, 21,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 856, 874)/
-     & 174,0.220,  0,175, 30,  0,  0,  0,
-     & 174,0.110,  0,171, 21,  0,  0,  0,
-     & 174,0.380,  0,176, 30,  0,  0,  0,
-     & 174,0.190,  0,172, 21,  0,  0,  0,
-     & 174,0.004,  0,171, 22,  0,  0,  0,
-     & 174,0.064,  0,176, 30, 21,  0,  0,
-     & 174,0.032,  0,172, 38, 30,  0,  0,
-     & 175,0.037,101,128,121, 46,  0,  0,
-     & 175,0.037,101,130,123, 46,  0,  0,
-     & 175,0.016,101,128,121, 47,  0,  0,
-     & 175,0.016,101,130,123, 47,  0,  0,
-     & 175,0.013,  0,128,121, 46, 21,  0,
-     & 175,0.013,  0,130,123, 46, 21,  0,
-     & 175,0.012,  0,128,121, 50, 38,  0,
-     & 175,0.012,  0,130,123, 50, 38,  0,
-     & 175,0.003,101,128,121, 38,  0,  0,
-     & 175,0.003,101,130,123, 38,  0,  0,
-     & 175,0.039,  0, 46, 30,  0,  0,  0,
-     & 175,0.091,  0, 46, 31,  0,  0,  0/
+     & 174,0.220D0,  0,175, 30,  0,  0,  0,
+     & 174,0.110D0,  0,171, 21,  0,  0,  0,
+     & 174,0.380D0,  0,176, 30,  0,  0,  0,
+     & 174,0.190D0,  0,172, 21,  0,  0,  0,
+     & 174,0.004D0,  0,171, 22,  0,  0,  0,
+     & 174,0.064D0,  0,176, 30, 21,  0,  0,
+     & 174,0.032D0,  0,172, 38, 30,  0,  0,
+     & 175,0.037D0,101,128,121, 46,  0,  0,
+     & 175,0.037D0,101,130,123, 46,  0,  0,
+     & 175,0.016D0,101,128,121, 47,  0,  0,
+     & 175,0.016D0,101,130,123, 47,  0,  0,
+     & 175,0.013D0,  0,128,121, 46, 21,  0,
+     & 175,0.013D0,  0,130,123, 46, 21,  0,
+     & 175,0.012D0,  0,128,121, 50, 38,  0,
+     & 175,0.012D0,  0,130,123, 50, 38,  0,
+     & 175,0.003D0,101,128,121, 38,  0,  0,
+     & 175,0.003D0,101,130,123, 38,  0,  0,
+     & 175,0.039D0,  0, 46, 30,  0,  0,  0,
+     & 175,0.091D0,  0, 46, 31,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 875, 893)/
-     & 175,0.067,  0, 46, 32,  0,  0,  0,
-     & 175,0.004,  0, 46, 30, 21,  0,  0,
-     & 175,0.100,  0, 46, 30, 21, 21,  0,
-     & 175,0.058,  0, 46, 30, 23,  0,  0,
-     & 175,0.020,  0, 46, 30, 24,  0,  0,
-     & 175,0.006,  0, 46, 30, 25,  0,  0,
-     & 175,0.043,  0, 47, 30,  0,  0,  0,
-     & 175,0.035,  0, 47, 31,  0,  0,  0,
-     & 175,0.007,  0,310, 30,  0,  0,  0,
-     & 175,0.007,  0,327, 30,  0,  0,  0,
-     & 175,0.020,  0, 50, 21,  0,  0,  0,
-     & 175,0.006,  0, 50, 22,  0,  0,  0,
-     & 175,0.009,  0, 50, 23,  0,  0,  0,
-     & 175,0.016,  0, 50, 24,  0,  0,  0,
-     & 175,0.014,  0, 50, 25,  0,  0,  0,
-     & 175,0.003,  0, 50,293,  0,  0,  0,
-     & 175,0.007,  0, 50, 56,  0,  0,  0,
-     & 175,0.003,  0, 50, 26,  0,  0,  0,
-     & 175,0.004,  0, 50,294,  0,  0,  0/
+     & 175,0.067D0,  0, 46, 32,  0,  0,  0,
+     & 175,0.004D0,  0, 46, 30, 21,  0,  0,
+     & 175,0.100D0,  0, 46, 30, 21, 21,  0,
+     & 175,0.058D0,  0, 46, 30, 23,  0,  0,
+     & 175,0.020D0,  0, 46, 30, 24,  0,  0,
+     & 175,0.006D0,  0, 46, 30, 25,  0,  0,
+     & 175,0.043D0,  0, 47, 30,  0,  0,  0,
+     & 175,0.035D0,  0, 47, 31,  0,  0,  0,
+     & 175,0.007D0,  0,310, 30,  0,  0,  0,
+     & 175,0.007D0,  0,327, 30,  0,  0,  0,
+     & 175,0.020D0,  0, 50, 21,  0,  0,  0,
+     & 175,0.006D0,  0, 50, 22,  0,  0,  0,
+     & 175,0.009D0,  0, 50, 23,  0,  0,  0,
+     & 175,0.016D0,  0, 50, 24,  0,  0,  0,
+     & 175,0.014D0,  0, 50, 25,  0,  0,  0,
+     & 175,0.003D0,  0, 50,293,  0,  0,  0,
+     & 175,0.007D0,  0, 50, 56,  0,  0,  0,
+     & 175,0.003D0,  0, 50, 26,  0,  0,  0,
+     & 175,0.004D0,  0, 50,294,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 894, 912)/
-     & 175,0.006,  0, 50, 21, 21,  0,  0,
-     & 175,0.042,  0, 50, 30, 38, 21,  0,
-     & 175,0.004,  0, 50, 30, 30, 38, 38,
-     & 175,0.076,  0, 50, 30, 38, 21, 21,
-     & 175,0.026,  0, 51, 21,  0,  0,  0,
-     & 175,0.014,  0, 51, 22,  0,  0,  0,
-     & 175,0.014,  0, 51, 23,  0,  0,  0,
-     & 175,0.011,  0, 51, 24,  0,  0,  0,
-     & 175,0.018,  0, 51, 30, 38,  0,  0,
-     & 175,0.004,  0, 50, 34, 46,  0,  0,
-     & 175,0.004,  0, 50, 34, 46, 21,  0,
-     & 175,0.005,  0, 50, 50, 42,  0,  0,
-     & 175,0.002,  0, 30, 38,  0,  0,  0,
-     & 175,0.001,  0, 21, 21,  0,  0,  0,
-     & 175,0.008,  0, 30, 38, 21,  0,  0,
-     & 175,0.007,  0, 30, 30, 38, 38,  0,
-     & 175,0.015,  0, 30, 30, 38, 38, 21,
-     & 175,0.004,  0, 34, 46,  0,  0,  0,
-     & 175,0.003,  0, 35, 46,  0,  0,  0/
+     & 175,0.006D0,  0, 50, 21, 21,  0,  0,
+     & 175,0.042D0,  0, 50, 30, 38, 21,  0,
+     & 175,0.004D0,  0, 50, 30, 30, 38, 38,
+     & 175,0.076D0,  0, 50, 30, 38, 21, 21,
+     & 175,0.026D0,  0, 51, 21,  0,  0,  0,
+     & 175,0.014D0,  0, 51, 22,  0,  0,  0,
+     & 175,0.014D0,  0, 51, 23,  0,  0,  0,
+     & 175,0.011D0,  0, 51, 24,  0,  0,  0,
+     & 175,0.018D0,  0, 51, 30, 38,  0,  0,
+     & 175,0.004D0,  0, 50, 34, 46,  0,  0,
+     & 175,0.004D0,  0, 50, 34, 46, 21,  0,
+     & 175,0.005D0,  0, 50, 50, 42,  0,  0,
+     & 175,0.002D0,  0, 30, 38,  0,  0,  0,
+     & 175,0.001D0,  0, 21, 21,  0,  0,  0,
+     & 175,0.008D0,  0, 30, 38, 21,  0,  0,
+     & 175,0.007D0,  0, 30, 30, 38, 38,  0,
+     & 175,0.015D0,  0, 30, 30, 38, 38, 21,
+     & 175,0.004D0,  0, 34, 46,  0,  0,  0,
+     & 175,0.003D0,  0, 35, 46,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 913, 931)/
-     & 175,0.002,  0, 34, 47,  0,  0,  0,
-     & 175,0.001,  0, 42, 50,  0,  0,  0,
-     & 175,0.002,  0, 43, 51,  0,  0,  0,
-     & 175,0.003,  0, 42, 46, 30,  0,  0,
-     & 175,0.003,  0, 50, 34, 38,  0,  0,
-     & 175,0.001,  0, 34, 46, 30, 38, 21,
-     & 175,0.002,  0, 56, 23,  0,  0,  0,
-     & 175,0.001,  0, 56, 30, 38,  0,  0,
-     & 176,0.636,  0,175, 21,  0,  0,  0,
-     & 176,0.364,  0,175, 59,  0,  0,  0,
-     & 177,0.667,  0,172, 38,  0,  0,  0,
-     & 177,0.333,  0,176, 21,  0,  0,  0,
-     & 178,0.220,  0,171, 38,  0,  0,  0,
-     & 178,0.110,  0,175, 21,  0,  0,  0,
-     & 178,0.380,  0,172, 38,  0,  0,  0,
-     & 178,0.190,  0,176, 21,  0,  0,  0,
-     & 178,0.004,  0,175, 22,  0,  0,  0,
-     & 178,0.064,  0,172, 38, 21,  0,  0,
-     & 178,0.032,  0,176, 38, 30,  0,  0/
+     & 175,0.002D0,  0, 34, 47,  0,  0,  0,
+     & 175,0.001D0,  0, 42, 50,  0,  0,  0,
+     & 175,0.002D0,  0, 43, 51,  0,  0,  0,
+     & 175,0.003D0,  0, 42, 46, 30,  0,  0,
+     & 175,0.003D0,  0, 50, 34, 38,  0,  0,
+     & 175,0.001D0,  0, 34, 46, 30, 38, 21,
+     & 175,0.002D0,  0, 56, 23,  0,  0,  0,
+     & 175,0.001D0,  0, 56, 30, 38,  0,  0,
+     & 176,0.636D0,  0,175, 21,  0,  0,  0,
+     & 176,0.364D0,  0,175, 59,  0,  0,  0,
+     & 177,0.667D0,  0,172, 38,  0,  0,  0,
+     & 177,0.333D0,  0,176, 21,  0,  0,  0,
+     & 178,0.220D0,  0,171, 38,  0,  0,  0,
+     & 178,0.110D0,  0,175, 21,  0,  0,  0,
+     & 178,0.380D0,  0,172, 38,  0,  0,  0,
+     & 178,0.190D0,  0,176, 21,  0,  0,  0,
+     & 178,0.004D0,  0,175, 22,  0,  0,  0,
+     & 178,0.064D0,  0,172, 38, 21,  0,  0,
+     & 178,0.032D0,  0,176, 38, 30,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 932, 950)/
-     & 179,0.009,  0,130,123,  0,  0,  0,
-     & 179,0.019,101,128,121, 56,  0,  0,
-     & 179,0.019,101,130,123, 56,  0,  0,
-     & 179,0.025,101,128,121, 22,  0,  0,
-     & 179,0.025,101,130,123, 22,  0,  0,
-     & 179,0.009,101,128,121, 25,  0,  0,
-     & 179,0.009,101,130,123, 25,  0,  0,
-     & 179,0.036,  0, 34, 50,  0,  0,  0,
-     & 179,0.034,  0, 34, 51,  0,  0,  0,
-     & 179,0.007,  0, 34,328,  0,  0,  0,
-     & 179,0.043,  0, 35, 50,  0,  0,  0,
-     & 179,0.058,  0, 35, 51,  0,  0,  0,
-     & 179,0.011,  0, 34, 46, 30,  0,  0,
-     & 179,0.055,  0, 34, 46, 30, 21,  0,
-     & 179,0.003,  0, 34, 46, 30, 38, 30,
-     & 179,0.014,  0, 34, 50, 38, 30,  0,
-     & 179,0.017,  0, 42, 46, 30, 30,  0,
-     & 179,0.036,  0, 56, 30,  0,  0,  0,
-     & 179,0.067,  0, 56, 31,  0,  0,  0/
+     & 179,0.009D0,  0,130,123,  0,  0,  0,
+     & 179,0.019D0,101,128,121, 56,  0,  0,
+     & 179,0.019D0,101,130,123, 56,  0,  0,
+     & 179,0.025D0,101,128,121, 22,  0,  0,
+     & 179,0.025D0,101,130,123, 22,  0,  0,
+     & 179,0.009D0,101,128,121, 25,  0,  0,
+     & 179,0.009D0,101,130,123, 25,  0,  0,
+     & 179,0.036D0,  0, 34, 50,  0,  0,  0,
+     & 179,0.034D0,  0, 34, 51,  0,  0,  0,
+     & 179,0.007D0,  0, 34,328,  0,  0,  0,
+     & 179,0.043D0,  0, 35, 50,  0,  0,  0,
+     & 179,0.058D0,  0, 35, 51,  0,  0,  0,
+     & 179,0.011D0,  0, 34, 46, 30,  0,  0,
+     & 179,0.055D0,  0, 34, 46, 30, 21,  0,
+     & 179,0.003D0,  0, 34, 46, 30, 38, 30,
+     & 179,0.014D0,  0, 34, 50, 38, 30,  0,
+     & 179,0.017D0,  0, 42, 46, 30, 30,  0,
+     & 179,0.036D0,  0, 56, 30,  0,  0,  0,
+     & 179,0.067D0,  0, 56, 31,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 951, 969)/
-     & 179,0.023,  0, 56, 30, 21,  0,  0,
-     & 179,0.018,  0, 56, 30, 38, 30,  0,
-     & 179,0.020,  0, 22, 30,  0,  0,  0,
-     & 179,0.001,  0, 23, 30,  0,  0,  0,
-     & 179,0.009,  0, 24, 30,  0,  0,  0,
-     & 179,0.049,  0, 25, 30,  0,  0,  0,
-     & 179,0.011,  0,293, 30,  0,  0,  0,
-     & 179,0.015,  0, 22, 30, 21,  0,  0,
-     & 179,0.016,  0, 25, 30, 21,  0,  0,
-     & 179,0.103,  0, 22, 31,  0,  0,  0,
-     & 179,0.120,  0, 25, 31,  0,  0,  0,
-     & 179,0.010,  0, 30, 38, 30,  0,  0,
-     & 179,0.046,  0, 30, 38, 30, 21,  0,
-     & 179,0.003,  0, 30, 38, 38, 30, 30,
-     & 179,0.042,  0, 30, 38, 38, 30, 31,
-     & 179,0.001,  0, 34, 23,  0,  0,  0,
-     & 179,0.005,  0, 34, 38, 30,  0,  0,
-     & 179,0.001,  0, 34, 56,  0,  0,  0,
-     & 179,0.004,  0, 42, 30,  0,  0,  0/
+     & 179,0.023D0,  0, 56, 30, 21,  0,  0,
+     & 179,0.018D0,  0, 56, 30, 38, 30,  0,
+     & 179,0.020D0,  0, 22, 30,  0,  0,  0,
+     & 179,0.001D0,  0, 23, 30,  0,  0,  0,
+     & 179,0.009D0,  0, 24, 30,  0,  0,  0,
+     & 179,0.049D0,  0, 25, 30,  0,  0,  0,
+     & 179,0.011D0,  0,293, 30,  0,  0,  0,
+     & 179,0.015D0,  0, 22, 30, 21,  0,  0,
+     & 179,0.016D0,  0, 25, 30, 21,  0,  0,
+     & 179,0.103D0,  0, 22, 31,  0,  0,  0,
+     & 179,0.120D0,  0, 25, 31,  0,  0,  0,
+     & 179,0.010D0,  0, 30, 38, 30,  0,  0,
+     & 179,0.046D0,  0, 30, 38, 30, 21,  0,
+     & 179,0.003D0,  0, 30, 38, 38, 30, 30,
+     & 179,0.042D0,  0, 30, 38, 38, 30, 31,
+     & 179,0.001D0,  0, 34, 23,  0,  0,  0,
+     & 179,0.005D0,  0, 34, 38, 30,  0,  0,
+     & 179,0.001D0,  0, 34, 56,  0,  0,  0,
+     & 179,0.004D0,  0, 42, 30,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 970, 988)/
-     & 179,0.007,  0, 43, 30,  0,  0,  0,
-     & 180,0.900,  0,179, 59,  0,  0,  0,
-     & 180,0.100,  0,179, 21,  0,  0,  0,
-     & 181,0.500,  0,172, 42,  0,  0,  0,
-     & 181,0.500,  0,176, 34,  0,  0,  0,
-     & 182,0.440,  0,171, 42,  0,  0,  0,
-     & 182,0.440,  0,175, 34,  0,  0,  0,
-     & 182,0.055,  0,172, 42,  0,  0,  0,
-     & 182,0.055,  0,176, 34,  0,  0,  0,
-     & 182,0.010,  0,179, 22,  0,  0,  0,
-     & 183,1.000,  0,185, 30,  0,  0,  0,
-     & 184,1.000,  0,185, 30,  0,  0,  0,
-     & 185,0.028,101,128,121, 96,  0,  0,
-     & 185,0.010,101,128,121, 98,  0,  0,
-     & 185,0.028,101,130,123, 96,  0,  0,
-     & 185,0.010,101,130,123, 98,  0,  0,
-     & 185,0.026,  0, 91, 50,  0,  0,  0,
-     & 185,0.030,  0, 91, 50, 21,  0,  0,
-     & 185,0.029,  0, 91, 50, 38, 30,  0/
+     & 179,0.007D0,  0, 43, 30,  0,  0,  0,
+     & 180,0.900D0,  0,179, 59,  0,  0,  0,
+     & 180,0.100D0,  0,179, 21,  0,  0,  0,
+     & 181,0.500D0,  0,172, 42,  0,  0,  0,
+     & 181,0.500D0,  0,176, 34,  0,  0,  0,
+     & 182,0.440D0,  0,171, 42,  0,  0,  0,
+     & 182,0.440D0,  0,175, 34,  0,  0,  0,
+     & 182,0.055D0,  0,172, 42,  0,  0,  0,
+     & 182,0.055D0,  0,176, 34,  0,  0,  0,
+     & 182,0.010D0,  0,179, 22,  0,  0,  0,
+     & 183,1.000D0,  0,185, 30,  0,  0,  0,
+     & 184,1.000D0,  0,185, 30,  0,  0,  0,
+     & 185,0.028D0,101,128,121, 96,  0,  0,
+     & 185,0.010D0,101,128,121, 98,  0,  0,
+     & 185,0.028D0,101,130,123, 96,  0,  0,
+     & 185,0.010D0,101,130,123, 98,  0,  0,
+     & 185,0.026D0,  0, 91, 50,  0,  0,  0,
+     & 185,0.030D0,  0, 91, 50, 21,  0,  0,
+     & 185,0.029D0,  0, 91, 50, 38, 30,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I= 989,1007)/
-     & 185,0.014,  0, 91, 50, 22,  0,  0,
-     & 185,0.020,  0, 91, 51,  0,  0,  0,
-     & 185,0.029,  0, 91, 46, 30,  0,  0,
-     & 185,0.039,  0, 91, 46, 30, 21,  0,
-     & 185,0.002,  0, 91, 46, 30, 30, 38,
-     & 185,0.010,  0, 91, 46, 30, 21, 21,
-     & 185,0.014,  0, 91, 47, 30,  0,  0,
-     & 185,0.010,  0, 92, 50,  0,  0,  0,
-     & 185,0.020,  0, 92, 51,  0,  0,  0,
-     & 185,0.010,  0, 92, 51, 21,  0,  0,
-     & 185,0.007,  0,103, 46,  0,  0,  0,
-     & 185,0.014,  0,103, 47,  0,  0,  0,
-     & 185,0.004,  0, 91,293,  0,  0,  0,
-     & 185,0.003,  0, 91, 38, 30,  0,  0,
-     & 185,0.003,  0, 91, 38, 30, 38, 30,
-     & 185,0.001,  0, 91, 56,  0,  0,  0,
-     & 185,0.002,  0, 91, 46, 34,  0,  0,
-     & 185,0.010,  0, 96, 30,  0,  0,  0,
-     & 185,0.020,  0, 96, 31,  0,  0,  0/
+     & 185,0.014D0,  0, 91, 50, 22,  0,  0,
+     & 185,0.020D0,  0, 91, 51,  0,  0,  0,
+     & 185,0.029D0,  0, 91, 46, 30,  0,  0,
+     & 185,0.039D0,  0, 91, 46, 30, 21,  0,
+     & 185,0.002D0,  0, 91, 46, 30, 30, 38,
+     & 185,0.010D0,  0, 91, 46, 30, 21, 21,
+     & 185,0.014D0,  0, 91, 47, 30,  0,  0,
+     & 185,0.010D0,  0, 92, 50,  0,  0,  0,
+     & 185,0.020D0,  0, 92, 51,  0,  0,  0,
+     & 185,0.010D0,  0, 92, 51, 21,  0,  0,
+     & 185,0.007D0,  0,103, 46,  0,  0,  0,
+     & 185,0.014D0,  0,103, 47,  0,  0,  0,
+     & 185,0.004D0,  0, 91,293,  0,  0,  0,
+     & 185,0.003D0,  0, 91, 38, 30,  0,  0,
+     & 185,0.003D0,  0, 91, 38, 30, 38, 30,
+     & 185,0.001D0,  0, 91, 56,  0,  0,  0,
+     & 185,0.002D0,  0, 91, 46, 34,  0,  0,
+     & 185,0.010D0,  0, 96, 30,  0,  0,  0,
+     & 185,0.020D0,  0, 96, 31,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1008,1026)/
-     & 185,0.030,  0, 96, 30, 21,  0,  0,
-     & 185,0.010,  0, 96, 30, 22,  0,  0,
-     & 185,0.020,  0, 96, 30, 24,  0,  0,
-     & 185,0.035,  0, 96, 30, 30, 38,  0,
-     & 185,0.020,  0, 96, 30, 21, 21,  0,
-     & 185,0.010,  0, 96, 30, 38, 30, 21,
-     & 185,0.010,  0, 96, 30, 21, 21, 21,
-     & 185,0.007,  0, 96, 34, 50,  0,  0,
-     & 185,0.011,  0, 97, 30,  0,  0,  0,
-     & 185,0.022,  0, 97, 30, 21,  0,  0,
-     & 185,0.013,  0, 97, 30, 38, 30,  0,
-     & 185,0.010,  0, 97, 30, 21, 21,  0,
-     & 185,0.007,  0, 97, 30, 38, 30, 21,
-     & 185,0.005,  0, 97, 30, 21, 21, 21,
-     & 185,0.005,  0, 98, 30,  0,  0,  0,
-     & 185,0.015,  0, 98, 31,  0,  0,  0,
-     & 185,0.011,  0,104, 21,  0,  0,  0,
-     & 185,0.007,  0,104, 22,  0,  0,  0,
-     & 185,0.010,  0,104, 23,  0,  0,  0/
+     & 185,0.030D0,  0, 96, 30, 21,  0,  0,
+     & 185,0.010D0,  0, 96, 30, 22,  0,  0,
+     & 185,0.020D0,  0, 96, 30, 24,  0,  0,
+     & 185,0.035D0,  0, 96, 30, 30, 38,  0,
+     & 185,0.020D0,  0, 96, 30, 21, 21,  0,
+     & 185,0.010D0,  0, 96, 30, 38, 30, 21,
+     & 185,0.010D0,  0, 96, 30, 21, 21, 21,
+     & 185,0.007D0,  0, 96, 34, 50,  0,  0,
+     & 185,0.011D0,  0, 97, 30,  0,  0,  0,
+     & 185,0.022D0,  0, 97, 30, 21,  0,  0,
+     & 185,0.013D0,  0, 97, 30, 38, 30,  0,
+     & 185,0.010D0,  0, 97, 30, 21, 21,  0,
+     & 185,0.007D0,  0, 97, 30, 38, 30, 21,
+     & 185,0.005D0,  0, 97, 30, 21, 21, 21,
+     & 185,0.005D0,  0, 98, 30,  0,  0,  0,
+     & 185,0.015D0,  0, 98, 31,  0,  0,  0,
+     & 185,0.011D0,  0,104, 21,  0,  0,  0,
+     & 185,0.007D0,  0,104, 22,  0,  0,  0,
+     & 185,0.010D0,  0,104, 23,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1027,1045)/
-     & 185,0.031,  0,104, 24,  0,  0,  0,
-     & 185,0.010,  0,104, 25,  0,  0,  0,
-     & 185,0.004,  0,104, 56,  0,  0,  0,
-     & 185,0.026,  0,104, 38, 30,  0,  0,
-     & 185,0.005,  0,104, 38, 38, 30, 30,
-     & 185,0.005,  0,104, 38, 30, 21, 21,
-     & 185,0.005,  0,105, 21,  0,  0,  0,
-     & 185,0.006,  0,105, 23,  0,  0,  0,
-     & 185,0.004,  0,104, 46, 34,  0,  0,
-     & 185,0.002,  0,104, 34, 38,  0,  0,
-     & 185,0.001,  0,104, 34, 38, 21,  0,
-     & 185,0.016,  0, 99, 30, 30,  0,  0,
-     & 185,0.003,  0,106, 34,  0,  0,  0,
-     & 185,0.002,  0,107, 34,  0,  0,  0,
-     & 185,0.003,  0,101, 34, 30,  0,  0,
-     & 185,0.040,  0, 93, 34, 21,  0,  0,
-     & 185,0.040,  0, 93, 34, 38, 30,  0,
-     & 185,0.020,  0, 93, 34, 21, 21,  0,
-     & 185,0.010,  0, 93, 34, 38, 30, 21/
+     & 185,0.031D0,  0,104, 24,  0,  0,  0,
+     & 185,0.010D0,  0,104, 25,  0,  0,  0,
+     & 185,0.004D0,  0,104, 56,  0,  0,  0,
+     & 185,0.026D0,  0,104, 38, 30,  0,  0,
+     & 185,0.005D0,  0,104, 38, 38, 30, 30,
+     & 185,0.005D0,  0,104, 38, 30, 21, 21,
+     & 185,0.005D0,  0,105, 21,  0,  0,  0,
+     & 185,0.006D0,  0,105, 23,  0,  0,  0,
+     & 185,0.004D0,  0,104, 46, 34,  0,  0,
+     & 185,0.002D0,  0,104, 34, 38,  0,  0,
+     & 185,0.001D0,  0,104, 34, 38, 21,  0,
+     & 185,0.016D0,  0, 99, 30, 30,  0,  0,
+     & 185,0.003D0,  0,106, 34,  0,  0,  0,
+     & 185,0.002D0,  0,107, 34,  0,  0,  0,
+     & 185,0.003D0,  0,101, 34, 30,  0,  0,
+     & 185,0.040D0,  0, 93, 34, 21,  0,  0,
+     & 185,0.040D0,  0, 93, 34, 38, 30,  0,
+     & 185,0.020D0,  0, 93, 34, 21, 21,  0,
+     & 185,0.010D0,  0, 93, 34, 38, 30, 21/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1046,1064)/
-     & 185,0.010,  0, 93, 34, 21, 21, 21,
-     & 185,0.020,  0, 93, 35, 21,  0,  0,
-     & 185,0.040,  0, 93, 50, 30,  0,  0,
-     & 185,0.020,  0, 93, 50, 31,  0,  0,
-     & 185,0.010,  0, 93, 50, 30, 38, 30,
-     & 185,0.010,  0, 93, 50, 30, 21, 21,
-     & 185,0.006,  0, 93, 51, 30,  0,  0,
-     & 186,1.000,  0,185, 21,  0,  0,  0,
-     & 187,1.000,  0,185, 21,  0,  0,  0,
-     & 188,1.000,  0,185, 38,  0,  0,  0,
-     & 189,1.000,  0,185, 38,  0,  0,  0,
-     & 190,0.045,101,128,121,106,  0,  0,
-     & 190,0.005,101,128,121,107,  0,  0,
-     & 190,0.045,101,130,123,106,  0,  0,
-     & 190,0.005,101,130,123,107,  0,  0,
-     & 190,0.021,  0,104, 50,  0,  0,  0,
-     & 190,0.032,  0,105, 50,  0,  0,  0,
-     & 190,0.032,  0, 97, 30, 50,  0,  0,
-     & 190,0.045,  0,104, 51,  0,  0,  0/
+     & 185,0.010D0,  0, 93, 34, 21, 21, 21,
+     & 185,0.020D0,  0, 93, 35, 21,  0,  0,
+     & 185,0.040D0,  0, 93, 50, 30,  0,  0,
+     & 185,0.020D0,  0, 93, 50, 31,  0,  0,
+     & 185,0.010D0,  0, 93, 50, 30, 38, 30,
+     & 185,0.010D0,  0, 93, 50, 30, 21, 21,
+     & 185,0.006D0,  0, 93, 51, 30,  0,  0,
+     & 186,1.000D0,  0,185, 21,  0,  0,  0,
+     & 187,1.000D0,  0,185, 21,  0,  0,  0,
+     & 188,1.000D0,  0,185, 38,  0,  0,  0,
+     & 189,1.000D0,  0,185, 38,  0,  0,  0,
+     & 190,0.045D0,101,128,121,106,  0,  0,
+     & 190,0.005D0,101,128,121,107,  0,  0,
+     & 190,0.045D0,101,130,123,106,  0,  0,
+     & 190,0.005D0,101,130,123,107,  0,  0,
+     & 190,0.021D0,  0,104, 50,  0,  0,  0,
+     & 190,0.032D0,  0,105, 50,  0,  0,  0,
+     & 190,0.032D0,  0, 97, 30, 50,  0,  0,
+     & 190,0.045D0,  0,104, 51,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1065,1083)/
-     & 190,0.065,  0,105, 51,  0,  0,  0,
-     & 190,0.065,  0, 97, 30, 51,  0,  0,
-     & 190,0.055,  0,106, 30,  0,  0,  0,
-     & 190,0.160,  0,106, 31,  0,  0,  0,
-     & 190,0.105,  0,107, 30,  0,  0,  0,
-     & 190,0.320,  0,107, 31,  0,  0,  0,
-     & 191,1.000,  0,190, 59,  0,  0,  0,
-     & 192,0.667,  0,193, 30,  0,  0,  0,
-     & 192,0.333,  0,190, 21,  0,  0,  0,
-     & 193,0.045,101,128,121,101,  0,  0,
-     & 193,0.045,101,130,123,101,  0,  0,
-     & 193,0.005,101,128,121,102,  0,  0,
-     & 193,0.005,101,130,123,102,  0,  0,
-     & 193,0.020,  0, 97, 50,  0,  0,  0,
-     & 193,0.020,  0, 97, 21, 50,  0,  0,
-     & 193,0.020,  0, 98, 50,  0,  0,  0,
-     & 193,0.060,  0, 97, 51,  0,  0,  0,
-     & 193,0.060,  0, 97, 21, 51,  0,  0,
-     & 193,0.060,  0, 98, 51,  0,  0,  0/
+     & 190,0.065D0,  0,105, 51,  0,  0,  0,
+     & 190,0.065D0,  0, 97, 30, 51,  0,  0,
+     & 190,0.055D0,  0,106, 30,  0,  0,  0,
+     & 190,0.160D0,  0,106, 31,  0,  0,  0,
+     & 190,0.105D0,  0,107, 30,  0,  0,  0,
+     & 190,0.320D0,  0,107, 31,  0,  0,  0,
+     & 191,1.000D0,  0,190, 59,  0,  0,  0,
+     & 192,0.667D0,  0,193, 30,  0,  0,  0,
+     & 192,0.333D0,  0,190, 21,  0,  0,  0,
+     & 193,0.045D0,101,128,121,101,  0,  0,
+     & 193,0.045D0,101,130,123,101,  0,  0,
+     & 193,0.005D0,101,128,121,102,  0,  0,
+     & 193,0.005D0,101,130,123,102,  0,  0,
+     & 193,0.020D0,  0, 97, 50,  0,  0,  0,
+     & 193,0.020D0,  0, 97, 21, 50,  0,  0,
+     & 193,0.020D0,  0, 98, 50,  0,  0,  0,
+     & 193,0.060D0,  0, 97, 51,  0,  0,  0,
+     & 193,0.060D0,  0, 97, 21, 51,  0,  0,
+     & 193,0.060D0,  0, 98, 51,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1084,1102)/
-     & 193,0.020,  0,104, 46,  0,  0,  0,
-     & 193,0.060,  0,104, 47,  0,  0,  0,
-     & 193,0.040,  0,105, 46,  0,  0,  0,
-     & 193,0.120,  0,105, 47,  0,  0,  0,
-     & 193,0.020,  0,101, 30,  0,  0,  0,
-     & 193,0.060,  0,101, 31,  0,  0,  0,
-     & 193,0.040,  0,102, 30,  0,  0,  0,
-     & 193,0.120,  0,102, 31,  0,  0,  0,
-     & 193,0.010,  0,106, 21,  0,  0,  0,
-     & 193,0.030,  0,106, 23,  0,  0,  0,
-     & 193,0.020,  0,107, 21,  0,  0,  0,
-     & 193,0.060,  0,107, 23,  0,  0,  0,
-     & 193,0.030,  0,106, 56,  0,  0,  0,
-     & 193,0.030,  0,108, 34,  0,  0,  0,
-     & 194,1.000,  0,193, 59,  0,  0,  0,
-     & 195,0.670,  0,190, 38,  0,  0,  0,
-     & 195,0.330,  0,193, 21,  0,  0,  0,
-     & 196,0.050,101,128,121,108,  0,  0,
-     & 196,0.050,101,130,123,108,  0,  0/
+     & 193,0.020D0,  0,104, 46,  0,  0,  0,
+     & 193,0.060D0,  0,104, 47,  0,  0,  0,
+     & 193,0.040D0,  0,105, 46,  0,  0,  0,
+     & 193,0.120D0,  0,105, 47,  0,  0,  0,
+     & 193,0.020D0,  0,101, 30,  0,  0,  0,
+     & 193,0.060D0,  0,101, 31,  0,  0,  0,
+     & 193,0.040D0,  0,102, 30,  0,  0,  0,
+     & 193,0.120D0,  0,102, 31,  0,  0,  0,
+     & 193,0.010D0,  0,106, 21,  0,  0,  0,
+     & 193,0.030D0,  0,106, 23,  0,  0,  0,
+     & 193,0.020D0,  0,107, 21,  0,  0,  0,
+     & 193,0.060D0,  0,107, 23,  0,  0,  0,
+     & 193,0.030D0,  0,106, 56,  0,  0,  0,
+     & 193,0.030D0,  0,108, 34,  0,  0,  0,
+     & 194,1.000D0,  0,193, 59,  0,  0,  0,
+     & 195,0.670D0,  0,190, 38,  0,  0,  0,
+     & 195,0.330D0,  0,193, 21,  0,  0,  0,
+     & 196,0.050D0,101,128,121,108,  0,  0,
+     & 196,0.050D0,101,130,123,108,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1103,1121)/
-     & 196,0.075,  0,106, 50,  0,  0,  0,
-     & 196,0.225,  0,106, 51,  0,  0,  0,
-     & 196,0.150,  0,107, 50,  0,  0,  0,
-     & 196,0.450,  0,107, 51,  0,  0,  0,
-     & 197,1.000,  0,196, 59,  0,  0,  0,
-     & 209,0.250,100,  1,  8,  4,  0,  0,
-     & 209,0.250,100,  3, 10,  4,  0,  0,
-     & 209,0.250,100,  5, 12,  4,  0,  0,
-     & 209,0.085,100,121,128,  4,  0,  0,
-     & 209,0.085,100,123,130,  4,  0,  0,
-     & 209,0.080,100,125,132,  4,  0,  0,
-     & 210,0.250,100,  2,  7,209,  0,  0,
-     & 210,0.250,100,  4,  9,209,  0,  0,
-     & 210,0.250,100,  6, 11,209,  0,  0,
-     & 210,0.085,100,122,127,209,  0,  0,
-     & 210,0.085,100,124,129,209,  0,  0,
-     & 210,0.080,100,126,131,209,  0,  0,
-     & 211,0.250,100,  1,  8,  6,  0,  0,
-     & 211,0.250,100,  3, 10,  6,  0,  0/
+     & 196,0.075D0,  0,106, 50,  0,  0,  0,
+     & 196,0.225D0,  0,106, 51,  0,  0,  0,
+     & 196,0.150D0,  0,107, 50,  0,  0,  0,
+     & 196,0.450D0,  0,107, 51,  0,  0,  0,
+     & 197,1.000D0,  0,196, 59,  0,  0,  0,
+     & 209,0.250D0,100,  1,  8,  4,  0,  0,
+     & 209,0.250D0,100,  3, 10,  4,  0,  0,
+     & 209,0.250D0,100,  5, 12,  4,  0,  0,
+     & 209,0.085D0,100,121,128,  4,  0,  0,
+     & 209,0.085D0,100,123,130,  4,  0,  0,
+     & 209,0.080D0,100,125,132,  4,  0,  0,
+     & 210,0.250D0,100,  2,  7,209,  0,  0,
+     & 210,0.250D0,100,  4,  9,209,  0,  0,
+     & 210,0.250D0,100,  6, 11,209,  0,  0,
+     & 210,0.085D0,100,122,127,209,  0,  0,
+     & 210,0.085D0,100,124,129,209,  0,  0,
+     & 210,0.080D0,100,126,131,209,  0,  0,
+     & 211,0.250D0,100,  1,  8,  6,  0,  0,
+     & 211,0.250D0,100,  3, 10,  6,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1122,1140)/
-     & 211,0.250,100,  5, 12,  6,  0,  0,
-     & 211,0.085,100,121,128,  6,  0,  0,
-     & 211,0.085,100,123,130,  6,  0,  0,
-     & 211,0.080,100,125,132,  6,  0,  0,
-     & 212,0.250,100,  2,  7,211,  0,  0,
-     & 212,0.250,100,  4,  9,211,  0,  0,
-     & 212,0.250,100,  6, 11,211,  0,  0,
-     & 212,0.085,100,122,127,211,  0,  0,
-     & 212,0.085,100,124,129,211,  0,  0,
-     & 212,0.080,100,126,131,211,  0,  0,
-     & 215,0.250,100,  7,  2, 10,  0,  0,
-     & 215,0.250,100,  9,  4, 10,  0,  0,
-     & 215,0.250,100, 11,  6, 10,  0,  0,
-     & 215,0.085,100,127,122, 10,  0,  0,
-     & 215,0.085,100,129,124, 10,  0,  0,
-     & 215,0.080,100,131,126, 10,  0,  0,
-     & 216,0.250,100,  8,  1,215,  0,  0,
-     & 216,0.250,100, 10,  3,215,  0,  0,
-     & 216,0.250,100, 12,  5,215,  0,  0/
+     & 211,0.250D0,100,  5, 12,  6,  0,  0,
+     & 211,0.085D0,100,121,128,  6,  0,  0,
+     & 211,0.085D0,100,123,130,  6,  0,  0,
+     & 211,0.080D0,100,125,132,  6,  0,  0,
+     & 212,0.250D0,100,  2,  7,211,  0,  0,
+     & 212,0.250D0,100,  4,  9,211,  0,  0,
+     & 212,0.250D0,100,  6, 11,211,  0,  0,
+     & 212,0.085D0,100,122,127,211,  0,  0,
+     & 212,0.085D0,100,124,129,211,  0,  0,
+     & 212,0.080D0,100,126,131,211,  0,  0,
+     & 215,0.250D0,100,  7,  2, 10,  0,  0,
+     & 215,0.250D0,100,  9,  4, 10,  0,  0,
+     & 215,0.250D0,100, 11,  6, 10,  0,  0,
+     & 215,0.085D0,100,127,122, 10,  0,  0,
+     & 215,0.085D0,100,129,124, 10,  0,  0,
+     & 215,0.080D0,100,131,126, 10,  0,  0,
+     & 216,0.250D0,100,  8,  1,215,  0,  0,
+     & 216,0.250D0,100, 10,  3,215,  0,  0,
+     & 216,0.250D0,100, 12,  5,215,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1141,1159)/
-     & 216,0.085,100,128,121,215,  0,  0,
-     & 216,0.085,100,130,123,215,  0,  0,
-     & 216,0.080,100,132,125,215,  0,  0,
-     & 217,0.250,100,  7,  2, 12,  0,  0,
-     & 217,0.250,100,  9,  4, 12,  0,  0,
-     & 217,0.250,100, 11,  6, 12,  0,  0,
-     & 217,0.085,100,127,122, 12,  0,  0,
-     & 217,0.085,100,129,124, 12,  0,  0,
-     & 217,0.080,100,131,126, 12,  0,  0,
-     & 218,0.250,100,  8,  1,217,  0,  0,
-     & 218,0.250,100, 10,  3,217,  0,  0,
-     & 218,0.250,100, 12,  5,217,  0,  0,
-     & 218,0.085,100,128,121,217,  0,  0,
-     & 218,0.085,100,130,123,217,  0,  0,
-     & 218,0.080,100,132,125,217,  0,  0,
-     & 221,0.016,101,121,128,136,  0,  0,
-     & 221,0.016,101,123,130,136,  0,  0,
-     & 221,0.008,101,125,132,136,  0,  0,
-     & 221,0.048,101,121,128,137,  0,  0/
+     & 216,0.085D0,100,128,121,215,  0,  0,
+     & 216,0.085D0,100,130,123,215,  0,  0,
+     & 216,0.080D0,100,132,125,215,  0,  0,
+     & 217,0.250D0,100,  7,  2, 12,  0,  0,
+     & 217,0.250D0,100,  9,  4, 12,  0,  0,
+     & 217,0.250D0,100, 11,  6, 12,  0,  0,
+     & 217,0.085D0,100,127,122, 12,  0,  0,
+     & 217,0.085D0,100,129,124, 12,  0,  0,
+     & 217,0.080D0,100,131,126, 12,  0,  0,
+     & 218,0.250D0,100,  8,  1,217,  0,  0,
+     & 218,0.250D0,100, 10,  3,217,  0,  0,
+     & 218,0.250D0,100, 12,  5,217,  0,  0,
+     & 218,0.085D0,100,128,121,217,  0,  0,
+     & 218,0.085D0,100,130,123,217,  0,  0,
+     & 218,0.080D0,100,132,125,217,  0,  0,
+     & 221,0.016D0,101,121,128,136,  0,  0,
+     & 221,0.016D0,101,123,130,136,  0,  0,
+     & 221,0.008D0,101,125,132,136,  0,  0,
+     & 221,0.048D0,101,121,128,137,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1160,1178)/
-     & 221,0.048,101,123,130,137,  0,  0,
-     & 221,0.022,101,125,132,137,  0,  0,
-     & 221,0.003,101,121,128,331,  0,  0,
-     & 221,0.003,101,123,130,331,  0,  0,
-     & 221,0.001,101,125,132,331,  0,  0,
-     & 221,0.008,101,121,128,138,  0,  0,
-     & 221,0.008,101,123,130,138,  0,  0,
-     & 221,0.004,101,125,132,138,  0,  0,
-     & 221,0.008,101,121,128,313,  0,  0,
-     & 221,0.008,101,123,130,313,  0,  0,
-     & 221,0.004,101,125,132,313,  0,  0,
-     & 221,0.013,101,121,128,139,  0,  0,
-     & 221,0.013,101,123,130,139,  0,  0,
-     & 221,0.006,101,125,132,139,  0,  0,
-     & 221,0.004,  0,136, 30,  0,  0,  0,
-     & 221,0.010,  0,136, 31,  0,  0,  0,
-     & 221,0.006,  0,136, 32,  0,  0,  0,
-     & 221,0.003,  0,137, 30,  0,  0,  0,
-     & 221,0.009,  0,137, 31,  0,  0,  0/
+     & 221,0.048D0,101,123,130,137,  0,  0,
+     & 221,0.022D0,101,125,132,137,  0,  0,
+     & 221,0.003D0,101,121,128,331,  0,  0,
+     & 221,0.003D0,101,123,130,331,  0,  0,
+     & 221,0.001D0,101,125,132,331,  0,  0,
+     & 221,0.008D0,101,121,128,138,  0,  0,
+     & 221,0.008D0,101,123,130,138,  0,  0,
+     & 221,0.004D0,101,125,132,138,  0,  0,
+     & 221,0.008D0,101,121,128,313,  0,  0,
+     & 221,0.008D0,101,123,130,313,  0,  0,
+     & 221,0.004D0,101,125,132,313,  0,  0,
+     & 221,0.013D0,101,121,128,139,  0,  0,
+     & 221,0.013D0,101,123,130,139,  0,  0,
+     & 221,0.006D0,101,125,132,139,  0,  0,
+     & 221,0.004D0,  0,136, 30,  0,  0,  0,
+     & 221,0.010D0,  0,136, 31,  0,  0,  0,
+     & 221,0.006D0,  0,136, 32,  0,  0,  0,
+     & 221,0.003D0,  0,137, 30,  0,  0,  0,
+     & 221,0.009D0,  0,137, 31,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1179,1197)/
-     & 221,0.017,  0,137, 32,  0,  0,  0,
-     & 221,0.011,  0,136,179,  0,  0,  0,
-     & 221,0.015,  0,136,180,  0,  0,  0,
-     & 221,0.011,  0,137,179,  0,  0,  0,
-     & 221,0.022,  0,137,180,  0,  0,  0,
-     & 221,0.001,  0,164, 42,  0,  0,  0,
-     & 221,0.002,  0,164, 43,  0,  0,  0,
-     & 221,0.001,  0,165, 42,  0,  0,  0,
-     & 221,0.001,  0,165, 43,  0,  0,  0,
-     & 221,0.001,  0,166, 42,  0,  0,  0,
-     & 221,0.001,  0,166, 43,  0,  0,  0,
-     & 221,0.207,100,  1,  8,  4,  7,  0,
-     & 221,0.207,100,  3, 10,  4,  7,  0,
-     & 221,0.024,100,  1,  8,  2,  7,  0,
-     & 221,0.024,100,  3, 10,  2,  7,  0,
-     & 221,0.012,100,  3,  8,  4,  7,  0,
-     & 221,0.012,100,  1, 10,  4,  7,  0,
-     & 221,0.069,100,  4,  8,  1,  7,  0,
-     & 221,0.069,100,  4, 10,  3,  7,  0/
+     & 221,0.017D0,  0,137, 32,  0,  0,  0,
+     & 221,0.011D0,  0,136,179,  0,  0,  0,
+     & 221,0.015D0,  0,136,180,  0,  0,  0,
+     & 221,0.011D0,  0,137,179,  0,  0,  0,
+     & 221,0.022D0,  0,137,180,  0,  0,  0,
+     & 221,0.001D0,  0,164, 42,  0,  0,  0,
+     & 221,0.002D0,  0,164, 43,  0,  0,  0,
+     & 221,0.001D0,  0,165, 42,  0,  0,  0,
+     & 221,0.001D0,  0,165, 43,  0,  0,  0,
+     & 221,0.001D0,  0,166, 42,  0,  0,  0,
+     & 221,0.001D0,  0,166, 43,  0,  0,  0,
+     & 221,0.207D0,100,  1,  8,  4,  7,  0,
+     & 221,0.207D0,100,  3, 10,  4,  7,  0,
+     & 221,0.024D0,100,  1,  8,  2,  7,  0,
+     & 221,0.024D0,100,  3, 10,  2,  7,  0,
+     & 221,0.012D0,100,  3,  8,  4,  7,  0,
+     & 221,0.012D0,100,  1, 10,  4,  7,  0,
+     & 221,0.069D0,100,  4,  8,  1,  7,  0,
+     & 221,0.069D0,100,  4, 10,  3,  7,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1198,1216)/
-     & 221,0.008,100,  2,  8,  1,  7,  0,
-     & 221,0.008,100,  2, 10,  3,  7,  0,
-     & 221,0.004,100,  4,  8,  3,  7,  0,
-     & 221,0.004,100,  4, 10,  1,  7,  0,
-     & 222,0.016,101,121,128,140,  0,  0,
-     & 222,0.016,101,123,130,140,  0,  0,
-     & 222,0.008,101,125,132,140,  0,  0,
-     & 222,0.048,101,121,128,141,  0,  0,
-     & 222,0.048,101,123,130,141,  0,  0,
-     & 222,0.022,101,125,132,141,  0,  0,
-     & 222,0.003,101,121,128,332,  0,  0,
-     & 222,0.003,101,123,130,332,  0,  0,
-     & 222,0.001,101,125,132,332,  0,  0,
-     & 222,0.008,101,121,128,142,  0,  0,
-     & 222,0.008,101,123,130,142,  0,  0,
-     & 222,0.004,101,125,132,142,  0,  0,
-     & 222,0.008,101,121,128,314,  0,  0,
-     & 222,0.008,101,123,130,314,  0,  0,
-     & 222,0.004,101,125,132,314,  0,  0/
+     & 221,0.008D0,100,  2,  8,  1,  7,  0,
+     & 221,0.008D0,100,  2, 10,  3,  7,  0,
+     & 221,0.004D0,100,  4,  8,  3,  7,  0,
+     & 221,0.004D0,100,  4, 10,  1,  7,  0,
+     & 222,0.016D0,101,121,128,140,  0,  0,
+     & 222,0.016D0,101,123,130,140,  0,  0,
+     & 222,0.008D0,101,125,132,140,  0,  0,
+     & 222,0.048D0,101,121,128,141,  0,  0,
+     & 222,0.048D0,101,123,130,141,  0,  0,
+     & 222,0.022D0,101,125,132,141,  0,  0,
+     & 222,0.003D0,101,121,128,332,  0,  0,
+     & 222,0.003D0,101,123,130,332,  0,  0,
+     & 222,0.001D0,101,125,132,332,  0,  0,
+     & 222,0.008D0,101,121,128,142,  0,  0,
+     & 222,0.008D0,101,123,130,142,  0,  0,
+     & 222,0.004D0,101,125,132,142,  0,  0,
+     & 222,0.008D0,101,121,128,314,  0,  0,
+     & 222,0.008D0,101,123,130,314,  0,  0,
+     & 222,0.004D0,101,125,132,314,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1217,1235)/
-     & 222,0.013,101,121,128,143,  0,  0,
-     & 222,0.013,101,123,130,143,  0,  0,
-     & 222,0.006,101,125,132,143,  0,  0,
-     & 222,0.004,  0,140, 30,  0,  0,  0,
-     & 222,0.010,  0,140, 31,  0,  0,  0,
-     & 222,0.006,  0,140, 32,  0,  0,  0,
-     & 222,0.003,  0,141, 30,  0,  0,  0,
-     & 222,0.009,  0,141, 31,  0,  0,  0,
-     & 222,0.017,  0,141, 32,  0,  0,  0,
-     & 222,0.011,  0,140,179,  0,  0,  0,
-     & 222,0.015,  0,140,180,  0,  0,  0,
-     & 222,0.011,  0,141,179,  0,  0,  0,
-     & 222,0.022,  0,141,180,  0,  0,  0,
-     & 222,0.001,  0,164, 34,  0,  0,  0,
-     & 222,0.002,  0,164, 35,  0,  0,  0,
-     & 222,0.001,  0,165, 34,  0,  0,  0,
-     & 222,0.001,  0,165, 35,  0,  0,  0,
-     & 222,0.001,  0,166, 34,  0,  0,  0,
-     & 222,0.001,  0,166, 35,  0,  0,  0/
+     & 222,0.013D0,101,121,128,143,  0,  0,
+     & 222,0.013D0,101,123,130,143,  0,  0,
+     & 222,0.006D0,101,125,132,143,  0,  0,
+     & 222,0.004D0,  0,140, 30,  0,  0,  0,
+     & 222,0.010D0,  0,140, 31,  0,  0,  0,
+     & 222,0.006D0,  0,140, 32,  0,  0,  0,
+     & 222,0.003D0,  0,141, 30,  0,  0,  0,
+     & 222,0.009D0,  0,141, 31,  0,  0,  0,
+     & 222,0.017D0,  0,141, 32,  0,  0,  0,
+     & 222,0.011D0,  0,140,179,  0,  0,  0,
+     & 222,0.015D0,  0,140,180,  0,  0,  0,
+     & 222,0.011D0,  0,141,179,  0,  0,  0,
+     & 222,0.022D0,  0,141,180,  0,  0,  0,
+     & 222,0.001D0,  0,164, 34,  0,  0,  0,
+     & 222,0.002D0,  0,164, 35,  0,  0,  0,
+     & 222,0.001D0,  0,165, 34,  0,  0,  0,
+     & 222,0.001D0,  0,165, 35,  0,  0,  0,
+     & 222,0.001D0,  0,166, 34,  0,  0,  0,
+     & 222,0.001D0,  0,166, 35,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1236,1254)/
-     & 222,0.207,100,  1,  8,  4,  8,  0,
-     & 222,0.207,100,  3, 10,  4,  8,  0,
-     & 222,0.024,100,  1,  8,  2,  8,  0,
-     & 222,0.024,100,  3, 10,  2,  8,  0,
-     & 222,0.012,100,  3,  8,  4,  8,  0,
-     & 222,0.012,100,  1, 10,  4,  8,  0,
-     & 222,0.069,100,  4,  8,  1,  8,  0,
-     & 222,0.069,100,  4, 10,  3,  8,  0,
-     & 222,0.008,100,  2,  8,  1,  8,  0,
-     & 222,0.008,100,  2, 10,  3,  8,  0,
-     & 222,0.004,100,  4,  8,  3,  8,  0,
-     & 222,0.004,100,  4, 10,  1,  8,  0,
-     & 223,0.016,101,121,128,144,  0,  0,
-     & 223,0.016,101,123,130,144,  0,  0,
-     & 223,0.008,101,125,132,144,  0,  0,
-     & 223,0.048,101,121,128,145,  0,  0,
-     & 223,0.048,101,123,130,145,  0,  0,
-     & 223,0.022,101,125,132,145,  0,  0,
-     & 223,0.003,101,121,128,333,  0,  0/
+     & 222,0.207D0,100,  1,  8,  4,  8,  0,
+     & 222,0.207D0,100,  3, 10,  4,  8,  0,
+     & 222,0.024D0,100,  1,  8,  2,  8,  0,
+     & 222,0.024D0,100,  3, 10,  2,  8,  0,
+     & 222,0.012D0,100,  3,  8,  4,  8,  0,
+     & 222,0.012D0,100,  1, 10,  4,  8,  0,
+     & 222,0.069D0,100,  4,  8,  1,  8,  0,
+     & 222,0.069D0,100,  4, 10,  3,  8,  0,
+     & 222,0.008D0,100,  2,  8,  1,  8,  0,
+     & 222,0.008D0,100,  2, 10,  3,  8,  0,
+     & 222,0.004D0,100,  4,  8,  3,  8,  0,
+     & 222,0.004D0,100,  4, 10,  1,  8,  0,
+     & 223,0.016D0,101,121,128,144,  0,  0,
+     & 223,0.016D0,101,123,130,144,  0,  0,
+     & 223,0.008D0,101,125,132,144,  0,  0,
+     & 223,0.048D0,101,121,128,145,  0,  0,
+     & 223,0.048D0,101,123,130,145,  0,  0,
+     & 223,0.022D0,101,125,132,145,  0,  0,
+     & 223,0.003D0,101,121,128,333,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1255,1273)/
-     & 223,0.003,101,123,130,333,  0,  0,
-     & 223,0.001,101,125,132,333,  0,  0,
-     & 223,0.008,101,121,128,146,  0,  0,
-     & 223,0.008,101,123,130,146,  0,  0,
-     & 223,0.004,101,125,132,146,  0,  0,
-     & 223,0.008,101,121,128,315,  0,  0,
-     & 223,0.008,101,123,130,315,  0,  0,
-     & 223,0.004,101,125,132,315,  0,  0,
-     & 223,0.013,101,121,128,147,  0,  0,
-     & 223,0.013,101,123,130,147,  0,  0,
-     & 223,0.006,101,125,132,147,  0,  0,
-     & 223,0.004,  0,144, 30,  0,  0,  0,
-     & 223,0.010,  0,144, 31,  0,  0,  0,
-     & 223,0.006,  0,144, 32,  0,  0,  0,
-     & 223,0.003,  0,145, 30,  0,  0,  0,
-     & 223,0.009,  0,145, 31,  0,  0,  0,
-     & 223,0.017,  0,145, 32,  0,  0,  0,
-     & 223,0.011,  0,144,179,  0,  0,  0,
-     & 223,0.015,  0,144,180,  0,  0,  0/
+     & 223,0.003D0,101,123,130,333,  0,  0,
+     & 223,0.001D0,101,125,132,333,  0,  0,
+     & 223,0.008D0,101,121,128,146,  0,  0,
+     & 223,0.008D0,101,123,130,146,  0,  0,
+     & 223,0.004D0,101,125,132,146,  0,  0,
+     & 223,0.008D0,101,121,128,315,  0,  0,
+     & 223,0.008D0,101,123,130,315,  0,  0,
+     & 223,0.004D0,101,125,132,315,  0,  0,
+     & 223,0.013D0,101,121,128,147,  0,  0,
+     & 223,0.013D0,101,123,130,147,  0,  0,
+     & 223,0.006D0,101,125,132,147,  0,  0,
+     & 223,0.004D0,  0,144, 30,  0,  0,  0,
+     & 223,0.010D0,  0,144, 31,  0,  0,  0,
+     & 223,0.006D0,  0,144, 32,  0,  0,  0,
+     & 223,0.003D0,  0,145, 30,  0,  0,  0,
+     & 223,0.009D0,  0,145, 31,  0,  0,  0,
+     & 223,0.017D0,  0,145, 32,  0,  0,  0,
+     & 223,0.011D0,  0,144,179,  0,  0,  0,
+     & 223,0.015D0,  0,144,180,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1274,1292)/
-     & 223,0.011,  0,145,179,  0,  0,  0,
-     & 223,0.022,  0,145,180,  0,  0,  0,
-     & 223,0.001,  0,164, 25,  0,  0,  0,
-     & 223,0.002,  0,164, 56,  0,  0,  0,
-     & 223,0.001,  0,165, 25,  0,  0,  0,
-     & 223,0.001,  0,165, 56,  0,  0,  0,
-     & 223,0.001,  0,166, 25,  0,  0,  0,
-     & 223,0.001,  0,166, 56,  0,  0,  0,
-     & 223,0.207,100,  1,  8,  4,  9,  0,
-     & 223,0.207,100,  3, 10,  4,  9,  0,
-     & 223,0.024,100,  1,  8,  2,  9,  0,
-     & 223,0.024,100,  3, 10,  2,  9,  0,
-     & 223,0.012,100,  3,  8,  4,  9,  0,
-     & 223,0.012,100,  1, 10,  4,  9,  0,
-     & 223,0.069,100,  4,  8,  1,  9,  0,
-     & 223,0.069,100,  4, 10,  3,  9,  0,
-     & 223,0.008,100,  2,  8,  1,  9,  0,
-     & 223,0.008,100,  2, 10,  3,  9,  0,
-     & 223,0.004,100,  4,  8,  3,  9,  0/
+     & 223,0.011D0,  0,145,179,  0,  0,  0,
+     & 223,0.022D0,  0,145,180,  0,  0,  0,
+     & 223,0.001D0,  0,164, 25,  0,  0,  0,
+     & 223,0.002D0,  0,164, 56,  0,  0,  0,
+     & 223,0.001D0,  0,165, 25,  0,  0,  0,
+     & 223,0.001D0,  0,165, 56,  0,  0,  0,
+     & 223,0.001D0,  0,166, 25,  0,  0,  0,
+     & 223,0.001D0,  0,166, 56,  0,  0,  0,
+     & 223,0.207D0,100,  1,  8,  4,  9,  0,
+     & 223,0.207D0,100,  3, 10,  4,  9,  0,
+     & 223,0.024D0,100,  1,  8,  2,  9,  0,
+     & 223,0.024D0,100,  3, 10,  2,  9,  0,
+     & 223,0.012D0,100,  3,  8,  4,  9,  0,
+     & 223,0.012D0,100,  1, 10,  4,  9,  0,
+     & 223,0.069D0,100,  4,  8,  1,  9,  0,
+     & 223,0.069D0,100,  4, 10,  3,  9,  0,
+     & 223,0.008D0,100,  2,  8,  1,  9,  0,
+     & 223,0.008D0,100,  2, 10,  3,  9,  0,
+     & 223,0.004D0,100,  4,  8,  3,  9,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1293,1311)/
-     & 223,0.004,100,  4, 10,  1,  9,  0,
-     & 224,0.090,100,121,128,  4,109,  0,
-     & 224,0.090,100,123,130,  4,109,  0,
-     & 224,0.045,100,125,132,  4,109,  0,
-     & 224,0.010,100,121,128,  2,109,  0,
-     & 224,0.010,100,123,130,  2,109,  0,
-     & 224,0.005,100,125,132,  2,109,  0,
-     & 224,0.242,100,  1,  8,  4,109,  0,
-     & 224,0.242,100,  3, 10,  4,109,  0,
-     & 224,0.027,100,  1,  8,  2,109,  0,
-     & 224,0.027,100,  3, 10,  2,109,  0,
-     & 224,0.012,100,  3,  8,  4,109,  0,
-     & 224,0.012,100,  1, 10,  4,109,  0,
-     & 224,0.081,100,  4,  8,  1,109,  0,
-     & 224,0.081,100,  4, 10,  3,109,  0,
-     & 224,0.009,100,  2,  8,  1,109,  0,
-     & 224,0.009,100,  2, 10,  3,109,  0,
-     & 224,0.004,100,  4,  8,  3,109,  0,
-     & 224,0.004,100,  4, 10,  1,109,  0/
+     & 223,0.004D0,100,  4, 10,  1,  9,  0,
+     & 224,0.090D0,100,121,128,  4,109,  0,
+     & 224,0.090D0,100,123,130,  4,109,  0,
+     & 224,0.045D0,100,125,132,  4,109,  0,
+     & 224,0.010D0,100,121,128,  2,109,  0,
+     & 224,0.010D0,100,123,130,  2,109,  0,
+     & 224,0.005D0,100,125,132,  2,109,  0,
+     & 224,0.242D0,100,  1,  8,  4,109,  0,
+     & 224,0.242D0,100,  3, 10,  4,109,  0,
+     & 224,0.027D0,100,  1,  8,  2,109,  0,
+     & 224,0.027D0,100,  3, 10,  2,109,  0,
+     & 224,0.012D0,100,  3,  8,  4,109,  0,
+     & 224,0.012D0,100,  1, 10,  4,109,  0,
+     & 224,0.081D0,100,  4,  8,  1,109,  0,
+     & 224,0.081D0,100,  4, 10,  3,109,  0,
+     & 224,0.009D0,100,  2,  8,  1,109,  0,
+     & 224,0.009D0,100,  2, 10,  3,109,  0,
+     & 224,0.004D0,100,  4,  8,  3,109,  0,
+     & 224,0.004D0,100,  4, 10,  1,109,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1312,1330)/
-     & 225,0.090,100,121,128,  4,110,  0,
-     & 225,0.090,100,123,130,  4,110,  0,
-     & 225,0.045,100,125,132,  4,110,  0,
-     & 225,0.010,100,121,128,  2,110,  0,
-     & 225,0.010,100,123,130,  2,110,  0,
-     & 225,0.005,100,125,132,  2,110,  0,
-     & 225,0.242,100,  1,  8,  4,110,  0,
-     & 225,0.242,100,  3, 10,  4,110,  0,
-     & 225,0.027,100,  1,  8,  2,110,  0,
-     & 225,0.027,100,  3, 10,  2,110,  0,
-     & 225,0.012,100,  3,  8,  4,110,  0,
-     & 225,0.012,100,  1, 10,  4,110,  0,
-     & 225,0.081,100,  4,  8,  1,110,  0,
-     & 225,0.081,100,  4, 10,  3,110,  0,
-     & 225,0.009,100,  2,  8,  1,110,  0,
-     & 225,0.009,100,  2, 10,  3,110,  0,
-     & 225,0.004,100,  4,  8,  3,110,  0,
-     & 225,0.004,100,  4, 10,  1,110,  0,
-     & 226,0.090,100,121,128,  4,111,  0/
+     & 225,0.090D0,100,121,128,  4,110,  0,
+     & 225,0.090D0,100,123,130,  4,110,  0,
+     & 225,0.045D0,100,125,132,  4,110,  0,
+     & 225,0.010D0,100,121,128,  2,110,  0,
+     & 225,0.010D0,100,123,130,  2,110,  0,
+     & 225,0.005D0,100,125,132,  2,110,  0,
+     & 225,0.242D0,100,  1,  8,  4,110,  0,
+     & 225,0.242D0,100,  3, 10,  4,110,  0,
+     & 225,0.027D0,100,  1,  8,  2,110,  0,
+     & 225,0.027D0,100,  3, 10,  2,110,  0,
+     & 225,0.012D0,100,  3,  8,  4,110,  0,
+     & 225,0.012D0,100,  1, 10,  4,110,  0,
+     & 225,0.081D0,100,  4,  8,  1,110,  0,
+     & 225,0.081D0,100,  4, 10,  3,110,  0,
+     & 225,0.009D0,100,  2,  8,  1,110,  0,
+     & 225,0.009D0,100,  2, 10,  3,110,  0,
+     & 225,0.004D0,100,  4,  8,  3,110,  0,
+     & 225,0.004D0,100,  4, 10,  1,110,  0,
+     & 226,0.090D0,100,121,128,  4,111,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1331,1349)/
-     & 226,0.090,100,123,130,  4,111,  0,
-     & 226,0.045,100,125,132,  4,111,  0,
-     & 226,0.010,100,121,128,  2,111,  0,
-     & 226,0.010,100,123,130,  2,111,  0,
-     & 226,0.005,100,125,132,  2,111,  0,
-     & 226,0.242,100,  1,  8,  4,111,  0,
-     & 226,0.242,100,  3, 10,  4,111,  0,
-     & 226,0.027,100,  1,  8,  2,111,  0,
-     & 226,0.027,100,  3, 10,  2,111,  0,
-     & 226,0.012,100,  3,  8,  4,111,  0,
-     & 226,0.012,100,  1, 10,  4,111,  0,
-     & 226,0.081,100,  4,  8,  1,111,  0,
-     & 226,0.081,100,  4, 10,  3,111,  0,
-     & 226,0.009,100,  2,  8,  1,111,  0,
-     & 226,0.009,100,  2, 10,  3,111,  0,
-     & 226,0.004,100,  4,  8,  3,111,  0,
-     & 226,0.004,100,  4, 10,  1,111,  0,
-     & 227,0.090,100,121,128,  4,112,  0,
-     & 227,0.090,100,123,130,  4,112,  0/
+     & 226,0.090D0,100,123,130,  4,111,  0,
+     & 226,0.045D0,100,125,132,  4,111,  0,
+     & 226,0.010D0,100,121,128,  2,111,  0,
+     & 226,0.010D0,100,123,130,  2,111,  0,
+     & 226,0.005D0,100,125,132,  2,111,  0,
+     & 226,0.242D0,100,  1,  8,  4,111,  0,
+     & 226,0.242D0,100,  3, 10,  4,111,  0,
+     & 226,0.027D0,100,  1,  8,  2,111,  0,
+     & 226,0.027D0,100,  3, 10,  2,111,  0,
+     & 226,0.012D0,100,  3,  8,  4,111,  0,
+     & 226,0.012D0,100,  1, 10,  4,111,  0,
+     & 226,0.081D0,100,  4,  8,  1,111,  0,
+     & 226,0.081D0,100,  4, 10,  3,111,  0,
+     & 226,0.009D0,100,  2,  8,  1,111,  0,
+     & 226,0.009D0,100,  2, 10,  3,111,  0,
+     & 226,0.004D0,100,  4,  8,  3,111,  0,
+     & 226,0.004D0,100,  4, 10,  1,111,  0,
+     & 227,0.090D0,100,121,128,  4,112,  0,
+     & 227,0.090D0,100,123,130,  4,112,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1350,1368)/
-     & 227,0.045,100,125,132,  4,112,  0,
-     & 227,0.010,100,121,128,  2,112,  0,
-     & 227,0.010,100,123,130,  2,112,  0,
-     & 227,0.005,100,125,132,  2,112,  0,
-     & 227,0.242,100,  1,  8,  4,112,  0,
-     & 227,0.242,100,  3, 10,  4,112,  0,
-     & 227,0.027,100,  1,  8,  2,112,  0,
-     & 227,0.027,100,  3, 10,  2,112,  0,
-     & 227,0.012,100,  3,  8,  4,112,  0,
-     & 227,0.012,100,  1, 10,  4,112,  0,
-     & 227,0.081,100,  4,  8,  1,112,  0,
-     & 227,0.081,100,  4, 10,  3,112,  0,
-     & 227,0.009,100,  2,  8,  1,112,  0,
-     & 227,0.009,100,  2, 10,  3,112,  0,
-     & 227,0.004,100,  4,  8,  3,112,  0,
-     & 227,0.004,100,  4, 10,  1,112,  0,
-     & 228,0.090,100,121,128,  4,113,  0,
-     & 228,0.090,100,123,130,  4,113,  0,
-     & 228,0.045,100,125,132,  4,113,  0/
+     & 227,0.045D0,100,125,132,  4,112,  0,
+     & 227,0.010D0,100,121,128,  2,112,  0,
+     & 227,0.010D0,100,123,130,  2,112,  0,
+     & 227,0.005D0,100,125,132,  2,112,  0,
+     & 227,0.242D0,100,  1,  8,  4,112,  0,
+     & 227,0.242D0,100,  3, 10,  4,112,  0,
+     & 227,0.027D0,100,  1,  8,  2,112,  0,
+     & 227,0.027D0,100,  3, 10,  2,112,  0,
+     & 227,0.012D0,100,  3,  8,  4,112,  0,
+     & 227,0.012D0,100,  1, 10,  4,112,  0,
+     & 227,0.081D0,100,  4,  8,  1,112,  0,
+     & 227,0.081D0,100,  4, 10,  3,112,  0,
+     & 227,0.009D0,100,  2,  8,  1,112,  0,
+     & 227,0.009D0,100,  2, 10,  3,112,  0,
+     & 227,0.004D0,100,  4,  8,  3,112,  0,
+     & 227,0.004D0,100,  4, 10,  1,112,  0,
+     & 228,0.090D0,100,121,128,  4,113,  0,
+     & 228,0.090D0,100,123,130,  4,113,  0,
+     & 228,0.045D0,100,125,132,  4,113,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1369,1387)/
-     & 228,0.010,100,121,128,  2,113,  0,
-     & 228,0.010,100,123,130,  2,113,  0,
-     & 228,0.005,100,125,132,  2,113,  0,
-     & 228,0.242,100,  1,  8,  4,113,  0,
-     & 228,0.242,100,  3, 10,  4,113,  0,
-     & 228,0.027,100,  1,  8,  2,113,  0,
-     & 228,0.027,100,  3, 10,  2,113,  0,
-     & 228,0.012,100,  3,  8,  4,113,  0,
-     & 228,0.012,100,  1, 10,  4,113,  0,
-     & 228,0.081,100,  4,  8,  1,113,  0,
-     & 228,0.081,100,  4, 10,  3,113,  0,
-     & 228,0.009,100,  2,  8,  1,113,  0,
-     & 228,0.009,100,  2, 10,  3,113,  0,
-     & 228,0.004,100,  4,  8,  3,113,  0,
-     & 228,0.004,100,  4, 10,  1,113,  0,
-     & 229,0.090,100,121,128,  4,114,  0,
-     & 229,0.090,100,123,130,  4,114,  0,
-     & 229,0.045,100,125,132,  4,114,  0,
-     & 229,0.010,100,121,128,  2,114,  0/
+     & 228,0.010D0,100,121,128,  2,113,  0,
+     & 228,0.010D0,100,123,130,  2,113,  0,
+     & 228,0.005D0,100,125,132,  2,113,  0,
+     & 228,0.242D0,100,  1,  8,  4,113,  0,
+     & 228,0.242D0,100,  3, 10,  4,113,  0,
+     & 228,0.027D0,100,  1,  8,  2,113,  0,
+     & 228,0.027D0,100,  3, 10,  2,113,  0,
+     & 228,0.012D0,100,  3,  8,  4,113,  0,
+     & 228,0.012D0,100,  1, 10,  4,113,  0,
+     & 228,0.081D0,100,  4,  8,  1,113,  0,
+     & 228,0.081D0,100,  4, 10,  3,113,  0,
+     & 228,0.009D0,100,  2,  8,  1,113,  0,
+     & 228,0.009D0,100,  2, 10,  3,113,  0,
+     & 228,0.004D0,100,  4,  8,  3,113,  0,
+     & 228,0.004D0,100,  4, 10,  1,113,  0,
+     & 229,0.090D0,100,121,128,  4,114,  0,
+     & 229,0.090D0,100,123,130,  4,114,  0,
+     & 229,0.045D0,100,125,132,  4,114,  0,
+     & 229,0.010D0,100,121,128,  2,114,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1388,1406)/
-     & 229,0.010,100,123,130,  2,114,  0,
-     & 229,0.005,100,125,132,  2,114,  0,
-     & 229,0.242,100,  1,  8,  4,114,  0,
-     & 229,0.242,100,  3, 10,  4,114,  0,
-     & 229,0.027,100,  1,  8,  2,114,  0,
-     & 229,0.027,100,  3, 10,  2,114,  0,
-     & 229,0.012,100,  3,  8,  4,114,  0,
-     & 229,0.012,100,  1, 10,  4,114,  0,
-     & 229,0.081,100,  4,  8,  1,114,  0,
-     & 229,0.081,100,  4, 10,  3,114,  0,
-     & 229,0.009,100,  2,  8,  1,114,  0,
-     & 229,0.009,100,  2, 10,  3,114,  0,
-     & 229,0.004,100,  4,  8,  3,114,  0,
-     & 229,0.004,100,  4, 10,  1,114,  0,
-     & 230,0.080,100,121,128,  4, 10,  0,
-     & 230,0.080,100,123,130,  4, 10,  0,
-     & 230,0.040,100,125,132,  4, 10,  0,
-     & 230,0.080,100,121,128,  9,  5,  0,
-     & 230,0.080,100,123,130,  9,  5,  0/
+     & 229,0.010D0,100,123,130,  2,114,  0,
+     & 229,0.005D0,100,125,132,  2,114,  0,
+     & 229,0.242D0,100,  1,  8,  4,114,  0,
+     & 229,0.242D0,100,  3, 10,  4,114,  0,
+     & 229,0.027D0,100,  1,  8,  2,114,  0,
+     & 229,0.027D0,100,  3, 10,  2,114,  0,
+     & 229,0.012D0,100,  3,  8,  4,114,  0,
+     & 229,0.012D0,100,  1, 10,  4,114,  0,
+     & 229,0.081D0,100,  4,  8,  1,114,  0,
+     & 229,0.081D0,100,  4, 10,  3,114,  0,
+     & 229,0.009D0,100,  2,  8,  1,114,  0,
+     & 229,0.009D0,100,  2, 10,  3,114,  0,
+     & 229,0.004D0,100,  4,  8,  3,114,  0,
+     & 229,0.004D0,100,  4, 10,  1,114,  0,
+     & 230,0.080D0,100,121,128,  4, 10,  0,
+     & 230,0.080D0,100,123,130,  4, 10,  0,
+     & 230,0.040D0,100,125,132,  4, 10,  0,
+     & 230,0.080D0,100,121,128,  9,  5,  0,
+     & 230,0.080D0,100,123,130,  9,  5,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1407,1425)/
-     & 230,0.228,100,  1,  8,  4, 10,  0,
-     & 230,0.228,100,  3, 10,  4, 10,  0,
-     & 230,0.012,100,  3,  8,  4, 10,  0,
-     & 230,0.012,100,  1, 10,  4, 10,  0,
-     & 230,0.076,100,  4,  8,  1, 10,  0,
-     & 230,0.076,100,  4, 10,  3, 10,  0,
-     & 230,0.004,100,  4,  8,  3, 10,  0,
-     & 230,0.004,100,  4, 10,  1, 10,  0,
-     & 231,0.025,  0,121,127,  0,  0,  0,
-     & 231,0.025,  0,123,129,  0,  0,  0,
-     & 231,0.025,  0,125,131,  0,  0,  0,
-     & 231,0.008,  0,  1,  7,  0,  0,  0,
-     & 231,0.033,  0,  2,  8,  0,  0,  0,
-     & 231,0.008,  0,  3,  9,  0,  0,  0,
-     & 231,0.033,  0,  4, 10,  0,  0,  0,
-     & 231,0.801,130, 13, 13, 13,  0,  0,
-     & 231,0.042,130, 13, 13, 59,  0,  0,
-     & 245,0.016,101,127,122,171,  0,  0,
-     & 245,0.016,101,129,124,171,  0,  0/
+     & 230,0.228D0,100,  1,  8,  4, 10,  0,
+     & 230,0.228D0,100,  3, 10,  4, 10,  0,
+     & 230,0.012D0,100,  3,  8,  4, 10,  0,
+     & 230,0.012D0,100,  1, 10,  4, 10,  0,
+     & 230,0.076D0,100,  4,  8,  1, 10,  0,
+     & 230,0.076D0,100,  4, 10,  3, 10,  0,
+     & 230,0.004D0,100,  4,  8,  3, 10,  0,
+     & 230,0.004D0,100,  4, 10,  1, 10,  0,
+     & 231,0.025D0,  0,121,127,  0,  0,  0,
+     & 231,0.025D0,  0,123,129,  0,  0,  0,
+     & 231,0.025D0,  0,125,131,  0,  0,  0,
+     & 231,0.008D0,  0,  1,  7,  0,  0,  0,
+     & 231,0.033D0,  0,  2,  8,  0,  0,  0,
+     & 231,0.008D0,  0,  3,  9,  0,  0,  0,
+     & 231,0.033D0,  0,  4, 10,  0,  0,  0,
+     & 231,0.801D0,130, 13, 13, 13,  0,  0,
+     & 231,0.042D0,130, 13, 13, 59,  0,  0,
+     & 245,0.016D0,101,127,122,171,  0,  0,
+     & 245,0.016D0,101,129,124,171,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1426,1444)/
-     & 245,0.008,101,131,126,171,  0,  0,
-     & 245,0.048,101,127,122,172,  0,  0,
-     & 245,0.048,101,129,124,172,  0,  0,
-     & 245,0.022,101,131,126,172,  0,  0,
-     & 245,0.003,101,127,122,334,  0,  0,
-     & 245,0.003,101,129,124,334,  0,  0,
-     & 245,0.001,101,131,126,334,  0,  0,
-     & 245,0.008,101,127,122,173,  0,  0,
-     & 245,0.008,101,129,124,173,  0,  0,
-     & 245,0.004,101,131,126,173,  0,  0,
-     & 245,0.008,101,127,122,316,  0,  0,
-     & 245,0.008,101,129,124,316,  0,  0,
-     & 245,0.004,101,131,126,316,  0,  0,
-     & 245,0.013,101,127,122,174,  0,  0,
-     & 245,0.013,101,129,124,174,  0,  0,
-     & 245,0.006,101,131,126,174,  0,  0,
-     & 245,0.004,  0,171, 38,  0,  0,  0,
-     & 245,0.010,  0,171, 39,  0,  0,  0,
-     & 245,0.006,  0,171, 40,  0,  0,  0/
+     & 245,0.008D0,101,131,126,171,  0,  0,
+     & 245,0.048D0,101,127,122,172,  0,  0,
+     & 245,0.048D0,101,129,124,172,  0,  0,
+     & 245,0.022D0,101,131,126,172,  0,  0,
+     & 245,0.003D0,101,127,122,334,  0,  0,
+     & 245,0.003D0,101,129,124,334,  0,  0,
+     & 245,0.001D0,101,131,126,334,  0,  0,
+     & 245,0.008D0,101,127,122,173,  0,  0,
+     & 245,0.008D0,101,129,124,173,  0,  0,
+     & 245,0.004D0,101,131,126,173,  0,  0,
+     & 245,0.008D0,101,127,122,316,  0,  0,
+     & 245,0.008D0,101,129,124,316,  0,  0,
+     & 245,0.004D0,101,131,126,316,  0,  0,
+     & 245,0.013D0,101,127,122,174,  0,  0,
+     & 245,0.013D0,101,129,124,174,  0,  0,
+     & 245,0.006D0,101,131,126,174,  0,  0,
+     & 245,0.004D0,  0,171, 38,  0,  0,  0,
+     & 245,0.010D0,  0,171, 39,  0,  0,  0,
+     & 245,0.006D0,  0,171, 40,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1445,1463)/
-     & 245,0.003,  0,172, 38,  0,  0,  0,
-     & 245,0.009,  0,172, 39,  0,  0,  0,
-     & 245,0.017,  0,172, 40,  0,  0,  0,
-     & 245,0.011,  0,171,144,  0,  0,  0,
-     & 245,0.015,  0,171,145,  0,  0,  0,
-     & 245,0.011,  0,172,144,  0,  0,  0,
-     & 245,0.022,  0,172,145,  0,  0,  0,
-     & 245,0.001,  0,164, 50,  0,  0,  0,
-     & 245,0.002,  0,164, 51,  0,  0,  0,
-     & 245,0.001,  0,165, 50,  0,  0,  0,
-     & 245,0.001,  0,165, 51,  0,  0,  0,
-     & 245,0.001,  0,166, 50,  0,  0,  0,
-     & 245,0.001,  0,166, 51,  0,  0,  0,
-     & 245,0.207,100,  7,  2, 10,  1,  0,
-     & 245,0.207,100,  9,  4, 10,  1,  0,
-     & 245,0.024,100,  7,  2,  8,  1,  0,
-     & 245,0.024,100,  9,  4,  8,  1,  0,
-     & 245,0.012,100,  9,  2, 10,  1,  0,
-     & 245,0.012,100,  7,  4, 10,  1,  0/
+     & 245,0.003D0,  0,172, 38,  0,  0,  0,
+     & 245,0.009D0,  0,172, 39,  0,  0,  0,
+     & 245,0.017D0,  0,172, 40,  0,  0,  0,
+     & 245,0.011D0,  0,171,144,  0,  0,  0,
+     & 245,0.015D0,  0,171,145,  0,  0,  0,
+     & 245,0.011D0,  0,172,144,  0,  0,  0,
+     & 245,0.022D0,  0,172,145,  0,  0,  0,
+     & 245,0.001D0,  0,164, 50,  0,  0,  0,
+     & 245,0.002D0,  0,164, 51,  0,  0,  0,
+     & 245,0.001D0,  0,165, 50,  0,  0,  0,
+     & 245,0.001D0,  0,165, 51,  0,  0,  0,
+     & 245,0.001D0,  0,166, 50,  0,  0,  0,
+     & 245,0.001D0,  0,166, 51,  0,  0,  0,
+     & 245,0.207D0,100,  7,  2, 10,  1,  0,
+     & 245,0.207D0,100,  9,  4, 10,  1,  0,
+     & 245,0.024D0,100,  7,  2,  8,  1,  0,
+     & 245,0.024D0,100,  9,  4,  8,  1,  0,
+     & 245,0.012D0,100,  9,  2, 10,  1,  0,
+     & 245,0.012D0,100,  7,  4, 10,  1,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1464,1482)/
-     & 245,0.069,100, 10,  2,  7,  1,  0,
-     & 245,0.069,100, 10,  4,  9,  1,  0,
-     & 245,0.008,100,  8,  2,  7,  1,  0,
-     & 245,0.008,100,  8,  4,  9,  1,  0,
-     & 245,0.004,100, 10,  2,  9,  1,  0,
-     & 245,0.004,100, 10,  4,  7,  1,  0,
-     & 246,0.016,101,127,122,175,  0,  0,
-     & 246,0.016,101,129,124,175,  0,  0,
-     & 246,0.008,101,131,126,175,  0,  0,
-     & 246,0.048,101,127,122,176,  0,  0,
-     & 246,0.048,101,129,124,176,  0,  0,
-     & 246,0.022,101,131,126,176,  0,  0,
-     & 246,0.003,101,127,122,335,  0,  0,
-     & 246,0.003,101,129,124,335,  0,  0,
-     & 246,0.001,101,131,126,335,  0,  0,
-     & 246,0.008,101,127,122,177,  0,  0,
-     & 246,0.008,101,129,124,177,  0,  0,
-     & 246,0.004,101,131,126,177,  0,  0,
-     & 246,0.008,101,127,122,317,  0,  0/
+     & 245,0.069D0,100, 10,  2,  7,  1,  0,
+     & 245,0.069D0,100, 10,  4,  9,  1,  0,
+     & 245,0.008D0,100,  8,  2,  7,  1,  0,
+     & 245,0.008D0,100,  8,  4,  9,  1,  0,
+     & 245,0.004D0,100, 10,  2,  9,  1,  0,
+     & 245,0.004D0,100, 10,  4,  7,  1,  0,
+     & 246,0.016D0,101,127,122,175,  0,  0,
+     & 246,0.016D0,101,129,124,175,  0,  0,
+     & 246,0.008D0,101,131,126,175,  0,  0,
+     & 246,0.048D0,101,127,122,176,  0,  0,
+     & 246,0.048D0,101,129,124,176,  0,  0,
+     & 246,0.022D0,101,131,126,176,  0,  0,
+     & 246,0.003D0,101,127,122,335,  0,  0,
+     & 246,0.003D0,101,129,124,335,  0,  0,
+     & 246,0.001D0,101,131,126,335,  0,  0,
+     & 246,0.008D0,101,127,122,177,  0,  0,
+     & 246,0.008D0,101,129,124,177,  0,  0,
+     & 246,0.004D0,101,131,126,177,  0,  0,
+     & 246,0.008D0,101,127,122,317,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1483,1501)/
-     & 246,0.008,101,129,124,317,  0,  0,
-     & 246,0.004,101,131,126,317,  0,  0,
-     & 246,0.013,101,127,122,178,  0,  0,
-     & 246,0.013,101,129,124,178,  0,  0,
-     & 246,0.006,101,131,126,178,  0,  0,
-     & 246,0.004,  0,175, 38,  0,  0,  0,
-     & 246,0.010,  0,175, 39,  0,  0,  0,
-     & 246,0.006,  0,175, 40,  0,  0,  0,
-     & 246,0.003,  0,176, 38,  0,  0,  0,
-     & 246,0.009,  0,176, 39,  0,  0,  0,
-     & 246,0.017,  0,176, 40,  0,  0,  0,
-     & 246,0.011,  0,175,144,  0,  0,  0,
-     & 246,0.015,  0,175,145,  0,  0,  0,
-     & 246,0.011,  0,176,144,  0,  0,  0,
-     & 246,0.022,  0,176,145,  0,  0,  0,
-     & 246,0.001,  0,164, 46,  0,  0,  0,
-     & 246,0.002,  0,164, 47,  0,  0,  0,
-     & 246,0.001,  0,165, 46,  0,  0,  0,
-     & 246,0.001,  0,165, 47,  0,  0,  0/
+     & 246,0.008D0,101,129,124,317,  0,  0,
+     & 246,0.004D0,101,131,126,317,  0,  0,
+     & 246,0.013D0,101,127,122,178,  0,  0,
+     & 246,0.013D0,101,129,124,178,  0,  0,
+     & 246,0.006D0,101,131,126,178,  0,  0,
+     & 246,0.004D0,  0,175, 38,  0,  0,  0,
+     & 246,0.010D0,  0,175, 39,  0,  0,  0,
+     & 246,0.006D0,  0,175, 40,  0,  0,  0,
+     & 246,0.003D0,  0,176, 38,  0,  0,  0,
+     & 246,0.009D0,  0,176, 39,  0,  0,  0,
+     & 246,0.017D0,  0,176, 40,  0,  0,  0,
+     & 246,0.011D0,  0,175,144,  0,  0,  0,
+     & 246,0.015D0,  0,175,145,  0,  0,  0,
+     & 246,0.011D0,  0,176,144,  0,  0,  0,
+     & 246,0.022D0,  0,176,145,  0,  0,  0,
+     & 246,0.001D0,  0,164, 46,  0,  0,  0,
+     & 246,0.002D0,  0,164, 47,  0,  0,  0,
+     & 246,0.001D0,  0,165, 46,  0,  0,  0,
+     & 246,0.001D0,  0,165, 47,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1502,1520)/
-     & 246,0.001,  0,166, 46,  0,  0,  0,
-     & 246,0.001,  0,166, 47,  0,  0,  0,
-     & 246,0.207,100,  7,  2, 10,  2,  0,
-     & 246,0.207,100,  9,  4, 10,  2,  0,
-     & 246,0.024,100,  7,  2,  8,  2,  0,
-     & 246,0.024,100,  9,  4,  8,  2,  0,
-     & 246,0.012,100,  9,  2, 10,  2,  0,
-     & 246,0.012,100,  7,  4, 10,  2,  0,
-     & 246,0.069,100, 10,  2,  7,  2,  0,
-     & 246,0.069,100, 10,  4,  9,  2,  0,
-     & 246,0.008,100,  8,  2,  7,  2,  0,
-     & 246,0.008,100,  8,  4,  9,  2,  0,
-     & 246,0.004,100, 10,  2,  9,  2,  0,
-     & 246,0.004,100, 10,  4,  7,  2,  0,
-     & 247,0.016,101,127,122,179,  0,  0,
-     & 247,0.016,101,129,124,179,  0,  0,
-     & 247,0.008,101,131,126,179,  0,  0,
-     & 247,0.048,101,127,122,180,  0,  0,
-     & 247,0.048,101,129,124,180,  0,  0/
+     & 246,0.001D0,  0,166, 46,  0,  0,  0,
+     & 246,0.001D0,  0,166, 47,  0,  0,  0,
+     & 246,0.207D0,100,  7,  2, 10,  2,  0,
+     & 246,0.207D0,100,  9,  4, 10,  2,  0,
+     & 246,0.024D0,100,  7,  2,  8,  2,  0,
+     & 246,0.024D0,100,  9,  4,  8,  2,  0,
+     & 246,0.012D0,100,  9,  2, 10,  2,  0,
+     & 246,0.012D0,100,  7,  4, 10,  2,  0,
+     & 246,0.069D0,100, 10,  2,  7,  2,  0,
+     & 246,0.069D0,100, 10,  4,  9,  2,  0,
+     & 246,0.008D0,100,  8,  2,  7,  2,  0,
+     & 246,0.008D0,100,  8,  4,  9,  2,  0,
+     & 246,0.004D0,100, 10,  2,  9,  2,  0,
+     & 246,0.004D0,100, 10,  4,  7,  2,  0,
+     & 247,0.016D0,101,127,122,179,  0,  0,
+     & 247,0.016D0,101,129,124,179,  0,  0,
+     & 247,0.008D0,101,131,126,179,  0,  0,
+     & 247,0.048D0,101,127,122,180,  0,  0,
+     & 247,0.048D0,101,129,124,180,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1521,1539)/
-     & 247,0.022,101,131,126,180,  0,  0,
-     & 247,0.003,101,127,122,336,  0,  0,
-     & 247,0.003,101,129,124,336,  0,  0,
-     & 247,0.001,101,131,126,336,  0,  0,
-     & 247,0.008,101,127,122,181,  0,  0,
-     & 247,0.008,101,129,124,181,  0,  0,
-     & 247,0.004,101,131,126,181,  0,  0,
-     & 247,0.008,101,127,122,318,  0,  0,
-     & 247,0.008,101,129,124,318,  0,  0,
-     & 247,0.004,101,131,126,318,  0,  0,
-     & 247,0.013,101,127,122,182,  0,  0,
-     & 247,0.013,101,129,124,182,  0,  0,
-     & 247,0.006,101,131,126,182,  0,  0,
-     & 247,0.004,  0,179, 38,  0,  0,  0,
-     & 247,0.010,  0,179, 39,  0,  0,  0,
-     & 247,0.006,  0,179, 40,  0,  0,  0,
-     & 247,0.003,  0,180, 38,  0,  0,  0,
-     & 247,0.009,  0,180, 39,  0,  0,  0,
-     & 247,0.017,  0,180, 40,  0,  0,  0/
+     & 247,0.022D0,101,131,126,180,  0,  0,
+     & 247,0.003D0,101,127,122,336,  0,  0,
+     & 247,0.003D0,101,129,124,336,  0,  0,
+     & 247,0.001D0,101,131,126,336,  0,  0,
+     & 247,0.008D0,101,127,122,181,  0,  0,
+     & 247,0.008D0,101,129,124,181,  0,  0,
+     & 247,0.004D0,101,131,126,181,  0,  0,
+     & 247,0.008D0,101,127,122,318,  0,  0,
+     & 247,0.008D0,101,129,124,318,  0,  0,
+     & 247,0.004D0,101,131,126,318,  0,  0,
+     & 247,0.013D0,101,127,122,182,  0,  0,
+     & 247,0.013D0,101,129,124,182,  0,  0,
+     & 247,0.006D0,101,131,126,182,  0,  0,
+     & 247,0.004D0,  0,179, 38,  0,  0,  0,
+     & 247,0.010D0,  0,179, 39,  0,  0,  0,
+     & 247,0.006D0,  0,179, 40,  0,  0,  0,
+     & 247,0.003D0,  0,180, 38,  0,  0,  0,
+     & 247,0.009D0,  0,180, 39,  0,  0,  0,
+     & 247,0.017D0,  0,180, 40,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1540,1558)/
-     & 247,0.011,  0,179,144,  0,  0,  0,
-     & 247,0.015,  0,179,145,  0,  0,  0,
-     & 247,0.011,  0,180,144,  0,  0,  0,
-     & 247,0.022,  0,180,145,  0,  0,  0,
-     & 247,0.001,  0,164, 25,  0,  0,  0,
-     & 247,0.002,  0,164, 56,  0,  0,  0,
-     & 247,0.001,  0,165, 25,  0,  0,  0,
-     & 247,0.001,  0,165, 56,  0,  0,  0,
-     & 247,0.001,  0,166, 25,  0,  0,  0,
-     & 247,0.001,  0,166, 56,  0,  0,  0,
-     & 247,0.207,100,  7,  2, 10,  3,  0,
-     & 247,0.207,100,  9,  4, 10,  3,  0,
-     & 247,0.024,100,  7,  2,  8,  3,  0,
-     & 247,0.024,100,  9,  4,  8,  3,  0,
-     & 247,0.012,100,  9,  2, 10,  3,  0,
-     & 247,0.012,100,  7,  4, 10,  3,  0,
-     & 247,0.069,100, 10,  2,  7,  3,  0,
-     & 247,0.069,100, 10,  4,  9,  3,  0,
-     & 247,0.008,100,  8,  2,  7,  3,  0/
+     & 247,0.011D0,  0,179,144,  0,  0,  0,
+     & 247,0.015D0,  0,179,145,  0,  0,  0,
+     & 247,0.011D0,  0,180,144,  0,  0,  0,
+     & 247,0.022D0,  0,180,145,  0,  0,  0,
+     & 247,0.001D0,  0,164, 25,  0,  0,  0,
+     & 247,0.002D0,  0,164, 56,  0,  0,  0,
+     & 247,0.001D0,  0,165, 25,  0,  0,  0,
+     & 247,0.001D0,  0,165, 56,  0,  0,  0,
+     & 247,0.001D0,  0,166, 25,  0,  0,  0,
+     & 247,0.001D0,  0,166, 56,  0,  0,  0,
+     & 247,0.207D0,100,  7,  2, 10,  3,  0,
+     & 247,0.207D0,100,  9,  4, 10,  3,  0,
+     & 247,0.024D0,100,  7,  2,  8,  3,  0,
+     & 247,0.024D0,100,  9,  4,  8,  3,  0,
+     & 247,0.012D0,100,  9,  2, 10,  3,  0,
+     & 247,0.012D0,100,  7,  4, 10,  3,  0,
+     & 247,0.069D0,100, 10,  2,  7,  3,  0,
+     & 247,0.069D0,100, 10,  4,  9,  3,  0,
+     & 247,0.008D0,100,  8,  2,  7,  3,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1559,1577)/
-     & 247,0.008,100,  8,  4,  9,  3,  0,
-     & 247,0.004,100, 10,  2,  9,  3,  0,
-     & 247,0.004,100, 10,  4,  7,  3,  0,
-     & 248,0.090,100,127,122, 10,115,  0,
-     & 248,0.090,100,129,124, 10,115,  0,
-     & 248,0.045,100,131,126, 10,115,  0,
-     & 248,0.010,100,127,122,  8,115,  0,
-     & 248,0.010,100,129,124,  8,115,  0,
-     & 248,0.005,100,131,126,  8,115,  0,
-     & 248,0.242,100,  7,  2, 10,115,  0,
-     & 248,0.242,100,  9,  4, 10,115,  0,
-     & 248,0.027,100,  7,  2,  8,115,  0,
-     & 248,0.027,100,  9,  4,  8,115,  0,
-     & 248,0.012,100,  9,  2, 10,115,  0,
-     & 248,0.012,100,  7,  4, 10,115,  0,
-     & 248,0.081,100, 10,  2,  7,115,  0,
-     & 248,0.081,100, 10,  4,  9,115,  0,
-     & 248,0.009,100,  8,  2,  7,115,  0,
-     & 248,0.009,100,  8,  4,  9,115,  0/
+     & 247,0.008D0,100,  8,  4,  9,  3,  0,
+     & 247,0.004D0,100, 10,  2,  9,  3,  0,
+     & 247,0.004D0,100, 10,  4,  7,  3,  0,
+     & 248,0.090D0,100,127,122, 10,115,  0,
+     & 248,0.090D0,100,129,124, 10,115,  0,
+     & 248,0.045D0,100,131,126, 10,115,  0,
+     & 248,0.010D0,100,127,122,  8,115,  0,
+     & 248,0.010D0,100,129,124,  8,115,  0,
+     & 248,0.005D0,100,131,126,  8,115,  0,
+     & 248,0.242D0,100,  7,  2, 10,115,  0,
+     & 248,0.242D0,100,  9,  4, 10,115,  0,
+     & 248,0.027D0,100,  7,  2,  8,115,  0,
+     & 248,0.027D0,100,  9,  4,  8,115,  0,
+     & 248,0.012D0,100,  9,  2, 10,115,  0,
+     & 248,0.012D0,100,  7,  4, 10,115,  0,
+     & 248,0.081D0,100, 10,  2,  7,115,  0,
+     & 248,0.081D0,100, 10,  4,  9,115,  0,
+     & 248,0.009D0,100,  8,  2,  7,115,  0,
+     & 248,0.009D0,100,  8,  4,  9,115,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1578,1596)/
-     & 248,0.004,100, 10,  2,  9,115,  0,
-     & 248,0.004,100, 10,  4,  7,115,  0,
-     & 249,0.090,100,127,122, 10,116,  0,
-     & 249,0.090,100,129,124, 10,116,  0,
-     & 249,0.045,100,131,126, 10,116,  0,
-     & 249,0.010,100,127,122,  8,116,  0,
-     & 249,0.010,100,129,124,  8,116,  0,
-     & 249,0.005,100,131,126,  8,116,  0,
-     & 249,0.242,100,  7,  2, 10,116,  0,
-     & 249,0.242,100,  9,  4, 10,116,  0,
-     & 249,0.027,100,  7,  2,  8,116,  0,
-     & 249,0.027,100,  9,  4,  8,116,  0,
-     & 249,0.012,100,  9,  2, 10,116,  0,
-     & 249,0.012,100,  7,  4, 10,116,  0,
-     & 249,0.081,100, 10,  2,  7,116,  0,
-     & 249,0.081,100, 10,  4,  9,116,  0,
-     & 249,0.009,100,  8,  2,  7,116,  0,
-     & 249,0.009,100,  8,  4,  9,116,  0,
-     & 249,0.004,100, 10,  2,  9,116,  0/
+     & 248,0.004D0,100, 10,  2,  9,115,  0,
+     & 248,0.004D0,100, 10,  4,  7,115,  0,
+     & 249,0.090D0,100,127,122, 10,116,  0,
+     & 249,0.090D0,100,129,124, 10,116,  0,
+     & 249,0.045D0,100,131,126, 10,116,  0,
+     & 249,0.010D0,100,127,122,  8,116,  0,
+     & 249,0.010D0,100,129,124,  8,116,  0,
+     & 249,0.005D0,100,131,126,  8,116,  0,
+     & 249,0.242D0,100,  7,  2, 10,116,  0,
+     & 249,0.242D0,100,  9,  4, 10,116,  0,
+     & 249,0.027D0,100,  7,  2,  8,116,  0,
+     & 249,0.027D0,100,  9,  4,  8,116,  0,
+     & 249,0.012D0,100,  9,  2, 10,116,  0,
+     & 249,0.012D0,100,  7,  4, 10,116,  0,
+     & 249,0.081D0,100, 10,  2,  7,116,  0,
+     & 249,0.081D0,100, 10,  4,  9,116,  0,
+     & 249,0.009D0,100,  8,  2,  7,116,  0,
+     & 249,0.009D0,100,  8,  4,  9,116,  0,
+     & 249,0.004D0,100, 10,  2,  9,116,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1597,1615)/
-     & 249,0.004,100, 10,  4,  7,116,  0,
-     & 250,0.090,100,127,122, 10,117,  0,
-     & 250,0.090,100,129,124, 10,117,  0,
-     & 250,0.045,100,131,126, 10,117,  0,
-     & 250,0.010,100,127,122,  8,117,  0,
-     & 250,0.010,100,129,124,  8,117,  0,
-     & 250,0.005,100,131,126,  8,117,  0,
-     & 250,0.242,100,  7,  2, 10,117,  0,
-     & 250,0.242,100,  9,  4, 10,117,  0,
-     & 250,0.027,100,  7,  2,  8,117,  0,
-     & 250,0.027,100,  9,  4,  8,117,  0,
-     & 250,0.012,100,  9,  2, 10,117,  0,
-     & 250,0.012,100,  7,  4, 10,117,  0,
-     & 250,0.081,100, 10,  2,  7,117,  0,
-     & 250,0.081,100, 10,  4,  9,117,  0,
-     & 250,0.009,100,  8,  2,  7,117,  0,
-     & 250,0.009,100,  8,  4,  9,117,  0,
-     & 250,0.004,100, 10,  2,  9,117,  0,
-     & 250,0.004,100, 10,  4,  7,117,  0/
+     & 249,0.004D0,100, 10,  4,  7,116,  0,
+     & 250,0.090D0,100,127,122, 10,117,  0,
+     & 250,0.090D0,100,129,124, 10,117,  0,
+     & 250,0.045D0,100,131,126, 10,117,  0,
+     & 250,0.010D0,100,127,122,  8,117,  0,
+     & 250,0.010D0,100,129,124,  8,117,  0,
+     & 250,0.005D0,100,131,126,  8,117,  0,
+     & 250,0.242D0,100,  7,  2, 10,117,  0,
+     & 250,0.242D0,100,  9,  4, 10,117,  0,
+     & 250,0.027D0,100,  7,  2,  8,117,  0,
+     & 250,0.027D0,100,  9,  4,  8,117,  0,
+     & 250,0.012D0,100,  9,  2, 10,117,  0,
+     & 250,0.012D0,100,  7,  4, 10,117,  0,
+     & 250,0.081D0,100, 10,  2,  7,117,  0,
+     & 250,0.081D0,100, 10,  4,  9,117,  0,
+     & 250,0.009D0,100,  8,  2,  7,117,  0,
+     & 250,0.009D0,100,  8,  4,  9,117,  0,
+     & 250,0.004D0,100, 10,  2,  9,117,  0,
+     & 250,0.004D0,100, 10,  4,  7,117,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1616,1634)/
-     & 251,0.090,100,127,122, 10,118,  0,
-     & 251,0.090,100,129,124, 10,118,  0,
-     & 251,0.045,100,131,126, 10,118,  0,
-     & 251,0.010,100,127,122,  8,118,  0,
-     & 251,0.010,100,129,124,  8,118,  0,
-     & 251,0.005,100,131,126,  8,118,  0,
-     & 251,0.242,100,  7,  2, 10,118,  0,
-     & 251,0.242,100,  9,  4, 10,118,  0,
-     & 251,0.027,100,  7,  2,  8,118,  0,
-     & 251,0.027,100,  9,  4,  8,118,  0,
-     & 251,0.012,100,  9,  2, 10,118,  0,
-     & 251,0.012,100,  7,  4, 10,118,  0,
-     & 251,0.081,100, 10,  2,  7,118,  0,
-     & 251,0.081,100, 10,  4,  9,118,  0,
-     & 251,0.009,100,  8,  2,  7,118,  0,
-     & 251,0.009,100,  8,  4,  9,118,  0,
-     & 251,0.004,100, 10,  2,  9,118,  0,
-     & 251,0.004,100, 10,  4,  7,118,  0,
-     & 252,0.090,100,127,122, 10,119,  0/
+     & 251,0.090D0,100,127,122, 10,118,  0,
+     & 251,0.090D0,100,129,124, 10,118,  0,
+     & 251,0.045D0,100,131,126, 10,118,  0,
+     & 251,0.010D0,100,127,122,  8,118,  0,
+     & 251,0.010D0,100,129,124,  8,118,  0,
+     & 251,0.005D0,100,131,126,  8,118,  0,
+     & 251,0.242D0,100,  7,  2, 10,118,  0,
+     & 251,0.242D0,100,  9,  4, 10,118,  0,
+     & 251,0.027D0,100,  7,  2,  8,118,  0,
+     & 251,0.027D0,100,  9,  4,  8,118,  0,
+     & 251,0.012D0,100,  9,  2, 10,118,  0,
+     & 251,0.012D0,100,  7,  4, 10,118,  0,
+     & 251,0.081D0,100, 10,  2,  7,118,  0,
+     & 251,0.081D0,100, 10,  4,  9,118,  0,
+     & 251,0.009D0,100,  8,  2,  7,118,  0,
+     & 251,0.009D0,100,  8,  4,  9,118,  0,
+     & 251,0.004D0,100, 10,  2,  9,118,  0,
+     & 251,0.004D0,100, 10,  4,  7,118,  0,
+     & 252,0.090D0,100,127,122, 10,119,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1635,1653)/
-     & 252,0.090,100,129,124, 10,119,  0,
-     & 252,0.045,100,131,126, 10,119,  0,
-     & 252,0.010,100,127,122,  8,119,  0,
-     & 252,0.010,100,129,124,  8,119,  0,
-     & 252,0.005,100,131,126,  8,119,  0,
-     & 252,0.242,100,  7,  2, 10,119,  0,
-     & 252,0.242,100,  9,  4, 10,119,  0,
-     & 252,0.027,100,  7,  2,  8,119,  0,
-     & 252,0.027,100,  9,  4,  8,119,  0,
-     & 252,0.012,100,  9,  2, 10,119,  0,
-     & 252,0.012,100,  7,  4, 10,119,  0,
-     & 252,0.081,100, 10,  2,  7,119,  0,
-     & 252,0.081,100, 10,  4,  9,119,  0,
-     & 252,0.009,100,  8,  2,  7,119,  0,
-     & 252,0.009,100,  8,  4,  9,119,  0,
-     & 252,0.004,100, 10,  2,  9,119,  0,
-     & 252,0.004,100, 10,  4,  7,119,  0,
-     & 253,0.090,100,127,122, 10,120,  0,
-     & 253,0.090,100,129,124, 10,120,  0/
+     & 252,0.090D0,100,129,124, 10,119,  0,
+     & 252,0.045D0,100,131,126, 10,119,  0,
+     & 252,0.010D0,100,127,122,  8,119,  0,
+     & 252,0.010D0,100,129,124,  8,119,  0,
+     & 252,0.005D0,100,131,126,  8,119,  0,
+     & 252,0.242D0,100,  7,  2, 10,119,  0,
+     & 252,0.242D0,100,  9,  4, 10,119,  0,
+     & 252,0.027D0,100,  7,  2,  8,119,  0,
+     & 252,0.027D0,100,  9,  4,  8,119,  0,
+     & 252,0.012D0,100,  9,  2, 10,119,  0,
+     & 252,0.012D0,100,  7,  4, 10,119,  0,
+     & 252,0.081D0,100, 10,  2,  7,119,  0,
+     & 252,0.081D0,100, 10,  4,  9,119,  0,
+     & 252,0.009D0,100,  8,  2,  7,119,  0,
+     & 252,0.009D0,100,  8,  4,  9,119,  0,
+     & 252,0.004D0,100, 10,  2,  9,119,  0,
+     & 252,0.004D0,100, 10,  4,  7,119,  0,
+     & 253,0.090D0,100,127,122, 10,120,  0,
+     & 253,0.090D0,100,129,124, 10,120,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1654,1672)/
-     & 253,0.045,100,131,126, 10,120,  0,
-     & 253,0.010,100,127,122,  8,120,  0,
-     & 253,0.010,100,129,124,  8,120,  0,
-     & 253,0.005,100,131,126,  8,120,  0,
-     & 253,0.242,100,  7,  2, 10,120,  0,
-     & 253,0.242,100,  9,  4, 10,120,  0,
-     & 253,0.027,100,  7,  2,  8,120,  0,
-     & 253,0.027,100,  9,  4,  8,120,  0,
-     & 253,0.012,100,  9,  2, 10,120,  0,
-     & 253,0.012,100,  7,  4, 10,120,  0,
-     & 253,0.081,100, 10,  2,  7,120,  0,
-     & 253,0.081,100, 10,  4,  9,120,  0,
-     & 253,0.009,100,  8,  2,  7,120,  0,
-     & 253,0.009,100,  8,  4,  9,120,  0,
-     & 253,0.004,100, 10,  2,  9,120,  0,
-     & 253,0.004,100, 10,  4,  7,120,  0,
-     & 254,0.080,100,127,122, 10,  4,  0,
-     & 254,0.080,100,129,124, 10,  4,  0,
-     & 254,0.040,100,131,126, 10,  4,  0/
+     & 253,0.045D0,100,131,126, 10,120,  0,
+     & 253,0.010D0,100,127,122,  8,120,  0,
+     & 253,0.010D0,100,129,124,  8,120,  0,
+     & 253,0.005D0,100,131,126,  8,120,  0,
+     & 253,0.242D0,100,  7,  2, 10,120,  0,
+     & 253,0.242D0,100,  9,  4, 10,120,  0,
+     & 253,0.027D0,100,  7,  2,  8,120,  0,
+     & 253,0.027D0,100,  9,  4,  8,120,  0,
+     & 253,0.012D0,100,  9,  2, 10,120,  0,
+     & 253,0.012D0,100,  7,  4, 10,120,  0,
+     & 253,0.081D0,100, 10,  2,  7,120,  0,
+     & 253,0.081D0,100, 10,  4,  9,120,  0,
+     & 253,0.009D0,100,  8,  2,  7,120,  0,
+     & 253,0.009D0,100,  8,  4,  9,120,  0,
+     & 253,0.004D0,100, 10,  2,  9,120,  0,
+     & 253,0.004D0,100, 10,  4,  7,120,  0,
+     & 254,0.080D0,100,127,122, 10,  4,  0,
+     & 254,0.080D0,100,129,124, 10,  4,  0,
+     & 254,0.040D0,100,131,126, 10,  4,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1673,1691)/
-     & 254,0.080,100,127,122,  3, 11,  0,
-     & 254,0.080,100,129,124,  3, 11,  0,
-     & 254,0.228,100,  7,  2, 10,  4,  0,
-     & 254,0.228,100,  9,  4, 10,  4,  0,
-     & 254,0.012,100,  9,  2, 10,  4,  0,
-     & 254,0.012,100,  7,  4, 10,  4,  0,
-     & 254,0.076,100, 10,  2,  7,  4,  0,
-     & 254,0.076,100, 10,  4,  9,  4,  0,
-     & 254,0.004,100, 10,  2,  9,  4,  0,
-     & 254,0.004,100, 10,  4,  7,  4,  0,
-     & 265,1.000,  0,221, 59,  0,  0,  0,
-     & 266,1.000,  0,222, 59,  0,  0,  0,
-     & 267,1.000,  0,223, 59,  0,  0,  0,
-     & 268,0.667,  0,266, 38,  0,  0,  0,
-     & 268,0.333,  0,265, 21,  0,  0,  0,
-     & 269,0.667,  0,265, 30,  0,  0,  0,
-     & 269,0.333,  0,266, 21,  0,  0,  0,
-     & 270,0.500,  0,265, 50,  0,  0,  0,
-     & 270,0.500,  0,266, 46,  0,  0,  0/
+     & 254,0.080D0,100,127,122,  3, 11,  0,
+     & 254,0.080D0,100,129,124,  3, 11,  0,
+     & 254,0.228D0,100,  7,  2, 10,  4,  0,
+     & 254,0.228D0,100,  9,  4, 10,  4,  0,
+     & 254,0.012D0,100,  9,  2, 10,  4,  0,
+     & 254,0.012D0,100,  7,  4, 10,  4,  0,
+     & 254,0.076D0,100, 10,  2,  7,  4,  0,
+     & 254,0.076D0,100, 10,  4,  9,  4,  0,
+     & 254,0.004D0,100, 10,  2,  9,  4,  0,
+     & 254,0.004D0,100, 10,  4,  7,  4,  0,
+     & 265,1.000D0,  0,221, 59,  0,  0,  0,
+     & 266,1.000D0,  0,222, 59,  0,  0,  0,
+     & 267,1.000D0,  0,223, 59,  0,  0,  0,
+     & 268,0.667D0,  0,266, 38,  0,  0,  0,
+     & 268,0.333D0,  0,265, 21,  0,  0,  0,
+     & 269,0.667D0,  0,265, 30,  0,  0,  0,
+     & 269,0.333D0,  0,266, 21,  0,  0,  0,
+     & 270,0.500D0,  0,265, 50,  0,  0,  0,
+     & 270,0.500D0,  0,266, 46,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1692,1710)/
-     & 271,0.290,  0,266, 38,  0,  0,  0,
-     & 271,0.150,  0,265, 21,  0,  0,  0,
-     & 271,0.290,  0,222, 38,  0,  0,  0,
-     & 271,0.150,  0,221, 21,  0,  0,  0,
-     & 271,0.060,  0,266, 38, 21,  0,  0,
-     & 271,0.020,  0,265, 38, 30,  0,  0,
-     & 271,0.010,  0,265, 21, 21,  0,  0,
-     & 271,0.020,  0,222, 38, 21,  0,  0,
-     & 271,0.010,  0,221, 38, 30,  0,  0,
-     & 272,0.290,  0,265, 30,  0,  0,  0,
-     & 272,0.150,  0,266, 21,  0,  0,  0,
-     & 272,0.290,  0,221, 30,  0,  0,  0,
-     & 272,0.150,  0,222, 21,  0,  0,  0,
-     & 272,0.060,  0,265, 30, 21,  0,  0,
-     & 272,0.020,  0,266, 38, 30,  0,  0,
-     & 272,0.010,  0,266, 21, 21,  0,  0,
-     & 272,0.020,  0,221, 30, 21,  0,  0,
-     & 272,0.010,  0,222, 38, 30,  0,  0,
-     & 273,0.350,  0,221, 50,  0,  0,  0/
+     & 271,0.290D0,  0,266, 38,  0,  0,  0,
+     & 271,0.150D0,  0,265, 21,  0,  0,  0,
+     & 271,0.290D0,  0,222, 38,  0,  0,  0,
+     & 271,0.150D0,  0,221, 21,  0,  0,  0,
+     & 271,0.060D0,  0,266, 38, 21,  0,  0,
+     & 271,0.020D0,  0,265, 38, 30,  0,  0,
+     & 271,0.010D0,  0,265, 21, 21,  0,  0,
+     & 271,0.020D0,  0,222, 38, 21,  0,  0,
+     & 271,0.010D0,  0,221, 38, 30,  0,  0,
+     & 272,0.290D0,  0,265, 30,  0,  0,  0,
+     & 272,0.150D0,  0,266, 21,  0,  0,  0,
+     & 272,0.290D0,  0,221, 30,  0,  0,  0,
+     & 272,0.150D0,  0,222, 21,  0,  0,  0,
+     & 272,0.060D0,  0,265, 30, 21,  0,  0,
+     & 272,0.020D0,  0,266, 38, 30,  0,  0,
+     & 272,0.010D0,  0,266, 21, 21,  0,  0,
+     & 272,0.020D0,  0,221, 30, 21,  0,  0,
+     & 272,0.010D0,  0,222, 38, 30,  0,  0,
+     & 273,0.350D0,  0,221, 50,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1711,1729)/
-     & 273,0.350,  0,222, 46,  0,  0,  0,
-     & 273,0.150,  0,265, 50,  0,  0,  0,
-     & 273,0.150,  0,266, 46,  0,  0,  0,
-     & 274,1.000,  0,245, 59,  0,  0,  0,
-     & 275,1.000,  0,246, 59,  0,  0,  0,
-     & 276,1.000,  0,247, 59,  0,  0,  0,
-     & 277,0.667,  0,275, 30,  0,  0,  0,
-     & 277,0.333,  0,274, 21,  0,  0,  0,
-     & 278,0.667,  0,274, 38,  0,  0,  0,
-     & 278,0.333,  0,275, 21,  0,  0,  0,
-     & 279,0.500,  0,274, 42,  0,  0,  0,
-     & 279,0.500,  0,275, 34,  0,  0,  0,
-     & 280,0.290,  0,275, 30,  0,  0,  0,
-     & 280,0.150,  0,274, 21,  0,  0,  0,
-     & 280,0.290,  0,246, 30,  0,  0,  0,
-     & 280,0.150,  0,245, 21,  0,  0,  0,
-     & 280,0.060,  0,275, 30, 21,  0,  0,
-     & 280,0.020,  0,274, 38, 30,  0,  0,
-     & 280,0.010,  0,274, 21, 21,  0,  0/
+     & 273,0.350D0,  0,222, 46,  0,  0,  0,
+     & 273,0.150D0,  0,265, 50,  0,  0,  0,
+     & 273,0.150D0,  0,266, 46,  0,  0,  0,
+     & 274,1.000D0,  0,245, 59,  0,  0,  0,
+     & 275,1.000D0,  0,246, 59,  0,  0,  0,
+     & 276,1.000D0,  0,247, 59,  0,  0,  0,
+     & 277,0.667D0,  0,275, 30,  0,  0,  0,
+     & 277,0.333D0,  0,274, 21,  0,  0,  0,
+     & 278,0.667D0,  0,274, 38,  0,  0,  0,
+     & 278,0.333D0,  0,275, 21,  0,  0,  0,
+     & 279,0.500D0,  0,274, 42,  0,  0,  0,
+     & 279,0.500D0,  0,275, 34,  0,  0,  0,
+     & 280,0.290D0,  0,275, 30,  0,  0,  0,
+     & 280,0.150D0,  0,274, 21,  0,  0,  0,
+     & 280,0.290D0,  0,246, 30,  0,  0,  0,
+     & 280,0.150D0,  0,245, 21,  0,  0,  0,
+     & 280,0.060D0,  0,275, 30, 21,  0,  0,
+     & 280,0.020D0,  0,274, 38, 30,  0,  0,
+     & 280,0.010D0,  0,274, 21, 21,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1730,1748)/
-     & 280,0.020,  0,246, 30, 21,  0,  0,
-     & 280,0.010,  0,245, 38, 30,  0,  0,
-     & 281,0.290,  0,274, 38,  0,  0,  0,
-     & 281,0.150,  0,275, 21,  0,  0,  0,
-     & 281,0.290,  0,245, 38,  0,  0,  0,
-     & 281,0.150,  0,246, 21,  0,  0,  0,
-     & 281,0.060,  0,274, 38, 21,  0,  0,
-     & 281,0.020,  0,275, 38, 30,  0,  0,
-     & 281,0.010,  0,275, 21, 21,  0,  0,
-     & 281,0.020,  0,245, 38, 21,  0,  0,
-     & 281,0.010,  0,246, 38, 30,  0,  0,
-     & 282,0.350,  0,245, 42,  0,  0,  0,
-     & 282,0.350,  0,246, 34,  0,  0,  0,
-     & 282,0.150,  0,274, 42,  0,  0,  0,
-     & 282,0.150,  0,275, 34,  0,  0,  0,
-     & 285,1.000,  0, 24, 21,  0,  0,  0,
-     & 286,0.998,  0, 24, 38,  0,  0,  0,
-     & 286,0.002,  0, 38, 59,  0,  0,  0,
-     & 287,0.998,  0, 24, 30,  0,  0,  0/
+     & 280,0.020D0,  0,246, 30, 21,  0,  0,
+     & 280,0.010D0,  0,245, 38, 30,  0,  0,
+     & 281,0.290D0,  0,274, 38,  0,  0,  0,
+     & 281,0.150D0,  0,275, 21,  0,  0,  0,
+     & 281,0.290D0,  0,245, 38,  0,  0,  0,
+     & 281,0.150D0,  0,246, 21,  0,  0,  0,
+     & 281,0.060D0,  0,274, 38, 21,  0,  0,
+     & 281,0.020D0,  0,275, 38, 30,  0,  0,
+     & 281,0.010D0,  0,275, 21, 21,  0,  0,
+     & 281,0.020D0,  0,245, 38, 21,  0,  0,
+     & 281,0.010D0,  0,246, 38, 30,  0,  0,
+     & 282,0.350D0,  0,245, 42,  0,  0,  0,
+     & 282,0.350D0,  0,246, 34,  0,  0,  0,
+     & 282,0.150D0,  0,274, 42,  0,  0,  0,
+     & 282,0.150D0,  0,275, 34,  0,  0,  0,
+     & 285,1.000D0,  0, 24, 21,  0,  0,  0,
+     & 286,0.998D0,  0, 24, 38,  0,  0,  0,
+     & 286,0.002D0,  0, 38, 59,  0,  0,  0,
+     & 287,0.998D0,  0, 24, 30,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1749,1767)/
-     & 287,0.002,  0, 30, 59,  0,  0,  0,
-     & 288,0.330,  0, 39, 30,  0,  0,  0,
-     & 288,0.340,  0, 23, 21,  0,  0,  0,
-     & 288,0.330,  0, 31, 38,  0,  0,  0,
-     & 289,0.250,  0, 46, 35,  0,  0,  0,
-     & 289,0.250,  0, 34, 47,  0,  0,  0,
-     & 289,0.250,  0, 50, 43,  0,  0,  0,
-     & 289,0.250,  0, 42, 51,  0,  0,  0,
-     & 290,0.996,  0, 22, 21,  0,  0,  0,
-     & 290,0.002,  0, 46, 34,  0,  0,  0,
-     & 290,0.002,  0, 50, 42,  0,  0,  0,
-     & 291,0.996,  0, 22, 38,  0,  0,  0,
-     & 291,0.004,  0, 46, 42,  0,  0,  0,
-     & 292,0.996,  0, 22, 30,  0,  0,  0,
-     & 292,0.004,  0, 50, 34,  0,  0,  0,
-     & 293,0.520,  0, 38, 30,  0,  0,  0,
-     & 293,0.260,  0, 21, 21,  0,  0,  0,
-     & 293,0.110,  0, 46, 34,  0,  0,  0,
-     & 293,0.110,  0, 50, 42,  0,  0,  0/
+     & 287,0.002D0,  0, 30, 59,  0,  0,  0,
+     & 288,0.330D0,  0, 39, 30,  0,  0,  0,
+     & 288,0.340D0,  0, 23, 21,  0,  0,  0,
+     & 288,0.330D0,  0, 31, 38,  0,  0,  0,
+     & 289,0.250D0,  0, 46, 35,  0,  0,  0,
+     & 289,0.250D0,  0, 34, 47,  0,  0,  0,
+     & 289,0.250D0,  0, 50, 43,  0,  0,  0,
+     & 289,0.250D0,  0, 42, 51,  0,  0,  0,
+     & 290,0.996D0,  0, 22, 21,  0,  0,  0,
+     & 290,0.002D0,  0, 46, 34,  0,  0,  0,
+     & 290,0.002D0,  0, 50, 42,  0,  0,  0,
+     & 291,0.996D0,  0, 22, 38,  0,  0,  0,
+     & 291,0.004D0,  0, 46, 42,  0,  0,  0,
+     & 292,0.996D0,  0, 22, 30,  0,  0,  0,
+     & 292,0.004D0,  0, 50, 34,  0,  0,  0,
+     & 293,0.520D0,  0, 38, 30,  0,  0,  0,
+     & 293,0.260D0,  0, 21, 21,  0,  0,  0,
+     & 293,0.110D0,  0, 46, 34,  0,  0,  0,
+     & 293,0.110D0,  0, 50, 42,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1768,1786)/
-     & 294,0.620,  0, 38, 30,  0,  0,  0,
-     & 294,0.310,  0, 21, 21,  0,  0,  0,
-     & 294,0.035,  0, 46, 34,  0,  0,  0,
-     & 294,0.035,  0, 50, 42,  0,  0,  0,
-     & 295,1.000,  0,254, 59,  0,  0,  0,
-     & 296,1.000,  0,230, 59,  0,  0,  0,
-     & 297,1.000,  0,254, 59,  0,  0,  0,
-     & 298,1.000,  0,230, 59,  0,  0,  0,
-     & 299,1.000,  0,254, 59,  0,  0,  0,
-     & 300,1.000,  0,230, 59,  0,  0,  0,
-     & 301,0.050,  0,121,127,  0,  0,  0,
-     & 301,0.050,  0,123,129,  0,  0,  0,
-     & 301,0.017,  0,  1,  7,  0,  0,  0,
-     & 301,0.066,  0,  2,  8,  0,  0,  0,
-     & 301,0.017,  0,  3,  9,  0,  0,  0,
-     & 301,0.640,130, 13, 13, 13,  0,  0,
-     & 301,0.160,130, 13, 13, 59,  0,  0,
-     & 302,0.022,  0, 38, 30, 38, 30, 23,
-     & 302,0.016,  0, 38, 30, 38, 30,  0/
+     & 294,0.620D0,  0, 38, 30,  0,  0,  0,
+     & 294,0.310D0,  0, 21, 21,  0,  0,  0,
+     & 294,0.035D0,  0, 46, 34,  0,  0,  0,
+     & 294,0.035D0,  0, 50, 42,  0,  0,  0,
+     & 295,1.000D0,  0,254, 59,  0,  0,  0,
+     & 296,1.000D0,  0,230, 59,  0,  0,  0,
+     & 297,1.000D0,  0,254, 59,  0,  0,  0,
+     & 298,1.000D0,  0,230, 59,  0,  0,  0,
+     & 299,1.000D0,  0,254, 59,  0,  0,  0,
+     & 300,1.000D0,  0,230, 59,  0,  0,  0,
+     & 301,0.050D0,  0,121,127,  0,  0,  0,
+     & 301,0.050D0,  0,123,129,  0,  0,  0,
+     & 301,0.017D0,  0,  1,  7,  0,  0,  0,
+     & 301,0.066D0,  0,  2,  8,  0,  0,  0,
+     & 301,0.017D0,  0,  3,  9,  0,  0,  0,
+     & 301,0.640D0,130, 13, 13, 13,  0,  0,
+     & 301,0.160D0,130, 13, 13, 59,  0,  0,
+     & 302,0.022D0,  0, 38, 30, 38, 30, 23,
+     & 302,0.016D0,  0, 38, 30, 38, 30,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1787,1805)/
-     & 302,0.009,  0, 38, 30, 46, 34,  0,
-     & 302,0.004,  0, 23, 38, 30,  0,  0,
-     & 302,0.002,  0, 46, 43, 30,  0,  0,
-     & 302,0.002,  0, 34, 51, 38,  0,  0,
-     & 302,0.001,  0, 38, 30, 73, 91,  0,
-     & 302,0.273,  0, 59,164,  0,  0,  0,
-     & 302,0.671,  0, 13, 13,  0,  0,  0,
-     & 303,0.022,  0, 38, 30, 38, 30,  0,
-     & 303,0.019,  0, 38, 30, 46, 34,  0,
-     & 303,0.012,  0, 38, 30, 38, 30, 23,
-     & 303,0.007,  0, 23, 38, 30,  0,  0,
-     & 303,0.002,  0, 46, 43, 30,  0,  0,
-     & 303,0.002,  0, 34, 51, 38,  0,  0,
-     & 303,0.003,  0, 38, 30, 73, 91,  0,
-     & 303,0.002,  0, 38, 30,  0,  0,  0,
-     & 303,0.002,  0, 46, 34,  0,  0,  0,
-     & 303,0.001,  0, 21, 21,  0,  0,  0,
-     & 303,0.135,  0, 59,164,  0,  0,  0,
-     & 303,0.793,  0, 13, 13,  0,  0,  0/
+     & 302,0.009D0,  0, 38, 30, 46, 34,  0,
+     & 302,0.004D0,  0, 23, 38, 30,  0,  0,
+     & 302,0.002D0,  0, 46, 43, 30,  0,  0,
+     & 302,0.002D0,  0, 34, 51, 38,  0,  0,
+     & 302,0.001D0,  0, 38, 30, 73, 91,  0,
+     & 302,0.273D0,  0, 59,164,  0,  0,  0,
+     & 302,0.671D0,  0, 13, 13,  0,  0,  0,
+     & 303,0.022D0,  0, 38, 30, 38, 30,  0,
+     & 303,0.019D0,  0, 38, 30, 46, 34,  0,
+     & 303,0.012D0,  0, 38, 30, 38, 30, 23,
+     & 303,0.007D0,  0, 23, 38, 30,  0,  0,
+     & 303,0.002D0,  0, 46, 43, 30,  0,  0,
+     & 303,0.002D0,  0, 34, 51, 38,  0,  0,
+     & 303,0.003D0,  0, 38, 30, 73, 91,  0,
+     & 303,0.002D0,  0, 38, 30,  0,  0,  0,
+     & 303,0.002D0,  0, 46, 34,  0,  0,  0,
+     & 303,0.001D0,  0, 21, 21,  0,  0,  0,
+     & 303,0.135D0,  0, 59,164,  0,  0,  0,
+     & 303,0.793D0,  0, 13, 13,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1806,1824)/
-     & 304,1.000,  0, 13, 13,  0,  0,  0,
-     & 305,1.000,  0, 13, 13,  0,  0,  0,
-     & 306,0.050,  0, 59,231,  0,  0,  0,
-     & 306,0.950,  0, 13, 13,  0,  0,  0,
-     & 307,0.350,  0, 59,231,  0,  0,  0,
-     & 307,0.650,  0, 13, 13,  0,  0,  0,
-     & 308,0.220,  0, 59,231,  0,  0,  0,
-     & 308,0.780,  0, 13, 13,  0,  0,  0,
-     & 309,0.280,  0, 46, 31,  0,  0,  0,
-     & 309,0.140,  0, 50, 23,  0,  0,  0,
-     & 309,0.187,  0,327, 30,  0,  0,  0,
-     & 309,0.093,  0,328, 21,  0,  0,  0,
-     & 309,0.110,  0, 50, 24,  0,  0,  0,
-     & 309,0.107,  0, 47, 30,  0,  0,  0,
-     & 309,0.053,  0, 51, 21,  0,  0,  0,
-     & 309,0.030,  0, 50,293,  0,  0,  0,
-     & 310,0.280,  0, 50, 39,  0,  0,  0,
-     & 310,0.140,  0, 46, 23,  0,  0,  0,
-     & 310,0.187,  0,328, 38,  0,  0,  0/
+     & 304,1.000D0,  0, 13, 13,  0,  0,  0,
+     & 305,1.000D0,  0, 13, 13,  0,  0,  0,
+     & 306,0.050D0,  0, 59,231,  0,  0,  0,
+     & 306,0.950D0,  0, 13, 13,  0,  0,  0,
+     & 307,0.350D0,  0, 59,231,  0,  0,  0,
+     & 307,0.650D0,  0, 13, 13,  0,  0,  0,
+     & 308,0.220D0,  0, 59,231,  0,  0,  0,
+     & 308,0.780D0,  0, 13, 13,  0,  0,  0,
+     & 309,0.280D0,  0, 46, 31,  0,  0,  0,
+     & 309,0.140D0,  0, 50, 23,  0,  0,  0,
+     & 309,0.187D0,  0,327, 30,  0,  0,  0,
+     & 309,0.093D0,  0,328, 21,  0,  0,  0,
+     & 309,0.110D0,  0, 50, 24,  0,  0,  0,
+     & 309,0.107D0,  0, 47, 30,  0,  0,  0,
+     & 309,0.053D0,  0, 51, 21,  0,  0,  0,
+     & 309,0.030D0,  0, 50,293,  0,  0,  0,
+     & 310,0.280D0,  0, 50, 39,  0,  0,  0,
+     & 310,0.140D0,  0, 46, 23,  0,  0,  0,
+     & 310,0.187D0,  0,328, 38,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1825,1843)/
-     & 310,0.093,  0,327, 21,  0,  0,  0,
-     & 310,0.110,  0, 46, 24,  0,  0,  0,
-     & 310,0.107,  0, 51, 38,  0,  0,  0,
-     & 310,0.053,  0, 47, 21,  0,  0,  0,
-     & 310,0.030,  0, 46,293,  0,  0,  0,
-     & 311,0.280,  0, 34, 39,  0,  0,  0,
-     & 311,0.140,  0, 42, 23,  0,  0,  0,
-     & 311,0.187,  0,330, 38,  0,  0,  0,
-     & 311,0.093,  0,329, 21,  0,  0,  0,
-     & 311,0.110,  0, 42, 24,  0,  0,  0,
-     & 311,0.107,  0, 35, 38,  0,  0,  0,
-     & 311,0.053,  0, 43, 21,  0,  0,  0,
-     & 311,0.030,  0, 42,293,  0,  0,  0,
-     & 312,0.280,  0, 42, 31,  0,  0,  0,
-     & 312,0.140,  0, 34, 23,  0,  0,  0,
-     & 312,0.187,  0,329, 30,  0,  0,  0,
-     & 312,0.093,  0,330, 21,  0,  0,  0,
-     & 312,0.110,  0, 34, 24,  0,  0,  0,
-     & 312,0.107,  0, 43, 30,  0,  0,  0/
+     & 310,0.093D0,  0,327, 21,  0,  0,  0,
+     & 310,0.110D0,  0, 46, 24,  0,  0,  0,
+     & 310,0.107D0,  0, 51, 38,  0,  0,  0,
+     & 310,0.053D0,  0, 47, 21,  0,  0,  0,
+     & 310,0.030D0,  0, 46,293,  0,  0,  0,
+     & 311,0.280D0,  0, 34, 39,  0,  0,  0,
+     & 311,0.140D0,  0, 42, 23,  0,  0,  0,
+     & 311,0.187D0,  0,330, 38,  0,  0,  0,
+     & 311,0.093D0,  0,329, 21,  0,  0,  0,
+     & 311,0.110D0,  0, 42, 24,  0,  0,  0,
+     & 311,0.107D0,  0, 35, 38,  0,  0,  0,
+     & 311,0.053D0,  0, 43, 21,  0,  0,  0,
+     & 311,0.030D0,  0, 42,293,  0,  0,  0,
+     & 312,0.280D0,  0, 42, 31,  0,  0,  0,
+     & 312,0.140D0,  0, 34, 23,  0,  0,  0,
+     & 312,0.187D0,  0,329, 30,  0,  0,  0,
+     & 312,0.093D0,  0,330, 21,  0,  0,  0,
+     & 312,0.110D0,  0, 34, 24,  0,  0,  0,
+     & 312,0.107D0,  0, 43, 30,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1844,1862)/
-     & 312,0.053,  0, 35, 21,  0,  0,  0,
-     & 312,0.030,  0, 34,293,  0,  0,  0,
-     & 313,0.430,  0,140, 38,  0,  0,  0,
-     & 313,0.215,  0,136, 21,  0,  0,  0,
-     & 313,0.235,  0,140, 38, 21,  0,  0,
-     & 313,0.120,  0,136, 38, 30,  0,  0,
-     & 314,0.430,  0,136, 30,  0,  0,  0,
-     & 314,0.215,  0,140, 21,  0,  0,  0,
-     & 314,0.235,  0,136, 30, 21,  0,  0,
-     & 314,0.120,  0,140, 38, 30,  0,  0,
-     & 315,0.480,  0,136, 50,  0,  0,  0,
-     & 315,0.480,  0,140, 46,  0,  0,  0,
-     & 315,0.040,  0,145, 59,  0,  0,  0,
-     & 316,0.430,  0,175, 30,  0,  0,  0,
-     & 316,0.215,  0,171, 21,  0,  0,  0,
-     & 316,0.235,  0,175, 30, 21,  0,  0,
-     & 316,0.120,  0,171, 38, 30,  0,  0,
-     & 317,0.430,  0,171, 38,  0,  0,  0,
-     & 317,0.215,  0,175, 21,  0,  0,  0/
+     & 312,0.053D0,  0, 35, 21,  0,  0,  0,
+     & 312,0.030D0,  0, 34,293,  0,  0,  0,
+     & 313,0.430D0,  0,140, 38,  0,  0,  0,
+     & 313,0.215D0,  0,136, 21,  0,  0,  0,
+     & 313,0.235D0,  0,140, 38, 21,  0,  0,
+     & 313,0.120D0,  0,136, 38, 30,  0,  0,
+     & 314,0.430D0,  0,136, 30,  0,  0,  0,
+     & 314,0.215D0,  0,140, 21,  0,  0,  0,
+     & 314,0.235D0,  0,136, 30, 21,  0,  0,
+     & 314,0.120D0,  0,140, 38, 30,  0,  0,
+     & 315,0.480D0,  0,136, 50,  0,  0,  0,
+     & 315,0.480D0,  0,140, 46,  0,  0,  0,
+     & 315,0.040D0,  0,145, 59,  0,  0,  0,
+     & 316,0.430D0,  0,175, 30,  0,  0,  0,
+     & 316,0.215D0,  0,171, 21,  0,  0,  0,
+     & 316,0.235D0,  0,175, 30, 21,  0,  0,
+     & 316,0.120D0,  0,171, 38, 30,  0,  0,
+     & 317,0.430D0,  0,171, 38,  0,  0,  0,
+     & 317,0.215D0,  0,175, 21,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1863,1881)/
-     & 317,0.235,  0,171, 38, 21,  0,  0,
-     & 317,0.120,  0,175, 38, 30,  0,  0,
-     & 318,0.480,  0,171, 42,  0,  0,  0,
-     & 318,0.480,  0,175, 34,  0,  0,  0,
-     & 318,0.040,  0,180, 59,  0,  0,  0,
-     & 319,0.540,  0,275, 30,  0,  0,  0,
-     & 319,0.270,  0,274, 21,  0,  0,  0,
-     & 319,0.030,  0,275, 30, 21,  0,  0,
-     & 319,0.010,  0,274, 38, 30,  0,  0,
-     & 319,0.010,  0,274, 21, 21,  0,  0,
-     & 319,0.090,  0,246, 30, 21,  0,  0,
-     & 319,0.030,  0,245, 38, 30,  0,  0,
-     & 319,0.020,  0,245, 21, 21,  0,  0,
-     & 320,0.540,  0,274, 38,  0,  0,  0,
-     & 320,0.270,  0,275, 21,  0,  0,  0,
-     & 320,0.030,  0,274, 38, 21,  0,  0,
-     & 320,0.010,  0,275, 38, 30,  0,  0,
-     & 320,0.010,  0,275, 21, 21,  0,  0,
-     & 320,0.090,  0,245, 38, 21,  0,  0/
+     & 317,0.235D0,  0,171, 38, 21,  0,  0,
+     & 317,0.120D0,  0,175, 38, 30,  0,  0,
+     & 318,0.480D0,  0,171, 42,  0,  0,  0,
+     & 318,0.480D0,  0,175, 34,  0,  0,  0,
+     & 318,0.040D0,  0,180, 59,  0,  0,  0,
+     & 319,0.540D0,  0,275, 30,  0,  0,  0,
+     & 319,0.270D0,  0,274, 21,  0,  0,  0,
+     & 319,0.030D0,  0,275, 30, 21,  0,  0,
+     & 319,0.010D0,  0,274, 38, 30,  0,  0,
+     & 319,0.010D0,  0,274, 21, 21,  0,  0,
+     & 319,0.090D0,  0,246, 30, 21,  0,  0,
+     & 319,0.030D0,  0,245, 38, 30,  0,  0,
+     & 319,0.020D0,  0,245, 21, 21,  0,  0,
+     & 320,0.540D0,  0,274, 38,  0,  0,  0,
+     & 320,0.270D0,  0,275, 21,  0,  0,  0,
+     & 320,0.030D0,  0,274, 38, 21,  0,  0,
+     & 320,0.010D0,  0,275, 38, 30,  0,  0,
+     & 320,0.010D0,  0,275, 21, 21,  0,  0,
+     & 320,0.090D0,  0,245, 38, 21,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1882,1900)/
-     & 320,0.030,  0,246, 38, 30,  0,  0,
-     & 320,0.020,  0,246, 21, 21,  0,  0,
-     & 321,0.500,  0,266, 46,  0,  0,  0,
-     & 321,0.500,  0,265, 50,  0,  0,  0,
-     & 322,1.000,  0,254, 59,  0,  0,  0,
-     & 323,0.540,  0,266, 38,  0,  0,  0,
-     & 323,0.270,  0,265, 21,  0,  0,  0,
-     & 323,0.030,  0,266, 38, 21,  0,  0,
-     & 323,0.010,  0,265, 38, 30,  0,  0,
-     & 323,0.010,  0,265, 21, 21,  0,  0,
-     & 323,0.090,  0,222, 38, 21,  0,  0,
-     & 323,0.030,  0,221, 38, 30,  0,  0,
-     & 323,0.020,  0,221, 21, 21,  0,  0,
-     & 324,0.540,  0,265, 30,  0,  0,  0,
-     & 324,0.270,  0,266, 21,  0,  0,  0,
-     & 324,0.030,  0,265, 30, 21,  0,  0,
-     & 324,0.010,  0,266, 38, 30,  0,  0,
-     & 324,0.010,  0,266, 21, 21,  0,  0,
-     & 324,0.090,  0,221, 30, 21,  0,  0/
+     & 320,0.030D0,  0,246, 38, 30,  0,  0,
+     & 320,0.020D0,  0,246, 21, 21,  0,  0,
+     & 321,0.500D0,  0,266, 46,  0,  0,  0,
+     & 321,0.500D0,  0,265, 50,  0,  0,  0,
+     & 322,1.000D0,  0,254, 59,  0,  0,  0,
+     & 323,0.540D0,  0,266, 38,  0,  0,  0,
+     & 323,0.270D0,  0,265, 21,  0,  0,  0,
+     & 323,0.030D0,  0,266, 38, 21,  0,  0,
+     & 323,0.010D0,  0,265, 38, 30,  0,  0,
+     & 323,0.010D0,  0,265, 21, 21,  0,  0,
+     & 323,0.090D0,  0,222, 38, 21,  0,  0,
+     & 323,0.030D0,  0,221, 38, 30,  0,  0,
+     & 323,0.020D0,  0,221, 21, 21,  0,  0,
+     & 324,0.540D0,  0,265, 30,  0,  0,  0,
+     & 324,0.270D0,  0,266, 21,  0,  0,  0,
+     & 324,0.030D0,  0,265, 30, 21,  0,  0,
+     & 324,0.010D0,  0,266, 38, 30,  0,  0,
+     & 324,0.010D0,  0,266, 21, 21,  0,  0,
+     & 324,0.090D0,  0,221, 30, 21,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1901,1919)/
-     & 324,0.030,  0,222, 38, 30,  0,  0,
-     & 324,0.020,  0,222, 21, 21,  0,  0,
-     & 325,0.500,  0,275, 34,  0,  0,  0,
-     & 325,0.500,  0,274, 42,  0,  0,  0,
-     & 326,1.000,  0,230, 59,  0,  0,  0,
-     & 327,0.667,  0, 50, 38,  0,  0,  0,
-     & 327,0.333,  0, 46, 21,  0,  0,  0,
-     & 328,0.667,  0, 46, 30,  0,  0,  0,
-     & 328,0.333,  0, 50, 21,  0,  0,  0,
-     & 329,0.667,  0, 34, 38,  0,  0,  0,
-     & 329,0.333,  0, 42, 21,  0,  0,  0,
-     & 330,0.667,  0, 42, 30,  0,  0,  0,
-     & 330,0.333,  0, 34, 21,  0,  0,  0,
-     & 331,0.667,  0,140, 38,  0,  0,  0,
-     & 331,0.333,  0,136, 21,  0,  0,  0,
-     & 332,0.667,  0,136, 30,  0,  0,  0,
-     & 332,0.333,  0,140, 21,  0,  0,  0,
-     & 333,0.500,  0,136, 50,  0,  0,  0,
-     & 333,0.500,  0,140, 46,  0,  0,  0/
+     & 324,0.030D0,  0,222, 38, 30,  0,  0,
+     & 324,0.020D0,  0,222, 21, 21,  0,  0,
+     & 325,0.500D0,  0,275, 34,  0,  0,  0,
+     & 325,0.500D0,  0,274, 42,  0,  0,  0,
+     & 326,1.000D0,  0,230, 59,  0,  0,  0,
+     & 327,0.667D0,  0, 50, 38,  0,  0,  0,
+     & 327,0.333D0,  0, 46, 21,  0,  0,  0,
+     & 328,0.667D0,  0, 46, 30,  0,  0,  0,
+     & 328,0.333D0,  0, 50, 21,  0,  0,  0,
+     & 329,0.667D0,  0, 34, 38,  0,  0,  0,
+     & 329,0.333D0,  0, 42, 21,  0,  0,  0,
+     & 330,0.667D0,  0, 42, 30,  0,  0,  0,
+     & 330,0.333D0,  0, 34, 21,  0,  0,  0,
+     & 331,0.667D0,  0,140, 38,  0,  0,  0,
+     & 331,0.333D0,  0,136, 21,  0,  0,  0,
+     & 332,0.667D0,  0,136, 30,  0,  0,  0,
+     & 332,0.333D0,  0,140, 21,  0,  0,  0,
+     & 333,0.500D0,  0,136, 50,  0,  0,  0,
+     & 333,0.500D0,  0,140, 46,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1920,1938)/
-     & 334,0.667,  0,175, 30,  0,  0,  0,
-     & 334,0.333,  0,171, 21,  0,  0,  0,
-     & 335,0.667,  0,171, 38,  0,  0,  0,
-     & 335,0.333,  0,175, 21,  0,  0,  0,
-     & 336,0.500,  0,171, 42,  0,  0,  0,
-     & 336,0.500,  0,175, 34,  0,  0,  0,
-     & 337,0.667,  0,246, 30,  0,  0,  0,
-     & 337,0.333,  0,245, 21,  0,  0,  0,
-     & 338,0.667,  0,245, 38,  0,  0,  0,
-     & 338,0.333,  0,246, 21,  0,  0,  0,
-     & 339,0.500,  0,246, 34,  0,  0,  0,
-     & 339,0.500,  0,245, 42,  0,  0,  0,
-     & 340,1.000,  0,254, 59,  0,  0,  0,
-     & 341,0.667,  0,222, 38,  0,  0,  0,
-     & 341,0.333,  0,221, 21,  0,  0,  0,
-     & 342,0.667,  0,221, 30,  0,  0,  0,
-     & 342,0.333,  0,222, 21,  0,  0,  0,
-     & 343,0.500,  0,222, 46,  0,  0,  0,
-     & 343,0.500,  0,221, 50,  0,  0,  0/
+     & 334,0.667D0,  0,175, 30,  0,  0,  0,
+     & 334,0.333D0,  0,171, 21,  0,  0,  0,
+     & 335,0.667D0,  0,171, 38,  0,  0,  0,
+     & 335,0.333D0,  0,175, 21,  0,  0,  0,
+     & 336,0.500D0,  0,171, 42,  0,  0,  0,
+     & 336,0.500D0,  0,175, 34,  0,  0,  0,
+     & 337,0.667D0,  0,246, 30,  0,  0,  0,
+     & 337,0.333D0,  0,245, 21,  0,  0,  0,
+     & 338,0.667D0,  0,245, 38,  0,  0,  0,
+     & 338,0.333D0,  0,246, 21,  0,  0,  0,
+     & 339,0.500D0,  0,246, 34,  0,  0,  0,
+     & 339,0.500D0,  0,245, 42,  0,  0,  0,
+     & 340,1.000D0,  0,254, 59,  0,  0,  0,
+     & 341,0.667D0,  0,222, 38,  0,  0,  0,
+     & 341,0.333D0,  0,221, 21,  0,  0,  0,
+     & 342,0.667D0,  0,221, 30,  0,  0,  0,
+     & 342,0.333D0,  0,222, 21,  0,  0,  0,
+     & 343,0.500D0,  0,222, 46,  0,  0,  0,
+     & 343,0.500D0,  0,221, 50,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1939,1957)/
-     & 344,1.000,  0,230, 59,  0,  0,  0,
-     & 345,1.000,  0,225, 30,  0,  0,  0,
-     & 346,1.000,  0,225, 21,  0,  0,  0,
-     & 347,1.000,  0,225, 21,  0,  0,  0,
-     & 348,1.000,  0,225, 38,  0,  0,  0,
-     & 349,0.600,  0,228, 38,  0,  0,  0,
-     & 349,0.300,  0,227, 21,  0,  0,  0,
-     & 349,0.100,  0,227, 59,  0,  0,  0,
-     & 350,0.600,  0,228, 38,  0,  0,  0,
-     & 350,0.300,  0,227, 21,  0,  0,  0,
-     & 350,0.100,  0,227, 59,  0,  0,  0,
-     & 351,0.600,  0,227, 30,  0,  0,  0,
-     & 351,0.300,  0,228, 21,  0,  0,  0,
-     & 351,0.100,  0,228, 59,  0,  0,  0,
-     & 352,0.600,  0,227, 30,  0,  0,  0,
-     & 352,0.300,  0,228, 21,  0,  0,  0,
-     & 352,0.100,  0,228, 59,  0,  0,  0,
-     & 353,1.000,  0,229, 59,  0,  0,  0,
-     & 354,1.000,  0,249, 38,  0,  0,  0/
+     & 344,1.000D0,  0,230, 59,  0,  0,  0,
+     & 345,1.000D0,  0,225, 30,  0,  0,  0,
+     & 346,1.000D0,  0,225, 21,  0,  0,  0,
+     & 347,1.000D0,  0,225, 21,  0,  0,  0,
+     & 348,1.000D0,  0,225, 38,  0,  0,  0,
+     & 349,0.600D0,  0,228, 38,  0,  0,  0,
+     & 349,0.300D0,  0,227, 21,  0,  0,  0,
+     & 349,0.100D0,  0,227, 59,  0,  0,  0,
+     & 350,0.600D0,  0,228, 38,  0,  0,  0,
+     & 350,0.300D0,  0,227, 21,  0,  0,  0,
+     & 350,0.100D0,  0,227, 59,  0,  0,  0,
+     & 351,0.600D0,  0,227, 30,  0,  0,  0,
+     & 351,0.300D0,  0,228, 21,  0,  0,  0,
+     & 351,0.100D0,  0,228, 59,  0,  0,  0,
+     & 352,0.600D0,  0,227, 30,  0,  0,  0,
+     & 352,0.300D0,  0,228, 21,  0,  0,  0,
+     & 352,0.100D0,  0,228, 59,  0,  0,  0,
+     & 353,1.000D0,  0,229, 59,  0,  0,  0,
+     & 354,1.000D0,  0,249, 38,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1958,1976)/
-     & 355,1.000,  0,249, 21,  0,  0,  0,
-     & 356,1.000,  0,249, 21,  0,  0,  0,
-     & 357,1.000,  0,249, 30,  0,  0,  0,
-     & 358,0.600,  0,252, 30,  0,  0,  0,
-     & 358,0.300,  0,251, 21,  0,  0,  0,
-     & 358,0.100,  0,251, 59,  0,  0,  0,
-     & 359,0.600,  0,252, 30,  0,  0,  0,
-     & 359,0.300,  0,251, 21,  0,  0,  0,
-     & 359,0.100,  0,251, 59,  0,  0,  0,
-     & 360,0.600,  0,251, 38,  0,  0,  0,
-     & 360,0.300,  0,252, 21,  0,  0,  0,
-     & 360,0.100,  0,252, 59,  0,  0,  0,
-     & 361,0.600,  0,251, 38,  0,  0,  0,
-     & 361,0.300,  0,252, 21,  0,  0,  0,
-     & 361,0.100,  0,252, 59,  0,  0,  0,
-     & 362,1.000,  0,253, 59,  0,  0,  0,
-     & 363,0.400,  0, 53, 38,  0,  0,  0,
-     & 363,0.200,  0, 49, 21,  0,  0,  0,
-     & 363,0.100,  0, 51, 38,  0,  0,  0/
+     & 355,1.000D0,  0,249, 21,  0,  0,  0,
+     & 356,1.000D0,  0,249, 21,  0,  0,  0,
+     & 357,1.000D0,  0,249, 30,  0,  0,  0,
+     & 358,0.600D0,  0,252, 30,  0,  0,  0,
+     & 358,0.300D0,  0,251, 21,  0,  0,  0,
+     & 358,0.100D0,  0,251, 59,  0,  0,  0,
+     & 359,0.600D0,  0,252, 30,  0,  0,  0,
+     & 359,0.300D0,  0,251, 21,  0,  0,  0,
+     & 359,0.100D0,  0,251, 59,  0,  0,  0,
+     & 360,0.600D0,  0,251, 38,  0,  0,  0,
+     & 360,0.300D0,  0,252, 21,  0,  0,  0,
+     & 360,0.100D0,  0,252, 59,  0,  0,  0,
+     & 361,0.600D0,  0,251, 38,  0,  0,  0,
+     & 361,0.300D0,  0,252, 21,  0,  0,  0,
+     & 361,0.100D0,  0,252, 59,  0,  0,  0,
+     & 362,1.000D0,  0,253, 59,  0,  0,  0,
+     & 363,0.400D0,  0, 53, 38,  0,  0,  0,
+     & 363,0.200D0,  0, 49, 21,  0,  0,  0,
+     & 363,0.100D0,  0, 51, 38,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1977,1995)/
-     & 363,0.050,  0, 47, 21,  0,  0,  0,
-     & 363,0.150,  0, 46, 26,  0,  0,  0,
-     & 363,0.050,  0, 46, 56,  0,  0,  0,
-     & 363,0.050,  0, 46, 24,  0,  0,  0,
-     & 364,0.400,  0, 49, 30,  0,  0,  0,
-     & 364,0.200,  0, 53, 21,  0,  0,  0,
-     & 364,0.100,  0, 47, 30,  0,  0,  0,
-     & 364,0.050,  0, 51, 21,  0,  0,  0,
-     & 364,0.150,  0, 50, 26,  0,  0,  0,
-     & 364,0.050,  0, 50, 56,  0,  0,  0,
-     & 364,0.050,  0, 50, 24,  0,  0,  0,
-     & 365,0.400,  0, 37, 38,  0,  0,  0,
-     & 365,0.200,  0, 45, 21,  0,  0,  0,
-     & 365,0.100,  0, 35, 38,  0,  0,  0,
-     & 365,0.050,  0, 43, 21,  0,  0,  0,
-     & 365,0.150,  0, 42, 26,  0,  0,  0,
-     & 365,0.050,  0, 42, 56,  0,  0,  0,
-     & 365,0.050,  0, 42, 24,  0,  0,  0,
-     & 366,0.400,  0, 45, 30,  0,  0,  0/
+     & 363,0.050D0,  0, 47, 21,  0,  0,  0,
+     & 363,0.150D0,  0, 46, 26,  0,  0,  0,
+     & 363,0.050D0,  0, 46, 56,  0,  0,  0,
+     & 363,0.050D0,  0, 46, 24,  0,  0,  0,
+     & 364,0.400D0,  0, 49, 30,  0,  0,  0,
+     & 364,0.200D0,  0, 53, 21,  0,  0,  0,
+     & 364,0.100D0,  0, 47, 30,  0,  0,  0,
+     & 364,0.050D0,  0, 51, 21,  0,  0,  0,
+     & 364,0.150D0,  0, 50, 26,  0,  0,  0,
+     & 364,0.050D0,  0, 50, 56,  0,  0,  0,
+     & 364,0.050D0,  0, 50, 24,  0,  0,  0,
+     & 365,0.400D0,  0, 37, 38,  0,  0,  0,
+     & 365,0.200D0,  0, 45, 21,  0,  0,  0,
+     & 365,0.100D0,  0, 35, 38,  0,  0,  0,
+     & 365,0.050D0,  0, 43, 21,  0,  0,  0,
+     & 365,0.150D0,  0, 42, 26,  0,  0,  0,
+     & 365,0.050D0,  0, 42, 56,  0,  0,  0,
+     & 365,0.050D0,  0, 42, 24,  0,  0,  0,
+     & 366,0.400D0,  0, 45, 30,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=1996,2014)/
-     & 366,0.200,  0, 37, 21,  0,  0,  0,
-     & 366,0.100,  0, 43, 30,  0,  0,  0,
-     & 366,0.050,  0, 35, 21,  0,  0,  0,
-     & 366,0.150,  0, 34, 26,  0,  0,  0,
-     & 366,0.050,  0, 34, 56,  0,  0,  0,
-     & 366,0.050,  0, 34, 24,  0,  0,  0,
-     & 367,0.258,  0, 50, 38,  0,  0,  0,
-     & 367,0.129,  0, 46, 21,  0,  0,  0,
-     & 367,0.209,  0, 50, 39,  0,  0,  0,
-     & 367,0.105,  0, 46, 23,  0,  0,  0,
-     & 367,0.199,  0, 51, 38,  0,  0,  0,
-     & 367,0.100,  0, 47, 21,  0,  0,  0,
-     & 368,0.258,  0, 46, 30,  0,  0,  0,
-     & 368,0.129,  0, 50, 21,  0,  0,  0,
-     & 368,0.209,  0, 46, 31,  0,  0,  0,
-     & 368,0.105,  0, 50, 23,  0,  0,  0,
-     & 368,0.199,  0, 47, 30,  0,  0,  0,
-     & 368,0.100,  0, 51, 21,  0,  0,  0,
-     & 369,0.258,  0, 34, 38,  0,  0,  0/
+     & 366,0.200D0,  0, 37, 21,  0,  0,  0,
+     & 366,0.100D0,  0, 43, 30,  0,  0,  0,
+     & 366,0.050D0,  0, 35, 21,  0,  0,  0,
+     & 366,0.150D0,  0, 34, 26,  0,  0,  0,
+     & 366,0.050D0,  0, 34, 56,  0,  0,  0,
+     & 366,0.050D0,  0, 34, 24,  0,  0,  0,
+     & 367,0.258D0,  0, 50, 38,  0,  0,  0,
+     & 367,0.129D0,  0, 46, 21,  0,  0,  0,
+     & 367,0.209D0,  0, 50, 39,  0,  0,  0,
+     & 367,0.105D0,  0, 46, 23,  0,  0,  0,
+     & 367,0.199D0,  0, 51, 38,  0,  0,  0,
+     & 367,0.100D0,  0, 47, 21,  0,  0,  0,
+     & 368,0.258D0,  0, 46, 30,  0,  0,  0,
+     & 368,0.129D0,  0, 50, 21,  0,  0,  0,
+     & 368,0.209D0,  0, 46, 31,  0,  0,  0,
+     & 368,0.105D0,  0, 50, 23,  0,  0,  0,
+     & 368,0.199D0,  0, 47, 30,  0,  0,  0,
+     & 368,0.100D0,  0, 51, 21,  0,  0,  0,
+     & 369,0.258D0,  0, 34, 38,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=2015,2033)/
-     & 369,0.129,  0, 42, 21,  0,  0,  0,
-     & 369,0.209,  0, 34, 39,  0,  0,  0,
-     & 369,0.105,  0, 42, 23,  0,  0,  0,
-     & 369,0.199,  0, 35, 38,  0,  0,  0,
-     & 369,0.100,  0, 43, 21,  0,  0,  0,
-     & 370,0.258,  0, 42, 30,  0,  0,  0,
-     & 370,0.129,  0, 34, 21,  0,  0,  0,
-     & 370,0.209,  0, 42, 31,  0,  0,  0,
-     & 370,0.105,  0, 34, 23,  0,  0,  0,
-     & 370,0.199,  0, 43, 30,  0,  0,  0,
-     & 370,0.100,  0, 35, 21,  0,  0,  0,
-     & 371,0.400,  0, 53, 38,  0,  0,  0,
-     & 371,0.200,  0, 49, 21,  0,  0,  0,
-     & 371,0.100,  0, 51, 38,  0,  0,  0,
-     & 371,0.050,  0, 47, 21,  0,  0,  0,
-     & 371,0.150,  0, 46, 26,  0,  0,  0,
-     & 371,0.050,  0, 46, 56,  0,  0,  0,
-     & 371,0.050,  0, 46, 24,  0,  0,  0,
-     & 372,0.400,  0, 49, 30,  0,  0,  0/
+     & 369,0.129D0,  0, 42, 21,  0,  0,  0,
+     & 369,0.209D0,  0, 34, 39,  0,  0,  0,
+     & 369,0.105D0,  0, 42, 23,  0,  0,  0,
+     & 369,0.199D0,  0, 35, 38,  0,  0,  0,
+     & 369,0.100D0,  0, 43, 21,  0,  0,  0,
+     & 370,0.258D0,  0, 42, 30,  0,  0,  0,
+     & 370,0.129D0,  0, 34, 21,  0,  0,  0,
+     & 370,0.209D0,  0, 42, 31,  0,  0,  0,
+     & 370,0.105D0,  0, 34, 23,  0,  0,  0,
+     & 370,0.199D0,  0, 43, 30,  0,  0,  0,
+     & 370,0.100D0,  0, 35, 21,  0,  0,  0,
+     & 371,0.400D0,  0, 53, 38,  0,  0,  0,
+     & 371,0.200D0,  0, 49, 21,  0,  0,  0,
+     & 371,0.100D0,  0, 51, 38,  0,  0,  0,
+     & 371,0.050D0,  0, 47, 21,  0,  0,  0,
+     & 371,0.150D0,  0, 46, 26,  0,  0,  0,
+     & 371,0.050D0,  0, 46, 56,  0,  0,  0,
+     & 371,0.050D0,  0, 46, 24,  0,  0,  0,
+     & 372,0.400D0,  0, 49, 30,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=2034,2052)/
-     & 372,0.200,  0, 53, 21,  0,  0,  0,
-     & 372,0.100,  0, 47, 30,  0,  0,  0,
-     & 372,0.050,  0, 51, 21,  0,  0,  0,
-     & 372,0.150,  0, 50, 26,  0,  0,  0,
-     & 372,0.050,  0, 50, 56,  0,  0,  0,
-     & 372,0.050,  0, 50, 24,  0,  0,  0,
-     & 373,0.400,  0, 37, 38,  0,  0,  0,
-     & 373,0.200,  0, 45, 21,  0,  0,  0,
-     & 373,0.100,  0, 35, 38,  0,  0,  0,
-     & 373,0.050,  0, 43, 21,  0,  0,  0,
-     & 373,0.150,  0, 42, 26,  0,  0,  0,
-     & 373,0.050,  0, 42, 56,  0,  0,  0,
-     & 373,0.050,  0, 42, 24,  0,  0,  0,
-     & 374,0.400,  0, 45, 30,  0,  0,  0,
-     & 374,0.200,  0, 37, 21,  0,  0,  0,
-     & 374,0.100,  0, 43, 30,  0,  0,  0,
-     & 374,0.050,  0, 35, 21,  0,  0,  0,
-     & 374,0.150,  0, 34, 26,  0,  0,  0,
-     & 374,0.050,  0, 34, 56,  0,  0,  0/
+     & 372,0.200D0,  0, 53, 21,  0,  0,  0,
+     & 372,0.100D0,  0, 47, 30,  0,  0,  0,
+     & 372,0.050D0,  0, 51, 21,  0,  0,  0,
+     & 372,0.150D0,  0, 50, 26,  0,  0,  0,
+     & 372,0.050D0,  0, 50, 56,  0,  0,  0,
+     & 372,0.050D0,  0, 50, 24,  0,  0,  0,
+     & 373,0.400D0,  0, 37, 38,  0,  0,  0,
+     & 373,0.200D0,  0, 45, 21,  0,  0,  0,
+     & 373,0.100D0,  0, 35, 38,  0,  0,  0,
+     & 373,0.050D0,  0, 43, 21,  0,  0,  0,
+     & 373,0.150D0,  0, 42, 26,  0,  0,  0,
+     & 373,0.050D0,  0, 42, 56,  0,  0,  0,
+     & 373,0.050D0,  0, 42, 24,  0,  0,  0,
+     & 374,0.400D0,  0, 45, 30,  0,  0,  0,
+     & 374,0.200D0,  0, 37, 21,  0,  0,  0,
+     & 374,0.100D0,  0, 43, 30,  0,  0,  0,
+     & 374,0.050D0,  0, 35, 21,  0,  0,  0,
+     & 374,0.150D0,  0, 34, 26,  0,  0,  0,
+     & 374,0.050D0,  0, 34, 56,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=2053,2071)/
-     & 374,0.050,  0, 34, 24,  0,  0,  0,
-     & 375,0.208,  0, 50, 39,  0,  0,  0,
-     & 375,0.104,  0, 46, 23,  0,  0,  0,
-     & 375,0.134,  0, 51, 38,  0,  0,  0,
-     & 375,0.067,  0, 47, 21,  0,  0,  0,
-     & 375,0.124,  0, 50, 38,  0,  0,  0,
-     & 375,0.062,  0, 46, 21,  0,  0,  0,
-     & 375,0.301,  0, 46, 22,  0,  0,  0,
-     & 376,0.208,  0, 46, 31,  0,  0,  0,
-     & 376,0.104,  0, 50, 23,  0,  0,  0,
-     & 376,0.134,  0, 47, 30,  0,  0,  0,
-     & 376,0.067,  0, 51, 21,  0,  0,  0,
-     & 376,0.124,  0, 46, 30,  0,  0,  0,
-     & 376,0.062,  0, 50, 21,  0,  0,  0,
-     & 376,0.301,  0, 50, 22,  0,  0,  0,
-     & 377,0.208,  0, 34, 39,  0,  0,  0,
-     & 377,0.104,  0, 42, 23,  0,  0,  0,
-     & 377,0.134,  0, 35, 38,  0,  0,  0,
-     & 377,0.067,  0, 43, 21,  0,  0,  0/
+     & 374,0.050D0,  0, 34, 24,  0,  0,  0,
+     & 375,0.208D0,  0, 50, 39,  0,  0,  0,
+     & 375,0.104D0,  0, 46, 23,  0,  0,  0,
+     & 375,0.134D0,  0, 51, 38,  0,  0,  0,
+     & 375,0.067D0,  0, 47, 21,  0,  0,  0,
+     & 375,0.124D0,  0, 50, 38,  0,  0,  0,
+     & 375,0.062D0,  0, 46, 21,  0,  0,  0,
+     & 375,0.301D0,  0, 46, 22,  0,  0,  0,
+     & 376,0.208D0,  0, 46, 31,  0,  0,  0,
+     & 376,0.104D0,  0, 50, 23,  0,  0,  0,
+     & 376,0.134D0,  0, 47, 30,  0,  0,  0,
+     & 376,0.067D0,  0, 51, 21,  0,  0,  0,
+     & 376,0.124D0,  0, 46, 30,  0,  0,  0,
+     & 376,0.062D0,  0, 50, 21,  0,  0,  0,
+     & 376,0.301D0,  0, 50, 22,  0,  0,  0,
+     & 377,0.208D0,  0, 34, 39,  0,  0,  0,
+     & 377,0.104D0,  0, 42, 23,  0,  0,  0,
+     & 377,0.134D0,  0, 35, 38,  0,  0,  0,
+     & 377,0.067D0,  0, 43, 21,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=2072,2090)/
-     & 377,0.124,  0, 34, 38,  0,  0,  0,
-     & 377,0.062,  0, 42, 21,  0,  0,  0,
-     & 377,0.301,  0, 42, 22,  0,  0,  0,
-     & 378,0.208,  0, 42, 31,  0,  0,  0,
-     & 378,0.104,  0, 34, 23,  0,  0,  0,
-     & 378,0.134,  0, 43, 30,  0,  0,  0,
-     & 378,0.067,  0, 35, 21,  0,  0,  0,
-     & 378,0.124,  0, 42, 30,  0,  0,  0,
-     & 378,0.062,  0, 34, 21,  0,  0,  0,
-     & 378,0.301,  0, 34, 22,  0,  0,  0,
-     & 379,0.562,  0, 26, 38,  0,  0,  0,
-     & 379,0.155,  0, 39, 21,  0,  0,  0,
-     & 379,0.155,  0, 23, 38,  0,  0,  0,
-     & 379,0.088,  0,293, 38,  0,  0,  0,
-     & 379,0.020,  0, 46, 43,  0,  0,  0,
-     & 379,0.020,  0, 42, 47,  0,  0,  0,
-     & 380,0.562,  0, 26, 21,  0,  0,  0,
-     & 380,0.155,  0, 39, 30,  0,  0,  0,
-     & 380,0.155,  0, 31, 38,  0,  0,  0/
+     & 377,0.124D0,  0, 34, 38,  0,  0,  0,
+     & 377,0.062D0,  0, 42, 21,  0,  0,  0,
+     & 377,0.301D0,  0, 42, 22,  0,  0,  0,
+     & 378,0.208D0,  0, 42, 31,  0,  0,  0,
+     & 378,0.104D0,  0, 34, 23,  0,  0,  0,
+     & 378,0.134D0,  0, 43, 30,  0,  0,  0,
+     & 378,0.067D0,  0, 35, 21,  0,  0,  0,
+     & 378,0.124D0,  0, 42, 30,  0,  0,  0,
+     & 378,0.062D0,  0, 34, 21,  0,  0,  0,
+     & 378,0.301D0,  0, 34, 22,  0,  0,  0,
+     & 379,0.562D0,  0, 26, 38,  0,  0,  0,
+     & 379,0.155D0,  0, 39, 21,  0,  0,  0,
+     & 379,0.155D0,  0, 23, 38,  0,  0,  0,
+     & 379,0.088D0,  0,293, 38,  0,  0,  0,
+     & 379,0.020D0,  0, 46, 43,  0,  0,  0,
+     & 379,0.020D0,  0, 42, 47,  0,  0,  0,
+     & 380,0.562D0,  0, 26, 21,  0,  0,  0,
+     & 380,0.155D0,  0, 39, 30,  0,  0,  0,
+     & 380,0.155D0,  0, 31, 38,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=2091,2109)/
-     & 380,0.088,  0,293, 21,  0,  0,  0,
-     & 380,0.010,  0, 46, 35,  0,  0,  0,
-     & 380,0.010,  0, 50, 43,  0,  0,  0,
-     & 380,0.010,  0, 34, 47,  0,  0,  0,
-     & 380,0.010,  0, 42, 51,  0,  0,  0,
-     & 381,0.562,  0, 26, 30,  0,  0,  0,
-     & 381,0.155,  0, 31, 21,  0,  0,  0,
-     & 381,0.155,  0, 23, 30,  0,  0,  0,
-     & 381,0.088,  0,293, 30,  0,  0,  0,
-     & 381,0.020,  0, 34, 51,  0,  0,  0,
-     & 381,0.020,  0, 50, 35,  0,  0,  0,
-     & 382,0.360,  0, 31, 38, 38,  0,  0,
-     & 382,0.180,  0, 23, 38, 21,  0,  0,
-     & 382,0.040,  0, 39, 21, 21,  0,  0,
-     & 382,0.020,  0, 39, 38, 30,  0,  0,
-     & 382,0.300,  0, 38, 21,  0,  0,  0,
-     & 382,0.040,  0, 46, 43,  0,  0,  0,
-     & 382,0.040,  0, 42, 47,  0,  0,  0,
-     & 382,0.020,  0, 22, 39,  0,  0,  0/
+     & 380,0.088D0,  0,293, 21,  0,  0,  0,
+     & 380,0.010D0,  0, 46, 35,  0,  0,  0,
+     & 380,0.010D0,  0, 50, 43,  0,  0,  0,
+     & 380,0.010D0,  0, 34, 47,  0,  0,  0,
+     & 380,0.010D0,  0, 42, 51,  0,  0,  0,
+     & 381,0.562D0,  0, 26, 30,  0,  0,  0,
+     & 381,0.155D0,  0, 31, 21,  0,  0,  0,
+     & 381,0.155D0,  0, 23, 30,  0,  0,  0,
+     & 381,0.088D0,  0,293, 30,  0,  0,  0,
+     & 381,0.020D0,  0, 34, 51,  0,  0,  0,
+     & 381,0.020D0,  0, 50, 35,  0,  0,  0,
+     & 382,0.360D0,  0, 31, 38, 38,  0,  0,
+     & 382,0.180D0,  0, 23, 38, 21,  0,  0,
+     & 382,0.040D0,  0, 39, 21, 21,  0,  0,
+     & 382,0.020D0,  0, 39, 38, 30,  0,  0,
+     & 382,0.300D0,  0, 38, 21,  0,  0,  0,
+     & 382,0.040D0,  0, 46, 43,  0,  0,  0,
+     & 382,0.040D0,  0, 42, 47,  0,  0,  0,
+     & 382,0.020D0,  0, 22, 39,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=2110,2128)/
-     & 383,0.180,  0, 39, 30, 21,  0,  0,
-     & 383,0.180,  0, 31, 38, 21,  0,  0,
-     & 383,0.160,  0, 23, 21, 21,  0,  0,
-     & 383,0.080,  0, 23, 38, 30,  0,  0,
-     & 383,0.300,  0, 38, 30,  0,  0,  0,
-     & 383,0.020,  0, 46, 35,  0,  0,  0,
-     & 383,0.020,  0, 50, 43,  0,  0,  0,
-     & 383,0.020,  0, 34, 47,  0,  0,  0,
-     & 383,0.020,  0, 42, 51,  0,  0,  0,
-     & 383,0.020,  0, 22, 23,  0,  0,  0,
-     & 384,0.360,  0, 39, 30, 30,  0,  0,
-     & 384,0.180,  0, 23, 30, 21,  0,  0,
-     & 384,0.040,  0, 31, 21, 21,  0,  0,
-     & 384,0.020,  0, 31, 30, 38,  0,  0,
-     & 384,0.300,  0, 30, 21,  0,  0,  0,
-     & 384,0.040,  0, 34, 51,  0,  0,  0,
-     & 384,0.040,  0, 50, 35,  0,  0,  0,
-     & 384,0.020,  0, 22, 31,  0,  0,  0,
-     & 385,0.184,  0, 41, 21,  0,  0,  0/
+     & 383,0.180D0,  0, 39, 30, 21,  0,  0,
+     & 383,0.180D0,  0, 31, 38, 21,  0,  0,
+     & 383,0.160D0,  0, 23, 21, 21,  0,  0,
+     & 383,0.080D0,  0, 23, 38, 30,  0,  0,
+     & 383,0.300D0,  0, 38, 30,  0,  0,  0,
+     & 383,0.020D0,  0, 46, 35,  0,  0,  0,
+     & 383,0.020D0,  0, 50, 43,  0,  0,  0,
+     & 383,0.020D0,  0, 34, 47,  0,  0,  0,
+     & 383,0.020D0,  0, 42, 51,  0,  0,  0,
+     & 383,0.020D0,  0, 22, 23,  0,  0,  0,
+     & 384,0.360D0,  0, 39, 30, 30,  0,  0,
+     & 384,0.180D0,  0, 23, 30, 21,  0,  0,
+     & 384,0.040D0,  0, 31, 21, 21,  0,  0,
+     & 384,0.020D0,  0, 31, 30, 38,  0,  0,
+     & 384,0.300D0,  0, 30, 21,  0,  0,  0,
+     & 384,0.040D0,  0, 34, 51,  0,  0,  0,
+     & 384,0.040D0,  0, 50, 35,  0,  0,  0,
+     & 384,0.020D0,  0, 22, 31,  0,  0,  0,
+     & 385,0.184D0,  0, 41, 21,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=2129,2147)/
-     & 385,0.184,  0, 29, 38,  0,  0,  0,
-     & 385,0.184,  0, 39, 23,  0,  0,  0,
-     & 385,0.236,  0, 38, 21,  0,  0,  0,
-     & 385,0.160,  0, 24, 38,  0,  0,  0,
-     & 385,0.018,  0, 46, 43,  0,  0,  0,
-     & 385,0.018,  0, 42, 47,  0,  0,  0,
-     & 385,0.016,  0, 46, 42,  0,  0,  0,
-     & 386,0.184,  0, 41, 30,  0,  0,  0,
-     & 386,0.184,  0, 33, 38,  0,  0,  0,
-     & 386,0.184,  0, 39, 31,  0,  0,  0,
-     & 386,0.236,  0, 38, 30,  0,  0,  0,
-     & 386,0.160,  0, 24, 21,  0,  0,  0,
-     & 386,0.009,  0, 46, 35,  0,  0,  0,
-     & 386,0.009,  0, 50, 43,  0,  0,  0,
-     & 386,0.009,  0, 34, 47,  0,  0,  0,
-     & 386,0.009,  0, 42, 51,  0,  0,  0,
-     & 386,0.008,  0, 46, 34,  0,  0,  0,
-     & 386,0.008,  0, 42, 50,  0,  0,  0,
-     & 387,0.184,  0, 33, 21,  0,  0,  0/
+     & 385,0.184D0,  0, 29, 38,  0,  0,  0,
+     & 385,0.184D0,  0, 39, 23,  0,  0,  0,
+     & 385,0.236D0,  0, 38, 21,  0,  0,  0,
+     & 385,0.160D0,  0, 24, 38,  0,  0,  0,
+     & 385,0.018D0,  0, 46, 43,  0,  0,  0,
+     & 385,0.018D0,  0, 42, 47,  0,  0,  0,
+     & 385,0.016D0,  0, 46, 42,  0,  0,  0,
+     & 386,0.184D0,  0, 41, 30,  0,  0,  0,
+     & 386,0.184D0,  0, 33, 38,  0,  0,  0,
+     & 386,0.184D0,  0, 39, 31,  0,  0,  0,
+     & 386,0.236D0,  0, 38, 30,  0,  0,  0,
+     & 386,0.160D0,  0, 24, 21,  0,  0,  0,
+     & 386,0.009D0,  0, 46, 35,  0,  0,  0,
+     & 386,0.009D0,  0, 50, 43,  0,  0,  0,
+     & 386,0.009D0,  0, 34, 47,  0,  0,  0,
+     & 386,0.009D0,  0, 42, 51,  0,  0,  0,
+     & 386,0.008D0,  0, 46, 34,  0,  0,  0,
+     & 386,0.008D0,  0, 42, 50,  0,  0,  0,
+     & 387,0.184D0,  0, 33, 21,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=2148,2166)/
-     & 387,0.184,  0, 29, 30,  0,  0,  0,
-     & 387,0.184,  0, 31, 23,  0,  0,  0,
-     & 387,0.236,  0, 30, 21,  0,  0,  0,
-     & 387,0.160,  0, 24, 30,  0,  0,  0,
-     & 387,0.018,  0, 34, 51,  0,  0,  0,
-     & 387,0.018,  0, 50, 35,  0,  0,  0,
-     & 387,0.016,  0, 34, 50,  0,  0,  0,
-     & 388,0.183,  0,231, 38, 30,  0,  0,
-     & 388,0.091,  0,231, 21, 21,  0,  0,
-     & 388,0.067,  0, 59,307,  0,  0,  0,
-     & 388,0.066,  0, 59,308,  0,  0,  0,
-     & 388,0.043,  0, 59,309,  0,  0,  0,
-     & 388,0.446,130, 13, 13, 13,  0,  0,
-     & 388,0.023,130, 13, 13, 59,  0,  0,
-     & 388,0.013,  0,121,127,  0,  0,  0,
-     & 388,0.013,  0,123,129,  0,  0,  0,
-     & 388,0.013,  0,125,131,  0,  0,  0,
-     & 388,0.004,  0,  1,  7,  0,  0,  0,
-     & 388,0.017,  0,  2,  8,  0,  0,  0/
+     & 387,0.184D0,  0, 29, 30,  0,  0,  0,
+     & 387,0.184D0,  0, 31, 23,  0,  0,  0,
+     & 387,0.236D0,  0, 30, 21,  0,  0,  0,
+     & 387,0.160D0,  0, 24, 30,  0,  0,  0,
+     & 387,0.018D0,  0, 34, 51,  0,  0,  0,
+     & 387,0.018D0,  0, 50, 35,  0,  0,  0,
+     & 387,0.016D0,  0, 34, 50,  0,  0,  0,
+     & 388,0.183D0,  0,231, 38, 30,  0,  0,
+     & 388,0.091D0,  0,231, 21, 21,  0,  0,
+     & 388,0.067D0,  0, 59,307,  0,  0,  0,
+     & 388,0.066D0,  0, 59,308,  0,  0,  0,
+     & 388,0.043D0,  0, 59,309,  0,  0,  0,
+     & 388,0.446D0,130, 13, 13, 13,  0,  0,
+     & 388,0.023D0,130, 13, 13, 59,  0,  0,
+     & 388,0.013D0,  0,121,127,  0,  0,  0,
+     & 388,0.013D0,  0,123,129,  0,  0,  0,
+     & 388,0.013D0,  0,125,131,  0,  0,  0,
+     & 388,0.004D0,  0,  1,  7,  0,  0,  0,
+     & 388,0.017D0,  0,  2,  8,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=2167,2185)/
-     & 388,0.004,  0,  3,  9,  0,  0,  0,
-     & 388,0.017,  0,  4, 10,  0,  0,  0,
-     & 389,0.046,  0, 59,388,  0,  0,  0,
-     & 389,0.009,  0, 59,231,  0,  0,  0,
-     & 389,0.755,  0, 13, 13,  0,  0,  0,
-     & 389,0.030,  0,121,127,  0,  0,  0,
-     & 389,0.030,  0,123,129,  0,  0,  0,
-     & 389,0.030,  0,125,131,  0,  0,  0,
-     & 389,0.010,  0,  1,  7,  0,  0,  0,
-     & 389,0.040,  0,  2,  8,  0,  0,  0,
-     & 389,0.010,  0,  3,  9,  0,  0,  0,
-     & 389,0.040,  0,  4, 10,  0,  0,  0,
-     & 390,0.210,  0, 59,388,  0,  0,  0,
-     & 390,0.085,  0, 59,231,  0,  0,  0,
-     & 390,0.565,  0, 13, 13,  0,  0,  0,
-     & 390,0.022,  0,121,127,  0,  0,  0,
-     & 390,0.022,  0,123,129,  0,  0,  0,
-     & 390,0.022,  0,125,131,  0,  0,  0,
-     & 390,0.007,  0,  1,  7,  0,  0,  0/
+     & 388,0.004D0,  0,  3,  9,  0,  0,  0,
+     & 388,0.017D0,  0,  4, 10,  0,  0,  0,
+     & 389,0.046D0,  0, 59,388,  0,  0,  0,
+     & 389,0.009D0,  0, 59,231,  0,  0,  0,
+     & 389,0.755D0,  0, 13, 13,  0,  0,  0,
+     & 389,0.030D0,  0,121,127,  0,  0,  0,
+     & 389,0.030D0,  0,123,129,  0,  0,  0,
+     & 389,0.030D0,  0,125,131,  0,  0,  0,
+     & 389,0.010D0,  0,  1,  7,  0,  0,  0,
+     & 389,0.040D0,  0,  2,  8,  0,  0,  0,
+     & 389,0.010D0,  0,  3,  9,  0,  0,  0,
+     & 389,0.040D0,  0,  4, 10,  0,  0,  0,
+     & 390,0.210D0,  0, 59,388,  0,  0,  0,
+     & 390,0.085D0,  0, 59,231,  0,  0,  0,
+     & 390,0.565D0,  0, 13, 13,  0,  0,  0,
+     & 390,0.022D0,  0,121,127,  0,  0,  0,
+     & 390,0.022D0,  0,123,129,  0,  0,  0,
+     & 390,0.022D0,  0,125,131,  0,  0,  0,
+     & 390,0.007D0,  0,  1,  7,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=2186,2204)/
-     & 390,0.030,  0,  2,  8,  0,  0,  0,
-     & 390,0.007,  0,  3,  9,  0,  0,  0,
-     & 390,0.030,  0,  4, 10,  0,  0,  0,
-     & 391,0.162,  0, 59,388,  0,  0,  0,
-     & 391,0.071,  0, 59,231,  0,  0,  0,
-     & 391,0.615,  0, 13, 13,  0,  0,  0,
-     & 391,0.024,  0,121,127,  0,  0,  0,
-     & 391,0.024,  0,123,129,  0,  0,  0,
-     & 391,0.024,  0,125,131,  0,  0,  0,
-     & 391,0.008,  0,  1,  7,  0,  0,  0,
-     & 391,0.032,  0,  2,  8,  0,  0,  0,
-     & 391,0.008,  0,  3,  9,  0,  0,  0,
-     & 391,0.032,  0,  4, 10,  0,  0,  0,
-     & 392,0.034,  0,267, 38, 30,  0,  0,
-     & 392,0.017,  0,267, 21, 21,  0,  0,
-     & 392,0.044,  0,231, 38, 30,  0,  0,
-     & 392,0.022,  0,231, 21, 21,  0,  0,
-     & 392,0.050,  0,267, 59, 59,  0,  0,
-     & 392,0.114,  0, 59,389,  0,  0,  0/
+     & 390,0.030D0,  0,  2,  8,  0,  0,  0,
+     & 390,0.007D0,  0,  3,  9,  0,  0,  0,
+     & 390,0.030D0,  0,  4, 10,  0,  0,  0,
+     & 391,0.162D0,  0, 59,388,  0,  0,  0,
+     & 391,0.071D0,  0, 59,231,  0,  0,  0,
+     & 391,0.615D0,  0, 13, 13,  0,  0,  0,
+     & 391,0.024D0,  0,121,127,  0,  0,  0,
+     & 391,0.024D0,  0,123,129,  0,  0,  0,
+     & 391,0.024D0,  0,125,131,  0,  0,  0,
+     & 391,0.008D0,  0,  1,  7,  0,  0,  0,
+     & 391,0.032D0,  0,  2,  8,  0,  0,  0,
+     & 391,0.008D0,  0,  3,  9,  0,  0,  0,
+     & 391,0.032D0,  0,  4, 10,  0,  0,  0,
+     & 392,0.034D0,  0,267, 38, 30,  0,  0,
+     & 392,0.017D0,  0,267, 21, 21,  0,  0,
+     & 392,0.044D0,  0,231, 38, 30,  0,  0,
+     & 392,0.022D0,  0,231, 21, 21,  0,  0,
+     & 392,0.050D0,  0,267, 59, 59,  0,  0,
+     & 392,0.114D0,  0, 59,389,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=2205,2223)/
-     & 392,0.113,  0, 59,390,  0,  0,  0,
-     & 392,0.054,  0, 59,391,  0,  0,  0,
-     & 392,0.403,130, 13, 13, 13,  0,  0,
-     & 392,0.021,130, 13, 13, 59,  0,  0,
-     & 392,0.020,  0,121,127,  0,  0,  0,
-     & 392,0.020,  0,123,129,  0,  0,  0,
-     & 392,0.020,  0,125,131,  0,  0,  0,
-     & 392,0.007,  0,  1,  7,  0,  0,  0,
-     & 392,0.027,  0,  2,  8,  0,  0,  0,
-     & 392,0.007,  0,  3,  9,  0,  0,  0,
-     & 392,0.027,  0,  4, 10,  0,  0,  0,
-     & 393,0.250,  0,246,222,  0,  0,  0,
-     & 393,0.250,  0,245,221,  0,  0,  0,
-     & 393,0.385,130, 13, 13, 13,  0,  0,
-     & 393,0.020,130, 13, 13, 59,  0,  0,
-     & 393,0.015,  0,121,127,  0,  0,  0,
-     & 393,0.015,  0,123,129,  0,  0,  0,
-     & 393,0.015,  0,125,131,  0,  0,  0,
-     & 393,0.005,  0,  1,  7,  0,  0,  0/
+     & 392,0.113D0,  0, 59,390,  0,  0,  0,
+     & 392,0.054D0,  0, 59,391,  0,  0,  0,
+     & 392,0.403D0,130, 13, 13, 13,  0,  0,
+     & 392,0.021D0,130, 13, 13, 59,  0,  0,
+     & 392,0.020D0,  0,121,127,  0,  0,  0,
+     & 392,0.020D0,  0,123,129,  0,  0,  0,
+     & 392,0.020D0,  0,125,131,  0,  0,  0,
+     & 392,0.007D0,  0,  1,  7,  0,  0,  0,
+     & 392,0.027D0,  0,  2,  8,  0,  0,  0,
+     & 392,0.007D0,  0,  3,  9,  0,  0,  0,
+     & 392,0.027D0,  0,  4, 10,  0,  0,  0,
+     & 393,0.250D0,  0,246,222,  0,  0,  0,
+     & 393,0.250D0,  0,245,221,  0,  0,  0,
+     & 393,0.385D0,130, 13, 13, 13,  0,  0,
+     & 393,0.020D0,130, 13, 13, 59,  0,  0,
+     & 393,0.015D0,  0,121,127,  0,  0,  0,
+     & 393,0.015D0,  0,123,129,  0,  0,  0,
+     & 393,0.015D0,  0,125,131,  0,  0,  0,
+     & 393,0.005D0,  0,  1,  7,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=2224,2242)/
-     & 393,0.020,  0,  2,  8,  0,  0,  0,
-     & 393,0.005,  0,  3,  9,  0,  0,  0,
-     & 393,0.020,  0,  4, 10,  0,  0,  0,
-     & 395,0.195,  0, 39, 30,  0,  0,  0,
-     & 395,0.195,  0, 23, 21,  0,  0,  0,
-     & 395,0.195,  0, 31, 38,  0,  0,  0,
-     & 395,0.105,  0,286, 30,  0,  0,  0,
-     & 395,0.105,  0,285, 21,  0,  0,  0,
-     & 395,0.105,  0,287, 38,  0,  0,  0,
-     & 395,0.065,  0, 24, 38, 30,  0,  0,
-     & 395,0.035,  0, 24, 21, 21,  0,  0,
-     & 396,0.320,  0, 46, 34,  0,  0,  0,
-     & 396,0.320,  0, 60, 61,  0,  0,  0,
-     & 396,0.090,  0, 46, 35,  0,  0,  0,
-     & 396,0.090,  0, 42, 51,  0,  0,  0,
-     & 396,0.090,  0, 50, 43,  0,  0,  0,
-     & 396,0.090,  0, 34, 47,  0,  0,  0,
-     & 397,0.312,  0, 41, 30,  0,  0,  0,
-     & 397,0.312,  0, 29, 21,  0,  0,  0/
+     & 393,0.020D0,  0,  2,  8,  0,  0,  0,
+     & 393,0.005D0,  0,  3,  9,  0,  0,  0,
+     & 393,0.020D0,  0,  4, 10,  0,  0,  0,
+     & 395,0.195D0,  0, 39, 30,  0,  0,  0,
+     & 395,0.195D0,  0, 23, 21,  0,  0,  0,
+     & 395,0.195D0,  0, 31, 38,  0,  0,  0,
+     & 395,0.105D0,  0,286, 30,  0,  0,  0,
+     & 395,0.105D0,  0,285, 21,  0,  0,  0,
+     & 395,0.105D0,  0,287, 38,  0,  0,  0,
+     & 395,0.065D0,  0, 24, 38, 30,  0,  0,
+     & 395,0.035D0,  0, 24, 21, 21,  0,  0,
+     & 396,0.320D0,  0, 46, 34,  0,  0,  0,
+     & 396,0.320D0,  0, 60, 61,  0,  0,  0,
+     & 396,0.090D0,  0, 46, 35,  0,  0,  0,
+     & 396,0.090D0,  0, 42, 51,  0,  0,  0,
+     & 396,0.090D0,  0, 50, 43,  0,  0,  0,
+     & 396,0.090D0,  0, 34, 47,  0,  0,  0,
+     & 397,0.312D0,  0, 41, 30,  0,  0,  0,
+     & 397,0.312D0,  0, 29, 21,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=2243,2261)/
-     & 397,0.312,  0, 33, 38,  0,  0,  0,
-     & 397,0.016,  0, 46, 35,  0,  0,  0,
-     & 397,0.016,  0, 42, 51,  0,  0,  0,
-     & 397,0.016,  0, 50, 43,  0,  0,  0,
-     & 397,0.016,  0, 34, 47,  0,  0,  0,
-     & 398,0.805,  0, 26, 22,  0,  0,  0,
-     & 398,0.065,  0, 41, 30,  0,  0,  0,
-     & 398,0.065,  0, 29, 21,  0,  0,  0,
-     & 398,0.065,  0, 33, 38,  0,  0,  0,
-     & 399,0.667,  0, 24, 38, 30,  0,  0,
-     & 399,0.333,  0, 24, 21, 21,  0,  0,
-     &  62,0.440,  0, 21, 22,  0,  0,  0,
-     &  62,0.160,  0, 21, 25,  0,  0,  0,
-     &  62,0.200,  0, 50, 42,  0,  0,  0,
-     &  62,0.200,  0, 46, 34,  0,  0,  0,
-     &  63,0.440,  0, 38, 22,  0,  0,  0,
-     &  63,0.160,  0, 38, 25,  0,  0,  0,
-     &  63,0.400,  0, 46, 42,  0,  0,  0,
-     &  64,0.440,  0, 30, 22,  0,  0,  0/
+     & 397,0.312D0,  0, 33, 38,  0,  0,  0,
+     & 397,0.016D0,  0, 46, 35,  0,  0,  0,
+     & 397,0.016D0,  0, 42, 51,  0,  0,  0,
+     & 397,0.016D0,  0, 50, 43,  0,  0,  0,
+     & 397,0.016D0,  0, 34, 47,  0,  0,  0,
+     & 398,0.805D0,  0, 26, 22,  0,  0,  0,
+     & 398,0.065D0,  0, 41, 30,  0,  0,  0,
+     & 398,0.065D0,  0, 29, 21,  0,  0,  0,
+     & 398,0.065D0,  0, 33, 38,  0,  0,  0,
+     & 399,0.667D0,  0, 24, 38, 30,  0,  0,
+     & 399,0.333D0,  0, 24, 21, 21,  0,  0,
+     &  62,0.440D0,  0, 21, 22,  0,  0,  0,
+     &  62,0.160D0,  0, 21, 25,  0,  0,  0,
+     &  62,0.200D0,  0, 50, 42,  0,  0,  0,
+     &  62,0.200D0,  0, 46, 34,  0,  0,  0,
+     &  63,0.440D0,  0, 38, 22,  0,  0,  0,
+     &  63,0.160D0,  0, 38, 25,  0,  0,  0,
+     &  63,0.400D0,  0, 46, 42,  0,  0,  0,
+     &  64,0.440D0,  0, 30, 22,  0,  0,  0/
       DATA (IDK(I),BRFRAC(I),NME(I),(IDKPRD(J,I),J=1,5),I=2262,2263)/
-     &  64,0.160,  0, 30, 25,  0,  0,  0,
-     &  64,0.400,  0, 50, 34,  0,  0,  0/
+     &  64,0.160D0,  0, 30, 25,  0,  0,  0,
+     &  64,0.400D0,  0, 50, 34,  0,  0,  0/
 C--data for MRST98 LO PDF's
       DATA (FMRS(1,1,I, 1),I=1,49)/
      &     0.01518D0,  0.01868D0,  0.02298D0,  0.02594D0,  0.02828D0,
@@ -50643,7 +56611,7 @@ C
 C     Modified 16/01/01 by BRW to force particle on mass shell if
 C     p^2-m^2 < 10^-10 GeV^2 (rounding errors)
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,PMOM(4),DISP(4),PMOM2,SCALE,OFFSH
       INTEGER ID
       EXTERNAL HWRGEN
@@ -50670,7 +56638,7 @@ C     Gives warnings if: a particle has no decay modes or antiparticle's
 C     modes are not the charge conjugates of the particles.
 C     (N.B. CP violation permits this).
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWUPCM,HWUAEM,HWUALF,BRSUM,EPS,SCALE,
      & BRTMP(NMXDKS),FN,X,W,Q,FAC
       INTEGER HWUANT,I,IDKY,LAST,LTMP(NMXMOD),J,L,K,M,N,INDX(NMXMOD),
@@ -50983,7 +56951,7 @@ C                 Designed to be printed as landscape
 C     If (PRNWEB) HTML  to the file HW_decays/index.html
 C                                            /PART0000001.html etc.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER MMWIDE,MMLONG,MMHOFF,MMVOFF,IUNITT,IUNTW1,IUNTW2,I,NM,J,K,
      & L,M
       CHARACTER*1  Z
@@ -51320,7 +57288,7 @@ C     EDIT THE EVENT RECORD
 C     IF N>0 DELETE THE N ENTRIES IN IEDT FROM EVENT RECORD
 C     IF N<0 INSERT LINES AFTER THE -N ENTRIES IN IEDT
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER N,IEDT(*),IMAP(0:NMXHEP),IHEP,I,J,I1,I2
       COMMON /HWUMAP/IMAP
 C---MOVE ENTRIES AND CALCULATE MAPPING OF POINTERS
@@ -51385,7 +57353,7 @@ C-----------------------------------------------------------------------
 C     Loads cross-section coefficients, for kinematically open channels,
 C     in llbar-->qqbar; lepton label IL=1-6: e,nu_e,mu,nu_mu,tau,nu_tau.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION Q2
       INTEGER IL,JL,IQ
       Q2=EMSCA**2
@@ -51411,7 +57379,7 @@ C-----------------------------------------------------------------------
 C     MOVE A BLOCK OF ENTRIES IN THE EVENT RECORD
 C     N ENTRIES IN HEPEVT STARTING AT IFROM ARE MOVED TO AFTER ITO
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER N,IFROM,ITO,IMAP(0:NMXHEP),LFROM,LTO,I,IEDT(NMXHEP),IHEP,
      $ JHEP,KHEP
       COMMON /HWUMAP/IMAP
@@ -51460,7 +57428,7 @@ C                 Call HWUDPR to create particle property files in
 C                 the subdirectory HW_decays/
 C     ******* gives the event number 0000001 etc.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER MMWIDE,MMLONG,MMHOFF,MMVOFF,I,IST,IS,ID,MS,J,K,IUNITW,
      & IUNITT
       CHARACTER*1 Z
@@ -51881,6 +57849,24 @@ C Close the files
       ENDIF
       RETURN
       END
+CDECK  ID>, HWUGUP.
+*CMZ :-        -13/02/02  07.20.46  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE HWUGUP
+C-----------------------------------------------------------------------
+C     Subroutine to handle termination of HERWIG if reaches end of event
+C     file
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+C--reset the number of events to the correct value
+      NEVHEP = NEVHEP-1
+C--output information on the events
+      CALL HWEFIN
+C--run users end code
+      CALL HWAEND
+      STOP
+      END
 CDECK  ID>, HWUFNE.
 *CMZ :-        -16/10/93  12.42.15  by  Mike Seymour
 *-- Author :    Mike Seymour
@@ -51890,7 +57876,7 @@ C-----------------------------------------------------------------------
 C     FINALISES THE EVENT BY UNDOING THE LORENTZ BOOST IF THERE WAS ONE,
 C     CHECKING FOR ERRORS, AND PRINTING
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IHEP
       LOGICAL CALLED
       COMMON/HWDBUG/CALLED
@@ -51984,7 +57970,7 @@ C     IOPT= 1 GIVEN IPDG, RETURNS IWIG AND NWIG
 C     IOPT= 2 GIVEN IWIG, RETURNS IPDG AND NWIG
 C     IOPT= 3 GIVEN NWIG, RETURNS IPDG AND IWIG
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IOPT,IPDG,IWIG,I
       CHARACTER*8 NWIG
       IF (IOPT.EQ.1) THEN
@@ -52037,7 +58023,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     COMPUTES CONSTANTS AND LOOKUP TABLES
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWBVMC,HWUALF,HWUPCM,XMIN,XMAX,XPOW,QR,DQKWT,
      & UQKWT,SQKWT,DIQWT,QMAX,PMAX,PTLIM,ETLIM,PGS,PTELM,X,QSCA,UPV,DNV,
      & USEA,DSEA,STR,CHM,BTM,TOP,GLU,VAL(20),CLMXPW,RCLPOW,TEST,RPM(2)
@@ -52054,6 +58040,8 @@ C-----------------------------------------------------------------------
       EXTERNAL HWBVMC,HWUALF,HWUPCM
       COMMON/HWRPIN/XMIN,XMAX,XPOW,FIRST
       COMMON/W50516/FSTPDF
+C--read in the information frmo the Les Houches common block if needed
+      IF(IPROC.LE.0) CALL HWIGUP
 C---MSSM Higgs processes: additional IDs to distinguish from SM-like ones.
       IMSSM=0
       IHIGGS=0
@@ -52063,11 +58051,11 @@ C...define parity of Neutral MSSM Higgses.
       IP(1)=+1
       IP(2)=+1
       IP(3)=-1
-C---IPRO=9 (lepton-lepton) and 31...38 (hadron-hadron) MSSM Higgs production.
+C---IPRO=9,11 (lepton-lepton); 31...38 (hadron-hadron) MSSM Higgs production.
       LPROC=MOD(IPROC,10000)
       IF((LPROC.LT.3100).OR.(LPROC.GE.3900))THEN
 C...add here MSSM Higgs processes in lepton-lepton collisions.
-        IF(LPROC/100.NE.9)GOTO 666
+        IF((LPROC/100.NE.9).AND.(LPROC/100.NE.11))GOTO 666
       END IF
 C-----------------------------------------------------------------------
 C     HARD 2 LEPTON/PARTON -> HIGGS + X PROCESSES IN MSSM
@@ -52091,9 +58079,9 @@ C...leptonic processes.
      &          (LPROC.EQ.960).OR.(LPROC.EQ.970))THEN
           KPROC=MIN(951,LPROC)
           IV=MAX(KPROC-950,0)
-          IF((IV.LT.0).OR.(IV.GT.1))CALL HWWARN('HWUINC',625,*999)
+          IF((IV.LT.0).OR.(IV.GT.1))CALL HWWARN('HWUINC',627,*999)
           IH=LPROC/10-90-5*IV
-          IF((IH.LE.0).OR.(IH.GT.2))CALL HWWARN('HWUINC',624,*999)
+          IF((IH.LE.0).OR.(IH.GT.2))CALL HWWARN('HWUINC',626,*999)
           IF(LPROC.LE.920)IMSSM=LPROC-400
           IF(LPROC.GE.960)IMSSM=LPROC-300
 C...assign enhancement for MSSM Higgs-VV couplings, V->W,Z-gauge bosons.
@@ -52105,8 +58093,41 @@ C...assign enhancement for MSSM Higgs-VV couplings, V->W,Z-gauge bosons.
           IF(IH.EQ.2)IHIGGS=204-201
           IF(IH.EQ.3)IHIGGS=205-201
         ELSE
-          CALL HWWARN('HWUINC',623,*999)
+          CALL HWWARN('HWUINC',625,*999)
         END IF
+      ELSE IF(LPROC/100.EQ.11)THEN
+        IMSSM=-1
+        IF(LPROC.GE.1140)THEN
+          IHIGGS=207-201
+          PARITY=1
+          GOTO 548
+        END IF
+        IF(LPROC.LT.1140)IH=3
+        IF(LPROC.LT.1130)IH=2
+        IF(LPROC.LT.1120)IH=1
+        IF((IH.LE.0).OR.(IH.GT.3))CALL HWWARN('HWUINC',624,*999)
+        IQ=LPROC-1100-10*IH
+        IF((IQ.LE.0).OR.(IQ.GT.9))CALL HWWARN('HWUINC',623,*999)
+C...assign Neutral MSSM Higgs parity.
+        PARITY=IP(IH)
+C...assign enhancement for MSSM Higgs-QQ couplings, Q->U,D-type quarks.
+        DO 546 I=1,5,2
+          ENHANC(I  )=GHDDSS(IH)
+          ENHANC(I+1)=GHUUSS(IH)
+ 546    CONTINUE
+C...assign enhancement for MSSM Higgs-LL couplings, L->D-type leptons.
+        ENHANC(7)=GHDDSS(IH)
+        ENHANC(8)=GHDDSS(IH)
+        ENHANC(9)=GHDDSS(IH)
+C...assign enhancement for MSSM Higgs-VV couplings, V->W,Z-gauge bosons.
+        DO 547 I=10,10
+          ENHANC(I  )=GHWWSS(IH)
+          ENHANC(I+1)=GHZZSS(IH)
+ 547    CONTINUE
+        IF(IH.EQ.1)IHIGGS=203-201
+        IF(IH.EQ.2)IHIGGS=204-201
+        IF(IH.EQ.3)IHIGGS=205-201
+ 548    CONTINUE
 C...hadronic processes.
       ELSE IF((LPROC/100.EQ.31).OR.(LPROC/100.EQ.32))THEN
         IF(LPROC/100.EQ.31)THEN
@@ -52444,7 +58465,8 @@ C Decay length conversion factor GEV2MM hbar.c/e
 C Plank's constant/2pi (GeV.s)
       HBAR=GEV2MM/CSPEED
 C Check the SUSY DATA has been read in (if needed)
-      IF((IPRO.EQ.7.OR.(IPRO.GE.30.AND.IPRO.LE.41)).AND..NOT.SUSYIN)
+      IF((IPRO.EQ.7.OR.IPRO.EQ.8.OR.IPRO.EQ.9.OR.IPRO.EQ.11.
+     &OR.(IPRO.GE.30.AND.IPRO.LE.41)).AND..NOT.SUSYIN)
      &     CALL HWWARN('HWUINC',601,*999)
 C---IMPORTANCE SAMPLING
       FIRST=.TRUE.
@@ -52569,9 +58591,9 @@ C--end of mod
         IF (EMMAX.GT.ETLIM) EMMAX=ETLIM
       ENDIF
 C---CALCULATE HIGGS WIDTH
-      IF (IPRO.EQ. 3.OR.IPRO.EQ. 4.OR.IPRO.EQ.16.OR.IPRO.EQ.19
-     &.OR.IPRO.EQ.23.OR.IPRO.EQ.25.OR.IPRO.EQ.26.OR.IPRO.EQ.27
-     &.OR.IPRO.EQ.95) THEN
+      IF (IPRO.EQ. 3.OR.IPRO.EQ. 4.OR.IPRO.EQ.10.OR.IPRO.EQ.16
+     &.OR.IPRO.EQ.19.OR.IPRO.EQ.23.OR.IPRO.EQ.25.OR.IPRO.EQ.26
+     &.OR.IPRO.EQ.27.OR.IPRO.EQ.95) THEN
         GAMH=RMASS(201)
         CALL HWDHIG(GAMH)
       ENDIF
@@ -52595,9 +58617,9 @@ C---IF Q**2 CAN BE TOO SMALL, BREIT FRAME MAKES NO SENSE
      &  .OR.IPRO.EQ.51.OR.IPRO.EQ.52.OR.IPRO.EQ.53.OR.IPRO.EQ.55
      &  .OR.IPRO.EQ.60)
      &      WRITE (6,250) PTMIN,PTMAX
-        IF (IPRO.EQ. 3.OR.IPRO.EQ. 4.OR.IPRO.EQ.16.OR.IPRO.EQ.19
-     &  .OR.IPRO.EQ.23.OR.IPRO.EQ.25.OR.IPRO.EQ.26.OR.IPRO.EQ.27
-     &  .OR.IPRO.EQ.95)
+        IF (IPRO.EQ. 3.OR.IPRO.EQ. 4.OR.IPRO.EQ.10.OR.IPRO.EQ.16
+     &  .OR.IPRO.EQ.19.OR.IPRO.EQ.23.OR.IPRO.EQ.25.OR.IPRO.EQ.26
+     &  .OR.IPRO.EQ.27.OR.IPRO.EQ.95)
      &      WRITE (6,260) RMASS(201),GAMH,
      &      GAMMAX,RMASS(201)+GAMMAX*GAMH,(BRHIG(I)*100,I=1,12)
         IF (IPRO.EQ.91) WRITE (6,270) BGSHAT,EMMIN,EMMAX
@@ -52605,7 +58627,7 @@ C---IF Q**2 CAN BE TOO SMALL, BREIT FRAME MAKES NO SENSE
      &      WRITE (6,280) EMMIN,EMMAX,PTMIN,PTMAX,CTMAX
         IF (IPRO.EQ.5.AND.IQK.GE.50)
      &      WRITE (6,290) EMMIN,EMMAX,Q2MIN,Q2MAX,PTMIN
-        IF (IPRO.GT.10.AND.
+        IF (IPRO.GT.12.AND.
      &    (IPRO.LT.90.AND.(ABS(IDB).EQ.11.OR.ABS(IDB).EQ.13).OR.
      &                    (ABS(IDT).EQ.11.OR.ABS(IDT).EQ.13))) THEN
           WRITE (6,300) Q2WWMN,Q2WWMX,YWWMIN,YWWMAX
@@ -52625,7 +58647,7 @@ C  Check minimum mass threshold if ISR switched on
           ENDIF
           WRITE (6,330) TMNISR,ONE-ZMXISR
         ENDIF
-        IF (WHMIN.GT.ZERO .AND. IPRO.GT.10.AND.(IPRO.EQ.90.OR.
+        IF (WHMIN.GT.ZERO .AND. IPRO.GT.12.AND.(IPRO.EQ.90.OR.
      &       (ABS(IDB).EQ.11.OR.ABS(IDB).EQ.13).OR.
      &       (ABS(IDT).EQ.11.OR.ABS(IDT).EQ.13))) WRITE (6,340) WHMIN
   180   FORMAT(10X,'USE BEAM-TARGET C.M.F. =',L5)
@@ -52878,7 +58900,11 @@ C---SET PARAMETERS FOR SPACELIKE BRANCHING
 C--optimize the weights for the channels if needed
       CALL HWIPHS(2)
 C--perform the initialisation of the SUSY ME's
-      IF(SYSPIN.OR.THREEB.OR.FOURB) CALL HWISPN
+      IF(SYSPIN.OR.THREEB.OR.FOURB) THEN
+        CALL HWISPN
+        IF (IPRINT.NE.0) WRITE (6,510)
+ 510    FORMAT(/10X,'CHECKING SUSY DECAY MATRIX ELEMENTS')
+      ENDIF
 C Print particle decay tables here
       IF (IPRINT.GE.2) CALL HWUDPR
   999 END
@@ -52890,7 +58916,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     INITIALISES AN EVENT
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWRGEN,HWRGET,DUMMY
       REAL TL
       LOGICAL CALLED
@@ -52919,7 +58945,7 @@ C---UPDATE RANDOM NUMBER SEED
       ISLENT=1
       NQDK=0
 C---DECIDE WHETHER TO GENERATE SOFT UNDERLYING EVENT
-      GENSOF=IPROC.GT.1000.AND.IPROC.LT.10000.AND.
+      GENSOF=IPROC.GE.1300.AND.IPROC.LT.10000.AND.
      &      (IPROC.EQ.8000.OR.HWRGEN(0).LT.PRSOF)
 C Zero arrays
       CALL HWVZRI(2*NMXHEP,JMOHEP)
@@ -53104,7 +59130,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     CHOOSES MASS ACCORDING TO BREIT-WIGNER DISTRIBUTION
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       DOUBLE PRECISION HWUMBW,HWRGEN,WMX,TAU,T
       INTEGER ID
 C--WMX IS MAX NUMBER OF WIDTHS FROM NOMINAL MASS
@@ -53279,6 +59305,35 @@ C-----------------------------------------------------------------------
       END DO
       RETURN
       END
+CDECK  ID>, HWUPUP.
+*CMZ :-        -13/02/02  16.42.23  by  Peter Richardson
+*-- Author :    Bryan Webber
+C----------------------------------------------------------------------
+      SUBROUTINE HWUPUP
+C----------------------------------------------------------------------
+C     Prints contents of the GUPI (Generic User Process Interface)
+C     common block HEPEUP
+C----------------------------------------------------------------------
+      INCLUDE 'HERWIG65.INC'
+      INTEGER MAXNUP
+      PARAMETER (MAXNUP=500)
+      INTEGER NUP,IDPRUP,IDUP,ISTUP,MOTHUP,ICOLUP
+      DOUBLE PRECISION XWGTUP,SCALUP,AQEDUP,AQCDUP,PUP,VTIMUP,SPINUP
+      COMMON/HEPEUP/NUP,IDPRUP,XWGTUP,SCALUP,AQEDUP,AQCDUP,
+     &              IDUP(MAXNUP),ISTUP(MAXNUP),MOTHUP(2,MAXNUP),
+     &              ICOLUP(2,MAXNUP),PUP(5,MAXNUP),VTIMUP(MAXNUP),
+     &              SPINUP(MAXNUP)
+      INTEGER IUP,IWIG,I
+      CHARACTER*8 NAME
+      PRINT *
+      PRINT *, ' I ISTUP IDUP NAME  MOTHUP ICOLUP     PUP'
+      DO IUP=1,NUP
+        CALL HWUIDT(1,IDUP(IUP),IWIG,NAME)
+        PRINT 11,IUP,ISTUP(IUP),IDUP(IUP),NAME,MOTHUP(1,IUP),
+     &  MOTHUP(2,IUP),ICOLUP(1,IUP),ICOLUP(2,IUP),(PUP(I,IUP),I=1,5)
+      Enddo
+ 11   Format(2I3,I4,2X,A8,2I3,2I4,5F8.1)
+      End
 CDECK  ID>, HWURES.
 *CMZ :-        -26/04/91  11.11.56  by  Bryan Webber
 *-- Author :    Ian Knowles & Bryan Webber
@@ -53291,7 +59346,7 @@ C     ( rep. enhancement factor)^2  - used in cluster decays
 C     Finds iso-flavour hadrons and creates pointers for cluster decays.
 C     Sets CLDKWT(K) =(2J+1) spin weight normalizing largest value to 1.
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER NMXTMP
       PARAMETER (NMXTMP=20)
       DOUBLE PRECISION EPS,WTMX,REMMN,RWTMX,WTMP,RESTMP(91),WTMX2,
@@ -53596,7 +59651,7 @@ C     R IS ROTATION MATRIX TO GET FROM VECTOR P TO Z AXIS, FOLLOWED BY
 C     A ROTATION BY PSI ABOUT Z AXIS, WHERE CP = COS-PSI, SP = SIN-PSI
 C-----------------------------------------------------------------------
       DOUBLE PRECISION WN,CP,SP,PTCUT,PP,PT,CT,ST,CF,SF,P(3),R(3,3)
-      DATA WN,PTCUT/1.,1.D-20/
+      DATA WN,PTCUT/1.D0,1.D-20/
       PT=P(1)**2+P(2)**2
       PP=P(3)**2+PT
       IF (PT.LE.PP*PTCUT) THEN
@@ -53679,7 +59734,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C  Subroutine to output the contents of the spin common block
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER I
 C--write out the header
       WRITE(6,1000)
@@ -53709,7 +59764,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     MAKES PARTICLE TYPE 'NAME' STABLE
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER IPDG,IWIG
       CHARACTER*8 NAME
       CALL HWUIDT(3,IPDG,IWIG,NAME)
@@ -53902,7 +59957,7 @@ C                          300-399    FATAL, DUMP EVENT & TERMINATE RUN
 C                          400-499    FATAL, DUMP EVENT & STOP DEAD
 C                          500-       FATAL, STOP DEAD WITH NO DUMP
 C-----------------------------------------------------------------------
-      INCLUDE 'HERWIG64.INC'
+      INCLUDE 'HERWIG65.INC'
       INTEGER ICODE
       CHARACTER*6 SUBRTN
       IF (ICODE.GE.0) WRITE (6,10) SUBRTN,ICODE
@@ -54920,4 +60975,32 @@ C-----------------------------------------------------------------------
       FIRST=.FALSE.
       ENDIF
       TRES=1E10
+      END
+C-----------------------------------------------------------------------
+CDECK  ID>,  UPINIT.
+*CMZ :-        -16/07/02  10.30.48  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE UPINIT
+C-----------------------------------------------------------------------
+C     DUMMY UPINIT ROUTINE DELETE AND REPLACE IF USING LES HOUCHES
+C     INTERFACE
+C-----------------------------------------------------------------------
+      WRITE (6,10)
+   10 FORMAT(/10X,'UPINIT CALLED BUT NOT LINKED')
+      STOP
+      END
+C-----------------------------------------------------------------------
+CDECK  ID>,  UPEVNT.
+*CMZ :-        -16/07/02  10.30.48  by  Peter Richardson
+*-- Author :    Peter Richardson
+C-----------------------------------------------------------------------
+      SUBROUTINE UPEVNT
+C-----------------------------------------------------------------------
+C     DUMMY UPEVNT ROUTINE DELETE AND REPLACE IF USING LES HOUCHES
+C     INTERFACE
+C-----------------------------------------------------------------------
+      WRITE (6,10)
+   10 FORMAT(/10X,'UPEVNT CALLED BUT NOT LINKED')
+      STOP
       END

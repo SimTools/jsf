@@ -1,7 +1,7 @@
 C Utility programs to use it from C++
 
       subroutine setbeams(pname1, pname2, pb1, pb2, ipr)
-      include  'HERWIG64.INC'
+      include  'HERWIG65.INC'
       character*(*) pname1, pname2
       double precision pb1, pb2
       integer ipr
@@ -17,7 +17,7 @@ C Utility programs to use it from C++
 
 
       subroutine myanal
-      include 'HERWIG64.INC'
+      include 'HERWIG65.INC'
       print *,'**************'
       print *,' maxpr=',maxpr
       return
