@@ -4,17 +4,26 @@
 /* Created by A.Miyamoto  8-Feb-2000			*/
 /********************************************************/
 
-SrcSuf	= cxx
-ObjSuf	= o
+
+#include "conf/makejsf.tmpl"
+
 BASESDIR= $(JSFROOT)/share/bases
 
-CXX     = g++ 
-CXXFLAGS= -g -O2 -Wall -fPIC -I$(BASESDIR)/src
+# 
+# SrcSuf	= cxx
+# ObjSuf	= o
+# CXX     = g++ 
+# CXXFLAGS= -g -O2 -Wall -fPIC -I$(BASESDIR)/src
+# LIBS	= -L$(JSFROOT)/lib -lBasesSpring -lm -lc -rdynamic
+# LDFLAGS	= -g -O2 -fPIC -Wall
+# SOFLAGS	= -shared -rdynamic
+# LD	= $(CXX)
 
-LIBS	= -L$(JSFROOT)/lib -lBasesSpring -lm -lc -rdynamic
-LDFLAGS	= -g -O2 -fPIC -Wall
-SOFLAGS	= -shared -rdynamic
-LD	= $(CXX)
+# .SUFFIXES: .$(SrcSuf)
+# 
+# .$(SrcSuf).$(ObjSuf):
+#	$(CXX) $(CXXFLAGS) -c $<
+
 
 INTGEN  = basesspring
 IGOBJS	= intgen.o nunugam.o
@@ -29,18 +38,19 @@ SRCS   	= intgen.$(SrcSuf) testint.$(SrcSuf) testgen.$(SrcSuf) \
 
 HDRS	= nunugam.h
 
+ANALLIB +=  -L$(JSFROOT)/lib -lBasesSpring
 
 
 all:: $(INTGEN) $(INT) $(GEN)
 
 $(INTGEN): $(IGOBJS)
-	$(LD) -o $(INTGEN) $(IGOBJS) $(LIBS) 
+	$(LD) -o $(INTGEN) $(IGOBJS) $(LDFLAGS) 
 
 $(INT): $(IOBJS)
-	$(LD) -o $(INT) $(IOBJS) $(LIBS)
+	$(LD) -o $(INT) $(IOBJS) $(LDFLAGS)
 
 $(GEN): $(GOBJS)
-	$(LD) -o $(GEN) $(GOBJS) $(LIBS)
+	$(LD) -o $(GEN) $(GOBJS) $(LDFLAGS)
 
 depend::
 	makedepend -I$(BASESDIR)/src -I/usr/include/g++-2 $(SRCS)
@@ -52,7 +62,3 @@ cleanall:: clean
 	\rm -f bases basesspring spring
 	rm Makefile
 
-.SUFFIXES: .$(SrcSuf)
-
-.$(SrcSuf).$(ObjSuf):
-	$(CXX) $(CXXFLAGS) -c $<
