@@ -38,7 +38,7 @@ SONAME        = libJSFGUI
 
 #ifdef hitachiArchitecture
 
-CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74
+CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lpacklib
 JSFLIBS       = -Wl,-L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim
 
 ROOTLIBS      = -L$(ROOTSYS)/lib \
