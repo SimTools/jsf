@@ -92,4 +92,12 @@ distclean:
 	( cd macro ; rm -f jsf.root , PYTHIA.SEED )
 	rm -f *~ core jsf.conf jsf.root
 
+getdata:
+	mkdir -p data
+	cd data
+	echo "Downloading bsdata. "
+	wget http://www-jlc.kek.jp/subg/offl/jsf/lib/bsdata.tar.gz
+	tar zxvf bsdata.tar.gz
+
+
 
