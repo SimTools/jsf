@@ -18,7 +18,7 @@ help:
 
 install : lib html include
 	@echo "JSFROOT is set to $(JSFROOT)"
-	bin/makespec
+	( cd bin ; ./makespec $(JSFROOT) )
 	( cd src ; xmkmf ; make )
 	( cd example/FFbarSpring ; xmkmf ; make )
 #	( cd example/CCDAnal ; xmkmf ; make )
