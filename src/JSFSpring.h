@@ -9,6 +9,7 @@
 //                                                                      //
 //////////////////////////////////////////////////////////////////////////
 
+#include "JSFConfig.h"
 #include "TObject.h"
 #include "TClonesArray.h"
 #include "TString.h"
