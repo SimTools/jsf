@@ -1,4 +1,4 @@
-#!/bin/sh -f
+#!/bin/bash -f
 # ###################################################
 #
 # This script stores system information in config file.
@@ -144,17 +144,19 @@ fi
 ################################## 
 
 # pdflib
-if [ -e $CERN_ROOT/lib/libjetset74.a ] ; then
+if [ $PYTHIA_VERSION == 5 ] ; then
+  if [ -e $CERN_ROOT/lib/libjetset74.a ] ; then
     pdflib=`nm $CERN_ROOT/lib/libjetset74.a | grep pdf | grep "pdf" | grep -c " T "`
     if [ "$pdflib" == "1" ] ;  then
       echo "#define __CERNLIB_PDFLIB__ 1" >> $specfile
       echo -n "$CERN_ROOT/lib/libjetset74.a includes pdfset_"
       echo -n " ... "
     fi
-else
-  echo "You did not define CERN_ROOT environment variable or "
-  echo "you did not have $CERN_ROOT/lib/libjetset74.a"
-  echo "You may have problem later"
+  else
+    echo "You did not define CERN_ROOT environment variable or "
+    echo "you did not have $CERN_ROOT/lib/libjetset74.a"
+    echo "You may have problem later"
+  fi
 fi
 
 # Ranmar
