@@ -17,7 +17,6 @@
 
 
 #include "conf/makejsf.tmpl"
-#include "config/lclib.tmpl"
 
 LIBNAME = lib<<Analysis>>
 
@@ -31,6 +30,8 @@ HDRS    = $(subst .$(SrcSuf),.h,$(SRC))
 # Other usefull variables.
 #  CXXFLAGS +=   ( for additional CXX options )
 #  JSFLIBS  +=   ( to include additiona libraries after JSF libraries)
+
+<<ImakefileAnlibFlag>>
 
 all:: $(LIBNAME).$(DllSuf)
 

@@ -29,7 +29,7 @@
 void UserAnotherModules()
 {
 
-  amal=new <<Analysis>>();  // define <<Analysis>>
+  anal=new <<Analysis>>();  // define <<Analysis>>
 
 }
 
