@@ -57,6 +57,8 @@ class JSFVirtualFit : public TObject
 
   JSFDMatrix &GetParameter(){ return fA; }
   JSFDMatrix &GetErrorMatrix(){ return fDD;}
+  inline Double_t GetError(Int_t i, Int_t j){ return fDD(i,j); }
+  inline Double_t GetParameter(Int_t i){ return fA(i,0); }
 
   ClassDef(JSFVirtualFit, 1) // Virtual fit class
 

@@ -39,6 +39,14 @@ class JSFGeoCFit :  public JSFVirtualFit
   void Initialize(Int_t ntrk, TClonesArray *trk, JSF3DV vtxini);
   void Derivative(Double_t &chisq, JSFDMatrix &dchi2, JSFDMatrix &d2chi2);
 
+  inline Int_t GetNtrk(){ return fNtrk;}
+  inline void GetTrackChisq(Double_t trackchisq[]){ 
+    for(Int_t i=0;i<fNtrk;i++){ trackchisq[i]=fTrackChisq[i]; }
+  }
+  inline void GetTrackChisq(Float_t trackchisq[]){ 
+    for(Int_t i=0;i<fNtrk;i++){ trackchisq[i]=fTrackChisq[i]; }
+  }
+
   ClassDef(JSFGeoCFit,1) // Geometrical Constraint Fit of tracks
 
 };
