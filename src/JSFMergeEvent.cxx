@@ -1,7 +1,3 @@
-//*LastUpdate :  jsf-1-11  28-July-1999  By Akiya Miyamoto
-//*-- Author  : Akiya Miyamoto  28-July-1999
-
-
 ///////////////////////////////////////////////////////////////////
 //
 // JSFMergeEvent
@@ -44,6 +40,7 @@
 #include <TMath.h>
 #include <TRandom.h>
 #include <TKey.h>
+#include <TSystem.h>
 
 ClassImp(JSFMergeEvent)
 
@@ -122,7 +119,7 @@ Bool_t JSFMergeEvent::Initialize()
     // Print information.
     printf("In JSFMergeEvent::Initialize()...\n");
     printf("   Cross section data of PythiaGenerator is obtained from a file %s\n",
-	   fFile->GetName());
+    fFile->GetName());
     fNumEvent=fPythiaGenerator->GetNGEN(0);
     printf("   Total number of events is %d \n",fNumEvent);
     Double_t xcros=fPythiaGenerator->GetXSEC(0)*1.0E6;
@@ -134,6 +131,7 @@ Bool_t JSFMergeEvent::Initialize()
     // Make tree to read background event.
     fFile->cd();
     fTree=(TTree*)fFile->Get("Event");
+    gJSF->AddTree(fTree);
 
     fPythiaGenerator->SetBranch(fTree);
     fJSFQuickSim->SetBranch(fTree);
@@ -168,31 +166,32 @@ Bool_t JSFMergeEvent::Process(Int_t nev)
 
   Int_t nbkg=gRandom->Poisson(fNumAverage);
 
-  printf(" JSFMergeEvent::Process was called. .. nbkg=%d\n",nbkg);
-
   if( nbkg <= 0 ) return kTRUE;
   
   JSFQuickSim  *qsim=(JSFQuickSim*)gJSF->FindModule("JSFQuickSim","quiet");
   JSFGenerator *gen=(JSFGenerator*)gJSF->FindModule("JSFGenerator","quiet");
 
   for(Int_t i=0;i<nbkg;i++){
-    Int_t iev=(Int_t)(fNumEvent*gRandom->Rndm());
+    Int_t iev=(Int_t)(fNumEvent*gRandom->Rndm())+1;
     fTree->GetEvent(iev);
 
     Int_t naddgen=0;
+    JSFGeneratorBuf *buf=NULL;
+    JSFGeneratorBuf *src=NULL;
     if( gen != 0 ) {
-      JSFGeneratorBuf *buf=(JSFGeneratorBuf*)gen->EventBuf();
-      JSFGeneratorBuf *src=(JSFGeneratorBuf*)(fPythiaGenerator->EventBuf());
+      buf=(JSFGeneratorBuf*)gen->EventBuf();
+      src=(JSFGeneratorBuf*)(fPythiaGenerator->EventBuf());
       naddgen=src->GetNparticles();
       buf->Append(src);
-      printf(" Add naddgen=%d\n",naddgen);
+      fPythiaGenerator->Clear();
     }
 
     if( qsim != 0 ) {
+      JSFQuickSimBuf *ssrc=(JSFQuickSimBuf*)fJSFQuickSim->EventBuf();
+      ssrc->SetGeneratorPointers(src);
       JSFQuickSimBuf *sbuf=(JSFQuickSimBuf*)qsim->EventBuf();
-      sbuf->Append((JSFQuickSimBuf*)(fJSFQuickSim->EventBuf()), naddgen);
-
-      printf(" Quick Sim data is appended.\n");
+      sbuf->Append(ssrc, naddgen, buf);
+      fJSFQuickSim->Clear();
     }
 
   }
@@ -201,6 +200,64 @@ Bool_t JSFMergeEvent::Process(Int_t nev)
 }
 
 
+//_________________________________________________________
+void JSFMergeEvent::WriteRandomSeed(const Char_t *fw)
+{
+  Char_t fn[256];
+  if( strlen(fw) == 0 ) {
+    sprintf(fn,"%s",
+	    gJSF->Env()->GetValue("JSFMergeEvent:RandomSeedWriteFile","undefined"));
+    if( strcmp(fn,"undefined") == 0 ) {
+      sprintf(fn,"jsf-eventmerge-seed.%d",gSystem->GetPid());
+    }
+  }
+  else {
+    sprintf(fn,"%s",fw);
+  }
+  
+  FILE *fd=fopen(fn,"w");
+  fprintf(fd,"0 %d\n",gJSF->GetEventNumber());
+
+  fprintf(fd,"%d\n",gRandom->GetSeed());
+
+  fclose(fd);
+}
+
+
+// ---------------------------------------------------------------
+void JSFMergeEvent::ReadRandomSeed(const Char_t *fr)
+{
+  Char_t fn[256];
+  if( strlen(fr) == 0 ) {
+    sprintf(fn,"%s",
+	    gJSF->Env()->GetValue("JSFMergeEvent:RandomSeedReadFile","undefined"));
+    if( strcmp(fn,"undefined") == 0 ) {
+      printf("  Error in JSFMergeEvent::ReadRandomSeed()   \n");
+      printf("  File name to read random seed (JSFMergeEvent:RandomSeedReadFile) is not specified.\n");
+      return;
+    }
+  }
+  else {
+    sprintf(fn,"%s",fr);
+  }
+  FILE *fd=fopen(fn,"r");
+  Int_t mode, ievt;
+  fscanf(fd,"%d %d",&mode, &ievt);
+
+  fscanf(fd,"%d",&fRandomSeed);
+  gRandom->SetSeed(fRandomSeed);
+  fclose(fd);
+  printf(" Random seed for event#%d of JSFMergeEvent is obtained from a file %s\n",ievt,fn);
+}
+
+
+// ---------------------------------------------------------------
+void JSFMergeEvent::PrintRandomSeed()
+{ 
+  printf(" JSFMergeEvent-Seed:");
+  fRandomSeed=gRandom->GetSeed();
+  printf("%d\n",*uval);
+}
 
 
 

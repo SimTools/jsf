@@ -1,8 +1,3 @@
-//*LastUpdate:  jsf-1-11 23-July-1999  by Akiya Miyamoto
-//*LastUpdate:  jsf-1-4 14-Feburary-1999  by Akiya Miyamoto
-//*LastUpdate:  v0.3.08 09/29/1998  by A.Miyamoto
-//*-- Author :  Akiya Miyamoto  09/22/1998
-
 //////////////////////////////////////////////////////////////////
 //
 //  JSFModule
@@ -234,7 +229,6 @@ void JSFModule::SetBranch(TTree *tree)
 {
 //  Set Branch address for this module
 
-
    fTree=tree;
    if( fEventBuf ) {
      Int_t lc=strlen(GetName());
@@ -242,8 +236,19 @@ void JSFModule::SetBranch(TTree *tree)
      sprintf(name,"%s-EventBuf",GetName());
      fBranch=tree->GetBranch(name);
      fBranch->SetAddress(&fEventBuf);
+     fEventBuf->fTree=fTree;
      delete name;
    }
+}
+
+
+
+
+//___________________________________________________________________________
+JSFEventBuf::JSFEventBuf()
+{
+  fModule=NULL;
+  fTree=NULL;
 }
 
 
@@ -276,6 +281,29 @@ void JSFEventBuf::SetHeader()
   delete dtime;
 }
 
+//__________________________________________________________________________
+JSFEventBuf *JSFEventBuf::FindEventBuf(const Char_t *name)
+{
+  // Find a pointer to the EventBuf objects in the same tree as this 
+  // objects.
+  // Note that each EventBuf objects are saved as Branch of same tree.
+
+  TIter nt(gJSF->GetListOfTrees());
+  TTree *t;
+  while( (t=(TTree*)nt()) ) {
+    TIter nb(t->GetListOfBranches());
+    TBranch *br;
+    while( (br=(TBranch*)nb()) ) {
+      JSFEventBuf *obj=gJSF->FindEventBuf(br);
+      if( obj ){
+	if( obj->InheritsFrom(name) ) { return obj; }
+      }
+    }
+  }
+
+  return NULL;
+
+}
 
 
 

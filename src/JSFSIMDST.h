@@ -85,7 +85,8 @@ protected:
 
 
 public:
-  JSFSIMDSTBuf(const char *name="JSFSIMDSTBuf", 
+  JSFSIMDSTBuf();
+  JSFSIMDSTBuf(const char *name, 
 	     const char *title="JSF SimDST event buffer",
   	     JSFModule *module=NULL);
   virtual ~JSFSIMDSTBuf();

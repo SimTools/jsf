@@ -40,14 +40,27 @@ JSFLTKCLTrack::JSFLTKCLTrack()
   for(Int_t i=0;i<4;i++){ fP[i]=0.0; }
   fEcl=0.0; fNEMC=0; fCharge=0 ; fType=0;
   fSource=0; fNCDC=0 ; f1stCDC=0 ;
+  fCDCs=NULL;
+  fEMGen=NULL;
+  fIDCDC=NULL;
+  fIDEMGen=NULL;
+  fNEMGen=0;
 }
 //_____________________________________________________________________________
 JSFLTKCLTrack::~JSFLTKCLTrack()
 {
   // Delete opbjects
 
-  fCDCs.Clear();
-  fEMGen.Clear();
+  if( fCDCs ) { 
+    fCDCs->Clear();
+    delete fCDCs;
+  }
+  if( fEMGen ) { 
+    fEMGen->Clear();
+    delete fEMGen;
+  }
+  if( fIDCDC ) { delete fIDCDC; }
+  if( fIDEMGen ) { delete fIDEMGen; }
 }
 
 
@@ -56,18 +69,24 @@ JSFLTKCLTrack::JSFLTKCLTrack(EJSFLTKCLTrackBank bank, Float_t data[])
 {
     fBank=bank;
     fP[1]=data[0] ;  fP[2]=data[1] ;  fP[3]=data[2] ;  fP[0]=data[3] ; 
-    fEcl=data[4]  ;  fNEMC=(Int_t)data[6]; 
+    fEcl=data[4]  ;  
+    fNEMC=(Int_t)data[6]; 
     fCharge=(Int_t)data[8]; fType=(Int_t)data[9];
     fSource=(Int_t)data[10]; fNCDC=(Int_t)data[11];
     if( fNCDC > 0 ) { 
       f1stCDC=(Int_t)data[12];
+      fIDCDC=new Int_t[fNCDC];
       for(Int_t i=0;i<fNCDC;i++){ fIDCDC[i]=(Int_t)data[12+i]; }
     }
     else {
       f1stCDC=-1 ;
-      for(Int_t i=0;i<fNCDC;i++){ fIDCDC[i]=-1; }
+      fIDCDC=NULL;
     }
+    fIDEMGen=NULL;
+    fNEMGen=0;
     fCDC=NULL;
+    fCDCs=new TObjArray();
+    fEMGen=new TObjArray();
 }
 
 //_____________________________________________________________________________
@@ -83,6 +102,11 @@ JSFLTKCLTrack::JSFLTKCLTrack(Float_t data[])
     fEcl=0;
     fNEMC=0;
     if( fType !=1 || fType != 3 ) f1stCDC=(Int_t)data[7];
+    fCDCs=new TObjArray();
+    fEMGen=new TObjArray();
+    fIDCDC=NULL;
+    fIDEMGen=NULL;
+    fNEMGen=0;
 }
 //_____________________________________________________________________________
 JSFLTKCLTrack::JSFLTKCLTrack(JSFLTKCLTrack& t)
@@ -92,10 +116,39 @@ JSFLTKCLTrack::JSFLTKCLTrack(JSFLTKCLTrack& t)
   fBank=t.fBank;
   for(Int_t i=0;i<4;i++){ fP[i]=t.fP[i]; }
   fEcl=t.fEcl;  fNEMC=t.fNEMC;
-  fCharge=t.fCharge ;  fType=t.fType;
+  fCharge=t.fCharge;  fType=t.fType;
   fSource=t.fSource;   fNCDC=t.fNCDC;   f1stCDC=t.f1stCDC;
   fCDC=t.fCDC;
-  for(Int_t i=0;i<t.fNCDC;i++){ fIDCDC[i]=t.fIDCDC[i]; }
+  if( fNCDC > 0 ) {
+    fIDCDC=new Int_t[fNCDC];
+    for(Int_t i=0;i<t.fNCDC;i++){ fIDCDC[i]=t.fIDCDC[i]; }
+    fCDCs=new TObjArray();
+    for(Int_t i=0;i<t.fCDCs->GetEntries();i++){
+      fCDCs->Add(t.fCDCs->UncheckedAt(i));
+    }
+  }
+  else {
+    fIDCDC=NULL;
+    fCDCs=NULL;
+  }
+  fEMGen=NULL;
+  if( t.fEMGen != NULL ) {
+    fEMGen=new TObjArray();
+    fEMGen->SetOwner(kFALSE);
+    for(Int_t i=0;i<t.fEMGen->GetEntries();i++){
+      JSFGeneratorParticle *gp=(JSFGeneratorParticle*)t.fEMGen->UncheckedAt(i);
+      fEMGen->Add(gp);
+    }
+  }
+  fNEMGen=t.fNEMGen;
+  if( fNEMGen > 0 ) {
+    fIDEMGen=new Int_t[fNEMGen];
+    for(Int_t i=0;i<fNEMGen;i++){ fIDEMGen[i]=t.fIDEMGen[i]; }
+  }
+  else {
+    fIDEMGen=NULL;
+    fNEMGen=0;
+  }
 }
 
 //_____________________________________________________________________________
@@ -105,7 +158,7 @@ const Char_t *JSFLTKCLTrack::GetTypeName()
   return gTypeName[fType];
 }
 
-#if ROOT_VERSION_CODE >= ROOT_VERSION(3,0,0) && JSF_VERSION_CODE >= JSF_VERSION(1,17,26)
+#if ROOT_VERSION_CODE >= ROOT_VERSION(3,0,0) && JSF_VERSION_CODE >= JSF_VERSION(1,17,26) && JSF_VERSION_CODE < JSF_VERSION(1,17,30)
 
    
 //______________________________________________________________________________
@@ -137,7 +190,10 @@ void JSFLTKCLTrack::Streamer(TBuffer &R__b)
    }
 }
 
-#else
+#endif
+
+
+#if ROOT_VERSION_CODE < ROOT_VERSION(3,0,0) || JSF_VERSION_CODE < JSF_VERSION(1,17,26)
 
 //______________________________________________________________________________
 void JSFLTKCLTrack::Streamer(TBuffer &R__b)

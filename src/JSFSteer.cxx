@@ -1,6 +1,3 @@
-//*LastUpdate:  jsf-1-17 6-Jan-2001  by A.Miyamoto
-//*-- Author :  Akiya Miyamoto  09/24/1998
-
 //////////////////////////////////////////////////////////////////////////////
 //
 //  JLC Study Frame
@@ -152,7 +149,8 @@ JSFSteer::JSFSteer(const char *name, const char *title)
       }
     }
     fEnv=new JSFEnv(envfile);  // Create pointer to env file.
-
+    fEventTrees=new TObjArray(); // Remember defined trees.
+ 
     SetIOFiles();
 
     LoadSharedLibraries();
@@ -203,7 +201,8 @@ JSFSteer::~JSFSteer()
     JSFModule *module; 
     while( (module = (JSFModule*)next()) ) { delete module; }
   }
-  if (!fConf) delete fConf;
+  if (!fConf) { delete fConf; }
+  if (!fEventTrees) { delete fEventTrees; }
 }
 
 //---------------------------------------------------------------------------
@@ -546,6 +545,11 @@ Int_t JSFSteer::GetEvent(Int_t nevt)
 // nevt is the number from 1 to n, Note the difference with 
 // the event number of root, which ranges from 0 to n-1.
 
+  //  static Bool_t ncall=kFALSE;
+
+  //  if( ncall ){   fITree->Delete(); }
+  //  ncall=kTRUE;
+
    Int_t  nb=fITree->GetEvent(nevt-1); 
 
    fRun = fReadin->GetRunNumber();
@@ -618,6 +622,7 @@ Bool_t JSFSteer::MakeTree()
 
   if( !fOTree ) { 
     fOTree=new TTree("Event","JSF event tree");
+    AddTree(fOTree);
   }
 
 
@@ -669,7 +674,7 @@ Bool_t JSFSteer::SetupTree()
     sprintf(kname, "%s;%d",gJSFEventKey->GetName(),gJSFEventKey->GetCycle());
     fITree=(TTree*)fIFile->Get(kname);
   }
-  
+  AddTree(fITree);
 
   fReadin=new JSFSteer("ReadinJSF");
   fReadin->fConf->Read("JSF");
@@ -811,6 +816,27 @@ JSFModule *JSFSteer::FindModule(const Text_t *classname, const Char_t *opt)
   return NULL;
 }
 
+//_____________________________________________________________________________
+JSFEventBuf *JSFSteer::FindEventBuf(TBranch *branch, const Char_t *opt)
+{
+  // Find JSFEventBuf object defined for branch
+
+  TIter  next(fModules);
+  JSFModule *module;
+  while( (module=(JSFModule*)next()) ){
+    printf(" Looking for event buf for module %s\n",module->GetName());
+    JSFEventBuf *buf=module->EventBuf();
+    if( buf ) {
+      printf(" EventBuf name is %s\n",buf->GetName());
+      if( strcmp(buf->GetName(), branch->GetName()) == 0 ) { return buf; }
+    }
+  }
+
+  if( strcmp(opt,"quiet") != 0 ) {
+    Error("FindEventBuf","A Branch %s is not found",branch->GetName());
+  }
+  return NULL;
+}
 
 //_____________________________________________________________________________
 JSFSteerConf::JSFSteerConf(const char *name, const char*title)

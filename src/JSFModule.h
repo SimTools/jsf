@@ -22,6 +22,7 @@
 class JSFModule;
 
 class JSFEventBuf : public TNamed {
+  friend class JSFModule;
 private:
    Int_t   fRunNumber;   // Run number 
    Int_t   fEventNumber; // Event number
@@ -31,7 +32,7 @@ protected:
    JSFModule *fModule;   //! Pointer which defines this Event Buffer
    TTree     *fTree;     //! Pointer to tree
 public:
-   JSFEventBuf(){}
+   JSFEventBuf();
    JSFEventBuf(const char *name, const char *title, JSFModule *module);
    JSFEventBuf(JSFModule *module, const char *name, const char *title);
    virtual ~JSFEventBuf(){}
@@ -46,6 +47,15 @@ public:
    void SetEventNumber(Int_t nevent){ fEventNumber=nevent; return; }
    JSFModule *Module(){ return fModule; }
    TTree     *Tree(){ return fTree; }
+
+   JSFEventBuf *FindEventBuf(const Char_t *name);
+   inline Bool_t SameEvent(JSFEventBuf *buf) {
+     return ( ( buf->GetRunNumber() == fRunNumber &&
+		buf->GetEventNumber() == fEventNumber && 
+		buf->GetDate() == fDate &&
+		TMath::Abs(buf->GetTime()-fTime) < 2 ) ? kTRUE : kFALSE ) ; 
+   }
+
 
    ClassDef(JSFEventBuf, 1) // Class to save event data for the module.
 

@@ -4,7 +4,7 @@
 //
 // Quick simulator for JLC detector.
 // This version calls Quick simulator written by Fortran, which is 
-// those in lclib, then detector informations are output a la C++ class.
+// those in lclib, then detector informations are outpu a la C++ class.
 //   
 // When Quick Simulator is executed, detector information are saved in
 // JSFQuickSimBuf class, where pointers to detector signals are prepared.
@@ -111,15 +111,34 @@ JSFQuickSim::JSFQuickSim(const Char_t *name, const Char_t *title, const Char_t *
   fParam   = new JSFQuickSimParam();
   fEventBuf= new JSFQuickSimBuf("JSFQuickSimBuf", 
 			       "JSF QuickSim Event data", this);
-  //  SetMakeBranch(kFALSE);
 
 }
 
+//_____________________________________________________________________________
+JSFQuickSimBuf::JSFQuickSimBuf()
+{
+  fNTracks=0;
+  fTracks = NULL;
+  fNCDCTracks=0;
+  fCDCTracks= NULL;
+  fNVTXHits=0 ;
+  fVTXHits=NULL;
+
+  fNEMCHits=0 ;
+  fEMCHits=NULL;
+
+  fNHDCHits=0 ;
+  fHDCHits=NULL;
+
+  fCDCTrackIsCDCVTX = gJSF->Env()->GetValue("JSFQuickSim.CDCTrackIsCDCVTX",1);
+
+}
 
 //_____________________________________________________________________________
 JSFQuickSimBuf::JSFQuickSimBuf(const char *name, const char *title, JSFQuickSim *sim)
        : JSFEventBuf(name,title, sim)
 {
+
   fNTracks=0;
   fTracks = new TObjArray(1000);
 
@@ -137,7 +156,6 @@ JSFQuickSimBuf::JSFQuickSimBuf(const char *name, const char *title, JSFQuickSim 
 
   fCDCTrackIsCDCVTX = gJSF->Env()->GetValue("JSFQuickSim.CDCTrackIsCDCVTX",1);
 
-
 }
 
 //_____________________________________________________________________________
@@ -151,7 +169,8 @@ JSFQuickSim::~JSFQuickSim()
 //_____________________________________________________________________________
 JSFQuickSimBuf::~JSFQuickSimBuf()
 {
-  //  Clear();
+
+  Delete();
   if(fCDCTracks) delete fCDCTracks;
   if(fVTXHits)   delete fVTXHits;
   if(fEMCHits)   delete fEMCHits;
@@ -172,6 +191,13 @@ void JSFQuickSimBuf::Clear(const Option_t *option)
   if(fVTXHits)   fVTXHits->Clear(option);
   if(fEMCHits)   fEMCHits->Clear(option);
   if(fHDCHits)   fHDCHits->Clear(option);
+
+  fNTracks=0;
+  fNCDCTracks=0;
+  fNVTXHits=0;
+  fNEMCHits=0;
+  fNHDCHits=0;
+
 }
 
 //_____________________________________________________________________________
@@ -391,6 +417,10 @@ Bool_t JSFQuickSim::GetLastRunInfo()
 //_____________________________________________________________________________
 Bool_t JSFQuickSimBuf::MakeEventBuf()
 {
+  
+  //  Clear();
+  Delete();
+
    if( !MakeJSFLTKCLTracks() ) return kFALSE;
    if( !MakeCALHits() ) return kFALSE;
    if( !MakeCDCTracks() ) return kFALSE;
@@ -398,7 +428,7 @@ Bool_t JSFQuickSimBuf::MakeEventBuf()
 
    MakeJSFLTKCLTrackPointers();
 
-   return kTRUE;
+   return kTRUE;\
 }
 
 //_____________________________________________________________________________
@@ -422,27 +452,53 @@ Bool_t JSFQuickSimBuf::MakeJSFLTKCLTrackPointers()
      // Generator tracks.
      isrc=ct->GetSource();
      iemc=(isrc/10)%10;
-     if( iemc == 1 ) {
-       Int_t nemc=ct->GetNEMC();
-       Int_t nw, iret;
+     
+
+     Int_t nemc=ct->GetNEMC();
+     Int_t nw, iret;
+     Int_t itype=ct->GetType();
+     if( itype==1 || itype==2 ) {
        gJSFLCFULL->TBGET(1,"Production:EMC;Cluster",nemc,nw,emcls,iret);
        if( nw > 50 || iret < 0 ) { 
 	 printf("Error in MakeJSFLTKCLTrackPointers .. ");
-	 printf("Production:EMC;Cluster  nw=%d  iret=%d",nw,iret);
+	 printf("Production:EMC;Cluster  nw=%d  iret=%d\n",nw,iret);
+	 printf(" icmb=%d itype=%d nemc=%d",icmb,itype,nemc);
+	 printf(" isrc=%d iemc=%d\n",isrc,iemc);
        }
-       Int_t nemgen=emcls[14];
-       for(Int_t ipg=0;ipg<nemgen;ipg++){
-	 Int_t ig=emcls[ipg+15];
-	 JSFGeneratorParticle *pgen=(JSFGeneratorParticle*)pa->UncheckedAt(ig-1);
-	 ct->SetEMGen(pgen);
+       else{ 
+	 Int_t nemgen=emcls[14];
+	 ct->SetNEMGen(nemgen);
+	 if( nemgen > 0 ) {
+	   ct->fIDEMGen=new Int_t[nemgen];
+	   for(Int_t ipg=0;ipg<nemgen;ipg++){
+	     Int_t ig=emcls[ipg+15];
+	     if( ig < 1 || ig > pa->GetEntries() || ig > gevt->GetNparticles()) {
+	       printf(" Warning in JSFQuickSim::MakeJSFLTKCLTrackPointers \n");
+	       printf(" invalid pointer to EMC cluster to GeneratorParticleList\n");
+	       printf(" ig=%d ",ig);
+	       printf(" GenEntries=%d",pa->GetEntries());
+	       printf(" GeneratorParticles=%d ",gevt->GetNparticles());
+	       printf(" ipg=%d nemgen=%d",ipg,nemgen);
+	       printf(" \n");
+	     }
+
+	     JSFGeneratorParticle *pgen=(JSFGeneratorParticle*)pa->UncheckedAt(ig-1);
+	     ct->SetEMGen(pgen);
+	     ct->fIDEMGen[ipg]=ig;
+	     
+	     if( pgen->GetSerial() != ig ) {
+	       printf(" Warning at JSFQuickSim::MakeJSFLTKCLTrackPointers\n");
+	       printf(" Generator Serial Number(%d)",pgen->GetSerial());
+	       printf(" and pointer in elmcs (%d) is different\n",ig);
+	     }
+
+
+	   }
+	 }
        }
      }
-  }
+  }  
 
-  //
-  // Set Pointers for CDC tracks contributing to LTKCLTracks.
-  //
-  
   return kTRUE;
 }
 
@@ -636,8 +692,8 @@ Bool_t JSFQuickSimBuf::MakeCDCTracks()
 
        ncdc++;
      }
-     SetNCDCTracks(ncdc);
   }
+  SetNCDCTracks(ncdc);
 
   return kTRUE;
 }
@@ -677,21 +733,68 @@ Bool_t JSFQuickSim::ReviseGeneratorInfo()
 
 
 //______________________________________________________________________________
+void JSFQuickSimBuf::SetGeneratorPointers(JSFGeneratorBuf *ingen)
+{
+  // After reading the class data for JSFQuickSimBuf, pointers 
+  // for JSFCDCTracks and JSFVTXHits are reset.
+
+  JSFGenerator *gen=NULL;
+  JSFGeneratorBuf *genb=NULL;
+  if( ingen ) {
+    genb=ingen;
+  }
+  else {
+    gen=(JSFGenerator*)gJSF->FindModule("JSFGenerator"); 
+    genb=(JSFGeneratorBuf*)gen->EventBuf();
+  }
+  TClonesArray    *gps= (genb==NULL ? NULL : genb->GetParticles());
+
+  if( gps == NULL ) {
+    printf("Warning in JSFQuickSim: No Generator information is available ");
+    printf("to set EM cluster information in LTKCLTrack\n");
+    return ;
+  }
+
+  for(Int_t k=0;k<genb->GetNparticles();k++){
+    JSFGeneratorParticle *gp=(JSFGeneratorParticle*)gps->UncheckedAt(k);
+  }
+
+  for(Int_t i=0;i<fNTracks;i++){
+    JSFLTKCLTrack *lt=(JSFLTKCLTrack*)fTracks->UncheckedAt(i);
+    if( !lt->fEMGen ) { lt->fEMGen=new TObjArray(); }
+    else{ lt->fEMGen->Clear() ; }
+    for(Int_t j=0;j<lt->fNEMGen;j++){
+      JSFGeneratorParticle *gp=(JSFGeneratorParticle*)gps->UncheckedAt(lt->fIDEMGen[j]-1);
+      lt->SetEMGen(gp);
+    }
+  }
+
+}
+//______________________________________________________________________________
 void JSFQuickSimBuf::SetPointers()
 {
   // After reading the class data for JSFQuickSimBuf, pointers 
   // for JSFCDCTracks and JSFVTXHits are reset.
+
 
   Int_t i;
   for(i=0;i<fNTracks;i++){
     JSFLTKCLTrack *lt=(JSFLTKCLTrack*)fTracks->UncheckedAt(i);
     Int_t icdc=lt->Get1stCDC();
     if (icdc < 0) {
-	lt->SetCDCR(icdc,0);
-	continue;
+      lt->SetCDCR(icdc,0);
     }
-    JSFCDCTrack *t=(JSFCDCTrack*)fCDCTracks->UncheckedAt(icdc);
-    lt->SetCDCR(icdc, t);
+    else {
+      JSFCDCTrack *t=(JSFCDCTrack*)fCDCTracks->UncheckedAt(icdc-1);
+      lt->SetCDCR(icdc, t);
+      if( !lt->fCDCs ) { 
+	lt->fCDCs=new TObjArray(); 
+      }
+      for(Int_t j=0;j<lt->fNCDC;j++){
+	JSFCDCTrack *tt=(JSFCDCTrack*)fCDCTracks->UncheckedAt(lt->fIDCDC[j]-1);
+	lt->fCDCs->Add(tt);
+      }
+    }
   }
 
   for(i=0;i<fNVTXHits;i++){
@@ -707,17 +810,16 @@ void JSFQuickSimBuf::SetPointers()
 
 
 //______________________________________________________________________________
-void JSFQuickSimBuf::Append(JSFQuickSimBuf *src, Int_t numgp)
+void JSFQuickSimBuf::Append(JSFQuickSimBuf *src, Int_t numgp, JSFGeneratorBuf *gbuf)
 {
   // Append JSFQuickSimBuf object, src, to current object
   // numgp is a number of generator particles in the src.  It is used to increment
-  // pointer information 
-
-  // Append JSFEMCHits
+  // pointer information to JSFGenerator objects 
+  // gbuf: is a pointer to newly created JSFGeneratorBuf class.
 
   AppendCALHits(src);
 
-  AppendLTKCLTracks(src, numgp);
+  AppendLTKCLTracks(src, numgp, gbuf);
 
 }
 
@@ -764,7 +866,6 @@ void JSFQuickSimBuf::AppendCALHits(JSFQuickSimBuf *src)
     fNEMCHits=nemc;
   }
 
-
   // ****************************
   //  Merging HDC hits
   // ****************************
@@ -804,73 +905,81 @@ void JSFQuickSimBuf::AppendCALHits(JSFQuickSimBuf *src)
 
 
 //______________________________________________________________________________
-void JSFQuickSimBuf::AppendLTKCLTracks(JSFQuickSimBuf *src, Int_t numgp)
+void JSFQuickSimBuf::AppendLTKCLTracks(JSFQuickSimBuf *src, Int_t numgp, JSFGeneratorBuf *gbuf)
 {
   // Append JSFQuickSimBuf object, src, to current object
-  // numgp is a number of generator particles in the src.  It is used to increment
-  // pointer information 
+  // src  : A pointer to source JSFQuickSimBuf object.
+  // numgp: Number of generator particles added.
+  // gbuf : A pointer to JSFGeneratorBuf where generator information is added.
 
-  if( src->GetNTracks() <= 0 ) return ;
+  Int_t oldvtx=fNVTXHits;
+  Int_t oldcdc=fNCDCTracks;
 
-  Int_t nltsrc=src->GetNTracks();
-
-#if defined(_HPUX_SOURCE) || defined(_AIX)
-  Int_t *indlt = new Int_t [nltsrc];
-#else
-  Int_t indlt[nltsrc];
-#endif
-  //  TClonesArray *tracks=src->GetTracks(); 
-  TObjArray *tracks=src->GetTracks(); 
-  for(Int_t i=0;i<nltsrc;i++){
-    JSFLTKCLTrack *t=(JSFLTKCLTrack*)tracks->UncheckedAt(i);
-    fTracks->Add(new JSFLTKCLTrack(*t));
-    indlt[i]=fNTracks;
-    fNTracks++;
-  }
-
-  // ****************************************
-  // * Append CDCTracks
-  // ****************************************
-
-  Int_t ncdcsrc=src->GetNCDCTracks();
-  Int_t indcdc[kMaxCDCTracks]={-1};
-  if( ncdcsrc > 0 ) {
-    for(Int_t i=0;i<nltsrc;i++){
-      JSFLTKCLTrack *ct=(JSFLTKCLTrack*)fTracks->UncheckedAt(indlt[i]);
-      JSFCDCTrack *t=ct->GetCDC();
-      if( t == NULL ) continue;
-      t->fGenID+=numgp;
-      new((*fCDCTracks)[fNCDCTracks]) JSFCDCTrack(*t);
-      JSFCDCTrack *nt=(JSFCDCTrack*)fCDCTracks->UncheckedAt(fNCDCTracks);
-      nt->fNVTX=0;
-      indcdc[ct->Get1stCDC()]=fNCDCTracks;
-      ct->SetCDC(fNCDCTracks, nt);
-      fNCDCTracks++;
-    }
-  }
-
-  // ****************************************
-  // * Append VTXHits
-  // ****************************************
-
+  //(1) Copy all VTX Hits
+  //  fLinkedTrack is updated later/
   Int_t nvtxsrc=src->GetNVTXHits();
-  if( nvtxsrc > 0 ) {
-    TClonesArray *vtx=src->GetVTXHits();
-    TClonesArray *cdc=src->GetCDCTracks();
-    for(Int_t i=0;i<nvtxsrc;i++){
-      JSFVTXHit *v=(JSFVTXHit*)vtx->UncheckedAt(i);
-      v->fGenTrack +=numgp;
-      v->fLinkedTrack = indcdc[v->fLinkedTrack]; // Update VTX->cdc pointer
-      new((*fVTXHits)[fNVTXHits]) JSFVTXHit(*v);
-      JSFVTXHit *nv=(JSFVTXHit*)fVTXHits->UncheckedAt(i);
-      JSFCDCTrack *t=(JSFCDCTrack*)cdc->UncheckedAt(nv->GetLinkedTrack());
-      t->AddVTXHit(nv);  // Update cdc->vtx pointer
-      fNVTXHits++;
-    }  
+  TClonesArray *vtx=src->GetVTXHits();
+  for(Int_t i=0;i<nvtxsrc;i++){
+    JSFVTXHit *v=(JSFVTXHit*)vtx->UncheckedAt(i);
+    v->fGenTrack +=numgp;
+    v->fLinkedTrack +=fNCDCTracks;
+    new((*fVTXHits)[fNVTXHits]) JSFVTXHit(*v);
+    fNVTXHits++;
   }
-#if defined(_HPUX_SOURCE)
-  delete indlt;
-#endif
+
+  //(2) Copy CDCTracks object
+  Int_t ncdcsrc=src->GetNCDCTracks();
+  TClonesArray *cdc=src->GetCDCTracks();
+  for(Int_t i=0;i<ncdcsrc;i++){
+    JSFCDCTrack *t=(JSFCDCTrack*)cdc->UncheckedAt(i);
+    new((*fCDCTracks)[fNCDCTracks]) JSFCDCTrack(*t);
+    JSFCDCTrack *nt=(JSFCDCTrack*)fCDCTracks->UncheckedAt(fNCDCTracks);
+    for(Int_t j=0;j<t->fNVTX;j++){
+      Int_t ind=vtx->IndexOf(t->GetVTXHit(j));
+      nt->fVTXHits[j]=(JSFVTXHit*)fVTXHits->UncheckedAt(oldvtx+ind);
+    }
+    fNCDCTracks++;
+  }
+
+  //(3) Copy LTKCLTrack object
+  Int_t nltsrc=src->GetNTracks();
+  TObjArray *lt=src->GetTracks();
+  TClonesArray *genp= ( gbuf != NULL ? gbuf->GetParticles() : NULL );
+  Int_t ngenp=( genp != NULL ? genp->GetEntries() : 0 );
+
+  for(Int_t i=0;i<nltsrc;i++){
+    JSFLTKCLTrack *tsrc=(JSFLTKCLTrack*)lt->UncheckedAt(i);
+    JSFLTKCLTrack *t=new JSFLTKCLTrack(*tsrc);
+    fTracks->Add(t);
+    fNTracks++;
+    
+    Int_t k=cdc->IndexOf(tsrc->fCDC);
+    t->fCDC=(JSFCDCTrack*)fCDCTracks->UncheckedAt(oldcdc+k);
+    t->f1stCDC+=oldcdc;
+
+    if( t->fCDCs ) {
+      t->fCDCs->Clear();
+      for(Int_t j=0;j<tsrc->fCDCs->GetEntries();j++){
+	JSFCDCTrack *ct=(JSFCDCTrack*)tsrc->fCDCs->UncheckedAt(j);
+	k=cdc->IndexOf(ct);
+	t->fCDCs->Add(fCDCTracks->UncheckedAt(oldcdc+k));
+      }
+    }
+
+    if( t->fEMGen ) {
+      t->fEMGen->Clear();
+      for(Int_t j=0;j<tsrc->fEMGen->GetEntries();j++){
+	Int_t iser=tsrc->fIDEMGen[j];
+
+	if( genp ) {
+	  JSFGeneratorParticle *ngp=(JSFGeneratorParticle*)genp->UncheckedAt(ngenp-numgp+iser-2);
+	  t->fEMGen->Add(ngp);
+	}
+      }
+    }  // End of if( t->fEMGen ) 
+
+  }
+
 }
 
       
@@ -902,6 +1011,7 @@ void JSFQuickSimBuf::Streamer(TBuffer &R__b)
        //=== end of old versions
      }
      SetPointers();
+     SetGeneratorPointers();
    } else {
      JSFQuickSimBuf::Class()->WriteBuffer(R__b, this);
    }

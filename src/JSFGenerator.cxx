@@ -39,6 +39,17 @@ JSFGenerator::JSFGenerator(const Char_t *name, const Char_t *title, const Char_t
 
 
 //_____________________________________________________________________________
+JSFGeneratorBuf::JSFGeneratorBuf()
+{
+//   Create one JSFGenerator object
+//
+  fNparticles=0;
+  fParticles=NULL;
+  fEcm=0;
+  fStartSeed=0;
+}
+
+//_____________________________________________________________________________
 JSFGeneratorBuf::JSFGeneratorBuf(const char *name, const char *title, JSFGenerator *generator)
        : JSFEventBuf(name,title, (JSFModule*)generator)
 {
@@ -63,9 +74,11 @@ JSFGenerator::~JSFGenerator()
 //_____________________________________________________________________________
 Bool_t JSFGenerator::Process(Int_t ev)
 {
-   fEventBuf->SetHeader();
 
-   return kTRUE;
+  fEventBuf->Clear();
+  fEventBuf->SetHeader();
+
+  return kTRUE;
 }
 
 //_____________________________________________________________________________

@@ -1,11 +1,3 @@
-//*LastUpdate :  jsf-1-15 7-July-2000  By Akiya Miyamoto
-//*LastUpdate :  jsf-1-14  1-Feb-2000  By Akiya Miyamoto
-//*LastUpdate :  jsf-1-11  30-July-1999  By Akiya Miyamoto
-//*LastUpdate :  jsf-1-9  27-March-1999  By Akiya Miyamoto
-//*LastUpdate :  jsf-1-6  30-March-1999  By Akiya Miyamoto
-//*LastUpdate :  jsf-1-4  28-January-1999  By Akiya Miyamoto
-//*-- Author  : Akiya Miyamoto  28-January-1999
-
 ///////////////////////////////////////////////////////////////////
 //
 // JSFSIMDST  
@@ -670,6 +662,15 @@ Bool_t JSFSIMDSTBuf::UnpackDST(Int_t nev)
 
 }
 
+// ---------------------------------------------------------------
+JSFSIMDSTBuf::JSFSIMDSTBuf()
+{  
+  fEndian = 1296651082;
+  fVersion = __JSF_SIMDST_VERSION__ ;     // Since jsf-1-15
+  strcpy(fProduc,"QIK ");
+  fNSMHits = 0;
+
+}
 // ---------------------------------------------------------------
 JSFSIMDSTBuf::JSFSIMDSTBuf(const char *name, const char *title,	JSFModule *module)
     : JSFEventBuf(name, title, module)

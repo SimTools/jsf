@@ -38,6 +38,9 @@
 #ifndef __JSFQuickSimParam__
 #include "JSFQuickSimParam.h"
 #endif
+#ifndef __JSFGnerator__
+#include "JSFGenerator.h"
+#endif
  
 class JSFQuickSim;
 
@@ -50,15 +53,15 @@ private:
    Int_t            fNEMCHits  ;  // Number of EMC hit cells
    Int_t            fNHDCHits  ;  // Number of HDC hit cells
 
-   TObjArray       *fTracks    ;  // -> Pointers to Particles
-   TClonesArray    *fCDCTracks ;  // -> Pointer to CDC Tracks
-   TClonesArray    *fVTXHits   ;  // -> Pointers to VTX Hits
-   TClonesArray    *fEMCHits   ;  // -> Pointers to EMC Hit cells 
-   TClonesArray    *fHDCHits   ;  // -> Pointers to EMC Hit cells 
+   TObjArray       *fTracks    ;  //-> Pointers to Particles
+   TClonesArray    *fCDCTracks ;  //-> Pointer to CDC Tracks
+   TClonesArray    *fVTXHits   ;  //-> Pointers to VTX Hits
+   TClonesArray    *fEMCHits   ;  //-> Pointers to EMC Hit cells 
+   TClonesArray    *fHDCHits   ;  //-> Pointers to EMC Hit cells 
 
    Int_t      fCDCTrackIsCDCVTX; //! 0 when CDC track is not CDC+VTX combined track.
-
-   void SetPointers() ; // Set pointers among Hits/Track classes.
+   
+   void SetPointers() ; 
 
    Bool_t MakeJSFLTKCLTracks();
    Bool_t MakeJSFLTKCLTrackPointers();
@@ -67,15 +70,17 @@ private:
    Bool_t MakeCDCTracks();
 
    void AppendCALHits(JSFQuickSimBuf *src);
-   void AppendLTKCLTracks(JSFQuickSimBuf *src, Int_t numgp=0);
+   void AppendLTKCLTracks(JSFQuickSimBuf *src, Int_t numgp, JSFGeneratorBuf *gbuf);
 
 public:
-   JSFQuickSimBuf(const char *name="JSFQuickSimBuf",
+   JSFQuickSimBuf();
+   JSFQuickSimBuf(const char *name,
 		   const char *title="JSF QuickSim event class",
 		   JSFQuickSim *sim=NULL);
    virtual      ~JSFQuickSimBuf();
 
    Bool_t MakeEventBuf();
+   void SetGeneratorPointers(JSFGeneratorBuf *ingen=NULL) ; // Set pointers among Hits/Track classes.
 
   void SetNTracks(Int_t nt){ fNTracks=nt;}
   Int_t GetNtracks(){ return fNTracks; } // kept for backward compatibility
@@ -101,7 +106,8 @@ public:
 
   void Clear(const Option_t *opt="");
   void Delete(const Option_t *opt="");
-  void Append(JSFQuickSimBuf *src, Int_t numgp=0);
+  void Append(JSFQuickSimBuf *src, Int_t numgp, JSFGeneratorBuf *gsrc);
+
 
   ClassDef(JSFQuickSimBuf, 3) // QuickSim event buffer class.
 

@@ -181,6 +181,14 @@ Bool_t JSFSpring::GetLastRunInfo()
 }
 
 
+
+//_____________________________________________________________________________
+JSFSpringBuf::JSFSpringBuf()
+{
+   fNparton = 0 ;
+   fPartons=NULL;
+}
+
 //_____________________________________________________________________________
 JSFSpringBuf::JSFSpringBuf(const char *name, const char *title, 
 			   JSFSpring *spring)

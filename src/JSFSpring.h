@@ -29,9 +29,10 @@ class JSFSpringParton;
 class JSFSpringBuf : public JSFEventBuf {
 protected:
    Int_t          fNparton; // Number of partons
-   TClonesArray  *fPartons; // Pointer to partons
+   TClonesArray  *fPartons; //-> Pointer to partons
 public:
-   JSFSpringBuf(const char *name="JSFSpringBuf", 
+   JSFSpringBuf();
+   JSFSpringBuf(const char *name,
 	        const char *title="JSF Spring event buffer",
 		JSFSpring *spring=0);
    virtual ~JSFSpringBuf();

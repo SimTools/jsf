@@ -32,9 +32,10 @@ protected:
    Int_t            fStartSeed;  // Seed value at the begining of the event
    Double_t         fEcm;        // Center of Mass energy of the event.
    Int_t            fNparticles;  // Number of particles 
-   TClonesArray    *fParticles;  // Pointers to Particles
+   TClonesArray    *fParticles;  //-> Pointers to Particles
 public:
-   JSFGeneratorBuf(const char *name="JSFGeneratorBuf",
+   JSFGeneratorBuf();
+   JSFGeneratorBuf(const char *name,
 		   const char *title="JSF Generator",
 		   JSFGenerator *generator=0);
    virtual ~JSFGeneratorBuf();

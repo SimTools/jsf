@@ -41,7 +41,7 @@ class JSFVertexing : public TObject
   Double_t  fQuality; // Quality of vertex (Z difference in cm)
   Double_t    fChisq; // Chisq of vertex fit
   Double_t  fPairEpsilon; // epsilon value used for pair finder.
-  TClonesArray   *fT; // Helical Track to form vertex
+  TClonesArray   *fT; //-> Helical Track to form vertex
 
  public:
   JSFVertexing();

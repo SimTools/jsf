@@ -22,6 +22,7 @@
 #include "JSFConfig.h"
 
 class JSFModule;
+class JSFEventBuf;
 
 class JSFSteerConf : public TNamed {
 protected:
@@ -63,6 +64,7 @@ protected:
   JSFEnv       *fEnv;         //! Pointer to the env data.
   TBranch    *fBrJSF;      //! Branch address of JSFSteer.
   TChain     *fChain;     //! A tree of chained file.
+  TObjArray  *fEventTrees;  //! Collection of event trees.
 
 // Followings are event-by-event information
   Int_t      fVersion;      // JSFSteer version number
@@ -100,10 +102,14 @@ public:
   virtual void  SetRunNumber(Int_t run=1) {           fRun=run;  }
   virtual void  SetEventNumber(Int_t event=1) {fEvent=event;}
   
-  TTree     *ITree() {return fITree;}
-  TTree     *OTree() {return fOTree;}
+  inline TTree     *ITree() {return fITree;}
+  inline TTree     *OTree() {return fOTree;}
+  inline void AddTree(TTree *t){ fEventTrees->Add(t); }
+  inline TObjArray *GetListOfTrees(){ return fEventTrees; }
+
   TList     *Modules()  {return fModules;}
   JSFModule *FindModule(const Text_t *classname,const Option_t *opt="");
+  JSFEventBuf *FindEventBuf(TBranch *branch, const Option_t *opt="");
   JSFEnv    *Env(){ return fEnv;}
 
   Int_t     GetVersion(){ return fVersion;}

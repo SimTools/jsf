@@ -52,13 +52,17 @@ protected:
   Int_t     f1stCDC;  // Element number of corresponding CDC:Track_Parameter or Index of CDC tracks.
   JSFCDCTrack *fCDC;  //! Address of corresponding CDC track.
 
-  Int_t     fIDCDC[32];//[fNCDC]  saves CDC tracks contributing to this LTKCLTrack
-  TObjArray  fCDCs;   // Associated CDC tracks
-  TObjArray  fEMGen;  // Generator particles contributing to the EM cluster.  
- 
-  void SetCDC(Int_t ind, JSFCDCTrack *t){ f1stCDC=ind; fCDC=t; fCDCs.Add(t); }; 
-  void SetCDCR(Int_t ind, JSFCDCTrack *t){ f1stCDC=ind; fCDC=t; }; 
-  void SetEMGen(JSFGeneratorParticle *emg){ fEMGen.Add(emg); }
+  Int_t     *fIDCDC;   //[fNCDC]  saves CDC tracks contributing to this LTKCLTrack
+  TObjArray  *fCDCs;   //! Associated CDC tracks
+  TObjArray  *fEMGen;  //!  Generator particles contributing to the EM cluster.  
+  
+  Int_t     fNEMGen;   //  Number of matched EMC cluster
+  Int_t    *fIDEMGen;  //[fNEMGen]  ID's of Matched EM cluster
+
+  inline void SetCDC(Int_t ind, JSFCDCTrack *t){ f1stCDC=ind; fCDC=t; fCDCs->Add(t); }; 
+  inline void SetCDCR(Int_t ind, JSFCDCTrack *t){ f1stCDC=ind; fCDC=t; }; 
+  inline void SetEMGen(JSFGeneratorParticle *emg){ fEMGen->Add(emg); }
+  inline void SetNEMGen(Int_t nemc){ fNEMGen=nemc; }
 
 public:
   JSFLTKCLTrack();
@@ -92,22 +96,27 @@ public:
   JSFCDCTrack *GetCDC(){ return fCDC;}
 
 
-  inline Int_t GetEMGenEntries(){ return fEMGen.GetEntries(); }
+  inline Int_t GetEMGenEntries(){ return 
+			    ( fEMGen == NULL ? 0 : fEMGen->GetEntries() ) ; }
   inline JSFGeneratorParticle *GetEMGenAt(Int_t i){ 
-    return ((JSFGeneratorParticle*)fEMGen.At(i)); 
-  }
-  inline Int_t GetCDCEntries(){ return fCDCs.GetEntries(); }
-  inline JSFCDCTrack *GetCDCTrackAt(Int_t i){ 
-    return ((JSFCDCTrack*)fCDCs.At(i)); 
+    return ( fEMGen == NULL ? NULL : ((JSFGeneratorParticle*)fEMGen->UncheckedAt(i)) ) ; 
   }
 
-  inline Int_t GetIDCDC(Int_t i){ return fIDCDC[i]; }
+  inline TObjArray *GetEMGen(){ return fEMGen; }
+  inline TObjArray *GetCDCs(){ return fCDCs; }
+
+  inline Int_t GetCDCEntries(){ return 
+			  ( fCDCs == NULL ? 0 : fCDCs->GetEntries()); }
+  inline JSFCDCTrack *GetCDCTrackAt(Int_t i){ 
+    return ( fCDCs == NULL ? NULL : ((JSFCDCTrack*)fCDCs->UncheckedAt(i)) ) ; 
+  }
+  inline Int_t GetIDCDC(Int_t i){ return ( fIDCDC == NULL ? -1 : fIDCDC[i] ) ; }
 
 
   TVector GetPV(){ TVector p(4) ; 
           p(0)=fP[0] ; p(1) =fP[1] ; p(2)=fP[2] ; p(3)=fP[3] ; return p ; }
 
-  ClassDef(JSFLTKCLTrack,3)  //A JSFLTKCLTrack
+  ClassDef(JSFLTKCLTrack,4)  //A JSFLTKCLTrack
 };
 
 #endif

@@ -46,6 +46,10 @@ public:
   virtual Bool_t Process(Int_t ev=1);
   virtual Bool_t EndRun();
 
+  void ReadRandomSeed(const Char_t *filename);
+  void WriteRandomSeed(const Char_t *filename);
+  void PrintRandomSeed();
+
   Char_t *GetDataFileName(){ return fDataFileName; }
   void SetDataFileName(Char_t *name){ strcpy(fDataFileName, name);}
 
