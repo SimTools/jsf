@@ -43,10 +43,12 @@ void   uxdate( int &y, int &m, int &d, int &h, int &min );
 
   for( int i = 0; i < MXDIM; i++ )
      {
-       xl[i]  = 0.0;
-       xu[i]  = 1.0;
-       ig[i]  = 1;
-      }
+       var[i]  = 0;	
+       Mild[i] = 0;	
+       xl[i]   = 0.0;
+       xu[i]   = 1.0;
+       ig[i]   = 1;
+     }
 
   itmx1 = 10;
   itmx2 = 20;
