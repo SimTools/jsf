@@ -1,4 +1,11 @@
 ----------------------------------------------------------------------------
+14-Jan-2001 Akiya Miyamoto
+----------------------------------------------------------------------------
+(1) Update example/mkjimbnk to output JIM bank data of PhysSim generator.
+(2) macro/GUIMainMacro.C is modified so that multi-run job can be
+    executed in batch environment.
+
+----------------------------------------------------------------------------
 10-Jan-2001 Akiya Miyamoto
 ----------------------------------------------------------------------------
 (1) All sources in src directories are modified to use automtic 
