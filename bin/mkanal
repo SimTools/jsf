@@ -79,13 +79,13 @@ if( $param{'Date'}[0] =~ "auto" ) {
 
 $shrlib="lib$param{'Analysis'}[0].so";
 if( $param{'UseAnlib'}[0] =~ "yes" ) {
-  $shrlib="libAnlib.so:lib$param{'Analysis'}[0].so";
+  $shrlib="libS4Utils.so:libAnlib.so:lib$param{'Analysis'}[0].so";
 }
 
 $Outdir=$param{'OutputDirectory'}[0];
 $SampleName=$param{'SampleName'}[0];
 $IncludeSample=$param{'IncludeSample'}[0];
-$TempDir="$jsfroot/templates/$param{'TemplateDirectory'}[0]";
+$TempDir="$jsfroot/template/$param{'TemplateDirectory'}[0]";
 
 #
 # %%%%%%%%%%%%%%%%%%%%
@@ -122,6 +122,14 @@ $TempDir="$jsfroot/templates/$param{'TemplateDirectory'}[0]";
           }
 	  else { $outdummy="no";}
 	  next;
+      }
+      if( /<<ImakefileAnlibFlag>>/ ){
+         if( $param{'UseAnlib'}[0] =~ "yes" ) {
+           $outline =  "CXXFLAGS += -I\$(LEDAROOT)/include \n";
+         }
+         else {
+           $outline = "";
+         }
       }
       if( /<<SharedLibrary>>/ ){
           $outline =~ s/<<SharedLibrary>>/$shrlib/;

@@ -82,7 +82,7 @@ if( $param{'Date'}[0] =~ "auto" ) {
 $Outdir=$param{'OutputDirectory'}[0];
 $SampleName=$param{'SampleName'}[0];
 $IncludeSample=$param{'IncludeSample'}[0];
-$TempDir="$jsfroot/templates/$param{'TemplateDirectory'}[0]";
+$TempDir="$jsfroot/template/$param{'TemplateDirectory'}[0]";
 
 #
 # %%%%%%%%%%%%%%%%%%%%
