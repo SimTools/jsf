@@ -17,7 +17,7 @@
 class JSFJIM : public JSFSIMDST {
 protected:
   Char_t fInputFile[256]; //! File name where to read JIM parameter.
-
+  Int_t fUnit; //! Fortran logical unit number to read JIM input
 public:
   JSFJIM(const char *name="JSFJIM", 
 		  const char *title="Run JIM in JSF",

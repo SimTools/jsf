@@ -1,3 +1,4 @@
+//*LastUpdate :  jsf-1-12  30-August-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-10  29-May-1999  By Akiya Miyamoto
 //*-- Author  : Akiya Miyamoto  29-May-1999
 
@@ -6,12 +7,19 @@
 //
 // JSFJIM
 //
-// Run JIM in JSF
+// Run JIM in JSF.
+// 
+// 
+//
+// Due to subroutine GINIT is used not only in GEANT 3.21
+// but also in TAUOLA, JSFHadronizer can not handle tau decay
+// properly.
 //
 //$Id$
 //
 //////////////////////////////////////////////////////////////////
 
+#include "JSFSteer.h"
 #include "JSFJIM.h"
 
 
@@ -35,13 +43,17 @@ typedef struct {
   Int_t ieotri,ievent,iswit[10],ifinit[20],nevent,nrndm[2];
 } COMMON_GCFLAG;
 
+typedef struct {
+  Int_t lusijm,lusojm,luerjm,lunmjm[5],formjm[5];
+} COMMON_JMFILE;
+
 extern COMMON_GCFLAG gcflag_;  
+extern COMMON_JMFILE jmfile_;
 
 #include "JSFReadJIMCommon.h"
 
 ClassImp(JSFJIM)
 
-Int_t gJIMIUnit=4;
 
 //_____________________________________________________________________________
 JSFJIM::JSFJIM(const char *name, const char *title, Bool_t constbuf)
@@ -49,7 +61,8 @@ JSFJIM::JSFJIM(const char *name, const char *title, Bool_t constbuf)
 {
   if( constbuf )  fEventBuf = new JSFReadJIMBankBuf("JSFReadJIMBankBuf", 
 			       "JSFJIM event buffer",this);
-  strcpy(fInputFile,"input.dat");
+  strcpy(fInputFile,gJSF->Env()->GetValue("JSFJIM.InputFile","input.dat"));
+  fUnit=4;
 }
 
 
@@ -59,7 +72,8 @@ Bool_t JSFJIM::Initialize()
 
   Int_t lfInputFile=strlen(fInputFile);
   Int_t iret;
-  jsfjimopen_(&gJIMIUnit, fInputFile, &iret, lfInputFile);
+
+  jsfjimopen_(&fUnit, fInputFile, &iret, lfInputFile);
   if( iret != 0 ) {
     printf(" JSFJIM::Initialize failed to open a file %s\n",fInputFile);
     return kFALSE;
@@ -67,6 +81,7 @@ Bool_t JSFJIM::Initialize()
 
   //  *--   SET JMPPJM=0 FOR NORMAL JIM.
   jmcntl_.jmppjm=0;
+  jmfile_.lusijm=fUnit;
 
   uginit_();
   return kTRUE;
@@ -113,7 +128,7 @@ Bool_t JSFJIM::Terminate()
 {
   uglast_();
 
-  jsfjimclose_(&gJIMIUnit);
+  jsfjimclose_(&fUnit);
 
   return kTRUE;
 }
