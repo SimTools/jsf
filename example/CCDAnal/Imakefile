@@ -68,8 +68,3 @@ $(SONAME).$(SrcSuf): $(HDRS) LinkDef.h
 	 	-c -I$(JSFROOT)/include $(HDRS) LinkDef.h
 
 #---------------------------------------------------
-
-.SUFFIXES: .$(SrcSuf)
-
-.$(SrcSuf).$(ObjSuf):
-	$(CXX) $(CXXFLAGS) -c $<
