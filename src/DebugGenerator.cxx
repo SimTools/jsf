@@ -1,5 +1,46 @@
+//*LastUpdate:  jsf-1-7-3  20-April-1999  by Akiya Miyamoto
 //*LastUpdate:  v.01.01 04/10/1998  by Akiya Miyamoto
 //*-- Author :  04/10/1998  03/10/1998
+
+/*
+  20-Apri-1999 Akiya Miyamoto
+          One of the constructor of JSFGeneratorParticle calls constructor 
+          twice, that causes the error.
+*/
+
+///////////////////////////////////////////////////////////////////
+//
+// DebugGenerator class
+// 
+// Generate particles for debugging.  Event type can be specified by
+// parameters in jsf.conf file.
+// Valid parameters and default values are
+//   DebugGenerator.RandomSeed:  12345    # Start random seed.
+//   DebugGenerator.Nparticles:      4    # Number of particles per event.
+//   DebugGenerator.RangeP:  0.1  10.0    # Minimum and maximum momentum of 
+//                                        # particle
+//   DebugGenerator.RangeCosth: -1.0 1.0  # Minimu and maximum of Costh
+//                                        # ( cosine of production angle.)
+//   DebugGenerator.RangeAzimuth: 0.0 360.0 # Minumum and maximum of 
+//                                        # particles azimuthal angle in degree.
+//   DebugGenerator.RangeVTXR: 0.0 0.0  # min. and max. of radius of particle's
+//                                      # production point.
+//   DebugGenerator.RangeVTXPhi: 0.0 360.0 # min. and max. of azimuthal angle
+//                                      # of particle's production point.
+//   DebugGenerator.RangeVTXZ:  0.0 0.0 # min. and max of Z coordinate of
+//                                      # particles production point.
+//   DebugGenerator.Nspecies:  1  # Number of species of particles.
+//   DebugGenerator.Species[n]: 22, 0.0, 0.0  # Particle ID, mass, and charge
+//                                            # of [n]-th particle species.
+//                                            # [n] is positive integer.
+//   DebugGenerator.DoHistogram: YES     # Histogram generated event information.
+//   Several kind of particles can be produced in a single event, by 
+//   setting Nspecies and Species[n] properly.  
+//   "Species[n]" means Species1, Species2, ... 
+//
+//$Id:
+///////////////////////////////////////////////////////////////////
+
 
 #include "TRandom.h"
 #include "TDatime.h"
@@ -150,8 +191,11 @@ Bool_t DebugGenerator::Process(Int_t ievt)
       fSpec++;
       if(fSpec>=fNspecies) { fSpec=0; }
 
-      new(tracks[np++]) 
-       JSFGeneratorParticle(np, id,mass,charge, p, x ) ;
+      new(tracks[np]) 
+       JSFGeneratorParticle(np+1, id,mass,charge, p, x ) ;
+ 
+      np++;
+
   }
   buf->SetNparticles(np);
   

@@ -1,6 +1,12 @@
 //*LastUpdate :  jsf-1-7  7-April-1999  By Akiya Miyamoto
 //*-- Author  : Akiya Miyamoto  1-August-1999
 
+/*
+  20-Apri-1999 Akiya Miyamoto
+          One of the constructor of JSFGeneratorParticle calls constructor 
+          twice, that causes the error.
+*/
+
 ///////////////////////////////////////////////////////////////////
 //
 // JSFGeneratorParticle
@@ -43,8 +49,10 @@ JSFGeneratorParticle::JSFGeneratorParticle(Int_t Ser,
 JSFGeneratorParticle::JSFGeneratorParticle(Int_t Ser, 
          Int_t ID, Float_t Mass, Float_t Charge, TVector& P, TVector& X ) 
 {
-  JSFGeneratorParticle(Ser, ID, Mass, Charge, P);
-  for(Int_t i=0;i<4;i++){ fX[i]=X(i) ; }
+  fSer = Ser ; fID=ID; fMass=Mass; fCharge=Charge;
+  for(Int_t i=0;i<4;i++){ fP[i]=P(i) ; fX[i]=X(i) ; }
+  fNdaughter=0; fFirstDaughter=0;
+  fMother=0; fLifeTime=0.0; fDecayLength=0.0; 
 }
 
 // ---------------------------------------------------------------
