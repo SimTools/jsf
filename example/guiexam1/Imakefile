@@ -97,5 +97,5 @@ web:
 libJSFGUI.$(SrcSuf): $(HDRJSFGUI)
 		@echo "Generating dictionary ..."
 		rootcint -f libJSFGUI.$(SrcSuf) \
-	 	-c -I$(JSFROOT)/include $(HDRS) $(HDRJSFGUI)
+	 	-c -I$(JSFROOT)/include $(RCINTDEFINES) $(HDRS) $(HDRJSFGUI)
 

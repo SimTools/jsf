@@ -26,6 +26,7 @@ LD            = $(CXX)
 DYLDFLAGS     = $(SOFLAGS)
 DYLIBFLAGS    = $(SOFLAGS)
 DYLDEXTRALIBS = 
+RCINTDEFINES  = 
 
 #if __ROOT_FULLVERSION__ >= 22200
 ROOT222LIBS	= -lPhysics
@@ -117,8 +118,9 @@ SOEXT         = so
 DylibSuf      = dylib	
 LIBF2C	      = -l$(G77EGCS_LIBNAME)
 CXX           = c++ -O
+RCINTDEFINES  = -D__DARWIN__
 CXXFLAGS      = -pipe -Wall -fsigned-char \
-		$(EXTRACXXOPT) -D__DARWIN__ \
+		$(EXTRACXXOPT) $(RCINTDEFINES) \
 		-I$(JSFROOT)/include $(shell root-config --cflags)
 # DYLIBFLAGS    = -dylib -r -nostartfiles -nodefaultlibs
 DYLIBFLAGS    = -dylib -r -nostdlib

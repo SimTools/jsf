@@ -180,13 +180,13 @@ web:
 
 libJSF.$(SrcSuf): $(HDRJSF)
 		@echo "Generating dictionary ..."
-		rootcint  -f libJSF.$(SrcSuf) -c $(HDRJSF)
+		rootcint  -f libJSF.$(SrcSuf) -c $(RCINTDEFINES) $(HDRJSF)
 libJSFLCFULL.$(SrcSuf): $(HDRJSFLCFULL)
 		@echo "Generating dictionary ..."
-		rootcint -f libJSFLCFULL.$(SrcSuf) -c $(HDRJSFLCFULL)
+		rootcint -f libJSFLCFULL.$(SrcSuf) -c $(RCINTDEFINES) $(HDRJSFLCFULL)
 libJSFQuickSim.$(SrcSuf): $(HDRJSFQUICKSIM)
 		@echo "Generating dictionary ..."
-		rootcint -f libJSFQuickSim.$(SrcSuf) -c $(HDRJSFQUICKSIM)
+		rootcint -f libJSFQuickSim.$(SrcSuf) -c $(RCINTDEFINES) $(HDRJSFQUICKSIM)
 #if __ROOT_FULLVERSION__ < 30000
 libJSFDMatrix.$(SrcSuf): $(HDRJSFDMATRIX)
 		@echo "Generating dictionary ..."
