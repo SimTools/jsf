@@ -79,7 +79,7 @@ include:
 
 distclean: 
 	( cd share/bases ; make cleanall )
-	( cd share/bsgen ; make cleanall )
+	( cd share/bsgen ; make distclean )
 	( cd src ; xmkmf ; make distclean ) 
 	( cd example/FFbarSpring ; xmkmf ; make distclean )
 	( cd example/ZHStudy ; xmkmf ; make distclean )
