@@ -255,7 +255,7 @@ void BatchRun()
 
 
 //_________________________________________________________
-voi GetArguments()
+void GetArguments()
 {
 
   TApplication *ap=gROOT->GetApplication();
@@ -263,7 +263,6 @@ voi GetArguments()
   Int_t maxevt;
   Int_t i;
   Char_t str[256];
-  printf(" Start GetArguments .. #arg=%d\n",ap->Argc());
   for(i=0;i<ap->Argc();i++){
     if( strncmp(ap->Argv(i),"--maxevt=",9) == 0 ){
       strcpy(str,(ap->Argv(i)+9)); 
