@@ -1,24 +1,22 @@
 #---------------------------------------------------
 
-#include "/proj/phys/lclib/97a/config/lclib.tmpl"
-#include "/home/miyamoto/OOsoft/jsf/conf/makejsf.tmpl"
+#include "config/lclib.tmpl"
+#include "conf/makejsf.tmpl"
 
 ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
 		-lEG -lEGPythia \
-		-L/cern/pro/lib -lpythia -ljetset74 \
+		-L/cern/pro/lib -ljetset74 \
                 -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
                 -lPostscript -lProof -lTree -lUnix -lZip
 ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
 
-LCLIB 	  = $(LCDIR)/lib
-
-ANALLIB   = -L$(JSFROOT)/lib -lJSF -lJSFLCFULL \
-	    -L$(LCLIB) -lLCFULL -lGENUTIL -lLUND73 -lPYTHIA55 -lTAUOLA \
+ANALLIB   = -L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim \
+	    -L$(LCLIBROOT)/lib -lLCFULL -lGENUTIL -lLUHADR -lTAUOLA \
 	    -lLTKCL -lHELASV204 -lBASESV5.1 -lSIMJLC -lFORTLIB  \
-	    -lTBS -lLCFULL -lGENUTIL -lLUND73 -lCOM -lCLI  \
+	    -lTBS -lLCFULL -lGENUTIL -lCOM -lCLI  \
 	    -lHPKTOHBK -lFORTLIB -lTBS 
 
-INCPATH = -I$(LCDIR)/simjlc/src -I$(LCDIR)/util/fortlib/src 
+INCPATH = -I$(LCLIBROOT)/simjlc/src -I$(LCLIBROOT)/util/fortlib/src 
 
 
 
@@ -41,8 +39,7 @@ PROGRAM       = $(SONAME).$(DllSuf)
 all::  jsf
 
 jsf: $(OBJS) jsfmain.o $(FOBJS)
-	$(LD) jsfmain.o $(FOBJS) $(BLOCKDATA) $(OBJS) $(LDFLAGS) -o jsf 
-
+	$(LD) jsfmain.o $(FOBJS) $(BLOCKDATA) $(OBJS) $(LDFLAGS) -o jsf
 
 clean:: 
 	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h

@@ -34,7 +34,7 @@ C
       include 'WWZPRM.inc'
 C
 C
-      COMMON /SSWORK/ ELMNO2(20), ELMNO3(10)
+      COMMON /SSWORK/ ELMNO2(20), ELMNO3(10), IDUMMY(50)
       CHARACTER*32    PRCNAM
 C
 C =====< Entry Point >=================================================
