@@ -350,18 +350,20 @@ void JSFEventDisplay::DrawGeometry(Int_t type)
     case 0:
       gvVTX->SetVisibility(-1);
       gvAll->SetVisibility(-1);	
-      gvMomentum->SetVisibility(3);
-      gvMomentum->Draw("same");
+      if( gvMomentum ) {
+        gvMomentum->SetVisibility(3);
+        gvMomentum->Draw("same");
+      }
       break;
     case 1:
-      gvMomentum->SetVisibility(-1);
+      if( gvMomentum ) gvMomentum->SetVisibility(-1);
       gvVTX->SetVisibility(-1);
       gvAll->SetVisibility(3);	
       gvAll->Draw("same");
 
       break;
     case 2:
-      gvMomentum->SetVisibility(-1);
+      if( gvMomentum ) gvMomentum->SetVisibility(-1);
       gvAll->SetVisibility(-1);	
       gvVTX->SetVisibility(3);
       gvVTX->Draw("same");
@@ -403,6 +405,7 @@ void JSFEventDisplay::InitializeGeometry(Int_t type)
       
       gvAll=new TNode("ALLVIEW","ALLVIEW","EMC");
       gvAll->cd();
+      if( gJSF->Env()->GetValue("JSFGUI.ShowALLVIEWAxis",1) == 1 ) {
       vAll2=new TNode("ALLVIEW2","ALLVIEW2","BEAMPIPE",0,0,zshift,"");
       vAll3=new TNode("ALLVIEW3","ALLVIEW3","BEAMPIPE",0,0,-zshift,"");
       vAll4=new TNode("ALLVIEW4","ALLVIEW4","PIPE",10.0,0,2*zshift,"XDIR");
@@ -414,6 +417,7 @@ void JSFEventDisplay::InitializeGeometry(Int_t type)
       vAll3->SetLineColor(4);
       vAll4->SetLineColor(7);
       vAll5->SetLineColor(6);
+      }
     
   fCanvas->cd();
       //  View for vertex view
@@ -429,6 +433,8 @@ void JSFEventDisplay::InitializeGeometry(Int_t type)
       vtxaxis=new TTUBE("VTXAXIS", "VTXAXIS", "void", 0.0,0.02, 0.5);
       fWidgets->Add(vtx0) ; fWidgets->Add(vtx1); fWidgets->Add(vtxaxis);
 
+   
+      if( gJSF->Env()->GetValue("JSFGUI.ShowVTXAxis",1) == 1 ) { 
       vVTXin=new TNode("VTXIN", "VTXIN", "VTXIN");
       zvtx= p->GetVTXZplus(1);
       vVTXxa=new TNode("VTXXAXIS","VTXXAXIS","VTXAXIS",0.30,0,zvtx,"XDIR");
@@ -437,9 +443,11 @@ void JSFEventDisplay::InitializeGeometry(Int_t type)
       vVTXxa->SetLineColor(7);
       vVTXya->SetLineColor(6);
       fWidgets->Add(gvVTX) ; fWidgets->Add(vVTXxa); fWidgets->Add(vVTXya);
-    
+      }
 
   fCanvas->cd();
+  
+  if( gJSF->Env()->GetValue("JSFGUI.MomentumView",1) == 1 ) {
       momframe=new TSPHE("MOMV", "MOMV","void", 0.99, 1.0, 0.0, 180.0, 0.0, 360.0);
       gvMomentum=new TNode("MOMENTUMVIEW","MOMENTUMVIEW","MOMV",0.0,0.0,0.0,"");
       gvMomentum->cd();
@@ -452,6 +460,7 @@ void JSFEventDisplay::InitializeGeometry(Int_t type)
       vMomya->SetLineColor(6);
       fWidgets->Add(momframe) ; fWidgets->Add(momaxis); fWidgets->Add(gvMomentum);
       fWidgets->Add(vMomxa) ; fWidgets->Add(vMomya);
+   }
 
     gGeometryIsInitialized=kTRUE;
 }
