@@ -68,7 +68,18 @@ InputDialog::~InputDialog()
 InputDialog::InputDialog(const char *prompt, const char *defval, char *retstr,
 			 Int_t line, UInt_t w)
 {
-   // Create simple input dialog.
+  // Create simple input dialog.
+  // (Input Argument)
+  //   prompt: prompt string shown on top
+  //   defval: initial value shown in entry box.
+  //   line  : Number of lines of prompt string. ( default=1) 
+  //           if =0, it is counted from prompt string.
+  //   w     : Width of input dialog ( default = 400 (pixels) )
+  //           if line=0 and w=0, it is decided from the maximum number of 
+  //           characters in line  of prompt string.
+  // (Output argument):
+  //   retstr : input string.
+  //
 
    fWidgets = new TList;
 
@@ -84,9 +95,34 @@ InputDialog::InputDialog(const char *prompt, const char *defval, char *retstr,
    char cmd[128];
    sprintf(cmd, "{long r__ptr=0x%x; ((InputDialog*)r__ptr)->ProcessMessage($MSG,$PARM1,$PARM2);}", (UInt_t)this);
 
+   // Set width and height of widget automatically.
+   Int_t tline=line;
+   if( tline == 0 ) {
+     Int_t lprompt=strlen(prompt);
+     Int_t i;
+     for( i=0;i<lprompt;i++) { if(prompt[i]==0x0a) tline++ ; }
+   }
+
+   UInt_t wuse=w;
+   if( wuse == 0 ) {
+     Int_t maxcol=0;
+     Int_t lprompt=strlen(prompt);
+     Int_t i;
+     Int_t col=0;
+     for( i=0;i<lprompt;i++) { 
+       col++;
+       if(prompt[i]==0x0a) {
+         if( col > maxcol ) maxcol=col; 
+         col=0; 
+       }
+     }
+     if( maxcol < 20 ) maxcol=20;
+     wuse=8*maxcol;
+   }
+
    // create prompt label and textentry widget
-   if( line > 1  ) {
-     TGTextFrame *label=new TGTextFrame(fDialog, w, 15*line, kDoubleBorder);
+   if( tline > 1  ) {
+     TGTextFrame *label=new TGTextFrame(fDialog, wuse, 15*tline, kDoubleBorder);
      label->LoadBuffer(prompt);
      fWidgets->Add(label);
      fDialog->AddFrame(label, l1);
@@ -101,7 +137,7 @@ InputDialog::InputDialog(const char *prompt, const char *defval, char *retstr,
    tbuf->AddText(0, defval);
 
    fTE = new TGTextEntry(fDialog, tbuf);
-   fTE->Resize(w, fTE->GetDefaultHeight());
+   fTE->Resize(wuse, fTE->GetDefaultHeight());
    // fTE->Associate(fDialog);
    fTE->SetCommand(cmd);
 

@@ -181,21 +181,37 @@ defined in JSFROOT directory) and [C] is modified parameter.",
 	      }
 	      else if( id==0 ) {
 		JSFEnvRec *er=gJSF->Env()->Lookup("HEADER");
-		new TGMsgBox(fClient->GetRoot(), this, "JSF Message",
-			      er->fHelp.Data(),
+	 	Char_t *msg=er->GetHelpMessage();
+		new TGMsgBox(fClient->GetRoot(), this, "JSF Message", msg,
 			      kMBIconExclamation, buttons, &retval);
+                if( msg ) delete msg;
 		break;
 	      }
 	      
               TOrdCollection *tbl=gJSF->Env()->GetObtained();
 	      JSFEnvRec  *sel=(JSFEnvRec*)tbl->At(id);
 	      if( parm1 == B_PARA_HELP ) {
-		new TGMsgBox(fClient->GetRoot(), this, "JSF Message",
-			      sel->fHelp.Data(),
+  	        Char_t *msg=sel->GetHelpMessage();
+ 	 	new TGMsgBox(fClient->GetRoot(), this, "JSF Message", msg,
 			      kMBIconExclamation, buttons, &retval);
+                if( msg ) delete msg;
 		break;
 	      }
-	      new InputDialog(sel->fName.Data(),sel->fValue.Data(),retstr);
+
+              Char_t *msg=sel->GetHelpMessage();
+              Int_t lmsg=strlen(msg);
+              if( lmsg == 0 )  new InputDialog(sel->fName.Data(),sel->fValue.Data(),retstr);
+              else {
+                // Add comment in InputDialog
+                Char_t *dlmsg=new Char_t[lmsg+sel->fName.Length()+4];
+                strcpy(dlmsg,sel->fName.Data());
+                *(dlmsg+sel->fName.Length())=':';
+                *(dlmsg+sel->fName.Length()+1)=0x0a;
+                *(dlmsg+sel->fName.Length()+2)=0x0a;
+                strcpy(dlmsg+sel->fName.Length()+3,msg);
+	        new InputDialog(dlmsg,sel->fValue.Data(),retstr,0,0);
+                delete msg;  delete dlmsg;
+              }
 	      if( retstr[0] != 0  ) {
  	        sel->fValue=retstr;
 	        gJSF->Env()->SetValue(sel->fName.Data(), sel->fValue.Data());

@@ -1,3 +1,4 @@
+//*LastUpdate :  jsf-1-14 29-January-2000  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-13 25-January-2000  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-12 3-September-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-9  16-May-1999  By Akiya Miyamoto
@@ -910,22 +911,24 @@ void JSFGUIFrame::AnalizeEventAction()
   Int_t iNEventsAnalize=GetNEventsAnalize();
   fNoOfAnalizedEvents=0;
   Int_t last=iFirstEvent+iNEventsAnalize-1;
+  fReturnCode=0;
   for(i=iFirstEvent;i<=last;i++){
     fNoOfAnalizedEvents++;
     sprintf(cmd,"Bool_t ir=GetEvent(%d);",i);
     gROOT->ProcessLine(cmd);
 
-    switch (fReturnCode) {
-      case -2:
-         new TGMsgBox(fClient->GetRoot(), this, "JSF Message", 
-	     "Reached end-of-file\n or read error occured.",
-             icontype, buttons, &retval);
-	     break;
- 
-     case -1:
+    if( gJSF->GetReturnCode()&gJSF->kJSFEOF ) {
+       new TGMsgBox(fClient->GetRoot(), this, "JSF Message", 
+       "Reached end-of-file\n or read error occured.",
+       icontype, buttons, &retval);
+       fReturnCode=-2;
+       break;
+    }
+    else if( gJSF->GetReturnCode()&gJSF->kJSFFALSE ) {
          new TGMsgBox(fClient->GetRoot(), this, "JSF Message", 
 	     "Analysis routine returned error.",
              icontype, buttons, &retval);
+	 fReturnCode=-1;
 	     break;
     }
     sprintf(evtmsg,"  Event Number: %d\n",gJSF->GetEventNumber());
