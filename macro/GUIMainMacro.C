@@ -61,7 +61,7 @@ class JSFJ4;
   Int_t gReturnCode; // Return code from event analysis 
 
   enum EJSFGUIEventType { kPythia=0, kDebug=1, kBasesSpring=2,
-                        kReadParton=3, kReadHepevt=4, kNoGenerator=5  };
+                        kReadParton=3, kReadHepevt=4, kNoGenerator=5  , kHerwig=6 };
 
   Bool_t gHasUserMonitor=kFALSE;
 
@@ -190,6 +190,10 @@ void InitGenSim()
   switch (eventtype) {
     case kPythia:
       py  = new PythiaGenerator();
+      gen = py;
+      break;
+    case kHerwig:
+      py  = new HerwigGenerator();
       gen = py;
       break;
     case kDebug:
@@ -345,7 +349,6 @@ void JobEnd()
   jsf->Terminate();
   if( gROOT->GetGlobalFunction("UserTerminate",0,kTRUE) ) UserTerminate();
   if( ofile ) ofile->Write();
-
 }
 
 //_________________________________________________________
