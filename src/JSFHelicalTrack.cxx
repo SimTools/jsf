@@ -30,7 +30,7 @@ ClassImp(JSFHelicalTrack)
 
 
 extern "C" {
-  void utrkao_(Int_t *ntrk, Int_t *lntrk, Float_t hlxin[][],
+  void utrkao_(Int_t *ntrk, Int_t *lntrk, Float_t hlxin[][38],
 	       Float_t newhlx[], Float_t *chisq, Float_t pchi2[], Int_t *iret);
 };
 
