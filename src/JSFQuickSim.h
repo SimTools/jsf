@@ -47,6 +47,8 @@ typedef struct {
   Int_t   nsmpvx;
   Float_t dphivx, dzeevx;
   Float_t rcyvx[kMXxVXL], zcyvx[kMXxVXL][2], rdlvx[kMXxVXL];
+  Int_t   nerrvx;
+  Float_t errvx[5];
 } COMMON_SMRVGO ;
 extern COMMON_SMRVGO smrvgo_;
 
@@ -94,6 +96,7 @@ extern COMMON_CMBCUT cmbcut_;
 // ******* JSFQuickSimParam *********
 class JSFQuickSimParam : public TNamed {
 public:
+   Char_t  fParamFile[256] ; // Where to get simulator parameter.
    Int_t fSeed ;    // Seed of random variable;
    Float_t fBfield; // Bfield (kgauss).
    Float_t fTrack[8]; // Parameter for tracking device.
@@ -103,14 +106,18 @@ public:
    Float_t fDPHIVX   ; // VTX-phi pitch (cm)                        
    Float_t fDZEEVX   ; // VTX-Z   pitch (cm)                        
    Float_t fVTXLayer[10][4]; // VTX Layer
+   Float_t fVTXError[5];     // VTX resolution parameter
+   Int_t   fNERRVX;          // VTX Error flag. 
    Float_t fCLSPAR[4][5]   ; // Clustering parameter.
    Float_t fCMBCUT[3] ; // ADXEVT, ENSGEM, ENSGHD for CMBCUT
+    
 public:
    JSFQuickSimParam();
    ~JSFQuickSimParam();
 
    void SetSwimParam() ; // Set swimmer parameters
    void SetSmearParam() ; // Set smear parameters
+   void ReadParamDetector(Char_t *file) ;// Read detector parameter
 
    ClassDef(JSFQuickSimParam,1) // JSFQuickSim Parameters
 };

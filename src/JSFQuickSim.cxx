@@ -30,6 +30,8 @@ TClonesArray *gTracks;
 JSFQuickSim::JSFQuickSim(const char *name, const char *title)
        : JSFModule(name,title)
 {
+  // JLC QuickSimulator module.
+  // 
   fParam   = new JSFQuickSimParam();
   fData    = new JSFQuickSimData("JSFQuickSimData", "JSFQuickSim Data");
   fEventBuf= new JSFQuickSimBuf("JSFQuickSimBuf", 
@@ -201,6 +203,7 @@ Bool_t JSFQuickSim::Process(Int_t ev)
    gJSFLCFULL->TBCRTE(1,"Production:CDC;Track_Parameter",0,0,iret);
    gJSFLCFULL->TBCRTE(1,"Production:CDC_VTX;Track_Parameter",0,0,iret);
    gJSFLCFULL->TBCRTE(1,"Production:VTX;Space_Point",0,0,iret);
+   gJSFLCFULL->TBCRTE(1,"Production:VTX;Space_Point_Error",0,0,iret);
 
    swmevt_(&recid, &level, &idebug, &iret);
    
@@ -217,6 +220,10 @@ Bool_t JSFQuickSim::Process(Int_t ev)
 //_____________________________________________________________________________
 JSFQuickSimParam::JSFQuickSimParam()
 {
+  //  Parameters of JLC QUick Simulator.
+  //  
+
+
   fBfield=20.0;
   fSeed=314159 ;
 
@@ -267,6 +274,7 @@ JSFQuickSimParam::JSFQuickSimParam()
 
 
    // VTX 
+  fNERRVX   =     1    ; // VTX Space point error flag
   fNSMPVX   =     3    ; // # sampling layers + 1 = NSMPVX        
   fDPHIVX   =   25.E-4 ; // phi pitch (cm)                        
   fDZEEVX   =   25.E-4 ; // Z   pitch (cm)                        
@@ -283,7 +291,7 @@ JSFQuickSimParam::JSFQuickSimParam()
   fVTXLayer[1][3]  =  0.003  ; // thickness in radiation length 
   //  Layer #2
   fVTXLayer[2][0]  =    7.5  ; // radius (cm)                   
-  fVTXLayer[2][1]  =  -22.5  ; // Z-(cm)                        
+  fVTXLayer[2][1]  =  -22.5  ; // -Z-(cm)                        
   fVTXLayer[2][2]  =   22.5  ; // Z+(cm)                        
   fVTXLayer[2][3]  =  0.003  ; // thickness in radiation length 
   // layer #NSMPVX (CDC inner cylinder)
@@ -292,6 +300,11 @@ JSFQuickSimParam::JSFQuickSimParam()
   fVTXLayer[3][2]  =   230.  ; // Z+(cm)                        
   fVTXLayer[3][3]  =   0.01  ; // thickness in radiation length 
 
+  fVTXError[0] = 4.E-4 ;
+  fVTXError[1] = 4.E-4 ;
+  fVTXError[2] = 4.E-4 ;
+  fVTXError[3] = 4.E-4 ;
+  fVTXError[4] = 4.E-4 ;
 
   //  Parameters for Clustering.
   Float_t clp[4][5] ={ { 100., 0.40, 0.20, 1.00, 0.3 },
@@ -305,9 +318,19 @@ JSFQuickSimParam::JSFQuickSimParam()
     }
   }
 
-  fCMBCUT[0] = 20.0 ; // ADXECT for CMBCUT
-  fCMBCUT[1] = 2.0 ; //ENSGEM for EM-clusters
-  fCMBCUT[2] = 2.0 ; // ENSGHD for HD-clusters
+  // Load parameters
+  printf(" Parameter file is %s\n",gJSF->Env()->GetValue("JSFQuickSim.ParameterFile","Undefined"));
+  sscanf(gJSF->Env()->GetValue("JSFQuickSim.ParameterFile","Undefined"),
+	 "%s",fParamFile);
+   printf(" file name is %s\n",fParamFile);
+  if( strcmp("Undefined",fParamFile) != 0 ) ReadParamDetector(fParamFile);
+
+  sscanf(gJSF->Env()->GetValue("JSFQuickSim.CMBCUT.ADXECT","20.0"),
+	 "%g",&fCMBCUT[0]);
+  sscanf(gJSF->Env()->GetValue("JSFQuickSim.CMBCUT.ENSGEM","2.0"),
+	 "%g",&fCMBCUT[1]);
+  sscanf(gJSF->Env()->GetValue("JSFQuickSim.CMBCUT.ENSGHD","2.0"),
+	 "%g",&fCMBCUT[2]);
 
 }
 
@@ -316,6 +339,63 @@ JSFQuickSimParam::~JSFQuickSimParam()
 {
 }
 
+//_____________________________________________________________________________
+void JSFQuickSimParam::ReadParamDetector(Char_t *file)
+{
+  // Read QuickSimulator parameter from a file.
+  // In lclib.97a, there are two parameter files for Quick Simulator, but
+  // information prepared for swimmer is included in the parameter file
+  // for smearing.  Therefore, in this function, reads the smear parameter
+  // file a la lclib.97a format, and saved in the JSFQuickSim class for the
+  // latter use by Quick Simulator.
+
+  FILE *fd;
+  fd=fopen(file,"r");
+  if( !fd ) Fatal("ReadParamFile","Unable to open file %s",file);
+ 
+  printf("JSFQuickSimParam::ReadParamDetector ");
+  printf(" --  Read detector parameter from the file %s\n",file);
+  Char_t input[256];
+  while(fgets(input, 256, fd) ){
+    if( !strncmp("@!",input,2) ) continue;
+    
+    Int_t id;
+    Float_t val;
+    sscanf(input,"%d %g",&id, &val);
+    
+    Float_t *clspar=&fCLSPAR[0][0];
+    if( id == 1 ) continue ;
+    else if( id == 2 ) { fBfield = val; 
+                    prfeld_.bfield=10.1085  ;  // kgauss
+                    prfeld_.ptor=329.9837713  ;
+		    prfeld_.ropt=3.03045206e-3 ;
+    }
+    else if( 10 < id && id < 20 ) fTrack[id-11]=val;
+    else if( 30 < id && id < 50 ) fEMCal[id-31]=val;
+    else if( 50 < id && id < 70 ) fEMCal[id-51]=val;
+    else if( id == 70 ) fNERRVX = (Int_t)val ; //# sampling layers + 1 = NSMPVX
+    else if( id == 71 ) fNSMPVX = (Int_t)val ; //# sampling layers + 1 = NSMPVX
+    else if( id == 72 ) fDPHIVX = val ; // phi pitch (cm)
+    else if( id == 73 ) fDZEEVX = val ; // Z pitch (cm)
+    else if( 73 < id && id < 4*(fNSMPVX+1)+74 ) { // VTX layer info.
+      Int_t ilay=(id-74)/4 ;
+      fVTXLayer[ilay][id-(74+4*ilay)]=val;
+    }
+    else if( 4*(fNSMPVX+1)+73 < id && id < 4*(fNSMPVX+1)+79 ) { // VTX error info.
+      fVTXError[id-(4*(fNSMPVX+1)+74 )]=val;
+    }
+    else if( 1000 < id && id < 1021 ) clspar[id-1001]=val;
+    else {
+      Fatal("ReadParamDetector",
+	      "Invalid Parameter ID %d, Error line is \n%s",id,input);
+
+
+    }
+  }
+  fclose(fd);
+  
+
+}
 //_____________________________________________________________________________
 void JSFQuickSimParam::SetSwimParam()
 {
@@ -371,6 +451,7 @@ void JSFQuickSimParam::SetSmearParam()
   smrres_.sghde    =  fHDCal[10] ; // sigma_E/E at 1 GeV             
 
    // VTX 
+  smrvgo_.nerrvx   =  fNERRVX   ; // VTX Error flag
   smrvgo_.nsmpvx   =  fNSMPVX   ; // # sampling layers + 1 = NSMPVX        
   smrvgo_.dphivx   =  fDPHIVX   ; // phi pitch (cm)                        
   smrvgo_.dzeevx   =  fDZEEVX   ; // Z   pitch (cm)                        
@@ -378,9 +459,13 @@ void JSFQuickSimParam::SetSmearParam()
   //  fVTX Layer info
   for(Int_t i=0;i<=fNSMPVX;i++){
     smrvgo_.rcyvx[i]    = fVTXLayer[i][0] ; // radius (cm)                   
-    smrvgo_.zcyvx[0][i] = fVTXLayer[i][1] ; // Z-(cm)                        
-    smrvgo_.zcyvx[1][i] = fVTXLayer[i][2] ; // Z+(cm)                        
+    smrvgo_.zcyvx[i][0] = fVTXLayer[i][1] ; // Z-(cm)                        
+    smrvgo_.zcyvx[i][1] = fVTXLayer[i][2] ; // Z+(cm)                        
     smrvgo_.rdlvx[i]    = fVTXLayer[i][3] ; // thickness in radiation length 
+  }
+
+  for(Int_t i=0;i<5;i++){
+    smrvgo_.errvx[i] = fVTXError[i];
   }
 
   for(Int_t i=0;i<4;i++){
