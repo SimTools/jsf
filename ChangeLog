@@ -30,6 +30,22 @@ To-Do ( listed in arbitrary order ) -- Help wanted
 jsf-1-11  Modification toward jsf-1-11 A.Miyamoto
 **********************************************************
 -----------------------	
+30-July-1999 A.Miyamoto
+-----------------------	
+(1) Prepare JSFMergeEvent class to merge event data from another simulation data.
+(2) fVTXHits in JSFCDCTracks is increased from 10 to 22.
+(3) Add Append() function in JSFGeneratorBuf class and JSFQuickSimBuf class
+	
+-----------------------	
+29-July-1999 A.Miyamoto
+-----------------------	
+(1) Modify PythiaGenerator class to save cross sections and number of generated event
+    at the end of run.
+(2) Add options in JSFSteer::FindModule(), JSFGeneratorparticle::ls(), ..
+(3) Increase comments in QuickSim.cxx, etc.
+
+	
+-----------------------	
 28-July-1999 A.Miyamoto
 -----------------------	
 (1) JSFReadParton class is added.
