@@ -26,7 +26,7 @@
 
 TH1F *hMomB, *hMomC, *hMomS;
 TH1F *hDecayLB, *hDecayLC, *hDecayLS;
-TH1F *hConfl, *hNtry, hV0Qual, hDist;
+TH1F *hConfl, *hNtry, hV0Qual, hDist, *hK0mass;
 
 //_________________________________________________________
 void UserInitialize()
@@ -63,6 +63,8 @@ void GenInfoInitialize()
   hV0Qual=new TH1F("hV0Qual","V0 Quality",100,0.0,5.0);
   hDist=new TH1F("hDist","Distance between generated VTX - fitted vtx",
 		 100, 0.0, 10.0);
+  hK0mass=new TH1F("hK0mass","K0s mass",100,0.45,0.55);
+
 }
 
 //_________________________________________________________
@@ -94,7 +96,6 @@ void GenInfoAnalysis()
   // Any data processing of the event can be performed in this function.
   //
 
-  //  PrintEventInfo();
   
   if( jsf->GetEventNumber()%100 == 0 ) {
     printf(" Event #%d\n",jsf->GetEventNumber());
@@ -152,6 +153,19 @@ void V0Tagger()
 
   TVector3 gvtx=GetGeneratedVertex();
 
+
+  // List generated particle information
+
+#if debug
+  Int_t ngen=sdb->GetNGeneratorParticles();
+  TClonesArray *gen=(TClonesArray*)sdb->GetGeneratorParticles();
+  Int_t i;
+  for(i=0;i<ngen;i++){
+    JSFGeneratorParticle *pt=(JSFGeneratorParticle*)gen->UncheckedAt(i);
+    pt->ls();
+  }
+#endif
+
   Int_t i,j;
   
   TClonesArray fitbuf("JSFHelicalTrack",10); 
@@ -196,6 +210,32 @@ void V0Tagger()
       TVector3 dist(ans(0,0)-gvtx.X(), ans(1,0)-gvtx.Y(), ans(2,0)-gvtx.Z());
       hDist->Fill(dist.Mag());
 
+      Double_t pt1=1.0/TMath::Abs(ans(4,0));
+      Double_t phi01=ans(3,0);
+      Double_t tnl1 =ans(5,0);
+      Double_t psq1 = pt1*pt1*(1.0+tnl1*tnl1);
+      ANL4DVector pi1(TMath::Sqrt(psq1+0.13957*0.13957),
+		      -pt1*TMath::Sin(phi01), pt1*TMath::Cos(phi01),
+		      pt1*tnl1);
+      Double_t pt2=1.0/TMath::Abs(ans(7,0));
+      Double_t phi02=ans(6,0);
+      Double_t tnl2 =ans(8,0);
+      Double_t psq2 = pt2*pt2*(1.0+tnl2*tnl2);
+      Double_t e2   = TMath::Sqrt(psq2+0.13957*0.13957);
+      ANL4DVector pi2(e2,-pt2*TMath::Sin(phi02), pt2*TMath::Cos(phi02),
+		      pt2*tnl2);
+      ANL4DVector pk0=pi1+pi2;
+#if debug
+      printf(" CL=%g\n",fit.GetConfidenceLevel());
+      printf(" Gen Vertex=%g %g %g\n",gvtx.X(),gvtx.Y(),gvtx.Z());
+      printf(" Fitted Vertex is %g %g %g\n",ans(0,0),ans(1,0),ans(2,0));
+      printf(" dist=%g\n",dist.Mag());
+      pi1.DebugPrint();
+      pi2.DebugPrint();
+      pk0.DebugPrint();
+      printf(" Mass of K0 is %g\n",pk0.GetMass());
+#endif      
+      hK0mass->Fill(pk0.GetMass());
 
     }
   }
