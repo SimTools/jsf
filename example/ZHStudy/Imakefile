@@ -1,0 +1,68 @@
+#---------------------------------------------------
+
+#include    "../../conf/makejsf.tmpl"
+
+ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
+		-lEGPythia -lEG \
+                -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
+                -lPostscript -lProof -lTree -lUnix -lZip \
+		-Wl,-u,pytest_ \
+		-L/cern/pro/lib -lpythia -ljetset74
+
+ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
+
+LCLIB 	  = $(LCDIR)/lib
+
+ANALLIB   = -Wl,-L$(JSFROOT)/lib \
+	    -Wl,--whole-archive,-lJSF -lJSFLCFULL \
+	    -Wl,--no-whole-archive \
+	    -L$(LCLIB) -lLCFULL -lGENUTIL -lLUHADR -lTAUOLA \
+	    -lLTKCL -lHELASV204 -lBASESV5.1 -lSIMJLC -lFORTLIB  \
+	    -L/cern/pro/lib -ljetset74 -lpythia \
+	    -lTBS -lLCFULL -lGENUTIL -lLUHADR  -lCOM -lCLI \
+	    -lFORTLIB -lTBS
+
+LCLIBDIR = /proj/phys/lclib/pro
+
+#-------------------------------------------------------------
+
+INC           = ../../include 
+
+OBJS          = MyAnalysis.$(ObjSuf) \
+		libMyAnalysis.$(ObjSuf)
+
+SRC           = MyAnalysis.$(SrcSuf)
+
+HDRS	      = MyAnalysis.h
+
+all::  jsf
+
+jsf: $(OBJS) jsfmain.o
+	$(LD) jsfmain.o $(BLOCKDATA) $(OBJS) \
+	 $(LDFLAGS) -o jsf
+
+clean:: 
+	@rm -f $(OBJS) core *.so 
+	@rm -f libMyAnalysis.$(SrcSuf) libMyAnalysis.h
+
+depend:: 
+	makedepend -I$(ROOTSYS)/include $(SRC)
+
+distclean::
+	@rm -f $(OBJS) core *.so $(SONAME).$(SrcSuf) $(SONAME).h *.~ *.o
+	@rm -f *.bak libMyAnalysis.*
+	@rm -f jsf *.root Makefile 
+
+###
+
+libMyAnalysis.$(SrcSuf): $(HDRS)
+		@echo "Generating dictionary ..."
+		rootcint -f libMyAnalysis.$(SrcSuf) \
+	 	-c -I$(JSFROOT)/include $(HDRS) LinkDef.h
+
+#---------------------------------------------------
+
+.SUFFIXES: .$(SrcSuf)
+
+.$(SrcSuf).$(ObjSuf):
+	$(CXX) $(CXXFLAGS) -c $<
