@@ -52,7 +52,8 @@
 //           jsf->Clear();
 //         }
 //         jsf->Terminate();
-//         file->Write();
+//     //     file->Write(); // file->Write() is not necessary since JSF version 2
+//     //                    //  because it is done in JSFSteer::Terminate();
 //       }
 //
 //    c) Read QuickSim data.
@@ -77,6 +78,8 @@
 //(Update)
 //  6-Jan-2001  A.Miyamoto Use Root.3.00 IO functions
 //                         Class JSFSteerConf was modified.
+// 22-Jan-2005  A.Miyamoto Allow multiple-file output, use of TChain 
+// 23-Feb-2005  A.Miyamoto Default Write mode is "Overwrite".
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -108,6 +111,7 @@ using namespace std;
 
 JSFSteer *JSFSteer::myself=0;
 JSFSteer *gJSF=0;
+Int_t     JSFSteer::fWriteMode=TObject::kOverwrite;
 
 ClassImp(JSFSteer)
 ClassImp(JSFSteerConf)
@@ -606,7 +610,7 @@ Bool_t JSFSteer::BeginRun(Int_t nrun)
 
   }
   if( fOFile && fOFile->IsOpen() && fOFile->IsWritable() ) {
-      fOFile->Write();
+       fOFile->Write(0, GetWriteMode());
   }
 
 
@@ -672,8 +676,9 @@ Bool_t JSFSteer::EndRun()
 
 	if( !rcode ) { fReturnCode+=kFALSE ; return kFALSE; }
     }
+    
     if( fOFile && fOFile->IsOpen() && fOFile->IsWritable() ) {
-      fOFile->Write();
+          fOFile->Write(0, GetWriteMode());
     }
     if( fOFile ) fOFile->cd("/");
     return kTRUE;
@@ -803,6 +808,7 @@ Bool_t JSFSteer::Terminate()
     fConf->Write("JSF");
   }
 
+
   TIter next(fModules);
   JSFModule *module;
   Int_t iloop=0;
@@ -840,12 +846,13 @@ Bool_t JSFSteer::Terminate()
         if( !rcode )  return kFALSE; 
 
   }
-  if( fOFile ) fOFile->cd("/");
+  if( fOFile ) { 
+    fOFile->cd("/");
+    fOFile->Write(0, GetWriteMode());
+  }
 
   TDatime *dtime=new TDatime();
   printf("JSF Terminated at date and time : %s\n",dtime->AsString());
-
-
 
   if( gStopwatch ) {
     printf("****** Summary of CPU/Real time in sec  ****************\n");

@@ -111,7 +111,7 @@ private:
   void InitializeMessage();
   void LoadSharedLibraries();
   static JSFSteer *myself;  
-
+  static Int_t fWriteMode;
 public:
   JSFSteerConf *fConf;       //! Pointer to module information.
 
@@ -180,6 +180,9 @@ public:
 
   void SetReturnCode(Int_t ir){ fReturnCode=ir; }
   Int_t GetReturnCode(){ return fReturnCode; }
+
+  void SetWriteMode(Int_t writemode){ fWriteMode=writemode; }
+  inline Int_t GetWriteMode(){ return fWriteMode;}
   
   ClassDef(JSFSteer, 2)   // Steering class to control JLC study modules
 
