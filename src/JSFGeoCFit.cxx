@@ -151,7 +151,11 @@ C*
 // ---------------------------------------------------------------------
 //  
   fTrkpar = new JSFHelixParameter*[ntrk];
+#if __ROOT_FULLVERSION__ < 30000
   fTrkerr = new JSFDMatrix*[ntrk];
+#else
+  fTrkerr = new TMatrixD*[ntrk];
+#endif
 
   Int_t i=0;
   for(i=0;i<ntrk;i++){
@@ -164,8 +168,11 @@ C*
     if(i==0) fPTOR=t->GetAlpha();
     fTrkpar[i]=new JSFHelixParameter(t->GetHelixParameter());
 
-    //    JSFDMatrix *em=new JSFDMatrix(5,5);
+#if __ROOT_FULLVERSION__ < 30000
     JSFDMatrix em(5,5);
+#else
+    TMatrixD em(5,5);
+#endif
     Double_t *err=t->GetHelixErrorMatrix();
     Int_t j,k;
     Int_t ip=0;
@@ -173,8 +180,12 @@ C*
       em(j,k)=err[ip];  em(k,j)=err[ip++]; 
     }	
     em.Invert();
+#if __ROOT_FULLVERSION__ < 30000
     fTrkerr[i]=new JSFDMatrix(em);
-    //    delete em;
+#else
+    fTrkerr[i]=new TMatrixD(em);
+#endif
+
   }
 
 //C  
@@ -214,7 +225,11 @@ C*
 
 
 //________________________________________________________________________
+#if __ROOT_FULLVERSION__ < 30000
 void JSFGeoCFit::Derivative(Double_t &chis, JSFDMatrix &grad, JSFDMatrix &second)
+#else
+void JSFGeoCFit::Derivative(Double_t &chis, TMatrixD &grad, TMatrixD &second)
+#endif
 {
 // Calculate chi-square, and derivatives.
 /*
@@ -271,7 +286,11 @@ C*
   
   grad.Zero();
   second.Zero();
+#if __ROOT_FULLVERSION__ < 30000
   JSFDMatrix da(5,1), dadp(6,5);
+#else
+  TMatrixD da(5,1), dadp(6,5);
+#endif
   dadp.Zero();
   dadp(4,2)=1.0;
   dadp(2,3)=1.0;
@@ -322,9 +341,13 @@ C*
 //C  
 //C ... Calculate Chi-Square contribution of this track.
 //C  
+#if __ROOT_FULLVERSION__ < 30000
     JSFDMatrix *em = fTrkerr[itrk];
     JSFDMatrix prod(da,da.kTransposeMult,JSFDMatrix((*em),da.kMult,da));
-
+#else
+    TMatrixD *em = fTrkerr[itrk];
+    TMatrixD prod(da,da.kTransposeMult,TMatrixD((*em),da.kMult,da));
+#endif
     Double_t chi=prod(0,0);
     
     chis += chi;
@@ -357,21 +380,33 @@ C*
 //C  
 //C (Derivative of chi-square.
 //C  
+#if __ROOT_FULLVERSION__ < 30000
     JSFDMatrix dae((*em),da.kMult,da);
-
+#else
+    TMatrixD dae((*em),da.kMult,da);
+#endif
 //C  
 //C Derivatives with respect to A, B, C
 //C  
 
+#if __ROOT_FULLVERSION__ < 30000
     JSFDMatrix daedadp(dadp,dae.kMult,dae);
+#else
+    TMatrixD daedadp(dadp,dae.kMult,dae);
+#endif
     Int_t i;
     for(i=0;i<3;i++){
       grad(i,0) -= daedadp(i,0);
       grad(ip+i,0) -= daedadp(i+3,0);
     }
 
+#if __ROOT_FULLVERSION__ < 30000
     JSFDMatrix sm1(dadp,dadp.kMult,(*em));
     JSFDMatrix sm(dadp,dadp.kMult,JSFDMatrix(sm1.kTransposed,sm1));
+#else
+    TMatrixD sm1(dadp,dadp.kMult,(*em));
+    TMatrixD sm(dadp,dadp.kMult,TMatrixD(sm1.kTransposed,sm1));
+#endif
     Int_t j;
     for(i=0;i<3;i++) for(j=0;j<3;j++) {
       second(i,j)+=sm(i,j);

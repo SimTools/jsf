@@ -26,7 +26,11 @@ class JSFGeoCFit :  public JSFVirtualFit
  protected:
   Int_t fNtrk;                   // Number of tracks
   JSFHelixParameter   **fTrkpar; //! Track parameter
+#if __ROOT_FULLVERSION__ < 30000
   JSFDMatrix          **fTrkerr; //! Error matrix
+#else
+  TMatrixD            **fTrkerr; //! Error matrix
+#endif
   Double_t            *fTrackChisq ; //! Chisq of each track.
   Double_t            fPTOR   ; // Factor to conver Pt to R  (R = PTOR*Pt)
 
@@ -37,7 +41,12 @@ class JSFGeoCFit :  public JSFVirtualFit
   virtual ~JSFGeoCFit();
 
   void Initialize(Int_t ntrk, TClonesArray *trk, JSF3DV vtxini);
+
+#if __ROOT_FULLVERSION__ < 30000
   void Derivative(Double_t &chisq, JSFDMatrix &dchi2, JSFDMatrix &d2chi2);
+#else
+  void Derivative(Double_t &chisq, TMatrixD &dchi2, TMatrixD &d2chi2);
+#endif
 
   inline Int_t GetNtrk(){ return fNtrk;}
   inline void GetTrackChisq(Double_t trackchisq[]){ 

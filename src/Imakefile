@@ -60,9 +60,10 @@ SRCJSFQUICKSIM= JSFQuickSimParam.$(SrcSuf) JSFQuickSim.$(SrcSuf) \
 		JSFVirtualFit.$(SrcSuf) JSFGeoCFit.$(SrcSuf) \
 		JSFVertexing.$(SrcSuf)
 
-
+#if __ROOT_FULLVERSION__ < 30000
 SRCJSFDMATRIX = JSFDMatrix.$(SrcSuf) JSFDMatrixUtils.$(SrcSuf) \
 		JSFDVector.$(SrcSuf)
+#endif
 
 SRC	      = $(SRCJSF) $(SRCJSFLCFULL) $(SRCJSFQUICKSIM) \
 		$(SRCJSFDMATRIX) $(SRCJSFBASES)
@@ -78,8 +79,10 @@ OBJJSFQUICKSIM= $(subst .$(SrcSuf),.$(ObjSuf),$(SRCJSFQUICKSIM)) \
 		simdstutil.o \
 		libJSFQuickSim.$(ObjSuf)
 
+#if __ROOT_FULLVERSION__ < 30000
 OBJJSFDMATRIX = $(subst .$(SrcSuf),.$(ObjSuf),$(SRCJSFDMATRIX))\
 		libJSFDMatrix.$(ObjSuf)
+#endif
 
 HDRJSF	      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRCJSF)) \
 		JSFBasicClasses.h \
@@ -91,8 +94,10 @@ HDRJSFLCFULL  = $(subst .$(SrcSuf),.$(HdrSuf),$(SRCJSFLCFULL)) \
 HDRJSFQUICKSIM= $(subst .$(SrcSuf),.$(HdrSuf),$(SRCJSFQUICKSIM)) \
 		JSFQuickSimLinkDef.h
 
+#if __ROOT_FULLVERSION__ < 30000
 HDRJSFDMATRIX = $(subst .$(SrcSuf),.$(HdrSuf),$(SRCJSFDMATRIX)) \
 		JSFDMatrixLinkDef.h
+#endif
 
 HDR	      = $(HDRJSF) $(HDRJSFLCFULL) $(HDRJSFQUICKSIM) \
 		$(HDRJSFDMATRIX) $(HDRJSFBASESSPRING)
@@ -101,7 +106,11 @@ HDR	      = $(HDRJSF) $(HDRJSFLCFULL) $(HDRJSFQUICKSIM) \
 /*  Make targets							*/
 /*----------------------------------------------------------------------*/
 
+#if __ROOT_FULLVERSION__ < 30000
 all::  libjsf libjsflcfull libjsfquicksim libjsfdmatrix jsf
+#else
+all::  libjsf libjsflcfull libjsfquicksim jsf
+#endif
 
 libjsf: ../lib/libJSF.$(DllSuf)
 ../lib/libJSF.$(DllSuf): $(OBJJSF)
@@ -129,16 +138,16 @@ libjsfquicksim:     ../lib/libJSFQuickSim.$(DllSuf) ../lib/libJSFQuickSim.a
 	@/bin/rm -f $@
 	ar -r $@ $(OBJJSFQUICKSIM) 
 
+#if __ROOT_FULLVERSION__ < 30000
 libjsfdmatrix: ../lib/libJSFDMatrix.$(DllSuf)
 ../lib/libJSFDMatrix.$(DllSuf): $(OBJJSFDMATRIX)
 	@echo "Linking $@"
 	$(LD) $(SOFLAGS)  $(OBJJSFDMATRIX) -o $@
+#endif
 
-
-jsf: $(OBJS) jsfmain.o 
+jsf: $(OBJS) jsfmain.o
 	$(LD) jsfmain.o $(BLOCKDATA) \
-	-L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim -lJSFDMatrix \
-	-lBasesSpring $(LDFLAGS) \
+	$(JSFLIBS) $(LDFLAGS) \
 	 -o jsf
 	@cp -p jsf ../bin
 	@rm -f jsf
@@ -172,9 +181,11 @@ libJSFLCFULL.$(SrcSuf): $(HDRJSFLCFULL)
 libJSFQuickSim.$(SrcSuf): $(HDRJSFQUICKSIM)
 		@echo "Generating dictionary ..."
 		rootcint -f libJSFQuickSim.$(SrcSuf) -c $(HDRJSFQUICKSIM)
+#if __ROOT_FULLVERSION__ < 30000
 libJSFDMatrix.$(SrcSuf): $(HDRJSFDMATRIX)
 		@echo "Generating dictionary ..."
 		rootcint -f libJSFDMatrix.$(SrcSuf) -c $(HDRJSFDMATRIX)
+#endif
 
 JSFConfig.h: ../conf/jsf.version ../bin/makespec
 	../bin/makespec 

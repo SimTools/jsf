@@ -132,7 +132,7 @@ Bool_t PythiaGenerator::EndRun()
 
    if( fPrintStat ) {
      printf(" End of Pythia run.\n");
-#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 23
+#if __ROOT_FULLVERSION__ >= 22300
      fPythia->Pystat(fPrintStat);
 #else
      fPythia->PyStat(fPrintStat);
@@ -193,7 +193,7 @@ Bool_t PythiaGenerator::Process(Int_t ev)
    TVector pv(4);
    TVector xv(4);
 
-#if __ROOT_VERSION__ <= 2 &&  __ROOT_MINORVERSION__ <= 21 
+#if __ROOT_FULLVERSION__ <= 22100
    Int_t np=fPythia->GetNumberOfPrimaries();
 #else
    Int_t np=fPythia->GetNumberOfParticles();

@@ -22,9 +22,14 @@
 
 #include <TMinuit.h>
 #include "JSFSteer.h"
+#include "JSFConfig.h"
 #include "JSFHelicalTrack.h"
 #include "JSFUtil.h"
+#if __ROOT_FULLVERSION__ < 30000
 #include "JSFDMatrix.h"
+#else
+#include "TMatrixD.h"
+#endif
 
 ClassImp(JSFHelicalTrack)
 
@@ -810,7 +815,12 @@ CC********************************************************************CC
   Double_t rdrpr = 1.0/(r+drp);
   Double_t rcpar = r/cpa;
 
+#if __ROOT_FULLVERSION__ < 30000
   JSFDMatrix dapda(5,5);
+#else
+  TMatrixD dapda(5,5);
+#endif
+
   dapda.Zero();
   
   dapda(0,0) = csfd ; 
@@ -834,7 +844,12 @@ CC********************************************************************CC
   //C--
   //C  Copy error matrix to EEP and symmetrize it into EE.
   //C--
+#if __ROOT_FULLVERSION__ < 30000
   JSFDMatrix ee(5,5);
+#else
+  TMatrixD ee(5,5);
+#endif
+
   Int_t i,j,n;
   n=0;
   for(i=0;i<5;i++){ for(j=0;j<=i;j++) {
@@ -845,7 +860,11 @@ CC********************************************************************CC
   //C--
   //C  Transform error matrix EEP to that of XP.
   //C--
+#if __ROOT_FULLVERSION__ < 30000
   JSFDMatrix eep(dapda, dapda.kTransposeMult,JSFDMatrix(ee,ee.kMult,dapda));
+#else
+  TMatrixD eep(dapda, dapda.kTransposeMult,TMatrixD(ee,ee.kMult,dapda));
+#endif
   n=0;
   for(i=0;i<5;i++){ for(j=0;j<=i;j++) {
     fError.data[n]=eep(i,j);

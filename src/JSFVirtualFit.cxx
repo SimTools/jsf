@@ -61,9 +61,15 @@ Bool_t JSFVirtualFit::Fit()
 
   if( fNpar < 1 ) Fatal("Fit","Number of parameter of the fit is not set yet.");
 
+#if __ROOT_FULLVERSION__ < 30000
   JSFDMatrix as(fNpar,1);
   JSFDMatrix dchi2(fNpar,1), dchi2s(fNpar,1);
   JSFDMatrix d2chi2(fNpar,fNpar), d2chi2s(fNpar,fNpar);
+#else
+  TMatrixD as(fNpar,1);
+  TMatrixD dchi2(fNpar,1), dchi2s(fNpar,1);
+  TMatrixD d2chi2(fNpar,fNpar), d2chi2s(fNpar,fNpar);
+#endif
 
   // Start Initalization loop.
 
@@ -101,7 +107,12 @@ Bool_t JSFVirtualFit::Fit()
     // Invert DD and get next step.
 
     fDD.Invert();
+#if __ROOT_FULLVERSION__ < 30000
     JSFDMatrix da(fDD, dchi2.kMult, dchi2);
+#else
+    TMatrixD da(fDD, dchi2.kMult, dchi2);
+#endif
+
     fA -= da;
 
     //  Continue iteration if NTRY < MAXTRY.
@@ -135,7 +146,11 @@ enditeration:
 
 
 //________________________________________________________________________
+#if __ROOT_FULLVERSION__ < 30000
 void JSFVirtualFit::Derivative(Double_t &chis, JSFDMatrix &grad, JSFDMatrix &second)
+#else
+void JSFVirtualFit::Derivative(Double_t &chis, TMatrixD &grad, TMatrixD &second)
+#endif
 {
   // 
 
