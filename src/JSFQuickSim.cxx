@@ -68,6 +68,7 @@
 
 
 #include <TMath.h>
+#include "JSFConfig.h"
 #include "JSFSteer.h"
 #include "JSFLCFULL.h"
 #include "JSFGenerator.h"
@@ -329,7 +330,11 @@ void JSFQuickSim::MakeBranch(TTree *tree)
 
    fTree=tree;
    if( fEventBuf && fMakeBranch ) {
+#if ROOT_VERSION_CODE >= ROOT_VERSION(3,1,3)
+     Int_t split=-1;
+#else
      Int_t split=0;
+#endif
      Int_t bsize=50000;
      tree->Branch(fEventBuf->GetName(), fEventBuf->ClassName() ,
 		  &fEventBuf, bsize, split);
@@ -816,7 +821,6 @@ void JSFQuickSimBuf::AppendLTKCLTracks(JSFQuickSimBuf *src, Int_t numgp)
 void JSFQuickSimBuf::Streamer(TBuffer &R__b)
 {
    // Stream an object of class JSFQuickSimBuf.
-
    if (R__b.IsReading()) {
      UInt_t R__s, R__c;
      Version_t R__v = R__b.ReadVersion(&R__s, &R__c);
