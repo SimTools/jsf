@@ -61,7 +61,10 @@ clean:
 	( cd share/herwig ; make clean )
 	( cd share/me2shgen ; make clean )
 
-web: html/example
+web:
+	cd web ; jsf -b -q html.C
+
+webold: html/example
 	( cd src ; xmkmf ; make web ) 
 	for i in FFbarSpring guiexam1 ww CCDAnal readjim jsfjim ; do \
 	( cd example/$$i ; xmkmf -a ; make web ) \
