@@ -30,7 +30,7 @@ ANALLIB = $(JSFLIBS) $(EXTRALDOPT) \
 
 #endif	
 
-INC           = $(JSFROOT)/include
+CXXFLAGS += -I$(JSFROOT)/example/readjim
 
 /*----------------------------------------------------------------------*/
 /*  Source files, headers, and objects to build                         */
@@ -73,10 +73,13 @@ jsfgui:
 jsfmain.cxx:
 	ln -s ../../src/jsfmain.cxx jsfmain.cxx
 #else
-all::  libgui
+all::  libgui install
 libgui: $(OBJJSFGUI)
 	$(LD) $(SOFLAGS) $(OBJJSFGUI) -o  $(SONAME)
 #endif
+
+install::
+	cp -p $(SONAME) $(JSFROOT)/lib/$(SONAME)
 
 clean:: 
 	@rm -f $(OBJS) core *.so *~

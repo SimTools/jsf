@@ -132,6 +132,9 @@ public:
   void DisplayEMCHits();
   void DisplayHDCHits();
 
+  void DisplayJIMEMCHits();
+  void DisplayJIMHDCHits();
+
   //  void GetViewRange(Float_t range[]){
   //    Int_t i; for(i=0;i<6;i++){ range[i]=fViewRange[i]; } }
   TCanvas *GetCanvas(){ return fCanvas; }
