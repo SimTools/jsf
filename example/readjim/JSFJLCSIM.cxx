@@ -29,8 +29,10 @@ extern void kzbloc_(const char *cname,  int *lbank,  int lenb);
 // ---------------------------------------------------------------
 void JSFJLCSIM::KZGET(const char *cname, const int iseg, int &leng, int idat[])
 {
-  static int lenb=strlen(cname);
+  int lenb=strlen(cname);
+
   kzget_(cname, &iseg, &leng, idat, lenb);
+
   return ;
 }
 
@@ -52,7 +54,7 @@ void JSFJLCSIM::KZGETH(int idat[])
 // ---------------------------------------------------------------
 void JSFJLCSIM::KZGETV(const char *cname, int &ivers)
 {
-  static int lenb=strlen(cname);
+  int lenb=strlen(cname);
   kzgetv_(cname, &ivers, lenb);
   return ;
 }
@@ -60,7 +62,7 @@ void JSFJLCSIM::KZGETV(const char *cname, int &ivers)
 // ---------------------------------------------------------------
 void JSFJLCSIM::KZBLOC(const char *cname, int &lbank)
 {
-  static int lenb=strlen(cname);
+  int lenb=strlen(cname);
   kzbloc_(cname, &lbank, lenb);
   return ;
 }

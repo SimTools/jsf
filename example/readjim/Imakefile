@@ -16,7 +16,9 @@ ROOTLIBS     += -l$(EGPYTHIA) -lEG $(CERNLIBS)
 
 LCLIBDIR      = $(LCLIBROOT)/lib
 
-ANALLIB = $(JSFLIBS) $(EXTRALDOPT) -lJSFReadJIMBank -lJSFGUI \
+# -lJSFReadJIMBank 
+
+ANALLIB = $(JSFLIBS) $(EXTRALDOPT) -lJSFGUI \
 	-L$(JLCSIMROOT)/lib -lct -ljlclib -lvx -lcal -lzbs -ljlcutil \
 	-L$(LCLIBDIR) -lGENUTIL -lLUHADR -lTAUOLA \
         -lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
