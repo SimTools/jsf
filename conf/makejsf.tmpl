@@ -73,6 +73,7 @@ CERNLIBLIBS   += packlib
 CERNLIBS      = $(shell cernlib $(CERNLIBLIBS))
 
 
+
 XCOMM #---------------------------------------------------
 
 .SUFFIXES: .$(SrcSuf)
@@ -266,4 +267,9 @@ XCOMM #if __ROOT_FULLVERSION__ >= 22300
 XCOMM ROOTLIBS      = $(shell root-config --libs) -lMinuit
 XCOMM ROOTGLIBS     = -lGui
 XCOMM #endif
+
+GCCVER = $(shell $(CXX) -dumpversion 2>/dev/null | sed -e 's;\..*;;')
+ifeq ($(GCCVER),3)
+   CXXFLAGS += -D__USEISOCXX__
+endif
 
