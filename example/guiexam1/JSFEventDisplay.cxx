@@ -1,9 +1,10 @@
-//*LastUpdate :  jsf-1-12  20-Feburary-1999  By Akiya Miyamoto
+//*LastUpdate :  jsf-1-12  2-September-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-5  22-Feburary-1999  By Akiya Miyamoto
 //*-- Author  : A.Miyamoto  22-September-1999
 
 /*
 20-August-1999 A.Miyamoto  Changes to run with JSFDemoEventDisplay
+2-September-1999  A.Miyamoto  Add JSFEDHelix class to remove fRotMatrix from gGeometry
  */
 
 ///////////////////////////////////////////////////////////////////
@@ -47,6 +48,7 @@
 #include <TTUBE.h>
 #include <TSPHE.h>
 #include <TNode.h>
+#include <TGeometry.h>
 
 #include "JSFSteer.h"
 #include "JSFBasicClasses.h"
@@ -78,6 +80,7 @@ enum EJSFEDCommandIdentifiers {
 
 ClassImp(JSFEventDisplay)
 ClassImp(JSFEDProperty)
+ClassImp(JSFEDHelix)
 
 JSFSIMDST *simdst=0;
 TPolyMarker3D *pm=0;
@@ -85,6 +88,18 @@ TMarker3DBox *box3d;
 TPolyLine3D *pl;
 TNode *gvAll, *gvVTX, *gvMomentum;
 Bool_t  gGeometryIsInitialized;
+
+//---------------------------------------------------------------------------
+JSFEDHelix::JSFEDHelix(): THelix()
+{
+}
+
+//---------------------------------------------------------------------------
+JSFEDHelix::~JSFEDHelix()
+{
+  if(fRotMat) gGeometry->GetListOfMatrices()->Remove(fRotMat);
+}
+
 
 //---------------------------------------------------------------------------
 JSFEDProperty::JSFEDProperty(Char_t *name, 
@@ -167,6 +182,8 @@ JSFEventDisplay::JSFEventDisplay(JSFGUIFrame *gui)
   fGUIMain=gui;
 
   fWidgets = new TList();
+  fSignals = new TList();
+  fHelixes = new TList();
 
   gGeometryIsInitialized=kFALSE;
 
@@ -242,14 +259,15 @@ JSFEventDisplay::~JSFEventDisplay()
   if( !fCanvas     ) delete fCanvas;
   fWidgets->Delete();
   delete fWidgets;
+  delete fSignals;
+  delete fSignals;
 }
 
 //---------------------------------------------------------------------------
 void JSFEventDisplay::Clear()
 {
   fSignals->Delete();
-  delete fSignals;
-
+  fHelixes->Delete();
 }
 
 
@@ -270,8 +288,6 @@ void JSFEventDisplay::DisplayEventData()
   }
   TDirectory *olddir=gDirectory;
   if( fCanvasDirectory != gDirectory ) fCanvasDirectory->cd();
-
-  fSignals = new TList();
 
   TView *evview  = new TView(fViewNo);
   fSignals->Add(evview);
@@ -566,8 +582,8 @@ void JSFEventDisplay::DisplayCDCTracks()
      zlast = end.z;     if( zlast > 0.0 ) { range[0]=hx[2] ; range[1]=zlast ;}
      else {  range[1]=hx[2] ; range[0]=zlast; }
 
-     THelix *thelix=new THelix();
-     fSignals->Add(thelix);
+     JSFEDHelix *thelix=new JSFEDHelix();
+     fHelixes->Add(thelix);
      thelix->SetLineColor(fCDCTrack->fColor);
      thelix->SetLineWidth((Width_t)(fCDCTrack->fSize));
      thelix->SetHelix(hx, hp, w, range, kHelixZ, 0);
@@ -687,8 +703,8 @@ void  JSFEventDisplay::DisplayGeneratorParticles()
        ht.OriginToCylinder(rcyl, zcyl, phi0, phi1, 3, hx[0], hx[1]);
        JSF3DV tend=ht.GetCoordinate(phi1);
 
-       THelix *thelix=new THelix();
-       fSignals->Add(thelix);
+       JSFEDHelix *thelix=new JSFEDHelix();
+       fHelixes->Add(thelix);
 
        EHelixRangeType iht=kHelixZ;
        if( TMath::Abs(gt->GetPz()) < 0.0001 ) { 

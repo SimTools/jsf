@@ -36,6 +36,16 @@
 #include <TGFileDialog.h>
 
 #include <TClonesArray.h>
+#include <THelix.h>
+
+
+class JSFEDHelix : public THelix {
+ public:
+  JSFEDHelix();
+  virtual ~JSFEDHelix();
+
+  ClassDef(JSFEDHelix,1)  // A THelix Class for JSF Event display
+};
 
 class JSFEDProperty : public TObject {
 public:
@@ -66,7 +76,7 @@ protected:
   TCanvas *fCanvas;
   TView   *fView;
   TList   *fWidgets;
-  TList   *fSignals;
+  TList   *fSignals, *fHelixes;
 
   Int_t  fViewNo;
   Float_t fViewAngle[3];

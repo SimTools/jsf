@@ -13,6 +13,7 @@
 
 #pragma link C++ class JSFEventDisplay;
 #pragma link C++ class JSFEDProperty;
+#pragma link C++ class JSFEDHelix;
 #pragma link C++ class JSFDemoDisplay;
 // #pragma link C++ class JSFEDSetOptions;
 
