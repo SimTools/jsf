@@ -11,18 +11,14 @@ OBJS    = $(subst .$(SrcSuf),.$(ObjSuf),$(SRC)) \
 FOBJS   = zvsig3.o zvres3.o zvtop3.o \
 	zvkin.o zvgst.o zvtrk.o zvptm.o zurotem.o
 
-INCPATH = -I$(ANLIBROOT)/include -I$(SATELLITESROOT)/include \
+INCPATH = -I$(LEDAROOT)/include \
 	$(shell jsf-config --includes ) \
 	$(shell root-config --cflags)
 
 HDRS    = $(subst .$(SrcSuf),.h,$(SRC))
 
 
-# LCLIBDIR      = $(LCLIBROOT)/lib
-
-#CXXFLAGS += -I$(KFLIBROOT)/Anlib/src -I$(JSFROOT)/example/guiexam1
 CXXFLAGS   += $(INCPATH)
-# EXTRALDOPT += -L$(JSFROOT)/example/guiexam1 -lJSFGUI
 
 FFLAGS += -I$(LCLIBROOT)/simjlc/src \
 	  -I$(LCLIBROOT)/util/fortlib/src

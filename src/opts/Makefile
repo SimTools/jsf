@@ -1,20 +1,20 @@
 
 has_clhep  = $(shell opts-config --has_CLHEP)
-has_anlib  = $(shell opts-config --has_Anlib)
+has_leda   = $(shell opts-config --has_leda)
 has_lcio   = $(shell opts-config --has_LCIO)
 has_jim    =
 
 subdirs    =
-ifdef has_clhep
+ifeq ($(has_clhep),"yes")
 subdirs   += stdhep
 endif
-ifdef has_anlib
+ifeq ($(has_leda),"yes")
 subdirs   += Anlib zvtop
 endif
-ifdef has_lcio
+ifeq ($(has_lcio),"yes")
 subdirs   += lcio
 endif
-ifdef has_jim
+ifeq ($(has_jim),"yes")
 subdirs   += jim
 endif
 

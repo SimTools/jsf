@@ -8,18 +8,7 @@ OBJS    = $(subst .$(SrcSuf),.$(ObjSuf),$(SRC)) \
 
 HDRS    = $(subst .$(SrcSuf),.h,$(SRC))
 
-
-# CERNLIBS      = $(shell cernlib jetset74 packlib)
-# ROOTLIBS     += -lEGPythia -lEG $(CERNLIBS)
-#LCLIBDIR      = $(LCLIBROOT)/lib
-
-#ANALLIB = $(JSFLIBS) $(EXTRALDOPT) \
-#        -L$(LCLIBDIR) -lGENUTIL -lLUHADR -lTAUOLA \
-#        -lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
-#        -lHELASV204 -lFORTLIB -lCOM -lCLI \
-#        $(EXTRALIBS)
-
-INCPATH  += -I$(ANLIBROOT)/include -I$(SATELLITESROOT)/include \
+INCPATH  += -I$(LEDAROOT)/include \
 	$(shell jsf-config --includes) \
 	$(shell root-config --cflags)
 
