@@ -10,6 +10,7 @@
   30-March-1999  A.Miyamoto  Put modification to run with lclib-98a-4
   28-May-1999    A.Miyamoto  Increased buffer size for VTX layer from 10 to 22
   30-July-1999   A.Miyamoto  Add Append.  Does not use global variables for TClonesArray
+  13-Dec-1999    A.Miyamoto  Stop when Number of Cal hits > kMaxCalHits
 */
 
 
@@ -90,8 +91,10 @@ ClassImp(JSFQuickSimBuf)
 
 // ******* Common /PRJUNK/  ****************
 // to access temporary information of LTKCL package.
-const int MXxZET=43;
-const int MXxPHI=77;
+//const int MXxZET=43;
+//const int MXxPHI=77;
+const int MXxZET=90;
+const int MXxPHI=100;
 const int MXxBD=(MXxZET+1)*(MXxPHI+1);
 const int MXxCLS=5000;
 const int MXxWRK=1000;
@@ -448,7 +451,7 @@ Bool_t JSFQuickSimBuf::MakeCALHits()
   Int_t nhdc=0;
   TClonesArray &hdc=*(GetHDCHits());
   gJSFLCFULL->TBNOEL(1,"Production:HDC;Hit_Cell", nelm, neary);
-  if( nhdc >= kMaxCalHits ) {
+  if( nelm >= kMaxCalHits ) {
     printf("Error in JSFQuickSimBuf::MakeCALHits\n");
     printf("Number of HDC Calorimeter hits =%d, exceeded buffer size\n",nelm);
     return kFALSE;
