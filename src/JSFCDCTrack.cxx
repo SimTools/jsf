@@ -178,6 +178,17 @@ void JSFCDCTrack::GetTrackParameter(Float_t trkf[])
 }
 
 //_____________________________________________________________________________
+void JSFCDCTrack::GetPositionAtEMC(Float_t pos[3], Float_t poserr[2])
+{
+  // Return position and its error at EMC surface.
+
+  for(Int_t i=0;i<3;i++){ pos[i]=fPosAtEMC[i]; }
+  for(Int_t i=0;i<2;i++){ poserr[i]=fEPosAtEMC[i]; }
+
+}
+
+
+//_____________________________________________________________________________
 void JSFCDCTrack::SetPositionAtEMC(Float_t xp[])
 {
   // Calculate position and its error of CDC Track at EMC entrance.
