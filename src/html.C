@@ -28,6 +28,7 @@
    html.MakeClass("JSFSpringBuf");
    html.MakeClass("JSFSpringParton");
    html.MakeClass("JSFBases");
+   html.MakeClass("JSFBasesTempHist");
 
    html.MakeClass("JSFGenerator");
    html.MakeClass("JSFGeneratorBuf");
@@ -60,6 +61,16 @@
    html.MakeClass("JSFCALGeoParam");
 
    html.MakeClass("JSFHelicalTrack");
+   html.MakeClass("JSFDMatrix");
+   html.MakeClass("JSFDLazyMatrix");
+   html.MakeClass("JSFDMatrixRow");
+   html.MakeClass("JSFDMatrixColumn");
+   html.MakeClass("JSFDMatrixDiag");
+
+   html.MakeClass("JSFVirtualFit");
+   html.MakeClass("JSFGeoCFit");
+   html.MakeClass("JSFVertexing");
+
 //   html.MakeClass("JSFHitCylinder");
 //   html.MakeClass("JSFHelixParameter");
 //   html.MakeClass("JSFHelixParameter_f");

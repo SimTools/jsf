@@ -1,3 +1,14 @@
+/************************************************************************/
+/*									*/
+/* Imakefile to build JSF libraries and application			*/
+/*									*/
+/* (Update)								*/
+/*  4-Feb-2000 A.Miyamoto Include libJSFDMatrix, create shared library  */
+/*          								*/
+/*$ID$      								*/
+/*       								*/
+/************************************************************************/
+
 /*----------------------------------------------------------------------*/
 /*  Some macros specific to jsf	building				*/
 /*----------------------------------------------------------------------*/
@@ -32,7 +43,7 @@ SRCJSF        = JSFSteer.$(SrcSuf) JSFModule.$(SrcSuf) \
 		JSFDBS.$(SrcSuf) JSFUtil.$(SrcSuf) \
 		JSFEnv.$(SrcSuf) 
 
-SRCJSFLCFULL    = JSFBases.$(SrcSuf) \
+SRCJSFLCFULL  = JSFBases.$(SrcSuf) \
 		JSFSpringParton.$(SrcSuf) JSFSpring.$(SrcSuf) \
 		JSFReadParton.$(SrcSuf) JSFMergeEvent.$(SrcSuf) \
 		JSFGeneratorParticle.$(SrcSuf) JSFGenerator.$(SrcSuf) \
@@ -47,8 +58,11 @@ SRCJSFQUICKSIM= JSFQuickSimParam.$(SrcSuf) JSFQuickSim.$(SrcSuf) \
 		JSFVTXHit.$(SrcSuf) JSFCALHit.$(SrcSuf) \
 		JSFHelicalTrack.$(SrcSuf) JSFCDCTrack.$(SrcSuf)
 
-SRC = $(SRCJSF) $(SRCJSFLCFULL) $(SRCJSFQUICKSIM)
+SRCJSFDMATRIX = JSFDMatrix.$(SrcSuf) JSFDMatrixUtils.$(SrcSuf) \
+		JSFDVector.$(SrcSuf)
 
+SRC	      = $(SRCJSF) $(SRCJSFLCFULL) $(SRCJSFQUICKSIM) \
+		$(SRCJSFDMATRIX) $(SRCJSFBASES)
 
 OBJJSF        = $(subst .$(SrcSuf),.$(ObjSuf),$(SRCJSF)) \
 		libJSF.$(ObjSuf)
@@ -61,6 +75,8 @@ OBJJSFQUICKSIM= $(subst .$(SrcSuf),.$(ObjSuf),$(SRCJSFQUICKSIM)) \
 		simdstutil.o \
 		libJSFQuickSim.$(ObjSuf)
 
+OBJJSFDMATRIX = $(subst .$(SrcSuf),.$(ObjSuf),$(SRCJSFDMATRIX))\
+		libJSFDMatrix.$(ObjSuf)
 
 HDRJSF	      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRCJSF)) \
 		JSFBasicClasses.h \
@@ -72,34 +88,55 @@ HDRJSFLCFULL  = $(subst .$(SrcSuf),.$(HdrSuf),$(SRCJSFLCFULL)) \
 HDRJSFQUICKSIM= $(subst .$(SrcSuf),.$(HdrSuf),$(SRCJSFQUICKSIM)) \
 		JSFQuickSimLinkDef.h
 
-HDR	      = $(HDRJSF) $(HDRJSFLCFULL) $(HDRJSFQUICKSIM)
+HDRJSFDMATRIX = $(subst .$(SrcSuf),.$(HdrSuf),$(SRCJSFDMATRIX)) \
+		JSFDMatrixLinkDef.h
+
+HDR	      = $(HDRJSF) $(HDRJSFLCFULL) $(HDRJSFQUICKSIM) \
+		$(HDRJSFDMATRIX) $(HDRJSFBASESSPRING)
 
 /*----------------------------------------------------------------------*/
 /*  Make targets							*/
 /*----------------------------------------------------------------------*/
 
-all::  libjsf libjsflcfull libjsfquicksim jsf
+all::  libjsf libjsflcfull libjsfquicksim libjsfdmatrix jsf
 
-libjsf:     $(OBJJSF)
-		@/bin/rm -f libJSF.a
-		ar -r libJSF.a $(OBJJSF)
-		@cp -p libJSF.a ../lib
+libjsf: ../lib/libJSF.$(DllSuf)
+../lib/libJSF.$(DllSuf): $(OBJJSF)
+	@echo "Linking $@ "
+	$(LD) $(SOFLAGS)  $(OBJJSF) -o libJSF.$(DllSuf)
+	@mv libJSF.$(DllSuf) ../lib
 
-libjsflcfull:     $(OBJJSFLCFULL)
-		@echo "Linking libJSFLCFULL.a ..."
-		@/bin/rm -f libJSFLCFULL.a
-		ar -r libJSFLCFULL.a $(OBJJSFLCFULL)
-		@cp -p libJSFLCFULL.a ../lib
+libjsflcfull: ../lib/libJSFLCFULL.$(DllSuf) ../lib/libJSFLCFULL.a
+../lib/libJSFLCFULL.$(DllSuf):   $(OBJJSFLCFULL)
+	@echo "Linking $@ "
+	$(LD) $(SOFLAGS)  $(OBJJSFLCFULL) -o $@
 
-libjsfquicksim:     $(OBJJSFQUICKSIM)
-		@echo "Linking libJSFQuickSim.a ..."
-		@/bin/rm -f libJSFQuickSim.a
-		ar -r libJSFQuickSim.a $(OBJJSFQUICKSIM)
-		@cp -p libJSFQuickSim.a ../lib
+../lib/libJSFLCFULL.a:   $(OBJJSFLCFULL)
+	@echo "Linking $@"
+	@/bin/rm -f $@
+	ar -r $@ $(OBJJSFLCFULL)
+
+libjsfquicksim:     ../lib/libJSFQuickSim.$(DllSuf) ../lib/libJSFQuickSim.a
+../lib/libJSFQuickSim.$(DllSuf):     $(OBJJSFQUICKSIM)
+	@echo "Linking $@"
+	$(LD) $(SOFLAGS)  $(OBJJSFQUICKSIM) -o $@
+
+../lib/libJSFQuickSim.a:     $(OBJJSFQUICKSIM)
+	@echo "Linking $@"
+	@/bin/rm -f $@
+	ar -r $@ $(OBJJSFQUICKSIM) 
+
+libjsfdmatrix: ../lib/libJSFDMatrix.$(DllSuf)
+../lib/libJSFDMatrix.$(DllSuf): $(OBJJSFDMATRIX)
+	@echo "Linking $@"
+	$(LD) $(SOFLAGS)  $(OBJJSFDMATRIX) -o $@
+
 
 jsf: $(OBJS) jsfmain.o
 	$(LD) jsfmain.o $(BLOCKDATA) \
-	-L../lib -lJSF -lJSFLCFULL -lJSFQuickSim $(LDFLAGS) -o jsf
+	-L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim -lJSFDMatrix \
+	-lBasesSpring $(LDFLAGS) \
+	 -o jsf
 	@cp -p jsf ../bin
 	@rm -f jsf
 	@echo jsf was installed in ../bin/jsf
@@ -109,9 +146,11 @@ clean::
 	@rm -f libJSF.$(SrcSuf) libJSF.h
 	@rm -f libJSFLCFULL.$(SrcSuf) libJSFLCFULL.h
 	@rm -f libJSFQuickSim.$(SrcSuf) libJSFQuickSim.h
+	@rm -f libJSFDMatrix.$(SrcSuf) libJSFDMatrix.h
 
 depend:: 
-	makedepend -I$(ROOTSYS)/include -I$(JSFROOT)/include $(SRC) $(HDR)
+	makedepend -I$(ROOTSYS)/include -I$(JSFROOT)/include \
+	-I/usr/include/g++-2 $(SRC) $(HDR)
 
 distclean:: clean
 	@rm -f $(OBJS) core *~ *.o
@@ -130,5 +169,7 @@ libJSFLCFULL.$(SrcSuf): $(HDRJSFLCFULL)
 libJSFQuickSim.$(SrcSuf): $(HDRJSFQUICKSIM)
 		@echo "Generating dictionary ..."
 		rootcint -f libJSFQuickSim.$(SrcSuf) -c $(HDRJSFQUICKSIM)
-
+libJSFDMatrix.$(SrcSuf): $(HDRJSFDMATRIX)
+		@echo "Generating dictionary ..."
+		rootcint -f libJSFDMatrix.$(SrcSuf) -c $(HDRJSFDMATRIX)
 
