@@ -15,11 +15,13 @@ install : lib html include
 	( cd src ; xmkmf ; make )
 	( cd example/FFbarSpring ; xmkmf ; make )
 	( cd example/CCDAnal ; xmkmf ; make )
+	( cd example/ZHStudy ; xmkmf ; make )
 
 clean: 
 	( cd src ; make clean )
 	( cd example/FFbarSpring ; make clean )
 	( cd example/CCDAnal  ; make clean )
+	( cd example/ZHStudy  ; make clean )
 
 lib: 
 	mkdir lib

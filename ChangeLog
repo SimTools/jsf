@@ -4,6 +4,12 @@ Change Log
 	
 
 **********************************************************
+jsf-1-2   9-December-1998  in progress A.Miyamoto
+**********************************************************
+1) Bug was found in Imakefile in src and example/ZHStudy directory
+   when defining jetset74 and pythia library, and fixed.
+	
+**********************************************************
 jsf-1-1   9-December-1998  in progress A.Miyamoto
 **********************************************************
 1) Put comments in JSFLTKCLTrack class
