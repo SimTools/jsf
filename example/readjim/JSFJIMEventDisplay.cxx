@@ -54,7 +54,7 @@ void JSFJIMEventDisplay::DisplayEMCHits()
 
      Double_t ang=0;
      Double_t ath=0;
-     Int_t izee=TMath::Abs(cel)/1000000;
+     Int_t izee=cel/1000000;
      Double_t dy=pos[0]*width[1]*0.5;
      Double_t dx=energy*fEMCScale;  
      Double_t dz=width[2]*0.5;
@@ -66,15 +66,15 @@ void JSFJIMEventDisplay::DisplayEMCHits()
        ath=TMath::ATan2((pos[0]+par->GetPointingOffset()),z)*todegree + 90;
      }
      else { 
-       //       x=hit.r*TMath::Cos(hit.phi) ;
-       //y=hit.r*TMath::Sin(hit.phi) ;
-       //z=hit.r/TMath::Tan(hit.th) ;
-       //dz = dx;
-       //dy = hit.r*TMath::Pi()/par->GetEMCNPhi();
-       //dx = dxend;
-       //ang=hit.phi*todegree; 
-       //z += TMath::Sign(dz,z);
-     }
+       dy=TMath::Abs(pos[0]*width[1]*0.5);
+       dx=TMath::Abs(width[0]*0.5);
+       dz=TMath::Abs(izee*energy*fEMCScale);
+       x=(pos[0]+dx)*TMath::Cos(pos[1]) ;
+       y=(pos[0]+dx)*TMath::Sin(pos[1]) ;
+       z=pos[2]+izee*dz;
+       ang = 0 ; 
+       ath= TMath::ATan2(pos[0], pos[2])*todegree;
+   }
      
      box3d=new TMarker3DBox(x, y, z, dx, dy, dz, ath, ang);
      box3d->SetLineColor(fEMCHit->fColor);
@@ -108,7 +108,7 @@ void JSFJIMEventDisplay::DisplayHDCHits()
 
      Double_t ang=0;
      Double_t ath=0;
-     Int_t izee=TMath::Abs(cel)/1000000;
+     Int_t izee=cel/1000000;
      Double_t dy=pos[0]*width[1]*0.5;
      Double_t dx=energy*fEMCScale;  
      Double_t dz=width[2]*0.5;
@@ -120,23 +120,28 @@ void JSFJIMEventDisplay::DisplayHDCHits()
        ath=TMath::ATan2((pos[0]+par->GetPointingOffset()),z)*todegree + 90;
      }
      else { 
-       //       x=hit.r*TMath::Cos(hit.phi) ;
-       //       y=hit.r*TMath::Sin(hit.phi) ;
-       //z=hit.r/TMath::Tan(hit.th) ;
-       //dz = dx;
-       //dx = dxend;
-       //dy = hit.r*TMath::Pi()/par->GetHDCNPhi();
-       //ang=hit.phi*todegree; 
-       //z += TMath::Sign(dz,z);
+       dy=pos[0]*width[1]*0.5;
+       dx=width[0]*0.5;
+       dz=izee*energy*fEMCScale;
+       x=(pos[0]+dx)*TMath::Cos(pos[1]) ;
+       y=(pos[0]+dx)*TMath::Sin(pos[1]) ;
+       z=pos[2]+izee*dz;
+       ang = 0 ; 
+       ath= TMath::ATan2(pos[0], pos[2])*todegree;
      }
-     box3d=new TMarker3DBox(x, y, z, dx, dy, dz, 0, ang);
+
+     box3d=new TMarker3DBox(x, y, z, dx, dy, dz, ath, ang);
      box3d->SetLineColor(fHDCHit->fColor);
      box3d->SetLineWidth((Width_t)fHDCHit->fSize);
      box3d->Draw();
      fSignals->Add(box3d);
+
   } 
 
 }
+
+
+
 
 
 

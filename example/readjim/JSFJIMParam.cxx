@@ -73,24 +73,23 @@ void JSFJIMParam::ReadParameter()
   rtmp=(Float_t*)(idat+3);
   for(Int_t i=0;i<10;i++){ fECPAR0R[i]=rtmp[i]; }
 
-  printf(" NDREC=%d\n",fECPAR0I[1]);
-  printf(" RI1EC, RO1EC=%g %g\n",fECPAR0R[0],fECPAR0R[1]);
+  //  printf(" NDREC=%d\n",fECPAR0I[1]);
+  //printf(" RI1EC, RO1EC=%g %g\n",fECPAR0R[0],fECPAR0R[1]);
 
   JSFJLCSIM::KZGET("MCECPAR",1,len,fNDPEC);
-  printf(" fNDPEC=%d\n",len);
+  //printf(" fNDPEC=%d\n",len);
   JSFJLCSIM::KZGET("MCECPAR",2,len,(Int_t*)fREM1EC);
-  printf(" fREM1EC=%d\n",len);
+  //printf(" fREM1EC=%d\n",len);
   JSFJLCSIM::KZGET("MCECPAR",3,len,(Int_t*)fZEM1EC);
-  printf(" fZEM1EC=%d\n",len);
+  //printf(" fZEM1EC=%d\n",len);
   JSFJLCSIM::KZGET("MCECPAR",4,len,(Int_t*)fPEM1EC);
-  printf(" fPEM1EC=%d\n",len);
+  //printf(" fPEM1EC=%d\n",len);
   JSFJLCSIM::KZGET("MCECPAR",5,len,(Int_t*)fRHD1EC);
-  printf(" fRHD1EC=%d\n",len);
+  //printf(" fRHD1EC=%d\n",len);
   JSFJLCSIM::KZGET("MCECPAR",6,len,(Int_t*)fZHD1EC);
-  printf(" fZHD1EC=%d\n",len);
+  //printf(" fZHD1EC=%d\n",len);
   JSFJLCSIM::KZGET("MCECPAR",7,len,(Int_t*)fPHD1EC);
-  printf(" fPHD1EC=%d\n",len);
-
+  //printf(" fPHD1EC=%d\n",len);
 
   fTrack[0]=45.0;
   fTrack[1]=155.0;
@@ -113,27 +112,48 @@ Bool_t JSFJIMParam::GetEMPosition(Int_t cell, Float_t pos[3], Float_t width[3])
   //   pos[0] ; r (cm)
   //   pos[1] ; phi(radian)
   //   pos[2] ; z(cm)
-  //   width[0]; half width in r (cm) ( = 0 for End Cap cell )
-  //   width[1]; half width in phi (radian)
-  //   width[2]; half width in z (cm)
+  //   width[0]; width in r (cm) ( = 0 for Barrel Cap cell )
+  //   width[1]; width in phi (radian)
+  //   width[2]; width in z (cm) ( = 0 for End Cal cell )
 
   Int_t iz=cell/1000000 ;
   Int_t ith=(cell-iz*1000000)/1000;
   Int_t iph=cell%1000;
 
-  pos[0]=fREM1BC[ith-1];
-  pos[2]=fZEM1BC[ith-1];
-  pos[1]=fPEM1BC[iph-1];
+  // In the case of Barrel calroimeter
+  if( iz == 0 ) {
+    pos[0]=fREM1BC[ith-1];
+    pos[2]=fZEM1BC[ith-1];
+    pos[1]=fPEM1BC[iph-1];
 
-  width[0]=0;
-  if( iph > 2 ) { width[1]=fPEM1BC[iph]-fPEM1BC[iph-1]; }
-  else { width[1]=fPEM1BC[iph+1]-fPEM1BC[iph]; }
+    width[0]=0;
+    if( iph > 2 ) { width[1]=fPEM1BC[iph]-fPEM1BC[iph-1]; }
+    else { width[1]=fPEM1BC[iph+1]-fPEM1BC[iph]; }
+    
+    width[1]=TMath::Abs(width[1]);
 
-  width[1]=TMath::Abs(width[1]);
+    if( ith > 2 ) { width[2]=fZEM1BC[ith]-fZEM1BC[ith-1]; }
+    else { width[2]=fZEM1BC[ith+1]-fZEM1BC[ith]; }
+    width[2]=TMath::Abs(width[2]);
+  }
+  // In the case of Endcap calorimeter
+  else {
+    ith*=iz;
+    iph*=iz;
+    pos[0]=fREM1EC[ith-1];
+    pos[2]=iz*fZEM1EC[ith-1];
+    pos[1]=fPEM1EC[iph-1];
+    width[2]=0;
+    if( iph > 2 ) { width[1]=fPEM1EC[iph]-fPEM1EC[iph-1]; }
+    else { width[1]=fPEM1EC[iph+1]-fPEM1EC[iph]; }
+    
+    width[1]=TMath::Abs(width[1]);
 
-  if( ith > 2 ) { width[2]=fZEM1BC[ith]-fZEM1BC[ith-1]; }
-  else { width[2]=fZEM1BC[ith+1]-fZEM1BC[ith]; }
-  width[2]=TMath::Abs(width[2]);
+    if( ith > 2 ) { width[0]=fREM1EC[ith]-fREM1EC[ith-1]; }
+    else { width[0]=fREM1EC[ith+1]-fREM1EC[ith]; }
+    width[0]=TMath::Abs(width[0]);
+  }  
+
 
   return kTRUE;
 
@@ -150,24 +170,45 @@ Bool_t JSFJIMParam::GetHDPosition(Int_t cell, Float_t pos[3], Float_t width[3])
   //   pos[0] ; r (cm)
   //   pos[1] ; phi(radian)
   //   pos[2] ; z(cm)
-  //   width[0]; half width in r (cm) ( = 0 for End Cap cell )
-  //   width[1]; half width in phi (radian)
-  //   width[2]; half width in z (cm)
+  //   width[0]; width in r (cm) ( = 0 for End Cap cell )
+  //   width[1]; width in phi (radian)
+  //   width[2]; width in z (cm)
 
   Int_t iz=cell/1000000 ;
   Int_t ith=(cell-iz*1000000)/1000;
   Int_t iph=cell%1000;
 
-  pos[0]=fRHD1BC[ith-1];
-  pos[2]=fZHD1BC[ith-1];
-  pos[1]=fPHD1BC[iph-1];
+  if( iz == 0 ) {
+    pos[0]=fRHD1BC[ith-1];
+    pos[2]=fZHD1BC[ith-1];
+    pos[1]=fPHD1BC[iph-1];
 
-  width[0]=0;
-  if( iph > 2 ) { width[1]=fPHD1BC[iph]-fPHD1BC[iph-1]; }
-  else { width[1]=fPHD1BC[iph+1]-fPHD1BC[iph]; }
+    width[0]=0;
+    if( iph > 2 ) { width[1]=fPHD1BC[iph]-fPHD1BC[iph-1]; }
+    else { width[1]=fPHD1BC[iph+1]-fPHD1BC[iph]; }
 
-  if( ith > 2 ) { width[2]=fZHD1BC[ith]-fZHD1BC[ith-1]; }
-  else { width[2]=fZHD1BC[ith+1]-fZHD1BC[ith]; }
+    if( ith > 2 ) { width[2]=fZHD1BC[ith]-fZHD1BC[ith-1]; }
+    else { width[2]=fZHD1BC[ith+1]-fZHD1BC[ith]; }
+  }
+
+  // In the case of Endcap calorimeter
+  else {
+    ith*=iz;
+    iph*=iz;
+    pos[0]=fRHD1EC[ith-1];
+    pos[2]=iz*fZHD1EC[ith-1];
+    pos[1]=fPHD1EC[iph-1];
+    width[2]=0;
+    if( iph > 2 ) { width[1]=fPHD1EC[iph]-fPHD1EC[iph-1]; }
+    else { width[1]=fPHD1EC[iph+1]-fPHD1EC[iph]; }
+    
+    width[1]=TMath::Abs(width[1]);
+
+    if( ith > 2 ) { width[0]=fRHD1EC[ith]-fRHD1EC[ith-1]; }
+    else { width[0]=fRHD1EC[ith+1]-fRHD1EC[ith]; }
+    width[0]=TMath::Abs(width[0]);
+  }  
+
 
   return kTRUE;
 
