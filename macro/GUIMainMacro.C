@@ -250,7 +250,7 @@ Bool_t GetEvent(Int_t ev)
     if( gui != 0 ) gui->DrawHist();
     
     if( irunmode==1 || irunmode = 4 ) {
-      if( iret & jsf->kJSFNoOutput) ) jsf->FillTree();
+      if( !(iret & jsf->kJSFNoOutput) ) jsf->FillTree();
       jsf->Clear();
     }
 
