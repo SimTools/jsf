@@ -34,6 +34,8 @@
 
 
    html.MakeClass("PythiaGenerator");
+   html.MakeClass("JSFReadGenerator");
+   html.MakeClass("JSFReadGeneratorBuf");
    html.MakeClass("DebugGenerator");
    html.MakeClass("DebugWGenerator");
 

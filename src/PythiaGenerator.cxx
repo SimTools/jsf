@@ -1,8 +1,10 @@
+//*LastUpdate :  jsf-1-7-1  9-April-1999  A.Miyamoto
 //*LastUpdate :  jsf-1-7  8-April-1999  A.Miyamoto
 //*LastUpdate :  0.04/04  9-November-1998  By A.Miyamoto
 //*-- Author  : A.Miyamoto  9-November-1998
 
 /*
+  9-Apr-1999 A.Miyamoto  A bug to pickup stable particle from LUJETS is fixed.
   8-Apr-1999 A.Miyamoto  Save all particles in LUJETS common to 
                          JSFGeneratorParticle class
 */
@@ -12,6 +14,8 @@
 //  PythiaGenerator class
 //
 //  To run Pythia in JLC Study Framework
+//
+//$ID:
 //  
 //////////////////////////////////////////////////////////////////
 
@@ -126,16 +130,17 @@ Bool_t PythiaGenerator::Process(Int_t ev)
      firstdaughter=0;
      mother=0;
      dl=0.0;
-     if( kh != 0 ) {
-       Int_t ipar=idhist[kh];
-       if( ipar > 0 ) {
-       JSFGeneratorParticle *gp=
-	 (JSFGeneratorParticle*)tracks.UncheckedAt(ipar-1);
-	 gp->fNdaughter++;
-	 if( gp->fNdaughter == 1 ) gp->fFirstDaughter=nout;
-	 mother=ipar;
-       }
+     if( ks == 21 ) {
+       ndaughter = 1;
+       mother = -kh;
+       firstdaughter=fPythia->GetMSTI(4);
      }
+     else if( ks != 1 ) {
+       mother=kh;
+       firstdaughter=p->GetFirstChild();
+       ndaughter=p->GetLastChild()-firstdaughter+1;
+     }
+
      new(tracks[nout-1]) 
        JSFGeneratorParticle(nout, kf,mass,charge, pv, xv , 
 	    ndaughter, firstdaughter, mother, xctau, dl ) ;
