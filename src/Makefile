@@ -3,11 +3,11 @@ SHELL   = /bin/bash
 MFLAGS	=
 CURRDIR	= .
 
-SUBDIRS = kern generators tools lclibdep gui
+SUBDIRS = kern generators tools lclibdep gui opts
 
-.PHONY: all kern generators tools lclibdep gui
+.PHONY: all kern generators tools lclibdep gui opts
 	
-all: kern generators tools lclibdep gui
+all: kern generators tools lclibdep gui opts
 
 install: all
 
