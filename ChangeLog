@@ -1,10 +1,30 @@
 **********************************************************
-Change Log
+Change Log and some future plan.
 **********************************************************
 	
-
 **********************************************************
-jsf-1-2   9-December-1998  in progress A.Miyamoto
+To-Do  -- Help wanted
+**********************************************************
+0) More event generator  --> K.Fujii is working on this.
+1) Re-write QuickSimulator by C++  --> K.Fujii will do it.
+2) Include interface to JIM
+3) Prepare to generate event with background events and hits.
+4) Graphic display.
+
+	
+	
+**********************************************************
+jsf-1-3   since 9-December-1998  in progress A.Miyamoto
+**********************************************************
+1) Modification to bin/buildjsf, build/mkbs and src/Imakefile by K.Fujii 
+   is applied.
+2) Include example/ww as an example of HELAS/BASES/SPRING.
+   src/JSFHadronizer was changed accordinglly.
+3) There was a bug in JSFQuickSim, when setting VTX geometrical parameter, and fixed.	
+4) DebugGenerator calculation of Azimuthal angle was not correct.
+	
+**********************************************************
+jsf-1-2   9-December-1998  A.Miyamoto
 **********************************************************
 1) Bug was found in Imakefile in src and example/ZHStudy directory
    when defining jetset74 and pythia library, and fixed.
