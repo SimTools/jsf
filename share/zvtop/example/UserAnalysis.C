@@ -52,9 +52,16 @@ void UserAnalysis()
 
 
   Int_t ievt=jsf->GetEventNumber();
+  /*
   PythiaGenerator *pythia=(PythiaGenerator*)jsf->FindModule("PythiaGenerator");
-  TPythia *py=pythia->GetPythia();
-  
+  Int_t ivers=pythia->GetVersionNumber();
+  if( ivers <= 5 ) {
+    TPythia *py=pythia->GetPythia();
+  }
+  else {
+    TPythia6 *py=pyythia->GetPythia();
+  }
+  */
   //  if( ievt > 90 ) { printf(" Event#=%d\n",ievt); }
 
   if( ievt%10 == 1 ) {
