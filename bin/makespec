@@ -49,7 +49,7 @@ endif
 
 # pdflib
 if ( -e $CERN_ROOT/lib/libjetset74.a ) then
-    set pdflib=`nm $CERN_ROOT/lib/libjetset74.a | grep pdf | grep -c "T pdf"`
+    set pdflib=`nm $CERN_ROOT/lib/libjetset74.a | grep pdf | grep "pdf" | grep -c " T "`
     if ( $pdflib == 1 ) then
       echo "#define __CERNLIB_PDFLIB__ 1" >> $specfile
       echo -n "$CERN_ROOT/lib/libjetset74.a includes pdfset_"
