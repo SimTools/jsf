@@ -1,12 +1,12 @@
 #!/bin/csh
 # ###################################################
 #
-# This script stores system information in spec file.
+# This script stores system information in config file.
 #
 #(Author)
 #  Akiya Miyamoto  15-April-1999   Original version
-#
-#$Id:
+#  A.Miyamoto  25-June-1999  Create src/JSFConfig.h, instead of conf/spec
+#$Id$
 #
 # ###################################################
 
@@ -22,44 +22,34 @@ if ( !(`which g77 | grep -c g77 `)  ) goto message
 if ( !(`which root | grep -c root `)  ) goto message 
 
 echo -n "  Creating system information ."
-set specfile=$JSFROOT/conf/spec
-
-echo "XCOMM #" >&! $specfile
-echo "XCOMM #  This is spec file.  See spec.sample also for further description." >> $specfile
-echo "XCOMM #" >> $specfile
-
-echo -n ".."
-grep "XCOMM #" $JSFROOT/conf/spec.sample | grep -v "##" >> $specfile
-echo "XCOMM #" >> $specfile
+set specfile=$JSFROOT/src/JSFConfig.h
 
 echo -n "\nRoot version .."
-root -q -b $JSFROOT/macro/printversion.C | grep "ROOT_" >> $specfile
-grep "ROOT_VERSIONSTRING" $specfile | grep -v "XCOMM #" | cut -d"=" -f2
+root -q -b $JSFROOT/macro/printversion.C | grep "ROOT_" >! $specfile
 
 echo -n "g77 version .. "
-set g77version = `g77 -v |& grep release | grep gcc | cut -d"(" -f2 | cut -d")" -f1`
+set g77versionstr = `g77 -v |& grep release | grep gcc | cut -d"(" -f2 | cut -d")" -f1`
 
-echo -n "G77EGCS_VERSION = " >> $specfile
-echo $g77version | cut -d" " -f1 | cut -d"-" -f2 | cut -d"." -f1 >> $specfile 
+set g77version = `echo $g77versionstr | cut -d" " -f1 | cut -d"-" -f2 | cut -d"." -f1 `
+echo "#define __G77EGCS_VERSION__ " $g77version >> $specfile
 
-echo -n "G77EGCS_MINARVERSION = " >> $specfile
-echo $g77version | cut -d" " -f1 | cut -d"-" -f2 | cut -d"." -f2 >> $specfile 
+set g77mversion = `echo $g77versionstr | cut -d" " -f1 | cut -d"-" -f2 | cut -d"." -f2 `
+echo "#define __G77EGCS_MINORVERSION__ " $g77mversion >> $specfile
 
 g77 -v | & grep release | grep gcc | cut -d"(" -f2 | cut -d")" -f1
 
-echo -n "G77EGCS_PATCHLEVEL = " >> $specfile
-echo $g77version | cut -d" " -f1 | cut -d"-" -f2 | cut -d"." -f3 >> $specfile 
+set g77plevel = `echo $g77versionstr | cut -d" " -f1 | cut -d"-" -f2 | cut -d"." -f3 `
+echo "#define __G77EGCS_PATCHLEVEL__ " $g77plevel >> $specfile
 
-echo -n "UNAME_MACHINE = " >> $specfile
+
+echo -n "#define __UNAME_MACHINE__ " >> $specfile
 uname -m >> $specfile
-echo -n "UNAME_SYSNAME = " >> $specfile
+echo -n "#define __UNAME_SYSNAME__ " >> $specfile
 uname -s >> $specfile
 
 #######################
 #  Save parameters for Imakefile
 #######################
-set g77version=`grep "G77EGCS_VERSION" $specfile | grep -v "XCOMM #" | cut -d"=" -f2`
-set g77mversion=`grep "G77EGCS_MINARVERSION" $specfile | grep -v "XCOMM #" | cut -d"=" -f2`
 
 set g77lib = "g2c"
 if ( $g77version == 0 ) then
@@ -67,7 +57,8 @@ if ( $g77version == 0 ) then
 else if( $g77version == 1 && $g77mversion == 0 ) then
    set g77lib = "f2c"
 endif
-echo "G77EGCS_LIBNAME = $g77lib " >> $specfile
+echo -n "#define __G77EGCS_LIBNAME__ " >> $specfile
+echo $g77lib  >> $specfile
 
 echo "System information is saved in $specfile"
 
