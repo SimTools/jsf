@@ -26,7 +26,7 @@ PROGRAM       = $(SOLIBNAME).$(SOEXT)
 all::   lib ccd
 
 ccd: $(OBJS) jsfmain.o
-	$(LD) jsfmain.o $(OBJS) $(LDFLAGS) -o ccd
+	$(CXX) jsfmain.o $(OBJS) $(LDFLAGS) -o ccd
 
 lib:     $(OBJS)
 	@echo "Linking libCCD.a ..."

@@ -187,7 +187,7 @@ void CCDDarkData::LoadFile(const Char_t *file)
   struct darkinfo {
     int offset, nh, nv ; 
   };
-#ifdef R__ACC
+#if defined(R__ACC) || defined(AIX)
   darkinfo di[10];
 #else
   darkinfo di[fNCCD];

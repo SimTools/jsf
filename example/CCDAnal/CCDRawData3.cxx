@@ -159,7 +159,7 @@ void CCDEnvironmentBuf3::UnPackADC(Short_t data[], Int_t &nccd, Int_t& lnx,
   BEAM03_ENVRECHEAD *h=(BEAM03_ENVRECHEAD*)fEnvdata;
 
 // Loo over ADC.
-#ifdef R__ACC
+#if defined(R__ACC) || defined(AIX)
   Int_t  ccdind[10];
 #else
   Int_t  ccdind[fNCCD];

@@ -113,7 +113,7 @@ Bool_t CCD2x2Cluster::Process(Int_t ev)
   if( lastrun != gJSF->GetRunNumber() ) peds.ReadDBS(gJSF->GetRunNumber());
   lastrun=gJSF->GetRunNumber();
 
-#ifdef R__ACC
+#if  defined(R__ACC) || defined(AIX)
   Float_t thr[10];
 #else
   Float_t thr[cbuf->fNCCD];
@@ -126,7 +126,7 @@ Bool_t CCD2x2Cluster::Process(Int_t ev)
     nx=buf->GetNx(ic);
     ny=buf->GetNy(ic);
     adc=buf->ADC(ic);
-#ifdef R__ACC
+#if  defined(R__ACC) || defined(AIX)
     Short_t map[600][600];
 #else
     Short_t map[ny][nx];

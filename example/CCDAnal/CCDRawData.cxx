@@ -119,7 +119,7 @@ Bool_t CCDRawData::BeginRun(Int_t nrun)
    }
 
   Int_t ln=strlen(fRFNFormat);
-#ifdef R__ACC
+#if defined(R__ACC) || defined(AIX)
   Char_t infile[256];
 #else 
   Char_t infile[ln+10];
@@ -140,7 +140,7 @@ Bool_t CCDRawData::BeginRun(Int_t nrun)
     return kFALSE;
   }
 
-#ifdef R__ACC
+#if defined(R__ACC) || defined(AIX)
   Int_t data[720000];
   if( hd[kReclength] > 720000 ) {
     printf(" Data size(%d) exceeds predefined buffer size(720000)\n",hd[kReclength]);
