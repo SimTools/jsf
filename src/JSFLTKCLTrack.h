@@ -21,7 +21,7 @@
 #include "JSFCDCTrack.h"
 #endif
 
-#if 1
+#ifdef __DARWIN__
 enum {kCombinedGammaTrack, kCombinedLeptonTrack, kCombinedHadronTrack };
 // typedef Int_t EJSFLTKCLTrackBank;
 #else
@@ -34,7 +34,7 @@ typedef enum {kCombinedGammaTrack, kCombinedLeptonTrack,
 class JSFLTKCLTrack : public TObject {
 friend class JSFQuickSimBuf;
 protected:
-#if 1
+#ifdef __DARWIN__
   Int_t fBank; // The original bank name
 #else
   EJSFLTKCLTrackBank  fBank; // The original bank name
@@ -54,14 +54,14 @@ public:
   JSFLTKCLTrack() {}
   virtual ~JSFLTKCLTrack() {}
 
-#if 1
+#ifdef __DARWIN__
   JSFLTKCLTrack(Int_t bank, TVector& P, Real_t ecl,
 #else
   JSFLTKCLTrack(EJSFLTKCLTrackBank bank, TVector& P, Real_t ecl,
 #endif
          Int_t nemc, Int_t charge, Int_t type, Int_t source, 
  	 Int_t ncdc, Int_t first);
-#if 1
+#ifdef __DARWIN__
   JSFLTKCLTrack(Int_t bank, Float_t data[]);
 #else
   JSFLTKCLTrack(EJSFLTKCLTrackBank bank, Float_t data[]);
