@@ -467,6 +467,8 @@ Bool_t JSFCDCTrack::MovePivotToIP(JSFQuickSimParam *spar)
   Float_t ip[3]={0.0, 0.0, 0.0};
   MovePivot(ip, field);
 
+  delete helix;
+
   return kTRUE;
 
 }
