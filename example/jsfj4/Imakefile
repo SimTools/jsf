@@ -106,8 +106,9 @@ libG4all.a:
 
 install:: libJSFJ4.so
 	cp -p libJSFJ4.so ../../lib
+	( cd ../../include ; \
 	for f in $(HDRS); do \
-	ln -sf $(PWD)/$$f ../../include  ; done
+	ln -sf ../example/jsfj4/$$f .  ; done  )
 
 depend:: $(SRC) $(HDRS)
 	for i in $(SRC); do \
