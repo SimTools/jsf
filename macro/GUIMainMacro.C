@@ -329,11 +329,11 @@ void BatchRun()
       GetEvent(ievt);
       iret=jsf->GetReturnCode();
       if( iret & jsf->kJSFEOF ) {
-	printf("End of event loop due to end-of-file at event# %d\n",i);
+	printf("End of event loop due to end-of-file at event# %d\n",ievt);
 	break;
       }
       else if( iret & jsf->kJSFFALSE ) {
-	printf("End of event loop due to error at event# %d\n",i);
+	printf("End of event loop due to error at event# %d\n",ievt);
 	break;
       }
       else if( iret & (jsf->kJSFDoEndRun|jsf->kJSFTerminate|jsf->kJSFQuit)) {
