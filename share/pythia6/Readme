@@ -1,0 +1,25 @@
+----------------------------------------
+Note to JSF users
+----------------------------------------
+
+This directory contains
+ (1) Source code of Pythia
+ (2) Root-Pythia interface
+ (3) Pythia test program and Makefiles, etc.
+
+Source code of Pythia was obtainied from 
+http://www.thep.lu.se/~torbjorn/Pythia.html.
+Since Pythia6.206 did not work on AIX, line number 18214
+of original code was slightly modified.
+
+Source code of Root-Pythia interface was obtained from 
+http://root.cern.ch/
+
+When ROOT library, libEGPythia6.so is created, please make sure to 
+use libPythia6.so library created here, Otherwise, imcompatibility 
+of Pythia library may happen.
+
+This directory was prepared to use the latest version of Pythia program
+in JSF/ROOT environment.
+
+

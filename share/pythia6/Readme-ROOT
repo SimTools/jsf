@@ -1,0 +1,76 @@
+
+--------------------------
+(Purpose of this directory)
+--------------------------
+
+The ROOT library for Pythia6, libEGPythia6.so, required
+the pythia package.  The binary library, libPythia6.so, distributed from 
+ROOT web site is 6.131, which is not exactly same as the version 
+included in CERN2001 package, pythia 6.152.  In addition, the pythia
+package is updated independantly with ROOT/CERN.  Therefore, this directory 
+is created to allow JSF users to build pythia libraries for ROOT and JSF 
+based using his/her prefered pythia version.
+
+
+--------------------------
+(How to build pythia library)
+--------------------------
+
+On linux system, do
+
+$ makePythia6.linux
+
+This scripts compile and build library, libPythia6.so, which including 
+the original pythia program together with root interfaces to pythia.
+The created shared library, libPythia6.so, and the include file,
+pythia6.inc, are then copied to the include and lib directory 
+of JSF, which must be exist at ../../../ relative to this directory.
+
+The test program of pythia, pythia_test.f, is also compiled 
+and executed.  To run this test program, the environment variable,
+JSFROOT, must be set properly.
+
+Unfortunately, build on another system is not tested yet.
+
+
+--------------------------
+(Caution)
+--------------------------
+
+Once, libPythia6.so, is created, re-configure ROOT and compile/link
+TPythia6 so as to use newly created pythia package.
+
+When you use TPythia6, make sure not to include pythia library 
+in CERNLIB or elsewhere whose version may not be same as what you have
+created.  
+
+In the JSF system, the version of pythia is controlled by the flag, 
+PYTHIA_VERSION, which must be prepared in $(JSFROOT)/conf/configure.in.
+It is refered by a command, $JSFROOT/bin/makespec, which is executed 
+through "make install" command at the directory, $JSFROOT and 
+saved in $JSFROOT/include/JSFConfig.h for use in subsequent 
+compilation.  If PYTHIA_VERSION is 6, JSF uses 
+$JSFROOT/lib/libPythia6.so.  If PYTHIA_VERSION is not 6, 
+it uses the pythia libraries in $CERN_ROOT/lib/libjetset74.a.
+
+
+--------------------------
+(Source of originals)
+--------------------------
+
+Source of pythia package was obtained from 
+http://www.thep.lu.se/~torbjorn/Pythia.html
+
+pythia6.inc was obtained from 
+http://www.thep.lu.se/~torbjorn/pythia/main60.f
+
+pythia_test.f was obtained from 
+http://www.thep.lu.se/~torbjorn/pythia/main61.f
+
+Souce of ROOT interfaces to pythia was obtained from 
+ftp://root.cern.ch/root/pythia/pythia6.tar.gz
+
+
+--------------------------
+$Id$
+--------------------------
