@@ -1,0 +1,18 @@
+#
+#
+#$ID$
+#
+#include "config/lclib.tmpl"
+
+OBJS = k0evt.o
+
+LIB  =  $(JSFROOT)/lib/libJSFLCFULL.a \
+	-Wl,-L$(CERN_ROOT)/lib -ljetset74
+
+FFLAGS = -I$(CERN_ROOT)/include
+
+all:: k0evt
+
+k0evt: $(OBJS2)
+	$(FC) $(OBJS2) $(LIB) -o k0evt
+
