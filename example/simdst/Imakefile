@@ -3,8 +3,8 @@
 
 OBJS = simdstprint.o
 OBJHEPEVT = makehepevt.o
-FFLAGS = -I$(CERN_ROOT)/include
-
+#FFLAGS = -I$(CERN_ROOT)/include
+INCPATH = -I$(CERN_ROOT)/include
 
 all:: sdprint mkhepevt
 
