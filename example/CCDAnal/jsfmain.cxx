@@ -34,10 +34,6 @@
 void dummysub();
 extern "C" void G__cpp_setuplibJSF();
 
-#if defined(_HIUX_SOURCE)
-extern "C" void hf_fint(char *option); /* to initialize fortran environment */
-#endif
-
 extern void InitGui();
 VoidFuncPtr_t initfuncs[] = { InitGui, 0 };
 
@@ -50,9 +46,6 @@ int main(int argc, char **argv)
    char appname[] = "Rint";
 #else
    char appname[] = "Root_Rint";
-#endif
-#if defined(_HIUX_SOURCE)
-   hf_fint((char *)NULL);
 #endif
 
    TRint *theApp = new TRint(appname, &argc, argv, 0, 0);
