@@ -43,6 +43,10 @@ typedef struct {  // Common for JETSET random variables
 } COMMON_LUDATR;
 extern COMMON_LUDATR ludatr_;
 
+typedef struct { //  Flag for parton shower on/off
+  Int_t NDoPartonShower;
+} COMMON_LufragFlag;
+extern COMMON_LufragFlag lufragflag_;
 
 #ifndef __LCLIBRAN_USE_RANMAR__ 
 typedef struct { // Commo for Tauola random variables
@@ -86,6 +90,8 @@ JSFHadronizer::JSFHadronizer(const char *name, const char *title)
   KEYA1 = gJSF->Env()->GetValue("JSFHadronizer.KEYA1",1);
   IHLON = gJSF->Env()->GetValue("JSFHadronizer.IHLON",1);
   sscanf(gJSF->Env()->GetValue("JSFHadronizer.XK0DEC","0.001"),"%g",&XK0DEC);
+
+  lufragflag_.NDoPartonShower = gJSF->Env()->GetValue("JSFHadronizer.PartonShower",1);
 
 }
 
