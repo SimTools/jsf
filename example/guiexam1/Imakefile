@@ -70,10 +70,17 @@ ANALLIB = $(JSFLIBS) $(EXTRALDOPT) \
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #ifdef hitachiArchitecture
-all::  jsf
+all::  jsf jsfgui
 jsf: jsfmain.o $(OBJJSFGUI)
 	$(LD) jsfmain.o $(BLOCKDATA) $(OBJJSFGUI) \
 	$(LDFLAGS) -o jsf 
+
+jsfgui: 
+	rm -f ../../bin/jsfgui
+	ln -s $(JSFROOT)/example/guiexam1/jsf ../../bin/jsfgui
+
+jsfmain.cxx:
+	ln -s ../../src/jsfmain.cxx jsfmain.cxx
 #else
 all::  libgui
 libgui: $(OBJJSFGUI)
