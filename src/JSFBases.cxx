@@ -52,6 +52,8 @@
 ClassImp(JSFBases)
 ClassImp(JSFBasesTempHist)
 
+Int_t JSFBasesTempHist::fMax=20;
+
 //_____________________________________________________________________________
 JSFBases::JSFBases(const char *name, const char *title)
        : BasesSpring(), TNamed(name,title)

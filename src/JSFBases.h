@@ -62,8 +62,6 @@ class JSFBasesTempHist : public TNamed
   ClassDef(JSFBasesTempHist,1) //
 };
 
-Int_t JSFBasesTempHist::fMax=20;
-
 
 class JSFBases: public BasesSpring, public TNamed
 {
