@@ -39,6 +39,8 @@
    html.MakeClass("JSFReadGeneratorBuf");
    html.MakeClass("DebugGenerator");
    html.MakeClass("DebugWGenerator");
+   html.MakeClass("JSFReadParton");
+   html.MakeClass("JSFMergeEvent");
 
    html.MakeClass("JSFQuickSim");
    html.MakeClass("JSFQuickSimParam");
