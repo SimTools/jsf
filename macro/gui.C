@@ -16,7 +16,13 @@ Int_t gui()
 //
 // **************************************************************** 
 
-  gSystem->Load("libJSFGUI.so");
+  if( strncmp(gSystem->HostName(),"ccjlc",5)  != 0 ) {
+    if( strncmp(gSystem->Getenv("OSTYPE"),"hpux",4) == 0 ) {
+      gSystem->Load("libJSFGUI.sl");
+    } else {
+      gSystem->Load("libJSFGUI.so");
+    }
+  }
 
   jsf  = new JSFSteer();
 
