@@ -80,15 +80,6 @@ SRC  += JSFJ4CTHit.$(SrcSuf)
 ROOTCINTOPT += -DUSE__J4CT
 #endif
 
-#	-lG4hadronic_man_gen 
-#	-lG4hadronic_stringfrag 
-#       -lG4hadronic_string_common  
-#	-lG4hadronic_HE_gen 
-#	-lG4hadronic_kinetic 
-#	-lG4hadronic_deex 
-#	-lG4hadronic_util_gen 
-#	-lG4geomver 
-
 G4LIBS := -L$(G4INSTALL)/lib/$(G4SYSTEM) \
 	-L. -lG4all \
 	-lGLU -lGL -lXm -lXpm -lXaw -lXmu -lXt \
@@ -115,9 +106,10 @@ libG4all.a:
 
 install:: libJSFJ4.so
 	cp -p libJSFJ4.so ../../lib
+	for f in $(HDRS); do \
+	ln -sf $(PWD)/$$f ../../include  ; done
 
-
-depend:: $(SRC) $(HDR)
+depend:: $(SRC) $(HDRS)
 	for i in $(SRC); do \
 	rmkdepend -a -- $(DEPENDFILES) -- $$i; done
 
