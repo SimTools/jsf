@@ -5,6 +5,14 @@
 
   html.MakeClass("JSFSteer");
 
+//  html.MakeClass("JSF2DV");
+//  html.MakeClass("JSF3DV");
+//  html.MakeClass("JSF3DV_f");
+//  html.MakeClass("JSFRThPhi");
+//  html.MakeClass("JSFRThPhi_f");
+//  html.MakeClass("JSFRPhiZ");
+//  html.MakeClass("JSFRPhiZ_f");
+
    html.MakeClass("JSFModule");
    html.MakeClass("JSFSteer");
    html.MakeClass("JSFSteerConf");
