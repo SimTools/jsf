@@ -14,7 +14,19 @@ To-Do  -- Help wanted
 	
 	
 **********************************************************
-jsf-1-3   5-January-1999 progress A.Miyamoto
+jsf-1-4  progress since  5-January-1999 A.Miyamoto
+**********************************************************
+(1) Save Ecm properly in PythiaGenerator.cxx
+(2) A bug in JSFQuickSim.cxx.  fHDCal was not set.
+(3) A Bug in PythiaGenerator.cxx  ctau and decay length is reversed when creating
+    JSFGeneratorParticle class.
+(4) Add new classes for QuickSimulator, JSFCDCTrack, JSFVTXHit, JSFCALHit, 
+    JSFSIMDST.  A Library for Quick Simulator is created as libJSFQuickSIM.a,
+    which includes JSFQuickSim and JSFLTKCLTrack also.
+    A class, JSFQuickSimData class 
+	
+**********************************************************
+jsf-1-3   5-January-1999 A.Miyamoto
 **********************************************************
 1) Modification to bin/buildjsf, build/mkbs and src/Imakefile by K.Fujii 
    is applied.
