@@ -372,7 +372,7 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
     return kFALSE;
   }
   Int_t ngen=0 ;
-#ifdef R__ACC
+#if defined(R__ACC) || defined(_AIX)
   Float_t gendat[kGenMax][kGenSize];
   Int_t igendat[kGenMax][kIGenSize];
 #else
@@ -409,7 +409,7 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
   // Information(JSFLTKCLTrack class).
   // ************************************************************
   
-#ifdef R__ACC
+#if defined(R__ACC) || defined(_AIX)
   Float_t cmbt[kTrkMax][kCmbtSize];
   Float_t trkf[kTrkMax][kTrkfSize];
   Double_t trkd[kTrkMax][kTrkdSize];
@@ -474,7 +474,7 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
   // Make EMC/HDC Hit Cell info.
   // ***************************************
 
-#ifdef R__ACC
+#if defined(R__ACC) || defined(_AIX)
   Int_t emh[kClsMax][kClsSize];
   Int_t hdh[kClsMax][kClsSize];
 #else

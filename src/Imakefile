@@ -49,7 +49,7 @@ SRCJSF        = JSFSteer.$(SrcSuf) JSFModule.$(SrcSuf) \
 
 SRCJSFLCFULL  = JSFBases.$(SrcSuf) \
 		JSFSpringParton.$(SrcSuf) JSFSpring.$(SrcSuf) \
-		JSFReadParton.$(SrcSuf) JSFMergeEvent.$(SrcSuf) \
+		JSFReadParton.$(SrcSuf) \
 		JSFGeneratorParticle.$(SrcSuf) JSFGenerator.$(SrcSuf) \
 		JSFFULLGenerator.$(SrcSuf) JSFHadronizer.$(SrcSuf) \
 		JSFLCFULL.$(SrcSuf) \
@@ -62,7 +62,7 @@ SRCJSFQUICKSIM= JSFQuickSimParam.$(SrcSuf) JSFQuickSim.$(SrcSuf) \
 		JSFVTXHit.$(SrcSuf) JSFCALHit.$(SrcSuf) \
 		JSFHelicalTrack.$(SrcSuf) JSFCDCTrack.$(SrcSuf) \
 		JSFVirtualFit.$(SrcSuf) JSFGeoCFit.$(SrcSuf) \
-		JSFVertexing.$(SrcSuf)
+		JSFVertexing.$(SrcSuf) JSFMergeEvent.$(SrcSuf)
 
 #if __ROOT_FULLVERSION__ < 30000
 SRCJSFDMATRIX = JSFDMatrix.$(SrcSuf) JSFDMatrixUtils.$(SrcSuf) \
@@ -115,6 +115,34 @@ all::  libjsf libjsflcfull libjsfquicksim libjsfdmatrix jsf
 #else
 all::  libjsf libjsflcfull libjsfquicksim jsf
 #endif
+#if defined(AIXArchitecture)
+AIXSOLIBS += -L$(LCLIBDIR) -lGENUTIL -lLUHADR -lTAUOLA \
+	-lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
+	-lHELASV204 -lFORTLIB -lCOM -lCLI \
+	$(shell root-config --libs) \
+	-lMinuit -lEGPythia -lEG $(CERNLIBS) -lxlf90
+
+libjsf: ../lib/libJSF.$(DllSuf)
+../lib/libJSF.$(DllSuf): $(OBJJSF)
+	@echo "Linking $@ "
+	@rm -f $@
+	$(LD) $(SOFLAGS)  $(OBJJSF) -o libJSF.$(DllSuf) $(AIXSOLIBS)
+	@mv libJSF.$(DllSuf) ../lib
+
+libjsflcfull: ../lib/libJSFLCFULL.$(DllSuf) 
+../lib/libJSFLCFULL.$(DllSuf):   $(OBJJSFLCFULL) $(OBJJSFQUICKSIM)
+	@echo "Linking $@ "
+	@rm -f $@
+	$(LD) $(SOFLAGS)  $(OBJJSFLCFULL) $(OBJJSFQUICKSIM) -o $@ $(AIXSOLIBS) \
+	-L$(JSFROOT)/lib  -lBasesSpring -lJSF
+
+
+libjsfquicksim:     ../lib/libJSFQuickSim.$(DllSuf)
+../lib/libJSFQuickSim.$(DllSuf):     $(OBJJSFQUICKSIM)
+	ln -fs ../lib/libJSFLCFULL.so ../lib/libJSFQuickSim.so
+
+#else
+
 
 libjsf: ../lib/libJSF.$(DylibSuf)
 ../lib/libJSF.$(DylibSuf): $(OBJJSF)
@@ -151,9 +179,12 @@ libjsfdmatrix: ../lib/libJSFDMatrix.$(DylibSuf)
 	$(LD) $(DYLDFLAGS)  $(OBJJSFDMATRIX) -o $@
 #endif
 
+#endif
+
+
 jsf: $(OBJS) jsfmain.o
-	$(LD) jsfmain.o $(BLOCKDATA) \
-	$(JSFLIBS) $(LDFLAGS) \
+	$(CXX) jsfmain.o $(BLOCKDATA) \
+	$(JSFLIBS) $(LDFLAGS) -brtl -bshared \
 	 -o jsf $(DYLDEXTRALIBS)
 	@cp -p jsf ../bin
 	@rm -f jsf
@@ -178,6 +209,25 @@ distclean:: clean
 web:
 	../bin/jsf -q -b html.C
 
+
+#if defined(AIXArchitecture)
+
+libJSF.$(SrcSuf): $(HDRJSF)
+	@echo "Generating dictionary ..."
+	@( export LIBPATH=$(LD_LIBRARY_PATH) && \
+	rootcint  -f libJSF.$(SrcSuf) -c $(HDRJSF) )
+
+libJSFLCFULL.$(SrcSuf): $(HDRJSFLCFULL)
+	@echo "Generating dictionary ..."
+	@( export LIBPATH=$(LD_LIBRARY_PATH) && \
+	rootcint -f libJSFLCFULL.$(SrcSuf) -c $(HDRJSFLCFULL) )
+libJSFQuickSim.$(SrcSuf): $(HDRJSFQUICKSIM)
+	@echo "Generating dictionary ..."
+	@( export LIBPATH=$(LD_LIBRARY_PATH) && \
+	rootcint -f libJSFQuickSim.$(SrcSuf) -c $(HDRJSFQUICKSIM) )
+
+#else
+
 libJSF.$(SrcSuf): $(HDRJSF)
 		@echo "Generating dictionary ..."
 		rootcint  -f libJSF.$(SrcSuf) -c $(RCINTDEFINES) $(HDRJSF)
@@ -187,10 +237,13 @@ libJSFLCFULL.$(SrcSuf): $(HDRJSFLCFULL)
 libJSFQuickSim.$(SrcSuf): $(HDRJSFQUICKSIM)
 		@echo "Generating dictionary ..."
 		rootcint -f libJSFQuickSim.$(SrcSuf) -c $(RCINTDEFINES) $(HDRJSFQUICKSIM)
+
 #if __ROOT_FULLVERSION__ < 30000
 libJSFDMatrix.$(SrcSuf): $(HDRJSFDMATRIX)
 		@echo "Generating dictionary ..."
 		rootcint -f libJSFDMatrix.$(SrcSuf) -c $(HDRJSFDMATRIX)
+#endif
+
 #endif
 
 JSFConfig.h: ../conf/jsf.version ../bin/makespec

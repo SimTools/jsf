@@ -31,4 +31,6 @@
 #pragma link C++ class JSFVertexing-;
 #pragma link C++ class JSFGeoCFit+;
 
+#pragma link C++ class JSFMergeEvent+;
+
 #endif

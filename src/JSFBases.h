@@ -24,7 +24,8 @@ class JSFSpring;
 class JSFBasesTempHist : public TNamed
 {
  protected:
-  static const Int_t  fMax=20;
+  //  static const Int_t  fMax=20;
+  static Int_t  fMax;
   Int_t    fCall;
   Double_t fX[20];
   Double_t fY[20];
@@ -60,6 +61,8 @@ class JSFBasesTempHist : public TNamed
 
   ClassDef(JSFBasesTempHist,1) //
 };
+
+Int_t JSFBasesTempHist::fMax=20;
 
 
 class JSFBases: public BasesSpring, public TNamed

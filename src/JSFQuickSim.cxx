@@ -757,7 +757,7 @@ void JSFQuickSimBuf::AppendLTKCLTracks(JSFQuickSimBuf *src, Int_t numgp)
   if( src->GetNTracks() <= 0 ) return ;
 
   Int_t nltsrc=src->GetNTracks();
-#if defined(_HPUX_SOURCE)
+#if defined(_HPUX_SOURCE) || defined(_AIX)
   Int_t *indlt = new Int_t [nltsrc];
 #else
   Int_t indlt[nltsrc];
