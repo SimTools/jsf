@@ -13,7 +13,6 @@
 #include    "conf/makejsf.tmpl"
 
 CERNLIBS      = $(shell cernlib jetset74 packlib)
-JSFLIBS       = -Wl,-L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim
 
 ROOTLIBS     += -lEGPythia -lEG $(CERNLIBS)
 
@@ -60,7 +59,7 @@ all::  jsfrjim lib
 
 jsfrjim: $(OBJS) $(JSFROOT)/src/jsfmain.o JSFReadJIMCommonSize.h
 	$(LD) $(JSFROOT)/src/jsfmain.o $(BLOCKDATA) $(OBJS) \
-	$(LDFLAGS) -o jsfrjim 
+	$(LDFLAGS) -o ../../bin/jsfrjim
 
 lib: $(OBJS)
 	ar cr libreadjim.a $(OBJS) $(JIMOBJ)
