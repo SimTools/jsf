@@ -6,18 +6,27 @@
 
 void InitPythia()
 {
+  PythiaGenerator *py=(PythiaGenerator*)jsf->FindModule("PythiaGenerator");  
+  Int_t ivers=py->GetVersionNumber();
   Float_t fHiggsmass;       // Higgs mass
   sscanf(jsf->Env()->GetValue("JSFDEMO.HiggsMass","120.0"),"%g",&fHiggsmass);
-  TPythia *tpy=py->GetPythia();
+  if( ivers <= 5 ) {
+    TPythia *tpy=py->GetPythia();
+  }
+  else {
+    TPythia6 *tpy=py->GetPythia();
+  }
   //  tpy->SetMSEL(18);                  // e+e- -> ZH process
 
   Int_t kf=25;                   // kf code for H0 is 25
   Int_t rootver, rootmver, rootplevel;
   sscanf(gROOT->GetVersion(),"%d.%d/%d",&rootver,&rootmver,&rootplevel);
-  if (rootver >= 2 && rootmver >= 23) {
-     Int_t kc=tpy->Lucomp(kf);      // Get kc code for Higgs.
-  } else {
-     Int_t kc=tpy->LuComp(kf);      // Get kc code for Higgs.
+  Int_t kc=0;
+  if( ivers >= 6 ) {
+    kc=tpy->Pycomp(kf);
+  }
+  else {
+     kc=tpy->Lucomp(kf);      // Get kc code for Higgs.
   }
   tpy->SetPMAS(kc,1,fHiggsmass); // Set Higgs mass 
   printf(" Higgs mass parameters Mass=%g Width=%g Trancat %g LifeTime=%g\n",
@@ -57,6 +66,7 @@ void SetPythiaWeight()
 {
   // A function set event weight.
 
+  PythiaGenerator *py=(PythiaGenerator*)jsf->FindModule("PythiaGenerator");  Int_t ivers=py->GetVersionNumber();
   Int_t isub=py->GetPythia()->GetMINT(1);
   Float_t weight=1.0;
   switch(isub){

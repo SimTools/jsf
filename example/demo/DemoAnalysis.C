@@ -91,8 +91,10 @@ void UserInitialize()
 
   TH1F *htmp=0;
   TDirectory *pwd=gDirectory;
+
   TFile *fold=new TFile("demo.root","READ");
 
+  if( fold ) {
     hEvis->Add((TH1F*)fold->Get("hEvis"));
     hNCDC->Add((TH1F*)fold->Get("hNCDC"));
     hMissmass->Add((TH1F*)fold->Get("hMissmass"));
@@ -102,7 +104,7 @@ void UserInitialize()
     delete fold;
     pwd->cd();
     printf("Histogram data of previous run is not loaded.\n");
-
+  }
 
   hEvis->SetFillColor(38);
   hNCDC->SetFillColor(38);
@@ -189,7 +191,9 @@ void DrawHist(Int_t id=1)
 //_________________________________________________________
 void SoundMessage(Int_t id=0)
 {
-  if( strcmp(gSystem->HostName(),"jlcam.kek.jp") != 0 ) return;
+  //  if( strcmp(gSystem->HostName(),"jlcam.kek.jp") != 0 ) return;
+
+  PythiaGenerator *py=(PythiaGenerator*)jsf->FindModule("PythiaGenerator");
 
   Int_t itype=0;
   switch (id) {
@@ -197,7 +201,7 @@ void SoundMessage(Int_t id=0)
       gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/startup1.wav &");
       break;
     case -1:
-      gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/startup2.wav &");
+      gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/startup3.wav &");
       break;
     case -99:
       gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/shutdown1.wav &");
@@ -634,7 +638,7 @@ void UserTerminate()
 
   PythiaGenerator *py
      =(PythiaGenerator*)jsf->FindModule("PythiaGenerator");
-  py->GetPythia()->PyStat(1);
+  py->GetPythia()->Pystat(1);
 
 }
 
@@ -960,6 +964,7 @@ void NNHAccumulate()
 
   Float_t weight=1.0;
   Float_t wgt=1.0;
+  PythiaGenerator *py=(PythiaGenerator*)jsf->FindModule("PythiaGenerator");
   if( py->GetPythia()->GetMSTP(142) != 1 ) {
     Int_t isub=py->GetPythia()->GetMSTI(1);
     switch(isub){

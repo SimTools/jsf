@@ -1,3 +1,10 @@
+
+class JSFGUIFrame;
+JSFGUIFrame *gui=0;
+JSFSteer *jsf=0;
+JSFSteer *gJSF=0;
+ 
+Int_t demo()
 {
 // **************************************************************** 
 //  Example of Event display script. 
@@ -12,14 +19,8 @@
 
   gROOT->LoadMacro("$JSFROOT/macro/GUIMainMacro.C");
 
-  if( strncmp(gSystem->HostName(),"ccjlc",5)  != 0 ) {
-    if( strcmp(gSystem->Getenv("OSTYPE"),"hpux") ==0 ) {
-      gSystem->Load("$JSFROOT/example/guiexam1/libJSFGUI.sl");
-    }
-    else {
-      gSystem->Load("$JSFROOT/example/guiexam1/libJSFGUI.so");
-    }
-  }
+  gSystem->Load("$JSFROOT/example/guiexam1/libJSFGUI.so");
+
   JSFGUIFrame *gui;
   jsf  = new JSFSteer();
 
