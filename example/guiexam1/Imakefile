@@ -59,6 +59,10 @@ SONAME	      = $(SOLIBNAME).$(SOEXT)
 /*  Make targets                                                        */
 /*----------------------------------------------------------------------*/
 
+#ifdef AIXArchitecture
+AIXFLAGS = -brtl -bshared $(JSFLIBS) $(LDFLAGS)
+#endif
+
 #ifdef hitachiArchitecture
 all::  jsf jsfgui
 jsf: jsfmain.o $(OBJJSFGUI)
@@ -74,10 +78,11 @@ jsfmain.cxx:
 #else
 all::  libgui install
 libgui: $(OBJJSFGUI)
-	$(LD) $(SOFLAGS) $(OBJJSFGUI) -o  $(SONAME)
+	$(LD) $(SOFLAGS) $(OBJJSFGUI) -o  $(SONAME) $(AIXFLAGS)
 #endif
 
 install::
+	rm -f $(JSFROOT)/lib/$(SONAME)
 	cp -p $(SONAME) $(JSFROOT)/lib/$(SONAME)
 
 clean:: 

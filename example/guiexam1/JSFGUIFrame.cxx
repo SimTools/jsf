@@ -976,7 +976,7 @@ void JSFGUIFrame::ToRelativePath(const Char_t *fnin,
 
   //  Int_t lfn=strlen(fnin);
   Int_t ldir=strlen(dirnowi);
-#ifdef R__ACC
+#if defined(R__ACC) || defined(_AIX)
   Char_t dirnow[512];
 #else
   Char_t dirnow[ldir+2];
@@ -1088,7 +1088,7 @@ void JSFGUIFrame::DoFileMenuAction(Long_t parm1, Bool_t prompt)
 	 strcpy(retstr,GetInputFileName());
 	 if( prompt ) {
  	   TGFileInfo fi;
-	   fi.fFileTypes = (char **)filetypes;
+	   fi.fFileTypes = filetypes;
 	   Char_t dirnam[256];
 	   strcpy(dirnam,gSystem->WorkingDirectory());
 	   new TGFileDialog(fClient->GetRoot(), this, kFDOpen,&fi);
@@ -1111,7 +1111,7 @@ void JSFGUIFrame::DoFileMenuAction(Long_t parm1, Bool_t prompt)
        strcpy(retstr,GetOutputFileName());
        {
 	 TGFileInfo fi;
-	 fi.fFileTypes = (char **)filetypes;
+	 fi.fFileTypes = filetypes;
 	 Char_t dirnam[256];
 	 strcpy(dirnam,gSystem->WorkingDirectory());
 	 new TGFileDialog(fClient->GetRoot(), this, kFDSave,&fi);
@@ -1409,6 +1409,7 @@ Mass of Higgs used by Pythia.\n\
   static const Int_t nproc=9;
   Char_t *pname[nproc]={"ZH","gammagammaH", "eeH","nnH",
 			"gammaZ", "ZZ","WW","enW","twophoton"};
+  TGFileInfo fi;
 
   switch(parm1) {
 
@@ -1431,8 +1432,7 @@ Mass of Higgs used by Pythia.\n\
 
     case M_GEN_LASTRUNFILE:
       if( prompt ) {
- 	TGFileInfo fi;
-	fi.fFileTypes = (char **)ftypes1;
+	fi.fFileTypes = ftypes1;
         fi.fFilename = (Char_t*)gJSF->Env()->GetValue("JSFGUI.LastRunFile","");
 	Char_t dirnam[256];
 	strcpy(dirnam,gSystem->WorkingDirectory());
@@ -1454,8 +1454,7 @@ Mass of Higgs used by Pythia.\n\
       break;
 
     case M_CONT_PARAM_SAVEAS:
-      TGFileInfo fi;
-      fi.fFileTypes = (char **)ftypes2;
+      fi.fFileTypes = ftypes2;
       Char_t dirnam[256];
       strcpy(dirnam,gSystem->WorkingDirectory());
       new TGFileDialog(fClient->GetRoot(), this, kFDSave,&fi);
