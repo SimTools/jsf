@@ -121,6 +121,7 @@ echo $g77lib  >> $specfile
 
 lastput:
 
+echo '#include "JSFDefines.h" ' >> $specfile
 echo "#endif" >> $specfile
 echo "#endif" >> $specfile
 
