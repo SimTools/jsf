@@ -1,0 +1,14 @@
+Readme for readparton directory.
+
+This directory is an example about how to use JSFReadParon class.
+To run example, do
+
+  $ jsf sim.C
+
+This example reads parton information from a file, simple.dat,
+hadronize them, and simulate by Quick Simulator. Results are saved in a file,
+sim.root.  Simulated events are displayed by
+
+  $ jsf gui.C
+
+ 
