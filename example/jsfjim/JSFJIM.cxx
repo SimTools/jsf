@@ -93,6 +93,8 @@ Bool_t JSFJIM::Initialize()
   //  *--   SET JMPPJM=0 FOR NORMAL JIM.
   jmcntl_.jmppjm=0;
   jmfile_.lusijm=fUnit;
+  jmfile_.lusojm=6;
+  jmfile_.luerjm=6;
 
   uginit_();
   return kTRUE;
