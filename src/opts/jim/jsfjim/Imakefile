@@ -1,0 +1,133 @@
+#---------------------------------------------------
+#  Imakefile to build JSFJIM application
+#
+#(History)
+#  29-May-1999 A.Miyamoto  Original version
+# 
+#$Id$
+#
+#---------------------------------------------------
+
+#include    "config/lclib.tmpl"
+#include    "conf/makejsf.tmpl"
+#include    "jim.rules"
+
+ANALLIB = -Wl,-Bdynamic $(JSFLIBS) $(EXTRALDOPT) \
+	$(JIMLDLIBS) -L$(LCLIBDIR) -lGENUTIL -lLUHADR \
+        -lSIMJLC -lLTKCL -lLCFULL -lTBS \
+        -lHELASV204 -lFORTLIB -lCOM -lCLI \
+        $(EXTRALIBS) 
+
+# -lTAUOLA : subroutine ginit in libTAUOLA.a conflcts with ginit in 
+# libgeant321.a, so removed.
+
+CERNLIBLIBS   = jetset74 geant321
+#ifndef __CERNLIB_PDFLIB__
+CERNLIBLIBS   += pdflib804
+#endif
+CERNLIBLIBS  += pawlib graflib grafX11 packlib mathlib kernlib
+CERNLIBS      = $(shell cernlib $(CERNLIBLIBS))
+
+JIMLDLIBS = -L$(JSFROOT)/lib -lJSFReadJIMBank -lJSFGUI \
+	-L$(JLCSIMROOT)/lib -ljim -ljimlib -lct -lvx -lcal \
+	-ljlclib -lzbs -ljlcutil -lcal 
+
+ROOTLIBS += -lEGPythia -lEG $(CERNLIBS)
+
+JIMOBJS =$(JLCSIMROOT)/lib/libjim.a
+
+LDFLAGS += -lXt -lXm
+
+#
+# ----------------------------------
+#
+
+JIMLIBJIM = $(JLCSIMROOT)/lib/libjim.a
+JIMMAIN = $(JLCSIMROOT)/jim/src/jim.o
+
+
+#-------------------------------------------------------------
+
+EXTRACXXOPT   = -I$(JSFROOT)/example/readjim
+
+INCPATH	      = -I$(JLCSIMROOT)/util/inc -I$(JLCSIMROOT)/include/jlc \
+		-I$(JLCSIMROOT)/include
+
+FCINCLUDES = -I./ -I$(JLCSIMROOT)/include -I$(JLCSIMROOT)/include/jlc \
+		 -I$(JLCSIMROOT)/jim/inc -I$(JLCSIMROOT)/jimlib/inc 
+
+OBJS          = JSFJIM.$(ObjSuf) \
+		jimsub.o  jsfjimrun.o \
+		libJSFJIM.$(ObjSuf)
+
+SRC           = JSFJIM.$(SrcSuf)
+
+HDRS	      = JSFJIM.h 
+
+#ifdef hitachiArchitecture
+EXTRALDOPT = -L/lib/pa1.1 -lm
+#endif
+
+#----------------------------------------------------------------
+
+all:: jsfjim
+
+jsfjim:: $(OBJS) jsfmain.o $(JIMOBJS)
+#if __PYTHIA_VERSION__ <= 5
+	$(LD) jsfmain.o $(OBJS) $(BLOCKDATA) $(LDFLAGS) -o ../../bin/jsfjim
+#else
+	@echo "****************************************************"
+	@echo "jsfjim can not run with Pythia6. link is suppressed."
+	@echo "****************************************************"
+#endif
+
+jim: $(JIMOBJS) jimsub.o
+	$(FC) -o jim jimsub.o $(JIMMAIN) $(JIMLDLIBS) \
+	-L/usr/X11R6/lib -ljetset74 -lm -lX11 \
+	$(EXTRALDOPT)
+
+$(JIMOBJS):
+	@echo "Creating a jim library in $(JLCSIMROOT)/lib "
+	( cd $(JLCSIMROOT)/jim/src  ; \
+	  ar cr libjim.a *.o ; \
+	  ar d libjim.a jim.o ; \
+	  mv libjim.a ../../lib )
+
+clean:: 
+	@rm -f $(OBJS) core *.so 
+	@rm -f libJSFJIM.$(SrcSuf) libJSFJIM.h
+
+depend:: $(SRC) $(HDRS)
+	for i in $(SRC); do \
+	rmkdepend -a -- $(DEPENDFILES) -- $$i; done
+
+distclean::
+	@rm -f $(OBJS) core *~ *.o
+	@rm -f *.bak libJSFJIM.* *.bnk
+	@rm -f jsfjim *.root Makefile 
+
+web: jsfjim
+#if __PYTHIA_VERSION__ == 5
+	../../bin/jsfjim -q -b html.
+#else
+	@echo "****************************************************"
+	@echo "jsfjim can not run with Pythia6. web files are not created."
+	@echo "****************************************************"
+#endif
+
+###
+
+libJSFJIM.$(SrcSuf): $(HDRS) JSFJIMLinkDef.h
+		@echo "Generating dictionary ..."
+		rootcint -f libJSFJIM.$(SrcSuf) \
+	 	-c -I$(JSFROOT)/include -I$(JSFROOT)/example/readjim $(HDRS) \
+		JSFJIMLinkDef.h
+
+
+jsfmain.cxx: $(JSFROOT)/src/jsfmain.cxx
+	ln -s $(JSFROOT)/src/jsfmain.cxx .
+
+jsfmain.o: jsfmain.cxx
+
+
+

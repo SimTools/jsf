@@ -1,0 +1,15 @@
+JSFJIM readme
+
+This example is to run JIM full detector simulation in JSF environment.
+To build jsfjim application, do
+
+ $ setenv JLCSIMROOT [directory name where you installed jlcsim]
+ $ xmkmf
+ $ make
+
+To run,
+
+ $ jsfjim jim.C
+
+ jim.C is a sample script to run jim.  It reads jim parameters from
+ a file, input.dat.  
