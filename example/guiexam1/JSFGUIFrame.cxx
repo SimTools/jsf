@@ -547,6 +547,24 @@ Bool_t JSFGUIFrame::ProcessMessage(Long_t msg, Long_t parm1, Long_t)
 			gSystem->ChangeDirectory(dirnam);
 			fMenuFile->EnableEntry(M_FILE_READROOT);
 			fMenuFile->EnableEntry(M_FILE_READSIMDST);
+
+			Int_t lfn=strlen(fInputFileName);
+			if( strcmp(&fInputFileName[lfn-4],"root") == 0 ){
+			  fMenuFile->CheckEntry(M_FILE_READROOT);
+			  fMenuFile->UnCheckEntry(M_FILE_READSIMDST);
+			  fMenuFile->UnCheckEntry(M_FILE_GENEVENT);
+			  fRunMode=2;
+			}
+			else if( strcmp(&fInputFileName[lfn-3],"dat") == 0 ){
+			  fMenuFile->CheckEntry(M_FILE_READSIMDST);
+			  fMenuFile->UnCheckEntry(M_FILE_READROOT);
+			  fMenuFile->UnCheckEntry(M_FILE_GENEVENT);
+			  fRunMode=3;
+			}
+
+
+			break;
+
                      }
                      break;
 
@@ -876,18 +894,16 @@ void JSFGUIFrame::ToRelativePath(const Char_t *fnin,
   // dirnow.
 
   Int_t ldir=strlen(dirnow);
-  Int_t lfn=strlen(fnin);
   Int_t i;
   for(i=0;i<ldir;i++){ if( fnin[i] != dirnow[i] ) break;   }
 
   Int_t j;
   for(j=i;j>0;j--){ if( fnin[j] == '/' ) break; }
   Int_t k;  Int_t nslash=0;
-  for(k=j+1;k<lfn;k++){  if( fnin[k] == '/' ) nslash++; }
+  for(k=j+1;k<ldir;k++){  if( dirnow[k] == '/' ) nslash++; }
 
   k=0;
-  for(i=0;i<nslash;i++){ sprintf(&fnout[k],"../"); k+=3; }
+  for(i=0;i<nslash+1;i++){ sprintf(&fnout[k],"../"); k+=3; }
   sprintf(&fnout[k],"%s",&fnin[j+1]);
-  printf(" fnout is %s\n",fnout);
 }
 

@@ -7,10 +7,10 @@
 
   if( strncmp(gSystem->HostName(),"ccjlc",5)  != 0 ) {
     if( strcmp(gSystem->Getenv("OSTYPE"),"hpux") ==0 ) {
-      gSystem->Load("libJSFGUI.sl");
+      gSystem->Load("$JSFROOT/example/guiexam1/libJSFGUI.sl");
     }
     else {
-      gSystem->Load("libJSFGUI.so");
+      gSystem->Load("$JSFROOT/example/guiexam1/libJSFGUI.so");
     }
   }
   JSFGUIFrame *gui;

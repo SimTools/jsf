@@ -28,7 +28,6 @@
 #include "JSFSteer.h"
 #include "JSFBasicClasses.h"
 #include "JSFGeneratorParticle.h"
-#include "JSFQuickSim.h"
 #include "JSFQuickSimParam.h"
 #include "JSFSIMDST.h"
 #include "JSFEventDisplay.h"
@@ -164,7 +163,6 @@ void JSFEventDisplay::DisplayEventData()
 
   if( !fDrawAtNewEvent ) return;
 
-  //  if( fCanvas ) {  delete fView;  delete fCanvas ; fCanvas=NULL ; }
   if( !fCanvas ) {
     fCanvas = new TCanvas("Event Display");
     fView   = new TView(fViewNo);
@@ -172,13 +170,12 @@ void JSFEventDisplay::DisplayEventData()
     fCanvasDirectory=gDirectory;
   } 
   TDirectory *olddir=gDirectory;
-  //  olddir->ls();
   if( fCanvasDirectory != gDirectory ) fCanvasDirectory->cd();
-  // fCanvasDirectory->ls();
+
+  simdst=(JSFSIMDST*)gJSF->FindModule("JSFSIMDST");
 
   if( fDrawGeometry ) DrawGeometry(fDisplayType);
 
-  simdst=(JSFSIMDST*)gJSF->FindModule("JSFSIMDST");
 
   switch (fDisplayType) {
     case 0:
@@ -233,10 +230,7 @@ void JSFEventDisplay::DrawGeometry(Int_t type)
 void JSFEventDisplay::InitializeGeometry()
 {
   if( gJSF == 0 ) { printf("JSFSteer is not defined yet.\n"); return; }
-  JSFQuickSim *sim=(JSFQuickSim*)gJSF->FindModule("JSFQuickSim");
-  if( sim == 0 ) { 
-    printf("Can not draw detector geometry since no Simulator data is read.\n");  return ;}
-  JSFQuickSimParam *p=(JSFQuickSimParam*)sim->Param();
+  JSFQuickSimParam *p=(JSFQuickSimParam*)simdst->Param();
 
   fWidgets = new TList();
 
@@ -310,8 +304,7 @@ void JSFEventDisplay::DisplayEMCHits()
 {
   JSFSIMDSTBuf *sdb=(JSFSIMDSTBuf*)simdst->EventBuf();
   TClonesArray *emc=sdb->GetEMCHits(); 
-  JSFQuickSim *sim=(JSFQuickSim*)gJSF->FindModule("JSFQuickSim");
-  JSFQuickSimParam *par=sim->Param();
+  JSFQuickSimParam *par=simdst->Param();
   JSFCALGeoParam *geo=par->GetEMCGeom();
 
   Float_t dybarrel = 2*TMath::Pi()*par->GetEMCRMaximum()/par->GetEMCNPhi()/2;
@@ -365,9 +358,8 @@ void JSFEventDisplay::DisplayEMCHits()
 void JSFEventDisplay::DisplayHDCHits()
 {
   JSFSIMDSTBuf *sdb=(JSFSIMDSTBuf*)simdst->EventBuf();
-  JSFQuickSim *sim=(JSFQuickSim*)gJSF->FindModule("JSFQuickSim");
   TClonesArray *hdc=sdb->GetHDCHits(); 
-  JSFQuickSimParam *par=sim->Param();
+  JSFQuickSimParam *par=simdst->Param();
   JSFCALGeoParam *geo=par->GetHDCGeom();
 
   Float_t dybarrel = 2*TMath::Pi()*par->GetHDCRMaximum()/par->GetHDCNPhi()/2;
@@ -420,8 +412,7 @@ void JSFEventDisplay::DisplayCDCTracks()
    TClonesArray *cdc=sdb->GetCDCTracks(); 
    Int_t i;
 
-   JSFQuickSim *sim=(JSFQuickSim*)gJSF->FindModule("JSFQuickSim");
-   JSFQuickSimParam *par=(JSFQuickSimParam*)sim->Param();
+   JSFQuickSimParam *par=(JSFQuickSimParam*)simdst->Param();
    for(i=0;i<sdb->GetNCDCTracks();i++){
      JSFCDCTrack *t=(JSFCDCTrack*)cdc->UncheckedAt(i);
      Double_t hp[3], hx[3];
@@ -513,8 +504,7 @@ void  JSFEventDisplay::DisplayGeneratorParticles()
    
    JSFSIMDSTBuf *sdb=(JSFSIMDSTBuf*)simdst->EventBuf();
    TClonesArray *gen=sdb->GetGeneratorParticles(); 
-   JSFQuickSim *sim=(JSFQuickSim*)gJSF->FindModule("JSFQuickSim");
-   JSFQuickSimParam *par=sim->Param();
+   JSFQuickSimParam *par=simdst->Param();
 
    Int_t i;
    //   printf(" There are %d Generator particles\n",sdb->GetNGeneratorParticles());
@@ -645,13 +635,19 @@ void  JSFEventDisplay::DisplayVTXHits()
      Float_t y=r*TMath::Sin(phi); 
      Float_t z=vh->GetZ();
      //     pm->SetPoint(i,x,y,z);
-     Float_t angle=phi/TMath::Pi()*180.0+90.0;
+     Float_t angle=phi/TMath::Pi()*180.0;
      box3d=new TMarker3DBox(x, y, z,0.002,0.002,0.002,0,angle);
-     box3d->SetLineColor(6);
-     box3d->Draw();
-     box3d=new TMarker3DBox(x, y, z,0.02,0.002,0.02,0,angle);
-     box3d->SetLineColor(6);
-     box3d->Draw();
+     if( vh->GetGeneratorTrack() != 0 ){
+       box3d->SetLineColor(fVTXHit->fColor);
+       box3d->Draw();
+       box3d=new TMarker3DBox(x, y, z,0.002,0.02,0.02,0,angle);
+       box3d->SetLineColor(fVTXHit->fColor);
+       box3d->Draw();
+     }
+     else {
+       box3d->SetLineColor(fVTXHit->fColor+1);
+       box3d->Draw();
+     }
    }
    //   pm->SetMarkerSize(fVTXHit->fSize);
    //pm->SetMarkerColor(fVTXHit->fColor);

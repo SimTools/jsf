@@ -97,7 +97,6 @@ private:
    Int_t  fReturnCode;
    Int_t  fNoOfAnalizedEvents;
 
-   void ToRelativePath(const Char_t *fnin,const Char_t *dirnow, Char_t *fnout);
 
    Char_t fInitPythiaMacro[256];
    Float_t fEcm;
@@ -108,6 +107,7 @@ public:
    virtual ~JSFGUIFrame();
    virtual void CloseWindow();
    virtual Bool_t ProcessMessage(Long_t msg, Long_t parm1, Long_t);
+   void ToRelativePath(const Char_t *fnin,const Char_t *dirnow, Char_t *fnout);
 
    Char_t *GetInputFileName(){ return fInputFileName; }
    Char_t *GetOutputFileName(){ return fOutputFileName; }
