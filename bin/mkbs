@@ -1,4 +1,3 @@
-#!/jlc/local/bin/perl -w
 #
 # Create program template.
 #
@@ -93,6 +92,7 @@ $TempDir="$jsfroot/template/$param{'TemplateDirectory'}[0]";
 
   open(FIN, "ls $TempDir |") ;
   while(<FIN>) {
+    if ( !/^CVS$/ ) {
     chop ;
     $fname=$_ ;
     $fout=$fname;
@@ -129,10 +129,12 @@ $TempDir="$jsfroot/template/$param{'TemplateDirectory'}[0]";
     }
     close FD1;
     close FD2;
+    }
   }
   close FIN; 
   print "Sample program is created in the directory $Outdir using parameters in the file $conffile\n";
   exit;
+
 
 
 

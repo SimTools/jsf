@@ -1,4 +1,8 @@
-#!/jlc/local/bin/wish -f
+#!/bin/sh
+# Enhance PATH \
+export PATH=/usr/local/bin:/jlc/local/bin:$PATH
+# and reinvoke the script using wish \
+exec wish "$0" ${1+"$@"}
 #
 # Aid to build jsf user application
 #
@@ -27,7 +31,7 @@ proc ConfBasesSpring {w args} {
   label $w.title -text "Configuration of Bases/Spring modules" -font $titlefont
   pack $w.title -side top -fill x -pady 7
 
-  label $w.mess -text "Initial parameter values are obtained from the configuration file. After updating them,  press Build Program button to save them in thefile whose name is \"spring_class~name.conf\"  and create a sample JSF program." -wraplength 500 -justify left
+  label $w.mess -text "Initial parameter values are obtained from the configuration file. After updating them,  press Build Program button to save them in the file whose name is \"spring_class~name.conf\"  and create a sample JSF program." -wraplength 500 -justify left
   pack $w.mess -side top -fill x -pady 8
   frame $w.ruler -relief sunken -bd 2 -height 4
   pack $w.ruler -side top -fill x
@@ -97,7 +101,7 @@ proc BuildProgram { name } {
   set cfile [.conf.entry get ]
   switch $name {
     .bs { SaveParam .bs no
-         set mess [exec $jsfroot/bin/mkbs -conf $cfile -jsfroot $jsfroot]
+         set mess [exec -- perl -w $jsfroot/bin/mkbs -conf $cfile -jsfroot $jsfroot]
         tk_messageBox -icon info -message $mess -type ok -parent .bs }
     }
 }
@@ -119,6 +123,7 @@ proc SetFile { } {
       "Set file name is calceled." -type ok -parent .
       return
     }
+    .conf.entry delete 0 end
     .conf.entry insert 0 $file
 }
 
@@ -292,7 +297,7 @@ set incsample no
 set titlefont -*-Helvetica-Bold-R-Normal--*-180-*-*-*-*-*-*
 label .header -text "JSF Application Builder" -font $titlefont
 label .descript -wraplength 500 -justify left \
--text "This panel will create template files for JSF application.  Set parameters, then press the button for the type of the application.  The files are created in the output directory.  If command is executed without arguments, the JSF default configuration file is used.  If you want to startup with your own configuration file, do \"buildjsf -conf yourfile \", where yourfile is the name of your configuration file."
+-text "This panel will create template files for your JSF application.  Set parameters, then press the button for the type of the application.  The files are created in the output directory.  If the command is executed without arguments, the JSF default configuration file is used.  If you want to startup with your own configuration file, do \"buildjsf -conf yourfile \", where \"yourfile\" is the name of your configuration file."
 pack .header -side top 
 pack .descript -side top 
 
@@ -388,6 +393,7 @@ if { $ftemp == "" } {
     if { ![file exists build.conf] } { 
 	set cout [exec cp $jsfroot/conf/build.conf  build.conf] 
     }
+    .conf.entry delete 0 end
     .conf.entry insert 0 "build.conf" ;
 }
 
@@ -434,4 +440,5 @@ button .misc.help -text Help -command Help
 pack .misc.quit -side right -anchor sw
 pack .misc.help -side left -anchor se 
 pack .misc -side top -fill x -ipady 15 
+
 
