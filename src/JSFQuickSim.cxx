@@ -1,7 +1,14 @@
+//*LastUpdate :  jsf-1-6  30-March-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-5  26-Feburary-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-4  6-Feburary-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-0-3-8  29-September-1998  By A.Miyamoto
 //*-- Author  : A.Miyamoto  11-September-1998
+
+/*  Change Log
+
+  30-March-1999  A.Miyamoto  Put modification to run with lclib-98a-4
+
+*/
 
 
 ///////////////////////////////////////////////////////////////////
@@ -43,6 +50,7 @@
 //   printf(" Total energy is %g\n",psum(0));    
 // 
 //$Id$
+//
 //
 //////////////////////////////////////////////////////////////////
 
@@ -164,10 +172,8 @@ Bool_t JSFQuickSim::Initialize()
 //_____________________________________________________________________________
 Bool_t JSFQuickSim::BeginRun(Int_t nrun)
 {
-
   fParam->SetSwimParam();
   fParam->SetSmearParam();
-  
 
   smrjin_();
   if( fFile->IsWritable() ) fParam->Write();
@@ -208,6 +214,7 @@ Bool_t JSFQuickSim::Process(Int_t ev)
    gJSFLCFULL->TBCRTE(1,"Production:CDC_VTX;Track_Parameter",0,0,iret);
    gJSFLCFULL->TBCRTE(1,"Production:VTX;Space_Point",0,0,iret);
    gJSFLCFULL->TBCRTE(1,"Production:VTX;Space_Point_Error",0,0,iret);
+   gJSFLCFULL->TBCRTE(1,"Production:VTX;Track_Parameter",0,0,iret);
 
    swmevt_(&recid, &level, &idebug, &iret);
    
@@ -351,7 +358,8 @@ Bool_t JSFQuickSimBuf::MakeCALHits()
   }
   for(i=0;i<nelm;i++){
     gJSFLCFULL->TBGET(1,"Production:EMC;Hit_Cell",neary[i],nw,iwrk,iret);
-    new(emc[nemc++])  JSFEMCHit(iwrk[0], iwrk[1]);
+    //     new(emc[nemc++])  JSFEMCHit(iwrk[0], iwrk[1]);
+    new(emc[nemc++])  JSFEMCHit(iwrk[1], iwrk[0], 0);
   }
   SetNEMCHits(nemc);
 
@@ -365,7 +373,8 @@ Bool_t JSFQuickSimBuf::MakeCALHits()
   }
   for(i=0;i<nelm;i++){
     gJSFLCFULL->TBGET(1,"Production:HDC;Hit_Cell",neary[i],nw,iwrk,iret);
-    new(hdc[nhdc++])  JSFHDCHit(iwrk[0], iwrk[1]);
+    //    new(hdc[nhdc++])  JSFHDCHit(iwrk[0], iwrk[1]);
+    new(hdc[nhdc++])  JSFHDCHit(iwrk[1], 0, iwrk[0]);
   }
   SetNHDCHits(nhdc);
 
@@ -430,11 +439,13 @@ Bool_t JSFQuickSimBuf::MakeVTXHits()
 //_____________________________________________________________________________
 Bool_t JSFQuickSimBuf::MakeCDCTracks()
 {
-  // Create JSFCDCTracks class 
-  // the TBS bank, Production:CDC;Tracks and Production:CDC;Tracks
+  // Create JSFCDCTracks class.
+  // The track parameters in the TBS bank,
+  // Production:CDC_VTX;Track_Parameter is saved as data member. 
   //(Warning)
   // Only tracks which has entry in JSFLTKCLClass is saved in this class.
   // 
+
 
   Int_t ncmb = fNTracks;
   TClonesArray &cdc=*(GetCDCTracks());
@@ -442,19 +453,30 @@ Bool_t JSFQuickSimBuf::MakeCDCTracks()
   Int_t ncdc=0;
   Int_t i,nw,iret;
   Int_t itrkp[100]; 
+  Char_t *bankname="";
+  Int_t nerrvx=((JSFQuickSim*)Module())->Param()->GetVTXNERRVX() ;
+  if( nerrvx == 3 ) bankname="Production:CDC_VTX;Track_Parameter";
+  else  bankname="Production:CDC;Track_Parameter";
+
   for(i=0;i<ncmb;i++){
      JSFLTKCLTrack *ct=(JSFLTKCLTrack*)fTracks->UncheckedAt(i);
      if( ct->GetNCDC() < 0 ) continue;
      if( ct->GetType() == 1 || ct->GetType() ==3  ) continue;
      Int_t icdc=ct->Get1stCDC();
 
-     gJSFLCFULL->TBGET(1,"Production:CDC;Track_Parameter",icdc,
-	 	       nw, itrkp,iret);
+     gJSFLCFULL->TBGET(1,bankname,icdc, nw, itrkp,iret);
      if( iret < 0 ) {
-       printf("Error to TBGET Production:CDC;Track_Parameter ..");
+       printf("Error to TBGET %s ..",bankname);
        printf("Element# %d  IRET=%d",icdc,iret);
        printf("\n");
        return kFALSE;
+     }
+     if( nerrvx == 3 ) {
+       Char_t *bnkcdc="Production:CDC;Track_Parameter";
+       Int_t nwt;  Int_t itrkpp[200];
+       gJSFLCFULL->TBGET(1,bnkcdc,icdc,nwt,itrkpp,iret);
+       itrkp[55]=itrkpp[55];
+       itrkp[56]=itrkpp[56];
      }
      new(cdc[ncdc]) JSFCDCTrack( itrkp );
      JSFCDCTrack *t=(JSFCDCTrack*)cdc.UncheckedAt(ncdc);

@@ -23,43 +23,48 @@ const Int_t kMaxCalHits=500;
 //************************************************************
 class JSFCALHit : public TObject {
 protected:
-  Float_t fEnergy;  // Energy depositted in this cell (GeV)
-  Int_t   fCellID;  // Packed Cal hit info.
+  Float_t fEMEnergy; // Energy deposited by HD paarticle (GeV)
+  Float_t fHDEnergy; // Energy deposited by EM paarticle (GeV)
+  Int_t   fCellID;   // Packed Cal hit info.
 
 public:
   JSFCALHit() {}
   virtual ~JSFCALHit() {}
 
-  JSFCALHit(Int_t ienergy, Int_t cellid)
-    { fCellID = cellid ; fEnergy = (Float_t)ienergy/1000.0 ; }
+  JSFCALHit(Int_t cellid, Int_t iemenergy, Int_t ihdenergy)
+    { fCellID = cellid ; fEMEnergy = (Float_t)iemenergy/1000.0 ; 
+                         fHDEnergy = (Float_t)ihdenergy/1000.0 ; }
+  JSFCALHit(Int_t cellid, Float_t emenergy, Float_t hdenergy)
+    { fCellID = cellid ; fEMEnergy=emenergy ; fHDEnergy=hdenergy ; }
 
   virtual Int_t GetCellID(){ return fCellID;}
-  virtual Int_t GetIEnergy(){ return (Int_t)(fEnergy*1000.0);}
-  virtual Float_t GetEnergy(){ return fEnergy;}
+  virtual Float_t GetEMEnergy(){ return fEMEnergy; }
+  virtual Float_t GetHDEnergy(){ return fHDEnergy; }
+  virtual Float_t GetEnergy(){ return fEMEnergy+fHDEnergy; }
 
-  ClassDef(JSFCALHit,1)  // Calorimeter Hit Cell.
+  ClassDef(JSFCALHit,2)  // Calorimeter Hit Cell.
 };
 
 //************************************************************
 class JSFEMCHit : public JSFCALHit {
 public:
   JSFEMCHit() {}
-  JSFEMCHit(Int_t cellid, Int_t ienergy)
-   : JSFCALHit(cellid, ienergy){}
+  JSFEMCHit(Int_t cellid, Int_t iemenergy, Int_t ihdenergy)
+   : JSFCALHit(cellid, iemenergy, ihdenergy){}
   virtual ~JSFEMCHit() {}
 
-  ClassDef(JSFEMCHit,1)  // EMC Calorimeter HitCell.
+  ClassDef(JSFEMCHit,2)  // EMC Calorimeter HitCell.
 };
 
 //************************************************************
 class JSFHDCHit : public JSFCALHit {
 public:
   JSFHDCHit() {}
-  JSFHDCHit(Int_t cellid, Int_t ienergy)
-   : JSFCALHit(cellid, ienergy){}
+  JSFHDCHit(Int_t cellid, Int_t iemenergy, Int_t ihdenergy)
+   : JSFCALHit(cellid, iemenergy, ihdenergy){}
   virtual ~JSFHDCHit() {}
 
-  ClassDef(JSFHDCHit,1)  // HDC Calorimeter HitCell.
+  ClassDef(JSFHDCHit,2)  // HDC Calorimeter HitCell.
 };
 
 #endif

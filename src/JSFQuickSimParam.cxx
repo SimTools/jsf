@@ -1,3 +1,4 @@
+//*LastUpdate :  jsf-1-6  30-March-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-5  1-March-1999  By Akiya Miyamoto
 //*-- Author  : A.Miyamoto  1-March-1999
 
@@ -77,8 +78,9 @@ JSFQuickSimParam::JSFQuickSimParam()
 
 
    // VTX 
-  fNERRVX   =     2    ; // VTX Space point error flag
+  fNERRVX   =     3    ; // VTX Space point error flag
   fNSMPVX   =     5    ; // # sampling layers + 1 = NSMPVX        
+  fNUMVTX   =     4    ; // # sampling layers + 1 = NSMPVX        
   fDPHIVX   =   25.E-4 ; // phi pitch (cm)                        
   fDZEEVX   =   25.E-4 ; // Z   pitch (cm)                        
   
@@ -184,16 +186,20 @@ void JSFQuickSimParam::ReadParamDetector(Char_t *file)
   fd=fopen(file,"r");
   if( !fd ) Fatal("ReadParamFile","Unable to open file %s",file);
  
-  printf("JSFQuickSimParam::ReadParamDetector ");
+  printf("JSFQuickSimParam::ReadParamDetector \n");
   printf(" --  Read detector parameter from the file %s\n",file);
   Char_t input[256];
+
+  // Read a file
   while(fgets(input, 256, fd) ){
+
     if( !strncmp("@!",input,2) ) continue;
     
     Int_t id;
     Float_t val;
     sscanf(input,"%d %g",&id, &val);
-    
+   
+  // Set a data to varaiables
     Float_t *clspar=&fCLSPAR[0][0];
     if( id == 1 ) continue ;
     else if( id == 2 ) { fBfield = val; 
@@ -206,21 +212,31 @@ void JSFQuickSimParam::ReadParamDetector(Char_t *file)
     else if( 50 < id && id < 70 ) fHDCal[id-51]=val;
     else if( id == 70 ) fNERRVX = (Int_t)val ; //# sampling layers + 1 = NSMPVX
     else if( id == 71 ) fNSMPVX = (Int_t)val ; //# sampling layers + 1 = NSMPVX
-    else if( id == 72 ) fDPHIVX = val ; // phi pitch (cm)
-    else if( id == 73 ) fDZEEVX = val ; // Z pitch (cm)
-    else if( 73 < id && id < 4*(fNSMPVX+1)+74 ) { // VTX layer info.
-      Int_t ilay=(id-74)/4 ;
-      fVTXLayer[ilay][id-(74+4*ilay)]=val;
-    }
-    else if( 4*(fNSMPVX+1)+73 < id && id < 4*(fNSMPVX+1)+79 ) { // VTX error info.
-      fVTXError[id-(4*(fNSMPVX+1)+74 )]=val;
-    }
     else if( 1000 < id && id < 1021 ) clspar[id-1001]=val;
-    else {
-      Fatal("ReadParamDetector",
+
+    else { 
+      if( fNERRVX ==1 || fNERRVX == 2 ) {
+        if( id == 72 ) fDPHIVX = val ; // phi pitch (cm)
+        else if( id == 73 ) fDZEEVX = val ; // Z pitch (cm)
+	else if( 73 < id && id < 4*(fNSMPVX+1)+74 ) { // VTX layer info.
+	  Int_t ilay=(id-74)/4 ;
+	  fVTXLayer[ilay][id-(74+4*ilay)]=val;
+	}
+	else if( 4*(fNSMPVX+1)+73 < id && id < 4*(fNSMPVX+1)+79 ) { // VTX error info.
+	  fVTXError[id-(4*(fNSMPVX+1)+74 )]=val;
+	}
+      }
+      else if( fNERRVX==3 ){
+	if( 73 <= id  && id <= 76 ) { fVTXError[id-73]=val; }
+	else if( 76 < id && id < 4*(fNSMPVX+1)+77 ) {
+	  Int_t ilay=(id-76)/4;
+	  fVTXLayer[ilay][id - (4*ilay+77)]=val;
+	}
+      }
+      else {
+        Fatal("ReadParamDetector",
 	      "Invalid Parameter ID %d, Error line is \n%s",id,input);
-
-
+      }
     }
   }
   fclose(fd);
@@ -286,6 +302,7 @@ void JSFQuickSimParam::SetSmearParam()
   smrvgo_.nsmpvx   =  fNSMPVX   ; // # sampling layers + 1 = NSMPVX        
   smrvgo_.dphivx   =  fDPHIVX   ; // phi pitch (cm)                        
   smrvgo_.dzeevx   =  fDZEEVX   ; // Z   pitch (cm)                        
+  smrvgo_.numvtx   =  fNUMVTX   ; // Number of actual VTX layer
   
   //  fVTX Layer info
   Int_t i;
@@ -474,7 +491,7 @@ void JSFCALGeoParam::HitCellGeom(Int_t iCellID, Float_t geo[])
   JSFRThPhi hit;
   JSF3DV p1,p2;  
   hit.phi = fPhiStep*xphi;
-  Double_t zeta, costh, sinth;
+  Double_t zeta, sinth;
   Double_t zeta1, zeta2, cos1,cos2,sin1,sin2;
   switch( izee ) {
     case 0:
@@ -535,7 +552,9 @@ void JSFQuickSimParam::Streamer(TBuffer &R__b)
       R__b >> fNSMPVX;
       R__b >> fDPHIVX;
       R__b >> fDZEEVX;
+      R__b >> fNUMVTX;
       R__b.ReadStaticArray((float*)fVTXLayer);
+      R__b.ReadStaticArray((float*)fVTXError);
       R__b.ReadStaticArray((float*)fCLSPAR);
    } else {
       R__b.WriteVersion(JSFQuickSimParam::IsA());
@@ -548,8 +567,10 @@ void JSFQuickSimParam::Streamer(TBuffer &R__b)
       R__b << fNSMPVX;
       R__b << fDPHIVX;
       R__b << fDZEEVX;
+      R__b << fNUMVTX;
       Int_t nout=4*(fNSMPVX+1);
       R__b.WriteArray((float*)fVTXLayer, nout);
+      R__b.WriteArray((float*)fVTXError,5);
       R__b.WriteArray((float*)fCLSPAR, 20);
    }
 }

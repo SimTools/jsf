@@ -9,6 +9,8 @@
 //
 //$Id:
 //                                                                      //
+// 30-Mar-1999 A.Miyamoto  Add fNUMVTX in JSFQuickSimParam
+//
 //////////////////////////////////////////////////////////////////////////
 
 #include "TObject.h"
@@ -92,6 +94,7 @@ protected:
    Float_t fVTXLayer[10][4]; // VTX Layer
    Float_t fVTXError[5];     // VTX resolution parameter
    Int_t   fNERRVX;          // VTX Error flag. 
+   Int_t   fNUMVTX;          // Number of VTX layer
    Float_t fCLSPAR[4][5]   ; // Clustering parameter.
    Float_t fCMBCUT[3] ; // ADXEVT, ENSGEM, ENSGHD for CMBCUT
 
@@ -135,6 +138,9 @@ public:
    Float_t GetHDCZPlus(){ return fHDCal[6]; }
 
  
+   Int_t   GetVTXNInnerTracker(){ return fNSMPVX-1-fNUMVTX; }
+   Int_t   GetVTXNVTX(){ return fNUMVTX; }
+   Int_t   GetVTXNERRVX(){ return fNERRVX; }
    Int_t   GetVTXNLayer(){ return fNSMPVX; }
    Float_t GetVTXPhiPitch(){ return fDPHIVX; }
    Float_t GetVTXZPitch(){ return fDZEEVX; }
@@ -145,7 +151,7 @@ public:
    Float_t GetVTXSigmaSP(){ return fVTXError[0]; }
    Int_t   GetVTXLayerNumber(Float_t radius);   
 
-   ClassDef(JSFQuickSimParam,1) // JSFQuickSim Parameters
+   ClassDef(JSFQuickSimParam,2) // JSFQuickSim Parameters
 };
  
 #endif

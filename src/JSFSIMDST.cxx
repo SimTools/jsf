@@ -1,5 +1,13 @@
+//*LastUpdate :  jsf-1-6  30-March-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-4  28-January-1999  By Akiya Miyamoto
 //*-- Author  : Akiya Miyamoto  28-January-1999
+
+/*
+ 30-March-1999  A.Miyamoto
+   SIMDST Format is changed.  EMH(2,i), HDH(2,i) is increased to 
+   EMH(3,i), and HDH(3,i), to store EM and HD responce separately. 
+*/
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -204,36 +212,61 @@ Bool_t JSFSIMDST::WriteParameters(Int_t nrun)
   fprintf(fd,"@! \n@! VTX detector \n@!\n");
   com[69]="! VTX NERRVX Type of parameter format";
   com[70]="! VTX # sampling layers + 1 = NSMPVX";
-  com[71]="! VTX phi pitch (cm)";
-  com[72]="! VTX Z   pitch (cm)";
-  for(i=70;i<=73;i++){ fprintf(fd,"%3d   %g %s\n",i,smrpar[i-1],com[i-1]); }
-
   Int_t nerrvx=(Int_t)smrpar[69];
   Int_t nsmpvx=(Int_t)smrpar[70];
 
-  Int_t lyr=0;
-  Int_t ioff=0;
-  for(lyr=0;lyr<=nsmpvx;lyr++){
-    ioff=4*lyr+73;
-    com[ioff]="! VTX radius (cm)";
-    com[ioff+1]="! VTX Z-(cm)";
-    com[ioff+2]="! VTX Z+(cm)";
-    com[ioff+3]="! VTX thickness in radiation length";
-    for(i=0;i<4;i++){  
-      fprintf(fd,"%3d   %g %s\n",ioff+i+1,smrpar[ioff+i],com[ioff+i]); }
-  }
-  ioff +=4;
-  if( nerrvx > 1 ) {
-    com[ioff]="! VTX r-phi and Z resolution (sigma)";
-    com[ioff+1]="! VTX not used";
-    com[ioff+2]="! VTX not used";
-    com[ioff+3]="! VTX not used";
-    com[ioff+4]="! VTX not used";
-    for(i=0;i<5;i++){ 
-      if( strcmp(com[ioff+i],"! VTX not used") != 0 ) 
-      fprintf(fd,"%3d   %g %s\n",ioff+i+1,smrpar[ioff+i],com[ioff+i]); 
+  if( nerrvx == 1 || nerrvx == 2 ) {
+    com[71]="! VTX phi pitch (cm)";
+    com[72]="! VTX Z   pitch (cm)";
+    for(i=70;i<=73;i++){ fprintf(fd,"%3d   %g %s\n",i,smrpar[i-1],com[i-1]); }
+
+    Int_t lyr=0;
+    Int_t ioff=0;
+    for(lyr=0;lyr<=nsmpvx;lyr++){
+      ioff=4*lyr+73;
+      com[ioff]="! VTX radius (cm)";
+      com[ioff+1]="! VTX Z-(cm)";
+      com[ioff+2]="! VTX Z+(cm)";
+      com[ioff+3]="! VTX thickness in radiation length";
+      for(i=0;i<4;i++){  
+        fprintf(fd,"%3d   %g %s\n",ioff+i+1,smrpar[ioff+i],com[ioff+i]); }
     }
-  } 
+    ioff +=4;
+    if( nerrvx > 1 ) {
+      com[ioff]="! VTX r-phi and Z resolution (sigma)";
+      com[ioff+1]="! VTX not used";
+      com[ioff+2]="! VTX not used";
+      com[ioff+3]="! VTX not used";
+      com[ioff+4]="! VTX not used";
+      for(i=0;i<5;i++){ 
+        if( strcmp(com[ioff+i],"! VTX not used") != 0 ) 
+        fprintf(fd,"%3d   %g %s\n",ioff+i+1,smrpar[ioff+i],com[ioff+i]); 
+      }
+    } 
+  }
+
+  // when nerrvx == 3
+  else {
+    com[71]="! Number of VTX layer (NUMVTX)";
+    com[72]="! r-phi resolution(cm) of VTX";
+    com[73]="! z resolution(cm) of VTX";
+    com[74]="! r-phi resolution(cm) of VTX";
+    com[75]="! z resolution(cm) of VTX";
+    for(i=70;i<=76;i++){ fprintf(fd,"%3d   %g %s\n",i,smrpar[i-1],com[i-1]); }
+
+    Int_t lyr=0;
+    Int_t ioff=0;
+    for(lyr=0;lyr<=nsmpvx;lyr++){
+      ioff=4*lyr+76;
+      com[ioff]="! VTX radius (cm)";
+      com[ioff+1]="! VTX Z-(cm)";
+      com[ioff+2]="! VTX Z+(cm)";
+      com[ioff+3]="! VTX thickness in radiation length";
+      for(i=0;i<4;i++){ 
+        fprintf(fd,"%3d   %g %s\n",ioff+i+1,smrpar[ioff+i],com[ioff+i]); }
+    }
+  }
+
   fclose(fd);
 
   return kTRUE;
@@ -421,14 +454,16 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
 
   for(i=0;i<fNEMCHits;i++){
      JSFEMCHit *h=(JSFEMCHit*)fEMCHits->UncheckedAt(i);
-     emh[i][0]=h->GetIEnergy();
-     emh[i][1]=h->GetCellID();
+     emh[i][0]=(Int_t)(h->GetEMEnergy()*1000.0);
+     emh[i][1]=(Int_t)(h->GetHDEnergy()*1000.0);
+     emh[i][2]=h->GetCellID();
   }
 
   for(i=0;i<fNHDCHits;i++){
      JSFHDCHit *h=(JSFHDCHit*)fHDCHits->UncheckedAt(i);
-     hdh[i][0]=h->GetIEnergy();
-     hdh[i][1]=h->GetCellID();
+     hdh[i][0]=(Int_t)(h->GetEMEnergy()*1000.0);
+     hdh[i][1]=(Int_t)(h->GetHDEnergy()*1000.0);
+     hdh[i][2]=h->GetCellID();
   }
 
 
@@ -488,19 +523,18 @@ Bool_t JSFSIMDSTBuf::UnpackDST(Int_t nev)
 
   Int_t lenproduc=4;
   Int_t unit=((JSFSIMDST*)Module())->GetUnit();
-  simdstread_(&unit, &fEndian, fProduc, &fVersion, &ngen, &fNCombinedTracks,
+  Int_t ivers;
+  simdstread_(&unit, &fEndian, fProduc, &ivers, &ngen, &fNCombinedTracks,
        &fNCDCTracks, &fNEMCHits, &fNHDCHits, fHead, gendat, igendat, 
        cmbt, trkf, trkd, emh, hdh, nvtxh, &fNVTXHits, vtxd, idvtx, 
        &nret, lenproduc);
-  /*
-  printf(" nret=%d fEndian=%d \n",nret,fEndian);
-  printf(" fProduc=%s\n",fProduc);
-  printf(" fVersion=%d ngen=%d ",fVersion,ngen);
-  printf(" fNCombinedTracks=%d\n",fNCombinedTracks);
-  printf(" #CDC,#EMC, #HDC=%d %d %d\n",fNCDCTracks, fNEMCHits, fNHDCHits);
-  printf(" fHead=%g %g\n",fHead[0],fHead[1]);
-  printf(" #VTX Hits=%d\n",fNVTXHits);
-  */
+
+  if( ivers != fVersion ) {
+    printf("SIMDST version of the file is %d ",ivers);
+    printf("while the program is for the version %d\n",fVersion);
+    printf("Use proper program to read this file.\n");
+    return kFALSE;
+  }
 
   SetClonesArray();
 
@@ -531,11 +565,11 @@ Bool_t JSFSIMDSTBuf::UnpackDST(Int_t nev)
 
   TClonesArray &emha = *(fEMCHits);
   for(i=0;i<fNEMCHits;i++){
-     new(emha[i])  JSFEMCHit(emh[i][0], emh[i][1]);
+     new(emha[i])  JSFEMCHit(emh[i][2], emh[i][0], emh[i][1]);
   }
   TClonesArray &hdha = *(fHDCHits);
   for(i=0;i<fNHDCHits;i++){
-     new(hdha[i])  JSFHDCHit(hdh[i][0], hdh[i][1]);
+     new(hdha[i])  JSFHDCHit(hdh[i][2], hdh[i][0], hdh[i][1]);
   }
 
   // ***************************************
@@ -588,7 +622,8 @@ JSFSIMDSTBuf::JSFSIMDSTBuf(const char *name, const char *title,	JSFModule *modul
     : JSFEventBuf(name, title, module)
 {  
   fEndian = 1296651082;
-  fVersion = 201;
+  //  fVersion = 201;
+  fVersion = 202;     // Since jsf-1-6
   strcpy(fProduc,"QIK ");
 
 }

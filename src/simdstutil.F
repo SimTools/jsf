@@ -17,7 +17,7 @@ c*******************************************************************
       real*4  head(2), gendat(10,ngen), cmbt(8,ncmb), trkf(23,ntrk)
       integer*2 igendat(4,ngen)
       real*8  trkd(15,ntrk)
-      integer*4  emh(2,nemh), hdh(2,nhdh)
+      integer*4  emh(3,nemh), hdh(3,nhdh)
       integer*4 nvtx(ntrk)
       real*8   vtxd(5,npvtx)
       integer*4 ivtx(2,npvtx)
@@ -31,8 +31,8 @@ c*******************************************************************
      >  ((cmbt(kt,it),kt=1,8),it=1,ncmb),
      >  ((trkf(kt,it),kt=1,23),it=1,ntrk),
      >  ((trkd(kd,id),kd=1,15),id=1,ntrk),
-     >  ((emh(ke,ie),ke=1,2),ie=1,nemh),
-     >  ((hdh(kh,ih),kh=1,2),ih=1,nhdh),
+     >  ((emh(ke,ie),ke=1,3),ie=1,nemh),
+     >  ((hdh(kh,ih),kh=1,3),ih=1,nhdh),
      >  (nvtx(nv),nv=1,ntrk),
      >  npvtx, 
      >  ((vtxd(lv,iv),lv=1,5),iv=1,npvtx),
@@ -58,7 +58,7 @@ c     nret = -2 for read error.
       real*4  head(2), gendat(10,*),cmbt(8,*),trkf(23,*)
       integer*2 igendat(4,*)
       real*8  trkd(15,*)
-      integer*4  emh(2,*), hdh(2,*)
+      integer*4  emh(3,*), hdh(3,*)
       integer*4 nvtx(*)
       real*8   vtxd(5,*)
       integer*4 ivtx(2,*)
@@ -78,8 +78,8 @@ c     nret = -2 for read error.
      >  ((cmbt(kt,it),kt=1,8),it=1,ncmb),
      >  ((trkf(kt,it),kt=1,23),it=1,ntrk),
      >  ((trkd(kd,id),kd=1,15),id=1,ntrk),
-     >  ((emh(ke,ie),ke=1,2),ie=1,nemh),
-     >  ((hdh(kh,ih),kh=1,2),ih=1,nhdh),
+     >  ((emh(ke,ie),ke=1,3),ie=1,nemh),
+     >  ((hdh(kh,ih),kh=1,3),ih=1,nhdh),
      >  (nvtx(nv),nv=1,ntrk),
      >  npvtx, 
      >  ((vtxd(lv,iv),lv=1,5),iv=1,npvtx),

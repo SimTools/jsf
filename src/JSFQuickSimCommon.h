@@ -23,7 +23,7 @@ typedef struct {
   Float_t bfdata[2];
 } COMMON_SMRFLD;
 
-extern COMMON_SWMRND swmrnd_;
+extern COMMON_SWMRND swmrnd_; 
 extern COMMON_PRFELD prfeld_;
 extern COMMON_SMRFLD smrfld_;
 
@@ -36,6 +36,7 @@ typedef struct {
   Float_t rcyvx[kMXxVXL], zcyvx[kMXxVXL][2], rdlvx[kMXxVXL];
   Int_t   nerrvx;
   Float_t errvx[5];
+  Int_t   numvtx;
 } COMMON_SMRVGO ;
 extern COMMON_SMRVGO smrvgo_;
 

@@ -73,6 +73,50 @@ JSFHelicalTrack::JSFHelicalTrack(JSFHelixParameter hlx)
 }
 
 //_____________________________________________________________________________
+JSFHelicalTrack::JSFHelicalTrack(JSF3DV p1, JSF3DV p2, JSF3DV p3, Double_t bfield)
+{
+  // Set HelicalTrackParameter from 3 points, p1, p2, p3, and
+  // Magnetic field, bz.  bz is in unit of kgauss.
+  // Curvature is calculated from x and y corrdinates of p1, p2, p3 
+  // and tan-lambda is defined by z coordinates of p1 and p2.
+  // Pivot is set to p1.
+
+  SetBfield(bfield);
+  fWithError = kFALSE;
+
+  fChisq=0.0; fCL=0.0 ; fNDF=0 ; 
+  
+  fHelix.pivot.x=p1.x;
+  fHelix.pivot.y=p1.y;
+  fHelix.pivot.z=p1.z;
+  fHelix.dr=0;
+  fHelix.dz=0;
+  fHelix.kappa=0;
+  fHelix.phi0=0;
+
+  Double_t d = (p2.x-p1.x)*(p3.y-p2.y) - (p3.x-p2.x)*(p2.y-p1.y) ;
+  Double_t xc=0.0; Double_t yc=0.0 ;
+  if( d != 0.0 ) {
+    Double_t c1=( (p2.x-p1.x)*(p2.x+p1.x) + (p2.y-p1.y)*(p2.y+p1.y))/2.0;
+    Double_t c2=( (p3.x-p2.x)*(p3.x+p2.x) + (p3.y-p2.y)*(p3.y+p2.y))/2.0;
+    xc=( c1*(p3.y-p2.y)-c2*(p2.y-p1.y))/d;
+    yc=(-c1*(p3.x-p2.x)+c2*(p2.x-p1.x))/d;
+    Double_t r = TMath::Sqrt( (xc-p1.x)*(xc-p1.x) + (yc-p1.y)*(yc-p1.y) );
+    fHelix.kappa = fAlpha/r;
+    fHelix.phi0  = TMath::ATan2( (p1.y-yc), (p1.x-xc) );
+  }  
+  Double_t phi=TMath::ATan2( p2.y-yc, p2.x-xc );
+  Double_t phidef=phi-fHelix.phi0;
+  if( phidef > TMath::Pi() )  phidef += 2*TMath::Pi();
+  if( phidef < -TMath::Pi() ) phidef -= 2*TMath::Pi();
+  Double_t charge=-TMath::Sign(1.,phidef);
+  if( charge > 0.0 ) { fHelix.phi0 += TMath::Pi(); 
+      if( fHelix.phi0 > 2*TMath::Pi() ) fHelix.phi0 -= 2*TMath::Pi();}
+  fHelix.kappa = charge*fHelix.kappa;
+  fHelix.tanl  = ( fHelix.pivot.z - p2.z ) / phidef /fAlpha*fHelix.kappa ;
+}
+
+//_____________________________________________________________________________
 void JSFHelicalTrack::Print()
 {
   printf(" fHelix=%g %g %g %g %g \n",
@@ -100,8 +144,6 @@ Int_t JSFHelicalTrack::IntersectOf2Circle(JSF2DV x1, Double_t r1, JSF2DV x2, Dou
   if( r2 > l+r1 ) return 0;
   if( r1 > l+r2 ) return 0;
 
-  //  printf(" x1=%g %g   x2=%g %g\n",x1.x,x1.y,x2.x,x2.y);
-
   JSF2DV u = dif.UnitV();
   if( l ==  r1+r2 ) {
     c1=x1+u*r1;
@@ -110,15 +152,11 @@ Int_t JSFHelicalTrack::IntersectOf2Circle(JSF2DV x1, Double_t r1, JSF2DV x2, Dou
 
 
   Double_t rate= (r1*r1 - r2*r2 + l*l)/(2.0*l*r1);
-  //  printf(" r1=%g r2=%g l=%g rate=%g\n",r1,r2,l,rate);
   Double_t th=TMath::ACos( rate );
   JSF2DV v=u.NormalV();
 
   Double_t f1=r1*TMath::Cos(th);
   Double_t f2=r1*TMath::Sin(th);
-
-  // printf(" th=%g\n",th);
-  // printf(" u=%g %g  v=%g %g \n",u.x, u.y, v.x, v.y);
 
   c1 = x1 + u*f1 + v*f2;
   c2 = x1 + u*f1 - v*f2;
@@ -160,7 +198,6 @@ Int_t JSFHelicalTrack::OriginToCylinder(Double_t Rcyl, Double_t Zcyl,
   JSF3DV endp;
   Double_t fa=GetDeflectionAngle2D(orig);
 
-  // printf(" fa=%g phi0=%g \n",fa,fHelix.phi0);
   if( fHelix.kappa > 0 ) {  // Make sure deflection angle is decreasing
     while( fa < -0.0001 ) { fa +=twopi; }  
   }
@@ -168,18 +205,12 @@ Int_t JSFHelicalTrack::OriginToCylinder(Double_t Rcyl, Double_t Zcyl,
     while( fa > 0.0001 ) { fa -= twopi; }
   }
   Phi0=fa;
-  // printf(" kappa=%g Phi0=%g\n",fHelix.kappa,Phi0);
 
   // Find intersection with Barrel.
   JSF2DV center=GetCenter();
   JSF2DV cros[2];
   Double_t rabs=TMath::Abs(GetRadius());
   Int_t ncros=IntersectOf2Circle(orig, Rcyl, center, rabs, cros[0], cros[1]);
-  // printf(" ncros is %d\n",ncros);
-  // printf(" cros[0]=%g %g\n",cros[0].x,cros[0].y);
-  // printf(" cros[1]=%g %g\n",cros[1].x,cros[1].y);
-  // printf(" center is %g %g\n",center.x,center.y);
-  // printf(" Rcyl=%g rabs=%g\n",Rcyl, rabs);
   if( ncros == 0 ) goto ENDCAP;
 
   // When intersects with Barrel.
@@ -197,9 +228,7 @@ Int_t JSFHelicalTrack::OriginToCylinder(Double_t Rcyl, Double_t Zcyl,
     }
   }
 
-  //  printf(" fang is %g %g \n",fang[0],fang[1]);
   Phi1=fang[0];
-  // printf(" Phi1 is %g\n",Phi1);
   if( ncros == 1 ) return 0;  // Only one intersection with barrel.
 
   if( fHelix.kappa > 0 ) {  // Select deflection angle close to one at origin
@@ -209,9 +238,7 @@ Int_t JSFHelicalTrack::OriginToCylinder(Double_t Rcyl, Double_t Zcyl,
     if( Phi1 - Phi0 > fang[1] - Phi0 ) Phi1 = fang[1];
   }
 
-  // printf(" Phi0, Phi1=%g %g \n",Phi0, Phi1);
   endp=GetCoordinate(Phi1);
-  // printf(" endp is %g %g %g\n",endp.x, endp.y, endp.z);
   if( TMath::Abs(endp.z) > Zcyl ) { goto ENDCAP; }
 
   return 0;
@@ -221,7 +248,6 @@ ENDCAP:
   // When helix hits barrel.  
   Double_t fb=0;
   Int_t ir=1;
-  // printf(" Maxloop is %d\n",Maxloop);
   if( fHelix.tanl > 0 ) {
     fb = ( fHelix.pivot.z + fHelix.dz - Zcyl ) / ( GetRadius()*fHelix.tanl );
   }
@@ -237,10 +263,85 @@ ENDCAP:
       ir=2;
   }
   Phi1 = fb;
-  // printf(" Phi0, Phi1=%g %g \n",Phi0, Phi1);
 
   return ir;
 
 }
 
 
+
+//_____________________________________________________________________________
+Bool_t JSFHelicalTrack::IntersectWithCylinder(JSFRPhiZ ref, JSFRPhiZ &p)
+{
+  // Find track position at cylinder with radius ref.r
+  // (Input)
+  //    ref     : Track position near ref is calculated.
+  // (Output)
+  //    p       : Track position at cylinder 
+  //              p.r = ref.r and p.phi and p.z are calculated.
+  //    retun code is false, when not intersect with cylinder.
+
+  //  Double_t twopi=2*TMath::Pi();
+
+  // Find intersection with Barrel.
+  JSF2DV center=GetCenter();
+  JSF2DV orig(0.0, 0.0);
+  JSF2DV cros[2];
+  Double_t rabs=TMath::Abs(GetRadius());
+  Int_t ncros=IntersectOf2Circle(orig, ref.r, center, rabs, cros[0], cros[1]);
+  if( ncros == 0 ) return kFALSE;
+
+  // Select point close to ref.
+  p.r=ref.r;
+  Double_t refx=ref.r*TMath::Cos(ref.phi);
+  Double_t refy=ref.r*TMath::Sin(ref.phi);
+  Double_t dist0=TMath::Sqrt((refx-cros[0].x)*(refx-cros[0].x) +
+			     (refy-cros[0].y)*(refy-cros[0].y));
+  Double_t dist1=TMath::Sqrt((refx-cros[1].x)*(refx-cros[1].x) +
+			     (refy-cros[1].y)*(refy-cros[1].y));
+  if( dist1 < dist0 ) cros[0]=cros[1];
+
+  // When intersects with Barrel.
+  Double_t fang=GetDeflectionAngle2D(cros[0]);
+
+  JSF3DV xp=GetCoordinate(fang);
+  p.phi=TMath::ATan2(xp.y, xp.x);
+  p.z  = xp.z;
+
+  return kTRUE;
+
+}
+
+
+//_________________________________________________________________
+THelix *JSFHelicalTrack::GetTHelix(Double_t rcyl, Double_t zcyl)
+{
+  // returns THelix object
+  // rcyl and zcyl is a radius and a half Z length where Helix is drown.
+
+     Double_t hp[3], hx[3];
+     hx[0]=fHelix.pivot.x ; hx[1]=fHelix.pivot.y; hx[2]=fHelix.pivot.z;
+     Double_t pt  = 1.0/TMath::Abs(fHelix.kappa);
+     Double_t r   = fAlpha*pt;
+     Double_t w   = pt/r;
+     Double_t vt  = r*w;
+     JSF3DV pmom = GetMomentum(0.0);
+     hp[0]=vt*pmom.x/pt;  
+     hp[1]=vt*pmom.y/pt;  
+     hp[2]=pmom.z;
+     w *= GetCharge();
+
+     Double_t range[2]; 
+     Double_t zlast;
+
+     Double_t phi0, phi1;
+     OriginToCylinder(rcyl, zcyl, phi0, phi1);
+     JSF3DV end=GetCoordinate(phi1);
+     zlast = end.z;     if( zlast > 0.0 ) { range[0]=hx[2] ; range[1]=zlast ;}
+     else {  range[1]=hx[2] ; range[0]=zlast; }
+
+     THelix *thelix=new THelix();
+     thelix->SetHelix(hx, hp, w, range, kHelixZ);
+
+     return thelix;
+}

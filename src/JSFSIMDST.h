@@ -35,7 +35,8 @@
 const Int_t kGenSize=10;
 const Int_t kIGenSize=4;
 const Int_t kGenMax=500;
-const Int_t kClsSize=2;
+// const Int_t kClsSize=2;
+const Int_t kClsSize=3;
 const Int_t kClsMax=1000;
 const Int_t kTrkMax=500;
 const Int_t kCmbtSize=8;
@@ -152,7 +153,7 @@ public:
   void NoReadWrite(){ fReadWrite=0;}
   Int_t GetReadWriteFlag(){ return fReadWrite; }
 
-  ClassDef(JSFSIMDST, 1)  // Make SIMDST data.
+  ClassDef(JSFSIMDST, 2)  // Make SIMDST data.
 
 };
 

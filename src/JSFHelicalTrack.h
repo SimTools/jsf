@@ -16,6 +16,7 @@
 #include "TClonesArray.h"
 #include "TMath.h"
 #include "TVector.h"
+#include "THelix.h"
 
 #ifndef __JSFBasicClasses__
 #include "JSFBasicClasses.h"
@@ -87,17 +88,28 @@ public:
 		  Float_t charge, 
 		  Float_t x=0, Float_t y=0, Float_t z=0); 
   JSFHelicalTrack(JSFHelixParameter hlx);
+  JSFHelicalTrack(JSF3DV p1, JSF3DV p2, JSF3DV p3, Double_t bfield);
+
   virtual ~JSFHelicalTrack(){}
 
   Double_t GetBField(){ return fBfield; }
   void Print();
   Int_t IntersectOf2Circle(JSF2DV x1, Double_t r1, JSF2DV x2, Double_t r2,
       JSF2DV &c1, JSF2DV &c2);
+  Bool_t IntersectWithCylinder(JSFRPhiZ ref, JSFRPhiZ &p);
 
   Int_t OriginToCylinder(Double_t Rcyl, Double_t Zcyl, 
 			 Double_t &phi0, Double_t &phi1, Int_t Maxloop=3,
 			 Double_t StartX=0, Double_t StartY=0);
 
+  inline JSFHelixParameter GetHelixParameter(){return fHelix; }
+  inline void SetHelix(Double_t *par){
+    fHelix.dr=par[0];fHelix.phi0=par[1];fHelix.kappa=par[2];
+    fHelix.dz=par[3];fHelix.tanl=par[4];}
+  inline void SetErrorMatrix(Int_t ndf, 
+			     Double_t chisq, Double_t cl, Double_t *emat){
+    fNDF=ndf; fChisq=chisq; fCL=cl;
+    Int_t i;  for(i=0;i<15;i++){ fError.data[i]=emat[i]; } }
 
   inline void SetBfield(Double_t field) {
     fBfield=field; fAlpha=kGiga/kLightVelocity*100.0/(fBfield/10.0); }
@@ -120,6 +132,7 @@ public:
   }
 
   inline Double_t GetRadius(){ return fAlpha/fHelix.kappa; }
+  inline Double_t GetCharge(){ return TMath::Sign(1.0,fHelix.kappa); }
 
   inline JSF3DV GetMomentum(Double_t phi){
     Double_t kinv=1.0/TMath::Abs(fHelix.kappa);
@@ -129,20 +142,17 @@ public:
   }
 
   inline Double_t GetDeflectionAngle2D(JSF2DV p){
-//    printf(" p is %g %g\n",p.x,p.y);
     Double_t csphi0=TMath::Cos(fHelix.phi0);
     Double_t snphi0=TMath::Sin(fHelix.phi0);
     Double_t r=fAlpha/fHelix.kappa;
     Double_t dy= ( fHelix.pivot.y + (fHelix.dr+r)*TMath::Sin(fHelix.phi0) - p.y )/r;
     Double_t dx= ( fHelix.pivot.x + (fHelix.dr+r)*TMath::Cos(fHelix.phi0) - p.x )/r;
-//    printf(" dx,dy=%g %g\n",dx,dy);
     Double_t ang=TMath::ATan2( dy*csphi0 - dx*snphi0, dx*csphi0 + dy*snphi0 );
- //   printf(" ang=%g ",ang);
- //   if( ang > TMath::Pi() ) ang -= 2.0*TMath::Pi();
- //   printf(" ang =%g\n",ang);
     return ang;
   }
-      
+
+  THelix *GetTHelix(Double_t rcyl, Double_t zcyl);
+    
 			  
 
 };
