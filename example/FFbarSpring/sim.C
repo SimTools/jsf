@@ -15,7 +15,8 @@
   jsf->BeginRun(30);      // Set run number to 30.
   for(Int_t ev=1;ev<=maxevt;ev++){
     printf(" start event %d\n",ev);
-    jsf->Process(ev);
+    if( !jsf->Process(ev)) break;
+
     jsf->FillTree();
     jsf->Clear();
   }
