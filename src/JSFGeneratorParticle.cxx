@@ -84,6 +84,17 @@ JSFGeneratorParticle::JSFGeneratorParticle(Float_t data[])
    fMother=(Int_t)data[13]; fLifeTime=data[15];
    fDecayLength=data[16];
 }
+// ---------------------------------------------------------------
+JSFGeneratorParticle::JSFGeneratorParticle(Double_t data[])
+{
+   fSer=(Int_t)data[0];  
+   fID=(Int_t)data[1] ; fMass=data[2] ; fCharge=data[3];
+   fP[1]=data[4] ; fP[2]=data[5] ; fP[3]=data[6] ; fP[0]=data[7];
+   fX[1]=data[8] ; fX[2]=data[9] ; fX[3]=data[10]; fX[0]=data[14];
+   fNdaughter=(Int_t)data[11] ; fFirstDaughter=(Int_t)data[12] ;
+   fMother=(Int_t)data[13]; fLifeTime=data[15];
+   fDecayLength=data[16];
+}
 
 // ---------------------------------------------------------------
 JSFGeneratorParticle::JSFGeneratorParticle(JSFGeneratorParticle& g)

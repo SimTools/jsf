@@ -11,24 +11,37 @@
 #include <TObject.h>
 #include <TTree.h>
 #include <TClonesArray.h>
-#include <TPythia.h>
-#include <TMCParticle.h>
 
 #include "JSFConfig.h"
 #include "JSFGenerator.h"
 
+#if __PYTHIA_VERSION__ >= 6
+#include <TPythia6.h>
+#include <TMCParticle6.h>
+#else
+#include <TPythia.h>
+#include <TMCParticle.h>
+#endif
+
+#include "JSFBeamGeneration.h"
 
 class PythiaGenerator : public JSFGenerator {
 private:
   Double_t fEcm      ; // Center of mass energy (GeV)
+#if __PYTHIA_VERSION__ >= 6 
+  TPythia6  *fPythia  ; //! Pointer to the pythia class
+  Int_t     fMRPY[6];   // Random seed at the begining of event
+  Double_t  fRRPY[100]; // 			     
+#else
   TPythia  *fPythia  ; //! Pointer to the pythia class
+  Int_t    fMRLU[6];   // Random seed at the begining of event
+  Float_t  fRRLU[100]; // 			     
+#endif
   Char_t   fFrame[8]; // Name of beam particle
   Char_t   fBeamParticle[8]; // Name of beam particle
   Char_t   fTargetParticle[8]; // Target particle.
   Int_t    fPrintStat; //! call PYSTAT at the end run if not equal 0.				    
   
-  Int_t    fMRLU[6];   // Random seed at the begining of event
-  Float_t  fRRLU[100]; // 			     
 // Following data are filled only at the end of run, or data is read.
   Int_t    fNUMSUB   ; // Number of defined subprocesses + 1 (for total)
   Int_t    *fISUB    ; //[fNUMSUB] ISUB of subprocesses whose MSUB=1. (0=total, 1 to fNUMSUB )
@@ -37,6 +50,13 @@ private:
   Float_t   fEventWeight ; //! Weight of current event.    
 
   Int_t     fBeamStrahlung ; //  > 0 to include beam strahlung.
+
+  // For beamstrahlung
+  TFile             *fBSFile; //! Beamstrahlung file
+  JSFBeamGenerationCain  *fBS;     //  Beamstrahlung spectrum
+  Double_t           fEcmMax; //! Abolutely max ECM energy
+  TString            fBSname; //  Name of BS spectrum
+  Double_t           fBSwidth; //  half-width of BS spectrum
 
 public:
   PythiaGenerator(const Char_t *name="PythiaGenerator", 
@@ -50,7 +70,17 @@ public:
   virtual Bool_t EndRun();
   virtual Bool_t Terminate();
   virtual Bool_t GetLastRunInfo();
+
+#if __PYTHIA_VERSION__ >= 6
+  TPythia6  *GetPythia(){ return fPythia ; }
+  inline Int_t const GetVersionNumber(){ return __PYTHIA_VERSION__  ; }
+#else
   TPythia  *GetPythia(){ return fPythia ; }
+  inline Int_t const GetVersionNumber(){ return 5 ; }
+#endif
+
+  inline const JSFBeamGenerationCain *GetBS(){ return fBS; }
+  inline const TString &GetBSName(){ return fBSname; }
 
   void SetEcm(Double_t ecm){fEcm=ecm; }
   Double_t GetEcm(){ return fEcm;}
@@ -72,7 +102,7 @@ public:
   void PrintRandomSeed(Int_t num=8);  // First num's data are printed
 #endif
 
-  ClassDef(PythiaGenerator, 3)  // Pythia Generator
+  ClassDef(PythiaGenerator, 4)  // Pythia Generator
 
 };
 

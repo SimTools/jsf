@@ -17,9 +17,11 @@
 #include    "../conf/makejsf.tmpl"
 
 #if defined(MacOSXArchitecture) || defined(DarwinArchitecture)
-ROOTLIBS     += -lEGPythia -lEG $(CERNLIBS)
+ROOTLIBS     += -l$(EGPYTHIA) -lEG $(CERNLIBS)
+#elif defined(AIXArchitecture)
+ROOTLIBS     += -l$(EGPYTHIA) -lEG -Wl,-u,pytest_ $(shell cernlib mathlib)
 #else
-ROOTLIBS     += -lEGPythia -lEG -Wl,-u,pytest_ $(CERNLIBS)
+ROOTLIBS     += -l$(EGPYTHIA) -lEG -Wl,-u,pytest_ $(CERNLIBS)
 #endif
 
 LCLIBDIR      = $(LCLIBROOT)/lib
@@ -28,10 +30,17 @@ LCLIBDIR      = $(LCLIBROOT)/lib
 EXTRALDOPT = -Wl,-a,default 
 #endif
 
+#if __PYTHIA_VERSION__ >= 6
+ANALLIB = -L$(LCLIBDIR) $(EXTRALDOPT) -lGENUTIL -lTAUOLA \
+        -lSIMJLC -lLTKCL -lLCFULL -lTBS \
+        -lHELASV204 -lFORTLIB -lCOM -lCLI \
+        $(EXTRALIBS)
+#else
 ANALLIB = -L$(LCLIBDIR) $(EXTRALDOPT) -lGENUTIL -lLUHADR -lTAUOLA \
         -lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
         -lHELASV204 -lFORTLIB -lCOM -lCLI \
         $(EXTRALIBS)
+#endif
 
 EXTRADEFINES = -I$(LCLIBROOT)/simjlc/src -I$(LCLIBROOT)/util/fortlib/src 
 
@@ -77,6 +86,12 @@ OBJJSFLCFULL  = $(subst .$(SrcSuf),.$(ObjSuf),$(SRCJSFLCFULL)) \
 		readgenutil.o readparton.o \
 		libJSFLCFULL.$(ObjSuf)
 
+#if __PYTHIA_VERSION__ >= 6
+OBJJSFLCFULL += JSFPythia6Interfaces.$(ObjSuf)
+PYTHIA_LIBFILE = $(JSFROOT)/lib/libPythia6.$(DllSuf)
+#endif
+
+
 OBJJSFQUICKSIM= $(subst .$(SrcSuf),.$(ObjSuf),$(SRCJSFQUICKSIM)) \
 		simdstutil.o \
 		libJSFQuickSim.$(ObjSuf)
@@ -111,17 +126,28 @@ HDR	      = $(HDRJSF) $(HDRJSFLCFULL) $(HDRJSFQUICKSIM) \
 #if __ROOT_FULLVERSION__ < 30000
 all::  libjsf libjsflcfull libjsfquicksim libjsfdmatrix jsf
 #else
-all::  libjsf libjsflcfull libjsfquicksim jsf
+all::  $(PYTHIA_LIBFILE) libjsf libjsflcfull libjsfquicksim jsf
 #endif
 #if defined(AIXArchitecture)
 
+#if __PYTHIA_VERSION__ >= 6
+CERNLIBS      = -lPythia6 \
+		-L$(CERN_ROOT)/lib -lpacklib -lmathlib
+AIXSOLIBS += -L$(LCLIBDIR) -lGENUTIL -lTAUOLA \
+	-lSIMJLC -lLTKCL -lLCFULL -lTBS \
+	-lHELASV204 -lFORTLIB -lCOM -lCLI \
+	$(shell root-config --libs) \
+	-lMinuit -l$(EGPYTHIA) -lEG \
+	-L$(JSFROOT)/lib $(CERNLIBS) -lxlf90
+#else
 CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lpacklib -lmathlib
-
 AIXSOLIBS += -L$(LCLIBDIR) -lGENUTIL -lLUHADR -lTAUOLA \
 	-lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
 	-lHELASV204 -lFORTLIB -lCOM -lCLI \
 	$(shell root-config --libs) \
-	-lMinuit -lEGPythia -lEG $(CERNLIBS) -lxlf90
+	-lMinuit -l$(EGPYTHIA) -lEG \
+	-L$(JSFROOT)/lib $(CERNLIBS) -lxlf90
+#endif
 
 libjsf: ../lib/libJSF.$(DllSuf)
 ../lib/libJSF.$(DllSuf): $(OBJJSF)
@@ -135,7 +161,7 @@ libjsflcfull: ../lib/libJSFLCFULL.$(DllSuf)
 	@echo "Linking $@ "
 	@rm -f $@
 	$(LD) $(SOFLAGS)  $(OBJJSFLCFULL) $(OBJJSFQUICKSIM) -o $@ $(AIXSOLIBS) \
-	-L$(JSFROOT)/lib  -lBasesSpring -lJSF
+	-L$(JSFROOT)/lib  -lBasesSpring -lJSF -lJSFBeamGeneration
 
 
 libjsfquicksim:     ../lib/libJSFQuickSim.$(DllSuf)
@@ -151,7 +177,8 @@ libjsf: ../lib/libJSF.$(DylibSuf)
 	$(LD) $(DYLIBFLAGS)  $(OBJJSF) -o libJSF.$(DylibSuf)
 	@mv libJSF.$(DylibSuf) ../lib
 
-libjsflcfull: ../lib/libJSFLCFULL.$(DylibSuf) ../lib/libJSFLCFULL.a
+XCOMM # libjsflcfull: ../lib/libJSFLCFULL.$(DylibSuf) ../lib/libJSFLCFULL.a
+libjsflcfull: ../lib/libJSFLCFULL.$(DylibSuf)
 ../lib/libJSFLCFULL.$(DylibSuf):   $(OBJJSFLCFULL)
 	@echo "Linking $@ "
 	$(LD) $(DYLIBFLAGS)  $(OBJJSFLCFULL) -o libJSFLCFULL.$(DylibSuf)
@@ -162,7 +189,8 @@ libjsflcfull: ../lib/libJSFLCFULL.$(DylibSuf) ../lib/libJSFLCFULL.a
 	@/bin/rm -f $@
 	ar -r $@ $(OBJJSFLCFULL)
 
-libjsfquicksim:     ../lib/libJSFQuickSim.$(DylibSuf) ../lib/libJSFQuickSim.a
+XCOMM # libjsfquicksim:     ../lib/libJSFQuickSim.$(DylibSuf) ../lib/libJSFQuickSim.a
+libjsfquicksim:     ../lib/libJSFQuickSim.$(DylibSuf)
 ../lib/libJSFQuickSim.$(DylibSuf):     $(OBJJSFQUICKSIM)
 	@echo "Linking $@"
 	$(LD) $(DYLIBFLAGS)  $(OBJJSFQUICKSIM) -o libJSFQuickSim.$(DylibSuf)
@@ -183,7 +211,7 @@ libjsfdmatrix: ../lib/libJSFDMatrix.$(DylibSuf)
 #endif
 
 
-jsf: $(OBJS) jsfmain.o
+jsf: $(OBJS) jsfmain.o $(PYTHIA_LIBFILE)
 	$(CXX) jsfmain.o $(BLOCKDATA) \
 	$(JSFLIBS) $(LDFLAGS) \
 	 -o jsf $(DYLDEXTRALIBS)
@@ -253,3 +281,9 @@ JSFConfig.h: ../conf/jsf.version ../bin/makespec
 
 ../lib/libJSFGUI.so:
 	( cd $(JSFROOT)/example/guiexam1 ; xmkmf -a ; make )
+
+#if __PYTHIA_VERSION__ >= 6
+$(PYTHIA_LIBFILE):
+	( cd ../share/pythia6 ; make install )
+#endif
+

@@ -49,6 +49,7 @@ public:
 		       TVector& P);
 
   JSFGeneratorParticle(Float_t data[]);
+  JSFGeneratorParticle(Double_t data[]);
   JSFGeneratorParticle(JSFGeneratorParticle& g);
 
   inline Float_t GetPx(){ return fP[1] ;}
