@@ -1,2 +1,16 @@
+XCOMM #
+XCOMM # This file is to keep version information of JSF
+XCOMM # When JSF library is created, a script bin/makespec copies
+XCOMM # this file to src/JSFConfig.h after stripping comment lines.
+XCOMM # 
+XCOMM # JSF_PATCHLEVEL and JSF_VERSIONDATE are updated daily by cron
+XCOMM # job, when any modification is applied to JSF repository.
+XCOMM #
+XCOMM #$Id:
+XCOMM #
+
 #define __JSF_VERSION__ 1
-#define __JSF_MINORVERSION__ 14
+#define __JSF_MINORVERSION__ 15
+#define __JSF_PATCHLEVEL__ 1
+#define __JSF_VERSIONDATE__ 20000713
+#define __JSF_SIMDST_VERSION__ 203
