@@ -1,1 +1,0 @@
-#define BINSIZE 52
