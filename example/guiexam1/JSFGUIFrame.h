@@ -179,7 +179,7 @@ public:
      gJSF->Env()->SetValue("JSFGUI.NEventsAnalize",str);}
    void SetReturnCode(Int_t ir){ fReturnCode=ir;}
 
-   ClassDef(JSFGUIFrame, 1)   // A class to GUI
+//   ClassDef(JSFGUIFrame, 1)   // A class to GUI
 
    
 };

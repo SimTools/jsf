@@ -257,7 +257,7 @@ const char *filetypes[] = { "ROOT files",    "*.root",
                             "All files",     "*",
                             0,               0 };
 
-ClassImp(JSFGUIFrame)
+// ClassImp(JSFGUIFrame)
 
 ///////////////////////////////////////////////////////////////////////
 
