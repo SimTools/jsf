@@ -1,0 +1,141 @@
+#
+# Create program template.
+#
+
+# print "start mkbs ...";
+
+# #########################
+# #  Parse command argument
+# #########################
+$conffile="build.conf";
+$jsfroot="/proj/phys/lclib/jsf";
+if ( $ENV{"JSFROOT"} =~ "" ) { $jsfroot=$ENV{"JSFROOT"} }
+
+$iflag = "";
+foreach $i (@ARGV) { 
+    $line=$i;
+    if ( $line =~ "-conf" ) { $iflag = "conf" ; }
+    elsif ( $line =~ "-jsfroot" ) { $iflag = "jsfroot" ; }
+    elsif ( $iflag =~ "conf" ) { $conffile=$line ; $iflag = "" ; }
+    elsif ( $iflag =~ "jsfroot" ) { $jsfroot=$line ; $iflag = "" ; }
+}
+
+# print " conf file is $conffile" ;
+# #########################
+# #  Set default parameters
+# #########################
+
+
+#
+# r means a key for source code replacement.
+# g means a general paramter.
+#
+%param = ( TemplateDirectory  => ["BasesSpring","g"],
+	  OutputDirectory => ["example","g"],
+	  Spring => ["LLbarSpring","r"] ,
+	  SpringTitle => ["LLbar spring","r"],
+          Bases => ["LLbarBases","r"],
+          BasesTitle => ["LLbar Bases","r"],
+          Comment => ["Comment","r"],
+          JSFROOT => [$jsfroot,"r"],
+	  Author => ["Someone","r"],
+	  Date => ["auto","r"],
+	  Version => ["v01.01","r"],
+	  IncludeSample => ["yes","g"],
+	  SampleName => ["LLbar","g"] );
+
+# #########################
+# #  Scan configuration file and update parameters
+# #########################
+
+open(FCONF,$conffile);
+READCONF: while(<FCONF>){
+  s/^[ \t]*//;         # remove heading blanks
+  next READCONF if /^#/;
+  chop ;
+  next READCONF if /^ *$/;
+  $inline=$_;
+  @array = split(/:/,$inline);
+  $vname = $array[0];
+  $vvalue = $array[1];
+  $vname =~ s/^[ \t] +//;
+  $vname =~ s/[ \t]+$//;  # remove heading/trailing blanks
+  $vvalue =~ s/^[ \t]+//;
+  $vvalue =~ s/[ \t]+$//;  # remove heading/trailing blanks
+  $param{$vname}[0]=$vvalue ;
+  $param{$vname}[1]="r" ;
+}
+
+#
+# %%%%%%%%%%%%%%%%%%%%
+# %  Prepare parameters
+# %%%%%%%%%%%%%%%%%%%%
+
+if( $param{'Date'}[0] =~ "auto" ) {
+  @now = localtime;
+  $yearstr=$now[5]+1900;
+  $monstr=$now[4]+1;
+  $param{'Date'}[0] = sprintf "%2.2d/%2.2d/%d",$now[3],$monstr,$yearstr;
+#  print " Current date is ",$param{'Date'}[0],"\n";
+}
+
+$Outdir=$param{'OutputDirectory'}[0];
+$SampleName=$param{'SampleName'}[0];
+$IncludeSample=$param{'IncludeSample'}[0];
+$TempDir="$jsfroot/templates/$param{'TemplateDirectory'}[0]";
+
+#
+# %%%%%%%%%%%%%%%%%%%%
+# %  Process source files and build.
+# %%%%%%%%%%%%%%%%%%%%
+
+  open(FIN, "ls $TempDir |") ;
+  while(<FIN>) {
+    if ( !/^CVS$/ ) {
+    chop ;
+    $fname=$_ ;
+    $fout=$fname;
+    $fout=~ s/tmp//g;
+    $fout=~ s/Spring/$param{'Spring'}[0]/g;
+    $tspring="$TempDir/$fname";
+    open(FD2,"> $Outdir/$fout");
+    $outdummy="no";
+    open(FD1, $tspring);
+    while(<FD1>){
+      $outline=$_;
+      if( /^<<\+$SampleName>>/ ) {
+	  if( $IncludeSample =~ "yes"  ) { 
+	      $outline = join(' ',"// ", $_); 
+	      print FD2 $outline ; 
+          }
+	  else { $outdummy="yes"; }
+	  next;
+      }
+      if( /^<<\-$SampleName>>/ ) {
+	  if( $IncludeSample =~ "yes"  ) { 
+	      $outline = join(' ',"// ", $_) ; 
+	      print FD2 $outline ; 
+          }
+	  else { $outdummy="no";}
+	  next;
+      }
+      REPLACE: foreach $ind ( keys %param) {
+	  next REPLACE if $param{$ind}[1] !~ "r" ;
+	  $outline =~ s/<<$ind>>/$param{$ind}[0]/g;
+      }
+      if( $outdummy =~ "yes" ) { next; }
+      else { print FD2 $outline; }
+    }
+    close FD1;
+    close FD2;
+    }
+  }
+  close FIN; 
+  print "Sample program is created in the directory $Outdir using parameters in the file $conffile\n";
+  exit;
+
+
+
+
+
+

@@ -1,0 +1,66 @@
+#!/usr/bin/perl
+# ##########################################################
+#
+#  Make a JSF_Index.html in html directory
+#
+#$Id$
+#
+#(Author) Akiya Miyamoto, KEK, 14-Feburary-1999
+#
+# ##########################################################
+$jsfroot="/proj/phys/lclib/jsf";
+if ( $ENV{"JSFROOT"} =~ "" ) { $jsfroot=$ENV{"JSFROOT"} }
+$htmldir=join('',$jsfroot,"/html");
+$indexfile=join('',$htmldir,"/JSF_Index.html");
+
+@htmlf=( "JSFMain_Index.html",  "FFbarSpring_Index.html","ww_Index.html", "guiexam1_Index.html", "ReadJIM_Index.html", "JSFJIM_Index.html", "JSFZVTOP3_Index.html", "CCDAnal_Index.html","bsgen_Index.html","herwigx_Index.html");
+
+# #############################
+# Main reference index file
+# #############################
+for( $i=0;$i<=$#htmlf;$i++){
+  $ifile=join('',$htmldir,"/",$htmlf[$i]);
+  open(FIN,$ifile);
+  $ipre=0;
+  while(<FIN>){
+    if ( /<pre>/ ) { 
+	$ipre=1;  
+	if( $i == 0 ) { print "<pre>\n" ; }
+	next; 
+    }
+    if( /<\/pre>/ ) { 
+	$ipre=2; 
+	if( $i == $#htmlf ) { print "</pre>\n" ; }
+	 next; 
+    }
+    if( $i != 0 && $ipre==0 ) { next; }
+    if( $i != $#htmlf && $ipre == 2 ) { next; }
+
+    if( $ipre == 1 && $_ =~ /^<li>/ ) {
+	@array=split(/"/,$_);
+	if( $i == 0 ) { print ; }
+	if( $i == 6 && $array[1] =~ /^CCD*/ ) { print ; }
+	if( $i == 1 && $array[1] =~ /^FFbar*/ ) { print ; }
+	if( $i == 2 && $array[1] =~ /^WW*/ ) { print ; }
+
+	if( $i == 3 && $array[1] =~ /JSFEventDisplay/ ) { print ; }
+	if( $i == 3 && $array[1] =~ /JSFEnvGUI/ ) { print ; }
+	if( $i == 3 && $array[1] =~ /^JSFED*/ ) { print ; }
+	if( $i == 3 && $array[1] =~ /^JSFGUI*/ ) { print ; }
+
+	if( $i == 4 && $array[1] =~ /^JSFRead*/ ) { print ; }
+	if( $i == 4 && $array[1] =~ /^JSFJIM*/ ) { print ; }
+	if( $i == 4 && $array[1] =~ /^JSFJLCSIM*/ ) { print ; }
+	if( $i == 5 && $array[1] =~ /^JSFJIM*/ ) { print ; }
+
+	if( $i == 6 && $array[1] =~ /^JSFZVTOP3*/ ) { print ; }
+	if( $i == 6 && $array[1] =~ /^JSFVirtual*/ ) { print ; }
+	if( $i == 6 && $array[1] =~ /^JSFGenerator*/ ) { print ; }
+    }
+    else { print ; }
+
+  }
+
+}
+
+exit;
