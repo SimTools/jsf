@@ -166,7 +166,7 @@ void JSFEventDisplay::DisplayEventData()
   if( !fDrawAtNewEvent ) return;
 
   if( !fCanvas ) {
-    fCanvas = new TCanvas("Event Display");
+    fCanvas = new TCanvas("EventDisplay");
     fView   = new TView(fViewNo);
     fView->SetRange(&fViewRange[0], &fViewRange[3]);
     fCanvasDirectory=gDirectory;
