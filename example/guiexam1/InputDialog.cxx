@@ -122,11 +122,8 @@ InputDialog::InputDialog(const char *prompt, const char *defval, char *retstr,
 
    // create prompt label and textentry widget
    if( tline > 1  ) {
-#if __ROOT_VERSION__ > 3 || \
-	( __ROOT_VERSION__ == 2 && __ROOT_MINORVERSION__ > 25 ) || \
-	( __ROOT_VERSION__ == 2 && __ROOT_MINORVERSION__ == 25 \
-	&& __ROOT_PATCHLEVEL__ > 0 )
-     TGTextView *label=new TGTextView(fDialog, wuse, 15*tline);
+#if __ROOT_FULLVERSION__ > 22500
+     TGTextView *label=new TGTextView(fDialog, wuse, 15*(tline+2));
 #else
      TGTextFrame *label=new TGTextFrame(fDialog, wuse, 15*tline, kDoubleBorder);
 #endif
@@ -200,7 +197,7 @@ InputDialog::InputDialog(const char *prompt, const char *defval, char *retstr,
    Window_t wdum;
    int      ax, ay;
 
-#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 23
+#if __ROOT_FULLVERSION__ >= 22300
    gVirtualX->TranslateCoordinates(main->GetId(), main->GetId(),
 #else
    gGXW->TranslateCoordinates(main->GetId(), main->GetId(),

@@ -199,7 +199,7 @@ void JSFEventDisplay::Update()
        "0.0 80.0 80.0"),"%g %g %g",
 	 &fViewAngle[0], &fViewAngle[1], &fViewAngle[2]);
   sscanf(gJSF->Env()->GetValue("JSFEventDisplay.ViewRange1",
-#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 25
+#if __ROOT_FULLVERSION__ >= 22500
        "-100.0 -100.0 -100.0 100.0 100.0 100.0"),"%lg %lg %lg %lg %lg %lg",
 #else
        "-100.0 -100.0 -100.0 100.0 100.0 100.0"),"%g %g %g %g %g %g",
@@ -207,7 +207,7 @@ void JSFEventDisplay::Update()
        &fViewRange[1][0], &fViewRange[1][1], &fViewRange[1][2],
        &fViewRange[1][3], &fViewRange[1][4], &fViewRange[1][5]);
   sscanf(gJSF->Env()->GetValue("JSFEventDisplay.ViewRange2",
-#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 25
+#if __ROOT_FULLVERSION__ >= 22500
        "-300.0 -300.0 -300.0 300.0 300.0 300.0"),"%lg %lg %lg %lg %lg %lg",
 #else
        "-300.0 -300.0 -300.0 300.0 300.0 300.0"),"%g %g %g %g %g %g",
@@ -215,7 +215,7 @@ void JSFEventDisplay::Update()
        &fViewRange[1][0], &fViewRange[1][1], &fViewRange[1][2],
        &fViewRange[1][3], &fViewRange[1][4], &fViewRange[1][5]);
   sscanf(gJSF->Env()->GetValue("JSFEventDisplay.ViewRange3",
-#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 25
+#if __ROOT_FULLVERSION__ >= 22500
        "-10.0 -10.0 -10.0 10.0 10.0 10.0"),"%lg %lg %lg %lg %lg %lg",
 #else
        "-10.0 -10.0 -10.0 10.0 10.0 10.0"),"%g %g %g %g %g %g",

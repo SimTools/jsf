@@ -19,7 +19,7 @@
 #include <TROOT.h>
 #include <TCanvas.h>
 #include <TView.h>
-#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 23
+#if __ROOT_FULLVERSION__ >= 22300
 #include <TVirtualX.h>
 #else
 #include <TGXW.h>

@@ -20,7 +20,7 @@
 #include <TROOT.h>
 // #include <TCanvas.h>
 #include <TView.h>
-#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 23
+#if __ROOT_FULLVERSION__ >= 22300
 #include <TVirtualX.h>
 #else
 #include <TGXW.h>
@@ -89,7 +89,7 @@ protected:
 
   Int_t   fViewNo;
   Float_t fViewAngle[3];
-#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 25
+#if __ROOT_FULLVERSION__ >= 22500
   Double_t fViewRange[3][6];
 #else
   Float_t fViewRange[3][6];
