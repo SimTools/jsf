@@ -29,7 +29,8 @@ install:: $(LIBBASES)
 	mkdir -p $(JSFROOT)/lib
 	mv $(LIBBASES) $(JSFROOT)/lib
 	for h in $(HDRS) ; do \
-	   ln -sf $(PWD)/$$h $(JSFROOT)/include/$$h ; done
+	   ( cd $(JSFROOT)/include ; \
+	   ln -sf ../share/bases/src/$$h . ) ; done
 
 depend::
 	makedepend -I/usr/include/g++-2 $(SRCS)
