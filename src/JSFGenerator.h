@@ -63,6 +63,8 @@ public:
 
 //*************************************************************
 class JSFGenerator : public JSFModule {
+protected:
+   Double_t fXAngle; // Crossing angle
 public:
    JSFGenerator(const Char_t *name="JSFGenerator", 
 		const Char_t *title="JSF Generator",
@@ -74,6 +76,7 @@ public:
    virtual void   GetChargeCtau(Int_t ipdg, Float_t &charge, Float_t &ctau);
 
 //   virtual void  BeginRun(Int_t nrun);
+    inline Double_t GetXAngle(){ return fXAngle; }
 
     ClassDef(JSFGenerator,1)  // JSF Generator class.
 };

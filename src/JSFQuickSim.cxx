@@ -111,7 +111,12 @@ JSFQuickSim::JSFQuickSim(const Char_t *name, const Char_t *title, const Char_t *
   fParam   = new JSFQuickSimParam();
   fEventBuf= new JSFQuickSimBuf("JSFQuickSimBuf", 
 			       "JSF QuickSim Event data", this);
-
+  
+  sscanf(gJSF->Env()->GetValue("JSFQuickSim.XAngle","0.0035"),"%lg",&fXAngle);
+  sscanf(gJSF->Env()->GetValue("JSFQuickSim.SigmaX","0.0"),"%lg",&fSigmaX);
+  sscanf(gJSF->Env()->GetValue("JSFQuickSim.SigmaZ","0.0"),"%lg",&fSigmaZ);
+  sscanf(gJSF->Env()->GetValue("JSFQuickSim.BeamShape","0"),"%d",&fBeamShape);
+  
 }
 
 //_____________________________________________________________________________
@@ -255,15 +260,20 @@ Bool_t JSFQuickSim::Process(Int_t ev)
 
 //  Move load Generator data in the class into TBS buffer
 
+   if ( fXAngle > 0.0 ) {
+     if( !BoostInitial() ) return kFALSE;
+   }
 
    if( !TBPUTGeneratorParticles() ) return kFALSE;
 
    gJSFLCFULL->TBCRTE(1,"Production:EMC;Hit_Pad",0,0,iret);
 
    gJSFLCFULL->TBCRTE(1,"Production:EMC;Hit_Cell",0,0,iret);
+   gJSFLCFULL->TBCRTE(1,"Production:EMC;Hit_Track",0,0,iret);
    gJSFLCFULL->TBCRTE(1,"Production:EMC;Cluster",0,0,iret);
    gJSFLCFULL->TBCRTE(1,"Production:EMC;Cluster_to_Cell",0,0,iret);
    gJSFLCFULL->TBCRTE(1,"Production:HDC;Hit_Cell",0,0,iret);
+   gJSFLCFULL->TBCRTE(1,"Production:HDC;Hit_Track",0,0,iret);
    gJSFLCFULL->TBCRTE(1,"Production:HDC;Cluster",0,0,iret);
    gJSFLCFULL->TBCRTE(1,"Production:HDC;Cluster_to_Cell",0,0,iret);
 
@@ -286,6 +296,23 @@ Bool_t JSFQuickSim::Process(Int_t ev)
    return kTRUE;
 }
 
+//_____________________________________________________________________________
+Bool_t JSFQuickSim::BoostInitial()
+{
+  // Boost initial state according to the Crossing Angle
+  JSFGenerator *gen=(JSFGenerator*)gJSF->FindModule("JSFGenerator");
+  JSFGeneratorBuf *gevt=(JSFGeneratorBuf*)gen->EventBuf();
+  TClonesArray *pa=gevt->GetParticles();
+  Int_t j;
+  TVector3 boost(TMath::Sin(fXAngle), 0.0, 0.0);
+  for(j=0;j<gevt->GetNparticles();j++){
+    JSFGeneratorParticle *p=(JSFGeneratorParticle*)pa->At(j);
+    TLorentzVector v1(p->fP[1], p->fP[2], p->fP[3], p->fP[0]);
+    v1.Boost(boost); 
+    p->SetMomentum(v1.E(), v1.Px(), v1.Py(), v1.Pz() );
+  }
+  return kTRUE;
+}
 
 //_____________________________________________________________________________
 Bool_t JSFQuickSim::TBPUTGeneratorParticles()

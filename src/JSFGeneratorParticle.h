@@ -101,6 +101,14 @@ public:
   inline void   SetStatus(Int_t stat){ fStatus=stat; }
   inline Int_t  GetSecondMother(){ return fSecondMother; }
   inline Int_t  GetStatus(){ return fStatus; }
+  inline void   SetMomentum(Double_t e, Double_t px, Double_t py, Double_t pz) {
+        fP[0]=e ; fP[1]=px ; fP[2]=py ; fP[3]=pz; 
+  }
+  inline void   SetPosition(Double_t x, Double_t y, Double_t z) {
+        fX[1]=x ; fX[2]=y ; fX[3]=z ; 
+  }
+  inline void   SetTime(Double_t t) {  fX[0]=t ;  }
+
 
   inline Bool_t HasSecondMother(){ return ( fSecondMother < 0 ? kFALSE : kTRUE ) ; }
 

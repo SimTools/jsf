@@ -38,8 +38,8 @@ private:
   Float_t  fRRLU[100]; // 			     
 #endif
   Char_t   fFrame[8]; // Name of beam particle
-  Char_t   fBeamParticle[8]; // Name of beam particle
-  Char_t   fTargetParticle[8]; // Target particle.
+  Char_t   fBeamParticle[16]; // Name of beam particle
+  Char_t   fTargetParticle[16]; // Target particle.
   Int_t    fPrintStat; //! call PYSTAT at the end run if not equal 0.				    
   
 // Following data are filled only at the end of run, or data is read.
@@ -111,7 +111,7 @@ public:
   void PrintRandomSeed(Int_t num=8);  // First num's data are printed
 #endif
 
-  ClassDef(PythiaGenerator, 5)  // Pythia Generator
+  ClassDef(PythiaGenerator, 6)  // Pythia Generator
 
 };
 

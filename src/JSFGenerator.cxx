@@ -32,6 +32,7 @@ JSFGenerator::JSFGenerator(const Char_t *name, const Char_t *title, const Char_t
 //
   fEventBuf = new JSFGeneratorBuf("JSFGeneratorBuf", 
 				 "JSFGenerator Event data buffer", this);
+
 }
 
 

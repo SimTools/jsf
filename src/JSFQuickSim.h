@@ -120,6 +120,10 @@ protected:
    JSFQuickSimParam  *fParam ; //! Parameters for JSFQuickSim
    Int_t fSMRRND;   // Random seed for smearing
    Int_t fSWMRND;   // Random seed for swiming
+   Double_t fXAngle; // XAngle
+   Double_t fSigmaX; // Beam spread in X direction
+   Double_t fSigmaZ; // Beam spread in Z direction
+   Int_t    fBeamShape; // 0 ( No spread ), 1=Gausian, 2=flat
 public:
    JSFQuickSim(const Char_t *name="JSFQuickSim", 
 	       const Char_t *title="JSF Quick Simulator",
@@ -133,8 +137,14 @@ public:
    virtual Bool_t  GetLastRunInfo();
    JSFQuickSimParam *Param(){ return fParam; }
 
+   inline Double_t GetXAngle(){ return fXAngle; }
+   inline Double_t GetSigmaX(){ return fSigmaX; }
+   inline Double_t GetSigmaZ(){ return fSigmaZ; }
+   inline Int_t    GetBeamShape(){ return fBeamShape; }
+
    Bool_t TBPUTGeneratorParticles();
    Bool_t ReviseGeneratorInfo();
+   Bool_t BoostInitial();
    
    inline Int_t GetSMRRND(){ return fSMRRND;}
    inline Int_t GetSWMRND(){ return fSWMRND;}
@@ -144,7 +154,7 @@ public:
    virtual  void MakeBranch(TTree *tree); // Make branch for the module 
    virtual  void SetBranch(TTree *tree);  // Set Branch address for the module
 
-   ClassDef(JSFQuickSim,1)  // Debug structure
+   ClassDef(JSFQuickSim,2)  // Quick Simulator
 };
 
 

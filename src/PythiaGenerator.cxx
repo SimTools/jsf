@@ -165,6 +165,9 @@ Bool_t PythiaGenerator::Initialize()
   // Initializer of Pythia generator
 
   if( !JSFGenerator::Initialize() ) return kFALSE;
+
+  cout << "Beam=" << fBeamParticle << " Target " << fTargetParticle ;
+  cout << "====" << endl;  
   
   if( fBeamStrahlung != 0 ) {
     fPythia->SetMSTP(171,1);  // Trun on beamstrahlung
@@ -187,10 +190,12 @@ Bool_t PythiaGenerator::Initialize()
     fBS->Print();
     //    fEcmMax=fEcm*(1+2*fBSwidth);
     fEcmMax=fEcm*(1+fBSwidth);
-    fPythia->Initialize(fFrame, fBeamParticle, fTargetParticle, fEcmMax);
+//    fPythia->Initialize(fFrame, fBeamParticle, fTargetParticle, fEcmMax);
+    fPythia->Pyinit(fFrame, fBeamParticle, fTargetParticle, fEcmMax);
   }
   else {
-    fPythia->Initialize(fFrame, fBeamParticle, fTargetParticle, fEcm);
+//    fPythia->Initialize(fFrame, fBeamParticle, fTargetParticle, fEcm);
+    fPythia->Pyinit(fFrame, fBeamParticle, fTargetParticle, fEcm);
   }
 
   return kTRUE;
@@ -677,8 +682,8 @@ void PythiaGenerator::Streamer(TBuffer &R__b)
       JSFGenerator::Streamer(R__b);
       R__b << fEcm;
       R__b.WriteArray(fFrame, 8);
-      R__b.WriteArray(fBeamParticle, 8);
-      R__b.WriteArray(fTargetParticle, 8);
+      R__b.WriteArray(fBeamParticle, 16);
+      R__b.WriteArray(fTargetParticle, 16);
 #if __PYTHIA_VERSION__ >= 6 
       R__b.WriteArray(fMRPY, 6);
       R__b.WriteArray(fRRPY, 100);
