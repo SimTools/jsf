@@ -145,20 +145,21 @@ RCINTDEFINES  = -D__DARWIN__
 CXXFLAGS      = -pipe -Wall -fsigned-char \
 		$(EXTRACXXOPT) $(RCINTDEFINES) \
 		-I$(JSFROOT)/include $(shell root-config --cflags)
-# DYLIBFLAGS    = -dylib -r -nostartfiles -nodefaultlibs
-# DYLIBFLAGS    = -dylib -r -nostdlib
+/* DYLIBFLAGS    = -dylib -r -nostartfiles -nodefaultlibs */
+/* DYLIBFLAGS    = -dylib -r -nostdlib */
 DYLIBFLAGS    = -dynamiclib -flat_namespace -undefined suppress
-# DYLDFLAGS     = -dynamiclib -undefined suppress -nostdlib -bind_at_load
+/* DYLDFLAGS     = -dynamiclib -undefined suppress -nostdlib -bind_at_load */
 DYLDFLAGS     = -dynamiclib -flat_namespace -undefined suppress
 SOFLAGS       = -bundle -flat_namespace -undefined suppress
 LDFLAGS       = $(ANALLIB) $(GLIBS) -Xlinker -bind_at_load
 LIBS          = $(ROOTLIBS) -L/usr/local/lib -lm -ldl
 GLIBS         = $(ROOTLIBS) $(ROOTGLIBS) -L/usr/X11R6/lib \
                 -lXpm -lX11 $(LIBF2C) -L/usr/local/lib -lm -ldl
-# DYLDEXTRALIBS = -lcc_dynamic
+/* DYLDEXTRALIBS = -lcc_dynamic */
 PDFLIB	      = -lpdflib
 BLOCKDATA     = 
 DEPENDFILES  += $(shell cxxdepends)
+INSTALLFLAGS  = -c
 #  ifdef InstallSharedLibrary
 #  undef InstallSharedLibrary
 #  endif
