@@ -32,8 +32,9 @@ install:: $(LIBBASES)
 	   ( cd $(JSFROOT)/include ; \
 	   ln -sf ../share/bases/src/$$h . ) ; done
 
-depend::
-	makedepend -I/usr/include/g++-2 $(SRCS)
+depend:: $(SRCS) $(HDRS)
+	for i in $(SRCS); do \
+        rmkdepend -a -- $(CXXFLAGS) $(INCPATH) -- $$i; done
 
 clean::
 	\rm -f *.o

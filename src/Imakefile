@@ -151,9 +151,9 @@ clean::
 	@rm -f libJSFQuickSim.$(SrcSuf) libJSFQuickSim.h
 	@rm -f libJSFDMatrix.$(SrcSuf) libJSFDMatrix.h
 
-depend:: 
-	makedepend -I$(ROOTSYS)/include -I$(JSFROOT)/include \
-	-I/usr/include/g++-2 $(SRC) $(HDR)
+depend:: $(SRC) $(HDR)
+	for i in $(SRC); do \
+	rmkdepend -a -- $(CXXFLAGS) $(INCPATH) -- $$i; done
 
 distclean:: clean
 	@rm -f $(OBJS) core *~ *.o
