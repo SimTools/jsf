@@ -1,7 +1,7 @@
 {
   THtml html; 
   html.SetOutputDir("../html/"); 
-  html.SetSourceDir("./"); 
+//  html.SetSourceDir("./"); 
 
   html.MakeClass("JSFSteer");
 
