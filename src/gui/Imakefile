@@ -2,7 +2,7 @@
 /*  Some macros specific to gui building                                */
 /*----------------------------------------------------------------------*/
 
-#include    "../../conf/makejsf.tmpl"
+#include    "conf/makejsf.tmpl"
 
 
 /*----------------------------------------------------------------------*/
@@ -58,5 +58,6 @@ web:
 libJSFGUI.$(SrcSuf): $(HDRJSFGUI)
 		@echo "Generating dictionary ..."
 		rootcint -f libJSFGUI.$(SrcSuf) \
-	 	-c -I$(JSFROOT)/include $(RCINTDEFINES) $(HDRS) $(HDRJSFGUI)
+	 	-c $(shell jsf-config --includes) \
+		$(RCINTDEFINES) $(HDRS) $(HDRJSFGUI)
 
