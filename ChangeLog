@@ -1,3 +1,22 @@
+****************************************************
+jsf-1-14  29-Feburary-2000  A.Miyamoto
+****************************************************
+-------------------------------------------------------------------------------
+2000/02/29  A.Miyamoto
+-------------------------------------------------------------------------------
+(1) Add conf/jsf.version for JSF version information.
+
+(2) example/ww directory is completely modified according to the change of
+    new bases/spring programs.  Statements for jsf version 1-13 or before
+    are kept in the source files by using #if , so that user can easily 
+    find which statement must be modified.
+
+(3) example/v0tag is added as an example about how to use vertex finding
+    and fitting.
+
+(4) macro/PythiaUtility.C is added, which includes several functions to get
+    Pythia Generator information.
+	
 -------------------------------------------------------------------------------
 2000/02/22  A.Miyamoto
 -------------------------------------------------------------------------------
@@ -28,6 +47,10 @@
 
 (8) JSFGeneratorParticle.h class is modified to add 
     GetLorentzVector funciton
+
+(9) conf/makejsf.tmpl is modified 
+   to add -g option added for CXX and create .so library properly
+
 	
 -------------------------------------------------------------------------------
 2000/02/01  A.Miyamoto
