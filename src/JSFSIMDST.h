@@ -10,6 +10,7 @@
 ///////////////////////////////////////////////////////////////////////
 
 #include <TObject.h>
+
 #include "JSFModule.h"
 
 #ifndef __JSFModule__
@@ -38,6 +39,7 @@ const Int_t kGenMax=500;
 // const Int_t kClsSize=2;
 const Int_t kClsSize=3;
 const Int_t kClsMax=1000;
+const Int_t kSMHMax=1000;
 const Int_t kTrkMax=500;
 const Int_t kCmbtSize=8;
 const Int_t kTrkfSize=23;
@@ -47,7 +49,6 @@ const Int_t kVTXHMax=22;  // Maximum number of vertex hit
 const Int_t kVTXBufSize=kVTXHMax*kTrkMax;
 const Int_t kVTXHSize=5;
 const Int_t kVTXIDSize=2;
-
 
 // *************************************************************
 class JSFSIMDSTBuf : public JSFEventBuf {
@@ -76,6 +77,9 @@ protected:
   TClonesArray *fEMCHits; //! EMC Hits
   Int_t fNHDCHits;        //! Number of HDC Hits.
   TClonesArray *fHDCHits; //! HDC Hits
+
+  Int_t fNSMHits;         //! Number hits of Shower Max counter.
+  TClonesArray *fSMHits;  //! Shower max counter hits.
 
   void SetClonesArray(); // Set TClonesArray pointers.
 
@@ -109,6 +113,8 @@ public:
   TClonesArray *GetEMCHits(){ return fEMCHits;}
   Int_t GetNHDCHits(){ return fNHDCHits;}
   TClonesArray *GetHDCHits(){ return fHDCHits;}
+  Int_t GetNSMHits(){ return fNSMHits;}
+  TClonesArray *GetSMHits(){ return fSMHits;}
 
   void AddVTXHit(Double_t r, Double_t phi, Double_t z, Double_t dphi,
 	    Double_t dz, Int_t layer, Int_t trackid=0, Int_t gentrack=0);
@@ -155,7 +161,7 @@ public:
   void NoReadWrite(){ fReadWrite=0;}
   Int_t GetReadWriteFlag(){ return fReadWrite; }
 
-  ClassDef(JSFSIMDST, 2)  // Make SIMDST data.
+  ClassDef(JSFSIMDST, 3)  // Make SIMDST data.
 
 };
 

@@ -124,6 +124,11 @@ public:
 
    Bool_t TBPUTGeneratorParticles();
    Bool_t ReviseGeneratorInfo();
+   
+   inline Int_t GetSMRRND(){ return fSMRRND;}
+   inline Int_t GetSWMRND(){ return fSWMRND;}
+   inline void SetSMRRND(Int_t i){ fSMRRND=i; }
+   inline void SetSWMRND(Int_t i){ fSWMRND=i;}	
 
    virtual  void MakeBranch(TTree *tree); // Make branch for the module 
    virtual  void SetBranch(TTree *tree);  // Set Branch address for the module

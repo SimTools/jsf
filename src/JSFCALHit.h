@@ -70,5 +70,16 @@ public:
   ClassDef(JSFHDCHit,2)  // HDC Calorimeter HitCell.
 };
 
+//************************************************************
+class JSFSMHit : public JSFCALHit {
+public:
+  JSFSMHit() {}
+  JSFSMHit(Int_t cellid, Int_t iemenergy, Int_t ihdenergy)
+   : JSFCALHit(cellid, iemenergy, ihdenergy){}
+  virtual ~JSFSMHit() {}
+
+  ClassDef(JSFSMHit,2)  // Shower max counter hit
+};
+
 #endif
 

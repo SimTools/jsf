@@ -1,3 +1,4 @@
+//*LastUpdate :  jsf-1-15 7-July-2000  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-14  1-Feb-2000  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-11  30-July-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-9  27-March-1999  By Akiya Miyamoto
@@ -50,11 +51,13 @@
 //  27-May-1999  A.Miyamoto   kVTXHmax is increased from 10 to 22.
 //  30-July-1999  A.Miyamoto   Does not use global variable to store particle information
 //   2-Feb-2000   A.Miyamoto   kVTXHmax is increased to 52 ( curled track is produced by JIM)
+//   7-Jul-2000   A.Miyamoto  Follow change of CAL part.
 //
 //$Id$
 //
 //////////////////////////////////////////////////////////////////
 
+#include "JSFConfig.h"
 #include "JSFSteer.h"
 #include "JSFLCFULL.h"
 #include "JSFGenerator.h"
@@ -78,6 +81,18 @@ extern void simdstwrite_(Int_t *iunit,
         Int_t emh[][kClsSize], Int_t hdh[][kClsSize],
 	Int_t nvtx[], Int_t *npvtx, Double_t vtxd[][kVTXHSize], 
         Int_t ivtx[][kVTXIDSize], Int_t lenproduc);
+extern void simdstwrite204_(Int_t *iunit, 
+	Int_t *endian, Char_t *produc,
+	Int_t *ivers, Int_t *ngen, Int_t *ncmb, 
+        Int_t *ntrk, Int_t *nemh, Int_t *nhdh, Int_t *nsmh,
+	Float_t head[], Float_t gendat[][kGenSize], 
+        Int_t igendat[][kIGenSize],
+        Float_t cmbt[][kCmbtSize], Float_t trkf[][kTrkfSize],
+	Double_t trkd[][kTrkdSize], 
+        Int_t emh[][kClsSize], Int_t hdh[][kClsSize],
+        Int_t smh[][kClsSize],
+	Int_t nvtx[], Int_t *npvtx, Double_t vtxd[][kVTXHSize], 
+        Int_t ivtx[][kVTXIDSize], Int_t lenproduc);
 extern void simdstread_(Int_t *iunit, 
 	Int_t *endian, Char_t *produc,
 	Int_t *ivers, Int_t *ngen, Int_t *ncmb, 
@@ -87,6 +102,18 @@ extern void simdstread_(Int_t *iunit,
         Float_t cmbt[][kCmbtSize], Float_t trkf[][kTrkfSize],
 	Double_t trkd[][kTrkdSize], 
 	Int_t emh[][kClsSize], Int_t hdh[][kClsSize],
+	Int_t nvtx[], Int_t *npvtx, Double_t vtxd[][kVTXHSize], 
+	Int_t ivtx[][kVTXIDSize], Int_t *nret, Int_t lenproduc);
+extern void simdstread204_(Int_t *iunit, 
+	Int_t *endian, Char_t *produc,
+	Int_t *ivers, Int_t *ngen, Int_t *ncmb, 
+        Int_t *ntrk, Int_t *nemh, Int_t *nhdh, Int_t *nsmh,
+	Float_t head[], Float_t gendat[][kGenSize], 
+	Int_t igendat[][kIGenSize],
+        Float_t cmbt[][kCmbtSize], Float_t trkf[][kTrkfSize],
+	Double_t trkd[][kTrkdSize], 
+	Int_t emh[][kClsSize], Int_t hdh[][kClsSize],
+        Int_t smh[][kClsSize],
 	Int_t nvtx[], Int_t *npvtx, Double_t vtxd[][kVTXHSize], 
 	Int_t ivtx[][kVTXIDSize], Int_t *nret, Int_t lenproduc);
 
@@ -322,6 +349,9 @@ void JSFSIMDSTBuf::SetClassData(Int_t nev)
   fNHDCHits=sevt->GetNHDCHits();
   fHDCHits=sevt->GetHDCHits();
 
+  //  fNSMHits=sevt->GetNSMHits();
+  //  fSMHits=sevt->GetSMHits();
+
   fNVTXHits=sevt->GetNVTXHits();
   fVTXHits=sevt->GetVTXHits();
 
@@ -451,6 +481,7 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
   Int_t emh[fNEMCHits][kClsSize];
   Int_t hdh[fNHDCHits][kClsSize];
 #endif
+  Int_t smh[kSMHMax][kClsSize];
 
   for(i=0;i<fNEMCHits;i++){
      JSFEMCHit *h=(JSFEMCHit*)fEMCHits->UncheckedAt(i);
@@ -470,10 +501,19 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
   Int_t  lenproduc=4;
 
   Int_t unit=((JSFSIMDST*)Module())->GetUnit();
-  simdstwrite_(&unit, &fEndian, fProduc, &fVersion, &ngen, &fNCombinedTracks,
+  if( fVersion < 204 ) {
+    simdstwrite_(&unit, &fEndian, fProduc, &fVersion, &ngen, &fNCombinedTracks,
         &fNCDCTracks, &fNEMCHits, &fNHDCHits, fHead, gendat, igendat, 
         cmbt, trkf, 
 	trkd, emh, hdh, nvtxh, &fNVTXHits, vtxd, idvtx, lenproduc);
+  }
+  else {
+    simdstwrite204_(&unit, &fEndian, fProduc, &fVersion, &ngen, &fNCombinedTracks,
+        &fNCDCTracks, &fNEMCHits, &fNHDCHits, &fNSMHits, 
+        fHead, gendat, igendat, 
+        cmbt, trkf, 
+	trkd, emh, hdh, smh, nvtxh, &fNVTXHits, vtxd, idvtx, lenproduc);
+  }
 
   return kTRUE;
 
@@ -491,6 +531,7 @@ void JSFSIMDSTBuf::SetClonesArray()
       fVTXHits= new TClonesArray("JSFVTXHit", kVTXBufSize);
       fEMCHits= new TClonesArray("JSFEMCHit", kClsMax);
       fHDCHits= new TClonesArray("JSFHDCHit", kClsMax);
+      fSMHits= new TClonesArray("JSFSMHit", kSMHMax);
 }
 
 
@@ -506,6 +547,7 @@ Bool_t JSFSIMDSTBuf::UnpackDST(Int_t nev)
   Double_t trkd[kTrkMax][kTrkdSize];
   Int_t    emh[kClsMax][kClsSize];
   Int_t    hdh[kClsMax][kClsSize];
+  Int_t    smh[kSMHMax][kClsSize];
   Double_t vtxd[kVTXBufSize][kVTXHSize];
   Int_t    idvtx[kVTXBufSize][kVTXIDSize];
   Int_t    nret;
@@ -515,10 +557,20 @@ Bool_t JSFSIMDSTBuf::UnpackDST(Int_t nev)
   Int_t lenproduc=4;
   Int_t unit=((JSFSIMDST*)Module())->GetUnit();
   Int_t ivers;
-  simdstread_(&unit, &fEndian, fProduc, &ivers, &ngen, &fNCombinedTracks,
+
+  if ( fVersion < 204 ) {
+    simdstread_(&unit, &fEndian, fProduc, &ivers, &ngen, &fNCombinedTracks,
        &fNCDCTracks, &fNEMCHits, &fNHDCHits, fHead, gendat, igendat, 
        cmbt, trkf, trkd, emh, hdh, nvtxh, &fNVTXHits, vtxd, idvtx, 
        &nret, lenproduc);
+  }
+  else {
+    simdstread204_(&unit, &fEndian, fProduc, &ivers, &ngen, &fNCombinedTracks,
+       &fNCDCTracks, &fNEMCHits, &fNHDCHits, &fNSMHits, 
+       fHead, gendat, igendat, 
+       cmbt, trkf, trkd, emh, hdh, smh, nvtxh, &fNVTXHits, vtxd, idvtx, 
+       &nret, lenproduc);
+  }
 
   if( ivers != fVersion ) {
     printf("SIMDST version of the file is %d ",ivers);
@@ -624,8 +676,10 @@ JSFSIMDSTBuf::JSFSIMDSTBuf(const char *name, const char *title,	JSFModule *modul
   fEndian = 1296651082;
   //  fVersion = 201;
   //fVersion = 202;     // Since jsf-1-6
-  fVersion = 203;     // Since jsf-1-9
+  // fVersion = 203;     // Since jsf-1-9
+  fVersion = __JSF_SIMDST_VERSION__ ;     // Since jsf-1-15
   strcpy(fProduc,"QIK ");
+  fNSMHits = 0;
 
   SetClonesArray();
 
@@ -642,6 +696,7 @@ JSFSIMDSTBuf::~JSFSIMDSTBuf()
   if(fVTXHits) delete fVTXHits;
   if(fEMCHits) delete fEMCHits;
   if(fHDCHits) delete fHDCHits;
+  if(fSMHits) delete fSMHits;
 
 }
 
@@ -655,6 +710,7 @@ void JSFSIMDSTBuf::Clear(const Option_t *opt)
   if(fVTXHits)        fVTXHits->Clear(opt);
   if(fEMCHits)        fEMCHits->Clear(opt);
   if(fHDCHits)        fHDCHits->Clear(opt);
+  if(fSMHits)        fSMHits->Clear(opt);
 
 }
 

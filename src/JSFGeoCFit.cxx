@@ -62,6 +62,7 @@ C*
 */
 //
 // (Update)
+//  12-Jul-2000 A.Miyamoto  Remove memory leak in Initialize()
 //
 //$Id$
 ////////////////////////////////////////////////////////////////////////
@@ -88,9 +89,13 @@ JSFGeoCFit::~JSFGeoCFit()
 {
 
   if( fNtrk > 1 ) {
-    if( fTrkpar ) delete [] fTrkpar;
-    if( fTrkerr ) delete [] fTrkerr;
-    if( fTrackChisq ) delete fTrackChisq;
+    for(Int_t i=0;i<fNtrk;i++){
+      delete fTrkerr[i];
+      delete fTrkpar[i];
+    }
+    delete [] fTrkerr;
+    delete [] fTrkpar;
+    delete fTrackChisq;
   }
 
 }
@@ -159,15 +164,17 @@ C*
     if(i==0) fPTOR=t->GetAlpha();
     fTrkpar[i]=new JSFHelixParameter(t->GetHelixParameter());
 
-    JSFDMatrix *em=new JSFDMatrix(5,5);
+    //    JSFDMatrix *em=new JSFDMatrix(5,5);
+    JSFDMatrix em(5,5);
     Double_t *err=t->GetHelixErrorMatrix();
     Int_t j,k;
     Int_t ip=0;
     for(j=0;j<5;j++)  for(k=0;k<=j;k++) { 
-      (*em)(j,k)=err[ip];  (*em)(k,j)=err[ip++]; 
+      em(j,k)=err[ip];  em(k,j)=err[ip++]; 
     }	
-    em->Invert();
-    fTrkerr[i]=em;
+    em.Invert();
+    fTrkerr[i]=new JSFDMatrix(em);
+    //    delete em;
   }
 
 //C  

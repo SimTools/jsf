@@ -14,6 +14,7 @@
 #pragma link C++ class JSFCALHit;
 #pragma link C++ class JSFEMCHit;
 #pragma link C++ class JSFHDCHit;
+#pragma link C++ class JSFSMHit;
 #pragma link C++ class JSFCALGeoParam;
 
 #pragma link C++ class JSFSIMDST;
