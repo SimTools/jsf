@@ -64,6 +64,7 @@ protected:
   TTree      *fOTree;        //! Pointer to output event tree
   JSFEnv       *fEnv;         //! Pointer to the env data.
   TBranch    *fBrJSF;      //! Branch address of JSFSteer.
+  TChain     *fChain;     //! A tree of chained file.
 
 // Followings are event-by-event information
   Int_t      fVersion;      // JSFSteer version number
@@ -92,7 +93,7 @@ public:
   JSFSteer(const char *name="JSF", const char *title="The JLC Study Frame");
   virtual   ~JSFSteer();
   
-  void SetInput(TFile& file){ fIFile = &file ; return ; }
+  void SetInput(TFile& file);
   void SetOutput(TFile& file){ fOFile = &file ; return ; }
   TFile *GetOutput(){ return fOFile; }
   TFile *GetInput(){ return fIFile; }

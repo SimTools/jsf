@@ -134,6 +134,7 @@ JSFSteer::JSFSteer(const char *name, const char *title)
 
   fITree       = 0;
   fOTree       = 0;
+  fChain       = 0;
   fModules = new TList();
   fConf    = new JSFSteerConf("JSFSteerConf", "JSF Configuration");
 
@@ -364,7 +365,9 @@ Bool_t JSFSteer::Initialize()
    }
 
    // If Input file is opened, setup tree to read
-   if( fIFile && fIFile->IsOpen() ) { if( !SetupTree() ) return kFALSE; } 
+   if( !fChain && fIFile && fIFile->IsOpen() ) { 
+     if( !SetupTree() ) return kFALSE; 
+   } 
 
    // If Output file is writable, make tree for them
    if( fOFile && fOFile->IsOpen() && fOFile->IsWritable() ) {
@@ -455,6 +458,7 @@ Bool_t JSFSteer::EndRun()
 //
 //  Calls JSFModule::EndRun
 //
+
     fRunEnded = kTRUE;
     fReturnCode = kJSFOK;
 
@@ -699,6 +703,80 @@ Bool_t JSFSteer::SetupTree()
   }
 
   return kTRUE;
+}
+
+
+//_____________________________________________________________________________
+void JSFSteer::SetInput(TFile &file)
+{
+  // Setup addresses to read tree data
+  // Read the Key infile:/conf/JSF and find modules to read tree,
+  // then execute SetupBranch() method of each modules.
+  // for multiple file input
+
+
+  if( fReadin == 0 ) { 
+    fIFile = &file; 
+    return ;
+  }
+
+  //  delete fReadin;
+  fIFile->Close();
+
+
+  fIFile=&file;
+
+  if( !fIFile->cd("conf") ) {
+    Fatal("SetupTree","%s/conf does not exists.",fIFile->GetName());
+    return ;
+  }
+
+  gJSFEventList = fIFile->GetListOfKeys();
+
+// Get all event key directory
+  gJSFEventKey  = (TKey*)gJSFEventList->Last();
+  if( gJSFEventKey == NULL ) { 
+     Error("SetupTree","Event directory is not found in the input file.");
+     return ;
+  }
+
+  Char_t kname[60];
+  if( strcmp(gJSFEventKey->GetName(),"Event") == 0 ) { 
+    sprintf(kname, "%s;%d",gJSFEventKey->GetName(),gJSFEventKey->GetCycle());
+    fITree=(TTree*)fIFile->Get(kname);
+  }
+
+  while( (gJSFEventKey=(TKey*)gJSFEventList->Before(gJSFEventKey)) ) {
+    if( strcmp(gJSFEventKey->GetName(),"Event") != 0 ) continue ;
+    sprintf(kname, "%s;%d",gJSFEventKey->GetName(),gJSFEventKey->GetCycle());
+    fITree=(TTree*)fIFile->Get(kname);
+  }
+
+  fReadin=new JSFSteer("ReadinJSF");
+  fReadin->fConf->Read("JSF");
+
+// Prepare pointer for JSF obtained from a file.
+  gJSFBranch=fITree->GetBranch("JSF");
+
+  gJSFBranch->SetAddress(&fReadin); 
+
+  // Create modules defined in JSFSteerConf direcory
+  
+  Char_t temp[200];
+  for(Int_t i=0;i<fReadin->fConf->fNmodule;i++){
+    sprintf(temp,"%s mod%d(\"%s\",\"Readin module\")",
+	    fReadin->fConf->fClasses[i],i,fReadin->fConf->fNames[i]);
+    //    printf(" temp=%s\n",temp);
+    //    gROOT->ProcessLine(temp);
+
+    JSFModule *module = FindModule(fReadin->fConf->fClasses[i]);
+
+    module->SetBranch(fITree);
+    module->SetFile(fIFile);
+
+  }
+
+  return ;
 }
 
 
