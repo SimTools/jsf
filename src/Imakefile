@@ -176,3 +176,5 @@ libJSFDMatrix.$(SrcSuf): $(HDRJSFDMATRIX)
 		@echo "Generating dictionary ..."
 		rootcint -f libJSFDMatrix.$(SrcSuf) -c $(HDRJSFDMATRIX)
 
+JSFConfig.h: ../conf/jsf.version ../bin/makespec
+	../bin/makespec 

@@ -108,6 +108,9 @@ public:
 
   Int_t     GetVersion(){ return fVersion;}
   Int_t     GetVersionDate() { return fVersionDate;}
+  Int_t     GetMinorVersion();
+  Int_t     GetPatchLevel();
+
   Int_t     GetRunNumber() { return fRun;}
   Int_t     GetEventNumber() { return fEvent;}
   Int_t     GetDate() { return fDate;}

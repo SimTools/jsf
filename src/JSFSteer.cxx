@@ -103,6 +103,7 @@
 #include <TKey.h>
 
 #include "JSFSteer.h"
+#include "JSFConfig.h"
 #include "JSFModule.h"
 
 JSFSteer *gJSF=kFALSE;
@@ -123,8 +124,8 @@ JSFSteer::JSFSteer(const char *name, const char *title)
   fModules = 0;
   fConf    = 0;
   fReadin  = 0;
-  fVersion    = 112  ;  // JSFSteer version number
-  fVersionDate  = 19990826 ; // version date.
+  fVersion    = __JSF_VERSION__  ;  // JSFSteer version number
+  fVersionDate  = __JSF_VERSIONDATE__ ; // version date.
   fIsInitialized = kFALSE ;
   fIsTerminated  = kFALSE ;
   fLastRun       = 0 ;
@@ -171,6 +172,18 @@ JSFSteer::~JSFSteer()
     while( (module = (JSFModule*)next()) ) { delete module; }
   }
   if (!fConf) delete fConf;
+}
+
+//---------------------------------------------------------------------------
+Int_t JSFSteer::GetMinorVersion()
+{
+  return  __JSF_MINORVERSION__ ; 
+}
+
+//---------------------------------------------------------------------------
+Int_t JSFSteer::GetPatchLevel()
+{
+  return  __JSF_PATCHLEVEL__ ; 
 }
 
 //---------------------------------------------------------------------------
