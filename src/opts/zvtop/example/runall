@@ -1,0 +1,15 @@
+#!/bin/sh
+
+. runscript
+
+
+# ------------------------------------------------------------
+# Actual execution starts here
+# ------------------------------------------------------------
+
+run -bb -nevt 100 -fname test
+run -cc -nevt 100 -fname test
+run -ss -nevt 100 -fname test
+run -dd -nevt 100 -fname test
+run -uu -nevt 100 -fname test
+
