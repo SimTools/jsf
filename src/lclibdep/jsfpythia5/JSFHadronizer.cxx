@@ -80,12 +80,6 @@ Float_t XK0DEC;
 ClassImp(JSFHadronizer)
 
 #if __PYTHIA_VERSION__ <= 5
-#if 0
-typedef struct { //  Flag for parton shower on/off
-  Int_t NDoPartonShower;
-} COMMON_LufragFlag;
-extern COMMON_LufragFlag lufragflag_;
-#endif
 
 typedef struct {
   Int_t   MSTU[200]; 
@@ -588,9 +582,7 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
   Int_t nout;
 
   for(Int_t islv=1;islv<=nslvl;islv++){
-//////////////
     if( nptlv[islv-1] <= 0 ) { continue; }
-//////////////
 
     Int_t nin=0;
     for(Int_t k=0;k<30;k++){ ididit[k]=0; }
@@ -788,7 +780,7 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
     Int_t ip = inoshw[jp-1];
     Int_t id = (Int_t)rbuf[ip-1][1];
     Int_t ida = TMath::Abs(id);
-    if( ida > 24 && ida != 220000 && ida != 1000022 ) {
+    if( ida > 25 && ida != 220000 && ida != 1000022 ) {
       printf("Warning in JSFHadronizer::Hadronize");
       printf(" Particle ID=%d is not recognized.\n",id);
       continue;
@@ -814,9 +806,9 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
       npgen++;
     }
     //C--
-    //C  Tau, Z, and W.
+    //C  Tau (15), Z(23), W(24), and H(25).
     //C--
-    else if( ida==15 || ida==23 || ida==24 ) {
+    else if( ida==15 || ida==23 || ida==24 || ida==25 ) {
       for(Int_t k=0;k<10;k++){ rinlst[k][0]=0; }
       rinlst[0][0] = rbuf[ip-1][1];
       rinlst[0][1] = rbuf[ip-1][4];
