@@ -11,6 +11,8 @@
 TFile *file;
 TH1F *hCosp, *hE;
 TCanvas *c1;
+JSFSpring *spring;
+JSFQuickSim *sim;
 
 //////////////////////////////////////////////////////////////////
 // Macro for Histograming
@@ -67,7 +69,7 @@ int hist(Int_t id)
 //////////////////////////////////////////////////////////////////
 int anal()
 {
-  gROOT->Reset();
+  // gROOT->Reset();
 
   //  Load library ( dynamic loading is not available in ccjlc system.)
   if( strncmp(gSystem->HostName(),"ccjlc",5)  != 0 ) {
