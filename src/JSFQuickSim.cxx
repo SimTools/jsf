@@ -1,3 +1,4 @@
+//*LastUpdate :  jsf-1-13  25-Jan-2000  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-11  28-July-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-9  30-March-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-6  30-March-1999  By Akiya Miyamoto
@@ -10,7 +11,8 @@
   30-March-1999  A.Miyamoto  Put modification to run with lclib-98a-4
   28-May-1999    A.Miyamoto  Increased buffer size for VTX layer from 10 to 22
   30-July-1999   A.Miyamoto  Add Append.  Does not use global variables for TClonesArray
-  13-Dec-1999    A.Miyamoto  Stop when Number of Cal hits > kMaxCalHits
+  13-Dec-1999    A.Miyamoto Stop when Number of Cal hits > kMaxCalHits
+  25-Jan-2000    A.Miyamoto  Increase size for Cal hits for 3 Tesla detector.
 */
 
 
@@ -243,7 +245,7 @@ Bool_t JSFQuickSim::Process(Int_t ev)
    gJSFLCFULL->TBCRTE(1,"Production:VTX;Track_Parameter",0,0,iret);
 
    swmevt_(&recid, &level, &idebug, &iret);
-   
+
    smrevt_(&recid, &level, &idebug, &iret);
 
    cmbtrk_(&iret);
@@ -386,7 +388,6 @@ Bool_t JSFQuickSimBuf::MakeEventBuf()
    if( !MakeCALHits() ) return kFALSE;
    if( !MakeCDCTracks() ) return kFALSE;
    if( !MakeVTXHits() ) return kFALSE;
-
    return kTRUE;
 }
 
