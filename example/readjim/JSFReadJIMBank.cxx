@@ -165,9 +165,9 @@ Bool_t JSFReadJIMBankBuf::UnpackDST(Int_t nev)
   // Fill GeneratorParticle Array
   // *************************************** 
   fNGeneratorParticles=trbuff_.ngen;
-  fNGeneratorParticles=0;
+
   Int_t i;  
-  /*
+
   TClonesArray &gt = *(fGeneratorParticles);
   for(i=0;i<fNGeneratorParticles;i++){
     Int_t *igendat=&(trbuff_.igen[i][0]); 
@@ -202,7 +202,6 @@ Bool_t JSFReadJIMBankBuf::UnpackDST(Int_t nev)
 	      xctau, life);
     }
   }
-  */
 
   // ***************************************
   // Put EMC/HDC CALHit class
