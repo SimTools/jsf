@@ -37,6 +37,10 @@ extern void utrkmv_(Int_t *lnxhlx, Float_t helxin[],
 		    Float_t xp[], Float_t helxot[]);
 };
 
+//_____________________________________________________________________________
+JSFCDCTrack::JSFCDCTrack() : fNVTX(0)
+{
+}
 
 //_____________________________________________________________________________
 JSFCDCTrack::JSFCDCTrack(Int_t itrkp[])

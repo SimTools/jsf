@@ -38,7 +38,7 @@ protected:
   Int_t    fCharge ; // Apparent charge
   Int_t    fGenID  ; // Corresponding generator track ID. ( 1 to n )
   Int_t    fNDF     ; // NDF ( 2* Number of measured CDC layer - 5 )
-  Int_t    fNVTX    ; // Number of matched VTX hits.
+  Int_t    fNVTX    ; //! Number of matched VTX hits.
   Float_t  fP[3] ; // Px, Py, Pz at cloest approach
   Float_t  fE    ; // Particle energy assuming mass less particle.
   Float_t  fX[3] ; // x,y,z of cloest approach
@@ -50,7 +50,7 @@ protected:
   JSFVTXHit *fVTXHits[kMaxVTXAssoc] ; //! Pointer to linked VTX hits. 
 
 public:
-  JSFCDCTrack(){}
+  JSFCDCTrack();
   virtual ~JSFCDCTrack();
   JSFCDCTrack( Int_t trkp[] );
   JSFCDCTrack( Float_t trkf[], Double_t trkd[] );
