@@ -245,9 +245,6 @@ void InitGenSim()
 Bool_t GetEvent(Int_t ev)
 {
 
-  //    Int_t irunmode=jsf->Env()->GetValue("JSFGUI.RunMode",1);
-  //  if( irunmode==2 && !jsf->GetEvent(ev) ) { return kFALSE; }
-
   if( jsf->GetInput() ) {
     if( !jsf->GetEvent(ev) ) { return kFALSE; }
   }
@@ -269,6 +266,7 @@ Bool_t GetEvent(Int_t ev)
     }
 
     return kTRUE;
+
 }
 
 
@@ -314,25 +312,41 @@ void BatchRun()
 {
   Initialize();
 
-  Int_t i;
-  Int_t i1stevt=jsf->Env()->GetValue("JSFGUI.FirstEvent",1);
-  Int_t inoevt= jsf->Env()->GetValue("JSFGUI.NEventsAnalize",10);
+  Int_t firstrun=jsf->Env()->GetValue("JSFGUI.RunNo",1);
+  Int_t lastrun=jsf->Env()->GetValue("JSFGUI.LastRun",-1);
 
-  for(i=i1stevt;i<=i1stevt+inoevt-1;i++){
-    GetEvent(i);
-    Int_t iret=jsf->GetReturnCode();
-    if( iret & jsf->kJSFEOF ) {
-      printf("End of event loop due to end-of-file at event# %d\n",i);
-      break;
+  if( lastrun < 0 ) { lastrun=firstrun; }
+
+  Int_t irun;
+  Int_t ievt;
+  Bool_t flag=kTRUE;
+  JSFSteer::EJSFReturnCode iret=jsf->kJSFOK;
+  
+  for(irun=firstrun;irun<=lastrun;irun++){
+    if( irun != firstrun ) jsf->BeginRun(irun);
+    for( ievt=jsf->Env()->GetValue("JSFGUI.FirstEvent",1);
+	 ievt<=jsf->Env()->GetValue("JSFGUI.NEventsAnalize",10); ievt++){
+      GetEvent(ievt);
+      iret=jsf->GetReturnCode();
+      if( iret & jsf->kJSFEOF ) {
+	printf("End of event loop due to end-of-file at event# %d\n",i);
+	break;
+      }
+      else if( iret & jsf->kJSFFALSE ) {
+	printf("End of event loop due to error at event# %d\n",i);
+	break;
+      }
+      else if( iret & (jsf->kJSFDoEndRun|jsf->kJSFTerminate|jsf->kJSFQuit)) {
+	goto EndRun;
+      }
     }
-    else if( iret & jsf->kJSFFALSE ) {
-      printf("End of event loop due to error at event# %d\n",i);
-      break;
-    }
+
+    EndRun:
+      flag=jsf->EndRun();
+      if( flag & (jsf->kJSFTerminate|jsf->kJSFQuit) ) break;
   }
-
   JobEnd();
-    
+
 }
 
 

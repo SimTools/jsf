@@ -58,7 +58,8 @@ void InitPythia()
     Int_t kf=25;              // kf code for H0 is 25
     Int_t rootver, rootmver, rootplevel;
     sscanf(gROOT->GetVersion(),"%d.%d/%d",&rootver,&rootmver,&rootplevel);
-    if (rootver >= 2 && rootmver >= 23) {
+    Int_t fullvers=rootver*10000 + rootmver*100 + rootplevel ;
+    if ( fullvers >= 22300 ) {
        Int_t kc=tpy->Lucomp(kf);      // Get kc code for Higgs.
     } else {
        Int_t kc=tpy->LuComp(kf);      // Get kc code for Higgs.
