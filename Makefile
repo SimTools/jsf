@@ -19,6 +19,7 @@ help:
 install : lib html include
 	@echo "JSFROOT is set to $(JSFROOT)"
 	( cd bin ; ./makespec $(JSFROOT) )
+	( cd share/bases ; make )
 	( cd src ; xmkmf -a ; make )
 	( cd example/FFbarSpring ; xmkmf -a ; make )
 #	( cd example/CCDAnal ; xmkmf -a ; make )
@@ -27,6 +28,7 @@ install : lib html include
 	( cd example/guiexam1 ; xmkmf -a ; make )
 
 clean: 
+	( cd share/bases ; make clean )
 	( cd src ; make clean )
 	( cd example/FFbarSpring ; make clean )
 	( cd example/ZHStudy  ; make clean )
@@ -54,6 +56,7 @@ include:
 	ln -s src include
 
 distclean: 
+	( cd share/bases ; make cleanall ) 
 	( cd src ; make distclean ) 
 	( cd example/FFbarSpring ; make distclean )
 	( cd example/ZHStudy ; make distclean )
