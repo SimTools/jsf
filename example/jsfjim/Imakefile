@@ -12,8 +12,6 @@
 #include    "conf/makejsf.tmpl"
 #include    "jim.rules"
 
-JSFLIBS       = -Wl,-L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim
-
 ANALLIB = $(JSFLIBS) $(EXTRALDOPT) \
 	-L$(LCLIBDIR) -lGENUTIL -lLUHADR \
         -lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
@@ -69,8 +67,10 @@ EXTRALDOPT = -L/lib/pa1.1 -lm
 
 #----------------------------------------------------------------
 
-all:: jsfjim
+all:: install
 
+install:: $(OBJS) jsfjim.o $(JIMOBJS)
+	$(LD) jsfjim.o $(OBJS) $(LDFLAGS) -o ../../bin/jsfjim
 
 jsfjim: $(OBJS) jsfjim.o $(JIMOBJS)
 	$(LD) jsfjim.o $(OBJS) $(LDFLAGS) -o jsfjim 
