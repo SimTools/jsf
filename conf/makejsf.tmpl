@@ -51,11 +51,11 @@ CXX           = g++ -O2
 CXXFLAGS      = -Wall  -fno-rtti -fno-exceptions -fPIC \
 		$(EXTRACXXOPT) \
 		-I$(JSFROOT)/include -I$(ROOTSYS)/include
-SOFLAGS       = -shared -Wl,-soname,$(SONAME)
-LDFLAGS       = $(ANALLIB) $(GLIBS)
-LIBS          = $(ROOTLIBS) -lm -ldl -rdynamic
+SOFLAGS       = -shared -Wl,-soname,$(SONAME) -rdynamic
+LDFLAGS       = $(ANALLIB) $(GLIBS) -rdynamic
+LIBS          = $(ROOTLIBS) -lm -ldl
 GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -L/usr/X11R6/lib \
-		-lXpm -lX11 $(LIBF2C) -lm -ldl -rdynamic
+		-lXpm -lX11 $(LIBF2C) -lm -ldl
 BLOCKDATA     = 
 #endif
 
@@ -74,11 +74,11 @@ CXX           = g++ -O2
 CXXFLAGS      = -Wall -fsigned-char -fno-rtti -fno-exceptions -fPIC \
 		$(EXTRACXXOPT) \
                 -I$(JSFROOT)/include -I$(ROOTSYS)/include
-SOFLAGS       = -shared -Wl,-soname,$(SONAME)
-LDFLAGS       = $(ANALLIB) $(GLIBS)
-LIBS          = $(ROOTLIBS) -lm -ldl -rdynamic
+SOFLAGS       = -shared -Wl,-soname,$(SONAME) -rdynamic
+LDFLAGS       = $(ANALLIB) $(GLIBS) -rdynamic
+LIBS          = $(ROOTLIBS) -lm -ldl
 GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -L/usr/X11R6/lib \
-                -lXpm -lX11 $(LIBF2C) -lm -ldl -rdynamic
+                -lXpm -lX11 $(LIBF2C) -lm -ldl
 BLOCKDATA     = 
 #endif
 
@@ -92,11 +92,11 @@ CXX           = g++ -O2
 CXXFLAGS      = -Wall  -fno-rtti -fno-exceptions -fPIC \
 		$(EXTRACXXOPT) \
 		-I$(JSFROOT)/include -I$(ROOTSYS)/include
-SOFLAGS       = -shared -Wl,-soname,$(SONAME)
-LDFLAGS       = $(ANALLIB) $(GLIBS)
-LIBS          = $(ROOTLIBS) -lm -ldl -rdynamic
+SOFLAGS       = -shared -Wl,-soname,$(SONAME) -rdynamic
+LDFLAGS       = $(ANALLIB) $(GLIBS) -rdynamic
+LIBS          = $(ROOTLIBS) -lm -ldl
 GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -L/usr/X11R6/lib \
-		-lXpm -lX11 $(LIBF2C) -lm -ldl -rdynamic
+		-lXpm -lX11 $(LIBF2C) -lm -ldl
 BLOCKDATA     = 
 #endif
 
@@ -135,7 +135,7 @@ CXX	      = aCC -O
 CXXFLAGS      = +W70,495,740,749,829 -DR__ACC -z +Z \
 		$(EXTRACXXOPT) \
 		-I$(JSFROOT)/include -I$(ROOTSYS)/include
-SOFLAGS       = -b -z -Wl,+vnocompatwarnings
+SOFLAGS       = -b -z -Wl,+vnocompatwarnings -Wl,-E
 LDFLAGS       = -z -Wl,+s -Wl,-E $(ANALLIB) $(GLIBS)
 SOEXT         = sl
 LIBS          = $(ROOTLIBS) -L/usr/lib -lm -ldld
