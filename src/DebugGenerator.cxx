@@ -1,9 +1,11 @@
+//*LastUpdate:  jsf-1-13   25-Jan-2000  by Akiya Miyamoto
 //*LastUpdate:  jsf-1-11   23-July-1999  by Akiya Miyamoto
 //*LastUpdate:  jsf-1-7-3  20-April-1999  by Akiya Miyamoto
 //*LastUpdate:  v.01.01 04/10/1998  by Akiya Miyamoto
 //*-- Author :  04/10/1998  03/10/1998
 
 /*
+  25-Jan-2000  Akiya Miyamoto  Add parameter, DebugGenerator.DoHistogram
   23-July-1999 Akiya Miyamoto
           Save random seed in EndRun
   20-Apri-1999 Akiya Miyamoto
@@ -86,17 +88,15 @@ DebugGenerator::DebugGenerator(const char *name, const char *title)
  	                         "%d%lg%lg",&fID[i],&fMasses[i],&fCharges[i]);
   }
 
-  const Char_t *dohist=gJSF->Env()->GetValue("DebugGenerator.DoHistograms","YES");
-  if( strcmp(dohist,"YES") == 0 ) {
-    fHistograms = new TList();
-  }
+  hNparticle=0;
+  hPabs=0;
 
 }
 
 //_____________________________________________________________________________
 DebugGenerator::~DebugGenerator()
 {
-  if( fHistograms ) delete fHistograms;
+  if( fHistograms ) { delete fHistograms; fHistograms=0; }
   if( hNparticle ) delete hNparticle;
   if( hPabs ) delete hPabs;
 }
@@ -105,7 +105,11 @@ DebugGenerator::~DebugGenerator()
 Bool_t DebugGenerator::Initialize()
 {
   if( !JSFGenerator::Initialize() ) { return kFALSE; }
-  if( fHistograms )  Hcreate();
+  if( strcmp(gJSF->Env()->GetValue("DebugGenerator.DoHistograms","YES"),"YES") == 0 ) {
+    if( !fHistograms ) fHistograms = new TList();
+    Hcreate();
+  }
+
   return kTRUE;
 }
 
@@ -122,7 +126,7 @@ void DebugGenerator::Hcreate()
 
    fHistograms->Add(hNparticle);
    fHistograms->Add(hPabs);
-   //   Int_t nent=fHistograms->LastIndex();
+
 }
 
 //_____________________________________________________________________________
@@ -130,12 +134,14 @@ void DebugGenerator::Hfill()
 {
 
    JSFGeneratorBuf *buf=(JSFGeneratorBuf*)EventBuf();
-   hNparticle->Fill(buf->GetNparticles());
+   if( hNparticle ) hNparticle->Fill(buf->GetNparticles());
    
-   TClonesArray *p=buf->GetParticles();
-   for(Int_t i=0;i<buf->GetNparticles();i++){
-      JSFGeneratorParticle   *prt = (JSFGeneratorParticle*)p->At(i);
-      hPabs->Fill((Float_t)prt->GetPabs());
+   if( hPabs ) {
+     TClonesArray *p=buf->GetParticles();
+     for(Int_t i=0;i<buf->GetNparticles();i++){
+       JSFGeneratorParticle   *prt = (JSFGeneratorParticle*)p->At(i);
+       hPabs->Fill((Float_t)prt->GetPabs());
+     }
    }
 
 }
