@@ -9,7 +9,7 @@
 #include    "config/lclib.tmpl"
 #include    "conf/makejsf.tmpl"
 
-CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lpacklib
+CERNLIBS      = $(shell cernlib jetset74 packlib)
 JSFLIBS       = -Wl,-L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim
 
 ROOTLIBS     += -lEGPythia -lEG $(CERNLIBS)
