@@ -5,7 +5,7 @@ all: include/JSFConfig.h
 makefiles: include/JSFConfig.h
 	( cd src ; make makefiles )
 
-install: 
+install: all
 	( cd src ; make install )
 
 clean:
