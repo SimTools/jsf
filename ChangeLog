@@ -16,6 +16,17 @@ To-Do  -- Help wanted
 jsf-1-8  9-April-1999 A.Miyamoto
 **********************************************************
 -----------------------	
+7-May-1999 A.Miyamoto
+-----------------------	
+1) Add JSFCDCTrack::MovePivotToIP and AddMSError 
+   fix bugs in JSFCDCTrack::MovePivot
+
+-----------------------	
+1-May-1999 A.Miyamoto
+-----------------------	
+1) Add Open JIM bank and Start Browser menu in JSFGUIFrame.
+	
+-----------------------	
 16-April-1999 A.Miyamoto
 -----------------------	
 1) Bug in src/JSFReadGenerator.cxx and src/PythiaGenerator.cxx was fixed.
