@@ -543,8 +543,8 @@ void JSFSteerConf::Initialize(TList *mlist)
   while (( module = (JSFModule*)next()))
         {if(module->IsWritable() && module->GetMakeBranch())fNmodule++; }
 
-  fClasses = new (Char_t*)[fNmodule];
-  fNames   = new (Char_t*)[fNmodule];
+  fClasses = new Char_t* [fNmodule];
+  fNames   = new Char_t* [fNmodule];
   next.Reset();
   Int_t lc;
   Int_t im=0;
@@ -571,8 +571,8 @@ void JSFSteerConf::Streamer(TBuffer &R__b)
       Version_t R__v = R__b.ReadVersion(); if (R__v) { }
       TNamed::Streamer(R__b);
       R__b >> fNmodule;
-      fClasses = new (Char_t*)[fNmodule];
-      fNames   = new (Char_t*)[fNmodule];
+      fClasses = new Char_t* [fNmodule];
+      fNames   = new Char_t* [fNmodule];
       Char_t temp[200];
       Int_t lc;
       for(Int_t i=0;i<fNmodule;i++){

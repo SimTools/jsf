@@ -91,7 +91,7 @@ Bool_t PythiaGenerator::Process(Int_t ev)
    for(Int_t i=0;i<4001;i++){ idhist[i]=0 ; }
    Int_t  ndaughter, firstdaughter, mother ;
 
-   for(Int_t i=n0+1;i<=np;i++) {
+   for(i=n0+1;i<=np;i++) {
      TMCParticle *p=(TMCParticle*)pa->UncheckedAt(i-1);
      ks=p->GetKS();
      kf=p->GetKF();

@@ -205,7 +205,7 @@ void JSFModule::MakeBranch(TTree *tree)
      Int_t split=fSplit;
      Int_t bsize=fBufferSize;
      Int_t lc=strlen(GetName());
-     Char_t name[lc+10];
+     Char_t *name = new Char_t [lc+10];
      sprintf(name,"%s-EventBuf",GetName());
      fBranch = tree->Branch(name, fEventBuf->ClassName() ,&fEventBuf, bsize, split);
    }
@@ -220,7 +220,7 @@ void JSFModule::SetBranch(TTree *tree)
    fTree=tree;
    if( fEventBuf ) {
      Int_t lc=strlen(GetName());
-     Char_t name[lc+10];
+     Char_t *name = new Char_t [lc+10];
      sprintf(name,"%s-EventBuf",GetName());
      fBranch=tree->GetBranch(name);
      fBranch->SetAddress(&fEventBuf);

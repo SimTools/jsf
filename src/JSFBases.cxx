@@ -34,8 +34,8 @@ ClassImp(JSFBases)
 
 extern "C" {
 extern void bsinit_();
-extern void bsinfo_();
-extern void bhplot_();
+extern void bsinfo_(int*);
+extern void bhplot_(int*);
 extern void bases_(const void *adr, double *estim, double *sigma, double *ctime,
 		   int *it1, int *it2);
 extern void xhinit_(int *id, double *xl, double *, int *nbin,

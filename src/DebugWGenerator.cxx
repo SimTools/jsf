@@ -17,8 +17,8 @@
 #include "DebugWGenerator.h"
 
 extern "C" {
-extern void decay2_(Double_t *wmom, Double_t *amb, Double_t *amf,
-		    Double_t *amf, Double_t *pf1, Double_t *pf2);
+extern void decay2_(Double_t *wmom, Double_t *amb, Double_t *amf1,
+		    Double_t *amf2, Double_t *pf1, Double_t *pf2);
 };
   
 

@@ -2,56 +2,80 @@ XCOMM #---------------------------------------------------
 XCOMM # Machine dependant configuration to build JSF application.
 XCOMM #---------------------------------------------------
 XCOMM # 
-DllSuf        = so
+DllSuf        = $(SOEXT)
 SrcSuf        = cxx
 ObjSuf        = o
 
-CXX           = g++
-LD            = g++ 
+LD            = $(CXX)
 
 ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
                 -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
                 -lPostscript -lProof -lTree -lUnix -lZip
 ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
 
-LCLIB 	  = $(LCDIR)/lib
+LCLIBDIR      = $(LCDIR)/lib
 
 
 XCOMM # -----------------------------------------------------
 XCOMM # Linux with egcs
 XCOMM # -----------------------------------------------------
 #if defined(LinuxArchitecture)
-CXXFLAGS      = -O2 -Wall  -fno-rtti -fno-exceptions -fPIC \
+SOEXT         = so
+LIBF2C	      = -lf2c
+CXX           = g++ -O2 -g
+CXXFLAGS      = -Wall  -fno-rtti -fno-exceptions -fPIC \
 		-I$(JSFROOT)/include -I$(ROOTSYS)/include
-SOFLAGS       = -shared -Wl,-soname,$(SONAME).so 
+SOFLAGS       = -shared -Wl,-soname,$(SONAME).$(SOEXT)
 LCDIR         = /proj/phys/lclib/pro
 LDFLAGS       = $(ANALLIB) $(GLIBS)
 LIBS          = $(ROOTLIBS) -lm -ldl -rdynamic
 GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -L/usr/X11R6/lib \
-		-lXpm -lX11 -lf2c -lm -ldl -rdynamic
-SOEXT         = sl
+		-lXpm -lX11 $(LIBF2C) -lm -ldl -rdynamic
 BLOCKDATA     = 
 #endif
+
+XCOMM # -----------------------------------------------------
+XCOMM # MkLinux with egcs
+XCOMM # -----------------------------------------------------
+#if defined(PPCArchitecture)
+SOEXT         = so
+LIBF2C        = -lg2c           
+CXX           = g++ -O2 -g
+CXXFLAGS      = -Wall -fsigned-char -fno-rtti -fno-exceptions -fPIC \
+                -I$(JSFROOT)/include -I$(ROOTSYS)/include
+SOFLAGS       = -shared -Wl,-soname,$(SONAME).$(SOEXT)
+LCDIR         = /proj/phys/lclib/pro
+LDFLAGS       = $(ANALLIB) $(GLIBS)
+LIBS          = $(ROOTLIBS) -lm -ldl -rdynamic
+GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -L/usr/X11R6/lib \
+                -lXpm -lX11 $(LIBF2C) -lm -ldl -rdynamic
+BLOCKDATA     = 
+#endif
+
 XCOMM # -----------------------------------------------------
 XCOMM # For Machten gcc (This is not tested yet.)
 XCOMM # -----------------------------------------------------
 #if defined(MachTenPPCArchitecture)
-CXXFLAGS      = -O2 -Wall  -fno-rtti -fno-exceptions -fPIC \
+SOEXT         = so
+LIBF2C        = -lf2c           
+CXX           = g++ -O2 -g
+CXXFLAGS      = -Wall  -fno-rtti -fno-exceptions -fPIC \
 		-I$(JSFROOT)/include -I$(ROOTSYS)/include
-SOEXT         = sl
-SOFLAGS       = -shared -Wl,-soname,$(SONAME).so 
+SOFLAGS       = -shared -Wl,-soname,$(SONAME).$(SOEXT)
 LCDIR         = /proj/phys/lclib/pro
 LDFLAGS       = $(ANALLIB) $(GLIBS)
 LIBS          = $(ROOTLIBS) -lm -ldl -rdynamic
 GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -L/usr/X11R6/lib \
-		-lXpm -lX11 -lf2c -lm -ldl -rdynamic
+		-lXpm -lX11 $(LIBF2C) -lm -ldl -rdynamic
 BLOCKDATA     = 
 #endif
+
 XCOMM # -----------------------------------------------------
 XCOMM # HI-UX
 XCOMM # -----------------------------------------------------
 #if defined(hitachiArchitecture)
-CXXFLAGS      = -O2 -Wall  -fno-rtti -fno-exceptions -fPIC \
+CXX           = g++ -O2 -g
+CXXFLAGS      = -Wall  -fno-rtti -fno-exceptions -fPIC \
 		-I$(JSFROOT)/include -I$(ROOTSYS)/include \
 		$(USEFORTRAN)
 SOFLAGS       = -nostdlib  -nostartfiles -Wl,-b,-E 
@@ -69,5 +93,24 @@ BLOCKDATA     = $(LCDIR)/util/lcfull/src/prblk1.o \
 		$(LCDIR)/util/fortlib/src/uconst.o \
 		$(LCDIR)/simjlc/src/smrblk.o \
 		$(LCDIR)/util/ltkcl/cmbblk.o 
+#endif
+
+
+XCOMM # -----------------------------------------------------
+XCOMM # HP-UX
+XCOMM # -----------------------------------------------------
+#if defined(HPArchitecture)
+LIBF2C        = -L/opt/fortran/lib -lU77
+CXX	      = aCC -O -g
+CXXFLAGS      = +W70,495,740,749,829 -DR__ACC -z +Z \
+		-I$(JSFROOT)/include -I$(ROOTSYS)/include
+SOFLAGS       = -b -z -Wl,+vnocompatwarnings
+LDFLAGS       = -z -Wl,+s -Wl,-E $(ANALLIB) $(GLIBS)
+SOEXT         = sl
+LCDIR         = /proj/phys/lclib/pro
+LIBS          = $(ROOTLIBS) -lm -ldld
+GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -lXpm -lX11 \
+		$(LIBF2C) -lm -ldld
+BLOCKDATA     = 
 #endif
 

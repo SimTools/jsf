@@ -134,7 +134,7 @@ Bool_t JSFQuickSim::TBPUTGeneratorParticles()
     gJSFLCFULL->TBPUT(1,"Generator:Particle_List",ielm,20,(Int_t*)data,iret);
   }
 
-  for(Int_t i=0;i<20;i++){ data[i]=0.0;}
+  for(i=0;i<20;i++){ data[i]=0.0;}
   data[0]=gevt->GetEventNumber();
   data[1]=gevt->GetDate();
   data[2]=gevt->GetTime();
@@ -475,11 +475,11 @@ void JSFQuickSimParam::SetSmearParam()
     smrvgo_.rdlvx[i]    = fVTXLayer[i][3] ; // thickness in radiation length 
   }
 
-  for(Int_t i=0;i<5;i++){
+  for(i=0;i<5;i++){
     smrvgo_.errvx[i] = fVTXError[i];
   }
 
-  for(Int_t i=0;i<4;i++){
+  for(i=0;i<4;i++){
     for(Int_t j=0;j<5;j++){
       smrclp_.clspar[i][j]=fCLSPAR[i][j];
     }
