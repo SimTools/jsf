@@ -1,7 +1,13 @@
+//*LastUpdate :  jsf-1-12  2-September-1999  By A.Miyamoto
 //*LastUpdate :  jsf-1-11  23-July-1999  By A.Miyamoto
 //*LastUpdate :  jsf-1-4  15-Feburary-1999  By A.Miyamoto
 //*LastUpdate :  0.02/01  10-September-1998  By A.Miyamoto
 //*-- Author  : A.Miyamoto  10-September-1998
+
+/*
+2-September-1999 A.Miyamoto  Memory leak by fPartons are fixed.
+                             Add function, TBGETsSpringPartonList()
+*/
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -20,6 +26,7 @@
 #include <TKey.h>
 #include "TRandom.h"
 #include "JSFSteer.h"
+#include "JSFLCFULL.h"
 #include "JSFSpring.h"
 #include "JSFSpringParton.h"
 
@@ -167,6 +174,7 @@ JSFSpringBuf::JSFSpringBuf(const char *name, const char *title,
 JSFSpringBuf::~JSFSpringBuf()
 {
    Clear();
+   if( fPartons ) delete fPartons;
 }
 
 
@@ -174,6 +182,34 @@ JSFSpringBuf::~JSFSpringBuf()
 void JSFSpringBuf::Clear(Option_t *option)
 {
   if( fPartons ) fPartons->Clear(option);
+}
+
+//_____________________________________________________________________________
+Bool_t JSFSpringBuf::SetPartons()
+{
+  //  This function is provided as an interface to old TBS routines.
+  //  Use of TBS routine is strongly discouraged as they will be removed
+  //  when LCLIB is converted to C++
+  Int_t nelm, neary[1000];
+
+  // Save Particle information
+  gJSFLCFULL->TBNOEL(1,"Spring:Parton_List",nelm, neary);
+  if( nelm <= 0 ) {
+    fNparton=0;
+    return kTRUE;
+  }
+
+  Int_t iret, nw;
+  Float_t data[20];
+  TClonesArray &particles = *fPartons;
+  Int_t npart=0;
+  for(Int_t j=0;j<nelm;j++){
+     gJSFLCFULL->TBGET(1,"Spring:Parton_List",neary[j],nw,(Int_t*)data,iret);
+     if( iret < 0 ) return kFALSE;
+     new( particles[npart++] ) JSFSpringParton(data);
+  }
+  fNparton=npart;
+  return kTRUE;
 }
 
 //_____________________________________________________________________________

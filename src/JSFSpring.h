@@ -42,7 +42,7 @@ public:
    virtual ~JSFSpringBuf();
 
    virtual void Clear(Option_t *option="");
-   virtual Bool_t SetPartons(){ fNparton=0; return kTRUE; }
+   virtual Bool_t SetPartons();
 
    Int_t             GetNpartons() const { return fNparton; }
    TClonesArray     *GetPartons() { return fPartons; }
