@@ -1,6 +1,3 @@
-//*LastUpdate:  jsf-1-17 6-Jan-2001  by A.Miyamoto
-//*-- Author :  Akiya Miyamoto  09/24/1998
-
 //////////////////////////////////////////////////////////////////
 //
 //  JSFSteer
@@ -140,7 +137,7 @@ public:
   virtual Bool_t  GetLastRunInfo(TFile *file, Int_t lastrun=-1);
 
   virtual void  PrintInfo();
-  virtual void  FillTree(){ fOTree->Fill(); }
+  virtual void  FillTree(){ if( fOTree ) { fOTree->Fill(); }  }
   TBranch *GetBranch(){return fBrJSF;}
 
   void SetReturnCode(Int_t ir){ fReturnCode=ir; }
@@ -151,5 +148,7 @@ public:
 };
 
 R__EXTERN JSFSteer *gJSF;
+
+typedef JSFSteer::EJSFReturnCode JSFReturnCode_t;
 
 #endif

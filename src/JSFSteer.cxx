@@ -421,8 +421,10 @@ Bool_t JSFSteer::Initialize()
    if( fOFile && fOFile->IsOpen() && fOFile->IsWritable() ) {
        fOFile->cd("/");
        MakeConfDir();
-       fOFile->cd("/");
-       if( !MakeTree() ) return kFALSE; 
+       if( fEnv->GetValue("JSF.MakeJSFTree",1) == 1 ) {
+	 fOFile->cd("/");
+	 if( !MakeTree() ) return kFALSE; 
+       }
    }
 
    InitializeMessage();
@@ -835,20 +837,20 @@ Bool_t JSFSteer::MakeTree()
 
 
   // Define JSF in the tree.
-     Int_t split=1;
-     Int_t bsize=4000;
-     fBrJSF=fOTree->Branch(GetName(),ClassName(),&gJSF, bsize,split);  
+  Int_t split=1;
+  Int_t bsize=4000;
+  fBrJSF=fOTree->Branch(GetName(),ClassName(),&gJSF, bsize,split);  
 
-     TIter next(fModules);
-     JSFModule *module;
-     while ((module = (JSFModule*)next())) {
-       if( ! module->IsWritable() ) continue ;
-       module->MakeBranch(fOTree);
-     }
+  TIter next(fModules);
+  JSFModule *module;
+  while ((module = (JSFModule*)next())) {
+    if( ! module->IsWritable() ) continue ;
+    module->MakeBranch(fOTree);
+  }
 
-   if( fIFile ) fIFile->cd("/");
+  if( fIFile ) fIFile->cd("/");
 
-   return kTRUE;
+  return kTRUE;
 }
 
 //_____________________________________________________________________________
