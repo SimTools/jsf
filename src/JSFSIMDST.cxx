@@ -360,7 +360,9 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
 
   Int_t nobuf=fNGeneratorParticles;
   if( nobuf >= kGenMax ) { 
+    printf(" Fatal error in JSFDSIMDSBuf::PackDST.. \n");
     printf(" Too many generator Track at event%d. Process abandand.\n",nev);
+    printf(" Number of genrator track is %d\n",nobuf);
     return kFALSE;
   }
   Int_t ngen=0 ;
