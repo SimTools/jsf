@@ -246,7 +246,7 @@ XCOMM # -----------------------------------------------------
 SOEXT         = so
 LIBF2C        =
 CXX           = xlC
-CXXFLAGS      = $(EXTRACXXOPT) \
+CXXFLAGS      = $(EXTRACXXOPT) -DAIX \
                 -I$(JSFROOT)/include $(shell root-config --cflags) \
 		-I/usr/vacpp/include -brtl -bshared
 SOFLAGS       = -p 0
