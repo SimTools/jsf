@@ -2,12 +2,10 @@
 
 #include    "../../conf/makejsf.tmpl"
 CERNLIBS      = -L/cern/pro/lib -ljetset74 -lpythia
-JSFLIBS       = -Wl,-L$(JSFROOT)/lib \
-		-Wl,--whole-archive,-lJSF -lJSFLCFULL \
-		-Wl,--no-whole-archive \
+JSFLIBS       = -Wl,-L$(JSFROOT)/lib -lJSF -lJSFLCFULL 
 
 #if defined(hitachiArchitecture)
-CERNLIBS      = -L/cern/97a_nog/lib -ljetset74
+CERNLIBS      = -L/cern/97a/lib -ljetset74
 JSFLIBS       = -Wl,-L$(JSFROOT)/lib -lJSF -lJSFLCFULL 
 #endif
 

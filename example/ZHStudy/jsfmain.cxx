@@ -31,12 +31,13 @@
 #include "TRint.h"
 //*KEND.
 
-#if defined(_HIUX_SOURCE)
-#include "Pcommon.h"
-extern "C" void hf_fint(char *option); /* to initialize fortran environment */
+void dummysub();
 extern "C" void G__cpp_setuplibJSF();
 extern "C" void G__cpp_setuplibJSFLCFULL();
 extern "C" void G__cpp_setupG__Pythia();
+
+#if defined(_HIUX_SOURCE)
+extern "C" void hf_fint(char *option); /* to initialize fortran environment */
 #endif
 
 extern void InitGui();
@@ -54,10 +55,6 @@ int main(int argc, char **argv)
 #endif
 #if defined(_HIUX_SOURCE)
    hf_fint((char *)NULL);
-   LUJETS.n=0;  // Needs explicit initialize
-   G__cpp_setuplibJSF();
-   G__cpp_setuplibJSFLCFULL();
-   G__cpp_setupG__Pythia();
 #endif
 
    TRint *theApp = new TRint(appname, &argc, argv, 0, 0);
@@ -69,5 +66,15 @@ int main(int argc, char **argv)
 
    return(0);
 }
+
+// 
+//  Put here to load objects from archived library.
+void dummysub()
+{
+   G__cpp_setuplibJSF();
+   G__cpp_setuplibJSFLCFULL();
+   G__cpp_setupG__Pythia();
+}
+
 
 
