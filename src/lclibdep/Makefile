@@ -3,7 +3,7 @@ SHELL   = /bin/bash
 MFLAGS	=
 CURRDIR	= .
 
-SUBDIRS = tools core jsfpythia6 jsfpythia5
+SUBDIRS = quicksim jsfpythia6 jsfpythia5
 
 all: install
 install:

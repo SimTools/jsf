@@ -3,11 +3,11 @@ SHELL   = /bin/bash
 MFLAGS	=
 CURRDIR	= .
 
-SUBDIRS = kern generators lclibdep tools gui
+SUBDIRS = kern generators tools lclibdep gui
 
-.PHONY: all kern generators lclibdep tools gui
+.PHONY: all kern generators tools lclibdep gui
 	
-all: kern generators lclibdep tools  gui
+all: kern generators tools lclibdep gui
 
 install: all
 
@@ -21,10 +21,10 @@ lclibdep:
 	( cd lclibdep ; make all ; make install )
 
 tools:
-	( cd tools ; make all ; make install )
+	( cd tools ; xmkmf -a ; make all ; make install )
 
 gui:
-	( cd gui && xmkmf -a && make all && make install )
+	( cd gui ; xmkmf -a ; make all ; make install )
 
 %:
 	for i in $(SUBDIRS); do \

@@ -13,11 +13,11 @@
 /*  Some macros specific to jsf	building				*/
 /*----------------------------------------------------------------------*/
 
-#include    "../../../conf/makejsf.tmpl"
+#include    "conf/makejsf.tmpl"
 
 NAME		= JSFTools
 LIBNAME		= lib$(NAME)
-JSFINSTALLDIR   = ../../..
+JSFINSTALLDIR   = ../..
 INC		= $(JSFINSTALLDIR)/include 
 
 /*----------------------------------------------------------------------*/
