@@ -240,7 +240,7 @@ enum EJSFGUICommandIdentifiers {
 
    T_GOTO_EVENT,
    T_ANAL_START,
-   T_ANAL_END
+   T_ANAL_NEVENTS
 
 };
 
@@ -558,7 +558,7 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h, Bool_t demo)
 
    TGTextBuffer *tb1=new TGTextBuffer(20);
    tb1->AddText(0," ");
-   fTToEvent = new TGTextEntry(fStartAnal, tb1, T_ANAL_END);
+   fTToEvent = new TGTextEntry(fStartAnal, tb1, T_ANAL_NEVENTS);
    fTToEvent->Resize(50, fTToEvent->GetDefaultHeight());
    fStartAnal->AddFrame(fTToEvent, lhTopLeft);
    fTToEvent->Associate(this);
@@ -573,6 +573,7 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h, Bool_t demo)
    fStartAnal->AddFrame(fTFromEvent, lhTopLeft);
    fTFromEvent->Associate(this);
 
+   for(i=0;i<3;i++){ fTextEntryStatus[i]=kFALSE;}
 
    AddFrame(fStartAnal, lhTopLeft);
 
@@ -618,21 +619,35 @@ void JSFGUIFrame::Update()
   Int_t i;
 
   //*****************
-  Int_t firstEvent=GetFirstEvent();
-  sprintf(str,"%d",firstEvent);
-  TGTextBuffer *tb=fTFromEvent->GetBuffer();
-  tb->Clear();
-  tb->AddText(0,str);
-  fTFromEvent->UnmapWindow();
-  fTFromEvent->MapWindow();
+  Int_t firstEvent=0;
+  if( fTextEntryStatus[1] ) {
+    sscanf(fTFromEvent->GetBuffer()->GetString(),"%d",&firstEvent);
+    SetFirstEvent(firstEvent);
+    fTextEntryStatus[1]=kFALSE;
+  }
+  else {
+    firstEvent=GetFirstEvent();
+    sprintf(str,"%d",firstEvent);
+    TGTextBuffer *tb=fTFromEvent->GetBuffer();
+    tb->Clear();
+    tb->AddText(0,str);
+    fTFromEvent->UnmapWindow();  fTFromEvent->MapWindow();
+  }
 
   //*****************
-  Int_t nEventsAnalize=GetNEventsAnalize();
-  sprintf(str,"%d",nEventsAnalize);
-  tb=fTToEvent->GetBuffer();
-  tb->Clear();  tb->AddText(0,str);
-  fTToEvent->UnmapWindow();  fTToEvent->MapWindow();
-
+  Int_t nEventsAnalize=0;
+  if( fTextEntryStatus[2] ) {
+    sscanf(fTToEvent->GetBuffer()->GetString(),"%d",&nEventsAnalize);
+    SetNEventsAnalize(nEventsAnalize);
+    fTextEntryStatus[2]=kFALSE;
+  }
+  else {
+    nEventsAnalize=GetNEventsAnalize();
+    sprintf(str,"%d",nEventsAnalize);
+    TGTextBuffer *tb=fTToEvent->GetBuffer();
+    tb->Clear();  tb->AddText(0,str);
+    fTToEvent->UnmapWindow();  fTToEvent->MapWindow();
+  }
 
   //*****************
   fED->Update();
@@ -835,6 +850,12 @@ cyan is +Xand purple is +Y directions",    icontype, buttons, &retval);
 
       case kC_TEXTENTRY:
 
+	switch(parm1) {
+	  case T_GOTO_EVENT:   fTextEntryStatus[0]=kTRUE; break;
+	  case T_ANAL_START:   fTextEntryStatus[1]=kTRUE; break;
+	  case T_ANAL_NEVENTS: fTextEntryStatus[2]=kTRUE; break;
+	}
+
 	switch (GET_SUBMSG(msg)) {
 	  case kTE_ENTER:
 	    if( parm1 == T_GOTO_EVENT )  GotoEventAction();
@@ -905,14 +926,11 @@ void JSFGUIFrame::AnalizeEventAction()
        fMenuFile->DisableEntry(M_FILE_OPENOUTPUT);
        fInitialized=kTRUE;
        gROOT->ProcessLine("Initialize();");
-       Update();
   }
+  Update();
   Int_t i;
-  Int_t iFirstEvent, iNEventsAnalize;
-  sscanf(fTFromEvent->GetBuffer()->GetString(),"%d",&iFirstEvent);
-  sscanf(fTToEvent->GetBuffer()->GetString(),"%d",&iNEventsAnalize);
-  SetFirstEvent(iFirstEvent);
-  SetNEventsAnalize(iNEventsAnalize);
+  Int_t iFirstEvent=GetFirstEvent();
+  Int_t iNEventsAnalize=GetNEventsAnalize();
   fNoOfAnalizedEvents=0;
   Int_t last=iFirstEvent+iNEventsAnalize-1;
   for(i=iFirstEvent;i<=last;i++){

@@ -113,7 +113,7 @@ private:
    //Int_t  fNEventsAnalize;
    Int_t  fReturnCode;
    Int_t  fNoOfAnalizedEvents;
-
+   Bool_t fTextEntryStatus[3];
 
    TGTextBuffer *fTB1;
 
