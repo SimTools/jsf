@@ -2,14 +2,13 @@ XCOMM #
 XCOMM #  This is spec file.  See spec.sample also for further description.
 XCOMM #
 XCOMM # The file $JSFROOT/conf/spec is included from $JSFROOT/conf/makejsf.tmpl 
-XCOMM # through Imakefile when xmkmf command is executed. The file, 
-XCOMM # $JSFROOT/conf/spec, is created automatically by the script, 
-XCOMM # $JSFROOT/bin/makespec when make install command is executed.  
-XCOMM # Currently this file is used  only on Linux system.
+XCOMM # through Imakefile when xmkmf command is executed. 
 XCOMM #
 XCOMM # System information is saved in JSFConfig.h in $JSFROOT/src directory
 XCOMM # JSFConfig.h is created by makespec script, when JSF is installed by
 XCOMM # make install command.
+XCOMM #
+XCOMM #$Id:
 XCOMM #
 #include "include/JSFConfig.h"
 ROOT_VERSION = __ROOT_VERSION__
