@@ -5,21 +5,6 @@
 
 #include "conf/makejsf.tmpl"
 
-#ifdef hitachiArchitecture
-
-CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lpacklib
-
-ROOTLIBS     += -lEGPythia -lEG -Wl,-u,pytest_ $(CERNLIBS)
-
-LCLIB 	  = $(LCLIBROOT)/lib
-
-ANALLIB   = -L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim \
-	    -L$(LCLIBROOT)/lib -lGENUTIL -lLUHADR -lTAUOLA \
-	    -lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
-	    -lHELASV204 -lFORTLIB -lCOM -lCLI 
-
-#endif
-
 PROGRAM       = NuNuGam
 
 SOLIBNAME     = lib$(PROGRAM)
@@ -33,18 +18,9 @@ HDRS	      = $(PROGRAM).h
 WEBDIR        = $(JSFROOT)/html/example/$(PROGRAM)
 
 
-#ifdef hitachiArchitecture
-all::  jsf 
-jsf: $(OBJS) jsfmain.o
-	$(LD) jsfmain.o $(BLOCKDATA) $(OBJS) $(LDFLAGS) -o jsf
-jsfmain.cxx:
-	ln -s ../../src/jsfmain.cxx jsfmain.cxx
-
-#else
 all::  lib
 lib: $(OBJS)
-	$(LD) $(SOFLAGS) $(OBJS) -o  $(SOLIBNAME).$(DllSuf)
-#endif
+	$(LD) $(SOFLAGS) $(OBJS) -o  $(SOLIBNAME).$(DllSuf) $(AIXLIBS)
 
 
 clean:: 
