@@ -1,0 +1,20 @@
+For installation, please see HowToInstall
+
+JSF is a library for studies of Joint Linear Collider Working group,
+( http://acfahep.kek.jp/ ).  The home page of the JSF is prepared at
+http://www-jlc.kek.jp/subg/offl/jsf/jsf.html, and releated information
+may be found also at http://acfahep.kek.jp/subg/sim/index.html.
+
+This program is based on the ROOT, which is described in http://root.cern.ch/.
+
+We have started the project to get familiar with Object-Oriented technology 
+to apply them to High Energy Physics. JSF is still developping and many 
+changes and inclusion of new source codes are expected in near future.
+Please remind that there may be bugs and we may change codes without backword 
+compatibility for beter functionality.  
+
+Please send any comment to Akiya.Miyamoto@kek.jp. We would be very happy to 
+hear any thing from you. We welcome anyone to participate the development.
+
+14-Feburary-1999
+
