@@ -1,6 +1,30 @@
 //*************************************************
 //* Main Macro for JSF execution through GUI
 //*
+//*(List of functions ) 
+//* 
+//* int Initialize()    // Initialize
+//* void InitGenSim()   // Initialize Generator parameters
+//* Bool_t GetEvent(Int_t ev) // Process one event ( Read or generate)
+//* Bool_t GetNext()          // Read next or Generate one event
+//* Bool_t GetPrevious()      // Read previous event
+//* void JobEnd()             // Does job end task
+//* void GetArguments()       // Get command line arguments
+//* void BatchRun()           // Event loop for batch execution
+//* void ResetHist()          // Call User Initalize
+//* Bool_t SetOptionsForBatch() // Set options specfic to batch execution.
+//* 
+//* Some of these functions are called by TRoot::ProcessLine() executed
+//* in JSFGUIFrame.cxx 
+//*
+//*(User functions called from this macro)
+//*  Initialize() calls  UserSetOptions() and UserInitialize()
+//*  GetEvent(..) calls  UserAnalysis()
+//*  JobEnd()     calls  UserTerminate()
+//*  ResetHist()  calls  UserInitialize()
+//* 
+//*  These user functions are defined in a macro file, UserAnalysis.C 
+//* 
 //*(Author)
 //*  Akiya Miyamoto, KEK, 8-March-1999  
 //*  Akiya Miyamoto, KEK, 21-April-1999  
@@ -37,7 +61,6 @@ int Initialize()
   //  Set parameters 
   if( gui == 0 ) {
     SetOptionsForBatch();
-    GetArguments();
   }
   else {
     // In interactive mode, GetArguments() is called when gui object is created.
@@ -50,6 +73,7 @@ int Initialize()
     gInitPythiaMacro=gui->GetInitPythiaMacro();
   }
 
+  GetArguments();
   gROOT->LoadMacro(gMacroFileName);
 
   UserSetOptions();
@@ -198,6 +222,7 @@ Bool_t GetPrevious()
 void JobEnd()
 {
   jsf->Terminate();
+  UserTerminate();
   if( ofile ) ofile->Write();
 
 }
@@ -237,8 +262,6 @@ void BatchRun()
   Int_t i;
   for(i=gFirstEvent;i<=gFirstEvent+gNAnalizeEvent-1;i++){
     GetEvent(i);
-
-    printf(" i=%d, gReturnCode=%d\n",i,gReturnCode);
     if( gReturnCode == -2 ) {
       printf("End of event loop due to end-of-file at event# %d\n",i);
       break;
@@ -267,7 +290,27 @@ void GetArguments()
     if( strncmp(ap->Argv(i),"--maxevt=",9) == 0 ){
       strcpy(str,(ap->Argv(i)+9)); 
       sscanf(str,"%d",&maxevt);
-      printf(" str=%s maxevt=%d\n",str,maxevt);
+      gNAnalizeEvent= maxevt;
+      if( gui ) gui->SetNEventsAnalize(gNAnalizeEvent);
+      printf(" Number of event to process is %d\n",gNAnalizeEvent);
+    } 
+    elseif( strncmp(ap->Argv(i),"--1stevt=",9) == 0 ){
+      strcpy(str,(ap->Argv(i)+9)); 
+      sscanf(str,"%d",&gFirstEvent);
+      if( gui ) gui->SetFirstEvent(gFirstEvent);
+      printf(" Event number to start analysis is %d\n",gFirstEvent);
+    } 
+    elseif( strncmp(ap->Argv(i),"--ecm=",6) == 0 ){
+      strcpy(str,(ap->Argv(i)+6)); 
+      sscanf(str,"%g",&gEcm);
+      if( gui ) gui->SetEcm(gEcm);
+      printf(" Center of mass energy is %g (GeV)\n",gEcm);
+    } 
+    elseif( strncmp(ap->Argv(i),"--macro=",8) == 0 ){
+      strcpy(str,(ap->Argv(i)+8)); 
+      gMacroFileName=new Char_t[strlen(str)+1];
+      strcpy(gMacroFileName,str);
+      printf(" User Macro filename is %s\n");
     } 
     elseif( strcmp(ap->Argv(i),"--help") ==0 ) {
       printf("Macro : gui.C\n");
@@ -277,6 +320,8 @@ void GetArguments()
       printf("  Valid options are.\n");
       printf("   --help : display help information\n");
       printf("   --maxevt=N  : Number of event is set to N \n");
+      printf("   --1stevt=N  : First event number to analize \n");
+      printf("   --ecm=Ecm   : Set center of mass energy.\n");
       ap->Terminate();
     }
   }
