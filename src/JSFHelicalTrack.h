@@ -110,7 +110,7 @@ public:
 
   virtual ~JSFHelicalTrack(){}
   Double_t GetChisq(){ return fChisq; }
-  Int_t GetNDF(){ return fNDF; }
+  Int_t    GetNDF(){ return fNDF; }
   Double_t GetCL(){ return fCL;}
 
   Double_t GetBField(){ return fBfield; }
@@ -130,7 +130,11 @@ public:
 			 Double_t &phi0, Double_t &phi1, Int_t Maxloop=3,
 			 Double_t StartX=0, Double_t StartY=0);
 
+  void ChangeSign();
+  void MovePivot(JSF3DV pivot);
+
   inline JSFHelixParameter GetHelixParameter(){return fHelix; }
+  inline Double_t *GetHelixErrorMatrix(){return fError.data; }
   inline void SetHelix(Double_t *par){
     fHelix.dr=par[0];fHelix.phi0=par[1];fHelix.kappa=par[2];
     fHelix.dz=par[3];fHelix.tanl=par[4];

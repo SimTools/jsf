@@ -20,6 +20,7 @@
 #include "JSFSteer.h"
 #include "JSFHelicalTrack.h"
 #include "JSFUtil.h"
+#include "JSFDMatrix.h"
 
 ClassImp(JSFHelicalTrack)
 
@@ -627,5 +628,252 @@ void JSFHTFitFuncCylinderGeometry(
 
 
 
+//______________________________________________________
+void JSFHelicalTrack::ChangeSign()
+{
+  // Change sign of track.  Helix parameter and error matrix are
+  // modified accordingly.
+  /*
+C**********************************************************************
+C* 
+C*  ----------------------------------
+C*  Subroutine UTRKIV( TRKPAR, DRKPAR)
+C*  ----------------------------------
+C* 
+C*(Function)
+C*   Change charge sign of the track parameter.
+C* 
+C*(Input)
+C*   TRKPAR  ; Track parameter with TPC;Track parameter format.
+C*             ( R*4 format)
+C*   DRKPAR  ; same as TRKPAR, but R*8 format.
+C* 
+C*(Output)
+C*   TRKPAR  ; Change inverted track parameter.
+C*   DRKPAR  ;
+C* 
+C*(Author)
+C*  A. Miyamoto   6-Jul-1987
+C* 
+C**********************************************************************
+C* 
+  Converted to C++ code by Akiya Miyamoto  4-Feburary-2000
+*/
+
+//C  
+//C =====< Entry Point >=================================================
+//C  
+
+//C ---------------------------------------------------------------------
+//C (1) Convert track parameter.
+//C ---------------------------------------------------------------------
+//C  
+//   REAL*4  RSIGN(5)/-1., 1., -1., 1., -1./
+  
+  fHelix.dr*=-1.0;
+  fHelix.kappa*=-1.0;
+  fHelix.tanl*=-1.0;
+
+  Double_t twopi=2.0*TMath::Pi();
+  Double_t div=(fHelix.phi0+twopi)/twopi;
+  fHelix.phi0 = fHelix.phi0+twopi - twopi*((Int_t)(div)) - TMath::Pi();
+
+  Double_t sign[15]={  1.0, 
+		     -1.0,  1.0,
+		      1.0, -1.0,  1.0,
+		     -1.0,  1.0, -1.0,  1.0,
+		      1.0, -1.0,  1.0, -1.0, 1.0};
+  Int_t i;
+  for(i=0;i<15;i++){ fError.data[i]*= sign[i]; }
+
+}
+
+
+//_________________________________________________
+void JSFHelicalTrack::MovePivot(JSF3DV pivot)
+{
+  // Re-evaluate helix parameter by moving the pivot to "pivot".
+
+/*
+CC********************************************************************CC
+C*                                                                    *C
+C*=====================================------===                      *C
+C*  Subroutine UTRKMV(LNxHLX,HELXIN,XP,HELXOT)                        *C
+C*=====================================------===                      *C
+C*                                                                    *C
+C* (Purpose)                                                          *C
+C*    Transforms helix parameters and their error matrix to those     *C
+C*    of a new pivot XP.                                              *C
+C* (Inputs)                                                           *C
+C*      LNxHLX      : (I*4) ; length of helix parameter ( > 37 ).     *C
+C*      HELXIN(*)   : (R*4) ; helix parameter vector. 1-st 38 words   *C
+C*                            should have the same format as that of  *C
+C*                            Production:TPC;Track_Parameter.         *C
+C*      XP    (*)   : (R*4) ; new pivot position.                     *C
+C* (Outputs)                                                          *C
+C*      HELXOT(*)   : (R*4) ; helix parameter vector at XP.           *C
+C* (Relation)                                                         *C
+C*    Calls : no subroutines.                                         *C
+C* (Update Record)                                                    *C
+C*    7/06/87  K.Fujii        Original version.                       *C
+C*    6/25/89  K.Fujii        Restrict ABS(phi) < pi.                 *C
+C*                                                                    *C
+CC********************************************************************CC
+  Converted to C++ code by Akiya Miyamoto  4-Feburary-2000
+*/
+
+  if( !TestBfield() ) return;
+
+  Double_t ptor=fAlpha;
+  Double_t x2pid = 2.0*TMath::Pi();
+  Double_t xpid  = TMath::Pi();
+  Double_t dr  = fHelix.dr;
+  Double_t fi0 = fHelix.phi0;
+  Double_t cpa = fHelix.kappa;
+  Double_t dz  = fHelix.dz;
+  Double_t tnl = fHelix.tanl;
+  Double_t x0  = fHelix.pivot.X();
+  Double_t y0  = fHelix.pivot.Y();
+  Double_t z0  = fHelix.pivot.Z();
+  Double_t xv  = pivot.X();
+  Double_t yv  = pivot.Y();
+  Double_t zv  = pivot.Z();
+  //
+  // Transform helix parameters
+  //
+  Double_t r   = ptor/cpa;
+  Double_t rdr = r + dr;
+  Double_t fip = (fi0+2*x2pid)-x2pid*((Double_t)((Int_t)((fi0+2*x2pid)/x2pid)));
+  Double_t csf0 = TMath::Cos(fip);
+  Double_t snf0 = TMath::Sqrt( TMath::Max(0.0, (1.0-csf0)*(1.0+csf0)) );
+  if( fip > xpid ) snf0 = -snf0 ;
+
+  Double_t xc  = x0 + rdr*csf0 ;
+  Double_t yc  = y0 + rdr*snf0 ;
+  Double_t csf = ( xc-xv)/r;
+  Double_t snf = (yc-yv)/r;
+  Double_t anrm = 1.0/TMath::Sqrt(csf*csf+snf*snf);
+           csf  *= anrm;
+	   snf  *= anrm;
+  Double_t csfd  = csf*csf0 + snf*snf0;
+  Double_t snfd  = snf*csf0 - csf*snf0;
+           fip   = TMath::ATan2(snf, csf);
+  Double_t fid   = (fip-fi0 + 4*x2pid)
+                 - x2pid*((Double_t)(Int_t)((fip-fi0 + 4*x2pid)/x2pid));
+  if( fid > xpid ) fid -= x2pid;
+  Double_t drp   = (x0+dr*csf0+r*(csf0-csf)-xv)*csf
+                 + (y0+dr*snf0+r*(snf0-snf)-yv)*snf;
+  Double_t dzp   = z0 + dz - r*tnl*fid - zv;
+  //C--
+  //C  Calculate @AP/@A.
+  //C     AP = ( DRP, FIP, CPA, DZP, TNL )
+  //C     A  = ( DR , FI0, CPA, DZ , TNL )
+  //C--
+  Double_t rdrpr = 1.0/(r+drp);
+  Double_t rcpar = r/cpa;
+
+  JSFDMatrix dapda(5,5);
+  dapda.Zero();
+  
+  dapda(0,0) = csfd ; 
+  dapda(1,0) = rdr*snfd;  
+  dapda(2,0) = rcpar*(1.0-csfd);   
+   
+  dapda(0,1) = - rdrpr*snfd;
+  dapda(1,1) =   rdr*rdrpr*csfd;
+  dapda(2,1) =   rcpar*rdrpr*snfd;
+   
+  dapda(2,2) =   1.0;
+   
+  dapda(0,3) =   r*rdrpr*tnl*snfd;
+  dapda(1,3) =   r*tnl*(1.0-rdr*rdrpr*csfd);
+  dapda(2,3) =   rcpar*tnl*(fid-r*rdrpr*snfd);
+  dapda(3,3) =   1.0;
+  dapda(4,3) = - r*fid;
+   
+  dapda(4,4) =   1.0;
+
+  //C--
+  //C  Copy error matrix to EEP and symmetrize it into EE.
+  //C--
+  JSFDMatrix ee(5,5);
+  Int_t i,j,n;
+  n=0;
+  for(i=0;i<5;i++){ for(j=0;j<=i;j++) {
+    ee(i,j)=fError.data[n];
+    ee(j,i)=fError.data[n];
+    n++;
+  }}
+  //C--
+  //C  Transform error matrix EEP to that of XP.
+  //C--
+  JSFDMatrix eep(dapda, dapda.kTransposeMult,JSFDMatrix(ee,ee.kMult,dapda));
+  n=0;
+  for(i=0;i<5;i++){ for(j=0;j<=i;j++) {
+    fError.data[n]=eep(i,j);
+    n++;
+  }}
+
+/*
+  Double_t dapda[5][5];
+  memset(dapda,0,200);
+  
+  dapda[0][0] = csfd ; 
+  dapda[1][0] = rdr*snfd;  
+  dapda[2][0] = rcpar*(1.0-csfd);   
+   
+  dapda[0][1] = - rdrpr*snfd;
+  dapda[1][1] =   rdr*rdrpr*csfd;
+  dapda[2][1] =   rcpar*rdrpr*snfd;
+   
+  dapda[2][2] =   1.0;
+   
+  dapda[0][3] =   r*rdrpr*tnl*snfd;
+  dapda[1][3] =   r*tnl*(1.0-rdr*rdrpr*csfd);
+  dapda[2][3] =   rcpar*tnl*(fid-r*rdrpr*snfd);
+  dapda[3][3] =   1.0;
+  dapda[4][3] = - r*fid;
+   
+  dapda[4][4] =   1.0;
+
+  //C--
+  //C  Copy error matrix to EEP and symmetrize it into EE.
+  //C--
+  Double_t ee[5][5];
+  Int_t i,j,n;
+  n=0;
+  for(i=0;i<5;i++){ for(j=0;j<=i;j++) {
+    ee[i][j]=fError.data[n];
+    ee[j][i]=ee[i][j];
+    n++;
+  }}
+  //C--
+  //C  Transform error matrix EEP to that of XP.
+  //C--
+  n=0;
+  for(i=0;i<5;i++){ for(j=0;j<=i;j++) {
+    fError.data[n]=0.0;
+    Int_t k,l;
+    for(k=0;k<5;k++){ for(l=0;l<5;l++){
+      fError.data[n]+= dapda[k][i]*ee[l][k]*dapda[l][j];
+    }}
+    n++;
+  }}
+*/
+  //C--
+  //C  Fill HELXOT array.
+  //C--
+  fHelix.dr=drp;
+  fHelix.phi0=fip;
+  fHelix.kappa=cpa;
+  fHelix.dz=dzp;
+  fHelix.tanl=tnl;
+  fHelix.pivot.x=xv;
+  fHelix.pivot.y=yv;
+  fHelix.pivot.z=zv;
+
+  return;
+
+}
 
 

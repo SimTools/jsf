@@ -26,4 +26,8 @@
 #pragma link C++ class JSFHelicalTrack;
 #pragma link C++ class JSFHitCylinder;
 
+#pragma link C++ class JSFVirtualFit;
+#pragma link C++ class JSFVertexing;
+#pragma link C++ class JSFGeoCFit;
+
 #endif
