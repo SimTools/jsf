@@ -1,0 +1,30 @@
+
+----------------------------
+How to use this program.
+----------------------------
+
+(1) Prior to use this program, use needs to prepare libraries for ZVTOP.
+To do this, 
+  
+   $ cd ../../../zvtop
+   $ make all
+
+(2) Then, run mkdata script in this diretory.  
+
+   $ ./mkdata
+
+   This command creates three root files containing ntuple objects 
+   for ZVTOP analysis.
+
+(3) Then, run ctag.C script as follows.
+
+   $ jsf ctag.C
+
+    At the end of execution, ctag.C script displays two histograms;
+    The histogram of the training history and the one to compare 
+    signal and background distribution.
+
+    Since number of variables used for c/b/s separation are not enough, 
+    separation is insufficient and further improvements needs to be 
+    impremented by user for physics study.
+

@@ -1,0 +1,25 @@
+#!/bin/sh
+#
+# Create sample data for JETNET
+#
+#(Author)
+#  Akiya Miyamoto, 14-Jan-2002  Original version
+#
+#$Id$
+#
+
+
+ZVTOPDIR="../../../zvtop/example"
+
+. $ZVTOPDIR/runscript
+
+ln -sf $ZVTOPDIR/jsf.conf .
+ln -sf $ZVTOPDIR/jlc3T.com .
+ln -sf $ZVTOPDIR/UserAnalysis.C .
+ln -sf $ZVTOPDIR/libJSFVTXAnalysis.so .
+
+
+run -bb -nevt 10000 -fname train
+run -cc -nevt 10000 -fname train
+run -ss -nevt 10000 -fname train
+
