@@ -30,6 +30,7 @@ JSFLTKCLTrack::JSFLTKCLTrack(EJSFLTKCLTrackBank bank, TVector& P, Float_t ecl,
      for(Int_t i=0;i<4;i++){ fP[i]=P(i); }
      fEcl=ecl; fNEMC=nemc; fCharge=charge; fType=type ;
      fSource=source; fNCDC=ncdc ; f1stCDC=first ;
+     fCDC=NULL;
 }
 
 //_____________________________________________________________________________
@@ -42,5 +43,6 @@ JSFLTKCLTrack::JSFLTKCLTrack(EJSFLTKCLTrackBank bank, Float_t data[])
     fSource=(Int_t)data[10]; fNCDC=(Int_t)data[11];
     if( fNCDC > 0 ) f1stCDC=(Int_t)data[12];
     else f1stCDC=0 ;
+    fCDC=NULL;
 }
 

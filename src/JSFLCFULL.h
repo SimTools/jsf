@@ -135,6 +135,8 @@ public:
 
   void TBGET( Int_t idrec, const Char_t *bankname, Int_t elem,
 	      Int_t &nw, Int_t data[], Int_t &iret);
+  void TBGET( Int_t idrec, const Char_t *bankname, Int_t elem,
+	      Int_t &nw, Float_t data[], Int_t &iret);
   void TBNOEL( Int_t idrec, const Char_t *bankname, Int_t &nelm,
 	      Int_t neary[]);
   void TBCRTE( Int_t id, const Char_t *bname, Int_t isaloc, 

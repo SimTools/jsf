@@ -31,7 +31,40 @@
 #include "JSFCDCTrack.h"
 #endif
 
-// ******* JSFQuickSimParam *********
+typedef enum { kEMC , kHDC } EJSFCALType ;
+
+//************************************************************
+// Calorimeter's geometry parameter file.
+//************************************************************
+class JSFCALGeoParam : public TObject {
+protected:
+  EJSFCALType  fType ; // Calorimeter type
+  Float_t fRmin ; // Inner radius of end-cap calorimeter
+  Float_t fRmax ; // radius of barrel and outer radius of endcap.
+
+  Float_t fPhiStep ; // Phi step/bin
+
+  Float_t fBZetaMin ;   // Barrel Zeta min.
+  Float_t fBZetaStep ;  // Barrel Zeta step/bin
+
+//                     costh=( 1-exp(2*zeta))/(1+exp(2*zeta))
+  Float_t fMZetaMin ;  // Zeta min of -Zee endcap.
+  Float_t fMZetaStep ; // Zeta step of -Zee endcap.
+  Float_t fPZetaMin ;  // Zeta min of +Zee endcap.
+  Float_t fPZetaStep ; // Zeta step of +Zee endcap.
+
+public:
+  JSFCALGeoParam(EJSFCALType type, Int_t nphi, Int_t ntheta, Int_t nrad,
+ 	       Float_t rmin, Float_t rmax,  Float_t zminus, Float_t zplus );
+  virtual ~JSFCALGeoParam(){}
+
+  void SetGeoParam(EJSFCALType type, Int_t nphi, Int_t ntheta, Int_t nrad,
+ 	       Float_t rmin, Float_t rmax,  Float_t zminus, Float_t zplus );
+
+  ClassDef(JSFCALGeoParam,1)  // Calorimeter Geometry parameter.
+};
+
+// ******* JSFQuickSimParam *************************************
 class JSFQuickSimParam : public TNamed {
 public:
    Char_t  fParamFile[256] ; // Where to get simulator parameter.
@@ -80,40 +113,57 @@ class JSFQuickSim;
 // ******* JSFQuickSimBuf class ********************************
 class JSFQuickSimBuf : public JSFEventBuf {
 private:
-   Int_t            fNtracks   ;  // Number of particles 
+   Int_t            fNTracks   ;  // Number of particles 
    TClonesArray    *fTracks    ;  //! Pointers to Particles
    Int_t            fNCDCTracks;  // Number of CDC tracks.
    TClonesArray    *fCDCTracks ;  //! Pointer to CDC Tracks
    Int_t            fNVTXHits  ;  // Number of VTXHits
-   TClonesArray    *fVTXHits   ;  //! Pointers to VTX Hits
+   TClonesArray    *fVTXHits   ;  //!  Pointers to VTX Hits
    Int_t            fNEMCHits  ;  // Number of EMC hit cells
    TClonesArray    *fEMCHits   ;  //! Pointers to EMC Hit cells 
    Int_t            fNHDCHits  ;  // Number of HDC hit cells
    TClonesArray    *fHDCHits   ;  //! Pointers to EMC Hit cells 
+
+   TBranch         *fBTracks   ;  //! Branch for LTKCL tracks.
+   TBranch         *fBCDCTracks;  //! Branch for CDCTracks.
+   TBranch         *fBVTXHits  ;  //! Branch for VTX branch.
+   TBranch         *fBEMCHits  ;  //! Branch for EMC branch.
+   TBranch         *fBHDCHits  ;  //! Branch for EMC branch.
+
 public:
    JSFQuickSimBuf(const char *name="JSFQuickSimBuf",
 		   const char *title="JSF QuickSim event class",
 		   JSFQuickSim *sim=NULL);
+   virtual      ~JSFQuickSimBuf();
 
-  void SetNtracks(Int_t nt){ fNtracks=nt;}
-  Int_t GetNtracks(){ return fNtracks; }
+  void SetNTracks(Int_t nt){ fNTracks=nt;}
+//   Int_t GetNtracks(){ return fNTracks; }
+  Int_t GetNTracks(){ return fNTracks; }
   TClonesArray *GetTracks(){ return fTracks; }
+  void GetEventTracks(Int_t nevt){ fBTracks->GetEvent(nevt); }
 
   void SetNCDCTracks(Int_t nt){ fNCDCTracks=nt;}
   Int_t GetNCDCTracks(){ return fNCDCTracks; }
   TClonesArray *GetCDCTracks(){ return fCDCTracks; }
+  void GetEventCDC(Int_t nevt){ fBCDCTracks->GetEvent(nevt); }
 
   void SetNVTXHits(Int_t nt){ fNVTXHits=nt;}
   Int_t GetNVTXHits(){ return fNVTXHits; }
   TClonesArray *GetVTXHits(){ return fVTXHits; }
+  void GetEventVTX(Int_t nevt){ fBVTXHits->GetEvent(nevt); }
 
   void SetNEMCHits(Int_t nt){ fNEMCHits=nt;}
   Int_t GetNEMCHits(){ return fNEMCHits; }
   TClonesArray *GetEMCHits(){ return fEMCHits; }
+  void GetEventEMC(Int_t nevt){ fBEMCHits->GetEvent(nevt); }
 
   void SetNHDCHits(Int_t nt){ fNHDCHits=nt;}
   Int_t GetNHDCHits(){ return fNHDCHits; }
   TClonesArray *GetHDCHits(){ return fHDCHits; }
+  void GetEventHDC(Int_t nevt){ fBHDCHits->GetEvent(nevt); }
+
+  virtual  void MakeBranch(TTree *tree); // Make branch for the event data
+  virtual  void SetBranch(TTree *tree); // Set branches for the event data
 
   ClassDef(JSFQuickSimBuf, 1) // QuickSim event buffer class.
 
@@ -123,6 +173,7 @@ public:
 class JSFQuickSim : public JSFModule {
 protected:
    JSFQuickSimParam  *fParam ; //! Parameters for JSFQuickSim
+   TBranch           *fBranch; //! For Simulator data.
 public:
    JSFQuickSim(const char *name="JSFQuickSim", 
 	       const char *title="JSF Quick Simulator");
@@ -138,8 +189,8 @@ public:
    Bool_t MakeCALHits();
    Bool_t MakeVTXHits();
    Bool_t MakeCDCTracks();
-   Bool_t LinkCDCandVTX();
-   
+
+   void GetEvent(Int_t nevt){ fBranch->GetEvent(nevt); }
    virtual  void MakeBranch(TTree *tree); // Make branch for the module 
    virtual  void SetBranch(TTree *tree);  // Set Branch address for the module
 
@@ -148,3 +199,4 @@ public:
 
 
 #endif
+

@@ -15,12 +15,17 @@
 #include "TMath.h"
 #include "TVector.h"
 
+#ifndef __JSFCDCTrack__
+#include "JSFCDCTrack.h"
+#endif
+
 typedef enum {kCombinedGammaTrack, kCombinedLeptonTrack,
               kCombinedHadronTrack } EJSFLTKCLTrackBank;
 
 
+// *********************************************************
 class JSFLTKCLTrack : public TObject {
-
+friend class JSFQuickSim;
 protected:
   EJSFLTKCLTrackBank  fBank; // The original bank name
   Double_t    fP[4];    // four momentum (E,Px,Py,Pz), GeV
@@ -30,7 +35,10 @@ protected:
   Int_t     fType;    // ITYP
   Int_t     fSource;  // ISRC 
   Int_t     fNCDC;    // # used CDC tracks
-  Int_t     f1stCDC;  // serial number of first CDC track.
+  Int_t     f1stCDC;  // Element number of corresponding CDC:Track_Parameter
+  JSFCDCTrack *fCDC;  //! Address of corresponding CDC track.
+  
+  void SetCDC(JSFCDCTrack *t){ fCDC=t; }; 
 
 public:
   JSFLTKCLTrack() {}
@@ -57,7 +65,7 @@ public:
   Int_t    GetSource(){return fSource; }
   Int_t    GetNCDC(){ return fNCDC;}
   Int_t    Get1stCDC(){ return f1stCDC;}
- 
+  JSFCDCTrack *GetCDC(){ return fCDC;}
 
   TVector GetPV(){ TVector p(4) ; 
           p(0)=fP[0] ; p(1) =fP[1] ; p(2)=fP[2] ; p(3)=fP[3] ; return p ; }

@@ -40,8 +40,28 @@ JSFCDCTrack::JSFCDCTrack(Int_t itrkp[])
   fEPosAtEMC[0]=0.0 ;    fEPosAtEMC[1]=0.0 ;  
   Double_t *err=(Double_t*)&itrkp[18];
   for(i=0;i<15;i++){ fError[i]=err[i]; }
-  
+
+  fNVTX = 0;
+  for(i=0;i<10;i++){ fVTXHits[i]=NULL; }
+
 }
+
+
+//_____________________________________________________________________________
+JSFCDCTrack::~JSFCDCTrack()
+{
+}
+
+//_____________________________________________________________________________
+void JSFCDCTrack::AddVTXHit(JSFVTXHit *v)
+{ 
+  if( fNVTX >= 10 ) { 
+    printf("Too many VTX hits linked to CDC tracks in JSFCDCTrack::AddVTXHit.\n");
+  }
+  fVTXHits[fNVTX]=v; 
+  fNVTX++ ; 
+}
+
 
 //_____________________________________________________________________________
 void JSFCDCTrack::Print()

@@ -1,3 +1,5 @@
+//*LastUpdate :  jsf-1-4  11-Feburary-1999  By Akiya Miyamoto
+//*-- Author  : A.Miyamoto  11-September-1998
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -85,6 +87,17 @@ void JSFLCFULL::TBGET( Int_t idrec, const Char_t *bankname, Int_t elem,
 //  Get Int_t data from TBS buffer.
    Int_t lenb=strlen(bankname);
    tbget_(&idrec, bankname, &elem, &nw, data, &iret, lenb);
+   return ;
+
+}
+
+// ---------------------------------------------------------------
+void JSFLCFULL::TBGET( Int_t idrec, const Char_t *bankname, Int_t elem,
+	Int_t &nw, Float_t data[], Int_t &iret)
+{
+//  Get Int_t data from TBS buffer.
+   Int_t lenb=strlen(bankname);
+   tbget_(&idrec, bankname, &elem, &nw, (Int_t*)data, &iret, lenb);
    return ;
 
 }

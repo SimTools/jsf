@@ -10,7 +10,7 @@
 #pragma link C++ class JSFLTKCLTrack;
 
 #pragma link C++ class JSFVTXHit;
-#pragma link C++ class JSFCDCTrack;
+#pragma link C++ class JSFCDCTrack-;
 #pragma link C++ class JSFCALHit;
 #pragma link C++ class JSFEMCHit;
 #pragma link C++ class JSFHDCHit;

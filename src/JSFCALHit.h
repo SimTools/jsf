@@ -15,37 +15,7 @@
 #include "TMath.h"
 #include "TVector.h"
 
-typedef enum { kEMC , kHDC } EJSFCALType ;
 const Int_t kMaxCalHits=500;
-
-//************************************************************
-class JSFCALGeoParam : public TObject {
-protected:
-  EJSFCALType  fType ; // Calorimeter type
-  Float_t fRmin ; // Inner radius of end-cap calorimeter
-  Float_t fRmax ; // radius of barrel and outer radius of endcap.
-
-  Float_t fPhiStep ; // Phi step/bin
-
-  Float_t fBZetaMin ;   // Barrel Zeta min.
-  Float_t fBZetaStep ;  // Barrel Zeta step/bin
-
-//                     costh=( 1-exp(2*zeta))/(1+exp(2*zeta))
-  Float_t fMZetaMin ;  // Zeta min of -Zee endcap.
-  Float_t fMZetaStep ; // Zeta step of -Zee endcap.
-  Float_t fPZetaMin ;  // Zeta min of +Zee endcap.
-  Float_t fPZetaStep ; // Zeta step of +Zee endcap.
-
-public:
-  JSFCALGeoParam(EJSFCALType type, Int_t nphi, Int_t ntheta, Int_t nrad,
- 	       Float_t rmin, Float_t rmax,  Float_t zminus, Float_t zplus );
-  virtual ~JSFCALGeoParam(){}
-
-  void SetGeoParam(EJSFCALType type, Int_t nphi, Int_t ntheta, Int_t nrad,
- 	       Float_t rmin, Float_t rmax,  Float_t zminus, Float_t zplus );
-
-  ClassDef(JSFCALGeoParam,1)  // Calorimeter Geometry parameter.
-};
 
 
 //************************************************************

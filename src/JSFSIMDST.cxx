@@ -5,8 +5,13 @@
 //
 // JSFSIMDST  
 //
-// Output SIMDST record as a Fortran binary record.
-//
+// Purpose of this class is 
+// (1) Output SIMDST record as a Fortran binary record.
+// (2) Read SIMDST format fortran record.
+// (3) For user program which uses SIMDST format data, 
+//     provide interface with JSFQuickSim class
+// Thus this class does not output ROOT event tree.
+// 
 // (Limitation)
 //   Maximum size of tracks, etc are limited as follows.
 //     GEN  : max 500 tracks
@@ -24,13 +29,6 @@
 ClassImp(JSFSIMDST)
 ClassImp(JSFSIMDSTBuf)
 
-#undef JSFDEBUG
-#ifdef JSFDEBUG
-TH1F *hTh, *hPhi, *hDth, *hDphi, *hNDth, *hNDphi;
-TH1F *hKappa, *hTanl, *hNKappa, *hNTanl, *hPKappa, *hPTanl;
-TH1F *h20,*h21, *h22, *h23, *h31,*h32, *h33;
-#endif
-
 extern "C" {
 extern void simdstopen_(Int_t *unit, Char_t *name, Int_t len);
 extern void simdstclose_(Int_t *unit);
@@ -47,7 +45,6 @@ extern void utrkmv_(Int_t *lnxhlx, Float_t helxin[],
 		    Float_t xp[], Float_t helxot[]);
 };
 
-Int_t isergen[kGenMax];//Generator track's serial number to generator track number
 Int_t genidTOtrkid[kGenMax];  // Generator track number to CDC track number
 Float_t smrpar[300];
 
@@ -77,34 +74,6 @@ Bool_t JSFSIMDST::Initialize()
   Int_t lenf=strlen(fOutputFileName);
   simdstopen_(&fUnit, fOutputFileName, lenf);
 
-#ifdef JSFDEBUG
-  hTh=new TH1F("hTh","Th Distribution",100,1.568, 1.573);
-  hPhi=new TH1F("hPhi","Phi Distribution",100,1.543, 1.545);
-
-  hDth=new TH1F("hDth","Dth Distribution",100,0.0, 0.001);
-  hDphi=new TH1F("hDphi","Dphi Distribution",100,0.0, 0.0001);
-
-  hNDth=new TH1F("hNDth","Th/Error Distribution",100,-5.0,5.0);
-  hNDphi=new TH1F("hNDphi","Phi/Error Distribution",100,-5.0,5.0);
-
-  hKappa=new TH1F("hKappa","Kappa",100,0.033,0.034);
-  hTanl =new TH1F("hTanl","Tanlambda",100,-0.002,0.002);
-  hNKappa=new TH1F("hNKappa","(kappa-Kappa0)/Error",100,-5.0,5.0);
-  hNTanl =new TH1F("hNTanl","(Tanl-tanl0)/Error",100,-5.0, 5.0);
-  hPKappa=new TH1F("hPKappa","Kappa-Probability",100,0.0,1.0);
-  hPTanl =new TH1F("hPTanl","Tanl-Pobability",100,0.0,1.0);
-
-  h20=new TH1F("h20","dr vefore utrkmv ...",100,-0.01,0.02);
-  h21=new TH1F("h21","dr after utrkmv ...",100,0.07,0.10);
-  h22=new TH1F("h22","f0 after utrkmv ...",100,-0.048,-0.044);
-  h23=new TH1F("h23","dz after utrkmv ...",100,-0.2, 0.2);
-
-  h31=new TH1F("h31","(dr-..)/ddr",100,-5.0,5.0);
-  h32=new TH1F("h32","(f0-..)/df0",100,-5.0,5.0);
-  h33=new TH1F("h33","(dz-..)/ddz",100,-5.0,5.0);
-
-#endif
-
   return kTRUE;
 }
 
@@ -120,7 +89,7 @@ Bool_t JSFSIMDST::BeginRun(Int_t nrun)
 //
 
   Int_t nw, iret;
-  gJSFLCFULL->TBGET(2,"Smearing",2,nw,(Int_t*)smrpar,iret);
+  gJSFLCFULL->TBGET(2,"Smearing",2,nw,smrpar,iret);
   if( iret < 0 ) {
     printf("In JSFSIMDST::BeginRun .. Unable to get smearing parameter");
     printf(" for Run%d\n",nrun);
@@ -228,8 +197,42 @@ Bool_t JSFSIMDST::EndRun()
 Bool_t JSFSIMDST::Process(Int_t nev)
 {
 //
-  return ((JSFSIMDSTBuf*)EventBuf())->PackDST(nev);
+  JSFSIMDSTBuf *simb=(JSFSIMDSTBuf*)EventBuf();
+
+  simb->SetClassData(nev);
+
+  return (simb->PackDST(nev));
 }
+
+// ---------------------------------------------------------------
+void JSFSIMDSTBuf::SetClassData(Int_t nev)
+{
+  JSFGenerator *gen=(JSFGenerator*)gJSF->FindModule("JSFGenerator");
+  JSFGeneratorBuf *gevt=(JSFGeneratorBuf*)gen->EventBuf();
+  fHead[0]=nev;
+  fHead[1]=gevt->GetEcm();
+
+  fGeneratorParticles=gevt->GetParticles();
+  fNGeneratorParticles = gevt->GetNparticles();
+
+  JSFQuickSim *sim=(JSFQuickSim*)gJSF->FindModule("JSFQuickSim");
+  JSFQuickSimBuf *sevt=(JSFQuickSimBuf*)sim->EventBuf();
+  fCombinedTracks=sevt->GetTracks();
+  fNCDCTracks=sevt->GetNCDCTracks();
+  fCDCTracks=sevt->GetCDCTracks();
+  fNCombinedTracks = sevt->GetNTracks();
+
+  fNEMCHits=sevt->GetNEMCHits();
+  fEMCHits=sevt->GetEMCHits();
+
+  fNHDCHits=sevt->GetNHDCHits();
+  fHDCHits=sevt->GetHDCHits();
+
+  fNVTXHits=sevt->GetNVTXHits();
+  fVTXHits=sevt->GetVTXHits();
+
+}
+
 
 // ---------------------------------------------------------------
 Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
@@ -240,16 +243,6 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
   // Save JSFGenerator Bank information into the array, gendat.
   // ***************************************
 
-
-  JSFGenerator *gen=(JSFGenerator*)gJSF->FindModule("JSFGenerator");
-  JSFGeneratorBuf *gevt=(JSFGeneratorBuf*)gen->EventBuf();
-
-  fHead[0]=nev;
-  fHead[1]=gevt->GetEcm();
-
-  fGeneratorParticles=gevt->GetParticles();
-  fNGeneratorParticles = gevt->GetNparticles();
-
   Int_t nobuf=fNGeneratorParticles;
   if( nobuf >= kGenMax ) { 
     printf(" Too many generator Track at event%d. Process abandand.\n",nev);
@@ -257,13 +250,11 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
   }
   Int_t ngen=0 ;
   Float_t gendat[nobuf][kGenSize];
-  Short_t   igendat[nobuf][kIGenSize];
+  Short_t igendat[nobuf][kIGenSize];
   for(Int_t j=0;j<nobuf;j++){
     JSFGeneratorParticle *p=(JSFGeneratorParticle*)fGeneratorParticles->At(j);
-    isergen[p->fSer]=-1;
     genidTOtrkid[p->fSer]=-1;
     //    if( p->fNdaughter != 0 ) continue;
-    isergen[p->fSer]=ngen;
     gendat[ngen][0]=p->fP[1];
     gendat[ngen][1]=p->fP[2]; 
     gendat[ngen][2]=p->fP[3];
@@ -276,10 +267,6 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
     gendat[ngen][8]=p->fMass;
     gendat[ngen][9]=p->fCharge;
 
-    //  gendat[ngen][8]=p->fID;
-    //  gendat[ngen][9]=p->fMass;
-    //  gendat[ngen][10]=p->fCharge;
-    
     igendat[ngen][0]=p->fID;
     igendat[ngen][1]=p->fNdaughter;
     igendat[ngen][2]=p->fFirstDaughter;
@@ -289,93 +276,89 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
   }
 
   // ************************************************************
-  // Make a SIMDST information based on Combined Track Information(JSFLTKCLTrack class).
+  // Make a SIMDST information based on Combined Track 
+  // Information(JSFLTKCLTrack class).
   // ************************************************************
-
-  JSFQuickSim *sim=(JSFQuickSim*)gJSF->FindModule("JSFQuickSim");
-  JSFQuickSimBuf *sevt=(JSFQuickSimBuf*)sim->EventBuf();
-  TClonesArray *fCombinedTracks=sevt->GetTracks();
-  TClonesArray *fCDCTracks=sevt->GetCDCTracks();
-  fNCombinedTracks = sevt->GetNtracks();
   
   Float_t cmbt[fNCombinedTracks][kCmbtSize];
-  Float_t trkf[fNCombinedTracks][kTrkfSize];
-  Double_t trkd[fNCombinedTracks][kTrkdSize];
-  Int_t    nvtxh[fNCombinedTracks];
+  Float_t trkf[fNCDCTracks][kTrkfSize];
+  Double_t trkd[fNCDCTracks][kTrkdSize];
+  Int_t    nvtxh[fNCDCTracks];
+  const Int_t kVTXHSize=5;
+  const Int_t kVTXIDSize=2;
+  Double_t vtxd[fNVTXHits][kVTXHSize];
+  Int_t idvtx[fNHDCHits][kVTXIDSize];
 
-  Int_t i;
-  Bool_t rc=kTRUE;
-  fNCDCTracks=0;
+  Int_t i,j;
+  Int_t ncdc=0;
+  Int_t nvtx=0;
   for(i=0;i<fNCombinedTracks;i++){
      JSFLTKCLTrack *t=(JSFLTKCLTrack*)fCombinedTracks->UncheckedAt(i);
      cmbt[i][0]=t->GetPx();  cmbt[i][1]=t->GetPy();  
      cmbt[i][2]=t->GetPz(); cmbt[i][3]=t->GetE(); 
      cmbt[i][4]=t->GetCharge(); cmbt[i][5]=t->GetType(); cmbt[i][6]=0;
-     cmbt[i][7]=0; if( t->GetNCDC() > 0 ) cmbt[i][7]=t->Get1stCDC();
+     cmbt[i][7]=0; 
+     if( t->GetNCDC() <= 0 ) continue ;
+     if( t->GetType() == 1 || t->GetType() == 3 ) continue;
 
-     if( t->GetType() != 1 && t->GetType() !=3 ) {
-       Int_t icdc=t->Get1stCDC();
-       JSFCDCTrack *ht=(JSFCDCTrack*)fCDCTracks->UncheckedAt(icdc-1);
-       ht->GetTrackParameter(&trkf[fNCDCTracks][0]);
-       ht->GetErrorMatrix(&trkd[fNCDCTracks][0]);
-       nvtxh[fNCDCTracks]=ht->GetNVTX();
-       fNCDCTracks++ ;
-     }
-     if( !rc ) return kFALSE;
+       cmbt[i][7]=ncdc+1;
+       JSFCDCTrack *ct=t->GetCDC();
+       ct->GetTrackParameter(&trkf[ncdc][0]);
+       ct->GetErrorMatrix(&trkd[ncdc][0]);
+       nvtxh[ncdc]=ct->GetNVTX();
+
+       // ***************************************
+       // Make an array for vertex 
+       // ***************************************
+       JSFVTXHit *v;
+       for(j=0;j<nvtxh[ncdc];j++){
+	 v=ct->GetVTXHit(j);
+	 vtxd[nvtx][0]=v->GetR();
+	 vtxd[nvtx][1]=v->GetPhi();
+	 vtxd[nvtx][2]=v->GetZ();
+	 vtxd[nvtx][3]=v->GetDphi();
+	 vtxd[nvtx][4]=v->GetDz();
+	 idvtx[nvtx][0]=ncdc+1;
+	 idvtx[nvtx][1]=v->GetLayerNumber();
+	 nvtx++;
+       }
+
+       ncdc++ ;
   }
-//  printf(" ncdc=%d ncmb=%d\n",fNCDCTracks,fNCombinedTracks);
- 
+  if( ncdc != fNCDCTracks ) {
+    printf("In JSFSIMDST::PackDST  ncdc(%d)",ncdc);
+    printf(" and fNCDCTracks (%d) is inconsistent.\n",fNCDCTracks);
+  }
+  if( nvtx != fNVTXHits ) {
+    printf("In JSFSIMDST::PackDST nvtx(%d)",nvtx);
+    printf(" and fNVTXHits (%d) is inconsistent.\n",fNVTXHits);
+  }
+
   // ***************************************
   // Make EMC/HDC Hit Cell info.
   // ***************************************
 
-  fNEMCHits=sevt->GetNEMCHits();
-  fEMCHits=sevt->GetEMCHits();
   Int_t emh[fNEMCHits][kClsSize];
   for(i=0;i<fNEMCHits;i++){
      JSFEMCHit *h=(JSFEMCHit*)fEMCHits->UncheckedAt(i);
      emh[i][0]=h->GetIEnergy();
      emh[i][1]=h->GetCellID();
-     //     printf(" i=%d  energy=%d cellid=%d\n",i,emh[i][0],emh[i][1]);
   }
 
-  fNHDCHits=sevt->GetNHDCHits();
-  fHDCHits=sevt->GetHDCHits();
   Int_t hdh[fNHDCHits][kClsSize];
   for(i=0;i<fNHDCHits;i++){
      JSFHDCHit *h=(JSFHDCHit*)fHDCHits->UncheckedAt(i);
      hdh[i][0]=h->GetIEnergy();
      hdh[i][1]=h->GetCellID();
-     // printf(" i=%d  HDC energy=%d cellid=%d\n",i,hdh[i][0],hdh[i][1]);
   }
 
-  // ***************************************
-  // Make an array for vertex hit
-  // ***************************************
-
-  fNVTXHits=sevt->GetNVTXHits();
-  fVTXHits=sevt->GetVTXHits();
-  const Int_t kVTXHSize=5;
-  const Int_t kVTXIDSize=2;
-  Double_t vtxd[fNVTXHits][kVTXHSize];
-  Int_t idvtx[fNHDCHits][kVTXIDSize];
-  for(i=0;i<fNVTXHits;i++){
-     JSFVTXHit *h=(JSFVTXHit*)fVTXHits->UncheckedAt(i);
-     vtxd[i][0]=h->GetR();
-     vtxd[i][1]=h->GetPhi();
-     vtxd[i][2]=h->GetZ();
-     vtxd[i][3]=h->GetDphi();
-     vtxd[i][4]=h->GetDz();
-     idvtx[i][0]=h->GetLinkedTrack();
-     idvtx[i][1]=h->GetLayerNumber();
-  }
 
   Int_t  lenproduc=4;
 
   Int_t unit=((JSFSIMDST*)Module())->GetUnit();
   simdstwrite_(&unit, &fEndian, fProduc, &fVersion, &ngen, &fNCombinedTracks,
         &fNCDCTracks, &fNEMCHits, &fNHDCHits, fHead, gendat, igendat, 
-        cmbt, trkf,
+        cmbt, trkf, 
 	trkd, emh, hdh, nvtxh, &fNVTXHits, vtxd, idvtx, lenproduc);
 
   return kTRUE;
