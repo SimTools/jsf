@@ -1,11 +1,7 @@
+//*LastUpdate :  jsf-1-14  31-January-2000  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-7-2  16-April-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-7  6-April-1999  By Akiya Miyamoto
 //*-- Author  : Akiya Miyamoto  6-April-1999
-
-/*
-16-April-1999  A.Miyamoto  Put bug fixes written by I.Nakamura 
-                           in ReadOneRecord()
-*/
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -34,6 +30,11 @@
 //  .          (JDAHEP(1,K),JDAHEP(2,K),K=1,NHEP),
 //  .          ((PHEP(J,K),J=1,5),K=1,NHEP),
 //  .          ((VHEP(J,K),J=1,5),K=1,NHEP)
+//
+// (Update)
+//   16-Apr-2000 A.Miyamoto  Put bug fixes written by I.Nakamura in ReadOneRecord()
+//
+//   31-Jan-2000 A.Miyamoto  Mange jmohep[i][0]=0 and isthep[i]=1 | 2 case in ReadOneRecord()
 //
 //$Id$
 //
@@ -180,18 +181,21 @@ Bool_t JSFReadGeneratorBuf::ReadOneRecord()
 
     nser++;
     jlist[nser]=i;
+    /*
     if( jmohep[i][0] < 1 && (isthep[i]==1 || isthep[i]==2 )) {
       printf("Fatal error in JSFReadGenerator::ReadOneRecord().\n");
       printf("jmohep should not be 0 when isthep=1 or 2 but \n");
       printf("jmohep[%d][0]=%d, isthep[%d]=%d\n",i,jmohep[i][0],i,isthep[i]);
       return kFALSE;
     }
+    */
 
     switch ( isthep[i] ) {
       case 1:
         map[i].ndau=0;
         map[i].dau1st=0;
-        map[i].mother=map[jmohep[i][0]-1].nser; // modified by I.Nakamura
+	if( jmohep[i][0] <= 0 ) map[i].mother=0;
+        else map[i].mother=map[jmohep[i][0]-1].nser; // modified by I.Nakamura
         map[i].nser=nser;
 	if( n1stfinal == 0 ) n1stfinal=nser;
 	if( map[i].mother == 0 ) map[i].mother=n1stdoc;
@@ -199,7 +203,8 @@ Bool_t JSFReadGeneratorBuf::ReadOneRecord()
       case 2:
         map[i].ndau=jdahep[i][1]-jdahep[i][0]+1;
         map[i].dau1st=-2;
-        map[i].mother=map[jmohep[i][0]-1].nser; // modified by I.Nakamura
+	if( jmohep[i][0] <= 0 ) map[i].mother=0;
+        else map[i].mother=map[jmohep[i][0]-1].nser; // modified by I.Nakamura
         map[i].nser=nser;
 	if( n1stfinal == 0 ) n1stfinal=nser;
 	if( map[i].mother == 0 ) map[i].mother=n1stdoc;
