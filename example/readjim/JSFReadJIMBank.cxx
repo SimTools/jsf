@@ -297,7 +297,7 @@ Bool_t JSFReadJIMBankBuf::UnpackDST(Int_t nev)
   // Put LTKCLTrack class
   // ***************************************
   fNCombinedTracks=trbuff_.ncmb;
-  TClonesArray &cta = *(fCombinedTracks);
+  TObjArray &cta = *(fCombinedTracks);
   for(i=0;i<fNCombinedTracks;i++){
     new(cta[i]) JSFLTKCLTrack(&trbuff_.cmbt[i][0]);
     lt=(JSFLTKCLTrack*)cta.UncheckedAt(i);
