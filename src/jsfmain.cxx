@@ -31,6 +31,9 @@
 #include "TRint.h"
 //*KEND.
 
+#include "JSFConfig.h"
+
+
 void dummysub();
 extern "C" void G__cpp_setuplibJSF();
 extern "C" void G__cpp_setuplibJSFLCFULL();
@@ -42,10 +45,15 @@ extern "C" void hf_fint(char *option); /* to initialize fortran environment */
 extern "C" void G__cpp_setupG__Pythia();
 #endif
 
+#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 23
+TROOT root("Rint","The ROOT Interactive Interface");
+#else
 extern void InitGui();
 VoidFuncPtr_t initfuncs[] = { InitGui, 0 };
-
 TROOT root("Rint","The ROOT Interactive Interface", initfuncs);
+#endif
+
+
 
 //______________________________________________________________________________
 int main(int argc, char **argv)
