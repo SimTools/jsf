@@ -71,11 +71,14 @@ Bool_t PythiaGenerator::Process(Int_t ev)
 
   if( !JSFGenerator::Process(ev) ) return kFALSE;
 
+  JSFGeneratorBuf *buf=(JSFGeneratorBuf*)EventBuf();
+  Double_t ecm=GetEcm();
+  buf->SetEcm(ecm);
+
   fPythia->GenerateEvent();
 
 // Stable particles are saved in the GeneratorParticle class.
 
-   JSFGeneratorBuf *buf=(JSFGeneratorBuf*)EventBuf();
    TClonesArray &tracks = *(buf->GetParticles());
    TVector pv(4);
    TVector xv(4);
