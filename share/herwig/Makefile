@@ -1,0 +1,116 @@
+include  ../../conf/configure.in
+UNAME  = $(shell uname)
+
+PYTHIANAME=pythia$(PYTHIA_VERSION)$(PYTHIA_SUBVERSION)
+
+ifeq ($(UNAME),AIX)
+FFLAGS    = -C -g -qcharlen=32767 -qstrict -qarch=pwr3 \
+	  -qextname -qfixed -qsave -qinitauto -brtl -bshared
+CFLAGS    = -O
+LD        =  /usr/vacpp/bin/makeC++SharedLib -brtl -bshared -p 0
+LDFLAGS   = -lxlf90
+SharedLib = libTHerwig.a
+INSTALL   = cp -fp
+else
+ifeq ($(UNAME),Darwin)
+FFLAGS    = -O0 -g -fno-second-underscore
+CFLAGS    =
+LD        = $(FC)
+LDFLAGS   = -r -flat_namespace -nostdlib -undefined suppress
+SharedLib = libTHerwig.a
+INSTALL   = install -c
+else
+FFLAGS    = -O2 -g -fPIC -fno-second-underscore
+CFLAGS    = -fPIC $(shell root-config --cflags)
+CXXFLAGS    = -Wall -fPIC $(shell root-config --cflags)
+LD        = $(FC)
+LDFLAGS   = -shared -rdynamic -Wl,-soname,$(SharedLib) \
+		$(shell root-config --libs)
+#		$(shell root-config --libs) -lEG
+SharedLib = libTHerwig.so
+INSTALL   = install -c
+endif
+endif
+
+DEPENDFLAGS = $(CXXFLAGS)
+SrcSuf = cxx
+ObjSuf = o
+
+.SUFFIXES: .$(SrcSuf)
+
+.$(SrcSuf).$(ObjSuf):
+	$(CXX) $(CXXFLAGS) -c $<
+
+
+HDRS = THerwig.h HerwigGenerator.h
+
+SRCS = THerwig.$(SrcSuf) HerwigGenerator.$(SrcSuf)
+
+
+OBJS = herwig6400.$(ObjSuf) circe.$(ObjSuf) \
+	herwig_util.$(ObjSuf) herwig64_test.$(ObjSuf) \
+	herwig_common_block_address.$(ObjSuf) \
+	herwig_address.$(ObjSuf)
+
+OBJS += THerwig.$(ObjSuf) HerwigGenerator.$(ObjSuf) libTHerwig.$(ObjSuf)
+
+CLEANOBJS = $(subst herwig6400.o, ,$(OBJS))
+
+CXXFLAGS += -I$(JSFROOT)/include
+
+DEPENDS = $(DEPENDFLAGS) -I/usr/lib/gcc-lib/i386-redhat-linux/2.96/include
+
+all: HERWIG64.INC herwig64_test.f install
+
+HERWIG64.INC:
+	ln -s herwig6400.inc HERWIG64.INC
+
+herwig64_test.f:
+	ln -s herwig64.tst herwig64_test.f
+
+lib: $(OBJS)
+	@rm -f $(SharedLib)
+	$(LD) $(OBJS) -o $(SharedLib) $(LDFLAGS) 
+
+install: lib
+	install $(SharedLib) $(JSFROOT)/lib
+
+testrun: testmain.o $(SharedLib)
+	g77 -o testmain  testmain.o -L$(JSFROOT)/lib -lTHerwig
+	@echo "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+	@echo "%  Herwig test program will start                   %"
+	@echo "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+	@date
+	@./testmain
+	@echo "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+	@echo "%  Herwiwg test program has completed               %"
+	@echo "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+	@date
+
+cleanall:
+	rm -f *.o core *~ a.out testmain
+	rm -f herwig64_test.f HERWIG64.INC $(SharedLib)
+	rm -f fort.77 fort.88
+
+clean:
+	rm -f $(CLEANOBJS) libTHerwig.*
+
+distclean: clean
+	rm -f testmain libTHerwig.so
+
+
+libTHerwig.cxx: $(HDRS) THerwigLinkDef.h
+	rootcint -f $@ -c -I$(JSFROOT)/include \
+	$(HDRS) THerwigLinkDef.h
+
+depend:: $(SRCS) $(HDRS)
+	rm -f makefile.depend
+	touch makefile.depend
+	for i in $(SRCS) ; do \
+	( rmkdepend -f- -- $(DEPENDS) -- $$i >> makefile.depend ) ; done
+
+
+include makefile.depend
+
+
+
