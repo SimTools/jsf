@@ -26,7 +26,9 @@ jsf-1-5  Progress since 16-Feburary-1999 A.Miyamoto
 (5) Add HitPostion fnction in JSFCALGeoParm class.
 (6) Separate JSFQuickSim to JSFQuickSim and JSFQuickSimParam	
 (7) Add example/gui1exam1 as a GUI example.
-	
+(8) For event display, Detector Parameters are obtained from the pointer in 
+    JSFQuickSimParam	
+
 **********************************************************
 jsf-1-4  16-Feburary-1999 A.Miyamoto
 **********************************************************
