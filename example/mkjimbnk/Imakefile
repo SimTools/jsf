@@ -42,7 +42,7 @@ ANALLIB = -Wl,-Bdynamic $(JSFLIBS) $(EXTRALDOPT) \
 JIMLDLIBS = -L$(JSFROOT)/lib -lJSFGUI \
 	-L$(JLCSIMROOT)/lib -lzbs -ljlcutil 
 
-ROOTLIBS += -lEGPythia -lEG $(CERNLIBS)
+ROOTLIBS += -l$(EGPYTHIA) -lEG $(CERNLIBS)
 
 EXTRALIBS = $(JIMLIBS) 
 

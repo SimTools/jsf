@@ -6,16 +6,26 @@ XCOMM #---------------------------------------------------
 #include "conf/makejsf.tmpl"
 
 #if defined(MacOSXArchitecture) || defined(DarwinArchitecture)
-ROOTLIBS     += -lEGPythia -lEG $(CERNLIBS)
+ROOTLIBS     += -l$(EGPYTHIA) -lEG $(CERNLIBS)
+#elif defined(AIXArchitecture)
+ROOTLIBS     += -l$(EGPYTHIA) -lEG -Wl,-u,pytest_ $(shell cernlib mathlib)
 #else
-ROOTLIBS     += -lEGPythia -lEG -Wl,-u,pytest_ $(CERNLIBS)
+ROOTLIBS     += -l$(EGPYTHIA) -lEG -Wl,-u,pytest_ $(CERNLIBS)
 #endif
 
+#if __PYTHIA_VERSION__ >= 6
+ANALLIB   = $(JSFLIBS) \
+	    -L$(LCLIBROOT)/lib -lLCFULL -lGENUTIL -lTAUOLA \
+	    -lLTKCL -lHELASV204 -lSIMJLC -lFORTLIB  \
+	    -lTBS -lLCFULL -lGENUTIL -lCOM -lCLI  \
+	    -lHPKTOHBK -lFORTLIB -lTBS 
+#else
 ANALLIB   = $(JSFLIBS) \
 	    -L$(LCLIBROOT)/lib -lLCFULL -lGENUTIL -lLUHADR -lTAUOLA \
 	    -lLTKCL -lHELASV204 -lSIMJLC -lFORTLIB  \
 	    -lTBS -lLCFULL -lGENUTIL -lCOM -lCLI  \
 	    -lHPKTOHBK -lFORTLIB -lTBS 
+#endif
 
 INCPATH = -I$(LCLIBROOT)/simjlc/src -I$(LCLIBROOT)/util/fortlib/src 
 INCPATH += -I$(JSFROOT)/include

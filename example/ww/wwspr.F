@@ -361,7 +361,7 @@ C
       RBUF( 8) =   PGEN(0,5)
       RBUF(14) =   2.
       RBUF(18) =   2.
-      RBUF(19) =   202.
+      RBUF(19) =   201.
       IF( IABS(IFIX(RBUF(2))).GE.11 ) RBUF(19)=0.
       CALL TBPUT(1,'Spring:Parton_List', 5, 20, RBUF, IRET )
 C
@@ -378,7 +378,7 @@ C
       RBUF( 8) =   PGEN(0,6)
       RBUF(14) =   2.
       RBUF(18) =   2.
-      RBUF(19) =   202.
+      RBUF(19) =   201.
       IF( IABS(IFIX(RBUF(2))).GE.11 ) RBUF(19)=0.
       CALL TBPUT(1,'Spring:Parton_List', 6, 20, RBUF, IRET )
 

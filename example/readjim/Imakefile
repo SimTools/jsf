@@ -12,7 +12,7 @@
 #include    "config/lclib.tmpl"
 #include    "conf/makejsf.tmpl"
 
-ROOTLIBS     += -lEGPythia -lEG $(CERNLIBS)
+ROOTLIBS     += -l$(EGPYTHIA) -lEG $(CERNLIBS)
 
 LCLIBDIR      = $(LCLIBROOT)/lib
 

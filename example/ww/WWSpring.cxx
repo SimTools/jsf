@@ -150,7 +150,7 @@ WWBases::WWBases(const char *name, const char *title)
 #if __JSF_VERSION__ == 1 && __JSF_MINORVERSION__ <= 13
   fPrintInfo = gJSF->Env()->GetValue("WWBases.PrintInfo",kTRUE);
   fPrintHist = gJSF->Env()->GetValue("WWBases.PrintHist",kTRUE);
-#elsif __JSF_VERSION__ == 1 && __JSF_MINORVERSION__ == 14
+#elif __JSF_VERSION__ == 1 && __JSF_MINORVERSION__ == 14
   Userin();
 #endif
 

@@ -1,18 +1,25 @@
 
 #include "config/lclib.tmpl"
+#include "conf/makejsf.tmpl"
 
 OBJS = simdstprint.o
+
+#if __PYTHIA_VERSION__ >= 6
+OBJHEPEVT = makehepevt6.o
+INCPATH   = -I../../include
+LIBS      = -L$(JSFROOT)/lib -lPythia6
+#else
 OBJHEPEVT = makehepevt.o
-#FFLAGS = -I$(CERN_ROOT)/include
-INCPATH = -I$(CERN_ROOT)/include
+INCPATH   = -I$(CERN_ROOT)/include
+LIBS      = -L$(CERN_ROOT)/lib -ljetset74
+#endif
 
 all:: sdprint mkhepevt
 
 sdprint: $(OBJS)
-	$(FC) $(OBJS) -Wl,-L$(JSFROOT)/lib -lJSFQuickSim \
+	$(FC) $(OBJS) ../../src/simdstutil.o \
 	-o sdprint
 
 mkhepevt: $(OBJHEPEVT)
-	$(FC) $(OBJHEPEVT) -Wl,-L$(JSFROOT)/lib -lJSFLCFULL \
-	-Wl,-L$(CERN_ROOT)/lib -ljetset74 -o mkhepevt
+	$(FC) $(OBJHEPEVT) ../../src/readgenutil.o $(LIBS) -o mkhepevt
 
