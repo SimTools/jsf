@@ -3,9 +3,9 @@ How to install
 1) Do
 	setenv CERN_ROOT <<cern directory>>
 	setenv LCLIBROOT <<lclib directory>>
-	setenv ROOT <<root directort>>
+	setenv ROOTSYS <<root directort>>
 	setenv JSFROOT <<jsf directort>>
-	set path=($JSFROOT/bin $ROOTSYS/bin $path)
+	set path=(. $JSFROOT/bin $ROOTSYS/bin $path)
 	setenv IMAKEINCLUDE "-I$JSFROOT -I$LCLIBROOT"
 
 
