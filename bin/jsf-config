@@ -2,19 +2,33 @@
 
 has_pythia5()
 {
-
   if [ -x $ROOTSYS/lib/libEGPythia.so ] ; then 
 	echo "jsfpythia5"
   fi
-
 }
 
+lciolib()
+{
+  if [ "X$LCIO" != "X" ] ; then
+	echo " -L\$(LCIO)/lib -L\$(LCIO)/sio/lib -llcio -lsio -lz"
+  fi
+}  
 
+print_help()
+{
+cat <<EOF
+ jsf-config [options]
+ options = --has_pythia5  --lciolib  --help
+EOF
+}
 
 while [ $# -ne 0 ] 
 do 
   case "$1" in 
     --has_pythia5) has_pythia5 ;; 
+    --lciolib) lciolib ;;
+    --help) print_help ;;
+    *)  print_help ;;
   esac
   shift
 done
