@@ -6,6 +6,8 @@
    html.MakeClass("JSFReadJIMBank");
    html.MakeClass("JSFReadJIMBankBuf");
    html.MakeClass("JSFJIMParam");
+   html.MakeClass("JSFJIMEventDisplay");
+   html.MakeClass("JSFJLCSIM");
 
    html.MakeIndex();
 
