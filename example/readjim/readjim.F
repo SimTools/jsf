@@ -139,19 +139,6 @@ C      CHARACTER*4  PRODUC
       NRET = 1
  1000 CONTINUE 
 
-      CALL JLREAD(IERR)
-
-C ... Read end-of-file
-      IF( IERR .EQ. 1 ) THEN
-         NRET = -1
-         RETURN
-C
-C ... Read error
-      ELSE IF( IERR .NE.0 ) THEN
-         NRET = -2
-         RETURN
-      ENDIF
-
       IEVENT = IEVENT + 1
 
 CC      WRITE(6,600) IEVENT

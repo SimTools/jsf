@@ -9,7 +9,7 @@
 // The JSFReadJIMBank class read a simulation data created by
 // JIM and put them into JSFSIMDST class
 //
-//$Id
+//$Id$
 //
 //////////////////////////////////////////////////////////////////
 
@@ -27,38 +27,13 @@ extern "C" {
 extern void readjiminit_(Int_t *unit, Char_t *name, Int_t len);
 extern void readjimend_();
 extern void readjimread_(Int_t *nret);
-
+extern void jlread_(Int_t *ierr);
 extern Float_t ulctau_(Int_t *kf);
 
 };
 
 
-const Int_t kJGenMax=700;
-const Int_t kJCmbMax=700;
-const Int_t kJTrkMax=300;
-const Int_t kJEClsMax=500;
-const Int_t kJHClsMax=400;
-const Int_t kJClsSize=3;
-const Int_t kJVTXBufSize=2000;
-
-typedef struct {
-  Int_t endian;
-  Char_t produc[4];
-  Int_t ivers, head[2],ierflg;
-  Int_t ngen ; Float_t gen[kJGenMax][kGenSize]; 
-               Int_t igen[kJGenMax][kIGenSize];
-  Int_t ncmb ; Float_t cmbt[kJCmbMax][kCmbtSize];
-  Int_t ntrk ; Float_t trkf[kJTrkMax][kTrkfSize]; 
-               Float_t trkd[kJTrkMax][kTrkdSize];
-               Int_t nvtx[kJTrkMax];
-  Int_t nemh ; Int_t emh[kJEClsMax][kJClsSize];
-  Int_t nhdh ; Int_t hdh[kJHClsMax][kJClsSize];
-  Int_t nsih ; Float_t vtxd[kJVTXBufSize][kVTXHSize] ; 
-  Int_t idvtx[kJVTXBufSize][kVTXIDSize];
-} COMMON_TRBUFF;
-
-extern COMMON_TRBUFF trbuff_;
-
+#include "JSFReadJIMCommon.h"
 
 
 //_____________________________________________________________________________
@@ -103,6 +78,19 @@ Bool_t JSFReadJIMBank::EndRun()
 Bool_t JSFReadJIMBank::Process(Int_t nev)
 {
 //
+
+  Int_t ierr;
+  jlread_(&ierr);
+  if( ierr == 1 ) {
+    printf(" JSFReadJIMBank::Process .. Read end-of-file\n");
+    return kFALSE;
+  }
+  else if( ierr == 0 ) {
+    printf(" JSFReadJIMBank::Process .. Read error occured.\n");
+    return kFALSE;
+  }
+
+  // Unpack JIM Bank
 
   JSFReadJIMBankBuf *simb=(JSFReadJIMBankBuf*)EventBuf();
 
