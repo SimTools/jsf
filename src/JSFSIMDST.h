@@ -5,6 +5,8 @@
 //
 //  To output SIMDST record by Fortran program
 //
+//$Id$
+//
 ///////////////////////////////////////////////////////////////////////
 
 #include <TObject.h>
@@ -40,8 +42,10 @@ const Int_t kCmbtSize=8;
 const Int_t kTrkfSize=23;
 const Int_t kTrkdSize=15;
 
-const Int_t kVTXHMax=100;  // Maximum number of vertex hit
+const Int_t kVTXHMax=10;  // Maximum number of vertex hit
 const Int_t kVTXBufSize=kVTXHMax*kTrkMax;
+const Int_t kVTXHSize=5;
+const Int_t kVTXIDSize=2;
 
 
 // *************************************************************
@@ -72,6 +76,8 @@ protected:
   Int_t fNHDCHits;        //! Number of HDC Hits.
   TClonesArray *fHDCHits; //! HDC Hits
 
+  void SetClonesArray(); // Set TClonesArray pointers.
+
 public:
   JSFSIMDSTBuf(const char *name="JSFSIMDSTBuf", 
 	     const char *title="JSF SimDST event buffer",
@@ -80,8 +86,28 @@ public:
 
   virtual void SetClassData(Int_t nev);       // Set Class Data
   virtual Bool_t PackDST(Int_t nev); // Pack SIMDST information.
+  virtual Bool_t UnpackDST(Int_t nev); // Unpack SIMDST information.
   friend class JSFSIMDST;
-  
+
+  Int_t GetEndian(){ return fEndian; }
+  Int_t GetVersion(){ return fVersion; }
+  Char_t *GetProducer(){ return fProduc; }
+  Float_t GetEventNumber(){ return fHead[0];}
+  Float_t GetEcm(){ return fHead[1];}
+
+  Int_t GetNGeneraorParticles(){ return fNGeneratorParticles; }
+  TClonesArray *GetGeneratorParticles(){ return fGeneratorParticles;}
+  Int_t GetNLTKCLTracks(){ return fNCombinedTracks;}
+  TClonesArray *GetLTKCLTracks(){ return fCombinedTracks;}
+  Int_t GetNCDCTracks(){ return fNCDCTracks;}
+  TClonesArray *GetCDCTracks(){ return fCDCTracks;}
+  Int_t GetNVTXHits(){ return fNVTXHits;}
+  TClonesArray *GetVTXHits(){ return fVTXHits;}
+  Int_t GetNEMCHits(){ return fNEMCHits;}
+  TClonesArray *GetEMCHits(){ return fEMCHits;}
+  Int_t GetNHDCHits(){ return fNHDCHits;}
+  TClonesArray *GetHDCHits(){ return fHDCHits;}
+ 
   ClassDef(JSFSIMDSTBuf,1)  // JSSF SimDST event buffer
 };
 
@@ -89,12 +115,12 @@ public:
 class JSFSIMDST : public JSFModule {
 protected:
   Int_t  fUnit;       // Fortran logical unit number to output SIMDST data.
-  Char_t fOutputFileName[256]; // File name of output file.
-  Char_t fParamFileName[256];   // Simulator parameter file name.
-
+  Char_t fDataFileName[256]; //! File name of output file.
+  Char_t fParamFileName[256];   //! Simulator parameter file name.
+  Int_t  fReadWrite;  // =0 no read/write =1 to write data, =2 to read 
 public:
   JSFSIMDST(const char *name="JSFSIMDST", 
-		  const char *title="Output SIMDST data");
+		  const char *title="Read/Write SIMDST data");
   virtual ~JSFSIMDST(){}
 
   friend class JSFSIMDSTBuf;
@@ -105,10 +131,17 @@ public:
   virtual Bool_t EndRun();
 
   Int_t  GetUnit(){ return fUnit;}
-  Char_t *GetOutputFileName(){ return fOutputFileName; }
+  Char_t *GetDataFileName(){ return fDataFileName; }
   void SetUnit(Int_t nunit){ fUnit=nunit; }
-  void SetOutputFileName(Char_t *name){ strcpy(fOutputFileName, name);}
+  void SetDataFileName(Char_t *name){ strcpy(fDataFileName, name);}
   void SetParamFileName(Char_t *name){ strcpy(fParamFileName, name);}
+
+  Bool_t WriteParameters(Int_t nrun);
+
+  void WriteData(){ fReadWrite=1;}
+  void ReadData(){ fReadWrite=2;}
+  void NoReadWrite(){ fReadWrite=0;}
+  Int_t GetReadWriteFlag(){ return fReadWrite; }
 
   ClassDef(JSFSIMDST, 1)  // Make SIMDST data.
 

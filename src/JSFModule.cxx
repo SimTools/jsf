@@ -1,3 +1,4 @@
+//*LastUpdate:  jsf-1-4 14-Feburary-1999  by Akiya Miyamoto
 //*LastUpdate:  v0.3.08 09/29/1998  by A.Miyamoto
 //*-- Author :  Akiya Miyamoto  09/22/1998
 
@@ -45,6 +46,7 @@
 //  crash.  When reading the root data, JSFSteer  read the header and creats 
 //  the objetcs required to get tree data.
 //  
+//$Id$
 //
 //////////////////////////////////////////////////////////////////
 //  
@@ -60,7 +62,7 @@ JSFModule::JSFModule(const char *name, const char *title)
 {
 // Default constructor of JSF module.
 
-  fVersion  =102;
+  fVersion  =104;
   fStat     = kConstruct;
   gJSF->Modules()->Add(this);
   fEventBuf=0;

@@ -65,8 +65,6 @@ c     nret = -2 for read error.
       
       character*4  produc
      
-      print *,' start read a record.'
-      
       nret=1
       if(nret .eq.10 ) then
         read(iunit,end=200,err=300) iendi,produc, ivers,ngen,ncmb

@@ -7,6 +7,9 @@
 //
 //  Utilities for CDC Tracks 
 //
+// 
+//$Id$
+//
 ////////////////////////////////////////////////////////////////////////
 
 #include "JSFSteer.h"
@@ -40,6 +43,28 @@ JSFCDCTrack::JSFCDCTrack(Int_t itrkp[])
   fEPosAtEMC[0]=0.0 ;    fEPosAtEMC[1]=0.0 ;  
   Double_t *err=(Double_t*)&itrkp[18];
   for(i=0;i<15;i++){ fError[i]=err[i]; }
+
+  fNVTX = 0;
+  for(i=0;i<10;i++){ fVTXHits[i]=NULL; }
+
+}
+
+
+//_____________________________________________________________________________
+JSFCDCTrack::JSFCDCTrack(Float_t trkf[], Double_t trkd[])
+{
+  // Make a JSFCDCTrack class from a data from Production:CDC;Track_Parameter
+  fP[0]=trkf[0]; fP[1]=trkf[1]; fP[2]=trkf[2];
+  fE=trkf[3];
+  fX[0]=trkf[4]; fX[1]=trkf[5] ; fX[2]=trkf[6];
+  fCharge=(Int_t)trkf[7];  fGenID=(Int_t)trkf[8];
+  Int_t i;
+  for(i=0;i<5;i++){ fHelix[i]=trkf[9+i] ;}
+  fPivot[0]=trkf[14] ; fPivot[1]=trkf[15]; fPivot[2]=trkf[16] ;
+  fNDF=(Int_t)trkf[17];
+  fPosAtEMC[0]=trkf[18]; fPosAtEMC[1]=trkf[19] ; fPosAtEMC[2]=trkf[20] ;
+  fEPosAtEMC[0]=trkf[21] ;    fEPosAtEMC[1]=trkf[22];  
+  for(i=0;i<15;i++){ fError[i]=trkd[i]; }
 
   fNVTX = 0;
   for(i=0;i<10;i++){ fVTXHits[i]=NULL; }
@@ -219,6 +244,158 @@ void JSFCDCTrack::ExtrapolateErrorAtEMC(Float_t helix[], Float_t x[], Float_t dx
    dx[0] = TMath::Sqrt(dth2);
    dx[1] = TMath::Sqrt(dphi2);
 
+}
+
+
+//_____________________________________________________________________________
+void JSFCDCTrack::MovePivot(Float_t pivot[], Float_t bfield)
+{
+  // Current helix parameter is expressed in terms of new pivot.
+
+  Double_t ptor=333.5640952*10.0/bfield;
+  Double_t x2pid = 2.0*TMath::Pi();
+  Double_t xpid  = TMath::Pi();
+  Double_t dr  = fHelix[0];
+  Double_t fi0 = fHelix[1];
+  Double_t cpa = fHelix[2];
+  Double_t dz  = fHelix[3];
+  Double_t tnl = fHelix[4];
+  Double_t x0  = fPivot[0];
+  Double_t y0  = fPivot[1];
+  Double_t z0  = fPivot[2];
+  Double_t xv  = pivot[0];
+  Double_t yv  = pivot[1];
+  Double_t zv  = pivot[2];
+  //
+  // Transform helix parameters
+  //
+  Double_t r   = ptor/cpa;
+  Double_t rdr = r + dr;
+  Double_t fip = (fi0+2*x2pid)-x2pid*((Double_t)((Int_t)((fi0+2*x2pid)/x2pid)));
+  Double_t csf0 = TMath::Cos(fip);
+  Double_t snf0 = TMath::Sin(fip);
+  if( fip > xpid ) snf0 = -snf0 ;
+
+  Double_t xc  = x0 + rdr*csf0 ;
+  Double_t yc  = y0 + rdr*snf0 ;
+  Double_t csf = ( xc-xv)/r;
+  Double_t snf = (yc-yv)/r;
+  Double_t anrm = 1.0/TMath::Sqrt(csf*csf+snf*snf);
+           csf  *= anrm;
+	   snf  *= anrm;
+  Double_t csfd  = csf*csf0 + snf*snf0;
+  Double_t snfd  = snf*csf0 - csf*snf0;
+           fip   = TMath::ATan2(snf, csf);
+  Double_t fid   = (fip-fi0 + 4*x2pid)
+                 - x2pid*((Double_t)(Int_t)((fip-fi0 + 4*x2pid)/x2pid));
+  if( fid > xpid ) fid -= x2pid;
+  Double_t drp   = (x0+dr*csf0+r*(csf0-csf)-xv)*csf
+                 + (y0+dr*snf0+r*(snf0-snf)-yv)*snf;
+  Double_t dzp   = z0 + dz - r*tnl*fid - zv;
+  //C--
+  //C  Calculate @AP/@A.
+  //C     AP = ( DRP, FIP, CPA, DZP, TNL )
+  //C     A  = ( DR , FI0, CPA, DZ , TNL )
+  //C--
+  Double_t rdrpr = 1.0/(r+drp);
+  Double_t rcpar = r/cpa;
+  Double_t dapda[5][5];
+  memset(dapda,0,200);
+  
+  dapda[0][0] = csfd ; 
+  dapda[1][0] = rdr*snfd;  
+  dapda[2][0] = rcpar*(1.0-csfd);   
+   
+  dapda[0][1] = - rdrpr*snfd;
+  dapda[1][1] =   rdr*rdrpr*csfd;
+  dapda[2][1] =   rcpar*rdrpr*snfd;
+   
+  dapda[2][2] =   1.0;
+   
+  dapda[0][3] =   r*rdrpr*tnl*snfd;
+  dapda[1][3] =   r*tnl*(1.0-rdr*rdrpr*csfd);
+  dapda[2][3] =   rcpar*tnl*(fid-r*rdrpr*snfd);
+  dapda[3][3] =   1.0;
+  dapda[4][3] = - r*fid;
+   
+  dapda[4][4] =   1.0;
+
+  //C--
+  //C  Copy error matrix to EEP and symmetrize it into EE.
+  //C--
+  Double_t ee[4][4];
+  Int_t i,j,n;
+  n=0;
+  for(i=0;i<5;i++){ for(j=0;j<=i;j++) {
+    ee[i][j]=fError[n];
+    ee[j][i]=ee[i][j];
+    n++;
+  }}
+  //C--
+  //C  Transform error matrix EEP to that of XP.
+  //C--
+  n=0;
+  for(i=0;i<5;i++){ for(j=0;j<=i;j++) {
+    fError[n]=0.0;
+    Int_t k,l;
+    for(k=0;k<5;k++){ for(l=0;l<5;l++){
+      fError[n]+= dapda[k][i]*ee[l][k]*dapda[l][j];
+    }}
+    n++;
+  }}
+  //C--
+  //C  Fill HELXOT array.
+  //C--
+  fHelix[0]=dr;
+  fHelix[1]=fip;
+  fHelix[2]=cpa;
+  fHelix[3]=dzp;
+  fHelix[4]=tnl;
+  fPivot[0]=xv;
+  fPivot[1]=yv;
+  fPivot[2]=zv;
+
+  return;
+
+}
+
+//______________________________________________________________________________
+void JSFCDCTrack::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFCDCTrack.
+
+   if (R__b.IsReading()) {
+      Version_t R__v = R__b.ReadVersion(); if (R__v) { }
+      TObject::Streamer(R__b);
+      R__b.ReadStaticArray(fP);
+      R__b >> fE;
+      R__b.ReadStaticArray(fX);
+      R__b >> fCharge;
+      R__b >> fGenID;
+      R__b.ReadStaticArray(fHelix);
+      R__b.ReadStaticArray(fPivot);
+      R__b.ReadStaticArray(fError);
+      R__b >> fNDF;
+      R__b.ReadStaticArray(fPosAtEMC);
+      R__b.ReadStaticArray(fEPosAtEMC);
+      //      R__b >> fNVTX;
+      fNVTX=0; // fNVTX is set to zero untill VTX address is set in SetPointers()
+   } else {
+      R__b.WriteVersion(JSFCDCTrack::IsA());
+      TObject::Streamer(R__b);
+      R__b.WriteArray(fP, 3);
+      R__b << fE;
+      R__b.WriteArray(fX, 3);
+      R__b << fCharge;
+      R__b << fGenID;
+      R__b.WriteArray(fHelix, 5);
+      R__b.WriteArray(fPivot, 3);
+      R__b.WriteArray(fError, 15);
+      R__b << fNDF;
+      R__b.WriteArray(fPosAtEMC, 3);
+      R__b.WriteArray(fEPosAtEMC, 2);
+      //  R__b << fNVTX;
+   }
 }
 
 

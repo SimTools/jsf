@@ -14,8 +14,10 @@
 
 #include "JSFGenerator.h"
 
-// extern "C" { 
-// };
+extern "C" {
+extern Int_t luchge_(Int_t *kf);
+extern Float_t ulctau_(Int_t *kf);
+};
 
 ClassImp(PythiaGenerator)
 

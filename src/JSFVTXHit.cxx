@@ -6,6 +6,8 @@
 //  JSFVTXHits
 //
 //  Utilities for VTXHits 
+// 
+//$Id$
 //
 ////////////////////////////////////////////////////////////////////////
 
@@ -13,16 +15,5 @@
 #include "JSFVTXHit.h"
 
 ClassImp(JSFVTXHit)
-
-  /*
-//_____________________________________________________________________________
-void JSFVTXHits::SetLayerNumber(JSFQuickSimParam *sp)
-{
-
-   SetGeoParam(type, nphi, ntheta, nrad,
-		    rmin,  rmax,  zminus, zplus );
-}
-
-*/
 
 

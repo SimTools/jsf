@@ -6,7 +6,7 @@
 
 #pragma link C++ class JSFQuickSim;
 #pragma link C++ class JSFQuickSimParam-;
-#pragma link C++ class JSFQuickSimBuf;
+#pragma link C++ class JSFQuickSimBuf-;
 #pragma link C++ class JSFLTKCLTrack;
 
 #pragma link C++ class JSFVTXHit;

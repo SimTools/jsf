@@ -6,6 +6,8 @@
 // JSFVTXHit                                                            //
 //                                                                      //
 // Vertex Detector Hit information class.                               //
+//
+//$Id$
 //                                                                      //
 //////////////////////////////////////////////////////////////////////////
 
@@ -27,7 +29,7 @@ protected:
   Double_t   fDphi; // Error of fTheta 
   Double_t   fDz;   // Error of fPhi
   Int_t      fLayer;  // Layer number of the hit. ( 1 to n )
-  Int_t      fLinkedTrack; // Track number ( 1 to n ) associated with this hit (-1 when no hit)
+  Int_t      fLinkedTrack; // Index to linked CDCTracks ( 0 to n-1)
   Int_t      fGenTrack ;   // GeneratorParticle number ( 1 to n ) who creates the hit.
 
 public:

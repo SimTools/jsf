@@ -7,6 +7,8 @@
 //
 //  Basic unit of data analysis
 //
+//$Id$
+//
 //////////////////////////////////////////////////////////////////
 
 #ifndef __JSFModule__
@@ -16,10 +18,6 @@
 #include <TNamed.h>
 #include <TFile.h>
 #include <TTree.h>
-
-// #ifndef __JSFSteer__     
-// #include "JSFSteer.h"
-// #endif                    
 
 class JSFModule;
 

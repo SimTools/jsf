@@ -12,12 +12,30 @@
 //     provide interface with JSFQuickSim class
 // Thus this class does not output ROOT event tree.
 // 
+// Three void functions are prepared to control write/read fortran data.
+//   If WriteData() function is called, fortran data is written.
+//   If ReadData() function is called, fortran data is read in.
+//   If NoReadWrite() function is called, no read/write of fortran record.
+//  When WriteData() or NoReadWrite() is called, JSFQuickSim module must be
+//  executed before this class.
+//
+// (Parameters)
+// Following parameters can be specified in the configuration file,
+// jsf.conf is default. They can be set by Set functions, too.
+//     parameter name       (Default)      Set functions
+// JSFSIMDST.DataFile       simdst.dat    SetDataFileName()
+// JSFSIMDST.ParameterFile  simdst.parm   SetParamFileName()
+// JSFSIMDST.fUnit          21            SetUnut()
+// JSFSIMDST.DataReadWrite   1            WriteData()/ReadData()/NoReadWrite()
+//
 // (Limitation)
 //   Maximum size of tracks, etc are limited as follows.
 //     GEN  : max 500 tracks
 //     TRKF, TRKD, VTX : Max. 500 tracks.
 //     EMH, HDH        : Max. 1000 hits.
 //   
+//$Id$
+//
 //////////////////////////////////////////////////////////////////
 
 #include "JSFSteer.h"
@@ -41,14 +59,29 @@ extern void simdstwrite_(Int_t *iunit,
 	Double_t trkd[][], Int_t emh[][], Int_t hdh[][],
 	Int_t nvtx[], Int_t *npvtx, Double_t vtxd[][], Int_t ivtx[][],
 	Int_t lenproduc);
-extern void utrkmv_(Int_t *lnxhlx, Float_t helxin[], 
-		    Float_t xp[], Float_t helxot[]);
+extern void simdstread_(Int_t *iunit, 
+	Int_t *endian, Char_t *produc,
+	Int_t *ivers, Int_t *ngen, Int_t *ncmb, 
+        Int_t *ntrk, Int_t *nemh, Int_t *nhdh,
+	Float_t head[], Float_t gendat[][], Short_t igendat[][],
+        Float_t cmbt[][], Float_t trkf[][],
+	Double_t trkd[][], Int_t emh[][], Int_t hdh[][],
+	Int_t nvtx[], Int_t *npvtx, Double_t vtxd[][], Int_t ivtx[][],
+	Int_t *nret, Int_t lenproduc);
+
+extern Float_t ulctau_(Int_t *kf);
+
 };
 
 Int_t genidTOtrkid[kGenMax];  // Generator track number to CDC track number
 Float_t smrpar[300];
 
-
+TClonesArray *gsGeneratorParticles;
+TClonesArray *gsCombinedTracks;
+TClonesArray *gsCDCTracks;
+TClonesArray *gsVTXHits;
+TClonesArray *gsEMCHits;
+TClonesArray *gsHDCHits;
 
 //_____________________________________________________________________________
 JSFSIMDST::JSFSIMDST(const char *name, const char *title)
@@ -57,12 +90,14 @@ JSFSIMDST::JSFSIMDST(const char *name, const char *title)
   fEventBuf = new JSFSIMDSTBuf("JSFSIMDSTBuf", 
 	       "JSFSIMDST event buffer",this);
  
-  sscanf(gJSF->Env()->GetValue("JSFSIMDST.OutputFile","simdst.dat"),
-	 "%s",fOutputFileName);
-  sscanf(gJSF->Env()->GetValue("JSFSIMDST.OutputFile","simdst.parm"),
+  sscanf(gJSF->Env()->GetValue("JSFSIMDST.DataFile","simdst.dat"),
+	 "%s",fDataFileName);
+  sscanf(gJSF->Env()->GetValue("JSFSIMDST.ParameterFile","simdst.parm"),
 	 "%s",fParamFileName);
   sscanf(gJSF->Env()->GetValue("JSFSIMDST.fUnit","21"),"%d",&fUnit);
+  sscanf(gJSF->Env()->GetValue("JSFSIMDST.DataReadWrite","1"),"%d",&fReadWrite);
 
+  SetMakeBranch(kFALSE);
 
 }
 
@@ -70,16 +105,31 @@ JSFSIMDST::JSFSIMDST(const char *name, const char *title)
 // ---------------------------------------------------------------
 Bool_t JSFSIMDST::Initialize()
 {
-  // Open a file to output simdst record as a Fortran binary file.
-  Int_t lenf=strlen(fOutputFileName);
-  simdstopen_(&fUnit, fOutputFileName, lenf);
-
   return kTRUE;
 }
 
 
 // ---------------------------------------------------------------
 Bool_t JSFSIMDST::BeginRun(Int_t nrun)
+{
+  Bool_t rc=kTRUE;
+// Open a file to output simdst record as a Fortran binary file.
+  Int_t lenf=strlen(fDataFileName);
+
+  if( fReadWrite == 1 ) {
+      simdstopen_(&fUnit, fDataFileName, lenf);
+      rc=WriteParameters(nrun);
+  }
+  else if( fReadWrite == 2 ) { 
+      simdstopen_(&fUnit, fDataFileName, lenf);
+  }
+
+  return rc;
+}
+
+
+// ---------------------------------------------------------------
+Bool_t JSFSIMDST::WriteParameters(Int_t nrun)
 {
 //  Save detector parameters into a ascii file.
 //  Parameter file name is obtained by fParamFileName.
@@ -188,7 +238,7 @@ Bool_t JSFSIMDST::BeginRun(Int_t nrun)
 // ---------------------------------------------------------------
 Bool_t JSFSIMDST::EndRun()
 {
-  simdstclose_(&fUnit);
+  if( fReadWrite ==1 || fReadWrite == 2 ) simdstclose_(&fUnit);
   return kTRUE;
 }
 
@@ -197,11 +247,16 @@ Bool_t JSFSIMDST::EndRun()
 Bool_t JSFSIMDST::Process(Int_t nev)
 {
 //
+
   JSFSIMDSTBuf *simb=(JSFSIMDSTBuf*)EventBuf();
+  if( fReadWrite == 2 ) return simb->UnpackDST(nev);
 
   simb->SetClassData(nev);
 
-  return (simb->PackDST(nev));
+  if( fReadWrite == 0 ) return kTRUE;
+
+  return simb->PackDST(nev);
+
 }
 
 // ---------------------------------------------------------------
@@ -232,7 +287,6 @@ void JSFSIMDSTBuf::SetClassData(Int_t nev)
   fVTXHits=sevt->GetVTXHits();
 
 }
-
 
 // ---------------------------------------------------------------
 Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
@@ -287,7 +341,7 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
   const Int_t kVTXHSize=5;
   const Int_t kVTXIDSize=2;
   Double_t vtxd[fNVTXHits][kVTXHSize];
-  Int_t idvtx[fNHDCHits][kVTXIDSize];
+  Int_t idvtx[fNVTXHits][kVTXIDSize];
 
   Int_t i,j;
   Int_t ncdc=0;
@@ -360,6 +414,145 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
         &fNCDCTracks, &fNEMCHits, &fNHDCHits, fHead, gendat, igendat, 
         cmbt, trkf, 
 	trkd, emh, hdh, nvtxh, &fNVTXHits, vtxd, idvtx, lenproduc);
+
+  return kTRUE;
+
+}
+
+
+// ---------------------------------------------------------------
+void JSFSIMDSTBuf::SetClonesArray()
+{
+  // Set pointers for TClonesArray;
+
+      if( !gsGeneratorParticles ) 
+         gsGeneratorParticles= new TClonesArray("JSFGeneratorParticle", kGenMax);
+      fGeneratorParticles=gsGeneratorParticles;
+      if( !gsCombinedTracks ) 
+         gsCombinedTracks = new TClonesArray("JSFLTKCLTrack", kTrkMax);
+      fCombinedTracks = gsCombinedTracks ; 
+      if( !gsCDCTracks )gsCDCTracks= new TClonesArray("JSFCDCTrack", kTrkMax);
+      fCDCTracks=gsCDCTracks;
+      if( !gsVTXHits ) gsVTXHits= new TClonesArray("JSFVTXHit", kVTXBufSize);
+      fVTXHits=gsVTXHits;
+      if( !gsEMCHits ) gsEMCHits= new TClonesArray("JSFEMCHit", kClsMax);
+      fEMCHits=gsEMCHits;
+      if( !gsHDCHits ) gsHDCHits= new TClonesArray("JSFHDCHit", kClsMax);
+      fHDCHits=gsHDCHits;
+
+}
+
+
+// ---------------------------------------------------------------
+Bool_t JSFSIMDSTBuf::UnpackDST(Int_t nev)
+{
+// Read SIMDST data from a file.
+
+  Float_t  gendat[kGenMax][kGenSize];
+  Short_t  igendat[kGenMax][kIGenSize];
+  Float_t  cmbt[kTrkMax][kCmbtSize];
+  Float_t  trkf[kTrkMax][kTrkfSize];
+  Double_t trkd[kTrkMax][kTrkdSize];
+  Int_t    emh[kClsMax][kClsSize];
+  Int_t    hdh[kClsMax][kClsSize];
+  Double_t vtxd[kVTXBufSize][kVTXHSize];
+  Int_t    idvtx[kVTXBufSize][kVTXIDSize];
+  Int_t    nret;
+  Int_t    nvtxh[kTrkMax];
+  Int_t    ngen;
+
+  Int_t lenproduc=4;
+  Int_t unit=((JSFSIMDST*)Module())->GetUnit();
+  simdstread_(&unit, &fEndian, fProduc, &fVersion, &ngen, &fNCombinedTracks,
+       &fNCDCTracks, &fNEMCHits, &fNHDCHits, fHead, gendat, igendat, 
+       cmbt, trkf, trkd, emh, hdh, nvtxh, &fNVTXHits, vtxd, idvtx, 
+       &nret, lenproduc);
+  /*
+  printf(" nret=%d fEndian=%d \n",nret,fEndian);
+  printf(" fProduc=%s\n",fProduc);
+  printf(" fVersion=%d ngen=%d ",fVersion,ngen);
+  printf(" fNCombinedTracks=%d\n",fNCombinedTracks);
+  printf(" #CDC,#EMC, #HDC=%d %d %d\n",fNCDCTracks, fNEMCHits, fNHDCHits);
+  printf(" fHead=%g %g\n",fHead[0],fHead[1]);
+  printf(" #VTX Hits=%d\n",fNVTXHits);
+  */
+
+  SetClonesArray();
+
+  // ***************************************
+  // Fill GeneratorParticle Array
+  // ***************************************
+  fNGeneratorParticles=ngen;
+  TClonesArray &gt = *(fGeneratorParticles);
+  Int_t i;  
+  for(i=0;i<fNGeneratorParticles;i++){
+   Int_t kf=igendat[i][0];
+   Double_t xctau=((Double_t)ulctau_(&kf));
+   Double_t life=0.0;
+   TVector pv(4); pv(0) = gendat[i][3] ; pv(1) = gendat[i][0]; 
+                  pv(2) = gendat[i][1] ; pv(3) = gendat[i][2];
+   TVector xv(4); xv(0) = gendat[i][7] ; xv(1) = gendat[i][4];
+                  xv(2) = gendat[i][5] ; xv(3) = gendat[i][6];
+   Int_t iser=i+1;
+   Int_t igen1=igendat[i][1]; Int_t igen2=igendat[i][2] ; Int_t igen3=igendat[i][3];
+   new(gt[i]) JSFGeneratorParticle(iser, kf, (Double_t)gendat[i][8],
+	      (Double_t)gendat[i][9], pv, xv, igen1, igen2, igen3, 
+	      xctau, life);
+  }
+
+  // ***************************************
+  // Put EMC/HDC CALHit class
+  // ***************************************
+
+  TClonesArray &emha = *(fEMCHits);
+  for(i=0;i<fNEMCHits;i++){
+     new(emha[i])  JSFEMCHit(emh[i][0], emh[i][1]);
+  }
+  TClonesArray &hdha = *(fHDCHits);
+  for(i=0;i<fNHDCHits;i++){
+     new(hdha[i])  JSFHDCHit(hdh[i][0], hdh[i][1]);
+  }
+
+  // ***************************************
+  // Put CDCTrack class
+  // ***************************************
+  JSFLTKCLTrack *lt=NULL;
+  JSFCDCTrack   *ct=NULL;
+  JSFVTXHit     *vh=NULL;
+  TClonesArray &cdc = *(fCDCTracks);
+  for(i=0;i<fNCDCTracks;i++){
+    new(cdc[i]) JSFCDCTrack(&trkf[i][0], &trkd[i][0]);
+  }
+
+  // ***************************************
+  // Put VTXHits class
+  // ***************************************
+  TClonesArray &vhits = *(fVTXHits);
+  for(i=0;i<fNVTXHits;i++){
+    Int_t it=idvtx[i][0]-1;
+    Int_t igen=(Int_t)trkf[it][8];
+    new(vhits[i]) JSFVTXHit(vtxd[i][0], vtxd[i][1], vtxd[i][2], 
+			   vtxd[i][3], vtxd[i][4], idvtx[i][1], it, igen);
+    if( idvtx[i][0] > 0 ) {
+      vh=(JSFVTXHit*)fVTXHits->UncheckedAt(i);
+      ct=(JSFCDCTrack*)fCDCTracks->UncheckedAt(it);
+      ct->AddVTXHit(vh);
+    }
+  }
+
+  // ***************************************
+  // Put LTKCLTrack class
+  // ***************************************
+  TClonesArray &cta = *(fCombinedTracks);
+  for(i=0;i<fNCombinedTracks;i++){
+    new(cta[i]) JSFLTKCLTrack(&cmbt[i][0]);
+    lt=(JSFLTKCLTrack*)cta.UncheckedAt(i);
+    Int_t icdc=(Int_t)cmbt[i][7]-1;
+    if( icdc >= 0 ){
+      ct=(JSFCDCTrack*)fCDCTracks->UncheckedAt(icdc);
+      lt->SetCDC(icdc, ct);
+    }
+  }
 
   return kTRUE;
 

@@ -7,6 +7,8 @@
 //
 // A template for JSFQuickSim
 //
+//$Id$
+//                                                                      //
 //////////////////////////////////////////////////////////////////////////
 
 #include "TObject.h"
@@ -66,7 +68,7 @@ public:
 
 // ******* JSFQuickSimParam *************************************
 class JSFQuickSimParam : public TNamed {
-public:
+protected:
    Char_t  fParamFile[256] ; // Where to get simulator parameter.
    Int_t fSeed ;    // Seed of random variable;
    Float_t fBfield; // Bfield (kgauss).
@@ -95,6 +97,18 @@ public:
    virtual JSFCALGeoParam *GetEMCGeom(){ return fEMCGeom; }  
    virtual JSFCALGeoParam *GetHDCGeom(){ return fHDCGeom; }  
 
+   Float_t GetBField(){ return fBfield;}
+   Float_t GetCDCInnerRadius(){ return fTrack[0];}
+   Float_t GetCDCOuterRadius(){ return fTrack[1];}
+   Float_t GetCDCZMinus(){ return fTrack[2];}
+   Float_t GetCDCZPlus(){ return fTrack[3];}
+   Float_t GetCDCNSample(){ return fTrack[4];}
+   Float_t GetCDCMinimumSample(){ return fTrack[5];}
+   Float_t GetCDCSigmaRPhi(){ return fTrack[6];}
+   Float_t GetCDCSigmaZ(){ return fTrack[7];}
+
+
+
    Int_t   GetVTXNLayer(){ return fNSMPVX; }
    Float_t GetVTXPhiPitch(){ return fDPHIVX; }
    Float_t GetVTXZPitch(){ return fDZEEVX; }
@@ -114,21 +128,22 @@ class JSFQuickSim;
 class JSFQuickSimBuf : public JSFEventBuf {
 private:
    Int_t            fNTracks   ;  // Number of particles 
-   TClonesArray    *fTracks    ;  //! Pointers to Particles
+   TClonesArray    *fTracks    ;  // Pointers to Particles
    Int_t            fNCDCTracks;  // Number of CDC tracks.
-   TClonesArray    *fCDCTracks ;  //! Pointer to CDC Tracks
+   TClonesArray    *fCDCTracks ;  // Pointer to CDC Tracks
    Int_t            fNVTXHits  ;  // Number of VTXHits
-   TClonesArray    *fVTXHits   ;  //!  Pointers to VTX Hits
+   TClonesArray    *fVTXHits   ;  // Pointers to VTX Hits
    Int_t            fNEMCHits  ;  // Number of EMC hit cells
-   TClonesArray    *fEMCHits   ;  //! Pointers to EMC Hit cells 
+   TClonesArray    *fEMCHits   ;  // Pointers to EMC Hit cells 
    Int_t            fNHDCHits  ;  // Number of HDC hit cells
-   TClonesArray    *fHDCHits   ;  //! Pointers to EMC Hit cells 
+   TClonesArray    *fHDCHits   ;  // Pointers to EMC Hit cells 
 
-   TBranch         *fBTracks   ;  //! Branch for LTKCL tracks.
-   TBranch         *fBCDCTracks;  //! Branch for CDCTracks.
-   TBranch         *fBVTXHits  ;  //! Branch for VTX branch.
-   TBranch         *fBEMCHits  ;  //! Branch for EMC branch.
-   TBranch         *fBHDCHits  ;  //! Branch for EMC branch.
+   void SetPointers() ; // Set pointers among Hits/Track classes.
+
+   Bool_t MakeJSFLTKCLTracks();
+   Bool_t MakeCALHits();
+   Bool_t MakeVTXHits();
+   Bool_t MakeCDCTracks();
 
 public:
    JSFQuickSimBuf(const char *name="JSFQuickSimBuf",
@@ -136,34 +151,29 @@ public:
 		   JSFQuickSim *sim=NULL);
    virtual      ~JSFQuickSimBuf();
 
+   Bool_t MakeEventBuf();
+
   void SetNTracks(Int_t nt){ fNTracks=nt;}
 //   Int_t GetNtracks(){ return fNTracks; }
   Int_t GetNTracks(){ return fNTracks; }
   TClonesArray *GetTracks(){ return fTracks; }
-  void GetEventTracks(Int_t nevt){ fBTracks->GetEvent(nevt); }
 
   void SetNCDCTracks(Int_t nt){ fNCDCTracks=nt;}
   Int_t GetNCDCTracks(){ return fNCDCTracks; }
   TClonesArray *GetCDCTracks(){ return fCDCTracks; }
-  void GetEventCDC(Int_t nevt){ fBCDCTracks->GetEvent(nevt); }
 
   void SetNVTXHits(Int_t nt){ fNVTXHits=nt;}
   Int_t GetNVTXHits(){ return fNVTXHits; }
   TClonesArray *GetVTXHits(){ return fVTXHits; }
-  void GetEventVTX(Int_t nevt){ fBVTXHits->GetEvent(nevt); }
 
   void SetNEMCHits(Int_t nt){ fNEMCHits=nt;}
   Int_t GetNEMCHits(){ return fNEMCHits; }
   TClonesArray *GetEMCHits(){ return fEMCHits; }
-  void GetEventEMC(Int_t nevt){ fBEMCHits->GetEvent(nevt); }
 
   void SetNHDCHits(Int_t nt){ fNHDCHits=nt;}
   Int_t GetNHDCHits(){ return fNHDCHits; }
   TClonesArray *GetHDCHits(){ return fHDCHits; }
-  void GetEventHDC(Int_t nevt){ fBHDCHits->GetEvent(nevt); }
 
-  virtual  void MakeBranch(TTree *tree); // Make branch for the event data
-  virtual  void SetBranch(TTree *tree); // Set branches for the event data
 
   ClassDef(JSFQuickSimBuf, 1) // QuickSim event buffer class.
 
@@ -173,7 +183,6 @@ public:
 class JSFQuickSim : public JSFModule {
 protected:
    JSFQuickSimParam  *fParam ; //! Parameters for JSFQuickSim
-//   TBranch           *fBranch; //! For Simulator data.
 public:
    JSFQuickSim(const char *name="JSFQuickSim", 
 	       const char *title="JSF Quick Simulator");
@@ -182,15 +191,11 @@ public:
    virtual Bool_t  Initialize(); 
    virtual Bool_t  Process(Int_t event);
    virtual Bool_t  BeginRun(Int_t nrun);
+   JSFQuickSimParam *Param(){ return fParam; }
 
    Bool_t TBPUTGeneratorParticles();
    Bool_t ReviseGeneratorInfo();
-   Bool_t MakeJSFLTKCLTracks();
-   Bool_t MakeCALHits();
-   Bool_t MakeVTXHits();
-   Bool_t MakeCDCTracks();
 
-   void GetEvent(Int_t nevt){ fBranch->GetEvent(nevt); }
    virtual  void MakeBranch(TTree *tree); // Make branch for the module 
    virtual  void SetBranch(TTree *tree);  // Set Branch address for the module
 

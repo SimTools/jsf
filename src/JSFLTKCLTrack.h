@@ -6,6 +6,8 @@
 // JSFLTKCLTrack                                                        //
 //                                                                      //
 // Track-Cluster mathced track                                          //
+//
+//$Id$
 //                                                                      //
 //////////////////////////////////////////////////////////////////////////
 
@@ -25,7 +27,8 @@ typedef enum {kCombinedGammaTrack, kCombinedLeptonTrack,
 
 // *********************************************************
 class JSFLTKCLTrack : public TObject {
-friend class JSFQuickSim;
+friend class JSFQuickSimBuf;
+friend class JSFSIMDSTBuf;
 protected:
   EJSFLTKCLTrackBank  fBank; // The original bank name
   Double_t    fP[4];    // four momentum (E,Px,Py,Pz), GeV
@@ -35,10 +38,10 @@ protected:
   Int_t     fType;    // ITYP
   Int_t     fSource;  // ISRC 
   Int_t     fNCDC;    // # used CDC tracks
-  Int_t     f1stCDC;  // Element number of corresponding CDC:Track_Parameter
+  Int_t     f1stCDC;  // Element number of corresponding CDC:Track_Parameter or Index of CDC tracks.
   JSFCDCTrack *fCDC;  //! Address of corresponding CDC track.
   
-  void SetCDC(JSFCDCTrack *t){ fCDC=t; }; 
+  void SetCDC(Int_t ind, JSFCDCTrack *t){ f1stCDC=ind; fCDC=t; }; 
 
 public:
   JSFLTKCLTrack() {}
@@ -48,6 +51,7 @@ public:
          Int_t nemc, Int_t charge, Int_t type, Int_t source, 
  	 Int_t ncdc, Int_t first);
   JSFLTKCLTrack(EJSFLTKCLTrackBank bank, Float_t data[]);
+  JSFLTKCLTrack(Float_t data[]);
 
   Double_t GetPx(){ return fP[1] ;}
   Double_t GetPy(){ return fP[2] ;}
@@ -62,6 +66,7 @@ public:
   Int_t    GetNEMC(){ return fNEMC; }
   Int_t    GetCharge(){ return fCharge; }
   Int_t    GetType(){ return fType;}
+  const Char_t  *GetTypeName();
   Int_t    GetSource(){return fSource; }
   Int_t    GetNCDC(){ return fNCDC;}
   Int_t    Get1stCDC(){ return f1stCDC;}

@@ -7,6 +7,8 @@
 //                                                                      //
 // CDC Track parameter information.                                     //
 //                                                                      //
+//$Id$
+//                                                                      //
 //////////////////////////////////////////////////////////////////////////
 
 #include "TObject.h"
@@ -42,6 +44,7 @@ public:
   JSFCDCTrack(){}
   virtual ~JSFCDCTrack();
   JSFCDCTrack( Int_t trkp[] );
+  JSFCDCTrack( Float_t trkf[], Double_t trkd[] );
 
   void GetErrorMatrix(Double_t trkd[]);
   void GetTrackParameter(Float_t trkf[]);
@@ -56,7 +59,34 @@ public:
   void Print();
   void SetPositionAtEMC(Float_t pos[]);
   void ExtrapolateErrorAtEMC(Float_t helix[], Float_t x[], Float_t dx[]);
+  void MovePivot(Float_t pivot[], Float_t bfield);
 
+  Int_t GetCharge(){ return fCharge;}
+  Int_t GetNDF(){ return fNDF;}
+  Float_t GetPx(){ return fP[0];}
+  Float_t GetPy(){ return fP[1];}
+  Float_t GetPz(){ return fP[2];}
+  Float_t GetP(){ return fE;}
+  Float_t GetX(){ return fX[0];}
+  Float_t GetY(){ return fX[1];}
+  Float_t GetZ(){ return fX[2];}
+
+  TVector GetPv(){ TVector p(4); p(0)=fE; p(1)=fP[0]; p(2)=fP[1];
+                   p(3)=fP[2]; return p;}
+  TVector GetXv(){ TVector x(4); x(0)=0.0 ; x(1)=fX[0]; x(2)=fX[1];
+                   x(3)=fX[2]; return x;}
+
+  void GetHelix(Float_t helix[]){ 
+     Int_t i; for(i=0;i<5;i++){ helix[i]=fHelix[i];} }
+  void GetPivot(Float_t pivot[]){
+     Int_t i; for(i=0;i<3;i++){ pivot[i]=fPivot[i];} }
+  void GetError(Double_t err[]){
+     Int_t i; for(i=0;i<15;i++){ err[i]=fError[i];} }
+  void GetPosAtEMC(Float_t pos[]){
+     Int_t i; for(i=0;i<3;i++){ pos[i]=fPosAtEMC[i];} 
+              for(i=0;i<2;i++){ pos[i+3]=fEPosAtEMC[i];} 
+  }
+  
   ClassDef(JSFCDCTrack,1)  //A CDC Track class
 };
 

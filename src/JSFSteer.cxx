@@ -1,3 +1,4 @@
+//*LastUpdate:  jsf-1-4 14-Feburary-1999  by A.Miyamoto
 //*LastUpdate:  v0.3.08 09/29/1998  by A.Miyamoto
 //*-- Author :  Akiya Miyamoto  09/24/1998
 
@@ -76,6 +77,8 @@
 //        jsf->Terminate();
 //      }
 //
+//$Id$
+//
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -110,8 +113,8 @@ JSFSteer::JSFSteer(const char *name, const char *title)
   fModules = 0;
   fConf    = 0;
   fReadin  = 0;
-  fVersion    = 101  ;  // JSFSteer version number
-  fVersionDate  = 19981116 ; // version date.
+  fVersion    = 104  ;  // JSFSteer version number
+  fVersionDate  = 19990214 ; // version date.
   fIsInitialized = kFALSE ;
   fIsTerminated  = kFALSE ;
   fLastRun       = 0 ;

@@ -13,8 +13,36 @@
 //   
 // When Quick Simulator is executed, detector information are saved in
 // JSFQuickSimBuf class, where pointers to detector signals are prepared.
-//   
+// The JSFQuickSimBuf includes following information:
+//    CDC track information, VTX/EMC/HDC hit information, 
+//    LTKCL information ( created by combining CDC and EMC/HDC information)
 // 
+// There are several link information among classes.  Thoese are
+//    JSFLTKCLTrack.fCDC -> JSFCDCTrack  ( only for charged track.)
+//    JSFCDCTrack.f1stCDC -> index of JSFCDCTrack in JSFQuickSimBuf.fCDCTracks
+//    JSFCDCTrack.fVTXHits[i]  -> JSFVTXHit
+//    JSFCDCTrack.fGenID  -> (index of JSFGeneratorParticle + 1 )
+//    JSFVTXHit.fLinkedTrack ->index of JSFCDCTrack in JSFQuickSimBuf.fCDCTracks
+//    JSFVTXHit.fGenTrack ->(index of JSFGeneratorParticle + 1 )
+// 
+// For simple minded usage, the use of LTKCL information is recomended,
+// as it includes both Track and Calorimeter information.  For example to 
+// calculate total energy from LTKCL is as follows.
+//
+//   JSFQuickSim *sim=(JSFQuickSim*)gJSF->FindModule("JSFQuickSim");
+//   JSFQuickSimBuf *sbuf=(JSFQuickSimBuf*)sim->EventBuf();
+//   TClonesArray *cmbt=sbuf->GetTracks();
+//   TVector psum(4);
+//   for(Int_t i=0;i<sbuf->GetNTracks();i++){
+//     JSSFLTKCLTrack *lt=(JSFLTKCLTrack*)sbuf->UncheckedAt(i);
+//     TVecor pv(4);
+//     pv=lt->GetPv();
+//     psum=psum+pv;
+//   }
+//   printf(" Total energy is %g\n",psum(0));    
+// 
+//$Id$
+//
 //////////////////////////////////////////////////////////////////
 
 
@@ -48,8 +76,6 @@ TClonesArray *gCDCTracks;
 TClonesArray *gVTXHits;
 TClonesArray *gEMCHits;
 TClonesArray *gHDCHits;
-
-JSFQuickSimBuf *gEventbuf;
 
 
 // ******* Common /PRJUNK/  ****************
@@ -163,7 +189,6 @@ Bool_t JSFQuickSim::Process(Int_t ev)
    Int_t level=1;
    Int_t idebug=0;
    Int_t iret;
-   gEventbuf=(JSFQuickSimBuf*)EventBuf();
 
 //  Move load Generator data in the class into TBS buffer
 
@@ -191,10 +216,8 @@ Bool_t JSFQuickSim::Process(Int_t ev)
    cmbtrk_(&iret);
 
    if( !ReviseGeneratorInfo() ) return kFALSE;
-   if( !MakeJSFLTKCLTracks() ) return kFALSE;
-   if( !MakeCALHits() ) return kFALSE;
-   if( !MakeCDCTracks() ) return kFALSE;
-   if( !MakeVTXHits() ) return kFALSE;
+
+   if( !(((JSFQuickSimBuf*)EventBuf())->MakeEventBuf()) ) return kFALSE;
 
    return kTRUE;
 }
@@ -264,11 +287,23 @@ Bool_t JSFQuickSim::TBPUTGeneratorParticles()
 }
 
 //_____________________________________________________________________________
-Bool_t JSFQuickSim::MakeJSFLTKCLTracks()
+Bool_t JSFQuickSimBuf::MakeEventBuf()
+{
+   if( !MakeJSFLTKCLTracks() ) return kFALSE;
+   if( !MakeCALHits() ) return kFALSE;
+   if( !MakeCDCTracks() ) return kFALSE;
+   if( !MakeVTXHits() ) return kFALSE;
+
+   return kTRUE;
+}
+
+
+//_____________________________________________________________________________
+Bool_t JSFQuickSimBuf::MakeJSFLTKCLTracks()
 {
   // Copy Production:Combined track banks into JSFLTKCLTrack class
 
-  TClonesArray &tracks=*(gEventbuf->GetTracks());
+  TClonesArray &tracks=*(GetTracks());
   Int_t nt=0;
 
   Char_t *bankname[64]={ "Production:Combined_Gamma_Track",
@@ -290,19 +325,19 @@ Bool_t JSFQuickSim::MakeJSFLTKCLTracks()
         new(tracks[nt++])  JSFLTKCLTrack(bank[ib], data);
      }
   }
-  gEventbuf->SetNTracks(nt);
+  SetNTracks(nt);
 
   return kTRUE;
 }
 
 
 //_____________________________________________________________________________
-Bool_t JSFQuickSim::MakeCALHits()
+Bool_t JSFQuickSimBuf::MakeCALHits()
 {
   // Create JSFEMCHits and JSFHDCHits from 
   // the TBS bank, Production:EMC;Hit_Cell and Production:HDC;Hit_Cell
 
-  TClonesArray &emc=*(gEventbuf->GetEMCHits());
+  TClonesArray &emc=*(GetEMCHits());
   Int_t nemc=0;
   Int_t nelm, neary[kMaxCalHits];
   Int_t iwrk[50]; 
@@ -310,7 +345,7 @@ Bool_t JSFQuickSim::MakeCALHits()
 
   gJSFLCFULL->TBNOEL(1,"Production:EMC;Hit_Cell", nelm, neary);
   if( nelm >= kMaxCalHits ) {
-      printf("Error in JSFQuickSim::MakeCALHits\n");
+      printf("Error in JSFQuickSimBuf::MakeCALHits\n");
       printf("Number of EMC Calorimeter hits =%d, exceeded buffer size\n",nelm);
       return kFALSE;
   }
@@ -318,13 +353,13 @@ Bool_t JSFQuickSim::MakeCALHits()
     gJSFLCFULL->TBGET(1,"Production:EMC;Hit_Cell",neary[i],nw,iwrk,iret);
     new(emc[nemc++])  JSFEMCHit(iwrk[0], iwrk[1]);
   }
-  gEventbuf->SetNEMCHits(nemc);
+  SetNEMCHits(nemc);
 
   Int_t nhdc=0;
-  TClonesArray &hdc=*(gEventbuf->GetHDCHits());
+  TClonesArray &hdc=*(GetHDCHits());
   gJSFLCFULL->TBNOEL(1,"Production:HDC;Hit_Cell", nelm, neary);
   if( nhdc >= kMaxCalHits ) {
-    printf("Error in JSFQuickSim::MakeCALHits\n");
+    printf("Error in JSFQuickSimBuf::MakeCALHits\n");
     printf("Number of HDC Calorimeter hits =%d, exceeded buffer size\n",nelm);
     return kFALSE;
   }
@@ -332,13 +367,13 @@ Bool_t JSFQuickSim::MakeCALHits()
     gJSFLCFULL->TBGET(1,"Production:HDC;Hit_Cell",neary[i],nw,iwrk,iret);
     new(hdc[nhdc++])  JSFHDCHit(iwrk[0], iwrk[1]);
   }
-  gEventbuf->SetNHDCHits(nhdc);
+  SetNHDCHits(nhdc);
 
   return kTRUE;
 }
 
 //_____________________________________________________________________________
-Bool_t JSFQuickSim::MakeVTXHits()
+Bool_t JSFQuickSimBuf::MakeVTXHits()
 {
   // Create JSFVTXHits class 
   // the TBS bank, Production:VTX;Hit and Production:VTX;Hit_Errors
@@ -346,16 +381,15 @@ Bool_t JSFQuickSim::MakeVTXHits()
   // from Production:VTX;Hit and Production:VTX;Hit_Errors bank,
   // and saved in JSFVTXHit class.
 
-  Int_t ncdc = gEventbuf->GetNCDCTracks();
-  TClonesArray *cdc=gEventbuf->GetCDCTracks();
-  TClonesArray &vtx=*(gEventbuf->GetVTXHits());
+  Int_t ncdc = fNCDCTracks;
+  TClonesArray &vtx=*(GetVTXHits());
   Int_t icdc,nwh,nwe,iret;
   Int_t nvtx=0;
   const Int_t kMaxBuff=200;
   Float_t hits[kMaxBuff][3], errs[kMaxBuff][2]; 
 
   for(icdc=0;icdc<ncdc;icdc++){
-    JSFCDCTrack *t=(JSFCDCTrack*)cdc->UncheckedAt(icdc);
+    JSFCDCTrack *t=(JSFCDCTrack*)fCDCTracks->UncheckedAt(icdc);
     Int_t igen=t->GetGenID();
     gJSFLCFULL->TBGET(1,"Production:VTX;Space_Point",igen,
 		      nwh, (Float_t*)hits,iret);
@@ -380,7 +414,7 @@ Bool_t JSFQuickSim::MakeVTXHits()
     
     Int_t j;
     for(j=0;j<nhit;j++){
-      Int_t layer=fParam->GetVTXLayerNumber(hits[j][0]);
+      Int_t layer=((JSFQuickSim*)Module())->Param()->GetVTXLayerNumber(hits[j][0]);
       new(vtx[nvtx])  JSFVTXHit(hits[j][0], hits[j][1], hits[j][2],
 				  errs[j][0], errs[j][1], layer, icdc, igen);
       JSFVTXHit *vh=(JSFVTXHit*)vtx.UncheckedAt(nvtx);
@@ -388,13 +422,13 @@ Bool_t JSFQuickSim::MakeVTXHits()
       nvtx++;
     }  
   }
-  gEventbuf->SetNVTXHits(nvtx);
+  SetNVTXHits(nvtx);
 
   return kTRUE;
 }
 
 //_____________________________________________________________________________
-Bool_t JSFQuickSim::MakeCDCTracks()
+Bool_t JSFQuickSimBuf::MakeCDCTracks()
 {
   // Create JSFCDCTracks class 
   // the TBS bank, Production:CDC;Tracks and Production:CDC;Tracks
@@ -402,16 +436,15 @@ Bool_t JSFQuickSim::MakeCDCTracks()
   // Only tracks which has entry in JSFLTKCLClass is saved in this class.
   // 
 
-  Int_t ncmb = gEventbuf->GetNTracks();
-  TClonesArray *cmbt=gEventbuf->GetTracks();
-  TClonesArray &cdc=*(gEventbuf->GetCDCTracks());
+  Int_t ncmb = fNTracks;
+  TClonesArray &cdc=*(GetCDCTracks());
 
   Int_t ncdc=0;
   Int_t i,nw,iret;
   Int_t itrkp[100]; 
   for(i=0;i<ncmb;i++){
-     JSFLTKCLTrack *ct=(JSFLTKCLTrack*)cmbt->UncheckedAt(i);
-     if( ct->GetNCDC() <= 0 ) continue;
+     JSFLTKCLTrack *ct=(JSFLTKCLTrack*)fTracks->UncheckedAt(i);
+     if( ct->GetNCDC() < 0 ) continue;
      if( ct->GetType() == 1 || ct->GetType() ==3  ) continue;
      Int_t icdc=ct->Get1stCDC();
 
@@ -429,10 +462,10 @@ Bool_t JSFQuickSim::MakeCDCTracks()
      if( *ncel > 0 ) {
        t->SetPositionAtEMC( &prjunk_.RTKBNK[icdc-1][60] );
      }
-     ct->SetCDC(t);
+     ct->SetCDC(ncdc, t);
      ncdc++;
   }
-  gEventbuf->SetNCDCTracks(ncdc);
+  SetNCDCTracks(ncdc);
 
   return kTRUE;
 }
@@ -795,29 +828,8 @@ void JSFQuickSim::MakeBranch(TTree *tree)
      Int_t bsize=4000;
      tree->Branch(fEventBuf->GetName(), fEventBuf->ClassName() ,
 		  &fEventBuf, bsize, split);
-     ((JSFQuickSimBuf*)fEventBuf)->MakeBranch(tree);
    }
 }
-
-//____________________________________________________________________________
-void JSFQuickSimBuf::MakeBranch(TTree *tree)
-{
-  //  Make branch for each detector data.
-
-  Int_t split=0;
-  Int_t bsize=4000;
-  tree->Branch("LTKCLTracks", fTracks->ClassName() ,
-              &fTracks, bsize, split);
-  tree->Branch("CDCTracks", fCDCTracks->ClassName() ,
-              &fCDCTracks, bsize, split);
-  tree->Branch("VTXHits", fVTXHits->ClassName() ,
-              &fVTXHits, bsize, split);
-  tree->Branch("EMCHits", fEMCHits->ClassName() ,
-              &fEMCHits, bsize, split);
-  tree->Branch("HDCHits", fHDCHits->ClassName() ,
-              &fHDCHits, bsize, split);
-}
-
 
 //_____________________________________________________________________________
 void JSFQuickSim::SetBranch(TTree *tree)
@@ -830,26 +842,7 @@ void JSFQuickSim::SetBranch(TTree *tree)
      sprintf(name,"%s",fEventBuf->GetName());
      fBranch=tree->GetBranch(name);
      fBranch->SetAddress(&fEventBuf);
-     printf(" Branch address is set at %d\n",(Int_t)fBranch);
-     ((JSFQuickSimBuf*)fEventBuf)->SetBranch(tree);
    }
-}
-//_____________________________________________________________________________
-void JSFQuickSimBuf::SetBranch(TTree *tree)
-{
-//  Set Branch address for this module
-
-  fBTracks=tree->GetBranch("LTKCLTracks");
-  fBTracks->SetAddress(&fTracks);
-  fBCDCTracks=tree->GetBranch("CDCTracks");
-  fBCDCTracks->SetAddress(&fCDCTracks);
-  fBVTXHits=tree->GetBranch("VTXHits");
-  fBVTXHits->SetAddress(&fVTXHits);
-  fBEMCHits=tree->GetBranch("EMCHits");
-  fBEMCHits->SetAddress(&fEMCHits);
-  fBHDCHits=tree->GetBranch("HDCHits");
-  fBHDCHits->SetAddress(&fHDCHits);
-
 }
 
 //_____________________________________________________________________________
@@ -943,41 +936,63 @@ void JSFQuickSimParam::Streamer(TBuffer &R__b)
 
 
 //______________________________________________________________________________
-void JSFCDCTrack::Streamer(TBuffer &R__b)
+void JSFQuickSimBuf::SetPointers()
 {
-   // Stream an object of class JSFCDCTrack.
+  // After reading the class data for JSFQuickSimBuf, pointers 
+  // for JSFCDCTracks and JSFVTXHits are reset.
+
+  Int_t i;
+  for(i=0;i<fNTracks;i++){
+    JSFLTKCLTrack *lt=(JSFLTKCLTrack*)fTracks->UncheckedAt(i);
+    Int_t icdc=lt->Get1stCDC();
+    if( icdc < 0 ) continue;
+    JSFCDCTrack *t=(JSFCDCTrack*)fCDCTracks->UncheckedAt(icdc);
+    lt->SetCDC(icdc, t);
+  }
+
+  for(i=0;i<fNVTXHits;i++){
+    JSFVTXHit *vh=(JSFVTXHit*)fVTXHits->UncheckedAt(i);
+    Int_t icdc=vh->GetLinkedTrack();
+    if( icdc < 0 ) continue;
+    JSFCDCTrack *t=(JSFCDCTrack*)fCDCTracks->UncheckedAt(icdc);
+    t->AddVTXHit(vh);
+  }
+
+
+}
+
+//______________________________________________________________________________
+void JSFQuickSimBuf::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class JSFQuickSimBuf.
 
    if (R__b.IsReading()) {
       Version_t R__v = R__b.ReadVersion(); if (R__v) { }
-      TObject::Streamer(R__b);
-      R__b.ReadStaticArray(fP);
-      R__b >> fE;
-      R__b.ReadStaticArray(fX);
-      R__b >> fCharge;
-      R__b >> fGenID;
-      R__b.ReadStaticArray(fHelix);
-      R__b.ReadStaticArray(fPivot);
-      R__b.ReadStaticArray(fError);
-      R__b >> fNDF;
-      R__b.ReadStaticArray(fPosAtEMC);
-      R__b.ReadStaticArray(fEPosAtEMC);
-      R__b >> fNVTX;
-      printf(" CDCTracks streamer is called.\n");
+      JSFEventBuf::Streamer(R__b);
+      R__b >> fNTracks;
+      fTracks->Streamer(R__b);
+      R__b >> fNCDCTracks;
+      fCDCTracks->Streamer(R__b);
+      R__b >> fNVTXHits;
+      fVTXHits->Streamer(R__b);
+      R__b >> fNEMCHits;
+      fEMCHits->Streamer(R__b);
+      R__b >> fNHDCHits;
+      fHDCHits->Streamer(R__b);
+      SetPointers();
    } else {
-      R__b.WriteVersion(JSFCDCTrack::IsA());
-      TObject::Streamer(R__b);
-      R__b.WriteArray(fP, 3);
-      R__b << fE;
-      R__b.WriteArray(fX, 3);
-      R__b << fCharge;
-      R__b << fGenID;
-      R__b.WriteArray(fHelix, 5);
-      R__b.WriteArray(fPivot, 3);
-      R__b.WriteArray(fError, 15);
-      R__b << fNDF;
-      R__b.WriteArray(fPosAtEMC, 3);
-      R__b.WriteArray(fEPosAtEMC, 2);
-      R__b << fNVTX;
-      printf(" CDCTracks streamer is called.\n");
+      R__b.WriteVersion(JSFQuickSimBuf::IsA());
+      JSFEventBuf::Streamer(R__b);
+      R__b << fNTracks;
+      fTracks->Streamer(R__b);
+      R__b << fNCDCTracks;
+      fCDCTracks->Streamer(R__b);
+      R__b << fNVTXHits;
+      fVTXHits->Streamer(R__b);
+      R__b << fNEMCHits;
+      fEMCHits->Streamer(R__b);
+      R__b << fNHDCHits;
+      fHDCHits->Streamer(R__b);
    }
 }
+
