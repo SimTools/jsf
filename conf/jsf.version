@@ -10,7 +10,7 @@ XCOMM #$Id$
 XCOMM #
 
 #define __JSF_VERSION__ 2
-#define __JSF_MINORVERSION__ 1
+#define __JSF_MINORVERSION__ 2
 #define __JSF_PATCHLEVEL__ 1
-#define __JSF_VERSIONDATE__ 20050207
+#define __JSF_VERSIONDATE__ 20050301
 #define __JSF_SIMDST_VERSION__ 204
