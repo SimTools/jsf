@@ -57,11 +57,18 @@ InputDialog::~InputDialog()
 {
    // Cleanup dialog.
 
-   fWidgets->Delete();
-   delete fWidgets;
+//   fWidgets->Delete();
+//   delete fWidgets;
 
-   delete fTE;
-   delete fDialog;
+//   delete fTE;
+//   delete fDialog;
+}
+
+//__________________
+void InputDialog::CloseWindow()
+{
+   fDialog->DeleteWindow();
+   delete this;
 }
 
 //_______________________________________________________________________________
@@ -239,12 +246,14 @@ void InputDialog::ProcessMessage(Long_t msg, Long_t parm1, Long_t parm2)
                    case B_OK:
                       // here copy the string from text buffer to return variable
                       strcpy(fRetStr, fTE->GetBuffer()->GetString());
-                      delete this;
+		      CloseWindow();
+//                      delete this;
                       break;
 
                    case B_CANCEL:
                       fRetStr[0] = 0;
-                      delete this;
+		      CloseWindow();
+//                      delete this;
                       break;
                  }
               default:
@@ -257,7 +266,8 @@ void InputDialog::ProcessMessage(Long_t msg, Long_t parm1, Long_t parm2)
              case kTE_ENTER:
                 // here copy the string from text buffer to return variable
                 strcpy(fRetStr, fTE->GetBuffer()->GetString());
-                delete this;
+		  CloseWindow();
+//                delete this;
                 break;
              default:
                 break;

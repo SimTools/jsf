@@ -25,6 +25,7 @@ public:
 	       UInt_t w=400);
    ~InputDialog();
    void ProcessMessage(Long_t msg, Long_t parm1, Long_t parm2);
+   void CloseWindow();
 };
 
 #endif
