@@ -59,8 +59,9 @@ public:
 //   virtual void CloseWindow();
    virtual Bool_t ProcessMessage(Long_t msg, Long_t parm1, Long_t parm2);
 
-};
+   ClassDef(JSFGUIAnalysis, 0)  // JSFGUIAnalysis
 
+};
 
 
 #endif

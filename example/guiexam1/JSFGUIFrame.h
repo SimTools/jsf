@@ -15,9 +15,9 @@
 #define __JSFGUIFrame__
 
 #include "JSFConfig.h"
-#ifdef __USEISOCXX__
-using namespace std;
-#endif
+// #ifdef __USEISOCXX__
+// using namespace std;
+// #endif
 
 #include <vector>
 

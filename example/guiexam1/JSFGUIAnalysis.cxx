@@ -22,6 +22,7 @@ enum EJSFGUIAnalysisID {
    GUIA_B_DISMISS
 };
 
+ClassImp(JSFGUIAnalysis)
 
 //---------------------------------------------------------------------------
 JSFGUIAnalysis::JSFGUIAnalysis(const TGWindow *p, 
