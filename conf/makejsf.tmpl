@@ -26,8 +26,10 @@ XCOMM # -----------------------------------------------------
 XCOMM # Linux with egcs
 XCOMM # -----------------------------------------------------
 #if defined(LinuxArchitecture)
+#include "conf/spec"
 SOEXT         = so
-LIBF2C	      = -lf2c
+LIBF2C	      = -l$(G77EGCS_LIBNAME)
+FC	      = g77
 CXX           = g++ -O2
 CXXFLAGS      = -Wall  -fno-rtti -fno-exceptions -fPIC \
 		-I$(JSFROOT)/include -I$(ROOTSYS)/include
