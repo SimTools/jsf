@@ -1,0 +1,52 @@
+-------------------------------------------------------------------------------
+		JLC Physics Analysis Library
+-------------------------------------------------------------------------------
+Version: 	0.9a
+Description:	C++ library for physics analysis, containing
+		4-vectors, combiners, jet finders, ....
+UpdateRecord:	
+  2000/05/16	K.Ikemtasu	Many bug fixes. Enhanced ANLVTXTagger
+  		(v.0.9a)	and ANL4(3)DVector classes.
+				Added FlavourGetter class.
+  1999/10/09	K.Fujii(v.0.8c)	Added ANLVTXTagger class.
+  1999/09/13	K.Ikematsu	Renamed ANLLVector to ANL4DVector.
+		(v.0.8b)	Added ANL3DVector and ANLTrack classes.
+  1999/09/05	K.Ikematsu	Replaced LockableLVector with ANLLVector.
+		(v.0.8)
+  1999/09/03	K.Fujii(v.0.7a)	Pluged memory leaks in ANLJetFinder.
+  1999/08/17	K.Ikematsu	Added ANLTrack class.
+ 		(v.0.7)		Added l+4j and 2l+2j analysis exsamples.
+  1999/08/14	K.Fujii	(v.0.6) Fixed GetYmass methods for jet finders
+				as suggested by M.Iwasaki.
+  1999/08/12	K.Fujii	(v.0.5) Added ANLEventShape class which is a direct
+  				translation of LCD's EventShape class into
+				JLC convention.
+  1999/08/09	K.Fujii	(v.0.4) further bug fixes: 
+  				ANLPair locking mechanism has been buggy. 
+				There was and still is no unlocking mechanism
+				for parents that get locked because of children
+				being locked. Decided to override IsLocked()
+				to check children.  ANLPair now carries a new
+				data member for quality and is now "Sortable"
+				according to this quality which is usually set
+				to be chi2 or something.
+  1999/08/05	K.Fujii	(v.0.3) further bug fixes. 
+  				It's now usable under RCINT:
+				The problem was the inheritance priority for
+				LockableLVector.  "LVector" which is a 
+				"TObject" has to come first, instead of 
+				"Lockable".
+  1999/08/04	K.Fujii	(v.0.2) bug fixes.
+  1999/08/01	K.Fujii	(v.0.1) original very primitive version for test use.
+
+Installation:
+		$ export KFLIBROOT=`(cd ..; pwd)`
+		$ make
+
+Examples:	see sample programs in the examplers directory.
+
+Remark:
+	Be careful that the current version(2.22/10) of RCINT does not seem to
+	allow repeated use of the same symbol as a reference even in different
+	scopes. Avoid using references or same symbols.
+

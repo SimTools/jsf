@@ -1,5 +1,5 @@
 
-include $(JSFROOT)/conf/common.gmk
+include $(LCBASEDIR)/conf/common.gmk
 
 NAME	  = JSFReadStdHep
 
@@ -15,11 +15,14 @@ OBJS      = $(subst .$(SrcSuf),.$(ObjSuf),$(SRCS)) \
 
 HDRS      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRCS))
 
-CXXFLAGS += -I. -I$(JSFINCDIR)
+ifdef CLHEP_BASE_DIR
+LIBS	+= -L$(CLHEP_BASE_DIR)
+endif
+LIBS    += -lCLHEP
 
-DEPENDS   = $(CXXFLAGS) $(DEPENDFLAGS) $(shell cxxdepends)
-
-LIBS      = -L/usr/lib -lCLHEP
+ifdef CLHEP_INCLUDE_DIR)
+INCPATH  += -I$(CLHEP_INCLUDE_DIR)
+endif
 
 all: depend $(SharedLib)
 
@@ -44,17 +47,17 @@ distclean: clean uninstall
 	rm -f *.o core *~ a.out $(SharedLib)
 
 $(LIBNAME).$(SrcSuf): $(HDRS)
-	rootcint -f $@ -c -I. -I$(JSFROOT)/include \
+	rootcint -f $@ -c $(DICTINCLUDES) \
 	$(HDRS) JSFStdHepLinkDef.h 
 
 depend: $(SRCS) $(HDRS)
 	rm -f makefile.depend
 	touch makefile.depend
 	for i in $(SRCS) ; do \
-	( rmkdepend -f- -- $(DEPENDS) -- $$i >> makefile.depend ) ; done
+	( rmkdepend -f- -- $(RMKDEPENDFILES) -- $$i >> makefile.depend ) ; done
 
 web:
 	jsf -b -q html.C
 
-include makefile.depend
+-include makefile.depend
 

@@ -234,7 +234,8 @@ JSFReadStdHep.o: /home/miyamoto/soft/LC/jsf/include/JSFEnv.h
 JSFReadStdHep.o: /proj/cdc/soft/root/new/include/TEnv.h
 JSFReadStdHep.o: /proj/cdc/soft/root/new/include/TOrdCollection.h
 JSFReadStdHep.o: /home/miyamoto/soft/LC/jsf/include/JSFConfig.h
-JSFReadStdHep.o: /home/miyamoto/soft/LC/jsf/include/JSFDefines.h
+JSFReadStdHep.o: /home/miyamoto/soft/LC/lcbase/include/LCBASEConfig.h
+JSFReadStdHep.o: /home/miyamoto/soft/LC/lcbase/include/LCBASEDefines.h
 JSFReadStdHep.o: JSFReadStdHep.h
 JSFReadStdHep.o: /home/miyamoto/soft/LC/jsf/include/JSFReadGenerator.h
 JSFReadStdHep.o: /home/miyamoto/soft/LC/jsf/include/JSFModule.h

@@ -1,0 +1,10 @@
+-------------------------------------------------------------------------------
+1999/08/01  K.Fujii 	Sample Test Program Using Anlib
+-------------------------------------------------------------------------------
+Usage:		
+
+$ xmkmf -a; make
+$ ./UserAnalysis
+
+$(KFLIBROOT)/lib should be in LD_LIBRARY_PATH so as to dynamically
+load libAnlib.so.

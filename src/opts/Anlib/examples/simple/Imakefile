@@ -1,0 +1,64 @@
+XCOMM ############################################################################
+XCOMM ## (Description)
+XCOMM ##    Imake file for XCXC analysis.
+XCOMM ## (Update Record) 
+XCOMM ##    99/05/22  K.Fujii   Original version.
+XCOMM ############################################################################
+
+/*
+ * Template Files
+ *
+ */
+#define CXXPACKAGE 
+#include "config/kflib.tmpl"
+
+/*
+ * Headers
+ *
+ */
+
+INCPATH	= -I. -I../../src -I$(ANLIBROOT)/include -I$(SATELLITESROOT)/include
+EXTRACXXOPT = $(INCPATH)
+
+/*
+ * Package Name
+ *
+ */
+
+PACKAGENAME	= UserAnalysis
+
+/*
+ * You don't have to edit anything below here
+ *
+ */
+
+OBJS		= $(PACKAGENAME).$(ObjSuf)
+
+SRCS		= $(subst .$(ObjSuf),.$(SrcSuf),$(OBJS))
+
+JSFPROGRAM	= $(PACKAGENAME)
+
+ANLLIB		= $(LDDIRFLAG)$(ANLIBROOT)/lib -lAnlib \
+                  $(LDDIRFLAG)$(SATELLITESROOT)/lib -lS4Utils
+LDFLAGS        += $(shell root-config --libs)
+
+/*
+ * Make Targets
+ *
+ */
+
+all::  $(JSFPROGRAM)
+
+$(JSFPROGRAM): $(PACKAGENAME).$(ObjSuf)
+	$(LD) -o $(JSFPROGRAM) $(PACKAGENAME).$(ObjSuf) $(ANLLIB) $(LDFLAGS)
+
+clean:: 
+	@rm -f *.$(ObjSuf) core
+
+depend:: $(SRCS)
+	for i in $(SRCS); do \
+	rmkdepend -a -- $(CXXFLAGS) $(INCPATH) $(DEPENDFILES) -- $$i; done
+
+distclean:: clean
+	@rm -f $(JSFPROGRAM) Makefile
+	@rm -f *.root *.tdr *.out *~ core

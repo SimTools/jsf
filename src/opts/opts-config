@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# ---------------------------------------------
+has_CLHEP()
+{
+  clheplib=/usr/lib
+  if [ "X$CLHEP_BASE_DIR" != "X" ] ; then
+    clheplib=$CLHEP_BASE_DIR
+  fi
+  if [ -a $clheplib/libCLHEP.a ] ; then
+#    echo $clheplib/libCLHEP.a
+    echo yes
+    exit 0
+  fi
+  exit -1
+}
+
+
+# ---------------------------------------------
+has_Anlib()
+{
+  if [ "X$ANLIBROOT" == "X" ] ; then
+    exit -1
+  fi
+  if [ ! -e $ANLIBROOT/lib/libAnlib.so ] ; then
+    exit -1
+  fi
+  if [ ! -e $ANLIBROOT/include ] ; then
+    exit -1
+  fi
+
+#  echo $ANLIBROOT/include
+  echo yes
+  exit 0
+
+}
+
+
+# ---------------------------------------------
+print_help()
+{
+cat <<EOF
+ opts-config [options]
+ options = --has_CLHEP --has_Anlib --help
+EOF
+}
+
+# ---------------------------------------------
+while [ $# -ne 0 ] 
+do 
+  case "$1" in 
+    --has_CLHEP) has_CLHEP ;;
+    --has_Anlib) has_Anlib ;;
+    *) print_help ;;
+  esac
+  shift
+done
+
