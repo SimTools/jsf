@@ -3,10 +3,6 @@ SIMDST
 This directory contains the script to create sample SIMDST data
 and a program example to read them.
 
-Prior to use the program here, do
-
-   $ ln -s $(JSFROOT)/bin/jsf jsf
-
 Files are,
 
    simdst.C : Root macro to create SIMDST data.

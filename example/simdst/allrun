@@ -20,15 +20,17 @@ if ( $#argv == 1 ) then
 endif
 echo "Output directory is $destdir"
 
-./jsf -b -q --destdir=$destdir --maxevt=10 simdst.C
-./jsf -b -q --destdir=$destdir --maxevt=100 simdst.C
-./jsf -b -q --destdir=$destdir --maxevt=1000 simdst.C
+set exec=$JSFROOT/bin/jsf
 
-./jsf -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=u simdst.C
-./jsf -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=d simdst.C
-./jsf -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=c simdst.C
-./jsf -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=b simdst.C
-./jsf -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=e simdst.C
-./jsf -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=mu simdst.C
-./jsf -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=tau simdst.C
+$exec -b -q --destdir=$destdir --maxevt=10 simdst.C
+$exec -b -q --destdir=$destdir --maxevt=100 simdst.C
+$exec -b -q --destdir=$destdir --maxevt=1000 simdst.C
+
+$exec -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=u simdst.C
+$exec -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=d simdst.C
+$exec -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=c simdst.C
+$exec -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=b simdst.C
+$exec -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=e simdst.C
+$exec -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=mu simdst.C
+$exec -b -q --destdir=$destdir --maxevt=100 --type=eez91 --flavour=tau simdst.C
 date
