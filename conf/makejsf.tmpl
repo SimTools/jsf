@@ -62,6 +62,11 @@ BLOCKDATA     =
 XCOMM # -----------------------------------------------------
 XCOMM # MkLinux with egcs
 XCOMM # -----------------------------------------------------
+#if defined(PowerPCArchitecture)
+#ifndef PPCArchitecture
+#define PPCArchitecture
+#endif
+#endif
 #if defined(PPCArchitecture)
 SOEXT         = so
 LIBF2C        = -lg2c           
