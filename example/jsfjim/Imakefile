@@ -73,7 +73,13 @@ EXTRALDOPT = -L/lib/pa1.1 -lm
 all:: jsfjim
 
 jsfjim:: $(OBJS) jsfmain.o $(JIMOBJS)
+#if __PYTHIA_VERSION__ <= 5
 	$(LD) jsfmain.o $(OBJS) $(BLOCKDATA) $(LDFLAGS) -o ../../bin/jsfjim
+#else
+	@echo "****************************************************"
+	@echo "jsfjim can not run with Pythia6. link is suppressed."
+	@echo "****************************************************"
+#endif
 
 jim: $(JIMOBJS) jimsub.o
 	$(FC) -o jim jimsub.o $(JIMMAIN) $(JIMLDLIBS) \
@@ -101,7 +107,13 @@ distclean::
 	@rm -f jsfjim *.root Makefile 
 
 web: jsfjim
-	../../bin/jsfjim -q -b html.C
+#if __PYTHIA_VERSION__ == 5
+	../../bin/jsfjim -q -b html.
+#else
+	@echo "****************************************************"
+	@echo "jsfjim can not run with Pythia6. web files are not created."
+	@echo "****************************************************"
+#endif
 
 ###
 
