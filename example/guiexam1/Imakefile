@@ -2,6 +2,9 @@
 
 #include    "config/lclib.tmpl"
 #include    "conf/makejsf.tmpl"
+#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 22 
+ROOT222LIBS	= -lPhysics
+#endif
 
 ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
                 -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
@@ -92,10 +95,4 @@ libJSFGUI.$(SrcSuf): $(HDRJSFGUI)
 		@echo "Generating dictionary ..."
 		rootcint -f libJSFGUI.$(SrcSuf) -c $(HDRJSFGUI)
 
-#---------------------------------------------------
-
-.SUFFIXES: .$(SrcSuf)
-
-.$(SrcSuf).$(ObjSuf):
-	$(CXX) $(CXXFLAGS) -c $<
-
+#

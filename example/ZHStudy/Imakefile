@@ -1,6 +1,9 @@
 #---------------------------------------------------
 
 #include    "conf/makejsf.tmpl"
+#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 22 
+ROOT222LIBS	= -lPhysics
+#endif
 CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lpacklib
 JSFLIBS       = -Wl,-L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim
 
@@ -8,7 +11,7 @@ ROOTLIBS      = -L$(ROOTSYS)/lib \
 		-lEGPythia -lEG $(CERNLIBS) \
 		-lNew -lBase -lCint -lClib -lCont -lFunc \
                 -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
-                -lPostscript -lProof -lTree -lUnix -lZip
+                $(ROOT222LIBS) -lPostscript -lProof -lTree -lUnix -lZip
 
 ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
 
@@ -64,9 +67,3 @@ libMyAnalysis.$(SrcSuf): $(HDRS) LinkDef.h
 		LinkDef.h
 
 #---------------------------------------------------
-
-.SUFFIXES: .$(SrcSuf)
-
-.$(SrcSuf).$(ObjSuf):
-	$(CXX) $(CXXFLAGS) -c $<
-
