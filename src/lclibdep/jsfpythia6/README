@@ -1,0 +1,38 @@
+2005/03/02 K.Fujii
+
+You can control versions by setting PYTHIAVERSON env. var.
+Unless otherwise specified, libJSFPythia6.so will be built
+by default.
+
+To build Pythia5 plug-in (libJSFPythia5.so), do the following:
+
+$ export PYTHIAVERSION=5
+$ xmkmf -a
+$ make install
+
+In order to use Pythia5 plug-in, you need to build Tauola
+plug-in by hand.
+
+On Linux, do
+
+$ cd $LCLIBROOT/gen/tauola/
+$ g77 -shared -o libTAUOLA.so *.o -rdynamic
+$ cp libTAUOLA.so $LCLIBROOT/lib
+
+or on Darwin, do
+
+$ cd $LCLIBROOT/gen/tauola/
+$ g77 -bundle -flat_namespace -undefined suppress -o libTAUOLA.so *.o
+$ cp libTAUOLA.so $LCLIBROOT/lib
+
+Then copy $JSFROOT/macro/LoadLibraries.C into your current working
+directory where you want to use libJSFPythia5.so and modified it as
+
+$ cd <somewhere you want to use the plug-in>
+$ cp $JSFROOT/macro/LoadLibraries.C
+$ vi LoadLibraries.C
+{
+  const Int_t pyversion=5;  // Set 5 to use Pythia5 
+  ............
+}
+

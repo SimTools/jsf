@@ -12,7 +12,7 @@ Int_t genbeam()
   TString paraname="jlcy500";
   
   Char_t bsdata[128];
-  sprintf(bsdata,"../../data/bsdata/%s.root",paraname.Data());
+  sprintf(bsdata,"../../../data/bsdata/%s.root",paraname.Data());
 
   TFile *fbm=new TFile(bsdata);
   if( !fbm ) {

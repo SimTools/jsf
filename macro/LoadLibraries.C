@@ -16,9 +16,10 @@ Int_t LoadLibraries()
     gSystem->Load("libEGPythia6.so");
   }
   else {
+    gSystem->Load("libTAUOLA.so");
     gSystem->Load("libJSFPythia5.so");
-    gSystem->Load("libEG.so");
-    gSystem->Load("libEGPythia.so");
+//    gSystem->Load("libEG.so");
+//    gSystem->Load("libEGPythia.so");
   }
 
   printf("Libraries loaded\n");
