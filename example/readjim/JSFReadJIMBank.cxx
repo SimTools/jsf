@@ -225,6 +225,7 @@ Bool_t JSFReadJIMBankBuf::UnpackDST(Int_t nev)
   // Put CDCTrack class
   // ***************************************
   fNCDCTracks = trbuff_.ntrk;
+
   JSFLTKCLTrack *lt=NULL;
   JSFCDCTrack   *ct=NULL;
   JSFVTXHit     *vh=NULL;
@@ -238,20 +239,46 @@ Bool_t JSFReadJIMBankBuf::UnpackDST(Int_t nev)
   // ***************************************
   // Put VTXHits class
   // ***************************************
+
+  for(i=0;i<fNCDCTracks;i++){
+    if( trbuff_.nvtx[i] > kMaxVTXAssoc ) {
+      printf("Warning in JSFReadJIMBank.. VTX hits associated ");
+      printf(" to %d-th Tracks is %d",i,trbuff_.nvtx[i]);
+      printf(" and not saved as exceeds max %d\n",kMaxVTXAssoc);
+    }
+  }
+
   fNVTXHits = trbuff_.nsih;
   TClonesArray &vhits = *(fVTXHits);
+
+  Int_t iotrk=0;
+
   for(i=0;i<fNVTXHits;i++){
     Int_t it=trbuff_.idvtx[i][0]-1;
+    if( it >= fNCDCTracks ) {
+      printf("Error in JSFReadJIMBank ... it(%d)",it);
+      printf(" is larger than number of tracks(%d).\n",fNCDCTracks);
+    }
+
     Int_t igen=(Int_t)trbuff_.trkf[it][8];
-    new(vhits[i]) JSFVTXHit(trbuff_.vtxd[i][0], trbuff_.vtxd[i][1], trbuff_.vtxd[i][2], 
-		   trbuff_.vtxd[i][3], trbuff_.vtxd[i][4], trbuff_.idvtx[i][1], it, igen);
+    new(vhits[i]) JSFVTXHit(trbuff_.vtxd[i][0], trbuff_.vtxd[i][1], 
+			    trbuff_.vtxd[i][2], trbuff_.vtxd[i][3], 
+			    trbuff_.vtxd[i][4], trbuff_.idvtx[i][1], it, igen);
     if( trbuff_.idvtx[i][0] > 0 ) {
+
       vh=(JSFVTXHit*)fVTXHits->UncheckedAt(i);
       ct=(JSFCDCTrack*)fCDCTracks->UncheckedAt(it);
+
       if( vh && ct ) {
-        ct->AddVTXHit(vh);
+	if( ct->GetNVTX() < kMaxVTXAssoc ) ct->AddVTXHit(vh);
+	//	else {
+	//  printf("In JSFReadJIMBank .. More than %d",kMaxVTXAssoc);
+	//  printf(" hits associated to CDCtrack# %d\n",it);
+	//  printf(" Further hit information is not saved.\n");
+	// }
       }
 
+      iotrk=it;
       // else {
       //	printf("Warning in JSFReadJIMBank::UnpackDST\n");
       //	printf(" address of JSFVTXHit class(%x) for index %d or JSFCDCTrack class(%x) for index %d is wrong.",(Int_t)vh,(Int_t)ct, i, it);

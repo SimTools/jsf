@@ -11,6 +11,9 @@
 #ifndef __JSFReadJIMCommon__
 #define __JSFReadJIMCommon__
 
+#ifndef __JSFSIMDST__
+#include "JSFSIMDST.h"
+#endif
 #include "JSFReadJIMCommonSize.h"
 
 typedef struct {
