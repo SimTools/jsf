@@ -32,7 +32,7 @@ int MainSimdst(Int_t maxevt)
 
   
   full->SetMakeBranch(kFALSE);   // suppress output of EventBuf 
-  py->SetMakeBranch(kFALSE);     // suppress output of EventBuf 
+  //  py->SetMakeBranch(kFALSE);     // suppress output of EventBuf 
   //  sim->SetMakeBranch(kFALSE);    // suppress output of EventBuf
   simdst->SetMakeBranch(kFALSE);     // suppress output of EventBuf
  
