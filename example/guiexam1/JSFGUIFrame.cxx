@@ -774,6 +774,8 @@ void JSFGUIFrame::Update()
     sprintf(wrk,"UserMenuUpdate((TGPopupMenu*)0x%x);",(UInt_t)fMenuUser);
     gROOT->ProcessLine(wrk);
   }
+
+
 }
 
 //__________________________________________________________________

@@ -278,8 +278,8 @@ JSFEventDisplay::~JSFEventDisplay()
 //---------------------------------------------------------------------------
 void JSFEventDisplay::Clear()
 {
-  fHelixes->Delete();
-  fSignals->Delete();
+  if( fHelixes )fHelixes->Delete();
+  if ( fSignals ) fSignals->Delete();
   //  fWidgets->Delete();
 }
 
@@ -300,6 +300,7 @@ void JSFEventDisplay::DisplayEventData()
     fCanvas->Clear("d");
     Clear();
   }
+
   TDirectory *olddir=gDirectory;
   if( fCanvasDirectory != gDirectory ) fCanvasDirectory->cd();
 
@@ -395,7 +396,7 @@ void JSFEventDisplay::InitializeGeometry(Int_t type)
   Double_t zvtx;
   Int_t nl;
 
-  fCanvas->cd();
+  if( fCanvas != 0 ) fCanvas->cd();
       tube=new TTUBE("EMC","EMC", "void", p->GetEMCRMaximum(), 
 			    p->GetHDCRMaximum(), p->GetHDCZPlus());
       beampipe=new TTUBE("BEAMPIPE","BEAMPIPE", "void", 0.01, 0.1,zshift);
@@ -419,7 +420,7 @@ void JSFEventDisplay::InitializeGeometry(Int_t type)
       vAll5->SetLineColor(6);
       }
     
-  fCanvas->cd();
+  if( fCanvas != 0 ) fCanvas->cd();
       //  View for vertex view
       nl=p->GetVTXNLayer();
       vtx0=new TTUBE("VTX","VTX", "void",p->GetVTXRadius(nl-1),
@@ -445,7 +446,7 @@ void JSFEventDisplay::InitializeGeometry(Int_t type)
       fWidgets->Add(gvVTX) ; fWidgets->Add(vVTXxa); fWidgets->Add(vVTXya);
       }
 
-  fCanvas->cd();
+  if( fCanvas != 0 ) fCanvas->cd();
   
   if( gJSF->Env()->GetValue("JSFGUI.MomentumView",1) == 1 ) {
       momframe=new TSPHE("MOMV", "MOMV","void", 0.99, 1.0, 0.0, 180.0, 0.0, 360.0);

@@ -26,6 +26,25 @@ ClassImp(JSFDemoDisplay)
 
 extern JSFSIMDST *simdst;
 
+#if 0
+static const Int_t mainwindowXsize=600;
+static const Int_t mainwindowYsize=600;
+static const Int_t evdispXsize=550;
+static const Int_t evdispYsize=550;
+static const Int_t legodispXsize=200;
+static const Int_t legodispYsize=67;
+static const Int_t histXsize=200;
+static const Int_t histYsize=120;
+#else
+static const Int_t mainwindowXsize=830;
+static const Int_t mainwindowYsize=785;
+static const Int_t evdispXsize=780;
+static const Int_t evdispYsize=735;
+static const Int_t legodispXsize=200;
+static const Int_t legodispYsize=150;
+static const Int_t histXsize=200;
+static const Int_t histYsize=140;
+#endif
 
 //---------------------------------------------------------------------------
 JSFDemoDisplay::JSFDemoDisplay(JSFGUIFrame *gui): JSFEventDisplay(gui)
@@ -53,12 +72,13 @@ JSFDemoDisplay::~JSFDemoDisplay()
 void JSFDemoDisplay::InitializeDemo()
 {
   //    fCanvas = new TCanvas("EventDisplay","EventDisplay",fCanvasSize[0],fCanvasSize[1]);
-    printf(" Initialize of demo canvas in progress.\n");
     gROOT->ProcessLine("SoundMessage(-1)");
-    fMain = new TGMainFrame(gClient->GetRoot(),600, 600, kHorizontalFrame);
+    fMain = new TGMainFrame(gClient->GetRoot(),
+		    mainwindowXsize, mainwindowYsize, kHorizontalFrame);
     fMain->SetWindowName("JSF Demo");
 
-    fDisp = new TRootEmbeddedCanvas("EventDisplay",fMain, 550, 550);
+    fDisp = new TRootEmbeddedCanvas("EventDisplay",fMain, 
+				    evdispXsize, evdispYsize);
     TGLayoutHints *fL3 = new TGLayoutHints(kLHintsTop|kLHintsLeft|kLHintsExpandY, 5, 5, 5, 5);
     TGLayoutHints *fL4 = new TGLayoutHints(kLHintsCenterX, 5, 5, 5, 5);
     TGLayoutHints *fLDisp = new TGLayoutHints(kLHintsTop | kLHintsLeft ,
@@ -70,16 +90,17 @@ void JSFDemoDisplay::InitializeDemo()
 
     fCont = new TGCompositeFrame(fMain,200,750,kVerticalFrame);
 
-    fLogo=new TGIcon(fCont,gClient->GetPicture("JLClogo98a.xpm"),200,67);
+    fLogo=new TGIcon(fCont,gClient->GetPicture("JLClogo98a.xpm"),
+		     legodispXsize, legodispYsize);
     fCont->AddFrame(fLogo,fL3);
 
-    fHist1 = new TRootEmbeddedCanvas("Hist1",fCont,200,120);
+    fHist1 = new TRootEmbeddedCanvas("Hist1",fCont,histXsize, histYsize);
     fCont->AddFrame(fHist1,fL4);
 
-    fHist2 = new TRootEmbeddedCanvas("Hist2",fCont,200,120);
+    fHist2 = new TRootEmbeddedCanvas("Hist2",fCont,histXsize, histYsize);
     fCont->AddFrame(fHist2,fL4);
 
-    fHist3 = new TRootEmbeddedCanvas("Hist3",fCont,200,120);
+    fHist3 = new TRootEmbeddedCanvas("Hist3",fCont,histXsize, histYsize);
     fCont->AddFrame(fHist3,fL4);
 
 
@@ -108,6 +129,7 @@ void JSFDemoDisplay::InitializeDemo()
     fMain->AddFrame(fCont,fL4);
 
     fDisp->GetCanvas()->cd();
+
     fDisp->Layout();
     fCont->Layout();
     //    fDisp->GetCanvas()->SetBorderMode(0);
@@ -120,20 +142,17 @@ void JSFDemoDisplay::InitializeDemo()
 
     gROOT->ProcessLine("SoundMessage(-2)");
 
-    
 }
 
 //---------------------------------------------------------------------------
 void JSFDemoDisplay::DisplayDemo()
 {
   // Display Event
-  //  printf("Start DisplayDemo ... fCanvas =%x\n",(Int_fCanvas);
-
-   if( !fMain ) {
-    InitializeDemo();
+  if( !fMain ) {
+     InitializeDemo();
    }
   else {
-    fDisp->GetCanvas()->cd();
+    // fDisp->GetCanvas()->cd();
     gPad->Clear();
     ///    fMain->Clear();
     fDisp->Clear();
@@ -188,6 +207,8 @@ void JSFDemoDisplay::DisplayDemo()
 
    txt->Draw();
    */
+
+
   gROOT->ProcessLine("DrawCanvas()");
 
   fDisp->GetCanvas()->Update();
