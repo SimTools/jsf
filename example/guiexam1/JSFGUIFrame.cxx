@@ -421,11 +421,6 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h)
    AddFrame(fStartAnal, new TGLayoutHints(kLHintsTop | kLHintsLeft,
             10, 10, 1, 0));
 
-
-   //* Call macro to process command line arguments
-   gROOT->ProcessLine("GetArguments();");
-
-   
    SetWindowName("JSF Control Panel");
    MapSubwindows();
 

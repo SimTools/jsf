@@ -117,6 +117,10 @@ public:
    Int_t GetEventType(){ return fEventType; }
    Float_t GetEcm(){ return fEcm;}
    Char_t *GetInitPythiaMacro(){ return fInitPythiaMacro; }
+
+   void SetEcm(Float_t ecm){ fEcm=ecm; }
+   void SetRunMode(Int_t runmode){ fRunMode=runmode; }
+   void SetEventType(Int_t eventtype){ fEventType=eventtype; }
    
 
 
