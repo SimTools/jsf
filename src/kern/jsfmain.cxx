@@ -22,6 +22,7 @@
 #if defined(__DARWIN__)
 void dummysub();
 extern "C" void G__cpp_setuplibJSF();
+extern "C" void G__cpp_setupG__Minuit();
 #endif
 
 //______________________________________________________________________________
@@ -48,6 +49,7 @@ int main(int argc, char **argv)
 void dummysub()
 {
    G__cpp_setuplibJSF();
+   G__cpp_setupG__Minuit();
 }
 #endif
 
