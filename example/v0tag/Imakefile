@@ -7,7 +7,7 @@
 #include "conf/makejsf.tmpl"
 
 #if __PYTHIA_VERSION__ >= 6
-OBJS   = k0evt6.o
+OBJS   = k0evt.o
 LIB    = ../../src/readgenutil.o -L$(JSFROOT)/lib -lPythia6
 FFLAGS = -I$(JSFROOT)/include 
 #else

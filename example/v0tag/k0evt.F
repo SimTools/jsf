@@ -9,11 +9,17 @@ C*  31-Jan-2000 Akiya Miyamoto  Original version.
 C*
 C*******************************************************************
 
+#include "JSFConfig.h"
+
+#if __PYTHIA_VERSION__ >= 6
+#include "pythia6.inc"
+      external pydata
+#else 
 #include "jetset74/pysubs.inc"
 #include "jetset74/hepevt.inc"
-
       external pydata
       external ludata
+#endif
 
       NEV=5000
 
@@ -27,6 +33,15 @@ c  kf=310 : k0_s
 
       do 100 i = 1, nev
 
+#if __PYTHIA_VERSION__ >= 6
+         pe=5.0*pyr(idummy)+0.5
+         the=pi*(0.5*pyr(idummy)+0.25)
+         phi=2.0*pi*pyr(idummy)
+         call py1ent(0, kf, pe, the, phi)
+         call pyexec
+c         call pylist(1)
+         call pyhepc(1)
+#else
          pe=5.0*rlu(idummy)+0.5
          the=pi*(0.5*rlu(idummy)+0.25)
          phi=2.0*pi*rlu(idummy)
@@ -34,6 +49,7 @@ c  kf=310 : k0_s
          call luexec
 c         call lulist(1)
          call luhepc(1)
+#endif
          iendi=1296651082
          nvers=1
 
