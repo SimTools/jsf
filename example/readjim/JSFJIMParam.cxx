@@ -38,7 +38,7 @@ void JSFJIMParam::ReadParameter()
 
   JSFJLCSIM::KZGET("MCBCPAR",0, len, idat);
   for(Int_t i=0;i<15;i++){ fBCPAR0I[i]=idat[i]; }
-  Float_t *rtmp=(Float_t*)(idat+15);
+  Float_t *rtmp=(Float_t*)(idat+17);
   for(Int_t i=0;i<16;i++){ fBCPAR0R[i]=rtmp[i]; }
 
   fEMCal[0]=idat[3];  // # of Phi
