@@ -18,7 +18,12 @@ jsf-1-5  Progress since 16-Feburary-1999 A.Miyamoto
 **********************************************************
 (1) Add several member functions in JSFGenertorParticle class
 (2) Typo in src/JSFSIMDST.h and fixed.
+(3) There was a problem in JSFCDCTrack.cxx. aCC of HP-UX does not allow 
+  to set address of float/int variable to pointer of Double variable.  
+  It abend at that point. So program is changed so as not to use such 
+  statement in case of R__ACC is defined.
 
+	
 **********************************************************
 jsf-1-4  5-January-1999 A.Miyamoto
 **********************************************************
