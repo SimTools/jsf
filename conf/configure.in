@@ -1,0 +1,8 @@
+# ----------------------------------------------------------
+#  Configure file for JSF.
+#  This file is sourced by $JSFROOT/bin/makespec.  It creates
+#  header files for JSF compile and link
+#
+# $Id$
+# ----------------------------------------------------------
+
