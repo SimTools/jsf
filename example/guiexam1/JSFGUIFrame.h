@@ -15,6 +15,9 @@
 #define __JSFGUIFrame__
 
 #include "JSFConfig.h"
+using namespace std;
+
+#include <vector>
 
 #include <stdlib.h>
 
@@ -95,7 +98,7 @@ private:
 
    TGPopupMenu        *fMenuRunMode, *fMenuControl;
    TGPopupMenu        *fMenuGen, *fMenuGenType, *fMenuSimType;
-   TGPopupMenu        *fMenuGInfo[6], *fMenuGenPara;
+   TGPopupMenu        *fMenuGInfo[10], *fMenuGenPara;
    // Int_t fRunMode; // =1, Gen Event, =2 Read File, =3 Read SIMDST
    TGPopupMenu        *fMenuUser;
    TGPopupMenu        *fPythiaEvtype;
@@ -144,6 +147,8 @@ public:
    void GotoEventAction();
    void AnalizeEventAction();
    void RunDemo();
+
+   void InitializeDialogMessage();
 
    JSFEventDisplay *GetEventDisplay(){ return fED; }
 

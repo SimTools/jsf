@@ -63,6 +63,9 @@
 #include "InputDialog.h"
 #include "JSFEnvGUIFrame.h"
 #include "JSFDemoDisplay.h"
+#include "JSFDialogMessage.h"
+
+using namespace std;
 
 TBrowser *gbrows;
 
@@ -126,6 +129,11 @@ enum EJSFGUICommandIdentifiers {
    M_GEN_PYEV_TWOPHOTON=629,
    M_GEN_PYEV_DECAY_Z=630,
 
+   M_GEN_INITHERWIG=641,
+   M_GEN_HERWIG_PRSTAT=642,
+   M_GEN_HERWIG_PROCESS=643,
+   M_GEN_HERWIG_HMASS=644,
+
    M_CONT_RT_USERDEFINE=660,
    M_CONT_RT_GENEVENT=661,
    M_CONT_RT_READROOT=662,
@@ -149,11 +157,12 @@ enum EJSFGUICommandIdentifiers {
    M_GEN_SPRING=723,
    M_GEN_RPARTON=724,
    M_GEN_RHEPEVT=725,
-   M_GEN_MERGE=726,
-   M_GEN_LASTRUN=727,
-   M_GEN_LAST=728,
+   M_GEN_HERWIG=726,
+   M_GEN_MERGE=727,
+   M_GEN_LASTRUN=728,
+   M_GEN_LAST=729,
 
-   M_GEN_LASTRUNFILE=729,
+   M_GEN_LASTRUNFILE=730,
 
    M_GEN_DEBUG_RANDOM=741,
    M_GEN_DEBUG_NPARTICLE=742,
@@ -220,8 +229,10 @@ const char *filetypes[] = { "ROOT files",    "*.root",
                             "All files",     "*",
                             0,               0 };
 
- ClassImp(JSFGUIFrame)
+ClassImp(JSFGUIFrame)
 
+vector<JSFDialogMessage> fDialogMessage;
+ 
 ///////////////////////////////////////////////////////////////////////
 
 JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h, 
@@ -385,9 +396,18 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h,
 
    fMenuGInfo[5]->AddLabel("Parameters");
    fMenuGInfo[5]->AddSeparator();
-   fMenuGInfo[5]->AddEntry("Data file",M_GEN_MERGE_DATAFILE);
-   fMenuGInfo[5]->AddEntry("Luminosity/Train",M_GEN_MERGE_LUMPERTRAIN);
-   fMenuGInfo[5]->AddEntry("Random seed",M_GEN_MERGE_SEED);
+   fMenuGInfo[5]->AddEntry("CM Energy",M_GEN_ECM);
+   fMenuGInfo[5]->AddEntry("InitHerwigMacro",M_GEN_INITHERWIG);
+   fMenuGInfo[5]->AddEntry("PRSTAT argument",M_GEN_HERWIG_PRSTAT);
+   fMenuGInfo[5]->AddEntry("Event type ...",M_GEN_HERWIG_PROCESS);
+   fMenuGInfo[5]->AddEntry("Mass of Higgs",M_GEN_HERWIG_HMASS);
+
+
+   fMenuGInfo[6]->AddLabel("Parameters");
+   fMenuGInfo[6]->AddSeparator();
+   fMenuGInfo[6]->AddEntry("Data file",M_GEN_MERGE_DATAFILE);
+   fMenuGInfo[6]->AddEntry("Luminosity/Train",M_GEN_MERGE_LUMPERTRAIN);
+   fMenuGInfo[6]->AddEntry("Random seed",M_GEN_MERGE_SEED);
 
    fMenuGenType->AddLabel("Generator Parameters");
    fMenuGenType->AddSeparator();
@@ -396,8 +416,9 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h,
    fMenuGenType->AddPopup("Bases/Spring ...",fMenuGInfo[2]);
    fMenuGenType->AddPopup("Read parton  ...",fMenuGInfo[3]);
    fMenuGenType->AddPopup("Read HEPEVT ...",fMenuGInfo[4]);
+   fMenuGenType->AddPopup("Herwig ...",fMenuGInfo[5]);
    fMenuGenType->AddSeparator();
-   fMenuGenType->AddPopup("Event Merge ...",fMenuGInfo[5]);
+   fMenuGenType->AddPopup("Event Merge ...",fMenuGInfo[6]);
    fMenuGenType->AddEntry("Last run file",M_GEN_LASTRUNFILE);
    fMenuGenType->AddSeparator();
    fMenuGenType->AddEntry("Run number",M_GUI_RUNNO);
@@ -412,6 +433,7 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h,
    fMenuGen->AddEntry("Bases/Spring",M_GEN_SPRING);
    fMenuGen->AddEntry("Read Parton Data",M_GEN_RPARTON);
    fMenuGen->AddEntry("Read HEPEVT Data",M_GEN_RHEPEVT);
+   fMenuGen->AddEntry("Herwig",M_GEN_HERWIG);
    fMenuGen->AddSeparator();
    fMenuGen->AddEntry("Merge Event",M_GEN_MERGE);
    fMenuGen->AddEntry("Use last run seed",M_GEN_LASTRUN);
@@ -455,7 +477,8 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h,
    fMenuBar->AddPopup("&Help", fMenuHelp, fMenuBarHelpLayout);
 
    // Add user Menu
-   if( gJSF->Env()->GetValue("JSFGUI.UserMenu",0) ) {
+   fMenuUser=0;
+   if( gJSF->Env()->GetValue("JSFGUI.UserMenu",0) != 0 ) {
      gROOT->LoadMacro(gJSF->Env()->GetValue("JSFGUI.UserMenuMacro","UserMenuMacro.C"));
      fMenuUser = new TGPopupMenu(fClient->GetRoot());
      Char_t cmd[256];
@@ -549,6 +572,8 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h,
    fTFromEvent->Associate(this);
 
    for(i=0;i<3;i++){ fTextEntryStatus[i]=kFALSE;}
+
+   InitializeDialogMessage();
 
    AddFrame(fStartAnal, lhTopLeft);
 
@@ -688,7 +713,6 @@ void JSFGUIFrame::Update()
     fMenuGen->CheckEntry(M_GEN_LASTRUN);
     fMenuGenType->EnableEntry(M_GEN_LASTRUNFILE);
   }
-
 
   static const Int_t nproc=9;
   Char_t *pname[nproc]={"ZH","gammagammaH", "eeH","nnH",
@@ -1269,141 +1293,6 @@ void JSFGUIFrame::DoRunmodeMenuAction(Long_t parm1, Bool_t prompt)
   Int_t retval=0;
   Int_t buttons=0;
 
-  static const Int_t maxmenu=29;
-  Char_t *value[maxmenu][3]={
-    {"JSFGUI.ECM","300",
-"JSFGUI.ECM:\n\
-Center of mass energy (GeV) for Pythia Generator."},  // 1
-    {"JSFGUI.InitPythiaMacro","InitPythia.C",
-"JSFGUI.InitPythiaMacro:\n\
-A name of a macro file, which defines a function to initialize Pythia.\n\
-A function name must be void InitPythia()"},  // 2
-    {"PythiaGenerator.PrintStat","1",
-"PythiaGenerator.PrintStat:\n\
-NPYSTAT, the argument of Subroutine PYSTAT.\n\
-If not 0, PYSTAT is called at the end of run as\n\
-CALL PYSTAT(NPYSTAT)."},  // 3
-
-    {"DebugGenerator.RandomSeed","12345",
-       "DebugGenerator.RandomSeed:\nSeed of random number"}, // 4 -2 
-    {"DebugGenerator.Nparticles","4",
-       "DebugGenerator.Nparticles:\nNumber of particles per event."}, //5-2
-    {"DebugGenerator.RangeP","0.1  10.0",
-       "DebugGenerator.RangeP\nMinimum and maximum of particle's momentum in GeV."}, //6-2
-    {"DebugGenerator.RangeCosth","-1.0 1.0",
-       "DebugGenerator.RangeCosth:\n\
-Minimum and maximum of Cosine of particle production angle."}, //7-2
-    {"DebugGenerator.RangeAzimuth","0.0, 360.0",
-     "DebugGenerator.RangeAzimuth:\n\
-Minimum and maximum of particle's azimuthal angle."}, //8-2
-    {"DebugGenerator.RangeVTXR","0.0 0.0",
-     "DebugGenerator.RangeVTXR:\n\
-Minimum and maximum of radius of particle's \n\
-vertex points in unit of cm."}, // 9- 3 
-    {"DebugGenerator.RangeVTXPhi","0.0, 360.0",
-"DebugGenerator.RangeVTXPhi:\n\
-Minimum and maximum of azimuthal angle of particle's \n\
-vertex coordinate. Note that coordinate of vertex point \n\
-is given by cylindrical coordinate system."}, //10-4
-    {"DebugGenerator.RangeVTXZ","0.0, 0.0",
-"DebugGenerator.RangeVTXZ:\n\
-Minimum and maximum of Z coordinate of vertex coordinate."}, //11-2
-    {"DebugGenerator.Nspecies","2",
-"DebugGenerator.Nspecies:\n\
-Number of species of generated particles"}, //12-2
-    {"DebugGenerator.Species1","13 0.1  1.0",
-"DebugGenerator.Species1:\n\
-ID, mass and charge of first species."}, //13-2
-    {"DebugGenerator.Species2","13 0.1  -1.0",
-"DebugGenerator.Species2:\n\
-ID, mass and charge of first species."}, //14-2
-    {"DebugGenerator.Species3","13 0.1  -1.0",
-"DebugGenerator.Species3:\n\
-ID, mass and charge of first species."}, //15-2
-    {"JSFGUI.Spring.SharedLibrary:","../FFbarSpring/libFFbarSpring.so",
-"JSFGUI.Spring.SharedLibrary:\n\
-A name of shared library for event generation \n\
-by Bases/Spring."}, //16-3
-    {"JSFGUI.Spring.ModuleName","FFbarSpring",
-"JSFGUI.Spring.ModuleName:\n\
-A module name of Spring.  It must be inherited\n\
-from a class, JSFModule and defined in the\n\
-shared library specified by JSFGUI.Spring.SharedLibrary"}, //17-4
-    {"JSFGUI.Spring.BasesFile","../FFbarSpring/bases.root",
-"JSFGUI.Spring.BasesFile:\n\
-A file name of bases data."}, //18-2
-    {"JSFReadParton.DataFile","parton.dat",
-"JSFReadParton.DataFile:\n\
-Input data file name of JSFReadParton class."}, //19-2
-    {"JSFReadParton.Format","1",
-"JSFReadParton.Format:\n\
-Format of input data. 1 = ASC file, 0=Fortran binary."}, //20-2
-    {"JSFReadGenerator.DataFile","genevent.dat",
-"JSFReadGenerator.DataFile:\n\
-Input file name for JSFReadGenerator class. This \n\
-class read generator data of HEPEVT format."}, //21-3
-    {"JSFReadGenerator.Format","HEPEVT",
-"JSFReadGenerator.Format:\n\
-Data format of generator data.  Value other than HEPEVT\n\
-is not recognized, since it is only supported now."}, //22-3
-    {"JSFMergeEvent.DataFile","simdst.root",
-"JSFMergeEvent.DataFile:\n\
-A file name of background data which is used by \n\
-JSFMergeEvent class."}, //23-3
-    {"JSFMergeEvent.LumPerTrain","0.06",
-"JSFMergeEvent.LumPerTrain:\n\
-Luminosity per bunch train in unit of  1/nb \n\
-(nano barn invers).  Default value of 0.06 corresponds \n\
-to collider luminosity of 9x10^{33} / cm^2 sec operated \n\
-at RF pulse frequency of 150 Hz."}, //24-5
-      {"JSFMergeEvent.RandomSeed","1990729",
-"JSFMergeEvent.RandomSeed:\n\
-Seed of random number for JSFMergeEvent class.  Since \n\
-this class uses gRandom variable, it \n\
-will be mixed up, if gRandom is used at another place."}, //25-4
-    {"JSFQuickSim.ParameterFile","Undefined",
-"JSFQuickSim.ParameterFile:\n\
-A file name for Quick simulator's detector parameter.\n\
-If it's \"Undefined\" ot not specified, a file,\n\
-$LCLIBROOT/simjlc/parm/detect7.com is used."}, //26-4
-    {"JSFGUI.RunNo","1",
-"JSFGUI.RunNo:\n\
-Run number "}, // 27-2
-    {"JSFGUI.Pythia.Decay.Z","0",
-"JSFGUI.Pythia.Decay.Z:\n\
-Decay mode of Z\n\
--1 = Disable all Z decay\n\
- 0 = Enable all Z decay\n\
- n = Enable only one decay node of Z,\n\
-   1=d-quark, 2=u-quark, 3=s-quark, 4=c-quark, 5=b-quark,\n\
-  11=e, 12=nu_e, 13=mu, 14=nu_mu, 15=tau, 16=nu_tau"},  // 28-7
-    {"JSFGUI.Pythia.Higgsmass","120.0",
-"JSFGUI.Pythia.Higgsmass:\n\
-Mass of Higgs used by Pythia.\n\
-(note) Branching ratio of Higgs is not correct."}//29-3 						
-};
-
-
-  Int_t nline[maxmenu]={2,3,4, //  3
-			  2,2,2,2,2, 3,4,2,2,2,  2,2,  // 12
-			  3,4,2,2,2, 3,3,3,5,4, 4,2,7,3 }; //13
-
-  Int_t id[maxmenu]={M_GEN_ECM,M_GEN_INITPYTHIA,
-   M_GEN_PYTHIA_PRSTAT, M_GEN_DEBUG_RANDOM,
-   M_GEN_DEBUG_NPARTICLE,M_GEN_DEBUG_PRANGE,M_GEN_DEBUG_COSTHRANGE,
-   M_GEN_DEBUG_AZIMUTHRANGE,M_GEN_DEBUG_VTXRRANGE,M_GEN_DEBUG_VTXPHIRANGE,
-   M_GEN_DEBUG_VTXZRANGE,M_GEN_DEBUG_NSPECIE,M_GEN_DEBUG_SPECIES1,
-   M_GEN_DEBUG_SPECIES2,M_GEN_DEBUG_SPECIES3,
-   M_GEN_SPRING_SO,M_GEN_SPRING_MODULE_NAME,M_GEN_BASES_FILE,
-   M_GEN_RPARTON_DATAFILE,M_GEN_RPARTON_FORMAT,
-   M_GEN_RDGEN_DATAFILE,M_GEN_RDGEN_FORMAT,
-   M_GEN_MERGE_DATAFILE,M_GEN_MERGE_LUMPERTRAIN,M_GEN_MERGE_SEED,
-   M_SIM_QUICKSIM_PARAM, M_GUI_RUNNO, M_GEN_PYEV_DECAY_Z,M_GEN_PYTHIA_HMASS};
-   
-
-
-
-  Int_t i;
 
   const char *ftypes1[] = { "ROOT files",    "*.root",
                             0,               0 };
@@ -1432,6 +1321,7 @@ Mass of Higgs used by Pythia.\n\
     case M_GEN_SPRING:
     case M_GEN_RPARTON:
     case M_GEN_RHEPEVT:
+    case M_GEN_HERWIG:
       SetEventType(parm1-M_GEN_PYTHIA);
       break;
 
@@ -1503,7 +1393,6 @@ Mass of Higgs used by Pythia.\n\
       }
       break;
 
-
    case M_GUI_OUTEVENTDATA:
       if( fMenuGen->IsEntryChecked(M_GUI_OUTEVENTDATA) ) {
         gJSF->Env()->SetValue("JSFGUI.OutputEventData","0");
@@ -1548,19 +1437,196 @@ Mass of Higgs used by Pythia.\n\
       break;
 
     default:
-      if( prompt ) {
-	for(i=0;i<maxmenu;i++){
-	  if( id[i] == parm1 ) {
-	    strcpy(wrkstr,gJSF->Env()->GetValue(value[i][0],value[i][1]));
-	    dialog = new InputDialog(value[i][2],wrkstr,wrkstr,nline[i]);
-	    if(wrkstr[0]!=0) gJSF->Env()->SetValue(value[i][0],wrkstr);
+      if( prompt ) { 
+	vector<JSFDialogMessage>::iterator iv;
+	for(iv=fDialogMessage.begin(); iv!=fDialogMessage.end();iv++){
+	  if( iv->GetId() == parm1 ) {
+	    strcpy(wrkstr,gJSF->Env()->GetValue(iv->GetVariable(), iv->GetValue()));
+	    dialog = new InputDialog(iv->GetComment(), wrkstr, wrkstr, iv->GetNline());
+	    if( wrkstr[0] != 0 ) gJSF->Env()->SetValue(iv->GetVariable(),wrkstr); 
 	    break;
 	  }
 	}
       }
-      break;
-
   } 
+
   Update();
+
+}
+
+
+// ----------------------------------------------------------------------------------
+void JSFGUIFrame::InitializeDialogMessage()
+{
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_ECM, "JSFGUI.ECM","300", 
+"JSFGUI.ECM:\nCenter of mass energy (GeV) for Pythia/Herwig Generator."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_INITPYTHIA, 
+"JSFGUI.InitPythiaMacro","InitPythia.C","JSFGUI.InitPythiaMacro:\n\
+A name of a macro file, which defines a function to initialize Pythia.\n\
+A function name must be void InitPythia()"));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_PYTHIA_PRSTAT,
+"PythiaGenerator.PrintStat","1",
+"PythiaGenerator.PrintStat:\nNPYSTAT, the argument of Subroutine PYSTAT.\n\
+If not 0, PYSTAT is called at the end of run as\nCALL PYSTAT(NPYSTAT)."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_DEBUG_RANDOM,
+    "DebugGenerator.RandomSeed","12345",
+    "DebugGenerator.RandomSeed:\nSeed of random number"));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_DEBUG_NPARTICLE,
+    "DebugGenerator.Nparticles","4",
+    "DebugGenerator.Nparticles:\nNumber of particles per event."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_DEBUG_PRANGE,
+    "DebugGenerator.RangeP","0.1  10.0",
+    "DebugGenerator.RangeP\nMinimum and maximum of particle's momentum in GeV."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_DEBUG_COSTHRANGE,
+    "DebugGenerator.RangeCosth","-1.0 1.0", "DebugGenerator.RangeCosth:\n\
+   Minimum and maximum of Cosine of particle production angle."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_DEBUG_AZIMUTHRANGE,
+    "DebugGenerator.RangeAzimuth","0.0, 360.0",
+    "DebugGenerator.RangeAzimuth:\nMinimum and maximum of particle's azimuthal angle."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_DEBUG_VTXRRANGE,
+    "DebugGenerator.RangeVTXR","0.0 0.0",
+    "DebugGenerator.RangeVTXR:\nMinimum and maximum of radius of particle's \n\
+vertex points in unit of cm."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_DEBUG_VTXPHIRANGE,
+    "DebugGenerator.RangeVTXPhi","0.0, 360.0",
+"DebugGenerator.RangeVTXPhi:\nMinimum and maximum of azimuthal angle of particle's \n\
+vertex coordinate. Note that coordinate of vertex point \n\
+is given by cylindrical coordinate system."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_DEBUG_VTXZRANGE,
+    "DebugGenerator.RangeVTXZ","0.0, 0.0",
+    "DebugGenerator.RangeVTXZ:\nMinimum and maximum of Z coordinate of vertex coordinate."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_DEBUG_NSPECIE,
+    "DebugGenerator.Nspecies","2","DebugGenerator.Nspecies:\n\
+Number of species of generated particles"));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_DEBUG_SPECIES1,
+    "DebugGenerator.Species1","13 0.1  1.0",
+    "DebugGenerator.Species1:\nID, mass and charge of first species."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_DEBUG_SPECIES2,
+    "DebugGenerator.Species2","13 0.1  -1.0",
+    "DebugGenerator.Species2:\nID, mass and charge of first species."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_DEBUG_SPECIES3,
+    "DebugGenerator.Species3","13 0.1  -1.0",
+    "DebugGenerator.Species3:\nID, mass and charge of first species."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_SPRING_SO,
+    "JSFGUI.Spring.SharedLibrary:","../FFbarSpring/libFFbarSpring.so",
+    "JSFGUI.Spring.SharedLibrary:\nA name of shared library for event generation \n\
+by Bases/Spring."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_SPRING_MODULE_NAME,
+    "JSFGUI.Spring.ModuleName","FFbarSpring",
+    "JSFGUI.Spring.ModuleName:\nA module name of Spring.  It must be inherited\n\
+from a class, JSFModule and defined in the\n\
+shared library specified by JSFGUI.Spring.SharedLibrary"));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_BASES_FILE,
+    "JSFGUI.Spring.BasesFile","../FFbarSpring/bases.root",
+    "JSFGUI.Spring.BasesFile:\nA file name of bases data."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_RPARTON_DATAFILE,
+    "JSFReadParton.DataFile","parton.dat",
+"JSFReadParton.DataFile:\nInput data file name of JSFReadParton class."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_RPARTON_FORMAT,
+    "JSFReadParton.Format","1",
+"JSFReadParton.Format:\nFormat of input data. 1 = ASC file, 0=Fortran binary."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_RDGEN_DATAFILE,
+    "JSFReadGenerator.DataFile","genevent.dat",
+"JSFReadGenerator.DataFile:\nInput file name for JSFReadGenerator class. This \n\
+class read generator data of HEPEVT format."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_RDGEN_FORMAT,
+    "JSFReadGenerator.Format","HEPEVT","JSFReadGenerator.Format:\n\
+Data format of generator data.  Value other than HEPEVT\n\
+is not recognized, since it is only supported now."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_MERGE_DATAFILE,
+   "JSFMergeEvent.DataFile","simdst.root","JSFMergeEvent.DataFile:\n\
+A file name of background data which is used by \nJSFMergeEvent class."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_MERGE_LUMPERTRAIN,
+    "JSFMergeEvent.LumPerTrain","0.06","JSFMergeEvent.LumPerTrain:\n\
+Luminosity per bunch train in unit of  1/nb \n\
+(nano barn invers).  Default value of 0.06 corresponds \n\
+to collider luminosity of 9x10^{33} / cm^2 sec operated \n\
+at RF pulse frequency of 150 Hz."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_MERGE_SEED,
+    "JSFMergeEvent.RandomSeed","1990729",
+    "JSFMergeEvent.RandomSeed:\nSeed of random number for JSFMergeEvent class.  Since \n\
+this class uses gRandom variable, it \n\
+will be mixed up, if gRandom is used at another place."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_SIM_QUICKSIM_PARAM,  
+    "JSFQuickSim.ParameterFile","Undefined",
+"JSFQuickSim.ParameterFile:\n\
+A file name for Quick simulator's detector parameter.\n\
+If it's \"Undefined\" ot not specified, a file,\n\
+$LCLIBROOT/simjlc/parm/detect7.com is used."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GUI_RUNNO, 
+    "JSFGUI.RunNo","1","JSFGUI.RunNo:\nRun number "));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_PYEV_DECAY_Z,
+    "JSFGUI.Pythia.Decay.Z","0",
+"JSFGUI.Pythia.Decay.Z:\n\
+Decay mode of Z\n\
+-1 = Disable all Z decay\n\
+ 0 = Enable all Z decay\n\
+ n = Enable only one decay node of Z,\n\
+   1=d-quark, 2=u-quark, 3=s-quark, 4=c-quark, 5=b-quark,\n\
+  11=e, 12=nu_e, 13=mu, 14=nu_mu, 15=tau, 16=nu_tau"));
+
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_PYTHIA_HMASS,
+    "JSFGUI.Pythia.Higgsmass","120.0",
+"JSFGUI.Pythia.Higgsmass:\n\
+Mass of Higgs used by Pythia.\n\
+(note) Branching ratio of Higgs is not correct."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_PYTHIA_HMASS,
+    "JSFGUI.Pythia.Higgsmass","120.0",
+"JSFGUI.Pythia.Higgsmass:\n\
+Mass of Higgs used by Pythia.\n\
+(note) Branching ratio of Higgs is not correct."));
+
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_INITHERWIG, 
+"JSFGUI.InitHerwigMacro","InitHerwig.C","JSFGUI.InitHerwigMacro:\n\
+A name of a macro file, which defines a function to initialize Herwig.\n\
+A function name must be void InitHerwig()"));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_HERWIG_PRSTAT,
+"HerwigGenerator.PrintStat","1",
+"HerwigGenerator.PrintStat:\n\
+Set verbosaritut."));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_HERWIG_PROCESS,
+"HerwigGenerator.IPROC","200",
+"HerwigGenerator.IPROC\n\
+Herwig process number\n\
+qq=100,WW=200,ZZ=250,Zh=300,nnH+llH=400, 600=qqqq\n\
+See Herwig manual for other ID"));
+
+  fDialogMessage.push_back(JSFDialogMessage(M_GEN_HERWIG_HMASS,
+"HerwigGenerator.HMass","120",
+"HerwigGenerator.HMass\n\
+Higgs mass"));
 
 }

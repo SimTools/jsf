@@ -39,7 +39,8 @@ SRCJSFGUI     = InputDialog.$(SrcSuf) \
 		JSFEventDisplay.$(SrcSuf) \
 		JSFEnvGUIFrame.$(SrcSuf) \
 		JSFGUIFrame.$(SrcSuf) \
-		JSFGUIAnalysis.$(SrcSuf)
+		JSFGUIAnalysis.$(SrcSuf) \
+		JSFDialogMessage.$(SrcSuf)
 
 OBJJSFGUI     = $(subst .$(SrcSuf),.$(ObjSuf),$(SRCJSFGUI)) \
 		libJSFGUI.$(ObjSuf)
