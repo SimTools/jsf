@@ -35,6 +35,7 @@ public:
 
   virtual Int_t GetCellID(){ return fCellID;}
   virtual Int_t GetIEnergy(){ return (Int_t)(fEnergy*1000.0);}
+  virtual Float_t GetEnergy(){ return fEnergy;}
 
   ClassDef(JSFCALHit,1)  // Calorimeter Hit Cell.
 };
