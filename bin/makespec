@@ -12,13 +12,12 @@
 
 set systype=`uname -s`
 echo -n "OS of this system is $systype".
-if ( $systype != "Linux" ) then
-    echo ""
-    exit 0
-endif
+#if ( $systype != "Linux" ) then
+#    echo ""
+#    exit 0
+#endif
 
 if ( !($?JSFROOT) )   goto message
-if ( !(`which g77 | grep -c g77 `)  ) goto message 
 if ( !(`which root | grep -c root `)  ) goto message 
 
 echo -n "  Creating system information ."
@@ -26,6 +25,14 @@ set specfile=$JSFROOT/src/JSFConfig.h
 
 echo -n "\nRoot version .."
 root -q -b $JSFROOT/macro/printversion.C | grep "ROOT_" >! $specfile
+
+
+echo -n "#define __UNAME_MACHINE__ " >> $specfile
+uname -m >> $specfile
+echo -n "#define __UNAME_SYSNAME__ " >> $specfile
+uname -s >> $specfile
+
+if ( !(`which g77 | grep -c g77 `)  ) goto exitmsg
 
 echo -n "g77 version .. "
 set g77versionstr = `g77 -v |& grep release | grep gcc | cut -d"(" -f2 | cut -d")" -f1`
@@ -41,12 +48,6 @@ g77 -v | & grep release | grep gcc | cut -d"(" -f2 | cut -d")" -f1
 set g77plevel = `echo $g77versionstr | cut -d" " -f1 | cut -d"-" -f2 | cut -d"." -f3 `
 echo "#define __G77EGCS_PATCHLEVEL__ " $g77plevel >> $specfile
 
-
-echo -n "#define __UNAME_MACHINE__ " >> $specfile
-uname -m >> $specfile
-echo -n "#define __UNAME_SYSNAME__ " >> $specfile
-uname -s >> $specfile
-
 #######################
 #  Save parameters for Imakefile
 #######################
@@ -59,6 +60,8 @@ else if( $g77version == 1 && $g77mversion == 0 ) then
 endif
 echo -n "#define __G77EGCS_LIBNAME__ " >> $specfile
 echo $g77lib  >> $specfile
+
+exitmsg:
 
 echo "System information is saved in $specfile"
 
