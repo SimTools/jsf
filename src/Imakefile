@@ -1,13 +1,17 @@
 #---------------------------------------------------
 
 #include    "../conf/makejsf.tmpl"
+CERNLIBS      = -L/cern/pro/lib -lpythia -ljetset74
+#if defined(hitachiArchitecture)
+CERNLIBS      = -L/cern/97a_nog/lib -ljetset74
+#endif
 
 ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
 		-lEGPythia -lEG \
                 -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
                 -lPostscript -lProof -lTree -lUnix -lZip \
 		-Wl,-u,pytest_ \
-		-L/cern/pro/lib -lpythia -ljetset74
+		$(CERNLIBS)
 
 ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
 
@@ -15,7 +19,6 @@ LCLIB 	  = $(LCDIR)/lib
 
 ANALLIB   =  -L$(LCLIB) -lLCFULL -lGENUTIL -lLUHADR -lTAUOLA \
 	    -lLTKCL -lHELASV204 -lBASESV5.1 -lSIMJLC -lFORTLIB  \
-	    -L/cern/pro/lib -ljetset74 -lpythia \
 	    -lTBS -lLCFULL -lGENUTIL -lLUHADR  -lCOM -lCLI \
 	    -lFORTLIB -lTBS
 
@@ -69,7 +72,6 @@ HDRJSFLCFULL  = JSFBases.h \
 all::  libjsf libjsflcfull jsf
 
 libjsf:     $(OBJJSF)
-		@echo "Linking libJSF.a ..."
 		@/bin/rm -f libJSF.a
 		ar -r libJSF.a $(OBJJSF)
 		@cp -p libJSF.a ../lib
