@@ -7,7 +7,7 @@
 //
 // Interface to BasesSpring package.
 //
-//$ID$
+//$Id:
 //
 //////////////////////////////////////////////////////////////////////////
 
@@ -16,21 +16,47 @@
 #include "TObjArray.h"
 #include "THashTable.h"
 #include "BasesSpring.h"
+#include "TH1.h"
+#include "TH2.h"
 
 class JSFSpring;
 
 class JSFBasesTempHist : public TNamed
 {
+ protected:
+  static const Int_t  fMax=20;
+  Int_t    fCall;
+  Double_t fX[20];
+  Double_t fY[20];
+  Double_t fW[20];
  public:
-  Bool_t   flag;
-  Double_t x;
-  Double_t y;
-  Double_t wgt;
-
-  JSFBasesTempHist(){flag=kFALSE; x=0; y=0; wgt=0;}
+  JSFBasesTempHist(){fCall=0;}
   JSFBasesTempHist(const char *name, const char *title="JSFBasesTempHist"):
-    TNamed(name,title){flag=kFALSE; x=0; y=0; wgt=0;}
+    TNamed(name,title){fCall=0;}
   virtual ~JSFBasesTempHist(){}
+
+
+  inline Int_t GetNcalls(){ return fCall; }
+  inline void Fill(Double_t x, Double_t w){ 
+    if( TestCall() ) { fX[fCall]=x; fW[fCall]=w ; fCall++;}  }
+  inline void Fill(Double_t x, Double_t y, Double_t w){ 
+    if( TestCall() ) { fX[fCall]=x; fY[fCall]=y; fW[fCall]=w ; fCall++; } }
+  inline void Reset(){ fCall=0;}
+  inline void Update(TH1D* h){ 
+    for(Int_t i=0;i<fCall;i++){ h->Fill(fX[i]); }
+    fCall=0;
+  }
+  inline void Update(TH2D* h){ 
+    for(Int_t i=0;i<fCall;i++){ h->Fill(fX[i],fY[i]); } 
+    fCall=0;
+  }
+
+  inline Bool_t TestCall(){
+    if( fCall < fMax ) return kTRUE; 
+    printf("Too mnay calls of H1FILL/H2FILL in a Bases function.");
+    printf("it must be less than %d\n",fMax);
+    return kFALSE;
+  }
 
   ClassDef(JSFBasesTempHist,1) //
 };
@@ -99,6 +125,7 @@ class JSFBases: public BasesSpring, public TNamed
     void   Dh_fill( int id, double x, double y, double fx );
     void   Bh_save( );
     void   Sh_reset( );
+    void   sh_reset( );
     void   Sh_update( );
     void   sh_update( );
     void   Sh_plot( );

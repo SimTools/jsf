@@ -1,3 +1,4 @@
+//*LastUpdate:  jsf-1-15 4-Feburary-2000
 //*LastUpdate:  jsf-1-14 11-Feburary-2000
 //*LastUpdate:  jsf-1-9 17-May-1999 Akiya Miyamoto
 //*LastUpdate:  jsf-1-7 8-April-1999 Akiya Miyamoto
@@ -32,7 +33,8 @@
 //  24-Jul-1999 A.Miyamoto  Environment variable, JSFBases.RandomSeed 
 //              is added to set seed of random variable.
 //  11-Feb-2000 A.Miyamoto  Uses new C++ BasesSpring library 
-//
+//   3-Jul-2000 A.Miyamoto  Output 2D bases histogram in SPRING
+//                          In spring, allow multiple H1FILL call per functions. 
 //$Id$
 //
 //////////////////////////////////////////////////////////////////
@@ -239,9 +241,7 @@ void JSFBases::H1Fill(Char_t *hn, Double_t x, Double_t fx)
 
   if( fIsSpring ) { 
     JSFBasesTempHist *th=((JSFBasesTempHist*)(fTempHash1->FindObject(hn)));
-    th->flag=kTRUE;
-    th->x=x;
-    th->wgt=fx*GetWeight();
+    th->Fill(x, fx*GetWeight() );
   }
   else { 
     Char_t hstn[128];
@@ -275,10 +275,7 @@ void JSFBases::H2Fill(Char_t *hn, Double_t x, Double_t y, Double_t fx)
 { 
   if( fIsSpring ) { 
     JSFBasesTempHist *th=((JSFBasesTempHist*)(fTempHash2->FindObject(hn)));
-    th->flag=kTRUE;
-    th->x=x;
-    th->y=y;
-    th->wgt=fx*GetWeight();
+    th->Fill(x, y, fx*GetWeight() );
   }
   else { 
     Char_t hstn[128];
@@ -352,6 +349,19 @@ void JSFBases::CopyHists(TFile *f, TDirectory *dest)
 	}
       }
     }	    
+    else if( strcmp(key->GetClassName(),"TH2D") == 0 ) {
+      Int_t ln=strlen(key->GetName());
+      const Char_t *hn=key->GetName();
+      if( *(hn+ln-1) == 'S' && *(hn+ln-2) == 'B' ) {
+	TH2D *hnew=(TH2D*)(fBSHash2->FindObject(hn));
+	if( hnew ) hnew->Add((TH2D*)f->Get(key->GetName()));
+	else {
+	  printf("Warning in JSFBases::CopyHists\n");
+	  printf("Bases histogram, %s, in the file, %s",hn,f->GetName());
+	  printf(" is not defined in the current job.\n");
+	}
+      }
+    }	    
   }
 
   if( dest ) { now->cd(); }
@@ -403,6 +413,26 @@ void JSFBases::Sh_reset( )
 }
 
 //_________________________________________________________
+void JSFBases::sh_reset( )
+{ 
+  
+  BasesSpring::sh_reset();
+
+  TIterator *hst1=fTempHash1->MakeIterator();
+  JSFBasesTempHist *th1;
+  while( (th1=(JSFBasesTempHist*)hst1->Next()) ){
+    th1->Reset();
+  }
+
+  TIterator *hst2=fTempHash2->MakeIterator();
+  JSFBasesTempHist *th2;
+  while( (th2=(JSFBasesTempHist*)hst2->Next()) ){
+    th2->Reset();
+  }
+
+}
+
+//_________________________________________________________
 void JSFBases::Sh_update( )
 { 
   sh_update(); 
@@ -413,26 +443,22 @@ void JSFBases::sh_update( )
 { 
   // Fill saved histogram inforation
 
+  BasesSpring::sh_update();
+
   Char_t hstn[128];
 
   TIterator *hst1=fTempHash1->MakeIterator();
   JSFBasesTempHist *th1;
   while( (th1=(JSFBasesTempHist*)hst1->Next()) ){
-    if( th1->flag ) {
-      sprintf(hstn,"%sSP",th1->GetName());
-      ((TH1D*)(fSPHash1->FindObject(hstn)))->Fill(th1->x);
-      th1->flag=kFALSE;
-    }
+    sprintf(hstn,"%sSP",th1->GetName());
+    th1->Update(((TH1D*)(fSPHash1->FindObject(hstn))));
   }
 
   TIterator *hst2=fTempHash2->MakeIterator();
   JSFBasesTempHist *th2;
   while( (th2=(JSFBasesTempHist*)hst2->Next()) ){
-    if( th2->flag ) {
-      sprintf(hstn,"%sSP",th2->GetName());
-      ((TH2D*)(fSPHash2->FindObject(hstn)))->Fill((Axis_t)th2->x, (Axis_t)th2->y);
-      th2->flag=kFALSE;
-    }
+    sprintf(hstn,"%sSP",th2->GetName());
+    th2->Update(((TH2D*)(fSPHash2->FindObject(hstn))));
   }
 
 }
@@ -568,4 +594,3 @@ void JSFBases::Streamer(TBuffer &R__b)
    }
 
 }
-
