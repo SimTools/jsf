@@ -1,3 +1,4 @@
+//*LastUpdate:  jsf-1-7-2 16-April-1999  by A.Miyamoto
 //*LastUpdate:  jsf-1-5 21-Feburary-1999  by A.Miyamoto
 //*LastUpdate:  jsf-1-4 14-Feburary-1999  by A.Miyamoto
 //*LastUpdate:  v0.3.08 09/29/1998  by A.Miyamoto
@@ -115,7 +116,7 @@ JSFSteer::JSFSteer(const char *name, const char *title)
   fConf    = 0;
   fReadin  = 0;
   fVersion    = 107  ;  // JSFSteer version number
-  fVersionDate  = 19990408 ; // version date.
+  fVersionDate  = 19990416 ; // version date.
   fIsInitialized = kFALSE ;
   fIsTerminated  = kFALSE ;
   fLastRun       = 0 ;
@@ -420,8 +421,7 @@ Bool_t JSFSteer::MakeTree()
   // Define JSF in the tree.
      Int_t split=1;
      Int_t bsize=4000;
-     JSFSteer *jsfsave=this;
-     fBrJSF=fOTree->Branch(GetName(),ClassName(),&jsfsave, bsize,split);  
+     fBrJSF=fOTree->Branch(GetName(),ClassName(),&gJSF, bsize,split);  
 
      TIter next(fModules);
      JSFModule *module;
