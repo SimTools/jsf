@@ -35,6 +35,8 @@ private:
   Double_t *fXSEC    ; //[fNUMSUB] Integrated cross sections (0=total, 1 to fNUMSUB)
   Float_t   fEventWeight ; //! Weight of current event.    
 
+  Int_t     fBeamStrahlung ; //  > 0 to include beam strahlung.
+
 public:
   PythiaGenerator(const Char_t *name="PythiaGenerator", 
 		  const Char_t *title="Pythia Event generator",
@@ -57,10 +59,13 @@ public:
   Int_t GetNGEN(Int_t i){ return fNGEN[i]; }
   Double_t GetXSEC(Int_t i){ return fXSEC[i]; }
 
+  inline Int_t GetBeamStrahlung(){  return fBeamStrahlung; }
+  inline void SetBeamStrahlung(Int_t ibs){ fBeamStrahlung=ibs; }
+
   void SetEventWeight(Float_t weight){ fEventWeight=weight; }
   Float_t GetEventWeight(){ return fEventWeight; }
 
-  ClassDef(PythiaGenerator, 2)  // Pythia Generator
+  ClassDef(PythiaGenerator, 3)  // Pythia Generator
 
 };
 

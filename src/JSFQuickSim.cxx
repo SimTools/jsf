@@ -393,9 +393,69 @@ Bool_t JSFQuickSimBuf::MakeEventBuf()
    if( !MakeCALHits() ) return kFALSE;
    if( !MakeCDCTracks() ) return kFALSE;
    if( !MakeVTXHits() ) return kFALSE;
+   
+   MakeJSFLTKCLTrackPointers();
+
    return kTRUE;
 }
 
+//_____________________________________________________________________________
+Bool_t JSFQuickSimBuf::MakeJSFLTKCLTrackPointers()
+{
+  // Set link information of JSFLTKCLTracks
+
+  Int_t ncmb = fNTracks;
+  Int_t isrc, iemc, emcls[50];
+  JSFGenerator *gen=(JSFGenerator*)gJSF->FindModule("JSFGenerator");
+  JSFGeneratorBuf *gevt=(JSFGeneratorBuf*)gen->EventBuf();
+  TClonesArray *pa=gevt->GetParticles();
+
+  //
+  // Set Pointers to access GeneratorParticle contributing EM Cluster
+  //
+  for(Int_t icmb=0;icmb<ncmb;icmb++){
+     JSFLTKCLTrack *ct=(JSFLTKCLTrack*)fTracks->UncheckedAt(icmb);
+     //
+     // Set pointers for generator tracks contributing to the
+     // Generator tracks.
+     isrc=ct->GetSource();
+     iemc=(isrc/10)%10;
+     if( iemc == 1 ) {
+       Int_t nemc=ct->GetNEMC();
+       Int_t nw, iret;
+       gJSFLCFULL->TBGET(1,"Production:EMC;Cluster",nemc,nw,emcls,iret);
+       if( nw > 50 || iret < 0 ) { 
+	 printf("Error in MakeJSFLTKCLTrackPointers .. ");
+	 printf("Production:EMC;Cluster  nw=%d  iret=%d",nw,iret);
+       }
+       Int_t nemgen=emcls[14];
+       for(Int_t ipg=0;ipg<nemgen;ipg++){
+	 Int_t ig=emcls[ipg+15];
+	 JSFGeneratorParticle *pgen=(JSFGeneratorParticle*)pa->UncheckedAt(ig-1);
+	 ct->SetEMGen(pgen);
+       }
+
+       /*
+       printf(" Number of Generator tracks matched to EM cluster is %d",
+	      ct->GetEMGenEntries());
+       for(Int_t i=0;i<ct->GetEMGenEntries();i++){
+	 JSFGeneratorParticle *pgen=ct->GetEMGenAt(i);
+	 printf(" i=%d Ser#=%d",i,pgen->GetSerial());
+	 printf(" Gen id=%d",pgen->GetID());
+	 printf(" Egen=%g E=%g",pgen->GetE(),ct->GetE());
+	 printf("\n");
+       }
+       */
+
+     }
+  }
+
+  //
+  // Set Pointers for CDC tracks contributing to LTKCLTracks.
+  //
+  
+  return kTRUE;
+}
 
 //_____________________________________________________________________________
 Bool_t JSFQuickSimBuf::MakeJSFLTKCLTracks()
@@ -421,7 +481,7 @@ Bool_t JSFQuickSimBuf::MakeJSFLTKCLTracks()
 	Warning("MakeJSFLTKCLTrack",
        " Too many CDC track associated to the Combined track. nw=%d",  nw);
        }
-        new(tracks[nt++])  JSFLTKCLTrack(bank[ib], data);
+       new(tracks[nt++])  JSFLTKCLTrack(bank[ib], data);
      }
   }
   SetNTracks(nt);
@@ -555,32 +615,37 @@ Bool_t JSFQuickSimBuf::MakeCDCTracks()
      JSFLTKCLTrack *ct=(JSFLTKCLTrack*)fTracks->UncheckedAt(i);
      if( ct->GetNCDC() < 0 ) continue;
      if( ct->GetType() == 1 || ct->GetType() ==3  ) continue;
-     Int_t icdc=ct->Get1stCDC();
 
-     gJSFLCFULL->TBGET(1,bankname,icdc, nw, itrkp,iret);
-     if( iret < 0 ) {
-       printf("Error to TBGET %s ..",bankname);
-       printf("Element# %d  IRET=%d",icdc,iret);
-       printf("\n");
-       return kFALSE;
+     for(Int_t j=0;j<ct->GetNCDC();j++){
+       
+       Int_t icdc=ct->GetIDCDC(j);
+
+       gJSFLCFULL->TBGET(1,bankname,icdc, nw, itrkp,iret);
+       if( iret < 0 ) {
+	 printf("Error to TBGET %s ..",bankname);
+	 printf("Element# %d  IRET=%d",icdc,iret);
+	 printf("\n");
+	 return kFALSE;
+       }
+       if( nerrvx == 3  && fCDCTrackIsCDCVTX == 1 ) {
+	 Char_t *bnkcdc="Production:CDC;Track_Parameter";
+	 Int_t nwt;  Int_t itrkpp[200];
+	 gJSFLCFULL->TBGET(1,bnkcdc,icdc,nwt,itrkpp,iret);
+	 itrkp[55]=itrkpp[55];
+	 itrkp[56]=itrkpp[56];
+       }
+       new(cdc[ncdc]) JSFCDCTrack( itrkp );
+       JSFCDCTrack *t=(JSFCDCTrack*)cdc.UncheckedAt(ncdc);
+       Int_t *ncel=(Int_t*)&prjunk_.RTKBNK[icdc-1][59];
+       if( *ncel > 0 ) {
+	 t->SetPositionAtEMC( &prjunk_.RTKBNK[icdc-1][60] );
+       }
+       ct->SetCDC(ncdc, t);
+
+       ncdc++;
      }
-     if( nerrvx == 3  && fCDCTrackIsCDCVTX == 1 ) {
-       Char_t *bnkcdc="Production:CDC;Track_Parameter";
-       Int_t nwt;  Int_t itrkpp[200];
-       gJSFLCFULL->TBGET(1,bnkcdc,icdc,nwt,itrkpp,iret);
-       itrkp[55]=itrkpp[55];
-       itrkp[56]=itrkpp[56];
-     }
-     new(cdc[ncdc]) JSFCDCTrack( itrkp );
-     JSFCDCTrack *t=(JSFCDCTrack*)cdc.UncheckedAt(ncdc);
-     Int_t *ncel=(Int_t*)&prjunk_.RTKBNK[icdc-1][59];
-     if( *ncel > 0 ) {
-       t->SetPositionAtEMC( &prjunk_.RTKBNK[icdc-1][60] );
-     }
-     ct->SetCDC(ncdc, t);
-     ncdc++;
+     SetNCDCTracks(ncdc);
   }
-  SetNCDCTracks(ncdc);
 
   return kTRUE;
 }

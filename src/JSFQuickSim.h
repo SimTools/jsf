@@ -61,6 +61,7 @@ private:
    void SetPointers() ; // Set pointers among Hits/Track classes.
 
    Bool_t MakeJSFLTKCLTracks();
+   Bool_t MakeJSFLTKCLTrackPointers();
    Bool_t MakeCALHits();
    Bool_t MakeVTXHits();
    Bool_t MakeCDCTracks();
@@ -100,6 +101,7 @@ public:
   void Clear(const Option_t *opt="");
   void Append(JSFQuickSimBuf *src, Int_t numgp=0);
 
+  
 
   ClassDef(JSFQuickSimBuf, 2) // QuickSim event buffer class.
 

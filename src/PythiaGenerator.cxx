@@ -69,6 +69,8 @@ extern "C" {
 extern Int_t luchge_(Int_t *kf);
 extern Float_t ulctau_(Int_t *kf);
 extern void pyevwt_(Float_t *wtxs);
+extern Float_t rlu_(Int_t *idummy);
+extern void eprobx_(Double_t *x, Int_t *itype, Double_t *ebeam);
 };
 
 ClassImp(PythiaGenerator)
@@ -87,6 +89,9 @@ PythiaGenerator::PythiaGenerator(const Char_t *name,
   sscanf(env->GetValue("PythiaGenerator.BeamParticle","e-"),"%s",fBeamParticle);
   sscanf(env->GetValue("PythiaGenerator.TargetParticle","e+"),"%s",fTargetParticle);
   fPrintStat=env->GetValue("PythiaGenerator.PrintStat",1);
+
+  sscanf(env->GetValue("PythiaGenerator.BeamStrahlung","0"),"%d",&fBeamStrahlung);
+
 
   fNUMSUB=0;
   fNGEN=NULL;
@@ -184,6 +189,18 @@ Bool_t PythiaGenerator::Process(Int_t ev)
   JSFGeneratorBuf *buf=(JSFGeneratorBuf*)EventBuf();
   Double_t ecm=GetEcm();
   buf->SetEcm(ecm);
+
+  if ( fBeamStrahlung > 0 ) {
+    Int_t idummy=0;
+    Double_t xrand=rlu_(&idummy);
+    Double_t eb1=1.0;
+    eprobx_(&xrand, &fBeamStrahlung, &eb1);
+    xrand=rlu_(&idummy);
+    Double_t eb2=1.0;
+    eprobx_(&xrand, &fBeamStrahlung, &eb2);
+    Double_t ecmnew=TMath::Sqrt(eb1*eb2)*ecm;
+    fPythia->Initialize(fFrame, fBeamParticle, fTargetParticle, ecmnew);
+  }
 
   fPythia->GenerateEvent();
 

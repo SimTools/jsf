@@ -21,6 +21,10 @@
 #include "JSFCDCTrack.h"
 #endif
 
+#ifndef __JSFGeneratorParticle__
+#include "JSFGeneratorParticle.h"
+#endif
+
 #if 1
 enum {kCombinedGammaTrack, kCombinedLeptonTrack, kCombinedHadronTrack };
 typedef Int_t EJSFLTKCLTrackBank;
@@ -33,6 +37,7 @@ typedef enum {kCombinedGammaTrack, kCombinedLeptonTrack,
 // *********************************************************
 class JSFLTKCLTrack : public TObject {
 friend class JSFQuickSimBuf;
+friend class JSFSIMDSTBuf;
 protected:
   EJSFLTKCLTrackBank  fBank; // The original bank name
   Double_t    fP[4];    // four momentum (E,Px,Py,Pz), GeV
@@ -44,20 +49,25 @@ protected:
   Int_t     fNCDC;    // # used CDC tracks
   Int_t     f1stCDC;  // Element number of corresponding CDC:Track_Parameter or Index of CDC tracks.
   JSFCDCTrack *fCDC;  //! Address of corresponding CDC track.
-  
+
+  Int_t     fIDCDC[16];//[fNCDC]  saves CDC tracks contributing to this LTKCLTrack
+  TObjArray  fCDCs;   // Associated CDC tracks
+  TObjArray  fEMGen;  // Generator particles contributing to the EM cluster.  
+
+  void SetCDC(Int_t ind, JSFCDCTrack *t){ f1stCDC=ind; fCDC=t; fCDCs.Add(t); }; 
+  void SetEMGen(JSFGeneratorParticle *emg){ fEMGen.Add(emg); }
 
 public:
   JSFLTKCLTrack() {}
   virtual ~JSFLTKCLTrack() {}
 
-  JSFLTKCLTrack(EJSFLTKCLTrackBank bank, TVector& P, Real_t ecl,
-         Int_t nemc, Int_t charge, Int_t type, Int_t source, 
- 	 Int_t ncdc, Int_t first);
+  //  JSFLTKCLTrack(EJSFLTKCLTrackBank bank, TVector& P, Real_t ecl,
+  //         Int_t nemc, Int_t charge, Int_t type, Int_t source, 
+  // 	 Int_t ncdc, Int_t first);
   JSFLTKCLTrack(EJSFLTKCLTrackBank bank, Float_t data[]);
   JSFLTKCLTrack(Float_t data[]);
   JSFLTKCLTrack(JSFLTKCLTrack& t);
 
-  void SetCDC(Int_t ind, JSFCDCTrack *t){ f1stCDC=ind; fCDC=t; }; 
 
   Double_t GetPx(){ return fP[1] ;}
   Double_t GetPy(){ return fP[2] ;}
@@ -78,10 +88,22 @@ public:
   Int_t    Get1stCDC(){ return f1stCDC;}
   JSFCDCTrack *GetCDC(){ return fCDC;}
 
+
+  inline Int_t GetEMGenEntries(){ return fEMGen.GetEntries(); }
+  inline JSFGeneratorParticle *GetEMGenAt(Int_t i){ 
+    return ((JSFGeneratorParticle*)fEMGen.At(i)); 
+  }
+  inline Int_t GetCDCEntries(){ return fCDCs.GetEntries(); }
+  inline JSFCDCTrack *GetCDCTrackAt(Int_t i){ 
+    return ((JSFCDCTrack*)fCDCs.At(i)); 
+  }
+  inline Int_t GetIDCDC(Int_t i){ return fIDCDC[i]; }
+
+
   TVector GetPV(){ TVector p(4) ; 
           p(0)=fP[0] ; p(1) =fP[1] ; p(2)=fP[2] ; p(3)=fP[3] ; return p ; }
 
-  ClassDef(JSFLTKCLTrack,2)  //A JSFLTKCLTrack
+  ClassDef(JSFLTKCLTrack,3)  //A JSFLTKCLTrack
 };
 
 #endif

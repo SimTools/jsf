@@ -39,6 +39,7 @@ ClassImp(JSFLTKCLTrack)
 
 
 //_____________________________________________________________________________
+/*
 JSFLTKCLTrack::JSFLTKCLTrack(EJSFLTKCLTrackBank bank, TVector& P, Float_t ecl,
          Int_t nemc, Int_t charge, Int_t type, Int_t source, 
  	 Int_t ncdc, Int_t first)
@@ -49,6 +50,8 @@ JSFLTKCLTrack::JSFLTKCLTrack(EJSFLTKCLTrackBank bank, TVector& P, Float_t ecl,
      fSource=source; fNCDC=ncdc ; f1stCDC=first ;
      fCDC=NULL;
 }
+*/
+
 
 //_____________________________________________________________________________
 JSFLTKCLTrack::JSFLTKCLTrack(EJSFLTKCLTrackBank bank, Float_t data[])
@@ -58,8 +61,14 @@ JSFLTKCLTrack::JSFLTKCLTrack(EJSFLTKCLTrackBank bank, Float_t data[])
     fEcl=data[4]  ;  fNEMC=(Int_t)data[6]; 
     fCharge=(Int_t)data[8]; fType=(Int_t)data[9];
     fSource=(Int_t)data[10]; fNCDC=(Int_t)data[11];
-    if( fNCDC > 0 ) f1stCDC=(Int_t)data[12];
-    else f1stCDC=-1 ;
+    if( fNCDC > 0 ) { 
+      f1stCDC=(Int_t)data[12];
+      for(Int_t i=0;i<fNCDC;i++){ fIDCDC[i]=(Int_t)data[12+i]; }
+    }
+    else {
+      f1stCDC=-1 ;
+      for(Int_t i=0;i<fNCDC;i++){ fIDCDC[i]=-1; }
+    }
     fCDC=NULL;
 }
 
@@ -89,6 +98,14 @@ JSFLTKCLTrack::JSFLTKCLTrack(JSFLTKCLTrack& t)
   fCharge=t.fCharge ;  fType=t.fType;
   fSource=t.fSource;   fNCDC=t.fNCDC;   f1stCDC=t.f1stCDC;
   fCDC=t.fCDC;
+  for(Int_t i=0;i<t.GetCDCEntries();i++){
+    fCDCs.Add(t.GetCDCTrackAt(i));
+  }
+  for(Int_t i=0;i<t.GetEMGenEntries();i++){
+    fCDCs.Add(t.GetEMGenAt(i));
+  }
+  for(Int_t i=0;i<t.fNCDC;i++){ fIDCDC[i]=t.fIDCDC[i]; }
+
 }
 
 //_____________________________________________________________________________
