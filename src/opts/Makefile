@@ -1,6 +1,6 @@
 
 has_clhep  = $(shell opts-config --has_CLHEP)
-has_leda   = $(shell opts-config --has_leda)
+has_leda   = $(shell opts-config --has_LEDA)
 has_lcio   = $(shell opts-config --has_LCIO)
 has_jim    =
 

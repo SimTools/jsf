@@ -17,6 +17,22 @@ has_CLHEP()
 
 
 # ---------------------------------------------
+has_LEDA()
+{
+  if [ "X$LEDAROOT" == "X" ] ; then
+    exit -1
+  fi
+  if [ ! -e $LEDAROOT/lib/libAnlib.so ] ; then
+    exit -1
+  fi
+  if [ ! -e $LEDAROOT/include ] ; then
+    exit -1
+  fi
+  echo "yes"
+  exit 0
+}
+
+# ---------------------------------------------
 has_Anlib()
 {
   if [ "X$ANLIBROOT" == "X" ] ; then
@@ -58,7 +74,7 @@ print_help()
 {
 cat <<EOF
  opts-config [options]
- options = --has_CLHEP --has_Anlib --help
+ options = --has_CLHEP --has_Anlib --has_LCIO --has_LEDA --help
 EOF
 }
 
@@ -69,6 +85,7 @@ do
     --has_CLHEP) has_CLHEP ;;
     --has_Anlib) has_Anlib ;;
     --has_LCIO)  has_LCIO ;;
+    --has_LEDA)  has_LEDA ;;
     *) print_help ;;
   esac
   shift
