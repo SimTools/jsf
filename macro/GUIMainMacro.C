@@ -21,6 +21,7 @@
 //*  JobEnd()     calls  UserTerminate()
 //*  ResetHist()  calls  UserInitialize()
 //*
+//*************************************************
 //*  These user functions are defined in a macro file, UserAnalysis.C. 
 //*  UserSetOptions() and UserTerminate() is not called when they are defined.
 //*  UserModuleDefine() is called only when RunMode=0.
@@ -32,7 +33,8 @@
 //*  Akiya Miyamoto, KEK, 24-July-1999  
 //*                  Moved to macro directory. 
 //*                  Add new options to get random seed from a file.
-//*  Akiya Miyamoto, 
+//*  Akiya Miyamoto, KEK, 25-January-2000
+//*                  Include the use of JSFGUIMergeEvent
 //* 
 //$Id$
 //
@@ -46,6 +48,7 @@
   JSFSIMDST  *simdst=0;
   JSFModule  *gen=0;
   JSFHadronizer *hdr=0;
+  JSFMergeEvent *merge=0;
   
 
   Int_t gReturnCode; // Return code from event analysis 
@@ -199,6 +202,13 @@ void InitGenSim()
     //else {
     //simdst = new JSFJIM();
     //}
+
+  if( jsf->Env()->GetValue("JSFGUI.MergeEvent",0 )) {
+    merge=new JSFMergeEvent();
+    merge->SetDataFileName(
+	   jsf->Env()->GetValue("JSFMergeEvent.DataFile","mergeevent.root"));
+  }
+
 
   if( jsf->Env()->GetValue("JSFGUI.SIMDST.Output",0) == 0 ) 
     simdst->NoReadWrite();
