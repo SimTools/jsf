@@ -11,6 +11,6 @@ XCOMM #
 
 #define __JSF_VERSION__ 1
 #define __JSF_MINORVERSION__ 15
-#define __JSF_PATCHLEVEL__ 26
-#define __JSF_VERSIONDATE__ 2000816
+#define __JSF_PATCHLEVEL__ 27
+#define __JSF_VERSIONDATE__ 2000824
 #define __JSF_SIMDST_VERSION__ 204
