@@ -33,6 +33,10 @@
 
 #if defined(_HIUX_SOURCE)
 extern "C" void hf_fint(char *option); /* to initialize fortran environment */
+void dummysub();
+extern "C" void G__cpp_setuplibJSF();
+extern "C" void G__cpp_setuplibJSFLCFULL();
+extern "C" void G__cpp_setuplibJSFQuickSim();
 #endif
 
 extern void InitGui();
@@ -62,4 +66,13 @@ int main(int argc, char **argv)
    return(0);
 }
 
-
+#if defined(_HIUX_SOURCE)
+// 
+//  Put here to load objects from archived library.
+void dummysub()
+{
+   G__cpp_setuplibJSF();
+   G__cpp_setuplibJSFLCFULL();
+   G__cpp_setuplibJSFQuickSim();
+}
+#endif

@@ -1,10 +1,7 @@
 #---------------------------------------------------
 
 #include    "../conf/makejsf.tmpl"
-CERNLIBS      = -L/cern/pro/lib -ljetset74 -lpythia -lpacklib
-#if defined(hitachiArchitecture)
-CERNLIBS      = -L/cern/97a_nog/lib -ljetset74 -lpacklib
-#endif
+CERNLIBS      = -L/cern/pro/lib -ljetset74 -lpacklib
 
 ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
 		-lEGPythia -lEG \
@@ -17,7 +14,11 @@ ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
 
 LCLIBDIR      = $(LCDIR)/lib
 
-ANALLIB = -L$(LCLIBDIR) -lGENUTIL -lLUHADR -lTAUOLA \
+#ifdef hitachiArchitecture
+EXTRALDOPT = -Wl,-a,default 
+#endif
+
+ANALLIB = -L$(LCLIBDIR) $(EXTRALDOPT) -lGENUTIL -lLUHADR -lTAUOLA \
         -lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
         -lHELASV204 -lFORTLIB -lCOM -lCLI \
         $(EXTRALIBS)
@@ -100,8 +101,10 @@ libjsfquicksim:     $(OBJJSFQUICKSIM)
 		@cp -p libJSFQuickSim.a ../lib
 
 jsf: $(OBJS) jsfmain.o
-	$(LD) jsfmain.o $(BLOCKDATA) $(OBJJSF) $(OBJJSFLCFULL) \
-	$(OBJJSFQUICKSIM) $(LDFLAGS) -o jsf
+	$(LD) jsfmain.o $(BLOCKDATA) \
+	-L../lib -lJSF -lJSFLCFULL -lJSFQuickSim $(LDFLAGS) -o jsf
+#	$(LD) jsfmain.o $(BLOCKDATA) $(OBJJSF) $(OBJJSFLCFULL) 
+#	$(OBJJSFQUICKSIM) $(LDFLAGS) -o jsf
 	@cp -p jsf ../bin
 	@rm -f jsf
 	@echo jsf was installed in ../bin/jsf
