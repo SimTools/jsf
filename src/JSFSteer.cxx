@@ -80,6 +80,8 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include <iostream>
+using namespace std;
 
 #include <TROOT.h>
 #include <TSystem.h>
@@ -397,7 +399,6 @@ Bool_t JSFSteer::Initialize()
 //  (2) Print initial message.
 //  (3) Calls JSFModule::Initialize()
 //   
-
    if (fIsInitialized) return kTRUE; 
    fIsInitialized=kTRUE;
 
@@ -466,6 +467,7 @@ Bool_t JSFSteer::Initialize()
    }
 
    last->cd();
+
    return kTRUE;
 }
 
@@ -512,7 +514,7 @@ Bool_t JSFSteer::BeginRun(Int_t nrun)
    // If Output file is writable, make tree for them
    if( fOFile && fOFile->IsOpen() && fOFile->IsWritable() ) {
       fOFile->cd("/conf");
-      gDirectory->mkdir(keyname);
+      if(!gDirectory->FindKey(keyname) ) gDirectory->mkdir(keyname);
    }
 
   sprintf(keyname,"/conf/begin%5.5d",fRun);
@@ -575,7 +577,7 @@ Bool_t JSFSteer::EndRun()
    // If Output file is writable, make endrun directory
    if( fOFile && fOFile->IsOpen() && fOFile->IsWritable() ) {
       fOFile->cd("/conf");
-      gDirectory->mkdir(keyname);
+      if( !gDirectory->FindKey(keyname) ) gDirectory->mkdir(keyname);
    }
 
     sprintf(keyname,"/conf/end%5.5d",fRun);

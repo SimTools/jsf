@@ -109,6 +109,9 @@ public:
   inline void AddTree(TTree *t){ fEventTrees->Add(t); }
   inline TObjArray *GetListOfTrees(){ return fEventTrees; }
 
+  inline void SetChain(TChain *chain){ fChain=chain; }
+  inline TChain *GetChain(){ return fChain; }
+
   TList     *Modules()  {return fModules;}
   JSFModule *FindModule(const Text_t *classname,const Option_t *opt="");
   JSFEventBuf *FindEventBuf(TBranch *branch, const Option_t *opt="");
