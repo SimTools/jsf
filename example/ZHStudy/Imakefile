@@ -1,7 +1,7 @@
 #---------------------------------------------------
 
 #include    "../../conf/makejsf.tmpl"
-CERNLIBS      = -L/cern/pro/lib -lpythia -ljetset74
+CERNLIBS      = -L/cern/pro/lib -ljetset74 -lpythia
 JSFLIBS       = -Wl,-L$(JSFROOT)/lib \
 		-Wl,--whole-archive,-lJSF -lJSFLCFULL \
 		-Wl,--no-whole-archive \

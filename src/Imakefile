@@ -1,7 +1,7 @@
 #---------------------------------------------------
 
 #include    "../conf/makejsf.tmpl"
-CERNLIBS      = -L/cern/pro/lib -lpythia -ljetset74
+CERNLIBS      = -L/cern/pro/lib -ljetset74 -lpythia
 #if defined(hitachiArchitecture)
 CERNLIBS      = -L/cern/97a_nog/lib -ljetset74
 #endif
