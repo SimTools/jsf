@@ -1,5 +1,18 @@
 
 -------------------------------------------------------------------------------
+2000/02/01  A.Miyamoto
+-------------------------------------------------------------------------------
+(1) JSFReadParton::GetOneRecord is modified to handle jmohep[i][0]=0 case 
+    properly.
+(2) Increase limit in JSFCDCTrack:AddVTXHits() and avoid invalid access
+    when limit is exceeded.
+(3) To increase the size of MXECLS in $JLCSIM/util/inc/trbuff.inc,
+    files in example/readjim are modified to get the array size information
+    automatically from trbuff.inc
+(4) Modified JSFCDCTracks so that not to call AddVTXHits when number of
+   VTX hits is larger than buffer size.
+ 
+-------------------------------------------------------------------------------
 2000/01/29  A.Miyamoto
 -------------------------------------------------------------------------------
 (1) Add more Getter in JSFSpringParton Class
