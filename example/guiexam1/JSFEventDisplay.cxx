@@ -1,6 +1,10 @@
+//*LastUpdate :  jsf-1-12  20-Feburary-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-5  22-Feburary-1999  By Akiya Miyamoto
 //*-- Author  : A.Miyamoto  22-September-1999
 
+/*
+20-August-1999 A.Miyamoto  Changes to run with JSFDemoEventDisplay
+ */
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -156,8 +160,6 @@ JSFEventDisplay::JSFEventDisplay(JSFGUIFrame *gui)
   fEMCHit    =new JSFEDProperty("EMCHit",1,2);
   fHDCHit    =new JSFEDProperty("HDCHit",1,3);
 
-  fHelixes = new TClonesArray("THelix",1000);
-
   Update();
 
   fView=NULL;
@@ -247,7 +249,6 @@ void JSFEventDisplay::Clear()
 {
   fSignals->Delete();
   delete fSignals;
-  fNHelix=0;
 
 }
 
@@ -521,8 +522,6 @@ void JSFEventDisplay::DisplayCDCTracks()
    JSFSIMDSTBuf *sdb=(JSFSIMDSTBuf*)simdst->EventBuf();
    TClonesArray *cdc=sdb->GetCDCTracks(); 
    Int_t i;
-   TClonesArray &helixes=*fHelixes;
-   Int_t nh=fNHelix;
 
    JSFQuickSimParam *par=(JSFQuickSimParam*)simdst->Param();
 
@@ -567,16 +566,14 @@ void JSFEventDisplay::DisplayCDCTracks()
      zlast = end.z;     if( zlast > 0.0 ) { range[0]=hx[2] ; range[1]=zlast ;}
      else {  range[1]=hx[2] ; range[0]=zlast; }
 
-     new(helixes[nh]) THelix();
-     THelix *thelix=(THelix*)fHelixes->UncheckedAt(nh);
-     nh++;
+     THelix *thelix=new THelix();
+     fSignals->Add(thelix);
      thelix->SetLineColor(fCDCTrack->fColor);
      thelix->SetLineWidth((Width_t)(fCDCTrack->fSize));
      thelix->SetHelix(hx, hp, w, range, kHelixZ, 0);
-     thelix->SetRange(range);
      thelix->Draw();
+
    }
-   fNHelix=nh;
 }
 
 //_____________________________________________________
@@ -619,8 +616,6 @@ void  JSFEventDisplay::DisplayGeneratorParticles()
    JSFQuickSimParam *par=simdst->Param();
 
    Int_t i;
-   TClonesArray &helixes=*fHelixes;
-   Int_t nh=fNHelix;
    //   printf(" There are %d Generator particles\n",sdb->GetNGeneratorParticles());
    Float_t xp[2],yp[2],zp[2];
    TVector pv(4); TVector xv(4); TVector xvd(4);
@@ -692,9 +687,8 @@ void  JSFEventDisplay::DisplayGeneratorParticles()
        ht.OriginToCylinder(rcyl, zcyl, phi0, phi1, 3, hx[0], hx[1]);
        JSF3DV tend=ht.GetCoordinate(phi1);
 
-       new(helixes[nh]) THelix();
-       THelix *thelix=(THelix*)fHelixes->UncheckedAt(nh);
-       nh++;
+       THelix *thelix=new THelix();
+       fSignals->Add(thelix);
 
        EHelixRangeType iht=kHelixZ;
        if( TMath::Abs(gt->GetPz()) < 0.0001 ) { 
@@ -723,7 +717,6 @@ void  JSFEventDisplay::DisplayGeneratorParticles()
        thelix->Draw();
      }
    }
-   fNHelix=nh;
 
 }
 

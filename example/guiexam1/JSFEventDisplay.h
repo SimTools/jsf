@@ -68,9 +68,6 @@ protected:
   TList   *fWidgets;
   TList   *fSignals;
 
-  TClonesArray *fHelixes;
-  Int_t fNHelix;
-
   Int_t  fViewNo;
   Float_t fViewAngle[3];
   Float_t fViewRange[3][6];
