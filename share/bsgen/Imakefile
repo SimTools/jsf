@@ -46,7 +46,7 @@ distclean:: clean
 	rm -f $(JSFROOT)/lib/lib$(PROGNAME).$(DylibSuf)
 	rm -f genbeam.root genbeam2.root
 
-XCOMM  web:
-XCOMM  	jsf -q -b html.C
+web:
+	jsf -q -b html.C
 
 
