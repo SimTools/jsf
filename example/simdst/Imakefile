@@ -2,10 +2,17 @@
 #include "config/lclib.tmpl"
 
 OBJS = simdstprint.o
+OBJHEPEVT = makehepevt.o
+FFLAGS = -I$(CERN_ROOT)/include
 
-all:: sdprint
+
+all:: sdprint mkhepevt
 
 sdprint: $(OBJS)
 	$(FC) $(OBJS) -Wl,-L$(JSFROOT)/lib -lJSFQuickSim \
 	-o sdprint
+
+mkhepevt: $(OBJHEPEVT)
+	$(FC) $(OBJHEPEVT) -Wl,-L$(JSFROOT)/lib -lJSFLCFULL \
+	-Wl,-L$(CERN_ROOT)/lib -ljetset74 -o mkhepevt
 

@@ -17,6 +17,7 @@
 //     TYPE=zh300 to generatoe e+e- -> Zh event at Ecm=300GeV, mh=110GeV.
 //     TYPE=eez91 to generate e+e- -> Z -> ffbar event at Ecm=91GeV
 //         only single flavour type is generated.
+//     TYPE=FILENAME : read a HEPEVT data from a file.
 //   --flavour=F   : F is a flavour to generate.
 //     F=d, u, s, c, b, e, mu, tau
 //   --destdir=DIRNAME   : Directory name where data is written.
@@ -24,6 +25,8 @@
 //(Author)
 //  Akiya Miyamoto   10-Feburary-1999
 //  E-Mail: akiya.miyamoto@kek.jp
+//(Update)
+//  A.Miyamoto  8-Apr-1999  Add option to read HEPEVT data
 // ************************************************************
 
 // ************************************************************
@@ -34,6 +37,7 @@
   JSFSteer *jsf;
   JSFLCFULL *full;
   JSFQuickSim *sim;
+  JSFReadGenerator *rgen;
 
   enum EDecayMode {ddbar=156, uubar=157, ssbar=158, 
 		   ccbar=159, bbbar=160, 
@@ -45,11 +49,13 @@
 
   Int_t maxevt=10;              // Number of events to generate
   Char_t fndir[256];  strcpy(fndir,"./");
+  Char_t fnreadgen[256]; strcpy(fnreadgen,"");
   Int_t fIDC=bbbar;
   Float_t fEcm=91.0;
   Float_t fHiggsmass=110.0;
-  enum EventType { kzh300=0, keez91=1 };
-  Char_t *eventTypeName[2]={"e+e- -> zh @ 300GeV", "e+e- -> Z@91GeV -> ffbar"};
+  enum EventType { kzh300=0, keez91=1, kReadGen=2 };
+  Char_t *eventTypeName[3]={"e+e- -> zh @ 300GeV", "e+e- -> Z@91GeV -> ffbar",
+                   "Read Generator data from a file"};
   Int_t fEventType=kzh300;
   Char_t fnpref[256];    strcpy(fnpref,"zh300gev");
   Char_t *zffbname[16]={"ddbar","uubar","ssbar","ccbar",
@@ -82,6 +88,8 @@
       printf("     TYPE=zh300 to generatoe e+e- -> Zh event at Ecm=300GeV, mh=110GeV.\n");
       printf("     TYPE=eez91 to generate e+e- -> Z -> ffbar event at Ecm=91GeV\n");
       printf("         only single flavour type is generated.\n");
+      printf("     TYPE=FILENAME : read a generator data file, FILENAME.\n");
+      printf("         only single flavour type is generated.\n");
       printf("   --flavour=F   : F is a flavour to generate.\n");
       printf("     F=d, u, s, c, b, e, mu, tau\n");
       printf("   --destdir=DIRNAME   : Directory name where data is written.\n");
@@ -96,8 +104,9 @@
 	sprintf(fnpref,"eez91-%s",zffbname[fIDC-156]);
       }
       else {
-	printf(" Invalid command argument : $s\n",ap->Argv(i));
-	return ;
+	fEventType=kReadGen;
+	strcpy(fnpref,"readgen");
+	strcpy(fnreadgen,str);
       }
       printf("Event type requested by command argument is %s\n",
 	     eventTypeName[fEventType]);
@@ -138,12 +147,14 @@
       sprintf(macroname,"%s/macro/PythiaZ2ffb.C",gSystem->Getenv("JSFROOT"));
       gROOT->LoadMacro(macroname); // Initialize Pythia for ee->Z event
       break;
-  case kzh300:
+    case kzh300:
       fEcm=300.0;              // Center of mass energy
       fHiggsmass=110.0;        // Higgs Mass
       sprintf(macroname,"%s/macro/PythiaZH.C",gSystem->Getenv("JSFROOT"));
       gROOT->LoadMacro(macroname); // Initialize Pythia for ZH event.
       strcpy(fnpref,"zh300gev");
+      break;
+    case kReadGen:
       break;
     default:
       printf(" Event Type (%d) is no recognized\n",fEventType);

@@ -12,3 +12,20 @@ Files are,
    Imakefile
    simdstprint.F : An example to read SIMDST data.
                    ( input file name mus be simdst.dat )
+
+
+   makehepevt.F :  A sample program to create HEPEVT data by Pythia
+   
+To create a sample HEPEVT data, do
+
+   $ xmkmf
+   $ make
+   $ mkhepevt
+
+This will create a file, genevent.dat, containing 10 events of 
+e+e- -> q qbar events created by Pythia.  This data can be used to 
+read by JSFReadGenerator class.
+
+
+   
+                  
