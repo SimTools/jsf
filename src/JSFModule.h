@@ -35,7 +35,8 @@ public:
    JSFEventBuf();
    JSFEventBuf(const char *name, const char *title, JSFModule *module);
    JSFEventBuf(JSFModule *module, const char *name, const char *title);
-   virtual ~JSFEventBuf(){}
+   virtual ~JSFEventBuf();
+   virtual void Delete();
 
    void SetHeader(); // Set header information.
 
@@ -65,6 +66,7 @@ typedef enum {kConstruct, kInitialize, kBeginRun, kEndRun,
               kEventLoop, kTerminate, kDestruct } EJSFModuleStatus;
 
 class JSFModule : public TNamed {
+friend class JSFEventBuf;
 protected:
     Int_t    fVersion;       // Version number of the module
     TList    *fHistograms;    //! Pointer to the histograms ( =0 no histo)
@@ -112,6 +114,8 @@ public:
    virtual  JSFEventBuf *EventBuf(){ return fEventBuf; }
    Bool_t   IsWritable() { if( !fFile ) return kFALSE ; 
             return fFile->IsWritable(); }
+
+   void     SetEventBufAddress(JSFEventBuf *addr) { fEventBuf=addr; }
 
    ClassDef(JSFModule,1)  //Event structure
 };

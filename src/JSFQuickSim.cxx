@@ -845,14 +845,16 @@ void JSFQuickSimBuf::SetGeneratorPointers(JSFGeneratorBuf *ingen)
   // After reading the class data for JSFQuickSimBuf, pointers 
   // for JSFCDCTracks and JSFVTXHits are reset.
 
-  JSFGenerator *gen=NULL;
+//  JSFGenerator *gen=NULL;
   JSFGeneratorBuf *genb=NULL;
   if( ingen ) {
     genb=ingen;
   }
   else {
-    gen=(JSFGenerator*)gJSF->FindModule("JSFGenerator"); 
-    genb=(JSFGeneratorBuf*)gen->EventBuf();
+//    gen=(JSFGenerator*)gJSF->FindModule("JSFGenerator"); 
+//    genb=(JSFGeneratorBuf*)gen->EventBuf();
+      genb=(JSFGeneratorBuf*)gJSF->FindEventBuf("JSFGeneratorBuf");
+
   }
   TClonesArray    *gps= (genb==NULL ? NULL : genb->GetParticles());
 

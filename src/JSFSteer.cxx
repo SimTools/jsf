@@ -81,6 +81,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <iostream>
+#include <vector>
+#include <string>
+
 using namespace std;
 
 #include <TROOT.h>
@@ -93,22 +96,47 @@ using namespace std;
 #include <TFile.h>
 #include <TKey.h>
 #include <TString.h>
+#include <TBranchObject.h>
 
 #include "JSFSteer.h"
 #include "JSFConfig.h"
 #include "JSFModule.h"
 #include <TBenchmark.h>
 
+#include "JSFQuickSim.h"
+
 JSFSteer *gJSF=0;
 
 ClassImp(JSFSteer)
 ClassImp(JSFSteerConf)
+ClassImp(JSFSteerBuf)
 
 static TList *gJSFEventList=0;
 static TKey  *gJSFEventKey=0;
 static TBranch *gJSFBranch=0;
 
 TStopwatch  *gStopwatch=0;
+
+//---------------------------------------------------------------------------
+JSFSteerBuf::JSFSteerBuf(const char *name, const char *title) 
+        : TNamed(name, title)
+{
+  fVersion    = __JSF_VERSION__  ;  // JSFSteer version number
+  fVersionDate  = __JSF_VERSIONDATE__ ; // version date.
+  fMinorVersion = __JSF_MINORVERSION__ ; // Minor Version number
+  fPatchLevel   = __JSF_PATCHLEVEL__   ; // Patch level
+  fRun          = 0 ;
+  fEvent 	= 0 ;
+  TDatime dtime;
+  fDate		= dtime.GetDate() ;
+  fTime		= dtime.GetTime() ;
+
+}
+
+//---------------------------------------------------------------------------
+JSFSteerBuf::~JSFSteerBuf()
+{
+}
 
 //---------------------------------------------------------------------------
 JSFSteer::JSFSteer(const char *name, const char *title) 
@@ -119,19 +147,21 @@ JSFSteer::JSFSteer(const char *name, const char *title)
   fModules = 0;
   fConf    = 0;
   fReadin  = 0;
-  fVersion    = __JSF_VERSION__  ;  // JSFSteer version number
-  fVersionDate  = __JSF_VERSIONDATE__ ; // version date.
+
   fIsInitialized = kFALSE ;
   fIsTerminated  = kFALSE ;
   fLastRun       = 0 ;
-  fRun           = 0 ;
+//  fRun           = 0 ;
   fRunEnded      = kFALSE;
+  fEventBuf    = 0; 
 
   fITree       = 0;
   fOTree       = 0;
   fChain       = 0;
   fModules = new TList();
   fConf    = new JSFSteerConf("JSFSteerConf", "JSF Configuration");
+  fEvents  = 0 ;
+  fEventBuf = new JSFSteerBuf("JSFSteerBuf", "JSF Event Header");
 
 #if ROOT_VERSION_CODE >= ROOT_VERSION(3,1,3)
   TTree::SetBranchStyle(0);
@@ -155,9 +185,10 @@ JSFSteer::JSFSteer(const char *name, const char *title)
     }
     fEnv=new JSFEnv(envfile);  // Create pointer to env file.
     fEventTrees=new TObjArray(); // Remember defined trees.
+    fEvents = new TObjArray();   // Collection of EventBuf;
  
     if( fEnv->GetValue("JSF.Benchmark",1) == 1 ) {
-      printf(" TBenchmark is initialized\n");
+      printf("TBenchmark is initialized\n");
       for(Int_t i=0;i<30;i++) { fCPUTime[i]=0;  fRealTime[i]=0; }
       gStopwatch=new TStopwatch();
 #if ROOT_VERSION_CODE >= ROOT_VERSION(3,3,0)
@@ -218,6 +249,7 @@ JSFSteer::~JSFSteer()
 {
 //  Terminate JSF, if fIsTerminated=kFALSE, then delete fModules
 //  
+
   if (fModules) { 
     if( !fIsTerminated ) Terminate(); 
     TIter next(fModules);
@@ -227,20 +259,13 @@ JSFSteer::~JSFSteer()
   }
   if (fConf) { delete fConf; }
   if (fEventTrees) { delete fEventTrees; }
+  if ( fEvents ) { delete fEvents; }
+  if ( fEventBuf ) { delete fEventBuf; }
+  if ( fReadin ) { delete fReadin; }
 
 }
 
-//---------------------------------------------------------------------------
-Int_t JSFSteer::GetMinorVersion()
-{
-  return  __JSF_MINORVERSION__ ; 
-}
 
-//---------------------------------------------------------------------------
-Int_t JSFSteer::GetPatchLevel()
-{
-  return  __JSF_PATCHLEVEL__ ; 
-}
 
 //---------------------------------------------------------------------------
 void JSFSteer::SetIOFiles()
@@ -291,9 +316,9 @@ void JSFSteer::InitializeMessage()
 //  Print message after jsf initialization
 
   printf("****  JSF Initialization *******************************************\n");
-  printf("      Version %d : Version Date %d \n",fVersion,fVersionDate);
-  TDatime *dtime=new TDatime();
-  printf("      Current date and time : %s\n",dtime->AsString());
+  printf("      Version %d : Version Date %d \n",GetVersion(),GetVersionDate());
+  TDatime dtime;
+  printf("      Current date and time : %s\n",dtime.AsString());
 
   printf("====  List of defined modules ======================================\n");
   TIter next(fModules);
@@ -318,35 +343,39 @@ Bool_t JSFSteer::Process(Int_t i)
 //  
 
 // Initialize
+
   if( !fIsInitialized ) {  
     if( !Initialize() ) { fReturnCode=fReturnCode|kJSFQuit|kJSFFALSE ; return kFALSE; } }
 
-  if( !fIsGetEvent ) fEvent=i;
+  if( !fIsGetEvent ) SetEventNumber(i);
 
   fReturnCode=kJSFOK;
 
 // BeginRun
   if( fLastRun == 0 ) { 
-    if( fRun == 0 ) {
+    if( GetRunNumber() == 0 ) {
       Warning("Process","Run number is undefined. Set default run number 1");
-      fRun = 1;
+      SetRunNumber(1);
     } 
-    if( !BeginRun(fRun) ) { fReturnCode+=kJSFTerminate|kJSFFALSE; return kFALSE; }
+    if( !BeginRun(GetRunNumber()) ) { fReturnCode+=kJSFTerminate|kJSFFALSE; return kFALSE; }
   }
-  else if( fLastRun != fRun ) {
+  else if( fLastRun != GetRunNumber() ) {
     if( !EndRun() ) { fReturnCode+=kJSFTerminate|kJSFFALSE; return kFALSE; }
-    if( !BeginRun(fRun) ) { fReturnCode+=kJSFTerminate|kJSFFALSE; return kFALSE; }
+    if( !BeginRun(GetRunNumber()) ) { fReturnCode+=kJSFTerminate|kJSFFALSE; return kFALSE; }
   }
 
 // Loop over all module to process event data
 
    if( fOFile ) {
+     fOFile=fOTree->GetCurrentFile();
      fOFile->cd();
    }
    TIter next(fModules);
    JSFModule *module;
    Int_t iloop=0;
    while (( module = (JSFModule*)next())) {
+//
+     if( module->GetFile() != fIFile ) { module->SetFile(fOFile); }
      module->SetModuleStatus(kEventLoop);
      if( module->IsWritable() ) {
         Double_t cputime=0;
@@ -500,16 +529,17 @@ Bool_t JSFSteer::BeginRun(Int_t nrun)
 	  if( irun < lrun ) { lrun = irun; }
        }
     }
-    fRun = lrun;
+    SetRunNumber(lrun);
   }
   else {
-    fRun = nrun;
+    SetRunNumber(nrun);
   }
-  fLastRun = fRun;
+
+  fLastRun = GetRunNumber();
   fRunEnded = kFALSE ;
 //  Make a begin-Run directory in the output file
 
-  sprintf(keyname,"begin%5.5d",fRun);
+  sprintf(keyname,"begin%5.5d",GetRunNumber());
 
    // If Output file is writable, make tree for them
    if( fOFile && fOFile->IsOpen() && fOFile->IsWritable() ) {
@@ -517,13 +547,13 @@ Bool_t JSFSteer::BeginRun(Int_t nrun)
       if(!gDirectory->FindKey(keyname) ) gDirectory->mkdir(keyname);
    }
 
-  sprintf(keyname,"/conf/begin%5.5d",fRun);
+  sprintf(keyname,"/conf/begin%5.5d",GetRunNumber());
   TIter next(fModules);
   JSFModule *module;
   Int_t iloop=0;
   while (( module = (JSFModule*)next())) {
     module->SetModuleStatus(kBeginRun);
-    module->SetRunNumber(fRun);
+    module->SetRunNumber(GetRunNumber());
     module->GetFile()->cd(keyname);
 
     Double_t cputime=0;
@@ -539,7 +569,7 @@ Bool_t JSFSteer::BeginRun(Int_t nrun)
        realtime=gStopwatch->GetRealTime();
 #endif
     }
-    Bool_t rcode=module->BeginRun(fRun);
+    Bool_t rcode=module->BeginRun(GetRunNumber());
     if( gStopwatch ) {
       iloop++;
 #if ROOT_VERSION_CODE >= ROOT_VERSION(3,3,0)
@@ -556,6 +586,10 @@ Bool_t JSFSteer::BeginRun(Int_t nrun)
     if( !rcode ) return kFALSE;
 
   }
+  if( fOFile && fOFile->IsOpen() && fOFile->IsWritable() ) {
+      fOFile->Write();
+  }
+
 
   if( fIFile ) fIFile->cd("/");
   return kTRUE;
@@ -573,21 +607,22 @@ Bool_t JSFSteer::EndRun()
     fReturnCode = kJSFOK;
 
     Char_t keyname[32];
-    sprintf(keyname,"end%5.5d",fRun);
+    sprintf(keyname,"end%5.5d",GetRunNumber());
    // If Output file is writable, make endrun directory
    if( fOFile && fOFile->IsOpen() && fOFile->IsWritable() ) {
       fOFile->cd("/conf");
       if( !gDirectory->FindKey(keyname) ) gDirectory->mkdir(keyname);
    }
 
-    sprintf(keyname,"/conf/end%5.5d",fRun);
+    sprintf(keyname,"/conf/end%5.5d",GetRunNumber());
 
     TIter next(fModules);
     JSFModule *module;
     Int_t iloop=0;
     while (( module = (JSFModule*)next())) {
         module->SetModuleStatus(kEndRun);
-	module->GetFile()->cd(keyname);
+	fOFile->cd(keyname);
+//	module->GetFile()->cd(keyname);
 
 	Double_t cputime=0;
 	Double_t realtime=0;
@@ -618,6 +653,9 @@ Bool_t JSFSteer::EndRun()
 
 	if( !rcode ) { fReturnCode+=kFALSE ; return kFALSE; }
     }
+    if( fOFile && fOFile->IsOpen() && fOFile->IsWritable() ) {
+      fOFile->Write();
+    }
     if( fOFile ) fOFile->cd("/");
     return kTRUE;
 }
@@ -631,6 +669,8 @@ Bool_t JSFSteer::GetLastRunInfo(TFile *file, Int_t lastrun)
 //  from conf/endNNNNN directory.
 //  If lastrun < 0, last run number in conf/[classname] is used.
 //
+
+  cout << "JSFSteer::GetLastRunInfo... File=" << file->GetName() << endl;
 
   TDirectory *curdir=gDirectory;
 
@@ -688,16 +728,43 @@ Int_t JSFSteer::GetEvent(Int_t nevt)
 // nevt is the number from 1 to n, Note the difference with 
 // the event number of root, which ranges from 0 to n-1.
 
-  //  static Bool_t ncall=kFALSE;
+// Remember EventBuf name and module addresses.
+  
+   TIter  next(fModules);
+   vector<JSFModule*> modadr;
+   vector<string>     bufnames;
 
-  //  if( ncall ){   fITree->Delete(); }
-  //  ncall=kTRUE;
+   JSFModule *module;
+   while( (module=(JSFModule*)next()) ){
+     if ( !module->IsWritable() ) {
+        if ( module->EventBuf() ) {
+          modadr.push_back(module);
+          string strname(module->EventBuf()->GetName());
+          bufnames.push_back(strname);
+        }
+      }
+   }
 
-   Int_t  nb=fITree->GetEvent(nevt-1); 
+   Int_t nb=fITree->GetEntry(nevt-1, 0);
 
-   fRun = fReadin->GetRunNumber();
-   fEvent = fReadin->GetEventNumber(); 
+   Int_t numbuf=bufnames.size();
+   for(Int_t i=0;i<numbuf;i++){
+     JSFEventBuf *buf=gJSF->FindEventBuf(bufnames[i].data());
+     JSFModule   *mod=modadr[i];
+     mod->SetEventBufAddress(buf);
+   }
+
+   SetRunNumber(fReadin->GetRunNumber());
+   SetEventNumber(fReadin->GetEventNumber()); 
    fIsGetEvent=kTRUE;
+   fReturnCode=kJSFOK;
+
+
+   if( GetRunNumber() == 0 ) { 
+	cerr << " Run number is 0 .. Funny!!! " << endl;
+        exit(0);
+   }
+
    if( !nb ) { fReturnCode = kJSFEOF|kJSFFALSE; }
 
    return nb; 
@@ -722,7 +789,8 @@ Bool_t JSFSteer::Terminate()
   Int_t iloop=0;
   while (( module = (JSFModule*)next())) {
         module->SetModuleStatus(kTerminate); 
-	module->GetFile()->cd("/conf/term");
+        fOFile->cd("/conf/term");
+//	module->GetFile()->cd("/conf/term");
 
 	Double_t cputime=0;
 	Double_t realtime=0;
@@ -808,7 +876,7 @@ void JSFSteer::PrintInfo()
 //     Gives information about versions etc.
    printf("\n\n");
    printf("**************************************************************\n");
-   printf("*             JSFSteer version:%3d released at %6d         *\n",fVersion, fVersionDate);
+   printf("*             JSFSteer version:%3d released at %6d         *\n",GetVersion(), GetVersionDate());
    printf("*                pre-pre release                             *\n");
    printf("**************************************************************\n");
 
@@ -841,7 +909,9 @@ Bool_t JSFSteer::MakeTree()
   // Define JSF in the tree.
   Int_t split=1;
   Int_t bsize=4000;
-  fBrJSF=fOTree->Branch(GetName(),ClassName(),&gJSF, bsize,split);  
+//  fBrJSF=fOTree->Branch(GetName(),ClassName(),&gJSF, bsize,split);  
+  fBrJSF=fOTree->Branch(fEventBuf->GetName(), fEventBuf->ClassName(),
+	&fEventBuf, bsize, split);
 
   TIter next(fModules);
   JSFModule *module;
@@ -862,6 +932,8 @@ Bool_t JSFSteer::SetupTree()
   // Read the Key infile:/conf/JSF and find modules to read tree,
   // then execute SetupBranch() method of each modules.
 
+// cerr << "JSFSteer::SetupTree was called. " << endl;
+
   if( !fIFile->cd("conf") ) {
     Fatal("SetupTree","%s/conf does not exists.",fIFile->GetName());
     return kFALSE;
@@ -875,40 +947,64 @@ Bool_t JSFSteer::SetupTree()
      Error("SetupTree","Event directory is not found in the input file.");
      return kFALSE;
   }
-  Char_t kname[60];
-  if( strcmp(gJSFEventKey->GetName(),"Event") == 0 ) { 
-    sprintf(kname, "%s;%d",gJSFEventKey->GetName(),gJSFEventKey->GetCycle());
-    fITree=(TTree*)fIFile->Get(kname);
-  }
 
-  while( (gJSFEventKey=(TKey*)gJSFEventList->Before(gJSFEventKey)) ) {
-    if( strcmp(gJSFEventKey->GetName(),"Event") != 0 ) continue ;
-    sprintf(kname, "%s;%d",gJSFEventKey->GetName(),gJSFEventKey->GetCycle());
-    fITree=(TTree*)fIFile->Get(kname);
+  fITree=new TChain("Event");
+  fITree->AddFile(fIFile->GetName());
+  cerr << "JSFSteer::SetupTree(...) input file is " << fIFile->GetName() << endl;
+  if( Env()->GetValue("JSF.ChainFiles",1) ) {
+    TString fnin(fIFile->GetName());
+    TString fnref=fnin.Remove(fnin.Sizeof()-6,6);
+    for(Int_t i=1;i<10000;i++) {
+      TString fnadd=fnref;
+      fnadd+="_";
+      fnadd+=i;
+      fnadd+=".root";
+      if ( gSystem->AccessPathName(fnadd) ) break;
+      fITree->AddFile(fnadd);
+      cerr << fnadd << " added to the input chains" << endl;
+    }
   }
+     
+  cerr << "Entries in Chain is " << fITree->GetEntries() << endl;
+
   AddTree(fITree);
 
-  fReadin=new JSFSteer("ReadinJSF");
-  fReadin->fConf->Read("JSF");
+//  fReadin=new JSFSteer("ReadinJSF");
+//  fReadin->fConf->Read("JSF");
+  fReadin = new JSFSteerBuf("ReadinJSF");
+  JSFSteerConf rdconf("JSFSteerConfReadin", "JSF Configuration");
+  rdconf.Read("JSF");
+
 
 // Prepare pointer for JSF obtained from a file.
-  gJSFBranch=fITree->GetBranch("JSF");
-  gJSFBranch->SetAddress(&fReadin); 
-
-  // Create modules defined in JSFSteerConf direcory
+  fITree->SetBranchStatus("*");
+  fITree->SetBranchAddress("JSFSteerBuf", &fReadin);
   
   TObject *first=fModules->First();
   Char_t temp[200];
-  for(Int_t i=0;i<fReadin->fConf->fNmodule;i++){
+  JSFEventBuf **rdinbuf=new JSFEventBuf*[rdconf.fNmodule];
+  for(Int_t i=0;i<rdconf.fNmodule;i++){
     sprintf(temp,"%s mod%d(\"%s\",\"Readin module\")",
-	    fReadin->fConf->fClasses[i].Data(),i,fReadin->fConf->fNames[i].Data());
-    //    printf(" temp=%s\n",temp);
+	    rdconf.fClasses[i].Data(),i,rdconf.fNames[i].Data());
     gROOT->ProcessLine(temp);
 
-    JSFModule *module = FindModule(fReadin->fConf->fClasses[i].Data());
+    JSFModule *module = FindModule(rdconf.fClasses[i].Data());
+    if ( module->EventBuf() ) {
+      rdinbuf[i]=module->EventBuf();
+      Int_t lc=strlen(module->GetName());
+      Char_t *name = new Char_t [lc+10];
+      if( strcmp(module->GetName(), "JSFQuickSim") == 0 ) {
+	strcpy(name,rdinbuf[i]->GetName());
 
-    module->SetBranch(fITree);
+      }
+      else {
+        sprintf(name,"%s-EventBuf",module->GetName());
+      }
+      fITree->SetBranchAddress(name, &rdinbuf[i]);
 
+      delete name;
+     }
+    
     if( first ) {  // Put readin-module to the first.
       fModules->Remove(module);
       fModules->AddBefore(first, module);
@@ -927,7 +1023,6 @@ void JSFSteer::SetInput(TFile &file)
   // Read the Key infile:/conf/JSF and find modules to read tree,
   // then execute SetupBranch() method of each modules.
   // for multiple file input
-
 
   if( fReadin == 0 ) { 
     fIFile = &file; 
@@ -957,33 +1052,35 @@ void JSFSteer::SetInput(TFile &file)
   Char_t kname[60];
   if( strcmp(gJSFEventKey->GetName(),"Event") == 0 ) { 
     sprintf(kname, "%s;%d",gJSFEventKey->GetName(),gJSFEventKey->GetCycle());
-    fITree=(TTree*)fIFile->Get(kname);
+    fITree=(TChain*)fIFile->Get(kname);
   }
 
   while( (gJSFEventKey=(TKey*)gJSFEventList->Before(gJSFEventKey)) ) {
     if( strcmp(gJSFEventKey->GetName(),"Event") != 0 ) continue ;
     sprintf(kname, "%s;%d",gJSFEventKey->GetName(),gJSFEventKey->GetCycle());
-    fITree=(TTree*)fIFile->Get(kname);
+    fITree=(TChain*)fIFile->Get(kname);
   }
 
-  fReadin=new JSFSteer("ReadinJSF");
-  fReadin->fConf->Read("JSF");
+
+//  fReadin=new JSFSteer("ReadinJSF");
+//  fReadin->fConf->Read("JSF");
+//  fReadin = new JSFSteerBuf("ReadinJSF");
+  JSFSteerConf rdconf("JSFSteerConfReadin", "JSF Configuration");
+  rdconf.Read("JSF");
 
 // Prepare pointer for JSF obtained from a file.
-  gJSFBranch=fITree->GetBranch("JSF");
+  gJSFBranch=fITree->GetBranch("JSFSteerBuf");
 
   gJSFBranch->SetAddress(&fReadin); 
 
   // Create modules defined in JSFSteerConf direcory
   
   Char_t temp[200];
-  for(Int_t i=0;i<fReadin->fConf->fNmodule;i++){
+  for(Int_t i=0;i<rdconf.fNmodule;i++){
     sprintf(temp,"%s mod%d(\"%s\",\"Readin module\")",
-	    fReadin->fConf->fClasses[i].Data(),i,fReadin->fConf->fNames[i].Data());
-    //    printf(" temp=%s\n",temp);
-    //    gROOT->ProcessLine(temp);
+	    rdconf.fClasses[i].Data(),i,rdconf.fNames[i].Data());
 
-    JSFModule *module = FindModule(fReadin->fConf->fClasses[i].Data());
+    JSFModule *module = FindModule(rdconf.fClasses[i].Data());
 
     module->SetBranch(fITree);
     module->SetFile(fIFile);
@@ -1029,6 +1126,23 @@ JSFModule *JSFSteer::FindModule(const Text_t *classname, const Char_t *opt)
 }
 
 //_____________________________________________________________________________
+JSFEventBuf *JSFSteer::FindEventBuf(const Char_t *classname, const Char_t *opt)
+{
+// Find JSFEventBuf, which is inherited from "class name"
+
+  TIter  next(fEvents);
+  JSFEventBuf *buf;
+  while( (buf=(JSFEventBuf*)next()) ){
+    if( buf->InheritsFrom(classname) ){ return buf; }
+  }
+
+  if( strcmp(opt,"quiet") != 0 ) {
+    Error("FindEventBuf","A class %s is not found",classname);
+  }
+  return NULL;
+}
+
+//_____________________________________________________________________________
 JSFEventBuf *JSFSteer::FindEventBuf(TBranch *branch, const Char_t *opt)
 {
   // Find JSFEventBuf object defined for branch
@@ -1056,6 +1170,7 @@ JSFSteerConf::JSFSteerConf(const char *name, const char*title)
 {
   //  A class to save JSFSteer information;
   //  class name, name, and title of defined modules are saved.
+
   fSize=50;
   fClasses=new TString [fSize];
   fNames=new TString [fSize];

@@ -48,6 +48,8 @@
 //
 //////////////////////////////////////////////////////////////////
 //  
+#include <iostream>
+using namespace std;
 #include <TSystem.h>
 #include <TDirectory.h>
 #include <TKey.h>
@@ -86,7 +88,7 @@ JSFModule::JSFModule(const char *name, const char *title, Option_t *opt)
 JSFModule::~JSFModule()
 {
 //  Destrutor of JSF module.
-  Clear();  
+//  Clear();  
   TObject *obj=gJSF->Modules()->FindObject(this);
 
   //  if( !obj ) gJSF->Modules()->Remove(this);
@@ -242,15 +244,29 @@ void JSFModule::SetBranch(TTree *tree)
 }
 
 
-
+//___________________________________________________________________________
+void JSFEventBuf::Delete()
+{
+}
 
 //___________________________________________________________________________
 JSFEventBuf::JSFEventBuf()
 {
   fModule=NULL;
   fTree=NULL;
+//  cerr << "JSFEventBuf constructor was called name is " << GetName() << endl;
+  gJSF->GetEvents()->Add(this);
 }
 
+//___________________________________________________________________________
+JSFEventBuf::~JSFEventBuf()
+{
+//  cerr << "JSFEventBuf .. Destructor is called name is " << GetName();
+//  cerr << " address is " << this << " fModule is " << fModule << endl;
+  gJSF->GetEvents()->Remove(this);
+  if ( fModule ) {   fModule->fEventBuf=0; }
+//  cerr << " End of JSFEventBuf destructor " << endl;
+}
 
 //___________________________________________________________________________
 JSFEventBuf::JSFEventBuf(const char *name, const char *title, JSFModule *module)
@@ -258,6 +274,7 @@ JSFEventBuf::JSFEventBuf(const char *name, const char *title, JSFModule *module)
 {
 // Default constructor of JSF module.
   fModule=module;
+  gJSF->GetEvents()->Add(this);
 }
 
 //___________________________________________________________________________
@@ -266,6 +283,7 @@ JSFEventBuf::JSFEventBuf(JSFModule *module, const char *name, const char *title)
 {
 // Default constructor of JSF module.
   fModule=module;
+  gJSF->GetEvents()->Add(this);
 }
 
 //___________________________________________________________________________

@@ -7,6 +7,7 @@
 #pragma link C++ class JSFModule+;
 #pragma link C++ class JSFSteer+;
 #pragma link C++ class JSFSteerConf-;
+#pragma link C++ class JSFSteerBuf+;
 #pragma link C++ class JSFEventBuf+;
 #pragma link C++ class JSFDBS+;
 #pragma link C++ class JSFUtil+;

@@ -319,10 +319,10 @@ Bool_t GetEvent(Int_t ev)
   if( jsf->GetInput() ) {
     if( !jsf->GetEvent(ev) ) { return kFALSE; }
   }
-
+    
     Bool_t flag=jsf->Process(ev);
     Int_t iret=jsf->GetReturnCode();
-
+ 
     if( iret & jsf->kJSFFALSE ) return kFALSE;
 
     if( !( iret & ( jsf->kJSFSkipRestModules|
@@ -338,6 +338,7 @@ Bool_t GetEvent(Int_t ev)
     if( gHasUserMonitor ) {
       UserMonitor();
     }
+
 
     if( jsf->GetOutput() ) {
       if( !(iret & jsf->kJSFNoOutput) ) jsf->FillTree();
@@ -405,6 +406,7 @@ void Batch_MultiRun()
   Initialize();
   Int_t firstrun=jsf->Env()->GetValue("JSFGUI.RunNo",1);
   Int_t lastrun=jsf->Env()->GetValue("JSFGUI.LastRun",-1);
+  string fnbegin(jsf->GetOutput()->GetName());
 
   if( lastrun < 0 ) { lastrun=firstrun; }
 
@@ -432,9 +434,18 @@ void Batch_MultiRun()
     }
 
     EndRun:
+    string fnend(jsf->GetOutput()->GetName());
+
+    if ( strcmp(fnbegin.data(), fnend.data()) != 0 ) {
+      jsf->OTree()->GetCurrentFile()->Write();
+      ofile=new TFile(fnbegin.data(),"UPDATE");
+      jsf->SetOutput(*ofile);
+    }
+
       flag=jsf->EndRun();
       if( flag & (jsf->kJSFTerminate|jsf->kJSFQuit) ) break;
   }
+
   JobEnd();
 
 }
