@@ -75,6 +75,7 @@ JSFReadGenerator::JSFReadGenerator(const char *name, const char *title)
 // ---------------------------------------------------------------
 Bool_t JSFReadGenerator::BeginRun(Int_t nrun)
 {
+  if( !IsWritable() ) return kTRUE; // Quit when not output mode.
   Bool_t rc=kTRUE;
 // Open a file 
   Int_t lenf=strlen(fDataFileName);
@@ -86,6 +87,7 @@ Bool_t JSFReadGenerator::BeginRun(Int_t nrun)
 // ---------------------------------------------------------------
 Bool_t JSFReadGenerator::EndRun()
 {
+  if( !IsWritable() ) return kTRUE;
   readgenclose_(&fUnit);
   return kTRUE;
 }
