@@ -6,6 +6,7 @@
  30-March-1999  A.Miyamoto
    SIMDST Format is changed.  EMH(2,i), HDH(2,i) is increased to 
    EMH(3,i), and HDH(3,i), to store EM and HD responce separately. 
+ 17-May-1999  A.Miyamoto   igendat is changed from Short to Int
 */
 
 
@@ -65,7 +66,7 @@ extern void simdstwrite_(Int_t *iunit,
 	Int_t *ivers, Int_t *ngen, Int_t *ncmb, 
         Int_t *ntrk, Int_t *nemh, Int_t *nhdh,
 	Float_t head[], Float_t gendat[][kGenSize], 
-        Short_t igendat[][kIGenSize],
+        Int_t igendat[][kIGenSize],
         Float_t cmbt[][kCmbtSize], Float_t trkf[][kTrkfSize],
 	Double_t trkd[][kTrkdSize], 
         Int_t emh[][kClsSize], Int_t hdh[][kClsSize],
@@ -76,7 +77,7 @@ extern void simdstread_(Int_t *iunit,
 	Int_t *ivers, Int_t *ngen, Int_t *ncmb, 
         Int_t *ntrk, Int_t *nemh, Int_t *nhdh,
 	Float_t head[], Float_t gendat[][kGenSize], 
-	Short_t igendat[][kIGenSize],
+	Int_t igendat[][kIGenSize],
         Float_t cmbt[][kCmbtSize], Float_t trkf[][kTrkfSize],
 	Double_t trkd[][kTrkdSize], 
 	Int_t emh[][kClsSize], Int_t hdh[][kClsSize],
@@ -344,10 +345,10 @@ Bool_t JSFSIMDSTBuf::PackDST(Int_t nev)
   Int_t ngen=0 ;
 #ifdef R__ACC
   Float_t gendat[kGenMax][kGenSize];
-  Short_t igendat[kGenMax][kIGenSize];
+  Int_t igendat[kGenMax][kIGenSize];
 #else
   Float_t gendat[nobuf][kGenSize];
-  Short_t igendat[nobuf][kIGenSize];
+  Int_t igendat[nobuf][kIGenSize];
 #endif
   Int_t j;
   for(j=0;j<nobuf;j++){
@@ -509,7 +510,7 @@ Bool_t JSFSIMDSTBuf::UnpackDST(Int_t nev)
 // Read SIMDST data from a file.
 
   Float_t  gendat[kGenMax][kGenSize];
-  Short_t  igendat[kGenMax][kIGenSize];
+  Int_t  igendat[kGenMax][kIGenSize];
   Float_t  cmbt[kTrkMax][kCmbtSize];
   Float_t  trkf[kTrkMax][kTrkfSize];
   Double_t trkd[kTrkMax][kTrkdSize];
@@ -632,7 +633,8 @@ JSFSIMDSTBuf::JSFSIMDSTBuf(const char *name, const char *title,	JSFModule *modul
 {  
   fEndian = 1296651082;
   //  fVersion = 201;
-  fVersion = 202;     // Since jsf-1-6
+  //fVersion = 202;     // Since jsf-1-6
+  fVersion = 203;     // Since jsf-1-9
   strcpy(fProduc,"QIK ");
 
 }

@@ -15,7 +15,7 @@ c*******************************************************************
 
       integer*4 iunit,iendi,ivers,ngen,ncmb,ntrk, nemh, nhdh
       real*4  head(2), gendat(10,ngen), cmbt(8,ncmb), trkf(23,ntrk)
-      integer*2 igendat(4,ngen)
+      integer*4 igendat(4,ngen)
       real*8  trkd(15,ntrk)
       integer*4  emh(3,nemh), hdh(3,nhdh)
       integer*4 nvtx(ntrk)
@@ -56,7 +56,7 @@ c     nret = -2 for read error.
 
       integer*4 iunit,iendi,ivers,ngen,ncmb,ntrk,nemh,nhdh
       real*4  head(2), gendat(10,*),cmbt(8,*),trkf(23,*)
-      integer*2 igendat(4,*)
+      integer*4 igendat(4,*)
       real*8  trkd(15,*)
       integer*4  emh(3,*), hdh(3,*)
       integer*4 nvtx(*)

@@ -18,15 +18,15 @@
 class JSFGeneratorParticle : public TObject {
 
 public:
-  Short_t  fSer;        // particle serial number ( 1 to n )
-  Short_t  fID;         // Particle ID a la PDG.
+  Int_t  fSer;        // particle serial number ( 1 to n )
+  Int_t  fID;         // Particle ID a la PDG.
   Float_t  fMass;    // Particle mass (GeV);
   Float_t  fCharge;  // Charge
   Float_t    fP[4];    // four momentum (E,Px,Py,Pz), GeV
   Float_t    fX[4];    // (t,x,y,z) (cm and nsec)
-  Short_t     fNdaughter;     // Number of daughter particles ( =0 for stable )
-  Short_t     fFirstDaughter; // Serial number of 1st daughter
-  Short_t     fMother;  // Serial number of mother particle ( =0 for initial)
+  Int_t     fNdaughter;     // Number of daughter particles ( =0 for stable )
+  Int_t     fFirstDaughter; // Serial number of 1st daughter
+  Int_t     fMother;  // Serial number of mother particle ( =0 for initial)
   Float_t  fLifeTime; // Particle life time ( c x nsec, =0 for stable, cm)
   Float_t  fDecayLength;  // Decay length (cm, =0 for stable)
 // If fDecayLength <= 0, vertex point is re-evaluated using fLifeTime.
@@ -76,7 +76,7 @@ public:
 
   virtual ~JSFGeneratorParticle() {}
 
-  ClassDef(JSFGeneratorParticle, 1)  //A JSFGeneratorParticle segment
+  ClassDef(JSFGeneratorParticle, 2)  //A JSFGeneratorParticle segment
 };
 
 #endif
