@@ -50,7 +50,7 @@ LCLIBDIR      = $(LCLIBROOT)/lib
 JSFLIBS       = -L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim \
 		$(LIBJSFDMATRIX) -lBasesSpring
 
-DEPENDFILES   = $(CXXFLAGS) $(INCPATH)
+DEPENDFILES   = $(filter -I% -D%,$(CXXFLAGS)) $(INCPATH)
 
 AIXLIBS       =
 

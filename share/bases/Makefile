@@ -2,8 +2,14 @@
 # Makefile to build bases libraries
 #
 
-all: src/Makefile example/nunugam/Makefile
+.PHONY: lib eg
+
+all: lib eg
+
+lib: src/Makefile
 	( cd src ; make ; make install )
+
+eg: example/nunugam/Makefile
 	( cd example/nunugam ; make )
 
 src/Makefile: src/Imakefile
