@@ -282,6 +282,12 @@ void InitGenSim()
     py->SetEcm(jsf->Env()->GetValue("JSFGUI.ECM",300.0));
     InitPythia();         // Set Pythia parameters.
   }
+  if( eventtype == kHerwig ) {
+	  gROOT->LoadMacro(
+	     jsf->Env()->GetValue("JSFGUI.InitHerwigMacro","InitHerwig.C"));
+    InitHerwig();         // Set Herwig parameters.
+  }
+
 
 }
 
