@@ -629,7 +629,10 @@ void JSFHTFitFuncCylinderGeometry(
      JSF3DV xyz=pFitHelix->GetCoordinate(fang);
      p=JSFRPhiZ(xyz);
      p.r=pSP[l].sp.r;
-     Double_t dxi=pSP[l].sp.r*(p.phi-pSP[l].sp.phi);
+     Double_t deltaphi=p.phi-pSP[l].sp.phi;
+     if( deltaphi > TMath::Pi() )  deltaphi -= 2*TMath::Pi();
+     if( deltaphi < -TMath::Pi() ) deltaphi += 2*TMath::Pi();
+     Double_t dxi=pSP[l].sp.r*deltaphi;
      Double_t dz=p.z-pSP[l].sp.z;
      delta=dxi*dxi*sxi2i[l] + dz*dz*sz2i[l] ;
      chisq += delta;
