@@ -19,8 +19,8 @@ HDRS    = $(subst .$(SrcSuf),.h,$(SRC))
 all:: install
 
 install:: lib$(PROGNAME).$(DllSuf)
-	install -m 755 lib$(PROGNAME).$(DllSuf) $(JSFINSTALLDIR)/lib
-	install -m 644 JSFBeamGeneration.h $(JSFINSTALLDIR)/include
+	install -p -m 755 lib$(PROGNAME).$(DllSuf) $(JSFINSTALLDIR)/lib
+	install -p -m 644 JSFBeamGeneration.h $(JSFINSTALLDIR)/include
 
 uninstall:: 
 	rm -f $(JSFINSTALLDIR)/lib/lib$(PROGNAME).$(DllSuf)

@@ -21,14 +21,14 @@ LD        = $(FC)
 LDFLAGS   = -dynamiclib -flat_namespace -single_module -undefined suppress
 SharedLib = libPythia6.dylib
 BUNDLE    = $(subst .dylib,.so,$(SharedLib))
-INSTALL   = install -c
+INSTALL   = install -c -p
 else
 FFLAGS    = -O2 -g -fPIC -fno-second-underscore
 CFLAGS    = -fPIC
 LD        = $(FC)
 LDFLAGS   = -shared -rdynamic -Wl,-soname,$(SharedLib)
 SharedLib = libPythia6.so
-INSTALL   = install -c
+INSTALL   = install -c -p
 endif
 endif
 
@@ -54,6 +54,8 @@ ifeq ($(UNAME),Darwin)
 	$(LD) -bundle -flat_namespace -undefined suppress -o $(BUNDLE) $(OBJS)
 endif
 
+../../../lib/$(SharedLib) : install
+
 install: $(SharedLib)
 	$(INSTALL) $(SharedLib) ../../../lib/$(SharedLib)
 	mkdir -p ../../../include
@@ -64,9 +66,10 @@ endif
 
 uninstall:
 	rm -f ../../../lib/$(SharedLib)
+	rm -f ../../../lib/$(BUNDLE)
 	rm -f ../../../include/pythia6.inc
 
-testrun: pythia_test $(SharedLib)
+testrun: pythia_test ../../../lib/$(SharedLib)
 	@echo "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
 	@echo "%  Pythia test program will start                   %"
 	@echo "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
@@ -77,7 +80,7 @@ testrun: pythia_test $(SharedLib)
 	@echo "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
 	@date
 
-pythia_test: pythia_test.f $(SharedLib)
+pythia_test: pythia_test.f ../../../lib/$(SharedLib)
 	$(FC) -o pythia_test pythia_test.f $(FFLAGS)  -L../../../lib -lPythia6
 
 clean:
