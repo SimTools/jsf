@@ -42,11 +42,19 @@ extern "C" void G__cpp_setuplibJSFQuickSim();
 #if defined(_HIUX_SOURCE)
 #include "Pcommon.h"
 extern "C" void hf_fint(char *option); /* to initialize fortran environment */
+#if __PYTHIA_VERSION__ > 5 
+extern "C" void G__cpp_setupG__Pythia6();
+#else
 extern "C" void G__cpp_setupG__Pythia();
+#endif
 #endif
 
 #if defined(__DARWIN__)
+#if __PYTHIA_VERSION__ > 5 
+extern "C" void G__cpp_setupG__Pythia6();
+#else
 extern "C" void G__cpp_setupG__Pythia();
+#endif
 extern "C" void pydata_();
 #endif
 
@@ -91,7 +99,11 @@ void dummysub()
    G__cpp_setuplibJSFLCFULL(); 
    G__cpp_setuplibJSFQuickSim();
 #if defined(_HIUX_SOURCE) || defined(__DARWIN__)
+#if __PYTHIA_VERSION__ > 5 
+   G__cpp_setupG__Pythia6();
+#else
    G__cpp_setupG__Pythia();
+#endif
 #if defined(__DARWIN__)
    pydata_();
 #endif

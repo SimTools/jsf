@@ -21,12 +21,12 @@ AIXFLAGS += -L$(ROOTSYS)/lib -lCore -lCint -lHist
 
 all:: install
 
-install:: lib$(PROGNAME).$(DllSuf)
-	cp lib$(PROGNAME).$(DllSuf) $(JSFROOT)/lib
+install:: lib$(PROGNAME).$(DylibSuf)
+	cp lib$(PROGNAME).$(DylibSuf) $(JSFROOT)/lib
 	( cd $(JSFROOT)/include ; ln -fs ../share/bsgen/JSFBeamGeneration.h . )
 
-lib$(PROGNAME).$(DllSuf): $(OBJS) $(FOBJS)
-	$(LD) $(SOFLAGS) $(OBJS) $(FOBJS) -o lib$(PROGNAME).$(DllSuf) $(ADDOBJ) \
+lib$(PROGNAME).$(DylibSuf): $(OBJS) $(FOBJS)
+	$(LD) $(DYLIBFLAGS) $(OBJS) $(FOBJS) -o lib$(PROGNAME).$(DylibSuf) $(ADDOBJ) \
 	$(AIXFLAGS)
 
 depend:: $(SRC) $(HDR)
@@ -43,7 +43,7 @@ clean::
 
 distclean:: clean
 	rm -f Makefile
-	rm -f $(JSFROOT)/lib/lib$(PROGNAME).$(DllSuf)
+	rm -f $(JSFROOT)/lib/lib$(PROGNAME).$(DylibSuf)
 	rm -f genbeam.root genbeam2.root
 
 XCOMM  web:
