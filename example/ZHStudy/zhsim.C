@@ -57,7 +57,7 @@ int zhsim()
 
   jsf->BeginRun(1);              // Set run number to 1.
   for(Int_t ev=1;ev<=maxevt;ev++){
-    jsf->Process(ev);
+    if( !jsf->Process(ev)) break ;
     jsf->FillTree();
     jsf->Clear();
   }
