@@ -284,6 +284,6 @@ JSFConfig.h: ../conf/jsf.version ../bin/makespec
 
 #if __PYTHIA_VERSION__ >= 6
 $(PYTHIA_LIBFILE):
-	( cd ../share/pythia6 ; make install )
+	( cd ../share/pythia6 ; make all )
 #endif
 
