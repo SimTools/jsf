@@ -8,12 +8,15 @@ How to install
 	set path=(. $JSFROOT/bin $ROOTSYS/bin $path)
 	setenv IMAKEINCLUDE "-I$JSFROOT -I$LCLIBROOT"
 
+2) Specify Pythia version number in conf/configure.in.
+   Make sure, LCLIB and ROOT are compiled with same version 
+   number
 
-2) do 
+3) do 
 	cd $JSFROOT
 	make install
 
-3) Utility macros are prepared in $JSFROOT/macro.  To use them without
+4) Utility macros are prepared in $JSFROOT/macro.  To use them without
    specify full pathname, copy $JSFROOT/macro/dot.rootrc to .rootrc 
    file in your home directory ( ~/.rootrc) or append it if you have
    already.
