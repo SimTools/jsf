@@ -7,6 +7,8 @@
 //
 // Description of JSFSpringParton parameters 
 //
+//$Id$
+//
 //////////////////////////////////////////////////////////////////////////
 
 #include "TObject.h"
@@ -62,6 +64,18 @@ public:
   Double_t GetPt(){ return TMath::Sqrt( fP[1]*fP[1]+fP[2]*fP[2]);}
   Double_t GetCosth(){ return fP[3]/GetPabs() ;}
 
+
+  Int_t   GetSerial(){ return fSer;}
+  Int_t   GetID(){ return fID;}
+  Double_t GetCharge(){ return fCharge;}
+  Double_t GetMass(){ return fMass;}
+
+  Int_t GetNDaughter(){ return fNdaughter;}
+  Int_t GetFirstDaughter(){ return fFirstDaughter;}
+  Int_t GetMother(){ return fMother; }
+  Int_t GetHelicity(){ return fHelicity;}
+  Int_t GetColorID(){ return fColorID;}
+  Int_t GetShowerInfo(){ return fShowerInfo;}
 
   TVector GetPV(){ TVector p(4) ; 
           p(0)=fP[0] ; p(1) =fP[1] ; p(2)=fP[2] ; p(3)=fP[3] ; return p ; }
