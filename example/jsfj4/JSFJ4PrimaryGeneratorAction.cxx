@@ -43,16 +43,16 @@ void JSFJ4PrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent)
 void JSFJ4PrimaryGeneratorAction::SavePrimaries(G4Event *anEvent)
 {
 
-  cout << " start JSFJ4PrimaryGeneratorAction::SavePrimaries" << endl;
+//  cout << " start JSFJ4PrimaryGeneratorAction::SavePrimaries" << endl;
 
-  GetEventBuf()->Print();
+//  GetEventBuf()->Print();
 
   TObjArray    *vertices=(TObjArray*)GetEventBuf()->GetComponent("PrimaryVertices");
 
   vertices->Clear();   vertices->Compress();
 
-  cout << "Number of primary particles are " << 
-    anEvent->GetNumberOfPrimaryVertex() << endl;
+//  cout << "Number of primary vertecies is " << 
+//    anEvent->GetNumberOfPrimaryVertex() << endl;
 
   Int_t iserv=0;
   for(Int_t iv=0;iv<anEvent->GetNumberOfPrimaryVertex();iv++){
@@ -63,29 +63,40 @@ void JSFJ4PrimaryGeneratorAction::SavePrimaries(G4Event *anEvent)
     stack<G4PrimaryParticle*>  p4mother;
     stack<JSFJ4PrimaryParticle*> jsfj4mother;
 
+    bool notsaved=true;
     while( p4 != 0 ) {
-      JSFJ4PrimaryParticle *p=new JSFJ4PrimaryParticle(p4);
-      v->Add(p);
-      p->SetPrimaryVertex(v);
-      G4PrimaryParticle *p4dau=p4->GetDaughter();
+     JSFJ4PrimaryParticle *p;
+     if ( fUseJupiterGenerator ) {
+       p=new JSFJ4PrimaryParticle(p4);
+     }
+     else {
+       JSFJ4PrimaryParticleInformation *pi=(JSFJ4PrimaryParticleInformation*)p4->GetUserInformation();
+       p=new JSFJ4PrimaryParticle(p4, pi->GetIndex(), pi->GetGeneratorParticle() );
+     }
+
+     v->Add(p);
+     p->SetPrimaryVertex(v);
+     G4PrimaryParticle *p4dau=p4->GetDaughter();
       if( !p4mother.empty() ) { (jsfj4mother.top())->AddDaughter(p); }
       if( p4dau != 0 ) {
 	p4mother.push(p4);
 	jsfj4mother.push(p);
 	p4=p4dau;
+        notsaved=true;
       }
       else {
-	p4=p4->GetNext();
-	if( p4 == 0 && !p4mother.empty()) {
-	  p4=p4mother.top();
-	  p4mother.pop();
-	  jsfj4mother.pop();
-	  p4=p4->GetNext();
+ 	p4=p4->GetNext();
+        if( p4 == 0 ) {
+          while( p4 == 0 && !p4mother.empty()){
+	    p4=p4mother.top();
+	    p4mother.pop();
+	    jsfj4mother.pop();
+	    p4=p4->GetNext();
+          }
 	}
       }
     }
     vertices->Add(v);
-
   }
 }
 
@@ -104,7 +115,6 @@ void JSFJ4PrimaryGeneratorAction::LoadJSFGenerator(G4Event *anEvent)
   for(Int_t ig=0;ig<gbuf->GetNparticles();ig++) {
     JSFGeneratorParticle *gp=(JSFGeneratorParticle*)gps->At(ig);
     G4int mother=gp->GetMother();
-
     if( mother <= 0 ) {
       nskip++;
       continue;
@@ -130,7 +140,8 @@ void JSFJ4PrimaryGeneratorAction::LoadJSFGenerator(G4Event *anEvent)
     particle->SetMass(mass);
     G4HEPEvtParticle* hepParticle
       = new G4HEPEvtParticle(particle, status, firstdaughter, lastdaughter);
-    
+    hepParticle->GetTheParticle()->SetUserInformation(new JSFJ4PrimaryParticleInformation(ig, gp));
+//  JSFJ4PrimaryParticleInformation object is deleted when G4PrimaryParticle object is deleted.    
     hplist.push_back(hepParticle);
     
   }
@@ -165,6 +176,7 @@ void JSFJ4PrimaryGeneratorAction::LoadJSFGenerator(G4Event *anEvent)
   G4PrimaryVertex* vertex = new G4PrimaryVertex(ip_position, ip_time);
 
   // put initial particles to the vertex
+
   for( size_t ii=0; ii<hplist.size(); ii++ )
   {
     if( hplist[ii]->GetISTHEP() > 0 ) // ISTHEP of daughters had been 

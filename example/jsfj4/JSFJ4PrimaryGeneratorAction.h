@@ -11,10 +11,42 @@
 ///////////////////////////////////////////////////////////////////////
 
 #include "J4PrimaryGeneratorAction.hh"
+#include "G4VUserPrimaryParticleInformation.hh"
 
 class G4Event;
 class JSFJ4Buf;
+class JSFGeneratorParticle;
   
+
+class JSFJ4PrimaryParticleInformation : public G4VUserPrimaryParticleInformation 
+{
+  protected:
+     int fGeneratorIndex;
+     JSFGeneratorParticle *fGeneratorParticle;
+     
+  public:
+     JSFJ4PrimaryParticleInformation(int index=-1, JSFGeneratorParticle *gp=0){
+         fGeneratorIndex=index; 
+         fGeneratorParticle=gp; 
+     }
+     ~JSFJ4PrimaryParticleInformation(){;}
+     
+  public:
+      void Print() const {}
+      int GetIndex(){ return fGeneratorIndex;}
+      JSFGeneratorParticle *GetGeneratorParticle(){ return fGeneratorParticle; }
+      void SetIndex(int index=-1) {
+          fGeneratorIndex=index; 
+      }
+      void SetParticle(JSFGeneratorParticle *gp) {
+          fGeneratorParticle = gp ;
+      }
+
+};
+ 
+
+
+
 // *******************************************************
 class JSFJ4PrimaryGeneratorAction : public J4PrimaryGeneratorAction
 {
