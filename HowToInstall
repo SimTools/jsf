@@ -13,4 +13,9 @@ How to install
 	cd $JSFROOT
 	make install
 
+3) Utility macros are prepared in $JSFROOT/macro.  To use them without
+   specify full pathname, copy $JSFROOT/macro/dot.rootrc to .rootrc 
+   file in your home directory ( ~/.rootrc) or append it if you have
+   already.
+
 that's it.
