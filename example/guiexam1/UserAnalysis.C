@@ -70,9 +70,7 @@ void DrawHist()
   else {
     cHist->cd();
   }
-  //  hRV->Draw();
-  //  hZV->Draw();
-  hYV->Draw();
+  hNCDC->Draw();
 
   old->cd();
 }
