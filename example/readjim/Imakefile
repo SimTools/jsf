@@ -11,13 +11,8 @@
 
 CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lpacklib
 JSFLIBS       = -Wl,-L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim
-ROOTLIBS      = -L$(ROOTSYS)/lib \
-		-lEGPythia -lEG $(CERNLIBS) \
-		-lNew -lBase -lCint -lClib -lCont -lFunc \
-                -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
-                $(ROOT222LIBS) -lPostscript -lProof -lTree -lUnix -lZip
 
-ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
+ROOTLIBS     += -lEGPythia -lEG $(CERNLIBS)
 
 LCLIBDIR      = $(LCLIBROOT)/lib
 
@@ -81,7 +76,7 @@ distclean::
 	@rm -f $(OBJS) core *~ *.o
 	@rm -f *.bak 
 	@rm -f jsf *.root Makefile 
-
+	@rm -f libJSFReadJIMBank*
 ###
 
 $(SOLIBNAME).$(SrcSuf): $(HDRS) JSFReadJIMLinkDef.h
