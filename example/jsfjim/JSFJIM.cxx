@@ -8,12 +8,14 @@
 // JSFJIM
 //
 // Run JIM in JSF.
-// 
-// 
 //
 // Due to subroutine GINIT is used not only in GEANT 3.21
 // but also in TAUOLA, JSFHadronizer can not handle tau decay
 // properly.
+//
+//(Update)
+//  16-October-1999  Add JSFJIM::KZGET.  
+//                   Do not call kzeclr at the end of event.
 //
 //$Id$
 //
@@ -30,6 +32,7 @@ extern void jsfjimgrun_(Int_t *nret);
 extern void jsfjimopen_(Int_t *iu, Char_t *fname, Int_t *iret, Int_t lname);
 extern void jsfjimclose_(Int_t *iu);
 extern void kzeclr_();
+extern void kzget_(Char_t *cname, Int_t *iseg, Int_t *leng, Int_t idat[],  Int_t lenb);
 };
 
 typedef struct {
@@ -102,7 +105,7 @@ Bool_t JSFJIM::Process(Int_t nev)
   // Trigger one JIM event
   Int_t iret=0;
   jsfjimgrun_(&iret);
-  printf(" jsfjimevent returned with iret=%d\n",iret);
+  //  printf(" jsfjimevent returned with iret=%d\n",iret);
   if( iret < 0 ) return kFALSE;
 
   // Put it into SIMDST buffer.
@@ -111,7 +114,7 @@ Bool_t JSFJIM::Process(Int_t nev)
 
   //*-- Delete (ZDROP'S and one ZGARB) all existing banks 
   //*-- and clear bank directory
-  kzeclr_();  // This was originally called in guout of JIM.
+  // kzeclr_();  // This was originally called in guout of JIM.
 
   return rc;
 }
@@ -120,6 +123,15 @@ Bool_t JSFJIM::Process(Int_t nev)
 Bool_t JSFJIM::EndRun()
 {
   return kTRUE;
+}
+
+
+// ---------------------------------------------------------------
+void JSFJIM::KZGET(Char_t *cname, Int_t iseg, Int_t &leng, Int_t idat[])
+{
+  Int_t lenb=strlen(cname);
+  kzget_(cname, &iseg, &leng, idat, lenb);
+  return ;
 }
 
 

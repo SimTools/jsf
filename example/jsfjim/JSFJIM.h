@@ -32,6 +32,9 @@ public:
 
   void SetInput(Char_t *file){ strcpy(fInputFile,file); }
 
+  // Interface functions to get JIM result
+  void KZGET(Char_t *cname, Int_t iseg, Int_t &leng, Int_t idat[]);  
+
 //  virtual JSFJIMParam *Param(){ return fParam; }
 //  JSFQuickSimParam *Param(){ return (JSFQuickSimPara.cxxm*)fParam;}
 //  void SetJIMParam(JSFJIMParam *par){ fParam=par; }
