@@ -1,5 +1,7 @@
-#include <fstream.h>
+#include <fstream>
  enum if_bases { BASES, SPRING };
+
+using namespace std;
                                                                             /*
 ******************************************************************************
 *                   =====================================                    */

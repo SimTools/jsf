@@ -1,5 +1,5 @@
-#include <fstream.h>
-#include <iostream.h>
+#include <fstream>
+#include <iostream>
 #include "bases_xhist.h"
 #include "bases_scat.h"
 const int NHS = 10, NHASH = 13, MXHIST = 110;
