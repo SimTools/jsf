@@ -13,7 +13,7 @@
   sim=new JSFQuickSim();
   
 //  full->SetMakeBranch(kFALSE);   // suppress output of EventBuf 
-  hdr->SetMakeBranch(kFALSE);     // suppress output of EventBuf 
+//  hdr->SetMakeBranch(kFALSE);     // suppress output of EventBuf 
 //  sim->SetMakeBranch(kFALSE);    // suppress output of EventBuf
 
   Int_t maxevt=100;      // Number of event is 10.
