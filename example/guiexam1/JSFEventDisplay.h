@@ -1,3 +1,4 @@
+//*LastUpdate:  jsf-1-13 25-January-2000  by Akiya Miyamoto
 //*LastUpdate:  jsf-1-5 22-Feburary-1999  by Akiya Miyamoto
 //*-- Author :  Akiya Miyamoto  22/02/1999
 
@@ -17,7 +18,7 @@
 #include "JSFConfig.h"
 
 #include <TROOT.h>
-#include <TCanvas.h>
+// #include <TCanvas.h>
 #include <TView.h>
 #if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 23
 #include <TVirtualX.h>
@@ -35,7 +36,6 @@
 #include <TGTextEntry.h>
 #include <TGMsgBox.h>
 #include <TGMenu.h>
-#include <TGCanvas.h>
 #include <TGComboBox.h>
 #include <TGTab.h>
 #include <TGSlider.h>

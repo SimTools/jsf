@@ -1,8 +1,18 @@
-#ifndef __JSFEnvGUIFrame__
-#define __JSFEnvGUIFrame__
+//*LastUpdate:  jsf-1-13 25-January-2000  by Akiya Miyamoto
+//*-- Author :  Akiya Miyamoto  26/08/1999
+
+//////////////////////////////////////////////////////////////////
+//
+//  JSFEnvGUIFrame
+//
+//  To Get Env prameter from GUI panel.
 //
 //$Id$
 //
+//////////////////////////////////////////////////////////////////
+
+#ifndef __JSFEnvGUIFrame__
+#define __JSFEnvGUIFrame__
 
 #include "JSFConfig.h"
 
@@ -15,28 +25,6 @@
 #else
 #include <TGXW.h>
 #endif
-
-#include <TGListBox.h>
-#include <TGClient.h>
-#include <TGFrame.h>
-#include <TGIcon.h>
-#include <TGLabel.h>
-#include <TGButton.h>
-#include <TGTextEntry.h>
-#include <TGMsgBox.h>
-#include <TGMenu.h>
-#include <TGCanvas.h>
-#include <TGComboBox.h>
-#include <TGTab.h>
-#include <TGSlider.h>
-#include <TGDoubleSlider.h>
-#include <TGFileDialog.h>
-#include <TRootEmbeddedCanvas.h>
-#include <TCanvas.h>
-#include <TH1.h>
-#include <TH2.h>
-#include <TRandom.h>
-#include <TSystem.h>
 
 #include "JSFEnv.h"
 

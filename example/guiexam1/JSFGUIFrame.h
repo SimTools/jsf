@@ -1,8 +1,18 @@
-#ifndef __JSFGUIFrame__
-#define __JSFGUIFrame__
+//*LastUpdate:  jsf-1-13 25-January-2000  by Akiya Miyamoto
+//*-- Author :  Akiya Miyamoto  09/03/1999
+
+//////////////////////////////////////////////////////////////////
+//
+//  JSFGUIFrame
+//
+//  For JSF Control Panel GUI
 //
 //$Id$
 //
+//////////////////////////////////////////////////////////////////
+
+#ifndef __JSFGUIFrame__
+#define __JSFGUIFrame__
 
 #include "JSFConfig.h"
 
@@ -25,16 +35,10 @@
 #include <TGTextEntry.h>
 #include <TGMsgBox.h>
 #include <TGMenu.h>
-#include <TGCanvas.h>
-#include <TGComboBox.h>
 #include <TGTab.h>
 #include <TGSlider.h>
 #include <TGDoubleSlider.h>
 #include <TGFileDialog.h>
-#include <TRootEmbeddedCanvas.h>
-#include <TCanvas.h>
-#include <TH1.h>
-#include <TH2.h>
 #include <TRandom.h>
 #include <TSystem.h>
 
@@ -101,9 +105,6 @@ private:
    TGTextButton       *fBStartAnal;
    TGLabel            *fLSAFromEvent, *fLSAToEvent;
 
-   //   Char_t fInputFileName[256];
-   //   Char_t fOutputFileName[256];
-
    JSFEventDisplay *fED;
    JSFDemoDisplay  *fDemo;
    JSFGUIAnalysis  *fAnal;
@@ -113,11 +114,8 @@ private:
    Char_t fMacroGetNext[64];
    Char_t fMacroGetPrev[64];
 
-   // Char_t fMacroFileName[256];
    Bool_t fShowHist;
    Int_t  fShowHistFrequency;
-   //Int_t  fFirstEvent;
-   //Int_t  fNEventsAnalize;
    Int_t  fReturnCode;
    Int_t  fNoOfAnalizedEvents;
    Bool_t fTextEntryStatus[3];
@@ -186,8 +184,11 @@ public:
      gJSF->Env()->SetValue("JSFGUI.NEventsAnalize",str);}
    void SetReturnCode(Int_t ir){ fReturnCode=ir;}
 
-//   ClassDef(JSFGUIFrame, 1)   // A class to GUI
+   Bool_t GetShowHist(){ return fShowHist; }
+   Int_t  GetShowHistFrequency(){ return fShowHistFrequency; }
+   Int_t  GetNoOfAnalizedEvents(){ return fNoOfAnalizedEvents; }
 
+   ClassDef(JSFGUIFrame, 0)   // A class to GUI
    
 };
 
