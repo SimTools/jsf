@@ -1,11 +1,3 @@
-//*LastUpdate :  jsf-1-14  11-Feburary-2000  By A.Miyamoto
-//*LastUpdate :  jsf-1-12  2-September-1999  By A.Miyamoto
-//*LastUpdate :  jsf-1-11  23-July-1999  By A.Miyamoto
-//*LastUpdate :  jsf-1-4  15-Feburary-1999  By A.Miyamoto
-//*LastUpdate :  0.02/01  10-September-1998  By A.Miyamoto
-//*-- Author  : A.Miyamoto  10-September-1998
-
-
 ////////////////////////////////////////////////////////////////////////
 //
 // JSFSpring
@@ -24,6 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
+#include <TSystem.h>
 #include <TObjectTable.h>
 #include <TKey.h>
 #include "TRandom.h"
@@ -254,6 +247,96 @@ Bool_t JSFSpringBuf::SetPartons()
   fNparton=npart;
   return kTRUE;
 }
+
+// ---------------------------------------------------------------
+void JSFSpring::WriteRandomSeed(Char_t *fw)
+{
+  Char_t fn[256];
+  if( strlen(fw) == 0 ) {
+    sprintf(fn,"%s",
+	    gJSF->Env()->GetValue("JSFSpring:RandomSeedWriteFile","undefined"));
+    if( strcmp(fn,"undefined") == 0 ) {
+      sprintf(fn,"jsf-spring-seed.%d",gSystem->GetPid());
+    }
+  }
+  else {
+    sprintf(fn,"%s",fw);
+  }
+  
+  FILE *fd=fopen(fn,"w");
+  fprintf(fd,"0 %d\n",gJSF->GetEventNumber());
+
+  bases_ran1 *rn=fBases->GetRan1();
+  fSeed=rn->GetSeed();
+  rn->GetSeed2(fSeedIY, fSeedIV);
+
+  fprintf(fd,"%d\n",fioNTAB);
+  fprintf(fd,"%ld\n",fSeed);
+  fprintf(fd,"%ld\n",fSeedIY);
+  for(Int_t i=0;i<fioNTAB;i++){
+    fprintf(fd,"%ld\n",fSeedIV[i]);
+  }
+  fclose(fd);
+}
+
+
+// ---------------------------------------------------------------
+void JSFSpring::ReadRandomSeed(Char_t *fr)
+{
+  Char_t fn[256];
+  if( strlen(fr) == 0 ) {
+    sprintf(fn,"%s",
+	    gJSF->Env()->GetValue("JSFSpring:RandomSeedReadFile","undefined"));
+    if( strcmp(fn,"undefined") == 0 ) {
+      printf("  Error in JSFSpring:ReadRandomSeed()   \n");
+      printf("  File name to read random seed (JSFSpring:RandomSeedReadFile) is not specified.\n");
+      return;
+    }
+  }
+  else {
+    sprintf(fn,"%s",fr);
+  }
+  FILE *fd=fopen(fn,"r");
+  Int_t mode, ievt;
+  fscanf(fd,"%d %d",&mode, &ievt);
+
+
+  fscanf(fd,"%d",&fioNTAB);
+  fscanf(fd,"%ld",&fSeed);
+  fscanf(fd,"%ld",&fSeedIY);
+  for(Int_t i=0;i<fioNTAB;i++){
+    fscanf(fd,"%ld",&fSeedIV[i]);
+  }
+  fclose(fd);
+
+  bases_ran1 *rn=fBases->GetRan1();
+  rn->SetSeed(fSeed);
+  rn->SetSeed2(fSeedIY, fSeedIV);
+
+  printf(" Random seed for event#%d of JSFSpring is obtained from a file %s\n",ievt,fn);
+}
+
+// ---------------------------------------------------------------
+void JSFSpring::PrintRandomSeed(Int_t num)
+{ 
+  printf(" Spring-Seed:");
+
+  bases_ran1 *rn=fBases->GetRan1();
+  fSeed=rn->GetSeed();
+  rn->GetSeed2(fSeedIY, fSeedIV);
+
+  printf("%d ",fioNTAB);
+  printf("%ld ",fSeed);
+  printf("%ld ",fSeedIY);
+
+  for(Int_t i=0;i<num;i++){
+    if( i < fioNTAB ) {
+      printf("%ld ",fSeedIV[i]);
+    }
+  }
+  printf("\n");
+}
+
 
 #if __ROOT_FULLVERSION__ >= 30000
 //_____________________________________________________________________________

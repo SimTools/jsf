@@ -96,6 +96,9 @@ public:
    void SetPrintInfo(Bool_t flag){ fPrintInfo=flag; }
    void SetPrintHist(Bool_t flag){ fPrintHist=flag; }
 
+   void WriteRandomSeed(Char_t *fw="");
+   void ReadRandomSeed(Char_t *fr="");
+   void PrintRandomSeed(Int_t num=8);  // First num's data are printed
    
     ClassDef(JSFSpring,4)  // JSFSpring module
 };

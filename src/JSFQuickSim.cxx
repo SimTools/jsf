@@ -428,7 +428,7 @@ Bool_t JSFQuickSimBuf::MakeEventBuf()
 
    MakeJSFLTKCLTrackPointers();
 
-   return kTRUE;\
+   return kTRUE;
 }
 
 //_____________________________________________________________________________
@@ -688,7 +688,7 @@ Bool_t JSFQuickSimBuf::MakeCDCTracks()
        if( *ncel > 0 ) {
 	 t->SetPositionAtEMC( &prjunk_.RTKBNK[icdc-1][60] );
        }
-       ct->SetCDC(ncdc, t);
+       ct->SetCDC(ncdc+1, t);
 
        ncdc++;
      }
