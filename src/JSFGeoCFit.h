@@ -31,7 +31,7 @@ class JSFGeoCFit :  public JSFVirtualFit
   Double_t            fPTOR   ; // Factor to conver Pt to R  (R = PTOR*Pt)
 
  public:
-  JSFGeoCFit();
+  JSFGeoCFit(){}
   JSFGeoCFit(Int_t ntrk, TClonesArray *trk, TVector3 vtxini);
   JSFGeoCFit(Int_t ntrk, TClonesArray *trk, JSF3DV vtxini);
   virtual ~JSFGeoCFit();
