@@ -97,6 +97,9 @@ distclean::
 	@rm -f *.bak libJSFJIM.* *.bnk
 	@rm -f jsfjim *.root Makefile 
 
+web: jsfjim
+	./jsfjim -q -b html.C
+
 ###
 
 libJSFJIM.$(SrcSuf): $(HDRS) JSFJIMLinkDef.h
