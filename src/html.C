@@ -31,6 +31,8 @@
 
    html.MakeClass("PythiaGenerator");
    html.MakeClass("DebugGenerator");
+   html.MakeClass("DebugWGenerator");
+   html.MakeClass("JSFLTKCLTrack");
 
    html.MakeIndex();
 }
