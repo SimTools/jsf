@@ -42,6 +42,8 @@ allinstall: install mkopsoft
 	( cd example/mkjimbnk ; xmkmf -a ; make )
 	( cd share/zvtop ; make all )
 	( cd share/jetnet ; make all )
+	( cd share/me2shgen ; make all ; make install)
+	( cd share/herwig ; make all ; make install)
 
 fullinstall: allinstall web
 
@@ -56,13 +58,17 @@ clean:
 	( cd example/CCDAnal  ; make clean )
 	( cd share/zvtop ; make clean )
 	( cd share/jetnet ; make clean )
+	( cd share/herwig ; make clean )
+	( cd share/me2shgen ; make clean )
 
 web: html/example
 	( cd src ; xmkmf ; make web ) 
 	for i in FFbarSpring guiexam1 ww CCDAnal readjim jsfjim ; do \
 	( cd example/$$i ; xmkmf -a ; make web ) \
 	done
-	( cd share/zvtop ; make web ) 
+	for i in zvtop jetnet bsgen herwig ; do\
+	( cd share/$$i ; make web ) \
+	done 
 	( perl bin/webindx > html/JSF_Index.html ) 
 
 html/example: 
@@ -91,6 +97,7 @@ distclean:
 	( rm -rf lib ; rm -rf html )
 	( cd macro ; rm -f jsf.root , PYTHIA.SEED )
 	rm -f *~ core jsf.conf jsf.root
+	( rm -f src/JSFConfig.h )
 
 getdata:
 	( mkdir -p data ; cd data ; \
