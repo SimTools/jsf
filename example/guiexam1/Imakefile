@@ -1,0 +1,65 @@
+#---------------------------------------------------
+
+#include    "config/lclib.tmpl"
+#include    "conf/makejsf.tmpl"
+
+ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
+                -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
+                -lPostscript -lProof -lTree -lUnix -lZip 
+
+ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
+
+
+#-------------------------------------------------------------
+
+INC           = $(JSFROOT)/include
+
+OBJJSFGUI     = InputDialog.$(ObjSuf) \
+		JSFEventDisplay.$(ObjSuf) \
+		JSFGUIFrame.$(ObjSuf) \
+		JSFGUIAnalysis.$(ObjSuf) \
+		libJSFGUI.$(ObjSuf)
+
+OBJS          = $(OBJJSFGUI)
+
+SRCJSFGUI     = InputDialog.$(SrcSuf) \
+		JSFEventDisplay.$(SrcSuf) \
+		JSFGUIFrame.$(SrcSuf) JSFGUIAnalysis.$(SrcSuf)
+
+SRC 	      = $(SRCJSFGUI)
+
+HDRJSFGUI     = InputDialog.h \
+		JSFEventDisplay.h \
+		JSFGUIFrame.h JSFGUIAnalysis.h \
+		JSFGUILinkDef.h
+
+SONAME        = libJSFGUI
+
+all::  libgui
+
+libgui: $(OBJJSFGUI)
+	$(LD) $(SOFLAGS) $(OBJJSFGUI) -o  $(SONAME).so
+
+clean:: 
+	@rm -f $(OBJS) core *.so *~
+	@rm -f libJSFGUI.$(SrcSuf) libJSFGUI.h
+
+depend:: 
+	makedepend -I$(ROOTSYS)/include -I$(JSFROOT)/include $(SRC)
+
+distclean:: clean
+	@rm -f $(OBJS) core *.so *.~ *.o *.root *.dat Makefile
+
+###
+
+libJSFGUI.$(SrcSuf): $(HDRJSFGUI)
+		@echo "Generating dictionary ..."
+		rootcint -f libJSFGUI.$(SrcSuf) -c $(HDRJSFGUI)
+
+#---------------------------------------------------
+
+.SUFFIXES: .$(SrcSuf)
+
+.$(SrcSuf).$(ObjSuf):
+	$(CXX) $(CXXFLAGS) -c $<
+
