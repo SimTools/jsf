@@ -54,6 +54,8 @@ public:
   JSFEMCHit() {}
   JSFEMCHit(Int_t cellid, Int_t iemenergy, Int_t ihdenergy)
    : JSFCALHit(cellid, iemenergy, ihdenergy){}
+  JSFEMCHit(Int_t cellid, Float_t emenergy, Float_t hdenergy)
+   : JSFCALHit(cellid, emenergy, hdenergy){}
   virtual ~JSFEMCHit() {}
 
   ClassDef(JSFEMCHit,2)  // EMC Calorimeter HitCell.
@@ -65,6 +67,8 @@ public:
   JSFHDCHit() {}
   JSFHDCHit(Int_t cellid, Int_t iemenergy, Int_t ihdenergy)
    : JSFCALHit(cellid, iemenergy, ihdenergy){}
+  JSFHDCHit(Int_t cellid, Float_t emenergy, Float_t hdenergy)
+   : JSFCALHit(cellid, emenergy, hdenergy){}
   virtual ~JSFHDCHit() {}
 
   ClassDef(JSFHDCHit,2)  // HDC Calorimeter HitCell.
@@ -76,6 +80,8 @@ public:
   JSFSMHit() {}
   JSFSMHit(Int_t cellid, Int_t iemenergy, Int_t ihdenergy)
    : JSFCALHit(cellid, iemenergy, ihdenergy){}
+  JSFSMHit(Int_t cellid, Float_t emenergy, Float_t hdenergy)
+   : JSFCALHit(cellid, emenergy, hdenergy){}
   virtual ~JSFSMHit() {}
 
   ClassDef(JSFSMHit,2)  // Shower max counter hit

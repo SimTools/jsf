@@ -34,8 +34,8 @@ DebugWGenerator::DebugWGenerator(const char *name, const char *title,
   fEventBuf = new DebugWGeneratorBuf("DebugWGeneratorBuf", 
 	 "DebugWGenerator event buffer", this);
  
-  fWmass  = gJSF->Env()->GetValue("DebugWGenerator.Wmass",80.0);
-  fWwidth = gJSF->Env()->GetValue("DebugWGenerator.Wwidth",2.5);
+  sscanf(gJSF->Env()->GetValue("DebugWGenerator.Wmass","80.0"),"%g",&fWmass);
+  sscanf(gJSF->Env()->GetValue("DebugWGenerator.Wwidth","2.5"),"%g",&fWwidth);
 
   sscanf(gJSF->Env()->GetValue("DebugWGenerator.RangeP","0.0,500.0"),
 	 "%g,%g",&fRp[0], &fRp[1]);
