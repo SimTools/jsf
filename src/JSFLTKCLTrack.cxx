@@ -1,8 +1,3 @@
-//*LastUpdate :  jsf-1-11  30-July-1999  By Akiya Miyamoto
-//*LastUpdate :  jsf-1-4  13-Feburary-1999  By Akiya Miyamoto
-//*LastUpdate :  0.04.01  5-October-1998  By Akiya Miyamoto
-//*-- Author  : Akiya Miyamoto  5-Octorber-1998
-
 ////////////////////////////////////////////////////////////////////////
 //
 //  JSFLTKCLTrack
@@ -22,6 +17,7 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
+#include "JSFConfig.h"
 #include "JSFSteer.h"
 #include "JSFLTKCLTrack.h"
 
@@ -52,7 +48,6 @@ JSFLTKCLTrack::~JSFLTKCLTrack()
 
   fCDCs.Clear();
   fEMGen.Clear();
-
 }
 
 
@@ -73,7 +68,6 @@ JSFLTKCLTrack::JSFLTKCLTrack(EJSFLTKCLTrackBank bank, Float_t data[])
       for(Int_t i=0;i<fNCDC;i++){ fIDCDC[i]=-1; }
     }
     fCDC=NULL;
-
 }
 
 //_____________________________________________________________________________
@@ -89,7 +83,6 @@ JSFLTKCLTrack::JSFLTKCLTrack(Float_t data[])
     fEcl=0;
     fNEMC=0;
     if( fType !=1 || fType != 3 ) f1stCDC=(Int_t)data[7];
-
 }
 //_____________________________________________________________________________
 JSFLTKCLTrack::JSFLTKCLTrack(JSFLTKCLTrack& t)
@@ -103,7 +96,6 @@ JSFLTKCLTrack::JSFLTKCLTrack(JSFLTKCLTrack& t)
   fSource=t.fSource;   fNCDC=t.fNCDC;   f1stCDC=t.f1stCDC;
   fCDC=t.fCDC;
   for(Int_t i=0;i<t.fNCDC;i++){ fIDCDC[i]=t.fIDCDC[i]; }
-
 }
 
 //_____________________________________________________________________________
@@ -113,7 +105,9 @@ const Char_t *JSFLTKCLTrack::GetTypeName()
   return gTypeName[fType];
 }
 
-#if __ROOT_FULLVERSION__ >= 30000
+#if ROOT_VERSION_CODE >= ROOT_VERSION(3,0,0) && JSF_VERSION_CODE >= JSF_VERSION(1,17,26)
+
+   
 //______________________________________________________________________________
 void JSFLTKCLTrack::Streamer(TBuffer &R__b)
 {

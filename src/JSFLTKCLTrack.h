@@ -55,8 +55,9 @@ protected:
   Int_t     fIDCDC[32];//[fNCDC]  saves CDC tracks contributing to this LTKCLTrack
   TObjArray  fCDCs;   // Associated CDC tracks
   TObjArray  fEMGen;  // Generator particles contributing to the EM cluster.  
-
+ 
   void SetCDC(Int_t ind, JSFCDCTrack *t){ f1stCDC=ind; fCDC=t; fCDCs.Add(t); }; 
+  void SetCDCR(Int_t ind, JSFCDCTrack *t){ f1stCDC=ind; fCDC=t; }; 
   void SetEMGen(JSFGeneratorParticle *emg){ fEMGen.Add(emg); }
 
 public:

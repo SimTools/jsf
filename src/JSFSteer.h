@@ -19,6 +19,7 @@
 #include <TDatime.h>
 #include <TString.h>
 #include "JSFEnv.h"
+#include "JSFConfig.h"
 
 class JSFModule;
 

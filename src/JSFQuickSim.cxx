@@ -1,21 +1,3 @@
-//*LastUpdate :  jsf-1-13  25-Jan-2000  By Akiya Miyamoto
-//*LastUpdate :  jsf-1-11  28-July-1999  By Akiya Miyamoto
-//*LastUpdate :  jsf-1-9  30-March-1999  By Akiya Miyamoto
-//*LastUpdate :  jsf-1-6  30-March-1999  By Akiya Miyamoto
-//*LastUpdate :  jsf-1-5  26-Feburary-1999  By Akiya Miyamoto
-//*LastUpdate :  jsf-1-4  6-Feburary-1999  By Akiya Miyamoto
-//*LastUpdate :  jsf-0-3-8  29-September-1998  By A.Miyamoto
-//*-- Author  : A.Miyamoto  11-September-1998
-
-/*  Change Log
-  30-March-1999  A.Miyamoto  Put modification to run with lclib-98a-4
-  28-May-1999    A.Miyamoto  Increased buffer size for VTX layer from 10 to 22
-  30-July-1999   A.Miyamoto  Add Append.  Does not use global variables for TClonesArray
-  13-Dec-1999    A.Miyamoto Stop when Number of Cal hits > kMaxCalHits
-  25-Jan-2000    A.Miyamoto  Increase size for Cal hits for 3 Tesla detector.
-*/
-
-
 ///////////////////////////////////////////////////////////////////
 //
 // JSRSFQuickSim 
@@ -454,19 +436,6 @@ Bool_t JSFQuickSimBuf::MakeJSFLTKCLTrackPointers()
 	 JSFGeneratorParticle *pgen=(JSFGeneratorParticle*)pa->UncheckedAt(ig-1);
 	 ct->SetEMGen(pgen);
        }
-
-       /*
-       printf(" Number of Generator tracks matched to EM cluster is %d",
-	      ct->GetEMGenEntries());
-       for(Int_t i=0;i<ct->GetEMGenEntries();i++){
-	 JSFGeneratorParticle *pgen=ct->GetEMGenAt(i);
-	 printf(" i=%d Ser#=%d",i,pgen->GetSerial());
-	 printf(" Gen id=%d",pgen->GetID());
-	 printf(" Egen=%g E=%g",pgen->GetE(),ct->GetE());
-	 printf("\n");
-       }
-       */
-
      }
   }
 
@@ -503,7 +472,6 @@ Bool_t JSFQuickSimBuf::MakeJSFLTKCLTracks()
 	Warning("MakeJSFLTKCLTrack",
        " Too many CDC track associated to the Combined track. nw=%d",  nw);
        }
-       //       new(tracks[nt++])  JSFLTKCLTrack(bank[ib], data);
        tracks.Add(new JSFLTKCLTrack(bank[ib], data));
        nt++;
      }
@@ -719,11 +687,11 @@ void JSFQuickSimBuf::SetPointers()
     JSFLTKCLTrack *lt=(JSFLTKCLTrack*)fTracks->UncheckedAt(i);
     Int_t icdc=lt->Get1stCDC();
     if (icdc < 0) {
-	lt->SetCDC(icdc,0);
+	lt->SetCDCR(icdc,0);
 	continue;
     }
     JSFCDCTrack *t=(JSFCDCTrack*)fCDCTracks->UncheckedAt(icdc);
-    lt->SetCDC(icdc, t);
+    lt->SetCDCR(icdc, t);
   }
 
   for(i=0;i<fNVTXHits;i++){
@@ -845,6 +813,7 @@ void JSFQuickSimBuf::AppendLTKCLTracks(JSFQuickSimBuf *src, Int_t numgp)
   if( src->GetNTracks() <= 0 ) return ;
 
   Int_t nltsrc=src->GetNTracks();
+
 #if defined(_HPUX_SOURCE) || defined(_AIX)
   Int_t *indlt = new Int_t [nltsrc];
 #else

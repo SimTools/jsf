@@ -167,6 +167,9 @@ Bool_t JSFMergeEvent::Process(Int_t nev)
 //
 
   Int_t nbkg=gRandom->Poisson(fNumAverage);
+
+  printf(" JSFMergeEvent::Process was called. .. nbkg=%d\n",nbkg);
+
   if( nbkg <= 0 ) return kTRUE;
   
   JSFQuickSim  *qsim=(JSFQuickSim*)gJSF->FindModule("JSFQuickSim","quiet");
@@ -182,12 +185,14 @@ Bool_t JSFMergeEvent::Process(Int_t nev)
       JSFGeneratorBuf *src=(JSFGeneratorBuf*)(fPythiaGenerator->EventBuf());
       naddgen=src->GetNparticles();
       buf->Append(src);
-      
+      printf(" Add naddgen=%d\n",naddgen);
     }
 
     if( qsim != 0 ) {
       JSFQuickSimBuf *sbuf=(JSFQuickSimBuf*)qsim->EventBuf();
       sbuf->Append((JSFQuickSimBuf*)(fJSFQuickSim->EventBuf()), naddgen);
+
+      printf(" Quick Sim data is appended.\n");
     }
 
   }

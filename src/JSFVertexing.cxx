@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include <TClass.h>
+#include "JSFConfig.h"
 #include "JSFVertexing.h"
 
 ClassImp(JSFVertexing)
