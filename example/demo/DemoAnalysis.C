@@ -55,6 +55,11 @@ Float_t gwgt; // Weight of this event.
 
 TPaveText *paveText[3];
 
+TLatex *txt=0;
+TLatex *txt2=0;
+Char_t *higgsmsg[5]={"!!!", "!!! Higgs", "!!! Higgs particle",
+     "!!! Higgs particle is", "!!! Higgs particle is generated !!!"};
+
 //_____________________________________________________________________
 void UserInitialize()
 {
@@ -161,7 +166,7 @@ void DrawHist(Int_t id=1)
         hNCDC->Draw();
 	break;
     case 3:
-        if( hHmass->Integral() > 0 )  gPad->SetLogy();
+      //        if( hHmass->Integral() > 0 )  gPad->SetLogy();
         hHmass->Draw();
 	break;
   }
@@ -187,35 +192,112 @@ void SoundMessage(Int_t id=0)
   Int_t itype=0;
   switch (id) {
     case -2:
-      gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/startup1.wav");
+      gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/startup1.wav &");
       break;
     case -1:
-      gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/startup2.wav");
+      gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/startup2.wav &");
       break;
     case -99:
-      gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/shutdown1.wav");
+      gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/shutdown1.wav &");
       break;
     case 0:
       itype=py->GetPythia()->GetMSTI(1);
       switch (itype) {
         case 24:
-          gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/gnobots2/victory.wav
-");
+	gSystem->Sleep(5000);
+	  //          gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/gnobots2/victory.wav");
           break;
         case 25:
-          gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/gnibbles/gobble.wav"
-);
+          gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/gnibbles/gobble.wav &");
           break;
         case 22:
-          gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/gnibbles/pop.wav");
+          gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/gnibbles/pop.wav &");
           break;
         case 36:
-          gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/gnobots2/bad.wav");
+          gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/gnobots2/splat.wav &");
+          break;
+        case 1:
+          gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/gnibbles/teleport.wav &");
           break;
         default:
-          gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/question.wav");
+          gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/question.wav &");
       }
   }
+}
+
+
+
+//_________________________________________________________
+void DrawCanvas()
+{
+  PythiaGenerator *py=(PythiaGenerator*)jsf->FindModule("PythiaGenerator");
+  Int_t itype=py->GetPythia()->GetMSTI(1);
+
+    Char_t msg[256]="                                                                     ";
+    sprintf(msg,"#sqrt{300} GeV : Evt %d : %s",jsf->GetEventNumber(),
+ 	   GetEventTypeString(itype));
+    Char_t msg2[256]="!!! Higgs particle is generated !!!";
+    if( txt ) delete txt; 
+    txt=new TLatex(-0.7, -0.9, msg);
+    
+    switch ( itype ) {
+      case 24:     txt->SetTextColor(2); // red
+ 	           txt->SetTextFont(32); // times-bold-i-normal
+		   txt->SetTextSize(0.05);
+		   break;
+      default:     txt->SetTextColor(26); // red
+ 	           txt->SetTextFont(72); // helvetica-bold-o-normal
+		   txt->SetTextSize(0.03);
+		   break;
+    }
+    txt->Draw();
+
+    if( itype == 24 || itype==103 || itype==123 || itype==124) {
+      gPad->Update();
+      gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/phone.wav &");
+      for(Int_t l=0;l<20;l++){
+        if( txt2 ) delete txt2; 
+	Int_t itxt=l;
+	if( l > 4 ) itxt=4;
+	txt2=new TLatex(-0.7, 0.8, higgsmsg[itxt]);
+	txt2->SetTextColor(2); // red
+	if( l > 4 ) {
+	  if( l%2 == 0 ) { txt2->SetTextColor(5); } // red
+	}
+	txt2->SetTextFont(32); // times-bold-i-normal
+	txt2->SetTextSize(0.05);
+	txt2->Draw();
+	gPad->Update();
+        if( l == 2 )  gSystem->Exec("/usr/bin/esdplay /usr/share/sounds/gnobots2/victory.wav &");
+	if( l < 4 ) { gSystem->Sleep(500); }
+      }
+    }
+
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+const Char_t GetEventTypeString(Int_t itype=-1)
+{
+  if( itype == -1 ) { 
+    PythiaGenerator *py=(PythiaGenerator*)jsf->FindModule("PythiaGenerator");
+    Int_t itype=py->GetPythia()->GetMSTI(1);
+  }
+  static  Char_t *processname[400]={0};
+  processname[1]="e^{+}e^{-} #rightarrow #gamma/Z^{0} ";
+  processname[22]="e^{+}e^{-} #rightarrow Z^{0} Z^{0}";
+  processname[24]="e^{+}e^{-} #rightarrow Z^{0} H^{0}";
+  processname[25]="e^{+}e^{-} #rightarrow W^{+} W^{-}";
+  processname[36]="e^{+}e^{-} #rightarrow e #nu W";
+  processname[103]="e^{+}e^{-} #rightarrow e^{+}e{-} H^{0} (#gamma #gamma #rightarrow H^{0}";
+  processname[123]="e^{+}e^{-} #rightarrow e^{+}e^{-} H0 (ZZ fusion)";
+  processname[124]="e^{+}e^{-} #rightarrow #nu#bar{#nu} H0 (WW fusion)";
+
+  if( processname[itype] != 0 ) return processname[itype];
+
+  static Char_t rtstr[64];
+  sprintf(rtstr,"Process id=%d",itype);
+  return rtstr;
+  
 }
 
 
