@@ -28,6 +28,23 @@ To-Do ( listed in arbitrary order ) -- Help wanted
 jsf-1-11  Modification toward jsf-1-11 A.Miyamoto
 **********************************************************
 -----------------------	
+27-July-1999 A.Miyamoto
+-----------------------	
+(1) JSFHelicalTrack class is enriched to include the helix fit using
+    Minuit.  The fit function can be used to the detector of cylindircal
+    geometry.
+(2) example/gui.C and example/MainMacro.C are moved to macro directory
+
+-----------------------	
+24-July-1999 A.Miyamoto
+-----------------------	
+(1) Several changes to JSFSteer, JSFModule, JSFSpring, ...
+    to save seeds of random number at the end of run. Next run can use them
+    to set seed to generate events with same random number sequence.
+(2) To do (1), directory structure in conf directory is changed.
+    See comment in JSFModule.cxx for more details.
+	
+-----------------------	
 15-July-1999 A.Miyamoto
 -----------------------	
 (1) SONAME in makejsf.tmpl and Imakefile were changed to SOLIBNAME
