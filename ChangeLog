@@ -27,7 +27,17 @@ To-Do ( listed in arbitrary order ) -- Help wanted
 
 	
 **********************************************************
-jsf-1-11  Modification toward jsf-1-11 A.Miyamoto
+jsf-1-12  Modification toward jsf-1-12 A.Miyamoto
+**********************************************************
+-----------------------	
+5-August-1999 A.Miyamoto
+-----------------------	
+(1) A bug in macro/GUIMainMacro.C was fixed.  
+    Due to this bug, histograms defined in UserAnalysis.C was nout out put
+    to the file when reading simulated data.
+	
+**********************************************************
+jsf-1-11  Released 30-July-1999 A.Miyamoto
 **********************************************************
 -----------------------	
 30-July-1999 A.Miyamoto
