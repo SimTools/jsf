@@ -515,7 +515,7 @@ void JSFCALGeoParam::HitCellGeom(Int_t iCellID, Float_t geo[])
       geo[2]=(p1.z+p2.z)/2.0 ;
       geo[3]=(p2.x-p1.x)/2.0 ;  geo[4]=(p2.y-p1.y)/2.0 ;
       geo[5]=(p2.z-p1.z)/2.0 ;
-      geo[6]=0.0;
+      geo[6]=TMath::ATan2(TMath::Sqrt(geo[0]*geo[0]+geo[1]*geo[1]), geo[2]);
       geo[7]=hit.phi;
       break;
 
@@ -536,6 +536,7 @@ void JSFCALGeoParam::HitCellGeom(Int_t iCellID, Float_t geo[])
       printf("Illegal cell number %d\n",iCellID);
       break;
   }
+
 
 }
 
