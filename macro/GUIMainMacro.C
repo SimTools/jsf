@@ -23,7 +23,7 @@
 //*
 //*  These user functions are defined in a macro file, UserAnalysis.C. 
 //*  UserSetOptions() and UserTerminate() is not called when they are defined.
-//*  UserModuleDefine() is called only when RunMode=4.
+//*  UserModuleDefine() is called only when RunMode=0.
 //* 
 //*(Author)
 //*  Akiya Miyamoto, KEK, 8-March-1999  
@@ -70,6 +70,9 @@ int Initialize()
   Int_t irunmode=jsf->Env()->GetValue("JSFGUI.RunMode",1);
 
   switch(irunmode){
+    case 0:
+      UserModuleDefine();
+      break;
     case 1:
       ofile= new TFile(outputFileName,"RECREATE");
       jsf->SetIOFiles();
@@ -99,7 +102,15 @@ int Initialize()
       simdst->SetQuickSimParam(par);
       break;
     case 4:
-      UserModuleDefine();
+      ofile = new TFile(outputFileName,"RECREATE");
+      jsf->SetIOFiles();
+      simdst= new ReadJIMBank();
+      simdst->SetDataFileName(inputFileName);  // Input file
+      break;
+    case 5:
+      ofile = new TFile(outputFileName,"RECREATE");
+      jsf->SetIOFiles();
+      simdst = new JSFJIM();
       break;
     default:
       printf("Run mode %d is not supported\n",irunmode);
@@ -180,14 +191,14 @@ void InitGenSim()
       break;
   }
 
-  if( jsf->Env()->GetValue("JSFGUI.SimulationType",1) == 1 ) {
+  //  if( jsf->Env()->GetValue("JSFGUI.SimulationType",1) == 1 ) {
     sim    = new JSFQuickSim();
     simdst = new JSFSIMDST();
     simdst->SetQuickSimParam(sim->Param());
-  }
-  else {
-    simdst = new JSFJIM();
-  }
+    //}
+    //else {
+    //simdst = new JSFJIM();
+    //}
 
   if( jsf->Env()->GetValue("JSFGUI.SIMDST.Output",0) == 0 ) 
     simdst->NoReadWrite();
@@ -236,7 +247,7 @@ Bool_t GetEvent(Int_t ev)
       gui->SetReturnCode(gReturnCode);
     }
     
-    if( irunmode==1 ) {
+    if( irunmode==1 || irunmode = 4 ) {
       jsf->FillTree();
       jsf->Clear();
     }
