@@ -131,7 +131,7 @@ void JSFDemoDisplay::DisplayDemo()
 
    if( !fMain ) {
     InitializeDemo();
-  }
+   }
   else {
     fDisp->GetCanvas()->cd();
     gPad->Clear();
@@ -176,7 +176,7 @@ void JSFDemoDisplay::DisplayDemo()
    }
 
    //   printf(" process name is %s\n",GetEventTypeString());
-
+   /*
    Char_t msg[256]="                                                                     ";
    sprintf(msg,"#sqrt{300}GeV : Evt %d : %s",gJSF->GetEventNumber(),
 	   GetEventTypeString());
@@ -187,6 +187,8 @@ void JSFDemoDisplay::DisplayDemo()
    txt->SetTextColor(50);
 
    txt->Draw();
+   */
+  gROOT->ProcessLine("DrawCanvas()");
 
   fDisp->GetCanvas()->Update();
 
