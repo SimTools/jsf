@@ -22,6 +22,8 @@
 #include "ANL4DVector.h"
 #include "PythiaGenerator.h"
 
+using namespace std;
+
 ClassImp(JSFVTXAnalysis)
 ClassImp(JSFVTXAnalysisBuf)
 
@@ -256,7 +258,8 @@ Bool_t JSFVTXAnalysis::Process(Int_t nev)
 	Double_t egp=TMath::Sqrt(gp->GetPx()*gp->GetPx()+
 		 gp->GetPy()*gp->GetPy()+gp->GetPz()*gp->GetPz()
 		 + 0.139*0.139);
-	ANL4DVector g4v(egp, gp->GetPx(), gp->GetPy(), gp->GetPz());
+	ANL4DVector g4v((Double_t)egp, (Double_t)gp->GetPx(), 
+			(Double_t)gp->GetPy(), (Double_t)gp->GetPz());
 	gsum=gsum+g4v;
 	ngs++;
 	}
@@ -372,7 +375,8 @@ Bool_t JSFVTXAnalysis::Process(Int_t nev)
     varnt[16]=ngs;
     if( nvtx > 1 && vg != 0 ) {
       JSFZVTOP3Vertex *rvtx=(JSFZVTOP3Vertex*)v->UncheckedAt(1);
-      TVector3 vdif=gvpos - rvtx->GetVertexPosition();
+      //      TVector3 vdif=gvpos - rvtx->GetVertexPosition();
+      ANL3DVector vdif=gvpos - (ANL3DVector)(rvtx->GetVertexPosition());
       varnt[15]=vdif.Mag();
     }
 
