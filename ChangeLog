@@ -1,5 +1,17 @@
 
 ----------------------------------------------------------------------------
+5-October-2000 Akiya Miyamoto
+----------------------------------------------------------------------------
+(1) Add new member functions, AddMSError and Average in JSFHelicalTrack class
+    JSFCDCTrack::AddMSError is also modified to allow energy loss correction
+(2) A bug in JSFHelicalTrack::SetTrackByFitToCyl ( The use of wrong space point
+for pivot determination and trial helix determination ) was fixed.  Now first
+point in the input space point is used as a pivot.
+In addition, new option for IP constraint fit is included.
+And the use of the derivative for Minuit minimization is removed until a bug
+in calculating first derivative is fixed.
+
+----------------------------------------------------------------------------
 27-September-2000 Akiya Miyamoto
 ----------------------------------------------------------------------------
 (1) Add KZGET2, KZBLOC, etc in example/readjim/JSFJLCSIM
