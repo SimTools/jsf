@@ -65,12 +65,9 @@ LIBS          = $(ROOTLIBS) -lm -ldld
 GLIBS         = $(ROOTLIBS) -lRint $(ROOTGLIBS) -lXpm -lX11 -lm -ldld
 FC            = f90
 USEFORTRAN    = -D_HIUX_FORTRAN
-BLOCKDATA     = $(LCDIR)/gen/pythia55/pydata.o \
-		$(LCDIR)/gen/lund73/jetset73/ludata.o \
-		$(LCDIR)/util/lcfull/src/prblk1.o \
+BLOCKDATA     = $(LCDIR)/util/lcfull/src/prblk1.o \
 		$(LCDIR)/util/fortlib/src/uconst.o \
 		$(LCDIR)/simjlc/src/smrblk.o \
 		$(LCDIR)/util/ltkcl/cmbblk.o 
-
 #endif
 
