@@ -17,7 +17,7 @@
 #include "TMath.h"
 #include "TVector.h"
 
-const Int_t kMaxCalHits=1000;
+const Int_t kMaxCalHits=2000;
 
 
 //************************************************************

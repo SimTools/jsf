@@ -543,6 +543,7 @@ Bool_t JSFCDCTrack::MovePivotToIP(JSFQuickSimParam *spar)
   Int_t maxloop=5;
   Int_t ncros=helix.OriginToCylinder(rcyl, zcyl, phi0, phi1, maxloop);
   if( ncros != 0 ) {
+    /*
     printf("Warning in JSFCDCTrack::MovePivotToIP(...)  .. Track does not intersect");
     printf(" with beam pipe.\n");
     printf("Track parameter is not changed.\n");
@@ -553,7 +554,7 @@ Bool_t JSFCDCTrack::MovePivotToIP(JSFQuickSimParam *spar)
 	printf("Radius of position =%g",TMath::Sqrt(xnow.x*xnow.x + xnow.y*xnow.y));
         printf("\n");
 	helix.Print();
-
+    */
     return kFALSE;
   }
   //

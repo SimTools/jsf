@@ -479,19 +479,20 @@ Bool_t JSFQuickSimBuf::MakeJSFLTKCLTrackPointers()
 	       printf(" GenEntries=%d",pa->GetEntries());
 	       printf(" GeneratorParticles=%d ",gevt->GetNparticles());
 	       printf(" ipg=%d nemgen=%d",ipg,nemgen);
+	       printf(" Pointer to this cluster is not set\n");
 	       printf(" \n");
+	
 	     }
-
-	     JSFGeneratorParticle *pgen=(JSFGeneratorParticle*)pa->UncheckedAt(ig-1);
-	     ct->SetEMGen(pgen);
-	     ct->fIDEMGen[ipg]=ig;
-	     
-	     if( pgen->GetSerial() != ig ) {
-	       printf(" Warning at JSFQuickSim::MakeJSFLTKCLTrackPointers\n");
-	       printf(" Generator Serial Number(%d)",pgen->GetSerial());
-	       printf(" and pointer in elmcs (%d) is different\n",ig);
+	     else {
+	       JSFGeneratorParticle *pgen=(JSFGeneratorParticle*)pa->UncheckedAt(ig-1);
+	       ct->SetEMGen(pgen);
+	       ct->fIDEMGen[ipg]=ig;
+	       if( pgen->GetSerial() != ig ) {
+		 printf(" Warning at JSFQuickSim::MakeJSFLTKCLTrackPointers\n");
+		 printf(" Generator Serial Number(%d)",pgen->GetSerial());
+		 printf(" and pointer in elmcs (%d) is different\n",ig);
+	       }
 	     }
-
 
 	   }
 	 }
@@ -518,13 +519,17 @@ Bool_t JSFQuickSimBuf::MakeJSFLTKCLTracks()
   EJSFLTKCLTrackBank bank[3]={kCombinedGammaTrack, kCombinedLeptonTrack, 
 			      kCombinedHadronTrack};
 
-  Float_t data[100];  
-  Int_t nw, nelm, neary[500], iret;
+  Float_t data[500];  
+  Int_t nw, nelm, neary[2000], iret;
   for(Int_t ib=0;ib<3;ib++){
      gJSFLCFULL->TBNOEL(1,bankname[ib], nelm, neary);
+     if ( nelm > 1000 ) {
+       printf("In JSFQuickSimBuf::MakeJSFLTKCLTracks..\n");
+       printf(" Too many elements(%d) in the bank %s\n",nelm,bankname[ib]);
+     }
      for(Int_t i=0;i<nelm;i++){
        gJSFLCFULL->TBGET(1,bankname[ib],neary[i], nw, data, iret);
-       if( nw > 50 ) { 
+       if( nw > 300 ) { 
 	Warning("MakeJSFLTKCLTrack",
        " Too many CDC track associated to the Combined track. nw=%d",  nw);
        }
@@ -532,6 +537,12 @@ Bool_t JSFQuickSimBuf::MakeJSFLTKCLTracks()
        nt++;
      }
   }
+  Int_t nent=tracks.GetEntries();
+  if( nt != nent ) {
+    printf("In JSFQuickSimBuf::MakeLTKCLTracks ..\n");
+    printf("nt(%d) and Number of entries in tracks (%d) is different\n",nt,nent);
+  }
+
   SetNTracks(nt);
 
   return kTRUE;
@@ -660,7 +671,7 @@ Bool_t JSFQuickSimBuf::MakeCDCTracks()
   else  bankname="Production:CDC;Track_Parameter";
 
   //
-  Int_t nelm, neary[500];
+  Int_t nelm, neary[2000];
   gJSFLCFULL->TBNOEL(1, bankname, nelm,neary);
   for(i=0;i<nelm;i++){
     Int_t id=i+1;
