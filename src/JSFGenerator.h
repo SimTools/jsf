@@ -50,6 +50,8 @@ public:
    Int_t         GetNparticles() const { return fNparticles;}
    TClonesArray *GetParticles(){ return fParticles; }
 
+   virtual void Print(const Option_t *opt="");
+
    void Append(JSFGeneratorBuf *src);
 
    ClassDef(JSFGeneratorBuf, 2) // JSF Generator Buffer class.

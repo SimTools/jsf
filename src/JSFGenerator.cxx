@@ -123,6 +123,45 @@ void JSFGeneratorBuf::Append(JSFGeneratorBuf *src)
   fNparticles+=nsrc;
 
 }
+
+//___________________________________________________________________________
+void JSFGeneratorBuf::Print(const Option_t *opt)
+{
+  // Print particles in fParticles
+
+  printf(" *** Event# %d ",gJSF->GetEventNumber());
+  printf(" %d particles in JSFGeneratorBuf object\n",fNparticles);
+  printf(" Ser   PId  Mo.  #D 1stD Charge Mass (E,Px,Py,Pz) ");
+  if( strcmp(opt,"full")==0 ) {
+    printf(" (T,X,Y,Z) ");
+  }
+  printf("\n");
+
+  for(Int_t i=0;i<fParticles->GetEntries();i++){
+    JSFGeneratorParticle *p=(JSFGeneratorParticle*)fParticles->UncheckedAt(i);
+    printf("%4d",p->GetSerial());
+    printf("%5d",p->GetID());
+    printf("%4d",p->GetMother());
+    printf("%4d",p->GetNDaughter());
+    printf("%4d",p->GetFirstDaughter());
+    printf("%6.3f",p->GetCharge());
+    printf("%10.5f",p->GetMass());
+    printf("%12.5f",p->GetE());
+    printf("%12.5f",p->GetPx());
+    printf("%12.5f",p->GetPy());
+    printf("%12.5f",p->GetPz());
+    if( strcmp(opt,"full")==0 ) {
+      printf(" %12.5f",p->GetT());
+      printf(" %12.5f",p->GetX());
+      printf(" %12.5f",p->GetY());
+      printf(" %12.5f",p->GetZ());
+    }
+    printf("\n");
+  }
+
+}
+
+
 #if __ROOT_FULLVERSION__ >= 30000
 //______________________________________________________________________________
 void JSFGeneratorBuf::Streamer(TBuffer &R__b)
