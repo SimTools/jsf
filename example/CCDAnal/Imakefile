@@ -52,7 +52,7 @@ clean::
 depend:: 
 	makedepend -I$(ROOTSYS)/include $(SRC)
 
-web: ccd
+web: lib ccd
 	./ccd -b -q html.C
 
 distclean::

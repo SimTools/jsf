@@ -74,7 +74,7 @@ clean::
 depend:: 
 	makedepend -I$(ROOTSYS)/include $(SRC)
 
-web: jsf
+web: jsf lib
 	./jsf -q -b html.C
 
 distclean::
