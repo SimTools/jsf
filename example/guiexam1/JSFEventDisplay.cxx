@@ -93,12 +93,14 @@ Bool_t  gGeometryIsInitialized;
 //---------------------------------------------------------------------------
 JSFEDHelix::JSFEDHelix(): THelix()
 {
+  
 }
 
 //---------------------------------------------------------------------------
 JSFEDHelix::~JSFEDHelix()
 {
-  if(fRotMat) gGeometry->GetListOfMatrices()->Remove(fRotMat);
+
+  //   if(fRotMat) gGeometry->GetListOfMatrices()->Remove(fRotMat);
 }
 
 
@@ -181,6 +183,8 @@ JSFEventDisplay::JSFEventDisplay(JSFGUIFrame *gui)
   fView=NULL;
   fCanvas=NULL;
   fGUIMain=gui;
+  
+  fRememberDisplayView=kFALSE;
 
   fWidgets  = new TList();
   fSignals  = new TList();
@@ -196,10 +200,13 @@ JSFEventDisplay::JSFEventDisplay(JSFGUIFrame *gui)
 void JSFEventDisplay::Update()
 {
 
+  if( !fRememberDisplayView ) {
+    sscanf(gJSF->Env()->GetValue("JSFEventDisplay.ViewAngle",
+				 "0.0 80.0 80.0"),"%lg %lg %lg",
+	   &fViewAngle[0], &fViewAngle[1], &fViewAngle[2]);
+  }
+
   fViewNo=gJSF->Env()->GetValue("JSFEventDisplay.ViewNo",1);
-  sscanf(gJSF->Env()->GetValue("JSFEventDisplay.ViewAngle",
-       "0.0 80.0 80.0"),"%g %g %g",
-	 &fViewAngle[0], &fViewAngle[1], &fViewAngle[2]);
   sscanf(gJSF->Env()->GetValue("JSFEventDisplay.ViewRange1",
 #if __ROOT_FULLVERSION__ >= 22500
        "-100.0 -100.0 -100.0 100.0 100.0 100.0"),"%lg %lg %lg %lg %lg %lg",
@@ -280,8 +287,9 @@ JSFEventDisplay::~JSFEventDisplay()
 //---------------------------------------------------------------------------
 void JSFEventDisplay::Clear()
 {
-  fSignals->Delete();
   fHelixes->Delete();
+  fSignals->Delete();
+  //  fWidgets->Delete();
 }
 
 
@@ -297,17 +305,19 @@ void JSFEventDisplay::DisplayEventData()
     fCanvasDirectory=gDirectory;
   } 
   else {
+    if( fRememberDisplayView ) { RememberView(); }
     fCanvas->Clear("d");
     Clear();
   }
   TDirectory *olddir=gDirectory;
   if( fCanvasDirectory != gDirectory ) fCanvasDirectory->cd();
 
-  TView *evview  = new TView(fViewNo);
-  fSignals->Add(evview);
+  //  TView *evview  = new TView(fViewNo);
+  fView  = new TView(fViewNo);
+  fSignals->Add(fView);
   Int_t ierr;
-  evview->SetView(fViewAngle[0], fViewAngle[1], fViewAngle[2], ierr);
-  evview->SetRange(&fViewRange[fDisplayType][0], &fViewRange[fDisplayType][3]);
+  fView->SetView(fViewAngle[0], fViewAngle[1], fViewAngle[2], ierr);
+  fView->SetRange(&fViewRange[fDisplayType][0], &fViewRange[fDisplayType][3]);
   if( !simdst ) simdst=(JSFSIMDST*)gJSF->FindModule("JSFSIMDST");
 
   if( fDrawGeometry ) DrawGeometry(fDisplayType);
@@ -343,16 +353,26 @@ void JSFEventDisplay::DisplayEventData()
 void JSFEventDisplay::DrawGeometry(Int_t type)
 {
 
-  if ( !gGeometryIsInitialized ) InitializeGeometry();
- 
+  if( !gGeometryIsInitialized ) { InitializeGeometry(type); }
+
   switch (type) {
     case 0:
+      gvVTX->SetVisibility(-1);
+      gvAll->SetVisibility(-1);	
+      gvMomentum->SetVisibility(3);
       gvMomentum->Draw("same");
       break;
     case 1:
+      gvMomentum->SetVisibility(-1);
+      gvVTX->SetVisibility(-1);
+      gvAll->SetVisibility(3);	
       gvAll->Draw("same");
+
       break;
     case 2:
+      gvMomentum->SetVisibility(-1);
+      gvAll->SetVisibility(-1);	
+      gvVTX->SetVisibility(3);
       gvVTX->Draw("same");
       break;
   }
@@ -361,7 +381,7 @@ void JSFEventDisplay::DrawGeometry(Int_t type)
 
 
 //---------------------------------------------------------------------------
-void JSFEventDisplay::InitializeGeometry()
+void JSFEventDisplay::InitializeGeometry(Int_t type)
 {
   if( gJSF == 0 ) { printf("JSFSteer is not defined yet.\n"); return; }
   JSFQuickSimParam *p=(JSFQuickSimParam*)simdst->Param();
@@ -372,64 +392,77 @@ void JSFEventDisplay::InitializeGeometry()
 
   //  View for full detector
   Double_t zshift=p->GetHDCZPlus()/2;
-  TTUBE *tube=new TTUBE("EMC","EMC", "void", p->GetEMCRMaximum(), 
-			   p->GetHDCRMaximum(), p->GetHDCZPlus());
-  TTUBE *beampipe=new TTUBE("BEAMPIPE","BEAMPIPE", "void",
-			p->GetVTXRadius(0),p->GetVTXRadius(0)+0.1,zshift);
-  TTUBE *pipe=new TTUBE("PIPE", "PIPE", "void", 0.0,1.0, 10.0);
-  fWidgets->Add(tube) ; fWidgets->Add(beampipe); fWidgets->Add(pipe);
+  TTUBE *tube, *beampipe, *pipe;
+  TNode *vAll2, *vAll3, *vAll4, *vAll5;
+  TTUBE *vtx0, *vtx1, *vtxaxis;
+  TNode *vVTXin, *vVTXxa, *vVTXya;
+  TSPHE *momframe;
+  TTUBE *momaxis;
+  TNode *vMomxa, *vMomya;
+  Double_t zvtx;
+  Int_t nl;
+
+  fCanvas->cd();
+      tube=new TTUBE("EMC","EMC", "void", p->GetEMCRMaximum(), 
+			    p->GetHDCRMaximum(), p->GetHDCZPlus());
+      beampipe=new TTUBE("BEAMPIPE","BEAMPIPE", "void", 0.01, 0.1,zshift);
+      //			p->GetVTXRadius(0),p->GetVTXRadius(0)+0.1,zshift);
+      pipe=new TTUBE("PIPE", "PIPE", "void", 0.0,1.0, 10.0);
+      fWidgets->Add(tube) ; fWidgets->Add(beampipe); fWidgets->Add(pipe);
+      
+      gvAll=new TNode("ALLVIEW","ALLVIEW","EMC");
+      gvAll->cd();
+      vAll2=new TNode("ALLVIEW2","ALLVIEW2","BEAMPIPE",0,0,zshift,"");
+      vAll3=new TNode("ALLVIEW3","ALLVIEW3","BEAMPIPE",0,0,-zshift,"");
+      vAll4=new TNode("ALLVIEW4","ALLVIEW4","PIPE",10.0,0,2*zshift,"XDIR");
+      vAll5=new TNode("ALLVIEW5","ALLVIEW5","PIPE",0.0, 10.0,2*zshift,"YDIR");
+      fWidgets->Add(gvAll) ; fWidgets->Add(vAll2); fWidgets->Add(vAll3);
+      fWidgets->Add(vAll4) ; fWidgets->Add(vAll5);
+	
+      vAll2->SetLineColor(2);
+      vAll3->SetLineColor(4);
+      vAll4->SetLineColor(7);
+      vAll5->SetLineColor(6);
+    
+  fCanvas->cd();
+      //  View for vertex view
+      nl=p->GetVTXNLayer();
+      vtx0=new TTUBE("VTX","VTX", "void",p->GetVTXRadius(nl-1),
+		     p->GetVTXRadius(nl-1)+0.01, p->GetVTXZplus(nl-1));
+      gvVTX=new TNode("VTXVIEW", "VTXVIEW","VTX");
+      gvVTX->cd();
 
 
-  gvAll=new TNode("ALLVIEW","ALLVIEW","EMC");
-  gvAll->cd();
-  TNode *vAll2=new TNode("ALLVIEW2","ALLVIEW2","BEAMPIPE",0,0,zshift,"");
-  TNode *vAll3=new TNode("ALLVIEW3","ALLVIEW3","BEAMPIPE",0,0,-zshift,"");
-  TNode *vAll4=new TNode("ALLVIEW4","ALLVIEW4","PIPE",10.0,0,2*zshift,"XDIR");
-  TNode *vAll5=new TNode("ALLVIEW5","ALLVIEW5","PIPE",0.0, 10.0,2*zshift,"YDIR");
-  fWidgets->Add(gvAll) ; fWidgets->Add(vAll2); fWidgets->Add(vAll3);
-  fWidgets->Add(vAll4) ; fWidgets->Add(vAll5);
+      vtx1=new TTUBE("VTXIN","VTXIN", "void",p->GetVTXRadius(1),
+		     p->GetVTXRadius(1)+0.01, p->GetVTXZplus(1));
+      vtxaxis=new TTUBE("VTXAXIS", "VTXAXIS", "void", 0.0,0.02, 0.5);
+      fWidgets->Add(vtx0) ; fWidgets->Add(vtx1); fWidgets->Add(vtxaxis);
 
-  vAll2->SetLineColor(2);
-  vAll3->SetLineColor(4);
-  vAll4->SetLineColor(7);
-  vAll5->SetLineColor(6);
+      vVTXin=new TNode("VTXIN", "VTXIN", "VTXIN");
+      zvtx= p->GetVTXZplus(1);
+      vVTXxa=new TNode("VTXXAXIS","VTXXAXIS","VTXAXIS",0.30,0,zvtx,"XDIR");
+      vVTXya=new TNode("VTXYAXIS","VTXYAXIS","VTXAXIS",0.0, 0.30,zvtx,"YDIR");
+      vVTXin->SetLineColor(1);
+      vVTXxa->SetLineColor(7);
+      vVTXya->SetLineColor(6);
+      fWidgets->Add(gvVTX) ; fWidgets->Add(vVTXxa); fWidgets->Add(vVTXya);
+    
 
-  //  View for vertex view
-  Int_t nl=p->GetVTXNLayer();
-  TTUBE *vtx0=new TTUBE("VTX","VTX", "void",p->GetVTXRadius(nl-1),
-			     p->GetVTXRadius(nl-1)+0.01, p->GetVTXZplus(nl-1));
-  TTUBE *vtx1=new TTUBE("VTXIN","VTXIN", "void",p->GetVTXRadius(1),
-			     p->GetVTXRadius(1)+0.01, p->GetVTXZplus(1));
-  TTUBE *vtxaxis=new TTUBE("VTXAXIS", "VTXAXIS", "void", 0.0,0.02, 0.5);
-  fWidgets->Add(vtx0) ; fWidgets->Add(vtx1); fWidgets->Add(vtxaxis);
+  fCanvas->cd();
+      gvMomentum=new TNode("MOMENTUMVIEW","MOMENTUMVIEW","MOMV",0.0,0.0,0.0,"");
+      gvMomentum->cd();
+      momframe=new TSPHE("MOMV", "MOMV","void", 0.99, 1.0, 0.0, 180.0, 0.0, 360.0);
+      momaxis=new TTUBE("MOMAXIS", "MOMAXIS", "void", 0.0,0.002, 0.1);
+      fWidgets->Add(momframe);  fWidgets->Add(momaxis);
+      vMomxa=new TNode("MOMXAXIS","MOMXAXIS","MOMAXIS",0.1,0,0.25,"XDIR");
+      vMomya=new TNode("MOMYAXIS","MOMYAXIS","MOMAXIS",0.0, 0.1,0.25,"YDIR");
+      gvMomentum->SetLineColor(43);
+      vMomxa->SetLineColor(7);
+      vMomya->SetLineColor(6);
+      fWidgets->Add(momframe) ; fWidgets->Add(momaxis); fWidgets->Add(gvMomentum);
+      fWidgets->Add(vMomxa) ; fWidgets->Add(vMomya);
 
-  gvVTX=new TNode("VTXVIEW", "VTXVIEW","VTX");
-  gvVTX->cd();
-  TNode *vVTXin=new TNode("VTXIN", "VTXIN", "VTXIN");
-  Double_t zvtx= p->GetVTXZplus(1);
-  TNode *vVTXxa=new TNode("VTXXAXIS","VTXXAXIS","VTXAXIS",0.30,0,zvtx,"XDIR");
-  TNode *vVTXya=new TNode("VTXYAXIS","VTXYAXIS","VTXAXIS",0.0, 0.30,zvtx,"YDIR");
-  vVTXin->SetLineColor(1);
-  vVTXxa->SetLineColor(7);
-  vVTXya->SetLineColor(6);
-  fWidgets->Add(gvVTX) ; fWidgets->Add(vVTXxa); fWidgets->Add(vVTXya);
-
-  //  TTUBE *momframe=new TTUBE("MOMV", "MOMV","void", 0.0, 1.0, 0.5);
-  TSPHE *momframe=new TSPHE("MOMV", "MOMV","void", 0.99, 1.0, 0.0, 180.0, 0.0, 360.0);
-  TTUBE *momaxis=new TTUBE("MOMAXIS", "MOMAXIS", "void", 0.0,0.002, 0.1);
-  fWidgets->Add(momframe);  fWidgets->Add(momaxis);
-  gvMomentum=new TNode("MOMENTUMVIEW","MOMENTUMVIEW","MOMV",0.0,0.0,0.0,"");
-  gvMomentum->cd();
-  gvMomentum->SetVisibility(0);  
-  TNode *vMomxa=new TNode("MOMXAXIS","MOMXAXIS","MOMAXIS",0.1,0,0.25,"XDIR");
-  TNode *vMomya=new TNode("MOMYAXIS","MOMYAXIS","MOMAXIS",0.0, 0.1,0.25,"YDIR");
-  gvMomentum->SetLineColor(43);
-  vMomxa->SetLineColor(7);
-  vMomya->SetLineColor(6);
-  fWidgets->Add(momframe) ; fWidgets->Add(momaxis); fWidgets->Add(gvMomentum);
-  fWidgets->Add(vMomxa) ; fWidgets->Add(vMomya);
-
-  gGeometryIsInitialized=kTRUE;
+    gGeometryIsInitialized=kTRUE;
 }
 
 
@@ -448,6 +481,7 @@ void JSFEventDisplay::DisplayEMCHits()
   
   Int_t i;
   Double_t todegree=180.0/TMath::Pi();
+
   for(i=0;i<sdb->GetNEMCHits();i++){
      JSFEMCHit *t=(JSFEMCHit*)emc->UncheckedAt(i);
      Int_t cel=t->GetCellID();
@@ -476,7 +510,6 @@ void JSFEventDisplay::DisplayEMCHits()
        ang=hit.phi*todegree; 
        z += TMath::Sign(dz,z);
      }
-     
      box3d=new TMarker3DBox(x, y, z, dx, dy, dz, 0, ang);
      box3d->SetLineColor(fEMCHit->fColor);
      box3d->SetLineWidth((Width_t)fEMCHit->fSize);
@@ -551,8 +584,6 @@ void JSFEventDisplay::DisplayCDCTracks()
    Int_t i;
 
    JSFQuickSimParam *par=(JSFQuickSimParam*)simdst->Param();
-
-
    for(i=0;i<sdb->GetNCDCTracks();i++){
      JSFCDCTrack *t=(JSFCDCTrack*)cdc->UncheckedAt(i);
      Double_t hp[3], hx[3];

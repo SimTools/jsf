@@ -1,20 +1,3 @@
-//*LastUpdate :  jsf-1-14 29-January-2000  By Akiya Miyamoto
-//*LastUpdate :  jsf-1-13 25-January-2000  By Akiya Miyamoto
-//*LastUpdate :  jsf-1-12 3-September-1999  By Akiya Miyamoto
-//*LastUpdate :  jsf-1-9  16-May-1999  By Akiya Miyamoto
-//*LastUpdate :  jsf-1-8  19-April-1999  By Akiya Miyamoto
-//*LastUpdate :  jsf-1-5  20-Feburary-1999  By Akiya Miyamoto
-//*-- Author  : A.Miyamoto  20-September-1998
-
-/*
-  19-Apr-1999 A.Miyamoto  A bug in JSFGUIFrame::ToRelativePath is fixed.
-  1-May-1999 A.Miyamoto   Add Start borwser and Open JIM file menu
-  16-May-1999 A.Miyamoto  Does not call GetArguments macro.
-                          It is now called from MainMacro.C
-  31-July-1999 A.Miyamoto Add comments.
-  3-September-1999 A.Miyamoto A lot of changes to use JSFEnv class and JSFDemoDisplay
-*/
-
 ///////////////////////////////////////////////////////////////////
 //
 // JSFGUIFrame
@@ -115,6 +98,9 @@ enum EJSFGUICommandIdentifiers {
    M_ONOFF_VTXHIT=325,
    M_ONOFF_EMCHIT=326,
    M_ONOFF_HDCHIT=327,
+
+   M_DISP_REMEMBERVIEW=311,
+
    M__DISP_END=330,
 
    M__ANAL_BEGIN=500,
@@ -299,7 +285,8 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h,
    fMenuDisplay->AddEntry("VTX View", M_DISP_VTX);
    fMenuDisplay->AddSeparator();
    fMenuDisplay->AddPopup("Show Signal...", fMenuOnOffSignals);
-
+   fMenuDisplay->AddSeparator();
+   fMenuDisplay->AddEntry("Remember View", M_DISP_REMEMBERVIEW);
    
    // Analysis 
    fMenuAnal = new TGPopupMenu(fClient->GetRoot());
@@ -639,6 +626,9 @@ void JSFGUIFrame::Update()
 
   if( fED->fDrawAtNewEvent) fMenuDisplay->CheckEntry(M_DISP_EVENT);
   else fMenuDisplay->UnCheckEntry(M_DISP_EVENT);
+
+  if( fED->fRememberDisplayView) fMenuDisplay->CheckEntry(M_DISP_REMEMBERVIEW);
+  else fMenuDisplay->UnCheckEntry(M_DISP_REMEMBERVIEW);
 
   if( fED->fDrawGeometry) fMenuDisplay->CheckEntry(M_ONOFF_GEOMETRY);
   else fMenuDisplay->UnCheckEntry(M_ONOFF_GEOMETRY);
@@ -1088,7 +1078,7 @@ void JSFGUIFrame::DoFileMenuAction(Long_t parm1, Bool_t prompt)
 	 strcpy(retstr,GetInputFileName());
 	 if( prompt ) {
  	   TGFileInfo fi;
-	   fi.fFileTypes = filetypes;
+	   fi.fFileTypes = (Char_t**)filetypes;
 	   Char_t dirnam[256];
 	   strcpy(dirnam,gSystem->WorkingDirectory());
 	   new TGFileDialog(fClient->GetRoot(), this, kFDOpen,&fi);
@@ -1111,7 +1101,7 @@ void JSFGUIFrame::DoFileMenuAction(Long_t parm1, Bool_t prompt)
        strcpy(retstr,GetOutputFileName());
        {
 	 TGFileInfo fi;
-	 fi.fFileTypes = filetypes;
+	 fi.fFileTypes = (Char_t**)filetypes;
 	 Char_t dirnam[256];
 	 strcpy(dirnam,gSystem->WorkingDirectory());
 	 new TGFileDialog(fClient->GetRoot(), this, kFDSave,&fi);
@@ -1157,6 +1147,15 @@ void JSFGUIFrame::DoDispMenuAction(Long_t parm1, Bool_t prompt)
        fED->fDisplayType=parm1-M_DISP_MOMENTUM;
        sprintf(wrk,"%d",fED->fDisplayType);
        gJSF->Env()->SetValue("JSFEventDisplay.DisplayType",wrk);
+       break;
+
+     case M_DISP_REMEMBERVIEW:
+       if( fED->fRememberDisplayView ) { fED->fRememberDisplayView=kFALSE; }
+       else { 
+	 fED->fRememberDisplayView=kTRUE; 
+       }
+       sprintf(wrk,"%d",(Int_t)fED->fRememberDisplayView);
+       gJSF->Env()->SetValue("JSFEventDisplay.RememberDisplayView",wrk);
        break;
 
      case M_DISP_EVENT:
@@ -1432,7 +1431,7 @@ Mass of Higgs used by Pythia.\n\
 
     case M_GEN_LASTRUNFILE:
       if( prompt ) {
-	fi.fFileTypes = ftypes1;
+	fi.fFileTypes = (Char_t**)ftypes1;
         fi.fFilename = (Char_t*)gJSF->Env()->GetValue("JSFGUI.LastRunFile","");
 	Char_t dirnam[256];
 	strcpy(dirnam,gSystem->WorkingDirectory());
@@ -1454,7 +1453,7 @@ Mass of Higgs used by Pythia.\n\
       break;
 
     case M_CONT_PARAM_SAVEAS:
-      fi.fFileTypes = ftypes2;
+      fi.fFileTypes = (Char_t**)ftypes2;
       Char_t dirnam[256];
       strcpy(dirnam,gSystem->WorkingDirectory());
       new TGFileDialog(fClient->GetRoot(), this, kFDSave,&fi);

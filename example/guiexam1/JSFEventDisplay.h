@@ -88,7 +88,9 @@ protected:
   TGeometry *fGeometry;
 
   Int_t   fViewNo;
-  Float_t fViewAngle[3];
+  Bool_t  fRememberDisplayView;
+  //  Float_t fViewAngle[3];
+  Double_t fViewAngle[3];
 #if __ROOT_FULLVERSION__ >= 22500
   Double_t fViewRange[3][6];
 #else
@@ -123,7 +125,7 @@ public:
   virtual void DisplayLTKCLMomentum();
 
   virtual void DrawGeometry(Int_t type);
-  void InitializeGeometry();
+  void InitializeGeometry(Int_t type);
 
   virtual void DisplayGeneratorParticles();
 //  void DisplayLTKCLTracks();
@@ -136,6 +138,12 @@ public:
   //    Int_t i; for(i=0;i<6;i++){ range[i]=fViewRange[i]; } }
   TCanvas *GetCanvas(){ return fCanvas; }
   Bool_t  DrawAtNewEvent(){ return fDrawAtNewEvent; }  
+
+  void RememberView(){
+    fViewAngle[0]=fView->GetLongitude();
+    fViewAngle[1]=fView->GetLatitude();
+    fViewAngle[2]=fView->GetPsi();
+  }
 
   void Update();
   void SetGUIMain(JSFGUIFrame *gui){ fGUIMain = gui ; }
