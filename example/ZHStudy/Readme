@@ -1,0 +1,24 @@
+
+
+This directory contains an example to run Quick Simulator of e+e- -> ZH 
+process and study the 2 jet mass resolution, when Z decays to neu+bar(neu)
+and H decays to 2 jets.  MyAnalysis.cxx in this directory creates 
+the mini-DST information of the process
+
+To build the JSF application, do
+
+$ xmkmf
+$ make
+
+To run Simulator macro in batch mode, do
+
+$ jsf -q -b zhsim.C 
+
+To analize the simulated result, do
+
+$ jsf -q -b zha.C
+
+If -b option is omitted, histograms are displayed during event analysis.
+
+
+(written by A.Miyamoto 16-November-1998)

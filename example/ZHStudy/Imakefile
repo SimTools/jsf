@@ -1,0 +1,47 @@
+#
+# This is Imakefile for ZHStudy
+#
+#$Id$
+
+#include    "../../conf/makejsf.tmpl"
+
+
+ROOTLIBS     += -l$(EGPYTHIA)
+
+INC           = $(JSFROOT)/include 
+NAME	      = MyAnalysis
+LIBNAME       = lib$(NAME)
+OBJS          = $(NAME).$(ObjSuf) \
+		jclust.o \
+		$(LIBNAME).$(ObjSuf)
+
+SRC           = $(NAME).$(SrcSuf)
+
+HDRS	      = $(NAME).h
+
+all:: $(LIBNAME).$(DllSuf)
+
+$(LIBNAME).$(DllSuf): $(OBJS)
+	@echo "Linking $@ "
+	$(LD) $(SOFLAGS)  $(OBJS) -o $(LIBNAME).$(DllSuf)
+
+clean:: 
+	@rm -f $(OBJS) core *.so 
+	@rm -f $(LIBNAME).$(SrcSuf) $(LIBNAME).h
+
+depend:: $(SRC) $(HDRS)
+	for i in $(SRC); do \
+	rmkdepend -a -- $(DEPENDFILES) -- $$i; done
+
+distclean::
+	@rm -f $(OBJS) core *.so *~ *.o
+	@rm -f *.bak $(LIBNAME).*
+	@rm -f jsf *.root Makefile 
+
+
+libMyAnalysis.$(SrcSuf): $(HDRS) LinkDef.h
+		@echo "Generating dictionary ..."
+		rootcint -f libMyAnalysis.$(SrcSuf) \
+	 	-c -I$(JSFROOT)/include $(HDRS) \
+		LinkDef.h
+
