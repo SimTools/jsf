@@ -15,7 +15,7 @@ install : lib html include
 	@echo "JSFROOT is set to $(JSFROOT)"
 	( cd src ; xmkmf ; make )
 	( cd example/FFbarSpring ; xmkmf ; make )
-	( cd example/CCDAnal ; xmkmf ; make )
+#	( cd example/CCDAnal ; xmkmf ; make )
 	( cd example/ZHStudy ; xmkmf ; make )
 	( cd example/ww ; xmkmf ; make )
 	( cd example/guiexam1 ; xmkmf ; make )
@@ -23,14 +23,12 @@ install : lib html include
 clean: 
 	( cd src ; make clean )
 	( cd example/FFbarSpring ; make clean )
-	( cd example/CCDAnal  ; make clean )
 	( cd example/ZHStudy  ; make clean )
 	( cd example/ww ; make clean )
 	( cd example/guiexam1 ; make clean )
+	( cd example/CCDAnal  ; make clean )
 
-web:
-	( cd example/CCDAnal ; ./ccd -q -b html.C ; \
-		cd $(JSFROOT)/html ; mv USER_Index.html CCDAnal_Index.html)
+web:  CCDAnal
 	( cd example/FFbarSpring ; ./jsf -q -b html.C ; \
 		cd $(JSFROOT)/html ; mv USER_Index.html FFbarSpring_Index.html)
 	( cd example/ww ; ./jsf -q -b html.C ; \
@@ -39,7 +37,12 @@ web:
 		cd $(JSFROOT)/html ; mv USER_Index.html guiexam1_Index.html)
 	( cd src ; ../bin/jsf -q -b html.C ; \
 		cd $(JSFROOT)/html ; mv USER_Index.html JSFMain_Index.html)
+	( cd example/CCDAnal ; ./ccd -q -b html.C ; \
+		cd $(JSFROOT)/html ; mv USER_Index.html CCDAnal_Index.html)
 	( perl bin/webindx > html/JSF_Index.html )
+
+CCDAnal:
+	( cd example/CCDAnal ; xmkmf ; make )
 
 lib: 
 	mkdir lib

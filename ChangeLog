@@ -9,12 +9,15 @@ To-Do  -- Help wanted
 1) Re-write QuickSimulator by C++  --> K.Fujii will do it.
 2) Include interface to JIM
 3) Prepare to generate event with background events and hits.
-4) Graphic display.
 
 	
 	
 **********************************************************
-jsf-1-5  Progress since 16-Feburary-1999 A.Miyamoto
+jsf-1-6  Progress since 10-March-1999 A.Miyamoto
+**********************************************************
+
+**********************************************************
+jsf-1-5  10-March-1999 A.Miyamoto
 **********************************************************
 (1) Add several member functions in JSFGenertorParticle class
 (2) Typo in src/JSFSIMDST.h and fixed.
@@ -28,7 +31,9 @@ jsf-1-5  Progress since 16-Feburary-1999 A.Miyamoto
 (7) Add example/gui1exam1 as a GUI example.
 (8) For event display, Detector Parameters are obtained from the pointer in 
     JSFQuickSimParam	
-
+(9) make example/CCDAnal is omitted from make install, since it can not compiled by
+    aCC of HPUX
+	
 **********************************************************
 jsf-1-4  16-Feburary-1999 A.Miyamoto
 **********************************************************
