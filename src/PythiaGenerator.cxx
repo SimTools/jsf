@@ -1,9 +1,11 @@
+//*LastUpdate :  jsf-1-7-2  16-April-1999  A.Miyamoto
 //*LastUpdate :  jsf-1-7-1  9-April-1999  A.Miyamoto
 //*LastUpdate :  jsf-1-7  8-April-1999  A.Miyamoto
 //*LastUpdate :  0.04/04  9-November-1998  By A.Miyamoto
 //*-- Author  : A.Miyamoto  9-November-1998
 
 /*
+ 16-Apr-1999 A.Miyamoto  A bug(mother of particle was not set) was fixed.
   9-Apr-1999 A.Miyamoto  A bug to pickup stable particle from LUJETS is fixed.
   8-Apr-1999 A.Miyamoto  Save all particles in LUJETS common to 
                          JSFGeneratorParticle class
@@ -12,9 +14,18 @@
 ///////////////////////////////////////////////////////////////////
 //
 //  PythiaGenerator class
-//
+// 
 //  To run Pythia in JLC Study Framework
 //
+//  From version JSF-1-7, PythiaGenerator class is modified to save all
+//  LUJETS common as JSFGeneratorParticle class.  When the class is prepared,
+//  JSFGeneratorParticle::fMother < 0, if it is the documentation line in 
+//  LUJETS common ( KS(K(i,1)) code is 21 ), with is absolute value is
+//  the pointer to the mother.  First two entries of JSFGeneratorParticle class
+//  are initial e- and e+ and their fMother = 0.  Also first particles of the
+//  final state have fMother=0.  fNDaughter for them are always 1 and pointer
+//  to the first daughter points first particle in the final state.  
+//   
 //$ID:
 //  
 //////////////////////////////////////////////////////////////////
@@ -128,15 +139,15 @@ Bool_t PythiaGenerator::Process(Int_t ev)
      mass=p->GetMass();
      ndaughter=0;
      firstdaughter=0;
-     mother=0;
+     mother=kh;
      dl=0.0;
+     //
      if( ks == 21 ) {
        ndaughter = 1;
        mother = -kh;
-       firstdaughter=fPythia->GetMSTI(4);
+       firstdaughter=fPythia->GetMSTI(4)+1;  
      }
      else if( ks != 1 ) {
-       mother=kh;
        firstdaughter=p->GetFirstChild();
        ndaughter=p->GetLastChild()-firstdaughter+1;
      }
