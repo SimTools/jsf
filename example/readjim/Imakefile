@@ -71,13 +71,13 @@ clean::
 depend:: 
 	makedepend -I$(ROOTSYS)/include $(SRC)
 
-web: jsf lib
-	./jsf -q -b html.C
+web: jsfrjim lib
+	../../bin/jsfrjim -q -b html.C
 
 distclean::
 	@rm -f $(OBJS) core *~ *.o
 	@rm -f *.bak 
-	@rm -f jsf *.root Makefile 
+	@rm -f *.root Makefile 
 	@rm -f libJSFReadJIMBank*
 ###
 

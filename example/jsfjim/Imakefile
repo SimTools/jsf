@@ -67,13 +67,10 @@ EXTRALDOPT = -L/lib/pa1.1 -lm
 
 #----------------------------------------------------------------
 
-all:: install
+all:: jsfjim
 
-install:: $(OBJS) jsfjim.o $(JIMOBJS)
+jsfjim:: $(OBJS) jsfjim.o $(JIMOBJS)
 	$(LD) jsfjim.o $(OBJS) $(LDFLAGS) -o ../../bin/jsfjim
-
-jsfjim: $(OBJS) jsfjim.o $(JIMOBJS)
-	$(LD) jsfjim.o $(OBJS) $(LDFLAGS) -o jsfjim 
 
 jim: $(JIMOBJS) jimsub.o
 	$(FC) -o jim jimsub.o $(JIMMAIN) $(JIMLDLIBS) \
@@ -101,7 +98,7 @@ distclean::
 	@rm -f jsfjim *.root Makefile 
 
 web: jsfjim
-	./jsfjim -q -b html.C
+	../../bin/jsfjim -q -b html.C
 
 ###
 
