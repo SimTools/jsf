@@ -53,9 +53,14 @@ distclean::
 	@rm -f PYTHIA.SEED *.bak
 	@rm -f jsf *.root Makefile 
 
+web:	
+	jsf -q -b html.C 
 
 $(SOLIBNAME).$(SrcSuf): $(HDRS) LinkDef.h
 		@echo "Generating dictionary ..."
 		rootcint -f $(SOLIBNAME).$(SrcSuf) \
 	 	-c -I$(JSFROOT)/include $(HDRS) LinkDef.h
+
+
+
 
