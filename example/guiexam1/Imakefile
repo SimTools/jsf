@@ -82,9 +82,9 @@ clean::
 	@rm -f $(OBJS) core *.so *~
 	@rm -f libJSFGUI.$(SrcSuf) libJSFGUI.h
 
-depend:: 
-	makedepend -I$(ROOTSYS)/include -I$(JSFROOT)/include \
-	$(SRC) $(HDRJSFGUI)
+depend:: $(SRC) $(HDRJSFGUI)
+	for i in $(SRC); do \
+	rmkdepend -a -- $(DEPENDFILES) -- $$i; done
 
 distclean:: clean
 	@rm -f $(OBJS) core *.so *.~ *.o *.root *.dat Makefile
