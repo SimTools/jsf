@@ -20,6 +20,9 @@ void InitPythia()
     TPythia6 *tpy=py->GetPythia();
   }
 
+  Int_t iniseed=jsf->Env()->GetValue("JSFGUI.Pythia.InitialSeed",19780503);
+  tpy->SetMRPY(1,iniseed);
+
   //****************************
   // Set ISUB according to parameters.
   //****************************
@@ -76,31 +79,10 @@ void InitPythia()
   }
 
   //*******************************************
-  //* Suppress decay mode of Z
-  //#  -1 : Disable all Z decay mode.
-  //#   0 : Enable all Z decay mode.
-  //#   n : decay mode of n is alloed, where n is
-  //#     1=d-quark, 2=u-quark, 3=s-quark, 4=c-quark, 5=b-quark,
-  //#    11=e, 12=nu_e, 13=mu, 14=nu_mu, 15=tau, 16=nu_tau
+  //* Set decay mode of particles
   //*******************************************
-  
-  Int_t izdcy=jsf->Env()->GetValue("JSFGUI.Pythia.Decay.Z",0);
-  if( izdcy != 0 ) {
-    if( ivers <= 5 ) {
-      for(Int_t idc=156;idc<=171;idc++)   tpy->SetMDME(idc,1,0);
-      if( izdcy > 0 && izdcy < 7 ) tpy->SetMDME(155+izdcy,1,1);
-      if( izdcy > 10 && izdcy < 16 ) tpy->SetMDME(153+izdcy,1,1);
-    }
-    else {
-      Int_t kfz=23;
-      Int_t kcz=tpy->Pycomp(kfz);
-      Int_t mdcy2=tpy->GetMDCY(kcz,2);
-      Int_t mdcy3=tpy->GetMDCY(kcz,3);
-      for(Int_t i=mdcy2;i<=mdcy2+mdcy3-1;i++){ tpy->SetMDME(i,1,0); }
-      if( izdcy > 0 && izdcy < 7 ) { tpy->SetMDME(mdcy2+izdcy-1, 1, 1); }
-      if( izdcy > 10 && izdcy < 17 ) { tpy->SetMDME(mdcy2+8+izdcy-11, 1, 1); }
-    }
-  }
+
+  SetPythiaDecayMode();
 
   //*******************************************
   //* Set Other options
@@ -113,3 +95,153 @@ void InitPythia()
 }
 
 
+
+// ---------------------------------------------------------------------
+void SetPythiaDecayMode()
+{
+  //*******************************************
+  //* Suppress decay mode of Z
+  //#  -1 : Disable all Z decay mode.
+  //#   0 : Enable all Z decay mode.
+  //#   n : decay mode of n is alloed, where n is
+  //#     1=d-quark, 2=u-quark, 3=s-quark, 4=c-quark, 5=b-quark,
+  //#    11=e, 12=nu_e, 13=mu, 14=nu_mu, 15=tau, 16=nu_tau
+  //# -2=Z->q qbar
+  //# -3=Z->ee/mumu
+  //# -4=Z->llepton lepton
+  //# -5=Z->nu nu
+  //*******************************************
+
+  PythiaGenerator *py=(PythiaGenerator*)jsf->FindModule("PythiaGenerator");
+
+  Int_t ivers=py->GetVersionNumber();
+  if( ivers <= 5 ) {
+    TPythia *tpy=py->GetPythia();
+  }
+  else {
+    TPythia6 *tpy=py->GetPythia();
+  }
+  
+  Int_t izdcy=jsf->Env()->GetValue("JSFGUI.Pythia.Decay.Z",0);
+  Int_t izdcy2=izdcy/100;
+  izdcy=izdcy%100;
+
+  if( izdcy != 0 ) {
+    if( ivers <= 5 ) {
+      for(Int_t idc=156;idc<=171;idc++)   tpy->SetMDME(idc,1,0);
+      if( izdcy > 0 && izdcy < 7 ) tpy->SetMDME(155+izdcy,1,1);
+      if( izdcy > 10 && izdcy < 16 ) tpy->SetMDME(153+izdcy,1,1);
+    }
+    else {
+      Int_t kfz=23;
+      Int_t kcz=tpy->Pycomp(kfz);
+      Int_t mdcy2=tpy->GetMDCY(kcz,2);
+      Int_t mdcy3=tpy->GetMDCY(kcz,3);
+      for(Int_t i=mdcy2;i<=mdcy2+mdcy3-1;i++){ tpy->SetMDME(i,1,0); }
+      if( izdcy > 0 ) {
+	if( izdcy > 0 && izdcy < 7 ) { tpy->SetMDME(mdcy2+izdcy-1, 1, 1); }
+	if( izdcy > 10 && izdcy < 17 ) { tpy->SetMDME(mdcy2+8+izdcy-11, 1, 1); }
+	if( izdcy2 > 0 && izdcy2 < 7 ) { tpy->SetMDME(mdcy2+izdcy2-1, 1, 1); }
+	if( izdcy2 > 10 && izdcy2 < 17 ) { tpy->SetMDME(mdcy2+8+izdcy2-11, 1, 1); }
+      }
+      else if( izdcy == -2 ) {
+	Int_t izlist[6]={1, 2, 3, 4, 5, 6 };
+	for(Int_t i=0;i<6;i++){
+	  Int_t ip=izlist[i];
+	  tpy->SetMDME(mdcy2+ip-1, 1, 1);
+	}
+      }
+      else if( izdcy == -3 ) {
+	Int_t izlist2[2]={9, 11};
+	for(Int_t i=0;i<2;i++){ 
+	  Int_t ip=izlist[i];
+	  tpy->SetMDME(mdcy2+ip-1, 1, 1); }
+      }
+      else if( izdcy == -4 ) {
+	Int_t izlist[3]={9, 11, 13};
+	for(Int_t i=0;i<3;i++){ 
+	  Int_t ip=izlist[i];
+	  tpy->SetMDME(mdcy2+ip-1, 1, 1); }
+      }
+      else if( izdcy == -5 ) {
+	Int_t izlist[3]={10, 12, 14};
+	for(Int_t i=0;i<3;i++){ 
+	  Int_t ip=izlist[i];
+	  tpy->SetMDME(mdcy2+ip-1, 1, 1); 
+	}
+      }
+
+    }
+  }
+
+  //  tpy->Pylist(12);
+  // ******************************************
+  // Decay Mode of W
+  //  1=dbar u   2=dbar c   3=dbar t  
+  //  5=sbar u   6=sbar c   7=sbar t
+  //  9=bbar u  10=bbar c  11=bbar t
+  // 17=e+ nue  18=mu+ nu_mu  19=tau+ nu_tau
+  // -2=W->q qbar
+  // -3=W->e-nu_e/mu-nu_mu
+  // -4=W->lepton nu_lepton
+  // ******************************************
+  Int_t iwdcy=jsf->Env()->GetValue("JSFGUI.Pythia.Decay.W",0);
+  Int_t iwdcy2=iwdcy/100;
+  iwdcy=iwdcy%100;
+  if( iwdcy != 0 ) {
+    if( ivers <= 5 ) {}
+    else {
+      Int_t kfh=24;
+      Int_t kch=tpy->Pycomp(kfh);
+      Int_t mdcy2=tpy->GetMDCY(kch,2);
+      Int_t mdcy3=tpy->GetMDCY(kch,3);
+      for(Int_t i=mdcy2;i<=mdcy2+mdcy3-1;i++){ tpy->SetMDME(i,1,0); }
+      if( iwdcy > 0 ) {
+	tpy->SetMDME(mdcy2+iwdcy-1, 1, 1);
+	if( iwdcy2 > 0 ) {  tpy->SetMDME(mdcy2+iwdcy2-1, 1, 1); }
+      }
+      else if( iwdcy == -2 ) {
+	Int_t iwlist[9]={1, 2, 3, 5, 6, 7, 9, 10, 11};
+	for(Int_t i=0;i<9;i++){
+	  Int_t ip=iwlist[i];
+	  tpy->SetMDME(mdcy2+ip-1, 1, 1);
+	}
+      }
+      else if( iwdcy == -3 ) {
+	Int_t idlist[2]={17, 18};
+	for(Int_t i=0;i<2;i++){ 
+	  Int_t ip=iwlist[i];
+	  tpy->SetMDME(mdcy2+ip-1, 1, 1); }
+      }
+      else if( iwdcy == -4 ) {
+	Int_t idlist[3]={17, 18, 19};
+	for(Int_t i=0;i<3;i++){ 
+	  Int_t ip=iwlist[i];
+	  tpy->SetMDME(mdcy2+ip-1, 1, 1); }
+      }
+    }
+  }
+
+  // ******************************************
+  // Decay Mode of Higgs
+  // 1=d dbar, 2=u ubar, 3=s sbar, 4=c cbar, 5=b bar, 6=t tbar, 
+  // 9=e- e+,  10=mu- mu+, 11=tau- tau+, 
+  // 13=g g, 14=gamma gamma, 15=gamma Z0, 16=Z0 Z0, 17=W+ W-
+  // ******************************************
+  Int_t ihdcy=jsf->Env()->GetValue("JSFGUI.Pythia.Decay.H",0);
+  Int_t ihdcy2=ihdcy/100;
+  ihdcy=ihdcy%100;
+  if( ihdcy != 0 ) {
+    if( ivers <= 5 ) {}
+    else {
+      Int_t kfh=25;
+      Int_t kch=tpy->Pycomp(kfh);
+      Int_t mdcy2=tpy->GetMDCY(kch,2);
+      Int_t mdcy3=tpy->GetMDCY(kch,3);
+      for(Int_t i=mdcy2;i<=mdcy2+mdcy3-1;i++){ tpy->SetMDME(i,1,0); }
+      tpy->SetMDME(mdcy2+ihdcy-1, 1, 1);
+      if( ihdcy2 > 0 ) {  tpy->SetMDME(mdcy2+ihdcy2-1, 1, 1); }
+    }
+  }
+
+}

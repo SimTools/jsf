@@ -44,6 +44,8 @@
 //
 //*************************************************
 
+class JSFJ4;
+
   TFile *ofile;
   JSFSteer *jsf;
   JSFLCFULL *full;
@@ -53,12 +55,13 @@
   JSFModule  *gen=0;
   JSFHadronizer *hdr=0;
   JSFMergeEvent *merge=0;
-  
+  JSFJ4         *jsfj4=0;
+  JSFJ4         *gJSFJ4=0;
 
   Int_t gReturnCode; // Return code from event analysis 
 
   enum EJSFGUIEventType { kPythia=0, kDebug=1, kBasesSpring=2,
-                        kReadParton=3, kReadHepevt=4 };
+                        kReadParton=3, kReadHepevt=4, kNoGenerator=5  };
 
   Bool_t gHasUserMonitor=kFALSE;
 
@@ -96,9 +99,11 @@ int Initialize()
       file = new TFile(inputFileName);  // Input file
       jsf->SetIOFiles();
       jsf->SetOutput(*ofile);
-      simdst = new JSFSIMDST();
-      simdst->SetFile(ofile);
-      simdst->NoReadWrite(); // Does not output SIMDST data
+      if( jsf->Env()->GetValue("JSFGUI.SIMDSTConversion",1) == 1 ) {
+         simdst = new JSFSIMDST();
+         simdst->SetFile(ofile);
+         simdst->NoReadWrite(); // Does not output SIMDST data
+      }
       break;
     case 3:
       ofile= new TFile(outputFileName,"RECREATE");
@@ -137,9 +142,11 @@ int Initialize()
   // ****************************
   jsf->Initialize();
 
-  if( irunmode == 2 ) {
+  if( irunmode == 2  && jsf->Env()->GetValue("JSFGUI.SIMDSTConversion",1) == 1 ) {
     sim=(JSFQuickSim*)jsf->FindModule("JSFQuickSim");
-    simdst->SetQuickSimParam(sim->Param());
+    if( sim ) {
+        simdst->SetQuickSimParam(sim->Param());
+    }
   }  
 
   if( spring ) {  spring->ReadBases(
@@ -171,6 +178,10 @@ void InitGenSim()
   // 
   Char_t wrkstr[256], spname[64];
   Int_t eventtype=jsf->Env()->GetValue("JSFGUI.EventType",kPythia);
+
+  bool gentype=gJSF->Env()->GetValue("JSFJ4.UseJupiterGenerator",0);
+  if( gentype == 1 ) eventtype=kNoGenerator;
+
   Float_t ecm;
   sscanf(jsf->Env()->GetValue("JSFGUI.ECM","300.0"),"%g",&ecm);
   JSFModule *genmod;
@@ -214,6 +225,9 @@ void InitGenSim()
     case kReadHepevt:
       gen=new JSFReadGenerator();
       break;
+    case kNoGenerator:
+      gen=0;
+      break;
     default;
       break;
   }
@@ -229,6 +243,12 @@ void InitGenSim()
 
     simdst = new JSFSIMDST();
     simdst->SetQuickSimParam(sim->Param());
+  }
+
+  // Jupiter simulation
+  else if( jsf->Env()->GetValue("JSFGUI.SimulationType",1) == 3 ) {
+    jsfj4  = new JSFJ4();
+    gJSFJ4 = jsfj4;
   }
   else if( jsf->Env()->GetValue("JSFGUI.SimulationType",1) > 1 ) {
     printf("JSFGUI.SimualtionType > 1 is not supported yet.\n");
@@ -248,7 +268,7 @@ void InitGenSim()
     full->SetMakeBranch(kFALSE);  
     if(sim) sim->SetMakeBranch(kFALSE);   
     if(simdst) simdst->SetMakeBranch(kFALSE);
-    gen->SetMakeBranch(kFALSE); 
+    if( gen ) gen->SetMakeBranch(kFALSE); 
     if( hdr ) hdr->SetMakeBranch(kFALSE);
   }
  

@@ -1,6 +1,7 @@
 class JSFGUIFrame;
 JSFGUIFrame *gui=0;
 JSFSteer *jsf=0;
+JSFSteer *gJSF=0;
 
 Int_t gui()
 {
@@ -17,7 +18,8 @@ Int_t gui()
 // **************************************************************** 
 
   if( strncmp(gSystem->HostName(),"ccjlc",5)  != 0 ) {
-    if( strncmp(gSystem->Getenv("OSTYPE"),"hpux",4) == 0 ) {
+    TString ostype=gSystem->Getenv("OSTYPE");
+    if( ostype == TString("hpux") ) {
       gSystem->Load("libJSFGUI.sl");
     } else {
       gSystem->Load("libJSFGUI.so");
@@ -25,6 +27,7 @@ Int_t gui()
   }
 
   jsf  = new JSFSteer();
+  gJSF = jsf;
 
   gROOT->LoadMacro(jsf->Env()->GetValue("JSFGUI.GUIMainMacro","GUIMainMacro.C"));
 
