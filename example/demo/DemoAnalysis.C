@@ -15,6 +15,8 @@ TH1F *hHmass, *hMissmass, *hPtmiss, *hStat, *hEvis, *hNjet;
 TH1F *hDrn, *hHmassNoVTX, *hNOffVertex ;
 TH1F *hNCDC=0;
 
+Float_t dat[100];
+
 //
 //   Variables for event property.
 //
@@ -230,6 +232,7 @@ void SoundMessage(Int_t id=0)
 //_________________________________________________________
 void DrawCanvas()
 {
+  /*
   PythiaGenerator *py=(PythiaGenerator*)jsf->FindModule("PythiaGenerator");
   Int_t itype=py->GetPythia()->GetMSTI(1);
 
@@ -272,7 +275,7 @@ void DrawCanvas()
 	if( l < 4 ) { gSystem->Sleep(500); }
       }
     }
-
+  */
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -283,14 +286,14 @@ const Char_t GetEventTypeString(Int_t itype=-1)
     Int_t itype=py->GetPythia()->GetMSTI(1);
   }
   static  Char_t *processname[400]={0};
-  processname[1]="e^{+}e^{-} #rightarrow #gamma/Z^{0} ";
-  processname[22]="e^{+}e^{-} #rightarrow Z^{0} Z^{0}";
-  processname[24]="e^{+}e^{-} #rightarrow Z^{0} H^{0}";
-  processname[25]="e^{+}e^{-} #rightarrow W^{+} W^{-}";
-  processname[36]="e^{+}e^{-} #rightarrow e #nu W";
-  processname[103]="e^{+}e^{-} #rightarrow e^{+}e{-} H^{0} (#gamma #gamma #rightarrow H^{0}";
-  processname[123]="e^{+}e^{-} #rightarrow e^{+}e^{-} H0 (ZZ fusion)";
-  processname[124]="e^{+}e^{-} #rightarrow #nu#bar{#nu} H0 (WW fusion)";
+  processname[1]=" e^{+} e^{-} #rightarrow #gamma/Z^{0} ";
+  processname[22]=" e^{+} e^{-} #rightarrow Z^{0} Z^{0} ";
+  processname[24]="e  ^{+}e^{-} #rightarrow Z^{0} H^{0} ";
+  processname[25]=" e^{+} e^{-} #rightarrow W^{+} W^{-} ";
+  processname[36]=" e^{+} e^{-} #rightarrow e #nu W ";
+  processname[103]=" e^{+} e^{-} #rightarrow e^{+} e^{-} H^{0} (#gamma #gamma #rightarrow H^{0} ";
+  processname[123]=" e^{+} e^{-} #rightarrow e^{+} e^{-} H0 (ZZ fusion) ";
+  processname[124]=" e^{+} e^{-} #rightarrow #nu#bar{#nu} H0 (WW fusion) ";
 
   if( processname[itype] != 0 ) return processname[itype];
 
@@ -327,11 +330,15 @@ void UserAnalysis()
   // This can be used only when generating event on the fly.
   // PrintEventInfo();  
 
-  CalculateEventParameters();
+    //  CalculateEventParameters();
 
   OffVertexTracks();
 
-  HAccumulate();
+  JetAnalysis();
+
+  NNHAccumulate();
+
+    //  HAccumulate();
 
 }
 
@@ -812,3 +819,177 @@ Char_t *MSTIInfo(Int_t id, Int_t ival)
 
 }
 
+
+
+
+//_________________________________________________________
+void JetAnalysis()
+{
+
+  // Calculate event parameters such as Visible energy, etc.
+
+  JSFSIMDST *sds=(JSFSIMDST*)jsf->FindModule("JSFSIMDST");
+  JSFSIMDSTBuf *evt=(JSFSIMDSTBuf*)sds->EventBuf();
+
+  //  Accumulate information in the histogram
+
+  PythiaGenerator *pythia
+     =(PythiaGenerator*)jsf->FindModule("PythiaGenerator","quiet");
+  Float_t ecm=300.0;
+  if( pythia ) { ecm=pythia->GetEcm() ; }
+
+  printf(" ecm=%g\n",ecm);
+
+   // ***************************************
+   // Make histograms of simulator information
+   // ***************************************
+
+   Int_t nt=evt->GetNLTKCLTracks();
+   TClonesArray *tracks=evt->GetLTKCLTracks();
+
+   // Accumulate 4 momentum of the event
+
+   TObjArray particles;
+   ANL4DVector sum;   
+
+   Int_t nc=0; 
+   Float_t maxEP=0.0;
+   Float_t maxMuP=0.0;
+   
+   for(Int_t i=0;i<nt;i++){
+     JSFLTKCLTrack *t=(JSFLTKCLTrack*)tracks->UncheckedAt(i);
+     if( t->GetType() == 11 && t->GetECL() > maxEP) { maxEP= t->GetECL(); } 
+     if( t->GetType() == 13 && t->GetE() > maxMuP ){ maxMuP=t->GetE(); }
+     //     st=t->GetPV();
+     Double_t px=t->GetPx();      Double_t py=t->GetPy(); 
+     Double_t pz=t->GetPz();      Double_t e=t->GetE(); 
+     ANL4DVector *p=new ANL4DVector(e,px,py,pz);
+     particles.Add(p);
+     if( t->GetCharge() != 0 ) { nc++; }
+     sum += *p ;  // Sum 4 momentum
+   }
+
+   ANLEventShape evshape;
+   evshape.Initialize(particles);
+   Float_t thrust=evshape.GetThrust();
+
+   // Clear other variables
+
+   Double_t ycut=0.0005;
+   Int_t    njet=0;
+   Double_t ptmiss=0.0;
+   Double_t msmass=0.0;
+   Double_t mh=0.0;
+   Double_t ymax=0.0;
+   Int_t    nfjet=0;
+   Double_t cos1=-9.0;  Double_t csj1=-9.0;
+   Double_t cos2=-9.0;  Double_t csj2=-9.0;
+
+   // Does jet analysis when there are more than one tracks
+   //   Float_t dat[30];
+   for(Int_t i=0;i<30;i++){ dat[i]=0.0; }
+
+   if( nc > 1 )  {
+     ANLJadeEJetFinder jclust(ycut);
+     jclust.Initialize(particles);
+     jclust.FindJets();
+     njet = jclust.GetNjets();
+     ptmiss=TMath::Sqrt(sum.Px()*sum.Px()+sum.Py()*sum.Py());
+
+     if( njet > 1 ) {
+       nfjet=2;
+       jclust.ForceNJets(nfjet);
+       ymax=jclust.GetYmax();
+
+       TObjArray &jets = jclust.GetJets();
+       ANLJet *jet1 = (ANLJet*)jets.UncheckedAt(0);
+       cos1 =  jet1->CosTheta();
+       ANLJet *jet2 = (ANLJet*)jets.UncheckedAt(1);
+       cos2 =  jet2->CosTheta();
+
+       ANL4DVector cm(ecm,0.0,0.0,0.0);
+       ANL4DVector miss(ecm-sum.E(), -sum.Px(), -sum.Py(), -sum.Pz());
+       msmass = miss.GetMass();
+       mh     = sum.GetMass();
+
+       TVector3 bh=sum.BoostVector();
+       jet1->Boost(bh);      csj1=jet1->CosTheta();
+       jet2->Boost(bh);      csj2=jet2->CosTheta();
+
+       dat[15]=(*jet1).E();      dat[16]=(*jet1).Px();
+       dat[17]=(*jet1).Py();     dat[18]=(*jet1).Pz();
+       dat[19]=(*jet1).E();      dat[20]=(*jet1).Px();
+       dat[21]=(*jet1).Py();     dat[22]=(*jet1).Pz();
+     }
+
+   }
+
+   /*
+
+   FourJetsEvent fourjet;
+
+   fourjet.SetEventData(ecm, nc, sum.E(), maxEP, maxMuP, thrust);
+
+   if( nc > 3 ) { fourjet.JetAnalysis(particles); }
+
+   */
+
+   dat[0]=(Float_t)jsf->GetEventNumber(); 
+   dat[1]=(Float_t)nc;  dat[2]=sum.E();  dat[3]=msmass;
+   dat[4]=ptmiss;       dat[5]=mh;       dat[6]=maxEP;
+   dat[7]=maxMuP;       dat[8]=(Float_t)njet;dat[9]=ymax;
+   dat[10]=cos1;
+   dat[11]=cos2;         dat[12]=csj1;    dat[13]=csj2;
+   dat[14]=(Float_t)nOffVertex;    // Number of off vertex track of events
+
+   // nTnnh->Fill(dat);
+   // fourjet.Fill(nT4j);
+
+   particles.Delete();
+
+
+
+  return;
+ 
+}
+
+
+//______________________________________________________
+void NNHAccumulate()
+{
+
+  Float_t weight=1.0;
+  Float_t wgt=1.0;
+  if( py->GetPythia()->GetMSTP(142) != 1 ) {
+    Int_t isub=py->GetPythia()->GetMSTI(1);
+    switch(isub){
+      case 1: weight=0.005; break;
+      case 22: weight=0.2; break;
+      case 24: weight=1.0; break;
+      case 25: weight=0.02; break;
+      case 36: weight=0.1; break;
+    }
+    wgt=1.0/weight;
+  }
+  gwgt=wgt;
+
+  hEvis->Fill( dat[2], wgt);
+
+  if( dat[2] > 220.0 ) return ;  // Visible energy
+
+  printf(" ymax=%g noffv=%g missmass=%g ",dat[9],dat[14],dat[3]);
+  printf(" mh =%g \n",dat[5]);
+
+  //  if( dat[9] < 0.60 ) return;    // Ymax
+  //  if( dat[9] > 0.90 ) return;    // Ymax
+  if( dat[6] > 2.0 ) return;     // MaxEP;
+  if( dat[7] > 2.0 ) return;     // MaxMuP
+  if( dat[14] < 3.0  ) return;     // noffvertex
+  //  if( dat[3]  > 110.0 ) return;  // missing mass
+
+
+
+  hHmass->Fill(dat[5],wgt);
+  
+
+}
