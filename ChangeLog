@@ -18,7 +18,7 @@ To-Do ( listed in arbitrary order ) -- Help wanted
 4) Further test of jsf-jim interface.
 5) Add switch to selectively suppress data output.
 6) parallel-jsf.
-
+7) Memory-leak is reported when reading MC data created by Spring.
 	
 **********************************************************
 jsf-1-12  Modification toward jsf-1-12 A.Miyamoto
@@ -28,6 +28,9 @@ jsf-1-12  Modification toward jsf-1-12 A.Miyamoto
 ------------------------
 (1) Changes in example/jsfjim and macro/GUIMainMacro.C and 
     example/JSFGUIMainFrame.cxx so as to run jsfjim properly with gui.C
+(2) Pointer in gGeometry for fRotMatrix of THelix class does not removed
+    whn THelix object is deleted to clear Canvas.  To avoid this problem,
+    JSFEDHelix class is added for Event Display
 
 -----------------------
 30-August-1999 A.Miyamoto
