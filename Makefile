@@ -45,7 +45,7 @@ web:  CCDAnal
 		cd $(JSFROOT)/html ; mv USER_Index.html JSFMain_Index.html)
 	( cd example/CCDAnal ; xmkmf ; make ; ./ccd -q -b html.C ; \
 		cd $(JSFROOT)/html ; mv USER_Index.html CCDAnal_Index.html)
-	( cd example/readjim ; xmkmf ; make ; ./jim -q -b html.C ; \
+	( cd example/readjim ; xmkmf ; make ; ./jsf -q -b html.C ; \
 		cd $(JSFROOT)/html ; mv USER_Index.html ReadJIM_Index.html)
 	( cd example/jsfjim ; xmkmf ; make ; ./jsfjim -q -b html.C ; \
 		cd $(JSFROOT)/html ; mv USER_Index.html JSFJIM_Index.html)
