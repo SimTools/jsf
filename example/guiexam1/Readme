@@ -1,3 +1,11 @@
+********************************************************
+gui.C and MainMacro.C in this directory were moved to 
+$JSFROOT/macro.  
+
+Akiya Miyamoto
+27-July-1999
+
+********************************************************
 The files in this directory are for GUI and event display.
 Please note that the program in this directory may be changed 
 completely in future, when we get more familiar with ROOT GUI.
