@@ -164,11 +164,12 @@ enum EJSFGUICommandIdentifiers {
    M_GEN_PYEV_TWOPHOTON=629,
    M_GEN_PYEV_DECAY_Z=630,
 
+   M_CONT_RT_USERDEFINE=660,
    M_CONT_RT_GENEVENT=661,
    M_CONT_RT_READROOT=662,
    M_CONT_RT_READSIMDST=663,
    M_CONT_RT_READJIM=664,
-   M_CONT_RT_USERDEFINE=665,
+   M_CONT_RT_JSFJIM=665,
    M_CONT_RT_LAST=666,
    
    M_CONT_PARAM_SAVE=683,
@@ -339,6 +340,8 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h, Bool_t demo)
    fMenuRunMode->AddLabel("Run Mode");
    fMenuRunMode->AddSeparator();
    fMenuRunMode->AddEntry("&Generate Event", M_CONT_RT_GENEVENT);
+   fMenuRunMode->AddEntry("&Run JIM simulation", M_CONT_RT_JSFJIM);
+   fMenuRunMode->AddSeparator();
    fMenuRunMode->AddEntry("&Read Root File", M_CONT_RT_READROOT);
    fMenuRunMode->AddEntry("&Read SIMDST File", M_CONT_RT_READSIMDST);
    fMenuRunMode->AddEntry("&Read JIM Bank File", M_CONT_RT_READJIM);
@@ -664,7 +667,7 @@ void JSFGUIFrame::Update()
   //**************************************************
 
   Int_t irunmode=GetRunMode();
-  for(i=M_CONT_RT_GENEVENT;i<M_CONT_RT_LAST;i++){
+  for(i=M_CONT_RT_USERDEFINE;i<M_CONT_RT_LAST;i++){
     if( i != M_CONT_RT_GENEVENT+irunmode-1 ) {
       fMenuRunMode->UnCheckEntry(i);
       if(fInitialized) fMenuRunMode->DisableEntry(i);
@@ -724,6 +727,7 @@ void JSFGUIFrame::Update()
 
   fMenuSimType->UnCheckEntry(M_SIM_QUICKSIM);
   fMenuSimType->UnCheckEntry(M_SIM_JIM);
+  fMenuSimType->DisableEntry(M_SIM_JIM);
   Int_t isim=gJSF->Env()->GetValue("JSFGUI.SimulationType",1);
   fMenuSimType->CheckEntry(M_SIM_QUICKSIM+isim-1);
 
@@ -1403,6 +1407,7 @@ Mass of Higgs used by Pythia.
     case M_CONT_RT_READSIMDST: 
     case M_CONT_RT_READJIM: 
     case M_CONT_RT_USERDEFINE: 
+    case M_CONT_RT_JSFJIM: 
        SetRunMode(parm1-M_CONT_RT_GENEVENT+1);
        break;
 
