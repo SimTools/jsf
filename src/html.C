@@ -33,6 +33,7 @@
    html.MakeClass("JSFGenerator");
    html.MakeClass("JSFGeneratorBuf");
    html.MakeClass("JSFGeneratorParticle");
+   html.MakeClass("JSFGeneratedProcessType");
 
    html.MakeClass("JSFLCFULL");
    html.MakeClass("JSFFULLGenerator");
