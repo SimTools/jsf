@@ -21,8 +21,8 @@
 #pragma link C++ class JSFSpringBuf+;
 #pragma link C++ class JSFSpringParton-;
 
-//pragma link C++ class JSFReadParton+;
-//pragma link C++ class JSFReadPartonBuf+;
+#pragma link C++ class JSFReadParton+;
+#pragma link C++ class JSFReadPartonBuf+;
 
 #pragma link C++ class JSFLCFULL+;
 #pragma link C++ class JSFFULLGenerator+;
