@@ -1,4 +1,4 @@
-
+class JSFGUIFrame;
 JSFGUIFrame *gui=0;
 JSFSteer *jsf=0;
 
@@ -15,6 +15,8 @@ Int_t gui()
 // $Id$
 //
 // **************************************************************** 
+
+  gSystem->Load("libJSFGUI.so");
 
   jsf  = new JSFSteer();
 
