@@ -3,6 +3,9 @@
 //*
 //*(Author)
 //*  Akiya Miyamoto, KEK, 8-March-1999  
+//*  Akiya Miyamoto, KEK, 21-April-1999  
+//*                  Modified to run both batch and Interaactive
+//* 
 //$Id$
 //
 //*************************************************
@@ -11,40 +14,68 @@
   JSFSteer *jsf;
   JSFLCFULL *full;
   JSFQuickSim *sim;
+  JSFReadGenerator *rgen;
   
-  Int_t gRunMode;
+  Int_t gRunMode;  // Generate event, Read root file, ...
+  Char_t *gOutputFileName; // Output file name
+  Char_t *gInputFileName;  // Input file name
+  Char_t *gMacroFileName;  //  Macro file name for user analysis
+  Int_t gEventType; // Pythia event, Debug Generator, Read file
+  Float_t gEcm;  // CM energy
+  Char_t *gInitPythiaMacro; // Macro to initialize pythia
+  Int_t gReturnCode; // Return code from event analysis 
+  Int_t gFirstEvent;   // Start event number to process in batch
+  Int_t gNAnalizeEvent;  // Number of event to process in batch
 
-  enum EventType { kPythia=0, kDebug=1};
+  enum EventType { kPythia=0, kDebug=1, kReadGen=2};
 
 
 //______________________________________________
 int Initialize()
 {
 
-  gRunMode=gui->GetRunMode();
+  //  Set parameters 
+  if( gui == 0 ) {
+    SetOptionsForBatch();
+    GetArguments();
+  }
+  else {
+    // In interactive mode, GetArguments() is called when gui object is created.
+    gRunMode=gui->GetRunMode();
+    gOutputFileName=gui->GetOutputFileName();
+    gInputFileName=gui->GetInputFileName();
+    gMacroFileName=gui->GetMacroFileName();
+    gEventType=gui->GetEventType();
+    gEcm=gui->GetEcm();
+    gInitPythiaMacro=gui->GetInitPythiaMacro();
+  }
+
+  gROOT->LoadMacro(gMacroFileName);
+
+  UserSetOptions();
 
   switch(gRunMode){
     case 1:
-      ofile= new TFile(gui->GetOutputFileName(),"RECREATE");
+      ofile= new TFile(gOutputFileName,"RECREATE");
       jsf->SetIOFiles();
       InitGenSim();
       break;
     case 2:
-      ofile= new TFile(gui->GetOutputFileName(),"RECREATE");
-      file = new TFile(gui->GetInputFileName());  // Input file
+      ofile= new TFile(gOutputFileName,"RECREATE");
+      file = new TFile(gInputFileName);  // Input file
       jsf->SetIOFiles();
       simdst = new JSFSIMDST();
       simdst->SetFile(ofile);
       simdst->NoReadWrite(); // Does not output SIMDST data
       break;
     case 3:
-      ofile= new TFile(gui->GetOutputFileName(),"RECREATE");
+      ofile= new TFile(gOutputFileName,"RECREATE");
       jsf->SetIOFiles();
       simdst = new JSFSIMDST();
       simdst->ReadData();
-      simdst->SetDataFileName(gui->GetInputFileName());
+      simdst->SetDataFileName(gInputFileName);
       Char_t parf[256];
-      strcpy(parf,gui->GetInputFileName());
+      strcpy(parf,gInputFileName);
       Int_t lparf=strlen(parf);
       strcpy(&parf[lparf-3],"param");
       JSFQuickSimParam *par=new JSFQuickSimParam();
@@ -63,8 +94,6 @@ int Initialize()
     simdst->SetQuickSimParam(sim->Param());
   }  
   
-  gROOT->LoadMacro(gui->GetMacroFileName());
-
   UserInitialize();
 
   jsf->BeginRun(1);              // Set run number to 1.
@@ -74,16 +103,19 @@ int Initialize()
 void InitGenSim()
 {
 
-   Int_t eventtype=gui->GetEventType();
-   Float_t ecm=gui->GetEcm();
+   Int_t eventtype=gEventType;
+   Float_t ecm=gEcm;
 
    full  = new JSFLCFULL();
    switch (eventtype) {
       case kDebug:
 	dbg=new DebugGenerator();
 	break;
+      case kReadGen:
+        rgen=new JSFReadGenerator();
+	break;
       default:
-        gROOT->LoadMacro(gui->GetInitPythiaMacro());
+	if( gInitPythiaMacro != 0 ) gROOT->LoadMacro(gInitPythiaMacro);
 	py    = new PythiaGenerator();
 	break;
    }
@@ -95,13 +127,16 @@ void InitGenSim()
    // simdst->WriteData();
    // simdst->SetDataFileName("simdst.dat");
    // simdst->SetParamFileName("simdst.param");
-  
+
+   // If these comments are removed, corresponding information
+   // is not saved in the ROOT tree.
+   //
    //  full->SetMakeBranch(kFALSE);   // suppress output of EventBuf 
    //  py->SetMakeBranch(kFALSE);     // suppress output of EventBuf 
    //  sim->SetMakeBranch(kFALSE);    // suppress output of EventBuf
    //  simdst->SetMakeBranch(kTRUE);     // suppress output of EventBuf
  
-   if( eventtype != kDebug ) { 
+   if( eventtype == kPythia ) { 
      py->SetEcm(ecm);             // Center of mass energy (GeV)
      InitPythia();         // Set Pythia parameters.
    }
@@ -111,18 +146,30 @@ void InitGenSim()
 //______________________________________________
 Bool_t GetEvent(Int_t ev)
 {
+  //  
     if( gRunMode==2 && !jsf->GetEvent(ev) ) {
-      gui->SetReturnCode(-2);
+      gReturnCode=-2 ;
+      if( gui != 0 ) gui->SetReturnCode(gReturnCode);
       return kFALSE;
     }      
     if( !jsf->Process(ev)) {
-      gui->SetReturnCode(-1);
+      gReturnCode=-1;
+      if( gui != 0 ) gui->SetReturnCode(gReturnCode);
       return kFALSE;
     }
-    gui->DisplayEventData();
+    if( gui != 0 ) gui->DisplayEventData();
     UserAnalysis();
-    gui->DrawHist();
-    gui->SetReturnCode(0);
+    gReturnCode=0;
+    if( gui != 0 ) {
+      gui->DrawHist();
+      gui->SetReturnCode(gReturnCode);
+    }
+    
+    if( gRunMode==1 ) {
+      jsf->FillTree();
+      jsf->Clear();
+    }
+
     return kTRUE;
 }
 
@@ -154,3 +201,89 @@ void JobEnd()
   if( ofile ) ofile->Write();
 
 }
+
+//______________________________________________
+Bool_t SetOptionsForBatch()
+{
+  //  Set global parameters for Batch execution.
+  //  This macro is called when jsf is executed with -b options.
+
+  gRunMode=jsf->Env()->GetValue("JSFGUI.RunMode",1);
+  gMacroFileName=jsf->Env()->GetValue("JSFGUI.MacroFileName","UserAnalysis.C");
+
+  gEventType=jsf->Env()->GetValue("JSFGUI.EventType",kPythia);
+  sscanf(jsf->Env()->GetValue("JSFGUI.ECM","300.0"),"%g",&gEcm);
+  gInitPythiaMacro=
+    jsf->Env()->GetValue("JSFGUI.InitPythiaMacro","InitPythia.C");
+
+  gInputFileName=jsf->Env()->GetValue("JSFGUI.InputFileName","");
+  gOutputFileName=jsf->Env()->GetValue("JSFGUI.OutputFileName","jsf.root");
+  gFirstEvent=jsf->Env()->GetValue("JSFGUI.FirstEvent",1);
+  gNAnalizeEvent= jsf->Env()->GetValue("JSFGUI.NEventsAnalize",10);
+
+}
+
+//_________________________________________________________
+void ResetHist()
+{
+  UserInitialize();
+}
+
+//_________________________________________________________
+void BatchRun()
+{
+  Initialize();
+
+  Int_t i;
+  for(i=gFirstEvent;i<=gFirstEvent+gNAnalizeEvent-1;i++){
+    GetEvent(i);
+
+    printf(" i=%d, gReturnCode=%d\n",i,gReturnCode);
+    if( gReturnCode == -2 ) {
+      printf("End of event loop due to end-of-file at event# %d\n",i);
+      break;
+    }
+    else if( gReturnCode == -1 ) {
+      printf("End of event loop due to error at event# %d\n",i);
+      break;
+    }
+  }
+
+  JobEnd();
+    
+}
+
+
+//_________________________________________________________
+voi GetArguments()
+{
+
+  TApplication *ap=gROOT->GetApplication();
+
+  Int_t maxevt;
+  Int_t i;
+  Char_t str[256];
+  printf(" Start GetArguments .. #arg=%d\n",ap->Argc());
+  for(i=0;i<ap->Argc();i++){
+    if( strncmp(ap->Argv(i),"--maxevt=",9) == 0 ){
+      strcpy(str,(ap->Argv(i)+9)); 
+      sscanf(str,"%d",&maxevt);
+      printf(" str=%s maxevt=%d\n",str,maxevt);
+    } 
+    elseif( strcmp(ap->Argv(i),"--help") ==0 ) {
+      printf("Macro : gui.C\n");
+      printf("  This macro is for batch and/or interactive execution of jsf.\n");
+      printf("  To run this macro, do\n");
+      printf("\n       jsf [options] gui.C \n\n");
+      printf("  Valid options are.\n");
+      printf("   --help : display help information\n");
+      printf("   --maxevt=N  : Number of event is set to N \n");
+      ap->Terminate();
+    }
+  }
+  return ;
+}
+
+
+
+

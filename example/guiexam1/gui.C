@@ -1,9 +1,14 @@
 {
-// 
+// **************************************************************** 
 //  Example of Event display script. 
 // 
+//(Author) 
+//  10-Mar-1999 A.Miyamoto  Original version 
+//  21-Apr-1999 A.Miyamoto  Modified to run both in batch and interactive.
+//
 // $Id$
 //
+// **************************************************************** 
 
   gROOT->LoadMacro("MainMacro.C");
 
@@ -16,9 +21,12 @@
     }
   }
   JSFGUIFrame *gui;
-
   jsf  = new JSFSteer();
-  gui=new JSFGUIFrame(gClient->GetRoot(), 400, 220);
+  if( gClient == 0 ) {
+    gui=0;
+    BatchRun();
+  }
+  else  gui=new JSFGUIFrame(gClient->GetRoot(), 400, 220);
 
 //********************************************
 //*  Start execution

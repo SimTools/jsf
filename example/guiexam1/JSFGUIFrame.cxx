@@ -1,6 +1,11 @@
+//*LastUpdate :  jsf-1-8  19-April-1999  By Akiya Miyamoto
 //*LastUpdate :  jsf-1-5  20-Feburary-1999  By Akiya Miyamoto
 //*-- Author  : A.Miyamoto  20-September-1998
 
+/*
+  1-May-1999 A.Miyamoto   Add Start borwser and Open JIM file menu
+  19-Apr-1999 A.Miyamoto  A bug in JSFGUIFrame::ToRelativePath is fixed.
+*/
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -23,6 +28,8 @@
 #include <TROOT.h>
 #include <TApplication.h>
 #include <TGXW.h>
+
+#include <TBrowser.h>
 
 #include <TGListBox.h>
 #include <TGClient.h>
@@ -52,17 +59,21 @@
 #include "JSFGUIFrame.h"
 #include "InputDialog.h"
 
+TBrowser *gbrows;
 
 enum ETestCommandIdentifiers {
    M_FILE_GENEVENT=101,
    M_FILE_READROOT=102,
    M_FILE_READSIMDST=103,
+   M_FILE_READJIM=104,
 
-   M_FILE_OPEN=104,
-   M_FILE_OPENOUTPUT=105,
-   M_FILE_SAVE=106,
-   M_FILE_SAVEAS=107,
-   M_FILE_EXIT=108,
+   M_FILE_OPEN=105,
+   M_FILE_OPENOUTPUT=106,
+   M_FILE_SAVE=107,
+   M_FILE_SAVEAS=108,
+
+   M_FILE_STARTBROWSER=150,
+   M_FILE_EXIT=151,
  
    M_HELP_CONTENTS=200,
    M_HELP_SEARCH=201,
@@ -121,6 +132,7 @@ EMsgBoxIcon mb_icon[4] = { kMBIconStop, kMBIconQuestion,
 
 const char *filetypes[] = { "ROOT files",    "*.root",
                             "SIMDST files",     "*.dat",
+                            "JIM bnk",     "*.bnk",
                             "All files",     "*",
                             0,               0 };
 
@@ -134,6 +146,7 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h)
    fED=new JSFEventDisplay();
    fInitialized=kFALSE;
    fNoOfAnalizedEvents=-999;
+   gbrows=NULL;
 
    // Create menubar and popup menus. The hint objects are used to place
    // and group the different menu widgets with respect to eachother.
@@ -147,9 +160,11 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h)
    fMenuFile->AddEntry("&Generate Event", M_FILE_GENEVENT);
    fMenuFile->AddEntry("&Read Root File", M_FILE_READROOT);
    fMenuFile->AddEntry("&Read SIMDST File", M_FILE_READSIMDST);
+   fMenuFile->AddEntry("&Read JIM Bank File", M_FILE_READJIM);
    fMenuFile->AddSeparator();
    fMenuFile->AddEntry("&Open Input...", M_FILE_OPEN);
    fMenuFile->AddEntry("&Open Output...", M_FILE_OPENOUTPUT);
+   fMenuFile->AddEntry("&Start Browser...", M_FILE_STARTBROWSER);
    fMenuFile->AddSeparator();
    fMenuFile->AddEntry("E&xit", M_FILE_EXIT);
 
@@ -281,6 +296,7 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h)
    if( lfn2 <= 0 ) {
      fMenuFile->DisableEntry(M_FILE_READROOT);
      fMenuFile->DisableEntry(M_FILE_READSIMDST);
+     fMenuFile->DisableEntry(M_FILE_READJIM);
    }
 
    fFileFrame->AddFrame(fLFileN, 
@@ -406,6 +422,8 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h)
             10, 10, 1, 0));
 
 
+   //* Call macro to process command line arguments
+   gROOT->ProcessLine("GetArguments();");
 
    
    SetWindowName("JSF Control Panel");
@@ -527,7 +545,8 @@ Bool_t JSFGUIFrame::ProcessMessage(Long_t msg, Long_t parm1, Long_t)
 	         case M_FILE_GENEVENT: 
 	         case M_FILE_READROOT: 
 	         case M_FILE_READSIMDST: 
-		   for(i=M_FILE_GENEVENT;i<=M_FILE_READSIMDST;i++){
+	         case M_FILE_READJIM: 
+		   for(i=M_FILE_GENEVENT;i<=M_FILE_READJIM;i++){
                      fMenuFile->UnCheckEntry(i);
 		   }
 		   fMenuFile->CheckEntry(parm1);
@@ -550,10 +569,12 @@ Bool_t JSFGUIFrame::ProcessMessage(Long_t msg, Long_t parm1, Long_t)
 			gSystem->ChangeDirectory(dirnam);
 			fMenuFile->EnableEntry(M_FILE_READROOT);
 			fMenuFile->EnableEntry(M_FILE_READSIMDST);
+			fMenuFile->EnableEntry(M_FILE_READJIM);
 
 			Int_t lfn=strlen(fInputFileName);
 			if( strcmp(&fInputFileName[lfn-4],"root") == 0 ){
 			  fMenuFile->CheckEntry(M_FILE_READROOT);
+			  fMenuFile->UnCheckEntry(M_FILE_READJIM);
 			  fMenuFile->UnCheckEntry(M_FILE_READSIMDST);
 			  fMenuFile->UnCheckEntry(M_FILE_GENEVENT);
 			  fRunMode=2;
@@ -561,8 +582,16 @@ Bool_t JSFGUIFrame::ProcessMessage(Long_t msg, Long_t parm1, Long_t)
 			else if( strcmp(&fInputFileName[lfn-3],"dat") == 0 ){
 			  fMenuFile->CheckEntry(M_FILE_READSIMDST);
 			  fMenuFile->UnCheckEntry(M_FILE_READROOT);
+			  fMenuFile->UnCheckEntry(M_FILE_READJIM);
 			  fMenuFile->UnCheckEntry(M_FILE_GENEVENT);
 			  fRunMode=3;
+			}
+			else if( strcmp(&fInputFileName[lfn-3],"bnk") == 0 ){
+			  fMenuFile->CheckEntry(M_FILE_READJIM);
+			  fMenuFile->UnCheckEntry(M_FILE_READROOT);
+			  fMenuFile->UnCheckEntry(M_FILE_READSIMDST);
+			  fMenuFile->UnCheckEntry(M_FILE_GENEVENT);
+			  fRunMode=4;
 			}
 
 
@@ -587,6 +616,10 @@ Bool_t JSFGUIFrame::ProcessMessage(Long_t msg, Long_t parm1, Long_t)
 			gSystem->ChangeDirectory(dirnam);
                      }
                      break;
+
+                  case M_FILE_STARTBROWSER:
+		    if( !gbrows ) gbrows=new TBrowser("Browser");
+                    break;
 
                   case M_FILE_EXIT:
 		    gROOT->ProcessLine("JobEnd();");
@@ -889,24 +922,36 @@ void JSFGUIFrame::AnalizeEventAction()
   DrawHist();
 }
 
-//____________________________________________________________________
+//------------------------------------------------------------
 void JSFGUIFrame::ToRelativePath(const Char_t *fnin, 
-				 const Char_t *dirnow, Char_t *fnout)
+				 const Char_t *dirnowi, Char_t *fnout)
 {
   // Absolute path name is changed to the path relative to 
   // dirnow.
 
-  Int_t ldir=strlen(dirnow);
+  //  Int_t lfn=strlen(fnin);
+  Int_t ldir=strlen(dirnowi);
+  Char_t dirnow[ldir+2];
+  strcpy(dirnow, dirnowi);
+  if( dirnowi[ldir] != '/' ) { strcat(dirnow, "/"); }
+  
   Int_t i;
-  for(i=0;i<ldir;i++){ if( fnin[i] != dirnow[i] ) break;   }
+  for(i=0;i<ldir+1;i++){ if( fnin[i] != dirnow[i] ) break;   }
 
+  if( ldir > 30 && i < ldir/2 ) {
+    strcpy(fnout,fnin);
+    return ;
+  }
   Int_t j;
-  for(j=i;j>0;j--){ if( fnin[j] == '/' ) break; }
-  Int_t k;  Int_t nslash=0;
-  for(k=j+1;k<ldir;k++){  if( dirnow[k] == '/' ) nslash++; }
+  for(j=i-1;j>-1;j--){ if( fnin[j] == '/' ) break;  }
+
+  // count number of slash between j and ldir
+  Int_t k;  Int_t nslash=0; 
+  for(k=j+1;k<=ldir;k++){  
+    if( dirnow[k] == '/' ) { nslash++; }
+   }
 
   k=0;
-  for(i=0;i<nslash+1;i++){ sprintf(&fnout[k],"../"); k+=3; }
+  for(i=0;i<nslash;i++){ sprintf(&fnout[k],"../"); k+=3; }
   sprintf(&fnout[k],"%s",&fnin[j+1]);
 }
-
