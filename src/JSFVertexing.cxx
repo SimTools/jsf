@@ -7,10 +7,10 @@
 //
 // (Description)
 // Perorms vertex finding and geometrycally constraining 
-// vertex fitting.
+// vertex finding.
 //  
 // (Usage) 
-//
+//   See example in example/v0tag/
 // (Update records)
 //   2000/01/31 A.Miyamoto  Original version.
 //
