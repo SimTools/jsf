@@ -50,8 +50,9 @@ lib: $(OBJS)
 clean:: 
 	@rm -f $(OBJS) core *.so $(SOLIBNAME).$(SrcSuf) $(SOLIBNAME).h
 
-depend:: 
-	makedepend -I$(ROOTSYS)/include -I$(JSFROOT)/include $(SRC)
+depend:: $(SRC) $(HDRS)
+	for i in $(SRC); do \
+	rmkdepend -a -- $(DEPENDFILES) -- $$i; done
 
 cleanall:: clean
 	@rm -f $(OBJS) core *.so $(SOLIBNAME).$(SrcSuf) $(SOLIBNAME).h *.~ *.o
