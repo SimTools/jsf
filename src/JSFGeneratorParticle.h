@@ -33,9 +33,13 @@ public:
   Float_t  fLifeTime; // Particle life time ( c x nsec, =0 for stable, cm)
   Float_t  fDecayLength;  // Decay length (cm, =0 for stable)
 // If fDecayLength <= 0, vertex point is re-evaluated using fLifeTime.
+  Int_t    fSecondMother;   // Serial Number of 2nd mother
+  Int_t    fStatus;      // Particle status code.
 
 public:
-  JSFGeneratorParticle() {}
+  JSFGeneratorParticle():fSer(0),fID(0),fMass(0.0),fCharge(0.0),
+    fNdaughter(0),fFirstDaughter(0),fMother(0),fLifeTime(0.0),
+    fDecayLength(0.0),fSecondMother(-1),fStatus(-9999) {}
 
   JSFGeneratorParticle(Int_t Ser, Int_t ID, Float_t Mass, Float_t Charge,
          TVector& P, TVector& X,
@@ -92,7 +96,15 @@ public:
 
   virtual ~JSFGeneratorParticle() {}
 
-  ClassDef(JSFGeneratorParticle, 3)  //A JSFGeneratorParticle segment
+
+  inline void   SetSecondMother(Int_t mod){ fSecondMother=mod; }
+  inline void   SetStatus(Int_t stat){ fStatus=stat; }
+  inline Int_t  GetSecondMother(){ return fSecondMother; }
+  inline Int_t  GetStatus(){ return fStatus; }
+
+  inline Bool_t HasSecondMother(){ return ( fSecondMother < 0 ? kFALSE : kTRUE ) ; }
+
+  ClassDef(JSFGeneratorParticle, 4)  //A JSFGeneratorParticle segment
 };
 
 //**********************
