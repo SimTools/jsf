@@ -42,7 +42,9 @@ jsf-1-4  progress since  5-January-1999 A.Miyamoto
 (13) JSFSIMDST class to output SIMDST format data or read it.
 (14) In the Makefile at the top directory, add an entry, makeweb, to create
      html file.  bin/webindx script is also added.
-	
+(15) Data member and functions of JSFGeneratorParticle are defined as 
+     Float_t instead of Double_t, to reduce output data size.
+
 **********************************************************
 jsf-1-3   5-January-1999 A.Miyamoto
 **********************************************************
