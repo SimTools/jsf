@@ -39,6 +39,7 @@ web: html/example
 	for i in FFbarSpring guiexam1 ww CCDAnal readjim jsfjim ; do \
 	( cd example/$$i ; xmkmf -a ; make web ) \
 	done
+	( perl bin/webindx > html/JSF_Index.html ) 
 
 html/example: 
 	mkdir html/example

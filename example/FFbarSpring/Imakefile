@@ -67,8 +67,8 @@ distclean::
 	@rm -f PYTHIA.SEED *.bak
 	@rm -f jsf *.root Makefile jsfmain.cxx
 
-web:	jsf  $(WEBDIR)
-	./jsf -q -b html.C 
+web:	lib  $(WEBDIR)
+	jsf -q -b html.C 
 
 $(WEBDIR):
 	mkdir $(WEBDIR)

@@ -13,7 +13,7 @@ if ( $ENV{"JSFROOT"} =~ "" ) { $jsfroot=$ENV{"JSFROOT"} }
 $htmldir=join('',$jsfroot,"/html");
 $indexfile=join('',$htmldir,"/JSF_Index.html");
 
-@htmlf=( "JSFMain_Index.html", "CCDAnal_Index.html", "FFbarSpring_Index.html","ww_Index.html", "guiexam1_Index.html", "ReadJIM_Index.html", "JSFJIM_Index.html");
+@htmlf=( "JSFMain_Index.html",  "FFbarSpring_Index.html","ww_Index.html", "guiexam1_Index.html", "ReadJIM_Index.html", "JSFJIM_Index.html", "CCDAnal_Index.html");
 
 # #############################
 # Main reference index file
@@ -39,14 +39,18 @@ for( $i=0;$i<=$#htmlf;$i++){
     if( $ipre == 1 && $_ =~ /^<li>/ ) {
 	@array=split(/"/,$_);
 	if( $i == 0 ) { print ; }
-	if( $i == 1 && $array[1] =~ /^CCD*/ ) { print ; }
-	if( $i == 2 && $array[1] =~ /^FFbar*/ ) { print ; }
-	if( $i == 3 && $array[1] =~ /^WW*/ ) { print ; }
-	if( $i == 4 && $array[1] =~ /^JSFE*/ ) { print ; }
-	if( $i == 4 && $array[1] =~ /^JSFGUI*/ ) { print ; }
-	if( $i == 5 && $array[1] =~ /^JSFRead*/ ) { print ; }
+	if( $i == 6 && $array[1] =~ /^CCD*/ ) { print ; }
+	if( $i == 1 && $array[1] =~ /^FFbar*/ ) { print ; }
+	if( $i == 2 && $array[1] =~ /^WW*/ ) { print ; }
+
+	if( $i == 3 && $array[1] =~ /JSFEventDisplay/ ) { print ; }
+	if( $i == 3 && $array[1] =~ /JSFEnvGUI/ ) { print ; }
+	if( $i == 3 && $array[1] =~ /^JSFED*/ ) { print ; }
+	if( $i == 3 && $array[1] =~ /^JSFGUI*/ ) { print ; }
+
+	if( $i == 4 && $array[1] =~ /^JSFRead*/ ) { print ; }
+	if( $i == 4 && $array[1] =~ /^JSFJIM*/ ) { print ; }
 	if( $i == 5 && $array[1] =~ /^JSFJIM*/ ) { print ; }
-	if( $i == 6 && $array[1] =~ /^JSFJIM*/ ) { print ; }
     }
     else { print ; }
 

@@ -50,7 +50,7 @@ clean::
 	@rm -f $(OBJS) core *.so $(SOLIBNAME).*
 
 depend:: 
-	makedepend -I$(ROOTSYS)/include $(SRC)
+	makedepend -I$(ROOTSYS)/include -I$(JSFROOT)/include $(SRC) $(HDRS)
 
 web: lib ccd
 	./ccd -b -q html.C

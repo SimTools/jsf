@@ -1,4 +1,10 @@
 {
+
+  gEnv->SetValue("Root.Html.Root",
+	       "http://www-jlc.kek.jp/subg/offl/jsf/RootHtmlDoc/html");
+  gEnv->SetValue("Root.Html.HomePage",
+		 "http://www-jlc.kek.jp/subg/offl/jsf/RootHtmlDoc/html");
+
    THtml html; 
    gSystem->Load("libJSFGUI.so");
 

@@ -1,7 +1,15 @@
 {
+
   THtml html; 
+
+    Char_t *name=gSystem->DynamicPathName("libFFbarSpring");
+    gSystem->Load(name);
+
   html.SetOutputDir("../../html/"); 
-  html.SetSourceDir("./"); 
+  html.SetSourceDir("./:$(JSFROOT)/src:$(JSFROOT)/include:$(ROOTSYS)/src:$(ROOTSYS)/include"); 
+
+    Char_t *name=gSystem->DynamicPathName("libFFbarSpring");
+    gSystem->Load(name);
 
    html.MakeClass("FFbarSpring");
    html.MakeClass("FFbarSpringBuf");
