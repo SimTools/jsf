@@ -583,6 +583,12 @@ void JSFBeamGenerationCain::MakeBSMap()
     }
   }
   fTotalInt=totalint;
+  if( TMath::Abs(ssum/totalint-1.0) > 0.001 ) {
+    printf("Fatal error at JSFBeamGenerattion::MakeBSMap\n");
+    printf(" Too much difference in total integration ");
+    printf(" and sum of each bins.  Something is wrong.\n"); 
+    exit(-1);
+  }
   if( ip != fMapsize ) { 
     printf(" Error in JSFBeamGenerationCain::MakeBSMap ..# of map data(%d)",ip);
     printf(" exceeds defined size of map (%d)\n",fMapsize);
