@@ -48,13 +48,21 @@ ROOTGLIBS     = $(shell root-config --glibs)
 LCLIBDIR      = $(LCLIBROOT)/lib
 
 JSFLIBS       = -L$(JSFROOT)/lib -lJSF -lJSFLCFULL -lJSFQuickSim \
-		$(LIBJSFDMATRIX) -lBasesSpring
+		$(LIBJSFDMATRIX) -lBasesSpring -lJSFBeamGeneration
 
 DEPENDFILES   = $(filter -I% -D%,$(CXXFLAGS)) $(INCPATH)
 
 AIXLIBS       =
 
+#if __PYTHIA_VERSION__ > 5 
+PYTHIA_LIBNAME = __PYTHIA_LIBNAME__
+JSFLIBS     += -l$(PYTHIA_LIBNAME)
+EGPYTHIA     = EGPythia6     
+#else
 CERNLIBLIBS   = jetset74
+EGPYTHIA     = EGPythia
+#endif
+
 #ifndef __CERNLIB_PDFLIB__
 CERNLIBLIBS   += pdflib804
 #endif
