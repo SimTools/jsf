@@ -68,7 +68,7 @@
 
    html.MakeIndex();
 
-   Char_t *cmd="cd ../../html ; mv USER_Index.html JSFMain_Index.html";
+   Char_t *cmd="cd ../html ; mv USER_Index.html JSFMain_Index.html";
    gSystem->Exec(cmd);
 
 

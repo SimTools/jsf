@@ -6,7 +6,7 @@
 #pragma link off all classes;
 #pragma link off all functions;
 
-#pragma link C++ class JSFGUIFrame;
+#pragma link C++ class JSFGUIFrame-;
 #pragma link C++ class InputDialog;
 #pragma link C++ class JSFGUIAnalysis;
 #pragma link C++ class JSFEnvGUIFrame;

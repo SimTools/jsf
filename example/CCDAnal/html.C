@@ -1,7 +1,8 @@
 {
   THtml html; 
   html.SetOutputDir("../../html/"); 
-  html.SetSourceDir("./"); 
+  html.SetSourceDir("./:$(JSFROOT)/src:$(JSFROOT)/include:$(ROOTSYS)/src:$(ROOTSYS)/include"); 
+
 
 //
    html.MakeClass("CCDRawData");

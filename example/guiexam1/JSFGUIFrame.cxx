@@ -257,6 +257,8 @@ const char *filetypes[] = { "ROOT files",    "*.root",
                             "All files",     "*",
                             0,               0 };
 
+ClassImp(JSFGUIFrame)
+
 ///////////////////////////////////////////////////////////////////////
 
 JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h, Bool_t demo)

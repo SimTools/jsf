@@ -178,6 +178,9 @@ public:
      Char_t str[12];       sprintf(str,"%d",n);
      gJSF->Env()->SetValue("JSFGUI.NEventsAnalize",str);}
    void SetReturnCode(Int_t ir){ fReturnCode=ir;}
+
+   ClassDef(JSFGUIFrame, 1)   // A class to GUI
+
    
 };
 

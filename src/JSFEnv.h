@@ -45,6 +45,7 @@ public:
 
   //  ClassDef(JSFEnvRec,1) // JSF Environment parameter
 
+  ClassDef(JSFEnvRec,1) // JSF Environment Record parameter
 
 };
 

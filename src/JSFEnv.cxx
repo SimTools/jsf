@@ -20,6 +20,7 @@
 #include "JSFEnv.h"
 
 ClassImp(JSFEnv)
+ClassImp(JSFEnvRec)
 
 //___________________________________________________________
 JSFEnv::JSFEnv(Char_t *name) : TEnv(name)
