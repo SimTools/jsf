@@ -79,7 +79,7 @@ void InitPythia()
   Int_t izdcy=jsf->Env()->GetValue("JSFGUI.Pythia.Decay.Z",0);
   if( izdcy != 0 ) {
     for(Int_t idc=156;idc<=171;idc++)   tpy->SetMDME(idc,1,0);
-    if( izdcy > 0 && izdcy < 6 ) tpy->SetMDME(155+izdcy,1,1);
+    if( izdcy > 0 && izdcy < 7 ) tpy->SetMDME(155+izdcy,1,1);
     if( izdcy > 10 && izdcy < 16 ) tpy->SetMDME(153+izdcy,1,1);
   }
 
