@@ -1,0 +1,2 @@
+#define __JSF_VERSION__ 1
+#define __JSF_MINORVERSION__ 14
