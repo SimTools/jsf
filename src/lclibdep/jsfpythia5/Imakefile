@@ -13,7 +13,7 @@
 /*  Some macros specific to jsf	building				*/
 /*----------------------------------------------------------------------*/
 
-#include    "../../../conf/makejsf.tmpl"
+#include    "conf/makejsf.tmpl"
 
 NAME		= JSFPythia5
 LIBNAME		= lib$(NAME)
@@ -52,13 +52,11 @@ $(LIBNAME).$(DllSuf): $(OBJ)
 	$(LD) $(SOFLAGS)  $(OBJ) $(LIBS) -o $(LIBNAME).$(DllSuf)
 
 install:: $(LIBNAME).$(DllSuf)
-	mkdir -p $(JSFINSTALLDIR)/lib $(JSFINSTALLDIR)/include
-	install -p -m 755 $(LIBNAME).$(DllSuf) $(JSFINSTALLDIR)/lib
-# 	install -p -m 644 $(HDR) $(JSFINSTALLDIR)/include	
+	mkdir -p $(JSFINSTALLDIR)/lib $(JSFINCDIR)
+	install -p -m 755 $(LIBNAME).$(DllSuf) $(JSFLIBDIR)
 
 uninstall::
 	rm -f $(JSFINSTALLDIR)/$(LIBNAME).$(DllSuf)
-#	( cd $(JSFINSTALLDIR) && rm -f $(HDR) )
 
 clean:: 
 	@rm -f $(OBJS) core *.so *~
@@ -77,6 +75,7 @@ web:
 
 $(LIBNAME).$(SrcSuf): $(HDR)
 		@echo "Generating dictionary ..."
-		rootcint -f $(LIBNAME).$(SrcSuf) -c -I. -I$(JSFINSTALLDIR)/include \
+		rootcint -f $(LIBNAME).$(SrcSuf) -c \
+		$(CXXFLAGS) $(shell jsf-config --includes) \
 		$(RCINTDEFINES) $(HDR)
 
