@@ -1,9 +1,3 @@
-//*LastUpdate : jsf-1-16  4-October-2000  A.Miyamoto
-//*LastUpdate : jsf-1-12  16-October-1999  A.Miyamoto
-//*LastUpdate : jsf-1-11  26-July-1999  A.Miyamoto
-//*LastUpdate : jsf-1-5  1-March-1999  A.Miyamoto
-//*-- Author  : Akiya Miyamoto  1-March-1999  A.Miyamoto
-
 ////////////////////////////////////////////////////////////////////////
 //
 //  JSFHelicalTrack
@@ -158,8 +152,8 @@ void JSFHelicalTrack::SetHelix(JSF3DV p1, JSF3DV p2, JSF3DV p3, Double_t bfield)
   }  
   Double_t phi=TMath::ATan2( p2.y-yc, p2.x-xc );
   Double_t phidef=phi-fHelix.phi0;
-  if( phidef > TMath::Pi() )  phidef += 2*TMath::Pi();
-  if( phidef < -TMath::Pi() ) phidef -= 2*TMath::Pi();
+  if( phidef > TMath::Pi() )  phidef -= 2*TMath::Pi();
+  if( phidef < -TMath::Pi() ) phidef += 2*TMath::Pi();
   Double_t charge=-TMath::Sign(1.,phidef);
   if( charge > 0.0 ) { fHelix.phi0 += TMath::Pi(); 
       if( fHelix.phi0 > 2*TMath::Pi() ) fHelix.phi0 -= 2*TMath::Pi();}
