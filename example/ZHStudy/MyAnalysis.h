@@ -47,6 +47,12 @@ public:
 
   friend class MyAnalysis;
 
+  void ClearJetInfo(){ fNumjet=0 ; fPtmiss=0.0; fMissmass=0.0;
+		       fCos1=1.0 ; fCos2=-1.0 ; fHmass=0.0;
+		       fJet[0][0]=0.0;   fJet[0][1]=0.0;
+		       fJet[0][2]=0.0;   fJet[0][3]=0.0;
+                     }
+
   Double_t GetEcm(){ return fEcm; }
   Double_t GetNcmulti(){ return fNcmulti; }
   Double_t GetMaxEP(){ return fMaxEP; }

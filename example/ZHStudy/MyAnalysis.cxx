@@ -96,17 +96,20 @@ Bool_t MyAnalysis::Process(Int_t nev)
    buf->SetNcharged(nt);
    buf->SetEvent4V(ssum(0), ssum(1), ssum(2), ssum(3));
 
-   // Does jet analysis
-   static const Int_t maxcut=1;
-   Float_t ycut[maxcut] ;    ycut[0]=fYcut;
-   Int_t numcls[maxcut] ;   
-   Int_t numjet[maxprt]; Int_t jettbl[maxprt] ; 
-   Float_t jetlst[maxprt][4]; Int_t status;
+   // Clear other variables
+   buf->ClearJetInfo();
 
-  jclust_(&nprt, &prtlst[0][0], &lngdat, &ipx0, &maxcut, ycut, 
+   // Does jet analysis
+   if( nt > 1 )  {
+     static const Int_t maxcut=1;
+     Float_t ycut[maxcut] ;    ycut[0]=fYcut;
+     Int_t numcls[maxcut] ;   
+     Int_t numjet[maxprt]; Int_t jettbl[maxprt] ; 
+     Float_t jetlst[maxprt][4]; Int_t status;
+     jclust_(&nprt, &prtlst[0][0], &lngdat, &ipx0, &maxcut, ycut, 
 	   numcls, numjet, jettbl, &jetlst[0][0], &status);
-  
-  buf->CalculateVariables((numcls[0]), jetlst);
+     buf->CalculateVariables((numcls[0]), jetlst);
+   }
 
   return kTRUE;
  
@@ -117,7 +120,6 @@ void MyAnalysisBuf::CalculateVariables(Int_t njet, Float_t jetlst[][4])
 {
 //  Calculate costh of jets, missing mass of the event, and 
 //  and invariant mass of the event.
-
 
   fNumjet=njet; 
   for(Int_t i=0;i<TMath::Min(fNumjet, 5);i++){
@@ -130,15 +132,20 @@ void MyAnalysisBuf::CalculateVariables(Int_t njet, Float_t jetlst[][4])
    
    //   printf(" e/mu Pmax=%g %g \n",fMaxEP, fMaxMuP);
    //printf(" ptmiss=%g\n",fPtmiss);
-   //printf(" event 4 vector is %g %g %g %g\n",
+   // printf(" event 4 vector is %g %g %g %g\n",
    //	  fEvent4V[0], fEvent4V[1], fEvent4V[2], fEvent4V[3]);
 
-
-  fCos1 = fJet[0][3]/TMath::Sqrt( fJet[0][1]*fJet[0][1] + 
-	  fJet[0][2]*fJet[0][2] + fJet[0][3]*fJet[0][3] );
-  fCos2 = fJet[1][3]/TMath::Sqrt( fJet[1][1]*fJet[1][1] + 
+   fCos1=1.0; 
+   fCos2=-1.0;
+  if( fNumjet > 0 ) {	
+    fCos1 = fJet[0][3]/TMath::Sqrt( fJet[0][1]*fJet[0][1] + 
+	    fJet[0][2]*fJet[0][2] + fJet[0][3]*fJet[0][3] );
+  }
+  if( fNumjet > 1) {  
+     fCos2 = fJet[1][3]/TMath::Sqrt( fJet[1][1]*fJet[1][1] + 
 	  fJet[1][2]*fJet[1][2] + fJet[1][3]*fJet[1][3] );
-   
+  }   
+
   Double_t missmass2 = (fEcm-fEvent4V[0])*(fEcm-fEvent4V[0]) 
      - fEvent4V[1]*fEvent4V[1] - fEvent4V[2]*fEvent4V[2] 
      - fEvent4V[3]*fEvent4V[3];
@@ -150,7 +157,7 @@ void MyAnalysisBuf::CalculateVariables(Int_t njet, Float_t jetlst[][4])
      - fEvent4V[2]*fEvent4V[2] - fEvent4V[3]*fEvent4V[3] ;
   if( hmass2 > 0.0 ) fHmass=TMath::Sqrt(hmass2);
   else fHmass=-TMath::Sqrt(hmass2);
-     
+    
 }
 
 

@@ -1,24 +1,30 @@
 #---------------------------------------------------
 
 #include    "../../conf/makejsf.tmpl"
+CERNLIBS      = -L/cern/pro/lib -lpythia -ljetset74
+JSFLIBS       = -Wl,-L$(JSFROOT)/lib \
+		-Wl,--whole-archive,-lJSF -lJSFLCFULL \
+		-Wl,--no-whole-archive \
 
-ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
+#if defined(hitachiArchitecture)
+CERNLIBS      = -L/cern/97a_nog/lib -ljetset74
+JSFLIBS       = -Wl,-L$(JSFROOT)/lib -lJSF -lJSFLCFULL 
+#endif
+
+ROOTLIBS      = -L$(ROOTSYS)/lib \
 		-lEGPythia -lEG \
+		$(CERNLIBS) \
+		-lNew -lBase -lCint -lClib -lCont -lFunc \
                 -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
-                -lPostscript -lProof -lTree -lUnix -lZip \
-		-Wl,-u,pytest_ \
-		-L/cern/pro/lib -lpythia -ljetset74
+                -lPostscript -lProof -lTree -lUnix -lZip
 
 ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
 
 LCLIB 	  = $(LCDIR)/lib
 
-ANALLIB   = -Wl,-L$(JSFROOT)/lib \
-	    -Wl,--whole-archive,-lJSF -lJSFLCFULL \
-	    -Wl,--no-whole-archive \
+ANALLIB   = $(JSFLIBS) \
 	    -L$(LCLIB) -lLCFULL -lGENUTIL -lLUHADR -lTAUOLA \
 	    -lLTKCL -lHELASV204 -lBASESV5.1 -lSIMJLC -lFORTLIB  \
-	    -L/cern/pro/lib -ljetset74 -lpythia \
 	    -lTBS -lLCFULL -lGENUTIL -lLUHADR  -lCOM -lCLI \
 	    -lFORTLIB -lTBS
 
@@ -39,7 +45,8 @@ all::  jsf
 
 jsf: $(OBJS) jsfmain.o
 	$(LD) jsfmain.o $(BLOCKDATA) $(OBJS) \
-	 $(LDFLAGS) -o jsf
+	$(LDFLAGS) -o jsf 
+
 
 clean:: 
 	@rm -f $(OBJS) core *.so 
@@ -55,10 +62,11 @@ distclean::
 
 ###
 
-libMyAnalysis.$(SrcSuf): $(HDRS)
+libMyAnalysis.$(SrcSuf): $(HDRS) LinkDef.h
 		@echo "Generating dictionary ..."
 		rootcint -f libMyAnalysis.$(SrcSuf) \
-	 	-c -I$(JSFROOT)/include $(HDRS) LinkDef.h
+	 	-c -I$(JSFROOT)/include $(HDRS) \
+		LinkDef.h
 
 #---------------------------------------------------
 
@@ -66,3 +74,4 @@ libMyAnalysis.$(SrcSuf): $(HDRS)
 
 .$(SrcSuf).$(ObjSuf):
 	$(CXX) $(CXXFLAGS) -c $<
+
