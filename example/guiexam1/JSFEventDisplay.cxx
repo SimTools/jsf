@@ -200,15 +200,27 @@ void JSFEventDisplay::Update()
        "0.0 80.0 80.0"),"%g %g %g",
 	 &fViewAngle[0], &fViewAngle[1], &fViewAngle[2]);
   sscanf(gJSF->Env()->GetValue("JSFEventDisplay.ViewRange1",
+#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 25
+       "-100.0 -100.0 -100.0 100.0 100.0 100.0"),"%lg %lg %lg %lg %lg %lg",
+#else
        "-100.0 -100.0 -100.0 100.0 100.0 100.0"),"%g %g %g %g %g %g",
+#endif
        &fViewRange[1][0], &fViewRange[1][1], &fViewRange[1][2],
        &fViewRange[1][3], &fViewRange[1][4], &fViewRange[1][5]);
   sscanf(gJSF->Env()->GetValue("JSFEventDisplay.ViewRange2",
+#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 25
+       "-300.0 -300.0 -300.0 300.0 300.0 300.0"),"%lg %lg %lg %lg %lg %lg",
+#else
        "-300.0 -300.0 -300.0 300.0 300.0 300.0"),"%g %g %g %g %g %g",
+#endif
        &fViewRange[1][0], &fViewRange[1][1], &fViewRange[1][2],
        &fViewRange[1][3], &fViewRange[1][4], &fViewRange[1][5]);
   sscanf(gJSF->Env()->GetValue("JSFEventDisplay.ViewRange3",
+#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 25
+       "-10.0 -10.0 -10.0 10.0 10.0 10.0"),"%lg %lg %lg %lg %lg %lg",
+#else
        "-10.0 -10.0 -10.0 10.0 10.0 10.0"),"%g %g %g %g %g %g",
+#endif
        &fViewRange[2][0], &fViewRange[2][1], &fViewRange[2][2],
        &fViewRange[2][3], &fViewRange[2][4], &fViewRange[2][5]);
   sscanf(gJSF->Env()->GetValue("JSFEventDisplay.CanvasSize","600 600"),"%d %d",

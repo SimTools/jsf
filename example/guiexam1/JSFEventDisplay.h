@@ -89,7 +89,11 @@ protected:
 
   Int_t   fViewNo;
   Float_t fViewAngle[3];
+#if __ROOT_VERSION__ >= 2 && __ROOT_MINORVERSION__ >= 25
+  Double_t fViewRange[3][6];
+#else
   Float_t fViewRange[3][6];
+#endif
   Int_t   fCanvasSize[2];
   Bool_t  fDrawAtNewEvent;
   Int_t   fDisplayType; 
