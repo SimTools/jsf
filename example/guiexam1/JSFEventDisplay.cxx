@@ -1,12 +1,3 @@
-//*LastUpdate :  jsf-1-12  2-September-1999  By Akiya Miyamoto
-//*LastUpdate :  jsf-1-5  22-Feburary-1999  By Akiya Miyamoto
-//*-- Author  : A.Miyamoto  22-September-1999
-
-/*
-20-August-1999 A.Miyamoto  Changes to run with JSFDemoEventDisplay
-2-September-1999  A.Miyamoto  Add JSFEDHelix class to remove fRotMatrix from gGeometry
- */
-
 ///////////////////////////////////////////////////////////////////
 //
 // JSFEventDisplay
@@ -449,9 +440,9 @@ void JSFEventDisplay::InitializeGeometry(Int_t type)
     
 
   fCanvas->cd();
+      momframe=new TSPHE("MOMV", "MOMV","void", 0.99, 1.0, 0.0, 180.0, 0.0, 360.0);
       gvMomentum=new TNode("MOMENTUMVIEW","MOMENTUMVIEW","MOMV",0.0,0.0,0.0,"");
       gvMomentum->cd();
-      momframe=new TSPHE("MOMV", "MOMV","void", 0.99, 1.0, 0.0, 180.0, 0.0, 360.0);
       momaxis=new TTUBE("MOMAXIS", "MOMAXIS", "void", 0.0,0.002, 0.1);
       fWidgets->Add(momframe);  fWidgets->Add(momaxis);
       vMomxa=new TNode("MOMXAXIS","MOMXAXIS","MOMAXIS",0.1,0,0.25,"XDIR");
