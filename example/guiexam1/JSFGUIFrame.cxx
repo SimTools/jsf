@@ -1078,7 +1078,7 @@ void JSFGUIFrame::DoFileMenuAction(Long_t parm1, Bool_t prompt)
 	 strcpy(retstr,GetInputFileName());
 	 if( prompt ) {
  	   TGFileInfo fi;
-	   (Char_t**)fi.fFileTypes = (Char_t**)filetypes;
+	   fi.fFileTypes = (const Char_t**)filetypes;
 	   Char_t dirnam[256];
 	   strcpy(dirnam,gSystem->WorkingDirectory());
 	   new TGFileDialog(fClient->GetRoot(), this, kFDOpen,&fi);
@@ -1101,7 +1101,7 @@ void JSFGUIFrame::DoFileMenuAction(Long_t parm1, Bool_t prompt)
        strcpy(retstr,GetOutputFileName());
        {
 	 TGFileInfo fi;
-	 (Char_t**)fi.fFileTypes = (Char_t**)filetypes;
+	 fi.fFileTypes = (const Char_t**)filetypes;
 	 Char_t dirnam[256];
 	 strcpy(dirnam,gSystem->WorkingDirectory());
 	 new TGFileDialog(fClient->GetRoot(), this, kFDSave,&fi);
@@ -1431,7 +1431,7 @@ Mass of Higgs used by Pythia.\n\
 
     case M_GEN_LASTRUNFILE:
       if( prompt ) {
-	(Char_t**)fi.fFileTypes = (Char_t**)ftypes1;
+	fi.fFileTypes = (const Char_t**)ftypes1;
         fi.fFilename = (Char_t*)gJSF->Env()->GetValue("JSFGUI.LastRunFile","");
 	Char_t dirnam[256];
 	strcpy(dirnam,gSystem->WorkingDirectory());
@@ -1453,7 +1453,7 @@ Mass of Higgs used by Pythia.\n\
       break;
 
     case M_CONT_PARAM_SAVEAS:
-      (Char_t**)fi.fFileTypes = (Char_t**)ftypes2;
+      fi.fFileTypes = (const Char_t**)ftypes2;
       Char_t dirnam[256];
       strcpy(dirnam,gSystem->WorkingDirectory());
       new TGFileDialog(fClient->GetRoot(), this, kFDSave,&fi);
