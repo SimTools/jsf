@@ -2,6 +2,7 @@
 /* Imakefile to create a Bases example 			*/
 /* 							*/
 /* Created by A.Miyamoto  8-Feb-2000			*/
+/*$Id:                                                   */
 /********************************************************/
 
 
@@ -54,7 +55,7 @@ $(GEN): $(GOBJS)
 
 depend:: $(SRCS) $(HDRS)
 	for i in $(SRCS); do \
-	rmkdepend -a -- $(CXXFLAGS) $(INCPATH) -- $$i; done
+	rmkdepend -a -- $(DEPENDFILES) -- $$i; done
 
 
 clean::
