@@ -235,18 +235,25 @@ const char *filetypes[] = { "ROOT files",    "*.root",
 
 ///////////////////////////////////////////////////////////////////////
 
-JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h, Bool_t demo)
+JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h, 
+			 Bool_t demo,  JSFEventDisplay *disp)
       : TGMainFrame(p, w, h)
 {
    // Create test main frame. A TGMainFrame is a top level window.
 
-  if( demo ) {
-    fDemo=new JSFDemoDisplay(this);
-    fED=fDemo;
+  if( disp ) {
+    fED=disp;
+    fDemo=0;
   }
   else {
-    fED=new JSFEventDisplay(this);
-    fDemo=0;
+    if( demo ) {
+      fDemo=new JSFDemoDisplay(this);
+      fED=fDemo;
+    }
+    else {
+      fED=new JSFEventDisplay(this);
+      fDemo=0;
+    }
   }
 
    fInitialized=kFALSE;

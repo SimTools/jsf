@@ -129,7 +129,8 @@ private:
    void DoRunmodeMenuAction(Long_t parm1, Bool_t prompt=kTRUE);
 
 public:
-   JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h, Bool_t demo=kFALSE);
+   JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h, Bool_t demo=kFALSE,
+	       JSFEventDisplay *disp=NULL);
    virtual ~JSFGUIFrame();
    virtual void CloseWindow();
    virtual Bool_t ProcessMessage(Long_t msg, Long_t parm1, Long_t);

@@ -30,7 +30,6 @@ ANALLIB = $(JSFLIBS) $(EXTRALDOPT) \
 
 #endif	
 
-CXXFLAGS += -I$(JSFROOT)/example/readjim
 
 /*----------------------------------------------------------------------*/
 /*  Source files, headers, and objects to build                         */

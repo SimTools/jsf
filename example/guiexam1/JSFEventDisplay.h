@@ -119,21 +119,18 @@ public:
   virtual ~JSFEventDisplay();
 
   void Clear();
-  void DisplayEventData();
-  void DisplayLTKCLMomentum();
+  virtual void DisplayEventData();
+  virtual void DisplayLTKCLMomentum();
 
-  void DrawGeometry(Int_t type);
+  virtual void DrawGeometry(Int_t type);
   void InitializeGeometry();
 
-  void DisplayGeneratorParticles();
+  virtual void DisplayGeneratorParticles();
 //  void DisplayLTKCLTracks();
-  void DisplayCDCTracks();
-  void DisplayVTXHits();
-  void DisplayEMCHits();
-  void DisplayHDCHits();
-
-  void DisplayJIMEMCHits();
-  void DisplayJIMHDCHits();
+  virtual void DisplayCDCTracks();
+  virtual void DisplayVTXHits();
+  virtual void DisplayEMCHits();
+  virtual void DisplayHDCHits();
 
   //  void GetViewRange(Float_t range[]){
   //    Int_t i; for(i=0;i<6;i++){ range[i]=fViewRange[i]; } }
