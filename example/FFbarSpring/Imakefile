@@ -6,18 +6,16 @@ ROOTLIBS      = -L$(ROOTSYS)/lib -lNew -lBase -lCint -lClib -lCont -lFunc \
 		-lEGPythia -lEG \
                 -lGraf -lGraf3d -lHist -lHtml -lMatrix -lMeta -lMinuit -lNet \
                 -lPostscript -lProof -lTree -lUnix -lZip  \
-		-L/cern/pro/lib -lpythia -ljetset74
+		-L/cern/pro/lib -ljetset74 -lpythia
 
 ROOTGLIBS     = -lGpad -lGui -lGX11 -lX3d
 
 LCLIB 	  = $(LCDIR)/lib
 
 ANALLIB   = -L$(JSFROOT)/lib -lJSF -lJSFLCFULL \
-	    -L$(LCLIB) -lLCFULL -lGENUTIL -lLUHADR -lTAUOLA \
-	    -lLTKCL -lHELASV204 -lBASESV5.1 -lSIMJLC -lFORTLIB  \
-	    -lTBS -lLCFULL -lGENUTIL -lCOM -lCLI \
-	    -lFORTLIB -lTBS 
-
+	    -L$(LCLIB) -lGENUTIL -lLUHADR -lTAUOLA \
+	    -lSIMJLC -lLTKCL -lLCFULL -lBASESV5.1 -lTBS \
+	    -lHELASV204 -lFORTLIB -lCOM -lCLI 
 
 
 #-------------------------------------------------------------
