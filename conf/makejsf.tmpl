@@ -144,7 +144,7 @@ CXXFLAGS      = +W70,495,740,749,829,823 -DR__ACC -z +Z \
 SOFLAGS       = -b -z -Wl,+vnocompatwarnings -Wl,-E
 LDFLAGS       = -z -Wl,+s -Wl,-E $(ANALLIB) $(GLIBS)
 LIBS          = $(ROOTLIBS) -L/usr/lib -lm -ldld
-GLIBS         = $(ROOTLIBS) $(ROOTGLIBS) -lXpm -lX11 \
+GLIBS         = $(ROOTLIBS) $(ROOTGLIBS) \
 		$(LIBF2C) -L/usr/lib -lm -ldld
 BLOCKDATA     = 
 #endif
