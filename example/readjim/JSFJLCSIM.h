@@ -23,6 +23,7 @@ class JSFJLCSIM
 		     int &leng, int idat[]);  
   static void KZGETH(int idat[]);  
   static void KZGETV(char *cname, int &ivers);  
+  static void KZBLOC(char *name, Int_t &lbank);
 
   ClassDef(JSFJLCSIM,0)  // Interfaces to JLCSIM routines.
 };
