@@ -15,10 +15,10 @@ kern:
 	( cd kern ; xmkmf -a ; make all ; make install )
 
 generators:
-	( cd generators ; make all ; make install )
+	( cd generators ; make install )
 
 lclibdep:
-	( cd lclibdep ; make all ; make install )
+	( cd lclibdep ; make install )
 
 tools:
 	( cd tools ; xmkmf -a ; make all ; make install )
