@@ -12,8 +12,6 @@
 #include    "config/lclib.tmpl"
 #include    "conf/makejsf.tmpl"
 
-CERNLIBS      = $(shell cernlib jetset74 packlib mathlib)
-
 ROOTLIBS     += -lEGPythia -lEG $(CERNLIBS)
 
 LCLIBDIR      = $(LCLIBROOT)/lib
