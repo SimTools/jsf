@@ -16,6 +16,7 @@ LCLIBDIR      = $(LCLIBROOT)/lib
 
 #ifdef hitachiArchitecture
 EXTRALDOPT = -Wl,-a,default 
+CERNLIBS      = -L$(CERN_ROOT)/lib -ljetset74 -lkernlib
 #endif
 
 ANALLIB = $(JSFLIBS) $(EXTRALDOPT) \
