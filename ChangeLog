@@ -1,4 +1,12 @@
 -------------------------------------------------------------------------------
+2000/07/13  Keisuke Fujii
+-------------------------------------------------------------------------------
+(1) Modified src/{JSFBases.h,JSFBases.cxx,JSFSpring.cxx} 
+    so as to allow parameter initialization after reading in 
+    a JSFBases object via streamer. 
+    This functionality had been lost since version 1-14.
+
+-------------------------------------------------------------------------------
 2000/07/13  Akiya Miyamoto
 -------------------------------------------------------------------------------
 (1) conf/jsf.version, bin/makespec, src/JSFSteer.h,cxx are modified
