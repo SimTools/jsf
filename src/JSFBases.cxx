@@ -1,5 +1,11 @@
+//*LastUpdate:  jsf-1-7 8-April-1999 Akiya Miyamoto
 //*LastUpdate:  v0.3.08 09/29/1998  by A.Miyamoto
 //*-- Author :  Akiya Miyamoto  09/22/1998
+
+/*
+  8-Apr-1999 A.Miyamoto  forgetted Int_t is inserted in const of 
+             function Streamer.
+*/
 
 //////////////////////////////////////////////////////////////////
 //
@@ -22,6 +28,7 @@
 //         file->Write();
 //       }
 //
+//$ID:
 //
 //////////////////////////////////////////////////////////////////
 // 
@@ -298,7 +305,7 @@ void JSFBases::Streamer(TBuffer &R__b)
       R__b << base3_.tacc;
       R__b << base3_.it;
       
-      const kLenBase4xi=kNDMX*kNDMX+kMXDIM+2*kLENG;
+      const Int_t kLenBase4xi=kNDMX*kNDMX+kMXDIM+2*kLENG;
       R__b.WriteArray(base4_.xi,kLenBase4xi);
       R__b << base4_.nd;
       R__b << base4_.ng;
@@ -313,7 +320,7 @@ void JSFBases::Streamer(TBuffer &R__b)
       R__b.WriteArray(randm_.rdm,33);
       R__b.WriteArray(randm_.ia1,12);
 
-      const kPLOTH=13*(kNHS+1)+14*kNSC+kNHS+1+4*kNHS+1+4*kNSC+1;
+      const Int_t kPLOTH=13*(kNHS+1)+14*kNSC+kNHS+1+4*kNHS+1+4*kNSC+1;
       R__b.WriteArray(ploth_.xhash,kPLOTH);
 
       R__b.WriteArray(plotb_.ibuf,kLenIBUF);
