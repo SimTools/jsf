@@ -62,7 +62,7 @@ int Initialize()
   gROOT->LoadMacro(jsf->Env()->GetValue("JSFGUI.MacroFileName",
 					"UserAnalysis.C"));
 
-  if( gROOT->GetGlobalFunction("UserTerminate",0,kTRUE) ) UserSetOptions();
+  if( gROOT->GetGlobalFunction("UserSetOptions",0,kTRUE) ) UserSetOptions();
 
   Char_t *inputFileName=jsf->Env()->GetValue("JSFGUI.InputFileName","");
   Char_t *outputFileName=jsf->Env()->GetValue("JSFGUI.OutputFileName",
