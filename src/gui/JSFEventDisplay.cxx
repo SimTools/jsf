@@ -361,21 +361,21 @@ void JSFEventDisplay::DrawGeometry(Int_t type)
       gvAll->SetVisibility(-1);	
       if( gvMomentum ) {
         gvMomentum->SetVisibility(3);
-        gvMomentum->Draw("same");
+        gvMomentum->Draw("pad same");
       }
       break;
     case 1:
       if( gvMomentum ) gvMomentum->SetVisibility(-1);
       gvVTX->SetVisibility(-1);
       gvAll->SetVisibility(3);	
-      gvAll->Draw("same");
+      gvAll->Draw("pad same");
 
       break;
     case 2:
       if( gvMomentum ) gvMomentum->SetVisibility(-1);
       gvAll->SetVisibility(-1);	
       gvVTX->SetVisibility(3);
-      gvVTX->Draw("same");
+      gvVTX->Draw("pad same");
       break;
   }
 
