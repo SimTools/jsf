@@ -25,7 +25,7 @@ Int_t gui()
 
   gROOT->LoadMacro(jsf->Env()->GetValue("JSFGUI.GUIMainMacro","GUIMainMacro.C"));
 
-  if( gClient == 0 ) {
+  if( gROOT->IsBatch() ) {
     BatchRun();
   }
   else  {
