@@ -2,7 +2,7 @@ include  ../../../conf/configure.in
 UNAME  = $(shell uname)
 
 PYTHIA_VERSION=6
-PYTHIA_SUBVERSION=222
+PYTHIA_SUBVERSION=319
 PYTHIANAME=pythia$(PYTHIA_VERSION)$(PYTHIA_SUBVERSION)
 
 ifeq ($(UNAME),AIX)
@@ -35,6 +35,7 @@ endif
 -include srclist
 OBJS += tpythia6_called_from_cc.o \
 	pythia6_common_block_address.o \
+	pythia6_common_address.o \
 	pythia6_address.o
 ifneq ($(UNAME),Darwin)
 OBJS +=  main.o

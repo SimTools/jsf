@@ -1,3 +1,10 @@
+12-April-2005  Akiya Miyamoto
+  Pythia version is modifed from 6222 to 6319,
+  when ROOT version for JSF is updated to 4.03.04.
+  Accordingly, following comments are not valid.
+  They are kept here just as a history record.
+  
+
 *********************************************************
 
 Comments about the instruction written below. 

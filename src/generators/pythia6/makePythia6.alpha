@@ -1,11 +1,9 @@
 # /bin/sh
-f77 -c pythia6131.f
+f77 -c pythia*.f
 f77 -c tpythia6_called_from_cc.F
-f77 -c pythia6_common_block_address.F
 echo 'void MAIN__() {}' >main.c
-gcc -c main.c
-gcc -c pythia6_address.c
+cc -c main.c
+cc -c pythia6_common_address.c
 ld -b -shared -o libPythia6.so \
- main.o pythia6_address.o tpythia6_called_from_cc.o \
- pythia6_common_block_address.o pythia6131.o \
+ main.o tpythia6_called_from_cc.o pythia*.o \
  -L/usr/shlib  -lfor -lUfor  -lc -lm

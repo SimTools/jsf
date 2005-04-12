@@ -1,3 +1,19 @@
+12-April-2005 Akiya Miyamoto
+  At the time of this writting, Pythia library is obtained 
+  from root web site, http://root.cern.ch/, which posts
+  the latest version of pythia, 6.319.  The file on this 
+  directory was created from those on ROOT's web site.
+
+  ROOT-to-Pythia interface was changed, some time between 
+  version 4.00.08 to 4.03.04.  Namely, pythia6_common_address.c
+  was introduced instead of pythia6_common_block_address.F.
+  The version on the root's web site does not contain 
+  pythia6_common_block_address.F any more, but we included 
+  in libPythia6.so library for compatibility of users using 
+  old version of Root. 
+
+
+
 ----------------------------------------
 Note to JSF users
 ----------------------------------------
