@@ -446,7 +446,12 @@ void Batch_MultiRun()
     string fnend(jsf->GetOutput()->GetName());
 
     if ( strcmp(fnbegin.data(), fnend.data()) != 0 ) {
-      jsf->OTree()->GetCurrentFile()->Write();
+      if( gROOT->GetVersionInt() < 40100 ) {
+        jsf->OTree()->GetCurrentFile()->Write();
+      }
+      else {
+	jsf->OTree()->Write();
+      }
       ofile=new TFile(fnbegin.data(),"UPDATE");
       jsf->SetOutput(*ofile);
     }
