@@ -1,6 +1,3 @@
-//*LastUpdate :  jsf-1-5  2-March-1999  By Akiya Miyamoto
-//*-- Author  : A.Miyamoto  2-March-1999
-
 ///////////////////////////////////////////////////////////////////
 //
 //  Taken from tutorial 
@@ -36,6 +33,7 @@
 // }
 //
 ///////////////////////////////////////////////////////////////////
+#include <iostream>
 
 #include "JSFConfig.h"
 
@@ -58,16 +56,15 @@ InputDialog::~InputDialog()
    // Cleanup dialog.
 
 //   fWidgets->Delete();
-//   delete fWidgets;
+   delete fWidgets;
 
-//   delete fTE;
-//   delete fDialog;
+   delete fTE;
+   delete fDialog;
 }
 
 //__________________
 void InputDialog::CloseWindow()
 {
-   fDialog->DeleteWindow();
    delete this;
 }
 
@@ -91,7 +88,8 @@ InputDialog::InputDialog(const char *prompt, const char *defval, char *retstr,
    fWidgets = new TList;
 
    const TGWindow *main = gClient->GetRoot();
-   fDialog = new TGTransientFrame(main, main, 10, 10);
+   fDialog = new TGTransientFrame(main, main, 100, 100);
+   fDialog->Connect("CloseWindow()","InputDialog",this,"CloseWindow()");
 
    TGLayoutHints *l1 = new TGLayoutHints(kLHintsTop | kLHintsLeft, 5, 5, 5, 0);
    TGLayoutHints *l2 = new TGLayoutHints(kLHintsTop | kLHintsLeft, 5, 5, 5, 5);
