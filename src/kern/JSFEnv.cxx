@@ -1,6 +1,3 @@
-//*LastUpdate:  jsf-1-14 29-January-2000  Akiya Miyamoto
-//*LastUpdate:  jsf-1-12 31-July-1999  Akiya Miyamoto
-//*-- Author :  Akiya Miyamoto  31-July-1999 Akiya Miyamoto
 //////////////////////////////////////////////////////////////////
 //
 //  JSFEnv
@@ -18,11 +15,18 @@
 //$Id$
 //////////////////////////////////////////////////////////////////
 
-#include <strings.h>
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <sstream>
+#include <fstream>
 #include <TSystem.h>
 #include <TApplication.h>
 #include <TROOT.h>
 #include "JSFEnv.h"
+#include <TString.h>
+#include <TObjString.h>
+#include <TObject.h>
 
 ClassImp(JSFEnv)
 ClassImp(JSFEnvRec)
@@ -46,8 +50,86 @@ JSFEnv::JSFEnv(Char_t *name) : TEnv(name)
   strcpy(fEnvFileName, name);
   ReadFile(name, kEnvLocal);
 
-
   GetArguments();
+
+  fRecordDefault=GetValue("JSFEnv.RecordDefault",kFALSE);
+
+}
+
+//__________________________________________________________
+JSFEnv::JSFEnv(const JSFEnv &env, bool localonly)
+{
+  fEnvFileName=new Char_t[strlen(env.fEnvFileName)+1];
+  strcpy(fEnvFileName, env.fEnvFileName);
+  fObtained=new TOrdCollection(env.fObtained->Capacity());
+  TOrdCollectionIter next(env.fObtained);
+  JSFEnvRec *rec=0;
+  while( (rec=(JSFEnvRec*)next()) ) {
+    if( localonly && ( rec->fLevel != kEnvLocal ) ) continue;
+    fObtained->Add(new JSFEnvRec(*rec));
+  }
+  fDefined=0;
+
+}
+
+//__________________________________________________________
+void JSFEnv::Add(const JSFEnv *env, bool replace)
+{
+// Add env data 
+//   replace = true : Replace if same name is defined 
+//   replace = false : do not replace existing definition
+  TString filter(GetValue("JSFEnv.Filter","J4"));
+  TString token(":");
+  TObjArray *strobj=filter.Tokenize(token); 
+  TIter ns(strobj);
+  TObjString *ostr=0;
+
+  if ( fEnvFileName == 0 ) {
+    fEnvFileName=new Char_t[strlen(env->fEnvFileName)+1];
+    strcpy(fEnvFileName, env->fEnvFileName);
+  }
+  if ( fObtained == 0 ) { 
+    fObtained=new TOrdCollection(env->fObtained->Capacity());
+    TOrdCollectionIter next(env->fObtained);
+    JSFEnvRec *rec=0;
+    while( (rec=(JSFEnvRec*)next()) ) {
+      if( rec->fLevel != kEnvLocal ) continue;
+      ns.Reset();
+      while((ostr=(TObjString*)ns())) {
+        if( strncmp(ostr->GetString().Data(), rec->fName.Data(),
+            ostr->GetString().Length()) == 0 ) {   
+            fObtained->Add(new JSFEnvRec(*rec));
+        }
+      }
+    }
+  }
+  else {
+    TOrdCollectionIter next(env->fObtained);
+    JSFEnvRec *rec=0;
+    while( (rec=(JSFEnvRec*)next()) ) {
+      ns.Reset();
+      while((ostr=(TObjString*)ns())) {
+        if( strncmp(ostr->GetString().Data(), rec->fName.Data(),
+            ostr->GetString().Length()) == 0 ) {   
+	  JSFEnvRec *er=LookUp(rec->fName);
+	  if( replace && er != 0 ) {  // Replace existing record
+	    fObtained->Remove(er);
+	    fObtained->AddAt(new JSFEnvRec(*rec),1);
+	    std::cout << "JSFEnv parameter " << er->fName ;
+	    std::cout << " is replaced by \"" << rec->fValue ;
+	    std::cout << "\" obtained from the input file " << std::endl;
+	  }
+	  else if ( er == 0 ) {  // Add new record
+	    fObtained->AddAt(new JSFEnvRec(*rec),1);
+	    std::cout << "JSFEnv parameter " << rec->fName ;
+	    std::cout << " of value \"" << rec->fValue ;
+	    std::cout << "\" is obtained from the input file " << std::endl;
+	  }
+        }
+      }
+    } 
+  }
+
 }
 
 //__________________________________________________________
@@ -229,19 +311,97 @@ JSFEnv::~JSFEnv()
     fObtained->Delete();
     SafeDelete(fObtained);
   }
-  delete fEnvFileName ;
+  if ( fEnvFileName ) { 
+    delete fEnvFileName ;
+  }
+}
+
+//__________________________________________________________
+void JSFEnv::PrintDefined()
+{
+   const Char_t *fname=GetValue("JSFEnv.FileForDefaultValue","default.conf");
+   std::ofstream fout(fname);
+   fout.setf(std::ios::left, std::ios::adjustfield );
+   TOrdCollectionIter next(fDefined);
+   JSFEnvRec *rec=0;
+   while( (rec=(JSFEnvRec*)next()) ) {
+      JSFEnvRec *er=LookUp(rec->fName.Data());
+      int lenw=rec->fName.Length();
+      if( lenw < 30 ) { lenw=30; }
+      fout.width(lenw);
+      fout << rec->fName << "  : " << rec->fValue << std::endl;
+      if ( er ) {
+        if( er->fArgument.Length() > 0 ) { 
+          fout << "#!" << er->fArgument << std::endl;
+        }
+        if( er->fHelp.Length() > 0 ) { 
+          fout << "# " << er->fHelp << std::endl;
+          fout << std::endl;
+        }
+      }
+   }
+   fout.close();
+   
 }
 
 //__________________________________________________________
 const char *JSFEnv::GetValue(const char *name, const char *dflt)
 {
+  if( GetRecordDefault() && fDefined ) {
+    fDefined->AddFirst(new JSFEnvRec(name,"",dflt,kEnvAll));
+  }
   return TEnv::GetValue(name, dflt);
 }
 
 //__________________________________________________________
 int JSFEnv::GetValue(const char *name, int dflt)
 {
+  if( GetRecordDefault() && fDefined ) {
+    Char_t ins[1024];
+    sprintf(ins,"%d",dflt);
+    fDefined->AddFirst(new JSFEnvRec(name,"",ins,kEnvAll));
+  }
   return TEnv::GetValue(name, dflt);
+}
+
+//__________________________________________________________
+Double_t JSFEnv::GetValue(const char *name, Double_t dflt)
+{
+  if( GetRecordDefault() && fDefined ) {
+    Char_t ins[1024];
+    sprintf(ins,"%f",dflt);
+    fDefined->AddFirst(new JSFEnvRec(name,"",ins,kEnvAll));
+  }
+  return TEnv::GetValue(name, dflt);
+}
+
+//__________________________________________________________
+std::vector<int> JSFEnv::GetIValue(const char *name, const char *value, const int n) 
+{
+  if( GetRecordDefault() && fDefined ) {
+    fDefined->AddFirst(new JSFEnvRec(name,"",value,kEnvAll));
+  }
+  std::vector<int> vec(n);
+  std::istringstream instream(value);
+  for(int i=0;i<n;i++) {
+     instream >> vec[i] ;
+  }
+  return vec;
+}
+
+
+//__________________________________________________________
+std::vector<double> JSFEnv::GetDValue(const char *name, const char *value, const int n) 
+{
+  if( GetRecordDefault() && fDefined ) {
+    fDefined->AddFirst(new JSFEnvRec(name,"",value,kEnvAll));
+  }
+  std::vector<double> vec(n);
+  std::istringstream instream(value);
+  for(int i=0;i<n;i++) {
+     instream >> vec[i] ;
+  }
+  return vec;
 }
 
 //__________________________________________________________
@@ -253,10 +413,10 @@ void JSFEnv::SetValue(const char *name, const char *value,
   TEnv::SetValue(name, value, l, t);
 
   // Find JSFEnvRec and update it.
-
   JSFEnvRec *er=LookUp(name);
   if( er!= 0 ) er->ChangeValue(value, kEnvChange);
   else fObtained->AddAt(new JSFEnvRec(name, "", value, kEnvChange),1);
+
   return;
 }
 
@@ -291,7 +451,6 @@ JSFEnvRec::JSFEnvRec(const char *n, const char *t, const char *v, EEnvLevel l,
 //___________________________________________________________
 void JSFEnvRec::ChangeValue(const char *v, EEnvLevel l)
 {
-  //  printf("JSFEnvRec-1..%s changed from %s to %s\n",fName.Data(),fValue.Data(),v);
   fValue=v;
   fLevel=l;
 }
@@ -300,7 +459,6 @@ void JSFEnvRec::ChangeValue(const char *v, EEnvLevel l)
 void JSFEnvRec::ChangeValue(const char *t, const char *v, 
 			    EEnvLevel l, const char *help, const char *arg)
 {
-  // printf("JSFEnvRec-2..%s changed from %s to %s\n",fName.Data(),fValue.Data(),v);
   fType=t;
   fValue=v;
   fLevel=l;

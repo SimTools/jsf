@@ -28,12 +28,17 @@ protected:
   Int_t     fNmodule;  // Number of modules;
   TString   *fClasses; //[fNmodule]  Names of module Clases 
   TString   *fNames;   //[fNmodule]  Module names.
+  JSFEnv    *fEnv;    // JSFEnv data used in this job.
 public:
   JSFSteerConf(const char *name="JSFSteerConf", 
                const char *title="JSF Configuration");
   virtual   ~JSFSteerConf();
 
   void Initialize(TList *module); // Mkae fClasses, fNames from fModules
+  inline Int_t GetNModules(){ return fNmodule; }
+  inline const TString GetClasses(int i){ return fClasses[i];}
+  inline const TString GetNames(int i){ return fNames[i];}
+  inline JSFEnv *GetEnv(){ return fEnv;} 
 
   friend class JSFSteer;
   ClassDef(JSFSteerConf,2) // Stores JSF Module info at Initialize()

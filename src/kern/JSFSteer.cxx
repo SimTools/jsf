@@ -461,9 +461,7 @@ Bool_t JSFSteer::Initialize()
      printf("This will open output file.\n");
      gSystem->Exit(16);
    }
-  cerr << "fIFile=" << fIFile ;
-  cerr << "fOFile=" << fOFile ;
-  cerr << " File name is " << fOFile->GetName() << endl;
+  cerr << "Output file name is " << fOFile->GetName() << endl;
 
    // If Input file is opened, setup tree to read
    if( !fChain && fIFile && fIFile->IsOpen() ) { 
@@ -935,7 +933,6 @@ Bool_t JSFSteer::MakeTree()
   // Define JSF in the tree.
   Int_t split=1;
   Int_t bsize=4000;
-//  fBrJSF=fOTree->Branch(GetName(),ClassName(),&gJSF, bsize,split);  
   fBrJSF=fOTree->Branch(fEventBuf->GetName(), fEventBuf->ClassName(),
 	&fEventBuf, bsize, split);
 
@@ -958,8 +955,6 @@ Bool_t JSFSteer::SetupTree()
   // Read the Key infile:/conf/JSF and find modules to read tree,
   // then execute SetupBranch() method of each modules.
 
-// cerr << "JSFSteer::SetupTree was called. " << endl;
-
   if( !fIFile->cd("conf") ) {
     Fatal("SetupTree","%s/conf does not exists.",fIFile->GetName());
     return kFALSE;
@@ -976,7 +971,7 @@ Bool_t JSFSteer::SetupTree()
 
   fITree=new TChain("Event");
   fITree->AddFile(fIFile->GetName());
-  cerr << "JSFSteer::SetupTree(...) input file is " << fIFile->GetName() << endl;
+  cerr << "JSFSteer::SetupTree() input file is " << fIFile->GetName() << endl;
   if( Env()->GetValue("JSF.ChainFiles",1) ) {
     TString fnin(fIFile->GetName());
     TString fnref=fnin.Remove(fnin.Sizeof()-6,6);
@@ -1000,7 +995,16 @@ Bool_t JSFSteer::SetupTree()
   fReadin = new JSFSteerBuf("ReadinJSF");
   JSFSteerConf rdconf("JSFSteerConfReadin", "JSF Configuration");
   rdconf.Read("JSF");
-
+  if ( rdconf.fNmodule < 1 ) {
+    std::cerr << "Fatal error in JSFSteer::SetupTree " ;
+    std::cerr << " No input event data found " << std::endl;
+    std::cerr << " Make sure JSFGUI.OutputEventFile is Yes in jsf.conf file " <<std::endl;
+    exit(-1) ;
+  }
+  if ( Env()->GetValue("JSF.EnvParameter.GetFromInput",kTRUE) ) {
+    Bool_t replace=Env()->GetValue("JSF.EnvParameter.Replace",kFALSE);
+    fEnv->Add(rdconf.GetEnv(), replace); // Replace, if not defined in file.
+  }
 
 // Prepare pointer for JSF obtained from a file.
   fITree->SetBranchStatus("*");
@@ -1087,12 +1091,12 @@ void JSFSteer::SetInput(TFile &file)
     fITree=(TChain*)fIFile->Get(kname);
   }
 
-
-//  fReadin=new JSFSteer("ReadinJSF");
-//  fReadin->fConf->Read("JSF");
-//  fReadin = new JSFSteerBuf("ReadinJSF");
   JSFSteerConf rdconf("JSFSteerConfReadin", "JSF Configuration");
   rdconf.Read("JSF");
+  if ( Env()->GetValue("JSF.EnvParameter.GetFromInput",kTRUE) ) {
+    Bool_t replace=Env()->GetValue("JSF.EnvParameter.Replace",kFALSE);
+    fEnv->Add(rdconf.GetEnv(), replace); // Replace, if not defined in file.
+  }
 
 // Prepare pointer for JSF obtained from a file.
   gJSFBranch=fITree->GetBranch("JSFSteerBuf");
@@ -1176,10 +1180,10 @@ JSFEventBuf *JSFSteer::FindEventBuf(TBranch *branch, const Char_t *opt)
   TIter  next(fModules);
   JSFModule *module;
   while( (module=(JSFModule*)next()) ){
-    printf(" Looking for event buf for module %s\n",module->GetName());
+//    printf(" Looking for event buf for module %s\n",module->GetName());
     JSFEventBuf *buf=module->EventBuf();
     if( buf ) {
-      printf(" EventBuf name is %s\n",buf->GetName());
+//      printf(" EventBuf name is %s\n",buf->GetName());
       if( strcmp(buf->GetName(), branch->GetName()) == 0 ) { return buf; }
     }
   }
@@ -1201,11 +1205,13 @@ JSFSteerConf::JSFSteerConf(const char *name, const char*title)
   fClasses=new TString [fSize];
   fNames=new TString [fSize];
   fNmodule = 0;
+  fEnv     = 0;
 }
 
 //_____________________________________________________________________________
 JSFSteerConf::~JSFSteerConf()
 {
+  if ( fEnv ) delete fEnv;
   delete [] fClasses;
   delete [] fNames;
 }
@@ -1218,8 +1224,9 @@ void JSFSteerConf::Initialize(TList *mlist)
   fNmodule=0;
   TIter next(mlist);
   JSFModule *module;
-  while (( module = (JSFModule*)next()))
-        {if(module->IsWritable() && module->GetMakeBranch())fNmodule++; }
+  while (( module = (JSFModule*)next())){
+    if(module->IsWritable() && module->GetMakeBranch())fNmodule++; 
+  }
 
   next.Reset();
   Int_t im=0;
@@ -1230,10 +1237,11 @@ void JSFSteerConf::Initialize(TList *mlist)
       im++;
     }
   }
-
+  Bool_t localonly=gJSF->Env()->GetValue("JSF.EnvParameter.SaveOnlyLocal",kTRUE);
+  fEnv=new JSFEnv(*gJSF->Env(), localonly );
+  
 }
 
-#if __ROOT_FULLVERSION__ >= 30000
 //______________________________________________________________________________
 void JSFSteerConf::Streamer(TBuffer &R__b)
 {
@@ -1263,42 +1271,3 @@ void JSFSteerConf::Streamer(TBuffer &R__b)
      JSFSteerConf::Class()->WriteBuffer(R__b, this);
    }
 }
-
-#else
-
-//______________________________________________________________________________
-void JSFSteerConf::Streamer(TBuffer &R__b)
-{
-   // Stream an object of class JSFSteerConf.
-
-   if (R__b.IsReading()) {
-      Version_t R__v = R__b.ReadVersion(); if (R__v) { }
-      TNamed::Streamer(R__b);
-      R__b >> fNmodule;
-      Char_t temp[200];
-      Int_t lc;
-      for(Int_t i=0;i<fNmodule;i++){
-	lc=R__b.ReadStaticArray(temp);
-	fClasses[i]=temp;
-
-	lc=R__b.ReadStaticArray(temp);
-	fNames[i]=temp;
-      }
-
-   } else {
-      R__b.WriteVersion(JSFSteerConf::IsA());
-      TNamed::Streamer(R__b);
-      R__b << fNmodule;
-      //  Write class and name information
-      Int_t lc;
-      for(Int_t i=0;i<fNmodule;i++){
-	lc=strlen(fClasses[i].Data())+1;
-	R__b.WriteArray(fClasses[i].Data(),lc);
-	lc=strlen(fNames[i].Data())+1;
-	R__b.WriteArray(fNames[i].Data(),lc);
-      }
-   }
-}
-
-
-#endif
