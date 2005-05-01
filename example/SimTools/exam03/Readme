@@ -1,0 +1,7 @@
+examples/JSF_QuickSim/exam03
+
+Example to run JSF generator and calculate Pt sum and Thrust of 
+event and display histograms interactively.  To run it, do
+
+$ jsf gui.C
+

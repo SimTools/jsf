@@ -1,0 +1,12 @@
+# @(#)root/config:$Name$:$Id$
+# Author: Fons Rademakers  22/09/95
+
+# ROOT Environment settings are handled via the class TEnv. To see
+# which values are active do: gEnv->Print().
+
+# Path used by dynamic loader to find shared libraries and macros
+# Paths are different for Unix and Windows. The example shows the defaults
+# for all ROOT applications for either Unix or Windows.
+Unix.*.Root.DynamicPath:    .:$(ROOTSYS)/lib:$(JSFROOT)/lib:$(KFLIBROOT)/lib
+Unix.*.Root.MacroPath:      .:$(ROOTSYS)/macros:$(JSFROOT)/macro
+
