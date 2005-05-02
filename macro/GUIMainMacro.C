@@ -142,6 +142,12 @@ int Initialize(Char_t *fin="undef")
       return -1;
   }
 
+  if( jsf->Env()->GetValue("JSFGUI.OptModules",0) != 0 ) {
+     gROOT->LoadMacro(
+             jsf->Env()->GetValue("JSFGUI.OptFunctions","OptFunctions.C"));
+     DefineOptionalModules();
+  }
+
   if( gROOT->GetGlobalFunction("UserAnotherModules",0,kTRUE) ) UserAnotherModules();
   // ****************************
   // Does Initialize of each JSF Modules.
@@ -167,6 +173,7 @@ int Initialize(Char_t *fin="undef")
   }
 
   if( jsf->GetOutput() ) { jsf->GetOutput()->cd(); }
+
   UserInitialize();
 
   // ****************************
@@ -311,12 +318,6 @@ void InitGenSim()
 	  gROOT->LoadMacro(
 	     jsf->Env()->GetValue("JSFGUI.InitHerwigMacro","InitHerwig.C"));
     InitHerwig();         // Set Herwig parameters.
-  }
-
-  if( jsf->Env()->GetValue("JSFGUI.OptModules",0) != 0 ) {
-     gROOT->LoadMacro(
-             jsf->Env()->GetValue("JSFGUI.OptFunctions","OptFunctions.C"));
-     InitOptionalModules();
   }
 
 }

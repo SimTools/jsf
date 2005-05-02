@@ -1,27 +1,49 @@
-Int_t LoadLibraries()
+// --------------------------------------------------------
+void LoadLibraryWithMessage(Char_t *name)
 {
+  gSystem->Load(name);
+  cerr << "Shared library " << name << " was loaded " << endl;
+}
+
+// --------------------------------------------------------
+Int_t LoadLibraries(JSFEnv *env=0)
+{
+
   const Int_t pyversion=6;  // Set 5 to use Pythia5 
 
-//   gSystem->Load("libJSF.so");
-  gSystem->Load("libJSFGenerator.so");
-  gSystem->Load("libBasesSpring.so");
-  gSystem->Load("libJSFBeamGeneration.so");
-  gSystem->Load("libJSFTools.so");
-  gSystem->Load("libJSFQuickSim.so");
+  LoadLibraryWithMessage("libJSFGenerator.so");
+  LoadLibraryWithMessage("libBasesSpring.so");
+  LoadLibraryWithMessage("libJSFBeamGeneration.so");
+  LoadLibraryWithMessage("libJSFTools.so");
+  LoadLibraryWithMessage("libJSFQuickSim.so");
 
   if ( pyversion == 6 ) {
-    gSystem->Load("libPythia6.so");
-    gSystem->Load("libJSFPythia6.so");
-    gSystem->Load("libEG.so");
-    gSystem->Load("libEGPythia6.so");
+    LoadLibraryWithMessage("libPythia6.so");
+    LoadLibraryWithMessage("libJSFPythia6.so");
+    LoadLibraryWithMessage("libEG.so");
   }
   else {
-    gSystem->Load("libTAUOLA.so");
-    gSystem->Load("libJSFPythia5.so");
-//    gSystem->Load("libEG.so");
-//    gSystem->Load("libEGPythia.so");
+    LoadLibraryWithMessage("libTAUOLA.so");
+    LoadLibraryWithMessage("libJSFPythia5.so");
   }
 
-  printf("Libraries loaded\n");
+
+// ** Load Satellites libraries, when SATELLITESROOT environment variable is defined.
+
+  if( strlen(gSystem->Getenv("SATELLITESROOT") ) > 3 ) {
+    FileStat_t filestat;
+    Char_t *s4mdef=gSystem->ConcatFileName(gSystem->Getenv("SATELLITESROOT"),"macros/S4Macros.C");
+    Char_t *s4m=env->GetValue("JSFJ4.S4MacroFileName",s4mdef);
+
+    Int_t ierr=gSystem->GetPathInfo(s4m, filestat);
+    if ( ierr == 0 ) ) {
+      gROOT->LoadMacro(s4m);
+      cerr << "Macro " << s4m << " was loaded." << endl;
+      LoadS4Libraries(env);
+    }
+  }
+
+  printf("LoadLibraries() completed\n");
 
 }
+
