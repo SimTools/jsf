@@ -217,7 +217,10 @@ JSFSteer::JSFSteer(const char *name, const char *title)
     }
   
     gROOT->LoadMacro(fEnv->GetValue("JSF.LoadLibraryMacro","LoadLibraries.C"));
-    gROOT->ProcessLine("LoadLibraries();");
+
+    char cmd[2048];
+    sprintf(cmd,"{long env__ptr=0x%x; LoadLibraries((JSFEnv*)env__ptr);}",(UInt_t)fEnv);
+    gROOT->ProcessLine(cmd);
  
     SetIOFiles();
 
