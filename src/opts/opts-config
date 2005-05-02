@@ -5,7 +5,7 @@ has_CLHEP()
 {
   clheplib=/usr/lib
   if [ "X$CLHEP_BASE_DIR" != "X" ] ; then
-    clheplib=$CLHEP_BASE_DIR
+    clheplib=$CLHEP_BASE_DIR/lib
   fi
   if [ -a $clheplib/libCLHEP.a ] ; then
 #    echo $clheplib/libCLHEP.a
