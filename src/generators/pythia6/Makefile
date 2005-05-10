@@ -58,6 +58,7 @@ endif
 ../../../lib/$(SharedLib) : install
 
 install: $(SharedLib)
+	mkdir -p ../../../lib
 	$(INSTALL) $(SharedLib) ../../../lib/$(SharedLib)
 	mkdir -p ../../../include
 	$(INSTALL) -m 644 pythia6.inc ../../../include/pythia6.inc
