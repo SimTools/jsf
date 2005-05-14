@@ -21,6 +21,7 @@ Int_t LoadLibraries(JSFEnv *env=0)
     LoadLibraryWithMessage("libPythia6.so");
     LoadLibraryWithMessage("libJSFPythia6.so");
     LoadLibraryWithMessage("libEG.so");
+    LoadLibraryWithMessage("libEGPythia6.so");
   }
   else {
     LoadLibraryWithMessage("libTAUOLA.so");
