@@ -18,6 +18,86 @@ proc NotAvailable {w} {
 }
 
 #########################################################
+# Load Parameters for Jupiter/Satellites Analysis
+#########################################################
+
+proc ConfS4AnalModule {w args} {
+  global titlefont
+  global incsample
+  global useanlib
+
+  catch { destroy $w }
+  toplevel $w
+  wm title $w "Configuration"
+  label $w.title -text "Configuration of Jupiter/Satellites Analysis module" -font $titlefont
+  pack $w.title -side top -fill x -pady 7
+
+  label $w.mess -text "Initial parameter values are obtained from the configuration file. After updating them,  press Build Program button to save them in the file build.conf. \n  After the end of buildjsf command, do 'xmkmf -a' and 'make' to create shared library. The program is executed by 'jsf gui.C' " -wraplength 500 -justify left
+  pack $w.mess -side top -fill x -pady 8
+  frame $w.ruler -relief sunken -bd 2 -height 4
+  pack $w.ruler -side top -fill x
+
+  set file [ .conf.entry get ]
+  frame $w.conf -bd 0
+  label $w.conf.label -width 20 -anchor w -text "Configuration file"
+  label $w.conf.labelb -width 60 -anchor w -text $file 
+  pack $w.conf.label -side left
+  pack $w.conf.labelb -side right
+  pack $w.conf -side top -fill x
+
+  # parameter entry
+
+  foreach i { anlcls anltit version comment} {
+    frame $w.$i -bd 0
+    label $w.$i.label -width 25 -anchor w
+    entry $w.$i.entry  -relief sunken -width 40 
+    pack  $w.$i.label -side left 
+    pack  $w.$i.entry  -side left
+  }
+  $w.anlcls.label config -text {Name of Analysis  module:} 
+  $w.anltit.label config -text {Title of Analysis module:}
+  $w.version.label config -text {Version number  :}
+  $w.comment.label config -text {Program comment:}
+  pack $w.anlcls $w.anltit $w.version \
+	  $w.comment -side top -fill x
+
+  frame $w.sample
+  label $w.sample.label -text "Include sample code ?" 
+  radiobutton $w.sample.yes -text "Yes" -variable incsample \
+	  -value yes -relief flat
+  radiobutton $w.sample.no -text "No" -variable incsample \
+	  -value no -relief flat
+  pack $w.sample.label $w.sample.yes $w.sample.no -side left -anchor w
+  pack $w.sample
+
+#  frame $w.s4seq
+#  label $w.s4seq.label -text "Included Satellites codes ?"
+#  radiobutton $w.s4seq.makers -text "S4XXXMakers" -variable s4makers \
+#    -value yes -relief flat
+#  radiobutton $w.s4seq.anal -text "S4XXXAnalysis" -variable s4analysis \
+#    -value no -relief flat
+#  pack $w.s4seq.label $w.s4seq.makers $w.s4seq.anal -side left -anchor w
+#  pack $w.s4seq
+
+
+  frame $w.buttons -borderwidth 10
+  pack $w.buttons -side top -fill x
+
+  button $w.buttons.load -text "Load Parameter" -command "LoadParam .s4a yes"
+  button $w.buttons.save -text "Save Parameter" -command "SaveParam .s4a yes"
+  button $w.buttons.build -text "Build Program" -command "BuildProgram .s4a" 
+  button $w.buttons.quit -text Dismiss -command "destroy $w"
+  pack $w.buttons.load $w.buttons.save $w.buttons.build -side left
+  pack $w.buttons.quit -side right
+
+
+#  set default parameters
+  LoadParam .s4a no
+
+
+}
+
+#########################################################
 # Load Parameters for Analysis module
 #########################################################
 
@@ -96,6 +176,7 @@ proc ConfAnalModule {w args} {
 
 
 }
+
 
 #########################################################
 # Load BasesSpring Parameters
@@ -185,6 +266,9 @@ proc BuildProgram { name } {
     .am { SaveParam .am no
          set mess [exec -- perl -w $jsfroot/bin/mkanal -conf $cfile -jsfroot $jsfroot]
         tk_messageBox -icon info -message $mess -type ok -parent .am }
+    .s4a { SaveParam .s4a no
+         set mess [exec -- perl -w $jsfroot/bin/mks4anal -conf $cfile -jsfroot $jsfroot]
+        tk_messageBox -icon info -message $mess -type ok -parent .s4a }
     }
 }
 
@@ -284,6 +368,21 @@ proc LoadParam { w {message yes} } {
   	          UseAnlib { set useanlib $pval }
 	      }
 	 }
+	  .s4a {
+	      switch $pname {
+	          Analysis { .s4a.anlcls.entry delete 0 end ; \
+			     .s4a.anlcls.entry insert 0 $pval }
+	          AnalysisTitle { .s4a.anltit.entry delete 0 end ; \
+			     .s4a.anltit.entry insert 0 $pval }
+		  Version { .s4a.version.entry delete 0 end ; \
+			    .s4a.version.entry insert 0 $pval}
+		  Comment { .s4a.comment.entry delete 0 end ; \
+			    .s4a.comment.entry insert 0 $pval}
+  	          IncludeSample { set incsample $pval } 
+	      }
+	 }
+
+
 
       }
   }
@@ -372,7 +471,23 @@ proc SaveParam { w { message yes } } {
 		 IncludeSample { set rline($lno) "$pname: \t $incsample" }
 		 UseAnlib { set rline($lno) "$pname: \t $useanlib" }
 	      }
-	 } 
+	 }
+
+	  .s4a {
+	      switch $pname {
+		  Analysis { set nval [.s4a.anlcls.entry get] ;
+  		         set rline($lno) "$pname: \t $nval" }
+		  AnalysisTitle { set nval [.s4a.anltit.entry get] ;
+  		         set rline($lno) "$pname: \t $nval" }
+		  Version { set nval [.s4a.version.entry get] ;
+  		         set rline($lno) "$pname: \t $nval" }
+		  Comment { set nval [.s4a.comment.entry get] ;
+  		         set rline($lno) "$pname: \t $nval" }
+		 IncludeSample { set rline($lno) "$pname: \t $incsample" }
+	      }
+	 }
+
+
       } 
   } 
   close $fileId
@@ -526,10 +641,10 @@ label .fileshead -text "Build files" -font $titlefont
 pack .fileshead 
 
 
-foreach i { bases sana btest} {
+foreach i { bases sana s4anal} {
    frame .$i
-   label .$i.label -width 20 -anchor w
-   button .$i.conf -text "Set Parameters and Build Program" -width 60
+   label .$i.label -width 25 -anchor w
+   button .$i.conf -text "Set Parameters and Build Program" -width 50
    pack .$i.label -side left -fill x
    pack .$i.conf -side right
 }
@@ -539,10 +654,10 @@ foreach i { bases sana btest} {
 .sana.label config -text {Data Analysis}
 .sana.conf config -command  {ConfAnalModule .am conf}
 
-.btest.label config -text {Beam test analysis}
-.btest.conf config -command  { NotAvailable . }
+.s4anal.label config -text {Jupiter/Satelites Analysis}
+.s4anal.conf config -command  {ConfS4AnalModule .s4a conf }
 
-pack .bases .sana .btest -side top -fill x
+pack .bases .sana .s4anal -side top -fill x
 
 #########################################################
 # Quit buttons
