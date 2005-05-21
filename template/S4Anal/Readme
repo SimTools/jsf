@@ -1,0 +1,11 @@
+This is an example to read Jupiter data created by jsfj4 
+job and do some analysis.
+
+To build and run, do 
+
+ $ xmkmf -a
+ $ make 
+ $ jsf -b -q --InputFile=[input_file] gui.C
+
+ where input_file is a data created by jsfj4 job
+

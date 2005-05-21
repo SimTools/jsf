@@ -1,0 +1,48 @@
+#
+# ------------------------------------------------------------------- 
+# This is a template of Imakefile.
+# Makefile is created by
+#    xmkmf -a
+# To use this command, the environment variable, IMAKEINCLUDE
+# must be defined as collows.
+#    setenv IMAKEINCLUDE "-I$JSFROOT -I$LCLIBROOT"
+#
+# (Author)
+#    Akiya Miyamoto  27-July-2000
+#
+# $Id:
+#
+# ------------------------------------------------------------------- 
+#
+
+
+#include "conf/lcbase.tmpl"
+
+LIBNAME = lib<<Analysis>>
+
+SRC     = <<Analysis>>.$(SrcSuf)
+
+OBJS    = $(subst .$(SrcSuf),.$(ObjSuf),$(SRC)) \
+	  $(LIBNAME).$(ObjSuf)
+
+HDRS    = $(subst .$(SrcSuf),.h,$(SRC))
+
+# Other usefull variables.
+#  CXXFLAGS +=   ( for additional CXX options )
+#  JSFLIBS  +=   ( to include additiona libraries after JSF libraries)
+
+CXXFLAGS += -I$(LEDAROOT)/include -I$(SATELLITESROOT)/include 
+
+all:: $(LIBNAME).$(DllSuf)
+
+$(LIBNAME).$(DllSuf): $(OBJS) 
+	$(LD) $(SOFLAGS) $(OBJS)  -o $@
+
+depend:: $(SRC) $(HDR)
+	for i in $(SRC); do \
+	rmkdepend -a -- $(DEPENDFILES) -- $$i; done
+
+$(LIBNAME).$(SrcSuf): $(HDRS) LinkDef.h
+	rootcint -f $@ -c -I$(JSFROOT)/include \
+	-I$(ROOTSYS)/include \
+	$(HDRS) LinkDef.h 
