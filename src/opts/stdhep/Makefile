@@ -16,12 +16,13 @@ OBJS      = $(subst .$(SrcSuf),.$(ObjSuf),$(SRCS)) \
 HDRS      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRCS))
 
 ifdef CLHEP_BASE_DIR
-LIBS	+= -L$(CLHEP_BASE_DIR)
+LIBS	+= -L$(CLHEP_BASE_DIR)/lib
 endif
 LIBS    += -lCLHEP
 
 ifdef CLHEP_INCLUDE_DIR
 INCPATH  += -I$(CLHEP_INCLUDE_DIR)
+FFLAGS   += -I$(CLHEP_INCLUDE_DIR)
 endif
 
 all: depend $(SharedLib)
