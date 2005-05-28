@@ -6,7 +6,7 @@ has_jim    =
 
 subdirs    =
 ifeq ($(has_clhep),yes)
-subdirs   += stdhep stdhep-mcfio
+subdirs   += stdhep-mcfio stdhep
 endif
 ifeq ($(has_leda),yes)
 subdirs   += Anlib zvtop
