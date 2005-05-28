@@ -25,6 +25,14 @@
 ClassImp(JSFReadStdHep)
 ClassImp(JSFReadStdHepBuf)
 
+extern "C" {
+  extern void jsf_mcfio_init_();
+  extern void stdxropen_(const char *fname, int *nentries, 
+			int *istream,int *iok, int lfname);
+  extern void stdxrd_(int *iflag, int *istream, int *iok);
+  extern void stdxend_(int *istream);
+};
+
 //_____________________________________________________________________________
 JSFReadStdHep::JSFReadStdHep(const char *name, const char *title, const bool makebuf )
        : JSFReadGenerator(name,title, kFALSE)
@@ -41,6 +49,8 @@ JSFReadStdHep::JSFReadStdHep(const char *name, const char *title, const bool mak
   fNReadBlock=0;
   fRunInfo   =0;
   fEvent     =0;
+  fFormat = gJSF->Env()->GetValue("JSFReadStdHep.Format",1);
+  fMCFIOStream=0;
 }
 
 //_____________________________________________________________________________
@@ -55,6 +65,9 @@ Bool_t JSFReadStdHep::Initialize()
 {
   // Initialize
 
+  if( fFormat == 1 ) {
+    jsf_mcfio_init_();
+  }
 
   return kTRUE;
 }
@@ -65,6 +78,37 @@ Bool_t JSFReadStdHep::Process(Int_t nev)
 // 
   std::string block("first"), empty(" "), etype("StdEvent");
   std::cerr << "Process is called " << std::endl;
+  if ( fEvent ) delete fEvent;
+
+  if( fFormat == 1 ) {
+    int lok=0;
+    int flag=0;
+    StdHep::ConvertStdHep conv;
+
+    while( lok == 0 ) {
+      stdxrd_(&flag, &fMCFIOStream, &lok);
+      if( lok != 0 ) {
+        return kFALSE;
+      }
+      else if ( flag == 1 ) {
+        std::cerr << "read one record " << std::endl;
+        Int_t ievt=nev;
+        fEvent=conv.getStdEvent(ievt);
+        std::cerr << " Read .. evt=" << ievt <<std::endl;
+
+        std::cerr << " Event Number=" << fEvent->eventNumber();
+        std::cerr << " num part." << fEvent->numParticles();
+        std::cerr << " size=" << fEvent->size();
+        std::cerr << std::endl;
+        JSFReadStdHepBuf *buf=(JSFReadStdHepBuf*)EventBuf();
+        buf->ReadOneRecord();
+        std::cerr << " End of ReadOneRecord..." <<std::endl;
+        fEvent->print();
+        return kTRUE;
+      }
+    }
+    return kFALSE;
+  }
 
   while( fInStream && (block != empty) ) {
     block = StdHep::readBlockType( fInStream );
@@ -78,7 +122,6 @@ Bool_t JSFReadStdHep::Process(Int_t nev)
   if( block == empty ) return kFALSE;
 
   JSFReadStdHepBuf *buf=(JSFReadStdHepBuf*)EventBuf();
-//  std::cerr << " will call ReadOneRecord...." << std::endl;
   buf->ReadOneRecord();
 
   return kTRUE;
@@ -87,6 +130,21 @@ Bool_t JSFReadStdHep::Process(Int_t nev)
 //_____________________________________________________________________________
 Bool_t JSFReadStdHep::BeginRun(Int_t nrun)
 {
+  if (fFormat == 1 ) {
+    int lenfn=fInFileName.size();
+    int ntries;
+    int iok;
+    std::cerr << fInFileName << " will be opened" << std::endl;
+    stdxropen_(fInFileName.data(),&ntries, &fMCFIOStream, &iok, lenfn);
+    if( iok != 0 ) { 
+      std::cerr << "Error  JSFReadStdHep::BeginRun failed to open file ";
+      std::cerr << fInFileName << std::endl;
+      return kFALSE;
+    }
+    return kTRUE;
+  } 
+
+
   if ( !fInStream.is_open() ) {
     std::cerr << "Input file is " << fInFileName << std::endl;
     fInStream.open(fInFileName.data());
@@ -124,6 +182,11 @@ Bool_t JSFReadStdHep::BeginRun(Int_t nrun)
 //_____________________________________________________________________________
 Bool_t JSFReadStdHep::EndRun()
 {
+  if( fFormat == 1 ) {
+     stdxend_(&fMCFIOStream);
+     return kTRUE;
+  }
+
   if ( fInStream.is_open() ) fInStream.close();
   return kTRUE;
 }
@@ -149,6 +212,8 @@ Bool_t JSFReadStdHepBuf::ReadHepEvent(const Int_t maxhep, Int_t &nevhep,
   // Read Generator data and saved to the class.
 
   StdHep::StdEvent *event=((JSFReadStdHep*)Module())->GetEvent();  
+
+  event->print();
  
   HepLorentzVector mom, vh;
   HepMC::GenParticle* part;
@@ -173,8 +238,7 @@ Bool_t JSFReadStdHepBuf::ReadHepEvent(const Int_t maxhep, Int_t &nevhep,
       phep[i][1]   = mom.py();
       phep[i][2]   = mom.pz();
       phep[i][3]   = mom.e();
-      phep[i][4]   = mom.e();
-      phep[i][3]   = part->generatedMass();
+      phep[i][4]   = part->generatedMass();
       vhep[i][0]   = vh.x();
       vhep[i][1]   = vh.y();
       vhep[i][2]   = vh.z();
@@ -183,6 +247,14 @@ Bool_t JSFReadStdHepBuf::ReadHepEvent(const Int_t maxhep, Int_t &nevhep,
 //	std::cerr << "i=" << i << " status=" << isthep[i] ;
 //	std::cerr << " id=" << idhep[i] << " e=" << phep[i][3] ;
 //	std::cerr << " mother= " << jmohep[i][0] << std::endl;
+	std::cerr << " i=" << i ;
+        std::cerr << " ID=" << idhep[i];
+        std::cerr  << "E=" << phep[i][0] ;
+        std::cerr  << "Px=" << phep[i][1] ;
+        std::cerr  << "Py=" << phep[i][2] ;
+        std::cerr  << "Pz=" << phep[i][3] ;
+	std::cerr << std::endl;
+
     }
   } 
   if ( nhep != nrp ) {

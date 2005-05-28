@@ -50,6 +50,8 @@ class JSFReadStdHep : public JSFReadGenerator
   std::string   fInFileName; // Input filename
   
   Int_t         fNReadBlock;
+  Int_t         fFormat; // Input file format(0=ASCII, 1=Binary(default)
+  Int_t         fMCFIOStream; // Input file stream for MCFIO
 
   StdHep::StdRunInfo  *fRunInfo; //!
   StdHep::StdEvent    *fEvent;   //!

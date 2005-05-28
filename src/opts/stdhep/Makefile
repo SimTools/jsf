@@ -10,10 +10,13 @@ SharedLib = $(LIBNAME).$(DllSuf)
 SRCS      = JSFReadStdHep.$(SrcSuf)
 
 OBJS      = $(subst .$(SrcSuf),.$(ObjSuf),$(SRCS)) \
-	    dummystdhep.o \
+	    dummystdhep.o jsf_mcfio_init.o \
 	    $(LIBNAME).$(ObjSuf)
 
 HDRS      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRCS))
+
+FFLAGS += -I../stdhep-mcfio/stdhep
+LIBS    += -L$(JSFROOT)/lib -lStdHepMCFIO -lFmcfio
 
 ifdef CLHEP_BASE_DIR
 LIBS	+= -L$(CLHEP_BASE_DIR)/lib
