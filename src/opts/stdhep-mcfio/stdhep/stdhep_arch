@@ -1,0 +1,106 @@
+#
+# architecture specific information for StdHep makefiles
+# 
+UNAME = $(shell uname)
+ifeq "$(UNAME)" "IRIX"
+    IRIX6 = $(findstring 6,$(shell uname -r))
+    ifeq "$(IRIX6)" "6"
+	UNAME=IRIX64
+    endif
+endif
+
+ifeq "$(UNAME)" "Linux"
+    L22 = $(findstring 2.2,$(shell uname -r))
+    ifeq "$(L22)" "2.2"
+	UNAME=Linux22
+    endif
+    L24 = $(findstring 2.4,$(shell uname -r))
+    ifeq "$(L24)" "2.4"
+	UNAME=Linux24
+    endif
+endif
+
+ifndef DEBUG
+    DEBUG = none
+    DFLG =
+    SFX =
+else
+    DFLG = $(DEBUG)
+    SFX = _g
+endif
+
+AR=ar
+
+ifeq "$(UNAME)" "AIX"
+    CC=cc
+    CPP = /lib/cpp
+    F77=xlf
+    CFLAGS= $(DFLG) -I$(STDHEP_DIR)/src/inc
+    FFLAGS= $(DFLG) -qextname
+    KPPFLAGS= -C -P -DAIX -DUNIX
+endif
+ifeq "$(UNAME)" "IRIX"
+    IRIX6 = $(findstring 6,$(shell uname -r))
+    CC=cc
+    CPP = /lib/cpp
+    F77=f77
+    KPPFLAGS= -C -P -DIRIX -DUNIX
+    CFLAGS= $(DFLG) -I$(STDHEP_DIR)/src/inc
+    FFLAGS= $(DFLG)
+    BIGGER_STRINGS=-Wf,-XNl6000
+endif
+ifeq "$(UNAME)" "IRIX64"
+    CC=cc
+    CPP = /lib/cpp
+    F77=f77
+    CFLAGS= $(DFLG) -n32 -mips3 -I$(STDHEP_DIR)/src/inc
+    FFLAGS= $(DFLG) -n32 -mips3
+    KPPFLAGS= -C -P -DIRIX -DUNIX
+    BIGGER_STRINGS=-Wf,-XNl6000
+ endif
+ifeq "$(UNAME)" "Linux"
+    CC=gcc
+    CPP=gcc -E
+    F77=g77
+    CFLAGS= $(DFLG) -I$(STDHEP_DIR)/src/inc
+    FFLAGS= $(DFLG) -fno-second-underscore
+    KPPFLAGS= -C -P -DLinux -DUNIX
+    LOCAL = -lnsl
+endif
+ifeq "$(UNAME)" "Linux22"
+    CC=/usr/bin/gcc
+    CPP=/usr/bin/gcc -E
+    F77=/usr/bin/g77
+    CFLAGS= $(DFLG) -I$(STDHEP_DIR)/src/inc
+    FFLAGS= $(DFLG) -fno-second-underscore
+    KPPFLAGS= -C -P -DLinux -DUNIX
+    LOCAL = -lnsl
+endif
+ifeq "$(UNAME)" "Linux24"
+    CC=gcc
+    CPP=gcc -E
+    F77=g77
+    CFLAGS= $(DFLG) -I$(STDHEP_DIR)/src/inc
+    FFLAGS= $(DFLG) -fno-second-underscore
+    KPPFLAGS= -C -P -DLinux -DUNIX
+    LOCAL = -lnsl
+endif
+ifeq "$(UNAME)" "OSF1"
+    CC=cc
+    CPP = /usr/lib/cpp
+    F77=f77
+    CFLAGS= $(DFLG) -I$(STDHEP_DIR)/src/inc
+    FFLAGS= $(DFLG) -fpe2 -check underflow -check overflow
+    KPPFLAGS= -C -P -DOSF1 -DUNIX
+    MAP = -Wl,-m > $@.map 2>&1
+endif
+ifeq "$(UNAME)" "SunOS"
+    CC=/opt/SUNWspro/bin/cc
+    CPP = /usr/ccs/lib/cpp
+    F77=f77
+    CFLAGS= $(DFLG) -I/usr/openwin/include -I$(STDHEP_DIR)/src/inc
+    FFLAGS= $(DFLG)
+    KPPFLAGS= -C -P -DSunOS -DUNIX
+    ##LOCAL= -L/opt/SUNWspro/lib -lm -lnsl -lsocket -lF77 -lM77 -ldbxFintr -lsunmath -R/opt/SUNWspro/lib
+    LOCAL= -lw -lgen -lsocket -lnsl -lintl
+endif

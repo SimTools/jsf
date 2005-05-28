@@ -1,0 +1,98 @@
+#
+# architecture specific information for StdHep makefiles
+# 
+UNAME = $(shell uname)
+ifeq "$(UNAME)" "IRIX"
+    IRIX6 = $(findstring 6,$(shell uname -r))
+    ifeq "$(IRIX6)" "6"
+	UNAME=IRIX64
+    endif
+endif
+
+ifeq "$(UNAME)" "Linux"
+    L22 = $(findstring 2.2,$(shell uname -r))
+    ifeq "$(L22)" "2.2"
+	UNAME=Linux22
+    endif
+    L24 = $(findstring 2.4,$(shell uname -r))
+    ifeq "$(L24)" "2.4"
+	UNAME=Linux24
+    endif
+    L26 = $(findstring 2.6,$(shell uname -r))
+    ifeq "$(L26)" "2.6"
+	UNAME=Linux26
+    endif
+endif
+
+ifndef DEBUG
+    DEBUG = none
+    DFLG =
+    SFX =
+else
+    DFLG = $(DEBUG)
+    SFX = _g
+endif
+
+ifeq "$(UNAME)" "IRIX"
+    CC=cc
+    F77=f77
+    CFLAGS= $(DFLG)
+    FFLAGS= $(DFLG)
+    MXTLIBS = -lXm -lXt -lX11 -lPW -lm
+endif
+ifeq "$(UNAME)" "IRIX64"
+    CC=cc
+    F77=f77
+    CFLAGS= $(DFLG) -n32 -mips3
+    FFLAGS= $(DFLG) -n32 -mips3
+    MXTLIBS = -lXm -lXt -lX11 -lPW -lm
+endif
+ifeq "$(UNAME)" "Linux"
+    CC=gcc
+    F77=g77
+    CFLAGS= $(DFLG) -I/usr/X11/include
+    FFLAGS= $(DFLG) -fno-second-underscore -fdebug-kludge
+    MXTLIBS = /usr/X11R6/lib/libXm.a -L/usr/X11R6/lib -lX11 -lXt -lXp -lXext -lm
+endif
+ifeq "$(UNAME)" "Linux22"
+    CC=/usr/bin/gcc
+    F77=/usr/bin/g77
+    CFLAGS= $(DFLG) -I/usr/X11/include -I$(OPENMOTIF_DIR)/include
+#    FFLAGS= $(DFLG) -fdebug-kludge -fno-second-underscore
+    FFLAGS= $(DFLG) -fno-second-underscore
+    MXTLIBS = -L$(OPENMOTIF_DIR)/lib -L/usr/X11R6/lib -lXm -lX11 -lXt -lXp -lXext -lm
+endif
+ifeq "$(UNAME)" "Linux24"
+    CC=gcc
+    F77=g77
+    CFLAGS= $(DFLG) -I/usr/X11R6/include 
+#    FFLAGS= $(DFLG) -fdebug-kludge -fno-second-underscore
+    FFLAGS= $(DFLG) -fno-second-underscore
+    MXTLIBS = -L/usr/X11R6/lib -lXm -lX11 -lXt -lXp -lXext -lm
+endif
+ifeq "$(UNAME)" "Linux26"
+    CC=gcc
+    F77=g77
+    CFLAGS= $(DFLG) -I/usr/X11R6/include 
+#    FFLAGS= $(DFLG) -fdebug-kludge -fno-second-underscore
+    FFLAGS= $(DFLG) -fno-second-underscore
+    MXTLIBS = -L/usr/X11R6/lib -lXm -lX11 -lXt -lXp -lXext -lm
+endif
+ifeq "$(UNAME)" "OSF1"
+    CC=cc
+    F77=f77
+    CFLAGS= $(DFLG) 
+    FFLAGS= $(DFLG) -fpe2 -check underflow -check overflow
+    MXTLIBS = -lXm -lXt -lX11 -lm -lfor -lots
+    MAP = -Wl,-m > $@.map 2>&1
+endif
+ifeq "$(UNAME)" "SunOS"
+    CC=/opt/SUNWspro/bin/cc
+    F77=f77
+    CFLAGS= $(DFLG) -I/usr/openwin/include -I/usr/dt/include -DMOTIF12
+    FFLAGS= $(DFLG)
+    MXTLIBS = -L/usr/openwin/lib -L/usr/dt/lib -lm -lXm -lXt -lX11 -lgen \
+	   -lF77 -lM77 -lsunmath -lsocket -lnsl -R /usr/openwin/lib -R /usr/dt/lib
+endif
+
+AR=ar

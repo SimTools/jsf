@@ -1,0 +1,20 @@
+This directory contains packages to read 
+stdhep format file. Information of original packages
+are described at  
+http://www-cpd.fnal.gov/psm/stdhep/getStdHep.shtml
+
+Files in this directory are prepared based on 
+- stdhep v5_03 tarball
+- mcfio v5_3 tarball
+
+Since there are many routines not necessary 
+for our purpose, they are removed from this 
+package.
+
+A standalone example to read stdhep generator 
+data is available in examples directory.
+
+15-May-2005
+Akiya Miyamoto
+
+
