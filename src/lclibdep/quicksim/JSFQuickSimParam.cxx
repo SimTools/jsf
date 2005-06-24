@@ -138,6 +138,19 @@ JSFQuickSimParam::JSFQuickSimParam()
     }
   }
 
+   fXRADCDC=0.000015; // Radiation length of CDC gas.               
+
+   // For EM
+   fANMPAR[0][0]=0.055424;
+   fANMPAR[0][1]=0.395883;
+   fALMPAR[0][0]=0.45;
+   fALMPAR[0][1]=1.20;
+   // For HD
+   fANMPAR[1][0]=0.0877193;
+   fANMPAR[1][1]=0.043860;
+   fALMPAR[1][0]=2.20;
+   fALMPAR[1][1]=7.00;
+
   // Load parameters
 
   sscanf(gJSF->Env()->GetValue("JSFQuickSim.ParameterFile","Undefined"),
@@ -218,6 +231,15 @@ void JSFQuickSimParam::ReadParamDetector(Char_t *file)
     else if( id == 70 ) fNERRVX = (Int_t)val ; //# sampling layers + 1 = NSMPVX
     else if( id == 71 ) fNSMPVX = (Int_t)val ; //# sampling layers + 1 = NSMPVX
     else if( 1000 < id && id < 1021 ) clspar[id-1001]=val;
+    else if( id == 1101 ) fANMPAR[0][0]=val;
+    else if( id == 1102 ) fANMPAR[0][1]=val;
+    else if( id == 1103 ) fALMPAR[0][0]=val;
+    else if( id == 1104 ) fALMPAR[0][1]=val;
+    else if( id == 1111 ) fANMPAR[1][0]=val;
+    else if( id == 1112 ) fANMPAR[1][1]=val;
+    else if( id == 1113 ) fALMPAR[1][0]=val;
+    else if( id == 1114 ) fALMPAR[1][1]=val;
+    else if( id == 2001 ) fXRADCDC=val;
 
     else { 
       if( fNERRVX ==1 || fNERRVX == 2 ) {
@@ -338,6 +360,16 @@ void JSFQuickSimParam::SetSmearParam()
 	(Int_t)fEMCal[2], fEMCal[3], fEMCal[4], fEMCal[5], fEMCal[6] );
   fHDCGeom->SetGeoParam(kHDC, (Int_t)fHDCal[0], (Int_t)fHDCal[1], 
 	(Int_t)fHDCal[2], fHDCal[3], fHDCal[4], fHDCal[5], fHDCal[6] );
+
+
+  smrres_.xrad_cdc=fXRADCDC;
+  
+  for(i=0;i<2;i++) {
+    for(Int_t j=0;j<2;j++) {
+      smrclp_.clssh_anm[i][j]=fANMPAR[i][j];
+      smrclp_.clssh_alm[i][j]=fALMPAR[i][j];
+    }
+  }
 }
 
 //____________________________________________________________________________

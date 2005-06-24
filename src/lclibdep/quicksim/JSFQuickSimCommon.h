@@ -70,11 +70,14 @@ typedef struct {
   Float_t sigrf , sigze;
   Float_t sgemb0, sgemb, sgeme0, sgeme, sghdb0, sghdb;
   Float_t sghde0, sghde;
+  Float_t xrad_cdc;
 } COMMON_SMRRES;
 extern COMMON_SMRRES smrres_;
 
 typedef struct {
   Float_t clspar[4][5];
+  Float_t clssh_anm[2][2];
+  Float_t clssh_alm[2][2];
 } COMMON_SMRCLP;
 extern COMMON_SMRCLP smrclp_;
 
