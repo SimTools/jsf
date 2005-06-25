@@ -1,3 +1,4 @@
+
 //////////////////////////////////////////////////////////////////////////////
 //
 //  JLC Study Frame
@@ -805,8 +806,8 @@ Bool_t JSFSteer::Terminate()
   if( fOFile ) { 
     fOFile->cd("/conf");
     gDirectory->mkdir("term");
-    fConf->Initialize(fModules);
-    fConf->Write("JSF");
+    //    fConf->Initialize(fModules);
+    //    fConf->Write("JSF");
   }
 
 
@@ -848,6 +849,9 @@ Bool_t JSFSteer::Terminate()
 
   }
   if( fOFile ) { 
+    fOFile->cd("/conf");
+    fConf->Initialize(fModules);
+    fConf->Write("JSF");
     fOFile->cd("/");
     fOFile->Write(0, GetWriteMode());
   }
@@ -1240,7 +1244,8 @@ void JSFSteerConf::Initialize(TList *mlist)
       im++;
     }
   }
-  Bool_t localonly=gJSF->Env()->GetValue("JSF.EnvParameter.SaveOnlyLocal",kTRUE);
+  //  Bool_t localonly=gJSF->Env()->GetValue("JSF.EnvParameter.SaveOnlyLocal",kTRUE);
+  Bool_t localonly=gJSF->Env()->GetValue("JSF.EnvParameter.SaveOnlyLocal",kFALSE);
   fEnv=new JSFEnv(*gJSF->Env(), localonly );
   
 }

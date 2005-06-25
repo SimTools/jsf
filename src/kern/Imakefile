@@ -45,7 +45,7 @@ install:: $(HDRJSF) libJSF.$(DylibSuf) jsf
 	install -p -m 755 libJSF.$(DylibSuf) $(JSFLIBDIR)
 	install -p -m 755 jsf $(JSFBINDIR)
 
-jsf: jsfmain.o 
+jsf: jsfmain.o libJSF.$(DylibSuf)
 	$(CXX) jsfmain.o -L.  -lJSF \
 	$(ROOTLIBS) $(ROOTGLIBS) \
 	-o $@ $(DYLDEXTRALIBS)

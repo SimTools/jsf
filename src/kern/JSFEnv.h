@@ -68,8 +68,12 @@ public:
   TOrdCollection *GetDefined(){ return fDefined;}
   void Add(const JSFEnv *env, bool replace=kFALSE);
   const char *GetValue(const char *name, const char *dflt);
+  const char *GetValue(const char *name);
   int GetValue(const char *name, int dflt);
   Double_t GetValue(const char *name, Double_t dflt);
+  int GetIValue(const char *name);
+  Double_t GetDValue(const char *name);
+
   std::vector<int> GetIValue(const char *name, const char *dflt, const int n);
   std::vector<Double_t> GetDValue(const char *name, const char *dflt, const int n);
   void SetValue(const char *name, const char *value, 

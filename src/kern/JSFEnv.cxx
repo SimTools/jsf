@@ -83,11 +83,12 @@ void JSFEnv::Add(const JSFEnv *env, bool replace)
   TObjArray *strobj=filter.Tokenize(token); 
   TIter ns(strobj);
   TObjString *ostr=0;
-
+  Int_t nadd=0;
   if ( fEnvFileName == 0 ) {
     fEnvFileName=new Char_t[strlen(env->fEnvFileName)+1];
     strcpy(fEnvFileName, env->fEnvFileName);
   }
+  // If no record is saved in This Env Record yet, create new one
   if ( fObtained == 0 ) { 
     fObtained=new TOrdCollection(env->fObtained->Capacity());
     TOrdCollectionIter next(env->fObtained);
@@ -99,6 +100,9 @@ void JSFEnv::Add(const JSFEnv *env, bool replace)
         if( strncmp(ostr->GetString().Data(), rec->fName.Data(),
             ostr->GetString().Length()) == 0 ) {   
             fObtained->Add(new JSFEnvRec(*rec));
+	    TEnv::SetValue(rec->fName.Data(), rec->fValue.Data(),
+			   rec->fLevel, rec->fType.Data());
+	    nadd++;
         }
       }
     }
@@ -115,19 +119,30 @@ void JSFEnv::Add(const JSFEnv *env, bool replace)
 	  if( replace && er != 0 ) {  // Replace existing record
 	    fObtained->Remove(er);
 	    fObtained->AddAt(new JSFEnvRec(*rec),1);
-	    std::cout << "JSFEnv parameter " << er->fName ;
-	    std::cout << " is replaced by \"" << rec->fValue ;
-	    std::cout << "\" obtained from the input file " << std::endl;
+	    //	    std::cout << "JSFEnv parameter " << er->fName ;
+	    //	    std::cout << " is replaced by \"" << rec->fValue ;
+	    //	    std::cout << "\" obtained from the input file " << std::endl;
+	    TEnv::SetValue(rec->fName.Data(),rec->fValue.Data(),
+			   rec->fLevel, rec->fType.Data());
+	    nadd++;
 	  }
 	  else if ( er == 0 ) {  // Add new record
 	    fObtained->AddAt(new JSFEnvRec(*rec),1);
-	    std::cout << "JSFEnv parameter " << rec->fName ;
-	    std::cout << " of value \"" << rec->fValue ;
-	    std::cout << "\" is obtained from the input file " << std::endl;
+	    //	    std::cout << "JSFEnv parameter " << rec->fName ;
+	    //	    std::cout << " of value \"" << rec->fValue ;
+	    //	    std::cout << "\" is obtained from the input file " << std::endl;
+	    TEnv::SetValue(rec->fName.Data(),rec->fValue.Data(),
+			   rec->fLevel, rec->fType.Data());
+	    nadd++;
 	  }
         }
       }
     } 
+  }
+  if( nadd > 0 ) {
+    std::cerr << nadd << " parameters " ;
+    std::cerr << " with name prefixed by " ;
+    std::cerr << filter << " are obtained from the input file" << std::endl;
   }
 
 }
@@ -354,6 +369,13 @@ const char *JSFEnv::GetValue(const char *name, const char *dflt)
 }
 
 //__________________________________________________________
+const char *JSFEnv::GetValue(const char *name)
+{
+  JSFEnvRec *rec=LookUp(name);
+  return rec->fValue;
+}
+
+//__________________________________________________________
 int JSFEnv::GetValue(const char *name, int dflt)
 {
   if( GetRecordDefault() && fDefined ) {
@@ -362,6 +384,19 @@ int JSFEnv::GetValue(const char *name, int dflt)
     fDefined->AddFirst(new JSFEnvRec(name,"",ins,kEnvAll));
   }
   return TEnv::GetValue(name, dflt);
+}
+
+//__________________________________________________________
+int JSFEnv::GetIValue(const char *name)
+{
+  JSFEnvRec *rec=LookUp(name);
+  Int_t iv=0;
+  if( !rec ) {
+    std::cerr << "No value is given for parameter " << name << std::endl;
+    gSystem->Exit(16);
+  }
+  sscanf(rec->fValue.Data(),"%d",&iv);
+  return iv;
 }
 
 //__________________________________________________________
@@ -376,13 +411,27 @@ Double_t JSFEnv::GetValue(const char *name, Double_t dflt)
 }
 
 //__________________________________________________________
+Double_t JSFEnv::GetDValue(const char *name)
+{
+  JSFEnvRec *rec=LookUp(name);
+  Double_t v=0;
+  if( !rec ) {
+    std::cerr << "No value is given for parameter " << name << std::endl;
+    gSystem->Exit(16);
+  }
+  sscanf(rec->fValue.Data(),"%lg",&v);
+  return v;
+}
+
+
+//__________________________________________________________
 std::vector<int> JSFEnv::GetIValue(const char *name, const char *value, const int n) 
 {
   if( GetRecordDefault() && fDefined ) {
     fDefined->AddFirst(new JSFEnvRec(name,"",value,kEnvAll));
   }
   std::vector<int> vec(n);
-  std::istringstream instream(value);
+  std::istringstream instream(TEnv::GetValue(name,value));
   for(int i=0;i<n;i++) {
      instream >> vec[i] ;
   }
@@ -397,7 +446,7 @@ std::vector<double> JSFEnv::GetDValue(const char *name, const char *value, const
     fDefined->AddFirst(new JSFEnvRec(name,"",value,kEnvAll));
   }
   std::vector<double> vec(n);
-  std::istringstream instream(value);
+  std::istringstream instream(TEnv::GetValue(name,value));
   for(int i=0;i<n;i++) {
      instream >> vec[i] ;
   }
