@@ -301,7 +301,7 @@ void InitGenSim()
 
 
   if( jsf->Env()->GetValue("JSFGUI.OutputEventData",0) == 0  ) {
-    full->SetMakeBranch(kFALSE);  
+    if(full) full->SetMakeBranch(kFALSE);  
     if(sim) sim->SetMakeBranch(kFALSE);   
     if(simdst) simdst->SetMakeBranch(kFALSE);
     if( gen ) gen->SetMakeBranch(kFALSE); 
@@ -426,8 +426,14 @@ void Batch_MultiRun()
   JSFSteer::EJSFReturnCode iret=jsf->kJSFOK;
   for(irun=firstrun;irun<=lastrun;irun++){
     if( irun != firstrun ) jsf->BeginRun(irun);
-    for( ievt=jsf->Env()->GetValue("JSFGUI.FirstEvent",1);
-	 ievt<=jsf->Env()->GetValue("JSFGUI.NEventsAnalize",10); ievt++){
+    Int_t startevent=jsf->Env()->GetValue("JSFGUI.FirstEvent",1);
+    Int_t nevents=jsf->Env()->GetValue("JSFGUI.NEventsAnalize",0);
+    if( nevents < jsf->Env()->GetValue("JSFGUI.NEventsAnalyze",0) ) {
+      nevents=jsf->Env()->GetValue("JSFGUI.NEventsAnalyze",0);
+    }
+    Int_t lastevent=startevent+nevents-1;
+
+    for( ievt=startevent; ievt<=lastevent; ievt++){
       GetEvent(ievt);
       iret=jsf->GetReturnCode();
       if( iret & jsf->kJSFEOF ) {
@@ -484,7 +490,13 @@ void Batch_MultiInputs()
 
   Int_t nread=0;
   Int_t ievt=jsf->Env()->GetValue("JSFGUI.FirstEvent",1);
-  while( ievt < jsf->Env()->GetValue("JSFGUI.NEventsAnalize",1000) ) {
+  Int_t nevents=jsf->Env()->GetValue("JSFGUI.NEventsAnalize",0);
+  if( nevents < jsf->Env()->GetValue("JSFGUI.NEventsAnalyze",0) ) {
+    nevents=jsf->Env()->GetValue("JSFGUI.NEventsAnalyze",0);
+  }
+  Int_t lastevent=ievt+nevents-1;
+
+  while( ievt <= lastevent ) {
       GetEvent(++nread);
       iret=jsf->GetReturnCode();
       if( iret == jsf->kJSFOK ) {
