@@ -13,7 +13,7 @@ FOBJS   = zvsig3.o zvres3.o zvtop3.o \
 
 INCPATH = -I$(LEDAROOT)/include \
 	$(shell jsf-config --includes ) \
-	$(shell root-config --cflags)
+	$(shell root-config --cflags | sed -e 's;-Wno-long-double;;')
 
 HDRS    = $(subst .$(SrcSuf),.h,$(SRC))
 
