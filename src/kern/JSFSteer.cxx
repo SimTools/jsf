@@ -325,7 +325,17 @@ void JSFSteer::SetIOFiles()
 	fIFile=gFile ; fOFile=gFile ;
       }
     }
-
+    if ( fIFile && Env()->GetValue("JSF.EnvParameter.GetFromInput",kTRUE) ) {
+      TDirectory *lastdir=gDirectory;
+      fIFile->cd("conf");
+      JSFSteerConf rdconf("JSFSteerConfReadin", "JSF Configuration");
+      rdconf.Read("JSF");
+      Bool_t replace=Env()->GetValue("JSF.EnvParameter.Replace",kFALSE);
+      fEnv->Add(rdconf.GetEnv(), replace); // Replace, if not defined in file.
+      std::cerr << "JSFSteer::SetIOFiles load EnvParameter values from ";
+      std::cerr << fIFile->GetName() << endl;
+      lastdir->cd();
+    }	
 }
 
 //____________________________________________________________________________
@@ -1000,6 +1010,7 @@ Bool_t JSFSteer::SetupTree()
 //  fReadin=new JSFSteer("ReadinJSF");
 //  fReadin->fConf->Read("JSF");
   fReadin = new JSFSteerBuf("ReadinJSF");
+
   JSFSteerConf rdconf("JSFSteerConfReadin", "JSF Configuration");
   rdconf.Read("JSF");
   if ( rdconf.fNmodule < 1 ) {
@@ -1012,6 +1023,7 @@ Bool_t JSFSteer::SetupTree()
     Bool_t replace=Env()->GetValue("JSF.EnvParameter.Replace",kFALSE);
     fEnv->Add(rdconf.GetEnv(), replace); // Replace, if not defined in file.
   }
+
 
 // Prepare pointer for JSF obtained from a file.
   fITree->SetBranchStatus("*");
