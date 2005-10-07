@@ -362,13 +362,18 @@ Bool_t PythiaGenerator::Process(Int_t ev)
      pv(3)=p->GetPz();
      xv(0)=0.0; xv(1)=0.0 ; xv(2)=0.0 ; xv(3)=0.0 ; 
 #ifdef __USE_TPYTHIA__
-     charge=((Float_t)pychge_(&kf))/3.0;
      Int_t kc=fPythia->Pycomp(kf);
+     charge=((Float_t)fPythia->Pychge(kf))/3.0;
      xctau=fPythia->GetPMAS(kc,4)*0.1;
 #else
      charge=((Float_t)pychge_(&kf))/3.0;
      Int_t kc=pycomp_(&kf);
      xctau=pydat2_.PMAS[3][kc-1]*0.1;
+#endif
+#if 0
+     std::cerr << " kf = " << kf 
+               << " chg = " << charge
+               << " ctau = " << xctau << std::endl;
 #endif
      mass=p->GetMass();
      ndaughter=0;

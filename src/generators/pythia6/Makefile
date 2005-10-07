@@ -15,10 +15,11 @@ SharedLib = libPythia6.a
 INSTALL   = cp -fp
 else
 ifeq ($(UNAME),Darwin)
+FC        = gfortran
 FFLAGS    = -O0 -g -fno-second-underscore
 CFLAGS    =
 LD        = $(FC)
-LDFLAGS   = -dynamiclib -flat_namespace -single_module -undefined suppress
+LDFLAGS   = -dynamiclib -flat_namespace -single_module -undefined dynamic_lookup
 SharedLib = libPythia6.dylib
 BUNDLE    = $(subst .dylib,.so,$(SharedLib))
 INSTALL   = install -c -p
@@ -39,6 +40,8 @@ OBJS += tpythia6_called_from_cc.o \
 	pythia6_address.o
 ifneq ($(UNAME),Darwin)
 OBJS +=  main.o
+else
+OBJS +=  idate.o pydatawrapper.o
 endif
 
 # ROOTLIBS = -L$(ROOTSYS)/lib -lEG -lEGPythia6
@@ -52,7 +55,7 @@ lib: srclist $(OBJS)
 	@rm -f $(SharedLib)
 	$(LD) $(LDFLAGS) -o $(SharedLib) $(OBJS) 
 ifeq ($(UNAME),Darwin)
-	$(LD) -bundle -flat_namespace -undefined suppress -o $(BUNDLE) $(OBJS)
+	$(LD) -bundle -flat_namespace -undefined dynamic_lookup -o $(BUNDLE) $(OBJS)
 endif
 
 ../../../lib/$(SharedLib) : install

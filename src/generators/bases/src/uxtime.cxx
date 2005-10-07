@@ -1,5 +1,9 @@
 #include <sys/times.h>
+#if !defined(__DARWIN__)
 #include <time.h>
+#else
+#include <machine/limits.h>
+#endif
 #include <unistd.h>
 /*main()*/
 float	uxtime() 

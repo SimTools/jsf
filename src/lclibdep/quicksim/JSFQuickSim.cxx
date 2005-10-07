@@ -69,6 +69,9 @@ extern void smrrin_(int *level, int *debug);
 extern void swmevt_(int *recid, int *level, int *debug, int *iret);
 extern void smrevt_(int *recid, int *level, int *debug, int *iret);
 extern void cmbtrk_(int *iret);
+#if defined(__GFORTRAN__)
+extern void uconst_();
+#endif
 };
 
 ClassImp(JSFQuickSim)
@@ -219,6 +222,9 @@ void JSFQuickSimBuf::Delete(const Option_t *option)
 //_____________________________________________________________________________
 Bool_t JSFQuickSim::Initialize()
 {
+#if defined(__GFORTRAN__)
+  uconst_();
+#endif
   dscswm_();
   dscsmr_();
   return kTRUE;
@@ -340,6 +346,9 @@ Bool_t JSFQuickSim::TBPUTGeneratorParticles()
   Int_t j;
   for(j=0;j<gevt->GetNparticles();j++){
     JSFGeneratorParticle *p=(JSFGeneratorParticle*)pa->At(j);
+#if 0
+    p->ls("all");
+#endif
     data[0]=p->fSer;
     data[1]=p->fID;
     data[2]=p->fMass;

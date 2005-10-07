@@ -41,10 +41,17 @@ OBJ	      = $(subst .$(SrcSuf),.$(ObjSuf),$(SRC)) \
 HDR	      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRC)) \
 		$(NAME)LinkDef.h
 
+ifneq ($(FC),gfortran)
 LIBS     = -L$(LCLIBROOT)/lib $(EXTRALDOPT) \
         -lSIMJLC -lLTKCL -lLCFULL -lTBS \
         -lGENUTIL -lFORTLIB \
         $(EXTRALIBS) -lg2c /* -lnsl */
+else
+LIBS     = -L$(LCLIBROOT)/lib $(EXTRALDOPT) \
+        -lSIMJLC -lLTKCL -lLCFULL -lTBS \
+        -lGENUTIL -lFORTLIB \
+        $(EXTRALIBS) -lgfortran -lgfortranbegin /* -lnsl */
+endif
 
 
 /*----------------------------------------------------------------------*/
@@ -56,6 +63,10 @@ all::  $(LIBNAME).$(DllSuf)
 $(LIBNAME).$(DllSuf): $(OBJ)
 	@echo "Linking $@ "
 	$(LD) $(SOFLAGS)  $(OBJ) $(LIBS) -o $(LIBNAME).$(DllSuf)
+
+$(LIBNAME).$(DylibSuf): $(OBJ)
+	@echo "Linking $@ "
+	$(LD) $(DYLDFLAGS) -single_module $(OBJ) $(LIBS) -o $(LIBNAME).$(DylibSuf)
 
 exam:  JSFRandom.o  test.o
 	g77 -o exam JSFRandom.o test.o $(ROOTLIBS)	

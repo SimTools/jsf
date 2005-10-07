@@ -38,7 +38,11 @@ HDR	      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRC)) \
 
 INSTALLHDR    = $(HDR) JSFParticleData.h
 
+ifneq ($(shell uname),Darwin)
 LIBS	      = -lg2c /* -lnsl */
+else
+LIBS	      = -lgfortran -lgfortranbegin /* -lnsl */
+endif
 
 /*----------------------------------------------------------------------*/
 /*  Make targets							*/

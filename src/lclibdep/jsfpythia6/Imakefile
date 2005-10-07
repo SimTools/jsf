@@ -52,7 +52,7 @@ ifeq ($(shell uname),Darwin)
 CXX := $(subst -O,,$(CXX))
 endif
 
-CXXFLAGS     += -D__PYTHIA_VERSION__=$(PYTHIAVERSION)
+CXXFLAGS     += -D__PYTHIA_VERSION__=$(PYTHIAVERSION) -D__USE_TPYTHIA__
 
 /*----------------------------------------------------------------------*/
 /*  Make targets							*/

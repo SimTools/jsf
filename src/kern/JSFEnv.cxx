@@ -27,6 +27,7 @@
 #include <TString.h>
 #include <TObjString.h>
 #include <TObject.h>
+#include "JSFConfig.h"
 
 ClassImp(JSFEnv)
 ClassImp(JSFEnvRec)
@@ -39,8 +40,13 @@ JSFEnv::JSFEnv(Char_t *name) : TEnv(name)
   fDefined  = new TOrdCollection(1000);
   fObtained = new TOrdCollection(1000);
 
+#if __ROOT_VERSION__ <= 4
   TOrdCollection *ftbl=GetTable();
   ftbl->Clear();
+#else
+  THashList *ftbl=GetTable();
+  ftbl->Clear();
+#endif
     
   Char_t *s=gSystem->ConcatFileName(gSystem->Getenv("JSFROOT"),"macro/defaults.conf");
 

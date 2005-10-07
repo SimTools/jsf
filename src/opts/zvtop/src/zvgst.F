@@ -412,7 +412,61 @@ C             extraplote xyz to 2d poca
 71       CONTINUE
 72       CONTINUE
          RETN = 0
+#if !defined(__GFORTRAN__)
          GOTO   80
+#else
+#define L241 241 
+#define L242 242 
+#define L243 243 
+#define L250 250 
+#define L270 270 
+#define L261 261 
+#define L262 262 
+#define L290 290 
+#define L320 320 
+#define L310 310 
+#define L330 330 
+#define L350 350 
+#define L360 360 
+#define L370 370 
+#define L380 380 
+#define L390 390 
+#define L340 340 
+#define L301 301 
+#define L302 302 
+#define L400 400 
+#define L410 410 
+#define L420 420 
+#define L280 280 
+#define L231 231 
+#define L232 232 
+#include "zvgst.inc"
+#undef L241
+#undef L242
+#undef L243
+#undef L250
+#undef L270
+#undef L261
+#undef L262
+#undef L290
+#undef L320
+#undef L310
+#undef L330
+#undef L350
+#undef L360
+#undef L370
+#undef L380
+#undef L390
+#undef L340
+#undef L301
+#undef L302
+#undef L400
+#undef L410
+#undef L420
+#undef L280
+#undef L231
+#undef L232
+#endif
 90       TMIN = TRDISUM
       END IF
 Cif we moved theta, phiv with chi**2 calc
@@ -421,7 +475,61 @@ Citerate to find best vertex axis
 100   FLAG = .FALSE.
 110   PHIV = PHIV + ISTEP
       RETN = 1
+#if !defined(__GFORTRAN__)
       GOTO 80
+#else
+#define L241 1241
+#define L242 1242
+#define L243 1243
+#define L250 1250
+#define L270 1270
+#define L261 1261
+#define L262 1262
+#define L290 1290
+#define L320 1320
+#define L310 1310
+#define L330 1330
+#define L350 1350
+#define L360 1360
+#define L370 1370
+#define L380 1380
+#define L390 1390
+#define L340 1340
+#define L301 1301
+#define L302 1302
+#define L400 1400
+#define L410 1410
+#define L420 1420
+#define L280 1280
+#define L231 1231
+#define L232 1232
+#include "zvgst.inc"
+#undef L241
+#undef L242
+#undef L243
+#undef L250
+#undef L270
+#undef L261
+#undef L262
+#undef L290
+#undef L320
+#undef L310
+#undef L330
+#undef L350
+#undef L360
+#undef L370
+#undef L380
+#undef L390
+#undef L340
+#undef L301
+#undef L302
+#undef L400
+#undef L410
+#undef L420
+#undef L280
+#undef L231
+#undef L232
+#endif
 120   IF (TRDISUM.LT.TMIN) THEN
          TMIN = TRDISUM
          FLAG = .TRUE.
@@ -433,7 +541,61 @@ Citerate to find best vertex axis
       IF (.NOT.FLAG) THEN
 130      PHIV = PHIV - ISTEP
          RETN = 2
+#if !defined(__GFORTRAN__)
          GOTO 80
+#else
+#define L241 2241
+#define L242 2242
+#define L243 2243
+#define L250 2250
+#define L270 2270
+#define L261 2261
+#define L262 2262
+#define L290 2290
+#define L320 2320
+#define L310 2310
+#define L330 2330
+#define L350 2350
+#define L360 2360
+#define L370 2370
+#define L380 2380
+#define L390 2390
+#define L340 2340
+#define L301 2301
+#define L302 2302
+#define L400 2400
+#define L410 2410
+#define L420 2420
+#define L280 2280
+#define L231 2231
+#define L232 2232
+#include "zvgst.inc"
+#undef L241
+#undef L242
+#undef L243
+#undef L250
+#undef L270
+#undef L261
+#undef L262
+#undef L290
+#undef L320
+#undef L310
+#undef L330
+#undef L350
+#undef L360
+#undef L370
+#undef L380
+#undef L390
+#undef L340
+#undef L301
+#undef L302
+#undef L400
+#undef L410
+#undef L420
+#undef L280
+#undef L231
+#undef L232
+#endif
 140      IF (TRDISUM.LT.TMIN) THEN
             TMIN = TRDISUM
             MOVE = .TRUE.
@@ -449,7 +611,61 @@ Cnow theta co-ordinate
 C   keep theta in range for ZXFIT
          THETAV = THETAV + ISTEP
          RETN = 3
+#if !defined(__GFORTRAN__)
          GOTO 80
+#else
+#define L241 3241
+#define L242 3242
+#define L243 3243
+#define L250 3250
+#define L270 3270
+#define L261 3261
+#define L262 3262
+#define L290 3290
+#define L320 3320
+#define L310 3310
+#define L330 3330
+#define L350 3350
+#define L360 3360
+#define L370 3370
+#define L380 3380
+#define L390 3390
+#define L340 3340
+#define L301 3301
+#define L302 3302
+#define L400 3400
+#define L410 3410
+#define L420 3420
+#define L280 3280
+#define L231 3231
+#define L232 3232
+#include "zvgst.inc"
+#undef L241
+#undef L242
+#undef L243
+#undef L250
+#undef L270
+#undef L261
+#undef L262
+#undef L290
+#undef L320
+#undef L310
+#undef L330
+#undef L350
+#undef L360
+#undef L370
+#undef L380
+#undef L390
+#undef L340
+#undef L301
+#undef L302
+#undef L400
+#undef L410
+#undef L420
+#undef L280
+#undef L231
+#undef L232
+#endif
 160      IF (TRDISUM.LT.TMIN) THEN
             AGAIN = .TRUE.
             TMIN = TRDISUM
@@ -465,7 +681,61 @@ C   keep theta in range for ZXFIT
 C      keep theta in range for ZXFIT
             THETAV = THETAV - ISTEP
             RETN = 4
+#if !defined(__GFORTRAN__)
             GOTO 80
+#else
+#define L241 4241
+#define L242 4242
+#define L243 4243
+#define L250 4250
+#define L270 4270
+#define L261 4261
+#define L262 4262
+#define L290 4290
+#define L320 4320
+#define L310 4310
+#define L330 4330
+#define L350 4350
+#define L360 4360
+#define L370 4370
+#define L380 4380
+#define L390 4390
+#define L340 4340
+#define L301 4301
+#define L302 4302
+#define L400 4400
+#define L410 4410
+#define L420 4420
+#define L280 4280
+#define L231 4231
+#define L232 4232
+#include "zvgst.inc"
+#undef L241
+#undef L242
+#undef L243
+#undef L250
+#undef L270
+#undef L261
+#undef L262
+#undef L290
+#undef L320
+#undef L310
+#undef L330
+#undef L350
+#undef L360
+#undef L370
+#undef L380
+#undef L390
+#undef L340
+#undef L301
+#undef L302
+#undef L400
+#undef L410
+#undef L420
+#undef L280
+#undef L231
+#undef L232
+#endif
 180         IF (TRDISUM.LT.TMIN) THEN
                AGAIN = .TRUE.
                TMIN = TRDISUM
@@ -481,7 +751,61 @@ C      keep theta in range for ZXFIT
       END IF
 C call here to make sure gwidmax,dtrk at best thetav,phiv
       RETN = 5
+#if !defined(__GFORTRAN__)
       GOTO 80
+#else
+#define L241 5241
+#define L242 5242
+#define L243 5243
+#define L250 5250
+#define L270 5270
+#define L261 5261
+#define L262 5262
+#define L290 5290
+#define L320 5320
+#define L310 5310
+#define L330 5330
+#define L350 5350
+#define L360 5360
+#define L370 5370
+#define L380 5380
+#define L390 5390
+#define L340 5340
+#define L301 5301
+#define L302 5302
+#define L400 5400
+#define L410 5410
+#define L420 5420
+#define L280 5280
+#define L231 5231
+#define L232 5232
+#include "zvgst.inc"
+#undef L241
+#undef L242
+#undef L243
+#undef L250
+#undef L270
+#undef L261
+#undef L262
+#undef L290
+#undef L320
+#undef L310
+#undef L330
+#undef L350
+#undef L360
+#undef L370
+#undef L380
+#undef L390
+#undef L340
+#undef L301
+#undef L302
+#undef L400
+#undef L410
+#undef L420
+#undef L280
+#undef L231
+#undef L232
+#endif
 C iterate chi**2
 190   TMIN = TRDISUM
       IF (ISTEP.GT.0.00015) THEN
@@ -547,7 +871,61 @@ C
 C  vaz = gaxi(3)/vmag;
 C fill the final chis array
       RETN = 10
+#if !defined(__GFORTRAN__)
       GOTO 80
+#else
+#define L241 6241
+#define L242 6242
+#define L243 6243
+#define L250 6250
+#define L270 6270
+#define L261 6261
+#define L262 6262
+#define L290 6290
+#define L320 6320
+#define L310 6310
+#define L330 6330
+#define L350 6350
+#define L360 6360
+#define L370 6370
+#define L380 6380
+#define L390 6390
+#define L340 6340
+#define L301 6301
+#define L302 6302
+#define L400 6400
+#define L410 6410
+#define L420 6420
+#define L280 6280
+#define L231 6231
+#define L232 6232
+#include "zvgst.inc"
+#undef L241
+#undef L242
+#undef L243
+#undef L250
+#undef L270
+#undef L261
+#undef L262
+#undef L290
+#undef L320
+#undef L310
+#undef L330
+#undef L350
+#undef L360
+#undef L370
+#undef L380
+#undef L390
+#undef L340
+#undef L301
+#undef L302
+#undef L400
+#undef L410
+#undef L420
+#undef L280
+#undef L231
+#undef L232
+#endif
 210   IF (NTRY.LT.2) THEN
          NTRY = NTRY + 1
          ISTEP = 0.04
@@ -627,6 +1005,7 @@ C must be within 60deg of thrust and at least 25 deg from z
          GAXI(3) = VAZ
       END IF
       GOTO   220
+#if !defined(__GFORTRAN__)
 C zxtrks algo
 80    GWIDMAX = -100.0
       NITR = NITR + 1
@@ -783,6 +1162,7 @@ C try soft jet core weight
       IF (RETN.EQ.4) GOTO 180
       IF (RETN.EQ.5) GOTO 190
       IF (RETN.EQ.10) GOTO 210
+#endif
 C  write(*,*) 'end 1 e ';
 C*     pZBoutl%(nitr) = nitr;                                 *
 C now fill output info

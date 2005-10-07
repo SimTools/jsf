@@ -41,7 +41,7 @@
 #endif
 
 extern "C" {
-extern void  pydata_();
+extern void  pydatawrapper_();
 extern void  tauint_(int *inut, int *iout, int *jak1, 
 		     int *jak2, int *itdkrc, int *keya1, float *xk0dec);
 extern void  taudec_(int *kto, int *npnt, float *heltau, float p4tau[4]);
@@ -188,7 +188,7 @@ JSFHadronizer::~JSFHadronizer()
 //_____________________________________________________________________________
 Bool_t JSFHadronizer::Initialize()
 {
-   pydata_();
+   pydatawrapper_();
 
 // Initialize tauola
 
