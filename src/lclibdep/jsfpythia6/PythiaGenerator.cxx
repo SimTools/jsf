@@ -34,6 +34,7 @@
 //$Id$
 //  
 //////////////////////////////////////////////////////////////////
+#define __USE_TPYTHIA__
 
 #include <iostream>
 
@@ -69,15 +70,19 @@
 #endif
 
 extern "C" {
+#ifndef __USE_TPYTHIA__
 extern Int_t pychge_(Int_t *kf);
 extern int   pycomp_(int *kf);
+#endif
+#ifdef __LCLIBRAN_USE_RANMAR__
 extern void  pyevwt_(Float_t *wtxs);
-extern void  eprobx_(Double_t *x, Int_t *itype, Double_t *ebeam);
+#endif
 
 #if __PYTHIA_VERSION__ >= 6 
 extern void  pyrobo_(Int_t *imi, Int_t *ima, Double_t *the, Double_t *phi,
                     Double_t *bex, Double_t *bey, Double_t *bez);
 #else
+extern void  eprobx_(Double_t *x, Int_t *itype, Double_t *ebeam);
 extern Float_t rlu_(Int_t *idummy);
 #endif
 };
@@ -90,7 +95,9 @@ typedef struct {
   Float_t VCKM[4][4];
 } Pydat2_t;
 #endif
+#ifndef __USE_TPYTHIA__
 extern Pydat2_t pydat2_;
+#endif
 
 
 

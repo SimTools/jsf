@@ -16,7 +16,6 @@
 //
 //////////////////////////////////////////////////////////////////
 
-
 #include "TRandom.h"
 #include "JSFSteer.h"
 #include "JSFLCFULL.h"  
@@ -172,7 +171,11 @@ JSFHadronizer::JSFHadronizer(const char *name, const char *title)
   fDoesShower = gJSF->Env()->GetValue("JSFHadronizer.PartonShower",1);
 
 #if __PYTHIA_VERSION__ >= 6
+#if 0
   fPythia = new TPythia6();
+#else
+  fPythia = TPythia6::Instance();
+#endif
 #endif
 }
 
@@ -1231,6 +1234,19 @@ CC**********************************************************************
 #else
       Int_t kc = pycomp_(&kf);
       xctau    = pydat2_.PMAS[3][kc-1]*0.1;
+#endif
+#if 0
+std::cerr << "hadr: &pychge = " << (void *)&pychge_ << std::endl;
+std::cerr << "    : ichg = " << pychge_(&kf) << std::endl;
+std::cerr << "root: ichg = " <<fPythia->Pychge(kf) << std::endl;
+std::cerr << "hadr: &pycomp = " << (void *)&pycomp_ << std::endl;
+std::cerr << "root: kf = " << kf << std::endl;
+std::cerr << "root: kc = " << kc << std::endl;
+std::cerr << "    : kc = " << pycomp_(&kf) << std::endl;
+std::cerr << "root: xctau = " << xctau << std::endl;
+std::cerr << "    : xctau = " << pydat2_.PMAS[3][kc-1]*0.1 << std::endl;
+std::cerr << "root: xctau = " << fPythia->GetPMAS(pycomp_(&kf),4)*0.1 << std::endl;
+std::cerr << "    : xctau = " << pydat2_.PMAS[3][pycomp_(&kf)-1]*0.1 << std::endl;
 #endif
     }
     //C--         
