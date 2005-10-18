@@ -78,6 +78,18 @@ ifeq "$(UNAME)" "Linux26"
     FFLAGS= $(DFLG) -fno-second-underscore
     MXTLIBS = -L/usr/X11R6/lib -lXm -lX11 -lXt -lXp -lXext -lm
 endif
+ifeq "$(UNAME)" "Darwin"
+    CC=gcc
+ifneq ($(shell which gfortran | grep -v 'no gfortran' | grep -c gfortran),0)
+    F77=gfortran
+else
+    F77=g77
+endif
+    CFLAGS= $(DFLG) -I/usr/X11R6/include 
+#    FFLAGS= $(DFLG) -fdebug-kludge -fno-second-underscore
+    FFLAGS= $(DFLG) -fno-second-underscore
+    MXTLIBS = -L/usr/X11R6/lib -lXm -lX11 -lXt -lXp -lXext -lm
+endif
 ifeq "$(UNAME)" "OSF1"
     CC=cc
     F77=f77

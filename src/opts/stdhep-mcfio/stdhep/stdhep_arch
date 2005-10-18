@@ -85,6 +85,19 @@ ifeq "$(UNAME)" "Linux24"
     KPPFLAGS= -C -P -DLinux -DUNIX
     LOCAL = -lnsl
 endif
+ifeq "$(UNAME)" "Darwin"
+    CC=gcc
+    CPP=gcc -E
+ifneq ($(shell which gfortran | grep -v 'no gfortran' | grep -c gfortran),0)
+    F77=gfortran
+else
+    F77=g77
+endif
+    CFLAGS= $(DFLG) -I$(STDHEP_DIR)/src/inc
+    FFLAGS= $(DFLG) -fno-second-underscore
+    KPPFLAGS= -C -P -DLinux -DUNIX
+    LOCAL = #-lnsl
+endif
 ifeq "$(UNAME)" "OSF1"
     CC=cc
     CPP = /usr/lib/cpp
