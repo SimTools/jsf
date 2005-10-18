@@ -60,7 +60,11 @@ lib: srclist $(OBJS)
 	@rm -f $(SharedLib)
 	$(LD) $(LDFLAGS) -o $(SharedLib) $(OBJS) 
 ifeq ($(UNAME),Darwin)
+ifneq ($(shell which gfortran | grep -v 'no gfortran' | grep -c gfortran),0)
 	$(LD) -bundle -flat_namespace -undefined dynamic_lookup -o $(BUNDLE) $(OBJS)
+else
+	$(LD) -bundle -flat_namespace -undefined suppress -o $(BUNDLE) $(OBJS)
+endif
 endif
 
 ../../../lib/$(SharedLib) : install
