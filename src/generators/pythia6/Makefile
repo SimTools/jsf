@@ -15,11 +15,16 @@ SharedLib = libPythia6.a
 INSTALL   = cp -fp
 else
 ifeq ($(UNAME),Darwin)
+ifneq ($(shell which gfortran | grep -v 'no gfortran' | grep -c gfortran),0)
 FC        = gfortran
+LDFLAGS   = -dynamiclib -flat_namespace -single_module -undefined dynamic_lookup
+else
+FC        = g77
+LDFLAGS   = -dynamiclib -flat_namespace -single_module -undefined suppress
+endif
 FFLAGS    = -O0 -g -fno-second-underscore
 CFLAGS    =
 LD        = $(FC)
-LDFLAGS   = -dynamiclib -flat_namespace -single_module -undefined dynamic_lookup
 SharedLib = libPythia6.dylib
 BUNDLE    = $(subst .dylib,.so,$(SharedLib))
 INSTALL   = install -c -p

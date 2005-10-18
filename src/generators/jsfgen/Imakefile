@@ -41,7 +41,11 @@ INSTALLHDR    = $(HDR) JSFParticleData.h
 ifneq ($(shell uname),Darwin)
 LIBS	      = -lg2c /* -lnsl */
 else
+ifneq ($(FC),gfortran)
 LIBS	      = -lgfortran -lgfortranbegin /* -lnsl */
+else
+LIBS	      = -lg2c /* -lnsl */
+endif
 endif
 
 /*----------------------------------------------------------------------*/
