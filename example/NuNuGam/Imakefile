@@ -3,7 +3,7 @@
 #
 #$Id$
 
-#include "../../conf/makejsf.tmpl"
+#include "conf/makejsf.tmpl"
 
 PROGRAM       = NuNuGam
 
