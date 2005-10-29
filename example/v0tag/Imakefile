@@ -3,7 +3,7 @@
 #$Id$
 #
 
-#include "../../conf/makejsf.tmpl"
+#include "conf/makejsf.tmpl"
 
 OBJS   = k0evt.o
 LIB    = ../../src/generators/jsfgen/readgenutil.o -L$(JSFROOT)/lib -lPythia6
