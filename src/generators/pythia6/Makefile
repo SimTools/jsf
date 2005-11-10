@@ -29,6 +29,11 @@ SharedLib = libPythia6.dylib
 BUNDLE    = $(subst .dylib,.so,$(SharedLib))
 INSTALL   = install -c -p
 else
+ifneq ($(shell which gfortran | grep -v 'no gfortran' | grep -c gfortran),0)
+FC        = gfortran
+else
+FC        = g77
+endif
 FFLAGS    = -O2 -g -fPIC -fno-second-underscore
 CFLAGS    = -fPIC
 LD        = $(FC)
@@ -45,7 +50,9 @@ OBJS += tpythia6_called_from_cc.o \
 	pythia6_address.o
 ifneq ($(UNAME),Darwin)
 OBJS +=  main.o
-else
+endif
+
+ifneq ($(shell which gfortran | grep -v 'no gfortran' | grep -c gfortran),0)
 OBJS +=  idate.o pydatawrapper.o
 endif
 
