@@ -61,7 +61,7 @@ ifeq "$(UNAME)" "IRIX64"
 ifeq "$(UNAME)" "Linux"
     CC=gcc
     CPP=gcc -E
-ifneq ($(shell which gfortran | grep -v 'no gfortran' | grep -c gfortran),0)
+ifneq ($(shell which gfortran 2>&1 | grep -vc 'no gfortran'),0)
     F77=gfortran
 else
     F77=g77
@@ -92,7 +92,7 @@ endif
 ifeq "$(UNAME)" "Darwin"
     CC=gcc
     CPP=gcc -E
-ifneq ($(shell which gfortran | grep -v 'no gfortran' | grep -c gfortran),0)
+ifneq ($(shell which gfortran 2>&1 | grep -vc 'no gfortran'),0)
     F77=gfortran
 else
     F77=g77

@@ -15,7 +15,7 @@ SharedLib = libPythia6.a
 INSTALL   = cp -fp
 else
 ifeq ($(UNAME),Darwin)
-ifneq ($(shell which gfortran | grep -v 'no gfortran' | grep -c gfortran),0)
+ifneq ($(shell which gfortran 2>&1 | grep -vc 'no gfortran'),0)
 FC        = gfortran
 LDFLAGS   = -dynamiclib -flat_namespace -single_module -undefined dynamic_lookup
 else
@@ -29,7 +29,7 @@ SharedLib = libPythia6.dylib
 BUNDLE    = $(subst .dylib,.so,$(SharedLib))
 INSTALL   = install -c -p
 else
-ifneq ($(shell which gfortran | grep -v 'no gfortran' | grep -c gfortran),0)
+ifneq ($(shell which gfortran 2>&1 | grep -vc 'no gfortran'),0)
 FC        = gfortran
 else
 FC        = g77
@@ -52,7 +52,7 @@ ifneq ($(UNAME),Darwin)
 OBJS +=  main.o
 endif
 
-ifneq ($(shell which gfortran | grep -v 'no gfortran' | grep -c gfortran),0)
+ifneq ($(shell which gfortran 2>&1 | grep -vc 'no gfortran'),0)
 OBJS +=  idate.o pydatawrapper.o
 endif
 
@@ -67,7 +67,7 @@ lib: srclist $(OBJS)
 	@rm -f $(SharedLib)
 	$(LD) $(LDFLAGS) -o $(SharedLib) $(OBJS) 
 ifeq ($(UNAME),Darwin)
-ifneq ($(shell which gfortran | grep -v 'no gfortran' | grep -c gfortran),0)
+ifneq ($(shell which gfortran 2>&1 | grep -vc 'no gfortran'),0)
 	$(LD) -bundle -flat_namespace -undefined dynamic_lookup -o $(BUNDLE) $(OBJS)
 else
 	$(LD) -bundle -flat_namespace -undefined suppress -o $(BUNDLE) $(OBJS)
