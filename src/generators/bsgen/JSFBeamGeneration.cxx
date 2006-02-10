@@ -572,7 +572,7 @@ void JSFBeamGenerationCain::MakeBSMap()
     for(Int_t iy=0;iy<fMdiv;iy++){
       ymin=GetBndOrder()+iy*ystp;
       ymax=ymin+ystp;
-      Double_t s=fBS2DFunction->Integral(xmin,xmax,ymin,ymax,1.0E-30);
+      Double_t s=fBS2DFunction->Integral(xmin,xmax,ymin,ymax,1.0E-8);
       ssum+=s;
       fMxmin[ip]=xmin;
       fMxmax[ip]=xmax;
