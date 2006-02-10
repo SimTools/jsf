@@ -47,7 +47,7 @@ class JSFReadGenerator : public JSFGenerator {
 protected:
   Int_t  fUnit;       // Fortran logical unit number to output SIMDST data.
   Char_t fDataFileName[256]; //! File name of output file.
-  Char_t fFormat[32];  // Input binary data format.	   
+  Char_t fFormat[32];  // Input data format.	   
 public:
    JSFReadGenerator(const char *name="JSFReadGenerator", 
 		 const char *title="JSFReadGenerator",
@@ -59,8 +59,10 @@ public:
 
    Int_t  GetUnit(){ return fUnit;}
    Char_t *GetDataFileName(){ return fDataFileName; }
+   Char_t *GetFormat(){ return fFormat; }
    void SetUnit(Int_t nunit){ fUnit=nunit; }
    void SetDataFileName(Char_t *name){ strcpy(fDataFileName, name);}
+   void SetFormat(Char_t *name){ strcpy(fFormat, name);}
 
    ClassDef(JSFReadGenerator,2)  // To read Generator data
 };

@@ -57,6 +57,7 @@ private:
   Double_t           fEcmMax; //! Abolutely max ECM energy
   TString            fBSname; //  Name of BS spectrum 
   Double_t           fBSwidth; //  half-width of BS spectrum
+  TString            fBSFileName; // Name of BS parameter file.
 
   Double_t           fEMinus; //!
   Double_t           fEPlus;  //!
@@ -112,7 +113,7 @@ public:
   void PrintRandomSeed(Int_t num=8);  // First num's data are printed
 #endif
 
-  ClassDef(PythiaGenerator, 6)  // Pythia Generator
+  ClassDef(PythiaGenerator, 7)  // Pythia Generator
 
 };
 

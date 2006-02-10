@@ -47,6 +47,7 @@
 #include "JSFReadGenerator.h"
 #include "JSFParticleData.h"
 #include <TMath.h>
+#include "TSystem.h"
 
 ClassImp(JSFReadGenerator)
 ClassImp(JSFReadGeneratorBuf)
@@ -54,8 +55,15 @@ ClassImp(JSFReadGeneratorBuf)
 extern "C" {
 extern void readgenopen_(Int_t *unit, Char_t *name, Int_t len);
 extern void readgenclose_(Int_t *unit);
-extern void readgenhepevt_(Int_t *iunit, 
+extern void openfortranfile_(Int_t *unit, Char_t *name, Char_t *form,
+			Char_t *status, Int_t lenn, Int_t lenform, Int_t lenstatus);
+extern void readgenhepevt_(Int_t *iunit, const Int_t *maxhep,
 	Int_t *endian, Int_t *nvers, Int_t *nevhep, Int_t *nhep,
+        Int_t isthep[], Int_t idhep[],
+        Int_t jmohep[][2], Int_t jdahep[][2],
+	Double_t phep[][5], Double_t vhep[][4], Int_t *nret);
+extern void readgenhepevtascii_(Int_t *iunit, const Int_t *maxhep,
+	     Int_t *nvers, Int_t *nevhep, Int_t *nhep,
         Int_t isthep[], Int_t idhep[],
         Int_t jmohep[][2], Int_t jdahep[][2],
 	Double_t phep[][5], Double_t vhep[][4], Int_t *nret);
@@ -92,8 +100,25 @@ Bool_t JSFReadGenerator::BeginRun(Int_t nrun)
   if( !IsWritable() ) return kTRUE; // Quit when not output mode.
   Bool_t rc=kTRUE;
 // Open a file 
+
   Int_t lenf=strlen(fDataFileName);
-  readgenopen_(&fUnit, fDataFileName, lenf);
+  if( string(fFormat) == string("HEPEVT") ) {
+    readgenopen_(&fUnit, fDataFileName, lenf);
+   }
+  else if( string(fFormat) == string("HEPEVT_ASCII") ) {
+    Char_t *form="formatted";
+    Char_t *status="old"; 
+    Int_t lform=strlen(form);
+    Int_t lstatus=strlen(status); 
+	 openfortranfile_(&fUnit,fDataFileName,form,status,lenf,lform,lstatus);
+  }
+  else {
+     std::cerr << "Process will be terminated because " ;
+     std::cerr << "Undefined file format " << fFormat ;
+     std::cerr << " was specified in JSFReadGenerator::BeginRun " << std::endl;
+     gSystem->Exit(0);
+  }
+
 
   return rc;
 }
@@ -138,14 +163,23 @@ Bool_t JSFReadGeneratorBuf::ReadHepEvent(const Int_t maxhep, Int_t &nevhep, Int_
 //
 // 
 
-  Int_t nvers=1;
+  Int_t nvers=gJSF->Env()->GetValue("JSFReadGenerator.RequiredVersion",-1);
   Int_t ivers, endian ;
   Int_t nret;
   Int_t unit=((JSFReadGenerator*)Module())->GetUnit();
-  readgenhepevt_(&unit,&endian, &ivers, &nevhep,  &nhep,
-	isthep, idhep, jmohep, jdahep, phep, vhep, &nret);
+  Char_t *format=((JSFReadGenerator*)Module())->GetFormat();
 
-  if( nvers != ivers ) {
+  if( string(format) == string("HEPEVT") ) {
+    readgenhepevt_(&unit,&maxhep,&endian, &ivers, &nevhep,  &nhep,
+	  isthep, idhep, jmohep, jdahep, phep, vhep, &nret);
+   } 
+   else {
+      readgenhepevtascii_(&unit, &maxhep,&ivers, &nevhep, &nhep,
+ 	    isthep, idhep, jmohep, jdahep, phep, vhep, &nret);
+   }
+
+
+  if( nvers > 0  && nvers != ivers ) {
     printf("Errror at JSFReadGenerator.. Version number of ");
     printf("data is %d, while program can process only ",ivers);
     printf("version %d\n",nvers);

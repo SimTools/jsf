@@ -1,3 +1,4 @@
+
 ///////////////////////////////////////////////////////////////////
 //
 //  PythiaGenerator class
@@ -124,6 +125,9 @@ PythiaGenerator::PythiaGenerator(const Char_t *name,
   Char_t bspname[32];
   sscanf(env->GetValue("PythiaGenerator.BSParameter","trc500"),"%s",bspname);
   fBSname=bspname;
+  Char_t bsfilename[1024];
+  sscanf(env->GetValue("PythiaGenerator.BSFileName","undefined"),"%s",bsfilename);
+  fBSFileName=bsfilename;
   sscanf(env->GetValue("JSFBeamGeneration.Width","-1.0"),"%lg",&fBSwidth);
 
   sscanf(env->GetValue("PythiaGenerator.BSThreshold","10.0"),"%lg",&fBSThreshold);
@@ -178,13 +182,24 @@ Bool_t PythiaGenerator::Initialize()
     fPythia->SetMSTP(172,1);  // Generate event at requested energy
     
     Char_t bsfile[256];
-    sprintf(bsfile,"%s/data/bsdata/%s.root",gSystem->Getenv("JSFROOT"),fBSname.Data());
-    fBSFile=new TFile(bsfile);
-    if( fBSFile == 0 ) {
-      printf("Error in PythiaGenerator::Initialize\n");
-      printf("Unable to open file for Beamstrahlung : %s\n",bsfile);
-      exit(-1);
-    }
+    if( fBSFileName == TString("undefined") ) {
+      sprintf(bsfile,"%s/data/bsdata/%s.root",gSystem->Getenv("JSFROOT"),fBSname.Data());
+      fBSFile=new TFile(bsfile);
+      if( fBSFile == 0 ) {
+        printf("Error in PythiaGenerator::Initialize\n");
+        printf("Unable to open file for Beamstrahlung : %s\n",bsfile);
+        gSystem->Exit(-1);
+       }
+     }
+    else {
+       fBSFile=new TFile(fBSFileName.Data());
+       if( fBSFile == 0 ) {
+        printf("Error in PythiaGenerator::Initialize\n");
+        printf("Unable to open file for Beamstrahlung : %s\n",fBSFileName.Data());
+        gSystem->Exit(-1);
+       }
+     }  
+
     fBS=(JSFBeamGenerationCain*)fBSFile->Get(fBSname.Data());
     if( fBSwidth < 0.0 ) {
       fBSwidth=fBS->GetIBWidth();
