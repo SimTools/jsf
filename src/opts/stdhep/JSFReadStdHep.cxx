@@ -8,13 +8,20 @@
 //  
 //////////////////////////////////////////////////////////////////
 
+#if __CLHEPVERSION__ < 2
 #include "CLHEP/config/CLHEP.h"
 #include "CLHEP/config/fstream.h"
+#endif
 
 #include "CLHEP/StdHep/StdHep.hh"
 #include "CLHEP/StdHep/StdEvent.hh"
 #include "CLHEP/StdHep/ReadStdHep.hh"
 #include "CLHEP/StdHep/ConversionMethods.hh"
+
+#if __CLHEPVERSION__ >= 2
+using namespace CLHEP;
+#endif
+
 #include <iostream>
 #include <string>
 
