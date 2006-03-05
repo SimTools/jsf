@@ -29,6 +29,10 @@
 #include <TObject.h>
 #include "JSFConfig.h"
 
+#if __ROOT_VERSION__ > 4
+#include <THashList.h>
+#endif
+
 ClassImp(JSFEnv)
 ClassImp(JSFEnvRec)
 
