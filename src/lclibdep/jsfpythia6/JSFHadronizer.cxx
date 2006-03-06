@@ -40,7 +40,9 @@
 #endif
 
 extern "C" {
+#if __GNUC_VERSION__ >= 4
 extern void  pydatawrapper_();
+#endif
 extern void  tauint_(int *inut, int *iout, int *jak1, 
 		     int *jak2, int *itdkrc, int *keya1, float *xk0dec);
 extern void  taudec_(int *kto, int *npnt, float *heltau, float p4tau[4]);
@@ -191,7 +193,9 @@ JSFHadronizer::~JSFHadronizer()
 //_____________________________________________________________________________
 Bool_t JSFHadronizer::Initialize()
 {
+#if __GNUC_VERSION__  >= 4
    pydatawrapper_();
+#endif
 
 // Initialize tauola
 
