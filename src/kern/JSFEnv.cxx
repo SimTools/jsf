@@ -158,14 +158,22 @@ void JSFEnv::Add(const JSFEnv *env, bool replace)
 }
 
 //__________________________________________________________
+#if __ROOT_VERSION__<5 || (__ROOT_VERSION__==5 && __ROOT_MINORVERSION__<11)
 void JSFEnv::ReadFile(const char *n, EEnvLevel l)
+#else
+Int_t JSFEnv::ReadFile(const char *n, EEnvLevel l)
+#endif
 {
   TEnv::ReadFile(n, l);
 
   // Read file again to prepare parameter for JSF.
 
   FILE *fd;
+#if __ROOT_VERSION__<5 || (__ROOT_VERSION__==5 && __ROOT_MINORVERSION__<11)
   if( !(fd=fopen(n,"r") ) ) return;
+#else
+  if( !(fd=fopen(n,"r") ) ) return -1;
+#endif
 
   Int_t nadd=0;
   Char_t inp[256];
@@ -321,7 +329,11 @@ void JSFEnv::ReadFile(const char *n, EEnvLevel l)
   }
 
   fclose(fd);
-
+   
+#if __ROOT_VERSION__<5 || (__ROOT_VERSION__==5 && __ROOT_MINORVERSION__<11)
+#else
+  return 0;
+#endif
 }
 
 
@@ -366,7 +378,6 @@ void JSFEnv::PrintDefined()
       }
    }
    fout.close();
-   
 }
 
 //__________________________________________________________

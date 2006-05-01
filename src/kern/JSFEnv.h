@@ -18,6 +18,7 @@
 #include <TOrdCollection.h>
 #include <TString.h>
 #include <vector>
+#include "JSFConfig.h"
 
 // ______________________________________________________________
 class JSFEnvRec: public TObject {
@@ -81,7 +82,11 @@ public:
   JSFEnvRec *LookUp(const char *name);
   Char_t *GetEnvFileName(){ return fEnvFileName; }
   void GetArguments();
+#if __ROOT_VERSION__<5 || (__ROOT_VERSION__==5 && __ROOT_MINORVERSION__<11)
   void ReadFile(const char *fname, EEnvLevel l);
+#else
+  Int_t ReadFile(const char *fname, EEnvLevel l);
+#endif
   Bool_t WriteFile(char* fn=NULL);
 
   ClassDef(JSFEnv,1) // JSF Environment parameter
