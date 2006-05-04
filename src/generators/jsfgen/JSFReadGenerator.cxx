@@ -230,14 +230,14 @@ Bool_t JSFReadGeneratorBuf::ReadOneRecord()
     Int_t ndau;
     Int_t dau1st;
     Int_t nser;
-  } map[kNMXHEP];
+  } pmap[kNMXHEP];
   Int_t nser=0;
   Int_t n1stfinal=0;
   Int_t n1stdoc=0;
   Int_t jlist[kNMXHEP];
 
   for(i=0;i<nhep;i++){
-    map[i].nser=0;
+    pmap[i].nser=0;
     if( isthep[i] == 0 ) continue;
 
     nser++;
@@ -253,47 +253,47 @@ Bool_t JSFReadGeneratorBuf::ReadOneRecord()
 
     switch ( isthep[i] ) {
       case 1:
-        map[i].ndau=0;
-        map[i].dau1st=0;
-	if( jmohep[i][0] <= 0 ) map[i].mother=0;
-        else map[i].mother=map[jmohep[i][0]-1].nser; // modified by I.Nakamura
-        map[i].nser=nser;
+        pmap[i].ndau=0;
+        pmap[i].dau1st=0;
+	if( jmohep[i][0] <= 0 ) pmap[i].mother=0;
+        else pmap[i].mother=pmap[jmohep[i][0]-1].nser; // modified by I.Nakamura
+        pmap[i].nser=nser;
 	if( n1stfinal == 0 ) n1stfinal=nser;
-	if( map[i].mother == 0 ) map[i].mother=n1stdoc;
+	if( pmap[i].mother == 0 ) pmap[i].mother=n1stdoc;
 	break;
       case 2:
-        map[i].ndau=jdahep[i][1]-jdahep[i][0]+1;
-        map[i].dau1st=-2;
-	if( jmohep[i][0] <= 0 ) map[i].mother=0;
-        else map[i].mother=map[jmohep[i][0]-1].nser; // modified by I.Nakamura
-        map[i].nser=nser;
+        pmap[i].ndau=jdahep[i][1]-jdahep[i][0]+1;
+        pmap[i].dau1st=-2;
+	if( jmohep[i][0] <= 0 ) pmap[i].mother=0;
+        else pmap[i].mother=pmap[jmohep[i][0]-1].nser; // modified by I.Nakamura
+        pmap[i].nser=nser;
 	if( n1stfinal == 0 ) n1stfinal=nser;
-	if( map[i].mother == 0 ) map[i].mother=n1stdoc;
+	if( pmap[i].mother == 0 ) pmap[i].mother=n1stdoc;
 	break;
       case 3:
 	if( n1stdoc == 0 ) n1stdoc=nser;
-        map[i].ndau=1;
-        map[i].dau1st=-3;
-        map[i].mother=-3;
-        map[i].nser=nser;
+        pmap[i].ndau=1;
+        pmap[i].dau1st=-3;
+        pmap[i].mother=-3;
+        pmap[i].nser=nser;
 	break;
       default:
-        map[i].ndau=1;
-        map[i].dau1st=-4;
-        map[i].mother=-isthep[i];
-        map[i].nser=nser;
+        pmap[i].ndau=1;
+        pmap[i].dau1st=-4;
+        pmap[i].mother=-isthep[i];
+        pmap[i].nser=nser;
     }
   }
 
   for(i=0;i<nhep;i++){
-    if( map[i].nser == 0 ) continue;
-    switch (map[i].dau1st){
+    if( pmap[i].nser == 0 ) continue;
+    switch (pmap[i].dau1st){
       case -2:
-	map[i].dau1st=map[jdahep[i][0]-1].nser; // modified by I.Nakamura
+	pmap[i].dau1st=pmap[jdahep[i][0]-1].nser; // modified by I.Nakamura
 	break;
       case -3:
       case -4:
-	map[i].dau1st=n1stfinal;
+	pmap[i].dau1st=n1stfinal;
 	break;
     }
   }
@@ -315,9 +315,9 @@ Bool_t JSFReadGeneratorBuf::ReadOneRecord()
 
     Int_t id=idhep[i];
     Float_t mass=phep[i][4];
-    Int_t mother=map[i].mother;
-    Int_t firstdaughter=map[i].dau1st;
-    Int_t ndaughter=map[i].ndau;
+    Int_t mother=pmap[i].mother;
+    Int_t firstdaughter=pmap[i].dau1st;
+    Int_t ndaughter=pmap[i].ndau;
 
     Float_t charge=JSFParticleData::GetCharge(id);
     Float_t xctau =JSFParticleData::GetCTau(id);
