@@ -203,7 +203,7 @@ Int_t HerwigGenerator::HepevtToGeneratorParticles(COMMON_HEPEVT_t *hepevt)
     Int_t ndau;
     Int_t dau1st;
     Int_t nser;
-  } map[kNMXHEP];
+  } pmap[kNMXHEP];
   Int_t nser=0;
   Int_t n1stfinal=0;
   Int_t n1stdoc=0;
@@ -211,7 +211,7 @@ Int_t HerwigGenerator::HepevtToGeneratorParticles(COMMON_HEPEVT_t *hepevt)
 
   for(i=0;i<nhep;i++){
 
-    map[i].nser=0;
+    pmap[i].nser=0;
     if( hepevt->ISTHEP[i] == 0 ) continue;
     if( hepevt->ISTHEP[i] >= 100 && hepevt->ISTHEP[i] <= 103 ) continue;
     if( hepevt->ISTHEP[i] >= 123 && hepevt->ISTHEP[i] <= 124 ) continue;
@@ -223,43 +223,43 @@ Int_t HerwigGenerator::HepevtToGeneratorParticles(COMMON_HEPEVT_t *hepevt)
     Int_t tst= hepevt->ISTHEP[i];
 
     if( tst == 1 ) {
-      map[i].ndau=0;
-      map[i].dau1st=0;
-      if( hepevt->JMOHEP[i][0] <= 0 ) map[i].mother=0;
-      else map[i].mother=map[hepevt->JMOHEP[i][0]-1].nser; // modified by I.Nakamura
-      map[i].nser=nser;
+      pmap[i].ndau=0;
+      pmap[i].dau1st=0;
+      if( hepevt->JMOHEP[i][0] <= 0 ) pmap[i].mother=0;
+      else pmap[i].mother=pmap[hepevt->JMOHEP[i][0]-1].nser; // modified by I.Nakamura
+      pmap[i].nser=nser;
       if( n1stfinal == 0 ) n1stfinal=nser;
-      if( map[i].mother == 0 ) map[i].mother=n1stdoc;
+      if( pmap[i].mother == 0 ) pmap[i].mother=n1stdoc;
     }
     else {
       if( hepevt->JDAHEP[i][0] == 0 || hepevt->JDAHEP[i][1] == 0 ) {
 	cout << "Error  in HerwigGenerator::HepevtToGeneratorParticles" ;
 	cout << " Unexpected status code " << tst << endl;
       }
-      map[i].ndau=TMath::Abs(hepevt->JDAHEP[i][1] - hepevt->JDAHEP[i][0]) + 1;
-      map[i].dau1st=-2;
-      if(  hepevt->JMOHEP[i][0] <= 0 ) map[i].mother=0;
-      else map[i].mother=map[hepevt->JMOHEP[i][0]-1].nser; // modified by I.Nakamura
-      map[i].nser=nser;
+      pmap[i].ndau=TMath::Abs(hepevt->JDAHEP[i][1] - hepevt->JDAHEP[i][0]) + 1;
+      pmap[i].dau1st=-2;
+      if(  hepevt->JMOHEP[i][0] <= 0 ) pmap[i].mother=0;
+      else pmap[i].mother=pmap[hepevt->JMOHEP[i][0]-1].nser; // modified by I.Nakamura
+      pmap[i].nser=nser;
       if( n1stfinal == 0 ) n1stfinal=nser;
-      if( map[i].mother == 0 ) map[i].mother=n1stdoc;
+      if( pmap[i].mother == 0 ) pmap[i].mother=n1stdoc;
     }
   }
 
   for(i=0;i<nhep;i++){
-    if( map[i].nser == 0 ) continue;
-    switch (map[i].dau1st){
+    if( pmap[i].nser == 0 ) continue;
+    switch (pmap[i].dau1st){
       case -2:
 	if( hepevt->JDAHEP[i][0] < hepevt->JDAHEP[i][1] ) {
-	  map[i].dau1st=map[hepevt->JDAHEP[i][0]-1].nser; // modified by I.Nakamura
+	  pmap[i].dau1st=pmap[hepevt->JDAHEP[i][0]-1].nser; // modified by I.Nakamura
 	}
 	else {
-	  map[i].dau1st=map[hepevt->JDAHEP[i][1]-1].nser; // modified by I.Nakamura
+	  pmap[i].dau1st=pmap[hepevt->JDAHEP[i][1]-1].nser; // modified by I.Nakamura
 	}
 	break;
       case -3:
       case -4:
-	map[i].dau1st=n1stfinal;
+	pmap[i].dau1st=n1stfinal;
 	break;
     }
   }
@@ -286,9 +286,9 @@ Int_t HerwigGenerator::HepevtToGeneratorParticles(COMMON_HEPEVT_t *hepevt)
     Float_t mass, charge, xctau;
 
     GetChargeCtau(id, charge, xctau);
-    Int_t mother=map[i].mother;
-    Int_t firstdaughter=map[i].dau1st;
-    Int_t ndaughter=map[i].ndau;
+    Int_t mother=pmap[i].mother;
+    Int_t firstdaughter=pmap[i].dau1st;
+    Int_t ndaughter=pmap[i].ndau;
 
     Float_t dl=0.0;
     //    if( mother < 0 ) xctau=0.0;
