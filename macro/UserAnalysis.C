@@ -103,5 +103,33 @@ void DrawHist()
 
 
 
+//_________________________________________________________
+/*
+Sample function to define multi-input files.
+If UserInputFiles() is defined in UserAnalysis.C, string array 
+returned from this function is used to define input files.
+Example is attached below.
+*/
+/*
+vector<string> *UserInputFiles()
+{
+  vector<string> *inp=new vector<string>();
+
+  Char_t *fpref=gROOT->LoadMacro(jsf->Env()->GetValue("MyAnal.FileName.Prefix","../../out/uds91-mar06_2m-500-");
+  Int_t iini=gROOT->LoadMacro(jsf->Env()->GetValue("MyAnal.FileName.SeqFirst",1);
+  Int_t imax=gROOT->LoadMacro(jsf->Env()->GetValue("MyAnal.FileName.SeqLast",20);
+
+  for(Int_t i=iini;i<=imax;i++){
+    stringstream sinp;
+    sinp << fpref << i << ".root" << std::ends;
+    string tstr;
+    tstr=sinp.str();
+    std::cerr << tstr << std::endl;
+    inp->push_back(tstr);
+  }
+  return inp;
+}
+
+*/
 
 

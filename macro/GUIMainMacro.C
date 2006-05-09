@@ -66,16 +66,18 @@ class JSFMEGenerator;
                         kReadParton=3, kReadHepevt=4, kNoGenerator=6  , kHerwig=5 };
 
   Bool_t gHasUserMonitor=kFALSE;
-
+  Bool_t gLoadMacro=kTRUE;
 //______________________________________________
 int Initialize(Char_t *fin="undef")
 {
   //
   // Initialization of JSF modules.
   //
-  gROOT->LoadMacro(jsf->Env()->GetValue("JSFGUI.MacroFileName",
+  if( gLoadMacro ) {
+    gROOT->LoadMacro(jsf->Env()->GetValue("JSFGUI.MacroFileName",
 					"UserAnalysis.C"));
-
+    gLoadMacro=kFALSE;
+  }
   if( gROOT->GetGlobalFunction("UserSetOptions",0,kTRUE) ) UserSetOptions();
 
   if( gROOT->GetGlobalFunction("UserMonitor",0,kTRUE) ) {
@@ -400,8 +402,16 @@ void ResetHist()
 //_________________________________________________________
 void BatchRun()
 {
+  if( gLoadMacro ) {
+    gROOT->LoadMacro(jsf->Env()->GetValue("JSFGUI.MacroFileName",
+					"UserAnalysis.C"));
+    gLoadMacro=kFALSE;
+  }
+
   if ( strcmp(jsf->Env()->
-	      GetValue("JSFGUI.InputFileName.F1","undef"),"undef")==0 ) {
+	      GetValue("JSFGUI.InputFileName.F1","undef"),"undef")==0 &&
+       ( !gROOT->GetGlobalFunction("UserInputFiles",0,kTRUE)) ) {
+    std::cerr << " Will call Batch_MultiRun..." << std::endl;
     Batch_MultiRun();
   }
   else {
@@ -534,22 +544,32 @@ void Batch_MultiInputs()
 //_________________________________________________________
 vector<string> *SetInputFiles()
 {
-  Int_t maxinp=jsf->Env()->GetValue("JSFGUI.MaxInputFiles",3000);
-  vector<string> *inp=new vector<string>();
-  Char_t     wrkstr[128];
-  Int_t nundef=0;
-  for(Int_t i=0;i<maxinp;i++){
-    sprintf(wrkstr,"JSFGUI.InputFileName.F%d",i+1);
-    Char_t *fn=jsf->Env()->GetValue(wrkstr,"undef");
-    if( strcmp(fn,"undef") != 0 ) {
-      inp->push_back(string(fn));
-      nundef=0;
-    }
-    else {
-      nundef++;
-      if ( nundef > 10 ) break;
+
+  vector<string> *inp;
+  string fn;
+  if( gROOT->GetGlobalFunction("UserInputFiles",0,kTRUE) ) {
+    inp=UserInputFiles();
+  }
+  else {
+    Int_t maxinp=jsf->Env()->GetValue("JSFGUI.MaxInputFiles",30000);
+    inp=new vector<string>();
+    Char_t     wrkstr[128];
+    Int_t nundef=0;
+    for(Int_t i=0;i<maxinp;i++){
+      sprintf(wrkstr,"JSFGUI.InputFileName.F%d",i+1);
+      Char_t *fn=jsf->Env()->GetValue(wrkstr,"undef");
+      if( strcmp(fn,"undef") != 0 ) {
+	inp->push_back(string(fn));
+	nundef=0;
+      }
+      else {
+	nundef++;
+	if ( nundef > 10 ) break;
+      }
     }
   }
+//  std::cerr << "SetInputFiles ... size=" << inp->size();
+//  std::cerr << "First file name is " << (*inp)[0] << std::endl;
   return inp;
 }
 
