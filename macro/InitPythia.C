@@ -24,6 +24,14 @@ void InitPythia()
   tpy->SetMRPY(1,iniseed);
 
   //****************************
+  //*  ISR on/off
+  //****************************
+  
+  if ( jsf->Env()->GetValue("JSFGUI.Pythia.ISR",1) == 0 ) {
+    tpy->SetMSTP(11,0);
+  }
+
+  //****************************
   // Set ISUB according to parameters.
   //****************************
   tpy->SetMSEL(0);
@@ -113,6 +121,7 @@ void SetPythiaDecayMode()
   //# -3=Z->ee/mumu
   //# -4=Z->llepton lepton
   //# -5=Z->nu nu
+  //# -6=Z->uds
   //*******************************************
 
   PythiaGenerator *py=(PythiaGenerator*)jsf->FindModule("PythiaGenerator");
@@ -128,6 +137,8 @@ void SetPythiaDecayMode()
   Int_t izdcy=jsf->Env()->GetValue("JSFGUI.Pythia.Decay.Z",0);
   Int_t izdcy2=izdcy/100;
   izdcy=izdcy%100;
+
+  std::cerr << " Pythia Z Decay flag=" << izdcy << " izdcy2=" << izdcy2 << std::endl;
 
   if( izdcy != 0 ) {
     if( ivers <= 5 ) {
@@ -171,6 +182,41 @@ void SetPythiaDecayMode()
 	for(Int_t i=0;i<3;i++){ 
 	  Int_t ip=izlist4[i];
 	  tpy->SetMDME(mdcy2+ip-1, 1, 1); 
+	}
+      }
+      else if( izdcy == -6 ) {
+	Int_t izlist5[3]={1, 2, 3 };
+	for(Int_t i=0;i<3;i++){
+	  Int_t ip=izlist5[i];
+	  tpy->SetMDME(mdcy2+ip-1, 1, 1);
+	}
+      }
+      else if( izdcy == -131 ) {  // mu mu + u ubar
+	Int_t izlist131[2]={13, 1};
+	for(Int_t i=0;i<2;i++){
+	  Int_t ip=izlist131[i];
+	  tpy->SetMDME(mdcy2+ip-1, 1, 4);
+	}
+      }
+      else if( izdcy == -135 ) {  // mu mu + b bbar
+	Int_t izlist135[2]={13, 5};
+	for(Int_t i=0;i<2;i++){
+	  Int_t ip=izlist135[i];
+	  tpy->SetMDME(mdcy2+ip-1, 1, 4);
+	}
+      }
+      else if( izdcy == -121 ) {  // nu_e nu_e + u ubar
+	Int_t izlist121[2]={12, 1};
+	for(Int_t i=0;i<2;i++){
+	  Int_t ip=izlist121[i];
+	  tpy->SetMDME(mdcy2+ip-1, 1, 4);
+	}
+      }
+      else if( izdcy == -125 ) {  // nu_e nu_e + b bbar
+	Int_t izlist125[2]={12, 5};
+	for(Int_t i=0;i<2;i++){
+	  Int_t ip=izlist125[i];
+	  tpy->SetMDME(mdcy2+ip-1, 1, 4);
 	}
       }
 
