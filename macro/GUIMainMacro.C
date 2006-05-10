@@ -546,7 +546,6 @@ vector<string> *SetInputFiles()
 {
 
   vector<string> *inp;
-  string fn;
   if( gROOT->GetGlobalFunction("UserInputFiles",0,kTRUE) ) {
     inp=UserInputFiles();
   }
@@ -557,9 +556,9 @@ vector<string> *SetInputFiles()
     Int_t nundef=0;
     for(Int_t i=0;i<maxinp;i++){
       sprintf(wrkstr,"JSFGUI.InputFileName.F%d",i+1);
-      Char_t *fn=jsf->Env()->GetValue(wrkstr,"undef");
-      if( strcmp(fn,"undef") != 0 ) {
-	inp->push_back(string(fn));
+      Char_t *fnnn=jsf->Env()->GetValue(wrkstr,"undef");
+      if( strcmp(fnnn,"undef") != 0 ) {
+	inp->push_back(string(fnnn));
 	nundef=0;
       }
       else {
