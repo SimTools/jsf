@@ -176,7 +176,9 @@ int Initialize(Char_t *fin="undef")
 
   if( jsf->GetOutput() ) { jsf->GetOutput()->cd(); }
 
-  if( gROOT->GetGlobalFunction("S4Initialize",0,kTRUE) ) S4Initialize();
+  if( jsf->Env()->GetValue("JSFGUI.OptModules",0) != 0 ) {
+    if( gROOT->GetGlobalFunction("S4Initialize",0,kTRUE) ) S4Initialize();
+  }
 
   UserInitialize();
 
