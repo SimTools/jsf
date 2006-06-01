@@ -61,6 +61,26 @@
 //   Comment lines can be inserted anywhere.  It is identified by a character "#"
 //   at first column.
 // 
+//(11-Feb-2006)
+// Input data format for this class was extended to read GRACE data 
+// prepared by Yoshimasa Kurihara san.  In this format, each line contains
+//   px, py, pz, e, mass
+// first two line is initial electron and positron information.
+// rest lines are information of final particles.
+// This format is very simple when using, twophpton eeee event for example
+// Sample data of one event is shown below.
+//   0.000000E+00   0.000000E+00   250.0000       250.0000       5.109991E-04
+//   0.000000E+00   0.000000E+00  -250.0000       250.0000       5.109991E-04
+//  -1.934790      -14.43530       41.80130       44.26590       5.109991E-04
+//  -8.556629      -64.47403       186.4988       197.5144       5.109991E-04
+//   5.336050       81.13042      -235.4707       249.1126      0.1056584    
+//   5.155369      -2.221091       7.170572       9.107104      0.1056584    
+// JSFEnv parameters related to this format are,
+//   JSFReadParton.Format: 3  # 3 means simple Grace format
+//   JSFReadParton.NParticles: 6 # Number of particles per event.
+//   JSFReadParton.PID:  11 -11 11 -11 13 -13 
+//   JSFReadParton.Charge: -1.0 1.0 -1.0 1.0 -1.0 1.0
+//
 //$Id$
 //
 ////////////////////////////////////////////////////////////////////////
@@ -84,6 +104,8 @@ extern void readparton_(Int_t *iunit, Int_t *type,
 ClassImp(JSFReadPartonBuf)
 ClassImp(JSFReadParton)
 
+  ifstream JSFReadParton::fInStream;
+
 //_____________________________________________________________________________
 JSFReadParton::JSFReadParton(const char *name, const char *title)
   : JSFSpring(name, title, NULL)
@@ -95,6 +117,10 @@ JSFReadParton::JSFReadParton(const char *name, const char *title)
 	 "%s",fDataFileName);
   sscanf(gJSF->Env()->GetValue("JSFReadParton.Unit","10"),"%d",&fUnit);
   fType=gJSF->Env()->GetValue("JSFReadParton.Format",1);
+
+  fNPGen=gJSF->Env()->GetValue("JSFReadParton.NParticles",6);
+  fKYPID=gJSF->Env()->GetIValue("JSFReadParton.PID","11 -11 11 -11 13  -13",fNPGen);
+  fKYCharge=gJSF->Env()->GetDValue("JSFReadParton.Charge","-1.0 1.0 -1.0 1.0 -1.0 1.0",fNPGen);
 
 }
 
@@ -121,30 +147,62 @@ Bool_t JSFReadPartonBuf::SetPartons()
   Int_t nret;
   Int_t unit=((JSFReadParton*)Module())->GetUnit();
   Int_t type=((JSFReadParton*)Module())->GetType();
-  
-  readparton_(&unit, &type, &iendian, &ivers, &nevent, &npart,
-	      idat, rdat, &nret);
 
-  // *************** Check return status
-  if(nret == -1) { 
-    printf("In JSFReadPartonBuf::SetParton .. ");
-    printf("read end-of-file of the input file.\n");
-    return kFALSE;
+  if( type == 1 || type == 2 ) {  
+    readparton_(&unit, &type, &iendian, &ivers, &nevent, &npart,
+	      idat, rdat, &nret);
+    fNparton=npart;
+
+    // *************** Check return status
+    if(nret == -1) { 
+      printf("In JSFReadPartonBuf::SetParton .. ");
+      printf("read end-of-file of the input file.\n");
+      return kFALSE;
+    }
+    else if( nret == -2 ) {
+      printf("In JSFReadPartonBuf::SetParton .. ");
+      printf("read error detected.\n");
+      return kFALSE;
+    }
+    else if( nvers != ivers ) {
+      printf("Errror at JSFReadPartonBuf.. Version number of ");
+      printf("data is %d, while program can process only ",nvers);
+      printf("version %d\n",ivers);
+      return kFALSE;
+    }
   }
-  else if( nret == -2 ) {
-    printf("In JSFReadPartonBuf::SetParton .. ");
-    printf("read error detected.\n");
-    return kFALSE;
-  }
-  else if( nvers != ivers ) {
-    printf("Errror at JSFReadPartonBuf.. Version number of ");
-    printf("data is %d, while program can process only ",nvers);
-    printf("version %d\n",ivers);
-    return kFALSE;
+  else {
+    JSFReadParton *rdp=(JSFReadParton*)Module();
+    //ifstream fin(fDataFileName);
+    //    while( !fin.eof() ) {
+    Int_t npgen=rdp->GetNPGen();
+    fNparton=npgen-2;
+    Int_t io=0;
+    ifstream *fin=rdp->GetInStream();
+    if ( fin->good() && !fin->eof() ) {
+      for(Int_t ip=0;ip<npgen;ip++) {
+	*fin >> rdat[io][2] >> rdat[io][3] >> rdat[io][4] ;
+	*fin >> rdat[io][5] >> rdat[io][0];
+        rdat[io][1]=rdp->GetCharge(ip);
+        idat[io][0]=rdp->GetPID(ip);
+        idat[io][1]=0; // ndaughter
+        idat[io][2]=0; // first daughter
+        idat[io][3]=0; // mother
+        idat[io][4]=0; // helicity
+        idat[io][5]=0; // color id
+        idat[io][6]=0; // shower info
+        if( ip > 1 ) io++;
+      }
+    }
+    else {
+      std::cout << "In JSFReadPartonBuf::SetParton .. " ;
+      std::cout << "read end-of-file of the input file," ;
+      std::cout << rdp->GetDataFileName() << std::endl;
+      return kFALSE;
+    }      
   }
 
   // ****************************
-  fNparton=npart;
   TVector p(4);
   for(Int_t i=0;i<fNparton;i++){
     p(1)=rdat[i][2];
@@ -155,6 +213,13 @@ Bool_t JSFReadPartonBuf::SetPartons()
 			   + rdat[i][3]*rdat[i][3] + rdat[i][4]*rdat[i][4]);
     }
     p(0)=rdat[i][5];
+
+//    std::cerr << "i=" << i << "(px,py,pz)=" << rdat[i][2] ;
+//    std::cerr << " " << rdat[i][3] << " " << rdat[i][4] ;
+//    std::cerr << " mass=" << rdat[i][0] ;
+//    std::cerr << " id= " << idat[i][0] ; 
+//    std::cerr << std::endl;
+
     new(partons[i]) JSFSpringParton(i+1, idat[i][0], rdat[i][0], rdat[i][1],
 		    p, idat[i][1], idat[i][2], idat[i][3], 
 		    idat[i][4], idat[i][5], idat[i][6] );
@@ -169,9 +234,18 @@ Bool_t JSFReadParton::BeginRun(Int_t nrun)
 {
   if( !IsWritable() ) return kTRUE; // Quit when not output mode.
 // Open a file 
-  Int_t lenf=strlen(fDataFileName);
-  readpartonopen_(&fUnit, &fType, fDataFileName, lenf);
-   
+  if( fType == 1 || fType == 2 ) {
+    Int_t lenf=strlen(fDataFileName);
+    readpartonopen_(&fUnit, &fType, fDataFileName, lenf);
+  }
+  else {
+    fInStream.open(fDataFileName, ifstream::in);
+    if( fInStream.bad() ) {
+      std::cerr << "JSFReadParton::BeginRun failed to open input file " ;
+      std::cerr << GetDataFileName() << std::endl;
+      return kFALSE;
+    }
+  }
   return kTRUE;
 }
 
@@ -180,7 +254,13 @@ Bool_t JSFReadParton::BeginRun(Int_t nrun)
 Bool_t JSFReadParton::EndRun()
 {
   if( !IsWritable() ) return kTRUE;
-  readpartonclose_(&fUnit);
+  if( fType == 1 || fType == 2 ) {
+    readpartonclose_(&fUnit);
+  }
+  else {
+    fInStream.close();
+  }
+
   return kTRUE;
 
 }
