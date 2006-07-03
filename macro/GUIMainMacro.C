@@ -289,7 +289,13 @@ void InitGenSim()
 
   // Jupiter simulation
   else if( jsf->Env()->GetValue("JSFGUI.SimulationType",1) == 3 ) {
-    jsfj4  = new JSFJ4();
+//    jsfj4  = new JSFJ4();
+    jsfj4 = new JSFJupiter();
+    gJSFJ4 = jsfj4;
+  }
+  // LCIO to JSF 
+  else if( jsf->Env()->GetValue("JSFGUI.SimulationType",1) == 4 ) {
+    jsfj4 = new JSFFromLCIO();
     gJSFJ4 = jsfj4;
   }
   else if( jsf->Env()->GetValue("JSFGUI.SimulationType",1) > 1 ) {
