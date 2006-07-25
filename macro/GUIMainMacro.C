@@ -289,8 +289,17 @@ void InitGenSim()
 
   // Jupiter simulation
   else if( jsf->Env()->GetValue("JSFGUI.SimulationType",1) == 3 ) {
-//    jsfj4  = new JSFJ4();
-    jsfj4 = new JSFJupiter();
+    
+    TString liblist(gSystem->GetLibraries("","D"));
+    if( liblist.Contains("libJSFJupiter.so") ) {
+      //      std::cerr << "Has libJSFJupiter.so" << std::endl;
+      jsfj4 = new JSFJupiter();
+    }
+    else {
+      //      std::cerr << "Does not contains libJSFJupiter.so" << std::endl;
+      jsfj4  = new JSFJ4();
+    }
+
     gJSFJ4 = jsfj4;
   }
   // LCIO to JSF 
