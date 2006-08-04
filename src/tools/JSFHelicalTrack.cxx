@@ -342,6 +342,14 @@ Bool_t JSFHelicalTrack::IntersectWithCylinder(JSFRPhiZ ref, Double_t &fang)
   // When intersects with Barrel.
   fang=GetDeflectionAngle2D(cros[0]);
 
+  // The case when track intersect with the end cap part of cylinder
+  JSF3DV pnt = GetCoordinate(fang);
+  if( TMath::Abs(pnt.z) < ref.z ) return kTRUE; 
+  Double_t r=fAlpha/fHelix.kappa;
+  Double_t denom=r*fHelix.tanl;
+  if ( denom == 0.0 ) return kFALSE;
+  fang = (fHelix.pivot.z + fHelix.dz - ref.z ) / denom; 
+
   return kTRUE;
 
 }
