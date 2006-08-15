@@ -28,8 +28,13 @@ LD        = $(FC)
 SharedLib = libPythia6.dylib
 BUNDLE    = $(subst .dylib,.so,$(SharedLib))
 INSTALL   = install -c -p
+
+#
+# Non-Darwin system
 else
-ifneq ($(shell which gfortran 2>&1 | grep -vc 'no gfortran'),0)
+JSFCONFIGFC = ($(shell jsf-config --fc))
+#  ifneq ($(shell which gfortran 2>&1 | grep -vc 'no gfortran'),0)
+ifeq ($(JSFCONFIGFC),gfortran)
 FC        = gfortran
 else
 FC        = g77
@@ -52,7 +57,9 @@ ifneq ($(UNAME),Darwin)
 OBJS +=  main.o
 endif
 
-ifneq ($(shell which gfortran 2>&1 | grep -vc 'no gfortran'),0)
+JSFCONFIGFC = ($(shell jsf-config --fc))
+# ifneq ($(shell which gfortran 2>&1 | grep -vc 'no gfortran'),0)
+ifeq ($(JSFCONFIGFC),gfortran)
 OBJS +=  idate.o pydatawrapper.o
 endif
 
@@ -76,6 +83,8 @@ endif
 
 ../../../lib/$(SharedLib) : install
 
+$(SharedLib): lib 
+
 install: $(SharedLib)
 	mkdir -p ../../../lib
 	$(INSTALL) $(SharedLib) ../../../lib/$(SharedLib)
@@ -90,7 +99,7 @@ uninstall:
 	rm -f ../../../lib/$(BUNDLE)
 	rm -f ../../../include/pythia6.inc
 
-testrun: pythia_test ../../../lib/$(SharedLib)
+testrun: pythia_test install
 	@echo "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
 	@echo "%  Pythia test program will start                   %"
 	@echo "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
