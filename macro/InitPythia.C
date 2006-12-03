@@ -191,28 +191,28 @@ void SetPythiaDecayMode()
 	  tpy->SetMDME(mdcy2+ip-1, 1, 1);
 	}
       }
-      else if( izdcy == -131 ) {  // mu mu + u ubar
+      else if( izdcy == -31 ) {  // mu mu + u ubar
 	Int_t izlist131[2]={13, 1};
 	for(Int_t i=0;i<2;i++){
 	  Int_t ip=izlist131[i];
 	  tpy->SetMDME(mdcy2+ip-1, 1, 4);
 	}
       }
-      else if( izdcy == -135 ) {  // mu mu + b bbar
+      else if( izdcy == -35 ) {  // mu mu + b bbar
 	Int_t izlist135[2]={13, 5};
 	for(Int_t i=0;i<2;i++){
 	  Int_t ip=izlist135[i];
 	  tpy->SetMDME(mdcy2+ip-1, 1, 4);
 	}
       }
-      else if( izdcy == -121 ) {  // nu_e nu_e + u ubar
+      else if( izdcy == -21 ) {  // nu_e nu_e + u ubar
 	Int_t izlist121[2]={12, 1};
 	for(Int_t i=0;i<2;i++){
 	  Int_t ip=izlist121[i];
 	  tpy->SetMDME(mdcy2+ip-1, 1, 4);
 	}
       }
-      else if( izdcy == -125 ) {  // nu_e nu_e + b bbar
+      else if( izdcy == -25 ) {  // nu_e nu_e + b bbar
 	Int_t izlist125[2]={12, 5};
 	for(Int_t i=0;i<2;i++){
 	  Int_t ip=izlist125[i];
