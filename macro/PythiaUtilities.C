@@ -24,11 +24,13 @@ void PrintEventInfo()
    printf("Ecm=%g\n",py->GetEcm());
 
    //**********************************************
-   JSFSIMDST *sds=(JSFSIMDST*)jsf->FindModule("JSFSIMDST");
-   JSFSIMDSTBuf *evt=(JSFSIMDSTBuf*)sds->EventBuf();
-   
-   Int_t ngen=evt->GetNGeneratorParticles();
-   TClonesArray *gen=(TClonesArray*)evt->GetGeneratorParticles();
+//   JSFSIMDST *sds=(JSFSIMDST*)jsf->FindModule("JSFSIMDST");
+//   JSFSIMDSTBuf *evt=(JSFSIMDSTBuf*)sds->EventBuf();
+   JSFGenerator *gen=(JSFGenerator*)gJSF->FindModule("JSFGenerator");
+   JSFGeneratorBuf *genb=(JSFGeneratorBuf*)gen->EventBuf();  
+ 
+   Int_t ngen=genb->GetNParticles();
+   TClonesArray *gps=(TClonesArray*)genb->GetParticles();
    /*
    printf(" ngen=%d\n",ngen);
    for(Int_t i=0;i<ngen;i++){
@@ -47,7 +49,7 @@ void PrintEventInfo()
      p->ls();
    }
    */
-   PrintGeneratedEventInfo(ngen, gen);
+   PrintGeneratedEventInfo(ngen, gps);
 
 }
 

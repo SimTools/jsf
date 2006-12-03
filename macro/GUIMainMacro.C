@@ -66,6 +66,7 @@ class JSFMEGenerator;
                         kReadParton=3, kReadHepevt=4, kNoGenerator=6  , kHerwig=5 };
 
   Bool_t gHasUserMonitor=kFALSE;
+  Bool_t gHasUserBeforeEventProcess=kFALSE;
   Bool_t gLoadMacro=kTRUE;
 //______________________________________________
 int Initialize(Char_t *fin="undef")
@@ -82,6 +83,9 @@ int Initialize(Char_t *fin="undef")
 
   if( gROOT->GetGlobalFunction("UserMonitor",0,kTRUE) ) {
     gHasUserMonitor=kTRUE;
+  }
+  if( gROOT->GetGlobalFunction("UserBeforeEventProcess",0,kTRUE) ) {
+    gHasUserBeforeEventProcess=kTRUE;
   }
  
   Char_t *inputFileName="";
@@ -347,6 +351,8 @@ void InitGenSim()
 Bool_t GetEvent(Int_t ev)
 {
 
+  if( gHasUserBeforeEventProcess ) { UserBeforeEventProcess(); }
+
   if( jsf->GetInput() ) {
     if( !jsf->GetEvent(ev) ) { return kFALSE; }
   }
@@ -366,12 +372,11 @@ Bool_t GetEvent(Int_t ev)
 
     }    
 
-    if( gHasUserMonitor ) {
-      UserMonitor();
-    }
+    if( gHasUserMonitor ) { UserMonitor(); }
 
 
     if( jsf->GetOutput() ) {
+      iret=jsf->GetReturnCode();
       if( !(iret & jsf->kJSFNoOutput) ) jsf->FillTree();
       jsf->Clear();
     }
