@@ -63,6 +63,7 @@ public:
 
   void TBINFO();
   void TBINFO(const Char_t * option);
+  void TBINIT(Int_t id, Int_t &iret);
 
 
   void JCLUST(Int_t numprt, Float_t *prtlst, const Int_t lngdat,

@@ -37,6 +37,7 @@ extern void tblbnm_();
 extern void tblist_(int *id);
 extern void tblsub_();
 extern void tblsum_();
+extern void tbinit_(int *id, int *iret);
 
 extern void jclust_(Int_t *numprt, Float_t *prtlst, const Int_t *lngdat,
 		    const Int_t *ipx0, const Int_t *maxcut, Float_t *ycut,
@@ -429,6 +430,12 @@ void JSFLCFULL::TBINFO(const Char_t * option)
      printf("Warning .. TBINFO is called with unrecognized option %s\n",option);
    }
    return ;
+}
+
+//_____________________________________________________________________________
+void JSFLCFULL::TBINIT(Int_t id, Int_t &iret)
+{
+  tbinit_(&id, &iret);
 }
 
 //_____________________________________________________________________________
