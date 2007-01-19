@@ -254,7 +254,9 @@ CC********************************************************************CC
        dfi = dfi - ifi*twopi;
        if( dfi > TMath::Pi() ) dfi -= twopi;
        if( dfi < -TMath::Pi() ) dfi += twopi; 
+#if 0
        if( ichg[itk]*dfi < -1.e-3 ) goto next300;
+#endif
        z[itk]=xcz[itk] - r[itk]*tnl[itk]*dfi;     
     }
     iret=0;
@@ -265,7 +267,9 @@ CC********************************************************************CC
       fV[1] = xx[ix].Y();
       fV[2] = 0.5*( z[0] + z[1] );
     }
+#if 0
   next300: continue;
+#endif
   }
   return fQuality; 
 }
