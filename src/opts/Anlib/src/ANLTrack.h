@@ -56,6 +56,7 @@ public:
   virtual   Bool_t IsElectron() const;
   virtual   Bool_t IsMuon() const;
   Bool_t    IsLepton() const;
+  Bool_t    IsGamma () const;
   virtual   Double_t GetCharge() const;
   Double_t  GetConeEnergy(const Double_t cth, const TObjArray *tracks) const;
   TObject  *GetTrackPtr() const;

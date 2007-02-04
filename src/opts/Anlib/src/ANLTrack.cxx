@@ -69,6 +69,9 @@ Bool_t   ANLTrack::IsMuon() const {
 Bool_t   ANLTrack::IsLepton() const {
   return ( IsElectron() || IsMuon() );
 }
+Bool_t   ANLTrack::IsGamma() const {
+  return ( ((JSFLTKCLTrack *)fTrackPtr)->GetType() == 1 );
+}
 Double_t ANLTrack::GetCharge() const {
   return ((JSFLTKCLTrack *)fTrackPtr)->GetCharge();
 }
