@@ -28,6 +28,9 @@
 #include <TObjString.h>
 #include <TObject.h>
 #include "JSFConfig.h"
+#if ROOT_VERSION_CODE >= ROOT_VERSION(5,15,0)
+#include "TObjArray.h"
+#endif
 
 #if __ROOT_VERSION__ > 4
 #include <THashList.h>

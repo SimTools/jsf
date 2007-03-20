@@ -18,6 +18,9 @@
 
 #include "JSFConfig.h"
 #include "JSFGeneratorParticle.h"
+#if ROOT_VERSION_CODE >= ROOT_VERSION(5,15,0)
+#include "TClass.h"
+#endif
 
 
 ClassImp(JSFGeneratorParticle)

@@ -90,6 +90,9 @@
 #include "TParticle.h"
 #include "TDatabasePDG.h"
 //  #include "Hepevt.h"
+#if ROOT_VERSION_CODE >= ROOT_VERSION(5,15,0)
+#include "TClonesArray.h"
+#endif
 
 #include "TParticle.h"
 #include "TMath.h"

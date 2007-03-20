@@ -17,6 +17,9 @@
 //
 // /////////////////////////////////////////////////////////////////
 
+#if 1
+#include "TObjArray.h"
+#endif
 #ifndef ROOT_TGenerator
 #include "TGenerator.h"
 #endif

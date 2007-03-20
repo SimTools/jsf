@@ -20,6 +20,10 @@
 #include "JSFSpring.h"
 #endif
 
+#if __ROOT_FULLVERSION__ >= 51502
+#include <vector>
+#endif
+
 class JSFReadParton;
 
 class JSFReadPartonBuf : public JSFSpringBuf {
