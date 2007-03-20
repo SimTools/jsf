@@ -2,7 +2,7 @@ include  ../../../conf/configure.in
 UNAME  = $(shell uname)
 
 PYTHIA_VERSION=6
-PYTHIA_SUBVERSION=319
+PYTHIA_SUBVERSION=409
 PYTHIANAME=pythia$(PYTHIA_VERSION)$(PYTHIA_SUBVERSION)
 
 ifeq ($(UNAME),AIX)
