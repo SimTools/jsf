@@ -21,6 +21,9 @@
 #include "JSFDemoDisplay.h"
 #include "JSFSIMDST.h"
 #include "JSFGUIFrame.h"
+#if ROOT_VERSION_CODE >= ROOT_VERSION(5,15,4)
+#include "TView3D.h"
+#endif
 
 ClassImp(JSFDemoDisplay)
 
@@ -169,7 +172,12 @@ void JSFDemoDisplay::DisplayDemo()
 
   fDisp->GetCanvas()->cd();
   fDisp->GetCanvas()->Clear();
+#if ROOT_VERSION_CODE < ROOT_VERSION(5,15,4)
   fView   = new TView(fViewNo);
+#else
+  fView   = new TView3D();
+  fView->SetSystem(fViewNo);
+#endif
   Int_t ierr;
   fView->SetView(fViewAngle[0], fViewAngle[1], fViewAngle[2], ierr);
   fView->SetRange(&fViewRange[fDisplayType][0], &fViewRange[fDisplayType][3]);

@@ -47,6 +47,9 @@
 #include "JSFQuickSimParam.h"
 #include "JSFSIMDST.h"
 #include "JSFEventDisplay.h"
+#if ROOT_VERSION_CODE >= ROOT_VERSION(5,15,4)
+#include "TView3D.h"
+#endif
 
 enum EJSFEDCommandIdentifiers {
    EDO_B_DRAW,
@@ -305,7 +308,12 @@ void JSFEventDisplay::DisplayEventData()
   if( fCanvasDirectory != gDirectory ) fCanvasDirectory->cd();
 
   //  TView *evview  = new TView(fViewNo);
+#if ROOT_VERSION_CODE >= ROOT_VERSION(5,15,4)
+  fView  = new TView3D();
+#else
   fView  = new TView(fViewNo);
+  fView->SetSystem(fViewNo);
+#endif
   fSignals->Add(fView);
   Int_t ierr;
   fView->SetView(fViewAngle[0], fViewAngle[1], fViewAngle[2], ierr);
