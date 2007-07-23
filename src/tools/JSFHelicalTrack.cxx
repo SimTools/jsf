@@ -372,7 +372,7 @@ Bool_t JSFHelicalTrack::IntersectWithCylinder(JSFRPhiZ ref, JSFRPhiZ &p)
   if( !IntersectWithCylinder(ref, fang) ) return kFALSE;
 
   JSF3DV xp=GetCoordinate(fang);
-  p.r=ref.r;
+  p.r=TMath::Sqrt(xp.x*xp.x + xp.y*xp.y);
   p.phi=TMath::ATan2(xp.y, xp.x);
   p.z  = xp.z;
 
