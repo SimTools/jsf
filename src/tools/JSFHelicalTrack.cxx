@@ -388,7 +388,9 @@ THelix *JSFHelicalTrack::GetTHelix(Double_t rcyl, Double_t zcyl)
   // rcyl and zcyl is a radius and a half Z length where Helix is drown.
 
      Double_t hp[3], hx[3];
-     hx[0]=fHelix.pivot.x ; hx[1]=fHelix.pivot.y; hx[2]=fHelix.pivot.z;
+     hx[0]=fHelix.pivot.x + fHelix.dr*TMath::Cos(fHelix.phi0);
+     hx[1]=fHelix.pivot.y + fHelix.dr*TMath::Sin(fHelix.phi0); 
+     hx[2]=fHelix.pivot.z + fHelix.dz ;
      Double_t pt  = 1.0/TMath::Abs(fHelix.kappa);
      Double_t r   = fAlpha*pt;
      Double_t w   = pt/r;
