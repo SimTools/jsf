@@ -8,16 +8,24 @@
 //
 //////////////////////////////////////////////////////////////////
 
+#include <iostream>
 #include "TSystem.h"
 #include "TFile.h"
 #include "JSFBeamGeneration.h"
+#include "JSFSteer.h"
+#include <sstream>
+
+
 
 ClassImp(JSFBeamGeneration)
 ClassImp(JSFBeamGenerationCain)
 
 TFile *gJSFBeamFile;
-JSFBeamGenerationCain *gJSFBeamGenerationCain;
+static JSFBeamGenerationCain *gJSFBeamGenerationCain=0;
 JSFBeamGenerationCain *gjsfbs2dfunction; 
+
+Double_t JSFBeamGenerationCain::fLastEMinus0=0.0;
+Double_t JSFBeamGenerationCain::fLastEPlus0=0.0;
 
 extern "C" {
 
@@ -35,27 +43,84 @@ extern "C" {
     return bsfunc;
 }
 
-  //___________________________________________________
-  void jsfbeamgen_(const Double_t *xebm, const Double_t *xebp, 
+//___________________________________________________
+void jsfbeamgen_(const Double_t *xebm, const Double_t *xebp, 
 		   const Double_t *xbsm, const Double_t *xbsp,
 		   Double_t *xm,  Double_t *xp, Double_t *weight)
-  {
+{
     Double_t wgt=gJSFBeamGenerationCain->GetWeight(*xebm, *xebp, 
 						      *xbsm, *xbsp, *xm, *xp);
+    *weight=wgt;
+}
+
+//___________________________________________________
+void jsfbeamgend_(const Double_t *xebm, const Double_t *xebp, 
+		   const Double_t *xbsm, const Double_t *xbsp,
+		  const Double_t *enominal,
+		   Double_t *em,  Double_t *ep, 
+		   Double_t *em0, Double_t *ep0, Double_t *weight)
+{
+  //(Function)
+  //  For given four random numbers, get energy of e- and e+ beam
+  //(Inputs)
+  // xebm: Random number(0<xebm<1) for initial beam energy spread of e-
+  // xebp: Random number(0<xebp<1) for initial beam energy spread of e+
+  // xbsm: Random number(0<xbsm<1) for Beamstrahlung of e- beam
+  // xbsp: Random number(0<xbsp<1) for Beamstrahlung of e+ beam
+  // enominal: Nominal Beam energy (used only at the time of initialization,
+  //            if not defined by Generator.BSNominalEnergy 
+  //(Outputs)
+  // em:   Generated e- beam energy (GeV)
+  // ep:   Generated e+ beam energy (GeV)
+  // em0:  e- energy after initial beam energy spread ( without BS )
+  // ep0:  e+ energy after initial beam energy spread ( without BS )
+
+    if( gJSFBeamGenerationCain == 0 ) {
+      const Char_t *bsfile=gJSF->Env()->GetValue("JSFBeamGeneration.FileName","bsfile.root");
+      const Char_t *bspara=gJSF->Env()->GetValue("JSFBeamGeneration.ParName","350_nominal");
+      Double_t bswidth=0;
+      Double_t e0=0;
+      std::stringstream sbswidth(gJSF->Env()->GetValue("JSFBeamGeneration.Width","0.0005"));
+      sbswidth >> bswidth ;
+      std::stringstream se0(gJSF->Env()->GetValue("JSFBeamGeneration.NominalEnergy","-100.0"));
+      se0 >> e0 ;
+      if ( e0 < 0.0 ) { e0 = *enominal; }
+
+      TDirectory *cdir=gDirectory;
+      gJSFBeamFile=new TFile(bsfile);
+      gJSFBeamGenerationCain=(JSFBeamGenerationCain*)gJSFBeamFile->Get(bspara);
+      gJSFBeamGenerationCain->SetIBParameters(e0, bswidth, 
+					      JSFBeamGenerationCain::kUniform);
+      gJSFBeamGenerationCain->Print();
+      gJSFBeamGenerationCain->MakeBSMap();
+      cdir->cd();
+    }
+  
+    Double_t wgt=gJSFBeamGenerationCain->GetWeight(*xebm, *xebp, 
+						      *xbsm, *xbsp, *em, *ep);
+    
+    *em *=gJSFBeamGenerationCain->GetNominalEnergy();
+    *ep *=gJSFBeamGenerationCain->GetNominalEnergy();
+    *em0=gJSFBeamGenerationCain->GetLastEMinus0()*gJSFBeamGenerationCain->GetNominalEnergy();
+    *ep0=gJSFBeamGenerationCain->GetLastEPlus0()*gJSFBeamGenerationCain->GetNominalEnergy();;
     *weight=wgt;
   }
 
 //___________________________________________________
-  void jsfbeaminit_(Int_t *itype, Int_t *ibtyp, Double_t *bmwidth)
+void jsfbeaminit_(Int_t *itype, Int_t *ibtyp, Double_t *bmwidth)
   {
     //(Usage)
     //   Generate beam energy, eminus and eplus
     //   energy is in unit of GeV.
-    //
+    //   itype=0-27 to select Beam Strauhlung spectrum
+    //   If ibtyp=1, use uniform initial beam spread
 
-    Char_t *bsname[16]={"x250_n63", "jlca300", "jlca500", "jlcy300", "jlcy500",
+    Char_t *bsname[28]={"x250_n63", "jlca300", "jlca500", "jlcy300", "jlcy500",
 			"trc250", "trc300", "trc350", "trc400", 
-			"trc450", "trc500", "trc1000"};
+			"trc450", "trc500", "trc1000",
+		"250_nominal", "350_largeY", "350_nominal", "500_lowP", // 16-19 
+		"300_nominal", "350_lowP", "500_highLum", "500_lowQ",   // 20-23
+		"350_highLum", "350_lowQ", "500_largeY", "500_nominal"}; // 24-27
 
     Char_t bsfile[256];
     sprintf(bsfile,"%s/data/bsdata/%s.root",
@@ -75,7 +140,73 @@ extern "C" {
 
   }
 
+
+//___________________________________________________
+void jsfbeaminit1_(char *bsfile, char *parname, 
+		   int *itype, double *eb0, double *width, int lbsfile, int lparname)
+{
+  //(Usage)
+  // bsfile: file name of beamstraulung data
+  // parname: beam strahlung parameter name, which is used to get bsdata
+  // itype:
+  //   -1: Use default value defined in the bsfile
+  //    0: Initial energy spread is uniform
+  //    1: Initial energy spread is gaussian
+  // eb0:  Nominal beam energy (GeV), valid when itype > -1
+  // width: reative initial beam energy spread, valid when itype >-1
+  //   Halfwidth (itype=0) or sigma (itype=1)
+  
+  TDirectory *cdir=gDirectory;
+  std::cerr << " bsfile=" << bsfile << "====" << std::endl;
+  std::cerr << "lbsfile=" << lbsfile << "  lparname=" << lparname << std::endl;
+
+  gSystem->Exec("pwd");
+
+  gJSFBeamFile=new TFile(bsfile);
+  gJSFBeamGenerationCain=(JSFBeamGenerationCain*)gJSFBeamFile->Get(parname);
+
+  if( *itype == 0 ) {
+    gJSFBeamGenerationCain->SetIBParameters(*eb0, *width, 
+					    JSFBeamGenerationCain::kUniform);
+  }
+  else if ( *itype == 1 ) {
+    gJSFBeamGenerationCain->SetIBParameters(*eb0, *width, 
+					      JSFBeamGenerationCain::kGauss);
+  }
+
+  gJSFBeamGenerationCain->Print();
+  gJSFBeamGenerationCain->MakeBSMap();
+  cdir->cd();
+
 }
+
+
+
+//___________________________________________________
+void jsfbeamgenr_(const Double_t *xebm, const Double_t *xebp, 
+		   const Double_t *xbsm, const Double_t *xbsp,
+		  const Float_t *enominal,
+		   Float_t *em,  Float_t *ep, 
+		   Float_t *em0, Float_t *ep0, Float_t *weight)
+{
+  Double_t eb0=*enominal;
+  Double_t emd=*em;
+  Double_t epd=*ep;
+  Double_t em0d=*em0;
+  Double_t ep0d=*ep0;
+  Double_t wd=*weight;
+  jsfbeamgend_(xebm, xebp, xbsm, xbsp, &eb0, &emd, &epd, 
+	       &em0d, &ep0d, &wd);
+  *em=emd;
+  *ep=epd;
+  *em0=em0d;
+  *ep0=ep0d;
+  *weight=wd;
+
+}
+
+}
+
 
 
 //______________________________________________________
@@ -370,6 +501,9 @@ Double_t JSFBeamGenerationCain::GetWeight(const Double_t xebm, const Double_t xe
 
   Double_t em=1+2*GetIBWidth()*(0.5-xebm);
   Double_t ep=1+2*GetIBWidth()*(0.5-xebp);
+
+  fLastEMinus0=em;
+  fLastEPlus0=ep;
   
   // Decide beamstraulung spectrum.
   // Assume eminus and eplus symmetry

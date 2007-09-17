@@ -113,9 +113,15 @@ class JSFBeamGenerationCain: public JSFBeamGeneration
   TF2      *fBS2DFunction; //!  BS2DFunction
   Double_t  fTotalInt;     //   Total integration
 
+  static Double_t fLastEMinus0;  // E- energy before BS of last call 
+  static Double_t fLastEPlus0;   // E+ energy before BS of last call 
+
  public:
   JSFBeamGenerationCain();
   virtual ~JSFBeamGenerationCain();
+
+  inline Double_t GetLastEMinus0(){ return fLastEMinus0; }
+  inline Double_t GetLastEPlus0(){ return fLastEPlus0; }
 
   virtual Double_t GetWeight(const Double_t random_initial_eminus, 
 			const Double_t random_initial_eplus,

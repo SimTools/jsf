@@ -15,6 +15,8 @@ OBJS    = $(subst .$(SrcSuf),.$(ObjSuf),$(SRC)) \
 
 HDRS    = $(subst .$(SrcSuf),.h,$(SRC))
 
+SAMPLELIBS= $(shell root-config --libs) \
+	-L/proj/soft/ext/cernlib/pro/lib -lpacklib
 
 all:: install
 
@@ -38,6 +40,10 @@ lib$(PROGNAME).$(SrcSuf): $(HDRS) $(PROGNAME)LinkDef.h
 	rootcint -f $@ -c -I$(JSFROOT)/include \
 	$(HDRS) $(PROGNAME)LinkDef.h 
 
+bssample: bssample.o bssample_dummy.o
+	g77 -o bssample bssample.o lib$(PROGNAME).$(DllSuf) \
+	$(SAMPLELIBS) bssample_dummy.o
+
 clean::
 	rm -f lib$(PROGNAME).*
 
@@ -45,6 +51,7 @@ distclean:: clean
 	rm -f Makefile
 	rm -f $(JSFROOT)/lib/lib$(PROGNAME).$(DylibSuf)
 	rm -f genbeam.root genbeam2.root
+	rm -f sample.root sample.hbook sample
 
 web:
 	jsf -q -b html.C
