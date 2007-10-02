@@ -17,13 +17,17 @@
 
 #if __PYTHIA_VERSION__ >= 6
 #include <TPythia6.h>
+#if __ROOT_VERSION__ >= 5 && __ROOT_MINORVERSION__ >= 17
+#include <TMCParticle.h>
+#else
 #include <TMCParticle6.h>
+#endif
 #else
 #include <TPythia.h>
 #include <TMCParticle.h>
 #endif
 
-#include "JSFBeamGeneration.h"
+class JSFBeamGenerationCain;
 
 class PythiaGenerator : public JSFGenerator {
 private:

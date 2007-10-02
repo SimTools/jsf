@@ -50,8 +50,14 @@
 
 #include "JSFGenerator.h"
 
+#include "JSFBeamGeneration.h"
+
 #if __PYTHIA_VERSION__ >= 6 
+#if ROOT_VERSION_CODE < ROOT_VERSION(5,17,0)
 #include <TMCParticle6.h>
+#else
+#include <TMCParticle.h>
+#endif
 #else
 #include <TMCParticle.h>
 #endif
