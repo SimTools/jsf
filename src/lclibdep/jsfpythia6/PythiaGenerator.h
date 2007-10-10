@@ -17,7 +17,7 @@
 
 #if __PYTHIA_VERSION__ >= 6
 #include <TPythia6.h>
-#if __ROOT_VERSION__ >= 5 && __ROOT_MINORVERSION__ >= 17
+#if __ROOT_VERSION__ >= 5 && __ROOT_MINORVERSION__ >= 16
 #include <TMCParticle.h>
 #else
 #include <TMCParticle6.h>

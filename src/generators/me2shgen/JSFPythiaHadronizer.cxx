@@ -12,7 +12,7 @@
 #include "JSFConfig.h"
 #include "JSFPythiaHadronizer.h"
 #include "TPythia6.h"
-#if ROOT_VERSION_CODE < ROOT_VERSION(5,17,0)
+#if ROOT_VERSION_CODE < ROOT_VERSION(5,16,0)
 #include "TMCParticle6.h"
 #else
 #include "TMCParticle.h"
