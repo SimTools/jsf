@@ -1,20 +1,38 @@
 // 
 // A sample script to generate beam strtulung spectrum
-//
+// To run program, do
+//   $ jsf genbeam.C
+// In this case, the default parameter ( 500 GeV, nominal parameters )
+// are generated.  To generate spectrum other than the default, do
+//   $ jsf "genbeam.C(1)"
+// In this case, enter the BS parameter name ( such as "500_nominal" ) 
+// and the BS parameter file name ( such as "500_nominal.root" )
+// should be entered in response to the prompt.
+// 
 //$Id$
 
 //----------------------------------------------------
-Int_t genbeam()
+Int_t genbeam(Int_t flag=0)
 {
   
   gSystem->Load("libJSFBeamGeneration.so");
 
-  TString paraname="jlcy500";
-  
-  Char_t bsdata[128];
-  sprintf(bsdata,"../../../data/bsdata/%s.root",paraname.Data());
+  TString paraname;
+  TString bsdata;
+  if( flag == 0 ) {
+    paraname=TString("500_nominal");
+    bsdata=TString("500_nominal.root");
+  }
+  else {     
+    std::cerr << "Enter parameter name: ";
+    std::cin  >> paraname ;
+    std::cerr << "Parameter name is " << paraname << std::endl;
+    std::cerr << "Enter parameter file name: ";
+    std::cin >> bsdata ;
+    std::cerr << "BSGEN data file is " << bsdata << std::endl;
+  }
 
-  TFile *fbm=new TFile(bsdata);
+  TFile *fbm=new TFile(bsdata.Data());
   if( !fbm ) {
       printf(" Unable to open a file for beam strahlung\n");
       return 0;
@@ -22,6 +40,10 @@ Int_t genbeam()
   TFile *fplot=new TFile("genbeam.root","RECREATE");
 
   JSFBeamGenerationCain *bm=(JSFBeamGenerationCain*)fbm->Get(paraname.Data());
+  if ( !bm ) {
+    std::cerr << "BSGEN data for " << paraname << " does not exist in " << bsdata << std::endl;
+    return ;
+  }
 
   // bm->SetIBParameters(0.005,JSFBeamGenerationCain::kUniform);
   bm->SetIBParameters(0.0);

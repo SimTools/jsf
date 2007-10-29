@@ -12,7 +12,9 @@
 #include "TSystem.h"
 #include "TFile.h"
 #include "JSFBeamGeneration.h"
+#ifndef NOJSF
 #include "JSFSteer.h"
+#endif
 #include <sstream>
 
 
@@ -76,6 +78,12 @@ void jsfbeamgend_(const Double_t *xebm, const Double_t *xebp,
   // ep0:  e+ energy after initial beam energy spread ( without BS )
 
     if( gJSFBeamGenerationCain == 0 ) {
+#ifdef NOJSF
+      const Char_t *bsfile="bsfile.root";
+      const Char_t *bspara="350_nominal.root";
+      double bswidth=0.0005;
+      double e0=175.0;
+#else
       const Char_t *bsfile=gJSF->Env()->GetValue("JSFBeamGeneration.FileName","bsfile.root");
       const Char_t *bspara=gJSF->Env()->GetValue("JSFBeamGeneration.ParName","350_nominal");
       Double_t bswidth=0;
@@ -86,6 +94,7 @@ void jsfbeamgend_(const Double_t *xebm, const Double_t *xebp,
       se0 >> e0 ;
       if ( e0 < 0.0 ) { e0 = *enominal; }
 
+#endif
       TDirectory *cdir=gDirectory;
       gJSFBeamFile=new TFile(bsfile);
       gJSFBeamGenerationCain=(JSFBeamGenerationCain*)gJSFBeamFile->Get(bspara);
@@ -205,6 +214,24 @@ void jsfbeamgenr_(const Double_t *xebm, const Double_t *xebp,
 
 }
 
+
+//___________________________________________________
+void jsfbeamgen0_(Double_t *eminus, Double_t *eplus,
+		  Double_t *eminus0, Double_t *eplus0)
+  //(Function)
+  //  Generate beam energy of weight 1.
+  //  beaminit function must be called prior to call this function
+  //(Outputs)
+  //  eminus: eminus energy after BS and initial energy spread in unit of GeV. 
+  //  eplus:  eplus energy after BS and initial energy spread in unit of GeV. 
+  //  eminus0: eminus energy after initial energy spread but before BS in unit of GeV. 
+  //  eplus0: eplus energy after initial energy spread but before BS in unit of GeV. 
+{
+   gJSFBeamGenerationCain->Generate(*eminus, *eplus);
+   *eminus0=gJSFBeamGenerationCain->GetLastEMinus0();
+   *eplus0=gJSFBeamGenerationCain->GetLastEPlus0();
+}
+
 }
 
 
@@ -251,6 +278,7 @@ void JSFBeamGeneration::Print()
   printf("  Luminosity             = %g (x10^{33})\n",fLuminosity);
 }
 
+
 //______________________________________________________
 void JSFBeamGeneration::Generate(Double_t &eminus, Double_t &eplus)
 {
@@ -261,7 +289,6 @@ void JSFBeamGeneration::Generate(Double_t &eminus, Double_t &eplus)
   GenBeamStrahlung(eminus, eplus);
 
 }
-
 //_______________________________________________________
 void JSFBeamGeneration::GenEnergySpread(Double_t &eminus, Double_t &eplus)
 {
@@ -408,7 +435,7 @@ void JSFBeamGenerationCain::Print()
   btname[0]="Uniform";
   btname[1]="Gauss";
   printf("  Type of Initial beam energy spread : %s\n",btname[GetIBType()-1].Data());
-  printf("  Relative luminosity of each region (%g, %g, %g \n",
+  printf("  Relative luminosity of each region (%g, %g, %g)\n",
 	 fLumRatio[0], fLumRatio[1], fLumRatio[2]);
 
 

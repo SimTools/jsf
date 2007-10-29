@@ -32,12 +32,11 @@ class JSFBeamGeneration : public TNamed
   Double_t fLuminosity;   //  Luminosity( x 10^33 /cm^2/s )
   Double_t fNominalE;     //  Nominal Beam Energy (GeV)
   TString fParameterName; //  Name of parameter
-  TRandom2 fRandom;       //  Uniform random number generator
+  TRandom2 fRandom;       //!  Uniform random number generator
 
   inline Double_t GetGauss(Double_t mean=0.0, Double_t sigma=1.0){ 
                              return fRandom.Gaus(mean,sigma); }
 
-  virtual inline Double_t GetIBWidth(){ return 0.0; }
 
  public:
   JSFBeamGeneration();
@@ -51,9 +50,9 @@ class JSFBeamGeneration : public TNamed
   inline Double_t GetInitialElectronEnergy(){ return fEEInitial; }
   inline Double_t GetInitialPositronEnergy(){ return fEPInitial; }
   inline Double_t GetNominalEnergy(){ return fNominalE; }
+  inline Double_t GetIBWidth(){ return 0.0; }
 
   inline Double_t GetRndm(){ return fRandom.Rndm(); }
-
 
   virtual void Print();
 
@@ -68,7 +67,7 @@ class JSFBeamGeneration : public TNamed
   virtual void Generate(TLorentzVector &ecm, TLorentzVector &vtx);
   virtual void GenBeamStrahlung(TLorentzVector &ecm, TLorentzVector &vtx);
 
-  ClassDef(JSFBeamGeneration,1)  // Virtual class of  Beam Spectrum generation
+  ClassDef(JSFBeamGeneration,2)  // Virtual class of  Beam Spectrum generation
 
 };
 

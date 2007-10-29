@@ -4,22 +4,30 @@
 //$Id$
 
 //----------------------------------------------------
-Int_t genbeam2()
+Int_t genbeam2(Int_t flag=0)
 {
-  
   gSystem->Load("libJSFBeamGeneration.so");
 
-  TString paraname="jlcy500";
-  
-  Char_t bsdata[128];
-  sprintf(bsdata,"../../../data/bsdata/%s.root",paraname.Data());
+  TString paraname;
+  TString bsdata;
+  if( flag == 0 ) {
+    paraname=TString("500_nominal");
+    bsdata=TString("500_nominal.root");
+  }
+  else {     
+    std::cerr << "Enter parameter name: ";
+    std::cin  >> paraname ;
+    std::cerr << "Parameter name is " << paraname << std::endl;
+    std::cerr << "Enter parameter file name: ";
+    std::cin >> bsdata ;
+    std::cerr << "BSGEN data file is " << bsdata << std::endl;
+  }
 
-  TFile *fbm=new TFile(bsdata);
+  TFile *fbm=new TFile(bsdata.Data());
   if( !fbm ) {
       printf(" Unable to open a file for beam strahlung\n");
       return 0;
   }
-  TFile *fplot=new TFile("genbeam2.root","RECREATE");
 
   JSFBeamGenerationCain *bm=(JSFBeamGenerationCain*)fbm->Get(paraname.Data());
 
@@ -35,7 +43,8 @@ Int_t genbeam2()
 
 
   Int_t maxevt=200000;
-  
+
+  TFile *fplot=new TFile("genbeam2.root","RECREATE");
   fplot->cd();
   TCanvas *clum=new TCanvas("clum","clum");
   TH1D *hlum=new TH1D("hlum","Luminosity",140,0.90,1.04);
