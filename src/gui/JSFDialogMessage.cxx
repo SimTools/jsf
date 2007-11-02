@@ -24,7 +24,7 @@ JSFDialogMessage::JSFDialogMessage(const int id, const char* variable,
   fComment=string(comment);
 
   fNline=1;
-  for(uint i=0;i<fComment.length();i++){
+  for(UInt_t i=0;i<fComment.length();i++){
     if( fComment[i] == '\n' ) fNline++;
   }
 
