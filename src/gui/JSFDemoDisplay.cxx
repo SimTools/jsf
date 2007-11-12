@@ -175,8 +175,7 @@ void JSFDemoDisplay::DisplayDemo()
 #if ROOT_VERSION_CODE < ROOT_VERSION(5,15,4)
   fView   = new TView(fViewNo);
 #else
-  fView   = new TView3D();
-  fView->SetSystem(fViewNo);
+  fView   = TView::CreateView(fViewNo,0,0);
 #endif
   Int_t ierr;
   fView->SetView(fViewAngle[0], fViewAngle[1], fViewAngle[2], ierr);

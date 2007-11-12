@@ -309,10 +309,9 @@ void JSFEventDisplay::DisplayEventData()
 
   //  TView *evview  = new TView(fViewNo);
 #if ROOT_VERSION_CODE >= ROOT_VERSION(5,15,4)
-  fView  = new TView3D();
+  fView = TView::CreateView(fViewNo,0,0);
 #else
   fView  = new TView(fViewNo);
-  fView->SetSystem(fViewNo);
 #endif
   fSignals->Add(fView);
   Int_t ierr;
