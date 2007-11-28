@@ -1262,18 +1262,21 @@ CC**********************************************************************
     printf("  After fragmentation...pyjets->N=%d\n",pyjets->N);
   }
   for(Int_t i=1;i<=pyjets->N;i++){
-    kf=pyjets->K[1][i-1];
-    Int_t kh=pyjets->K[2][i-1];
+    Int_t ks = pyjets->K[0][i-1]; // status code
+          kf = pyjets->K[1][i-1]; // flavor code
+    Int_t kh = pyjets->K[2][i-1]; // parent
     kfa=TMath::Abs(kf);
     idhist[i-1]=0;
+#if 0 /* 2007/11/28  Now store quraks and gluons, too! */
     //C--
     //C  Skip quarks and gluons.
     //C--
     if( ((kfa >= 1 && kfa <= 10)) || kfa==21 ) { continue; }
+#endif
+#if 0 /* 2007/11/28  Now store Z, W, and H, too! */
     //C--
     //C  Skip fundamental bosons except for photons.
     //C--
-#if 1 /* Store Z, W, and H */
     if( kfa >= 23 && kfa <= 100 ) { continue;}
 #endif
     //C--
@@ -1343,8 +1346,32 @@ std::cerr << "    : xctau = " << pydat2_.PMAS[3][pycomp_(&kf)-1]*0.1 << std::end
 	if( ndau == 1 ) { outlst[ipar-1][12] = nout; }
 	outlst[nout-1][13] = ipar;
       }
+      else {
+        std::cerr << ">>>>>>>> Error: JSFHadronizer::Fragmentation >>>>>>>"  << std::endl
+                  << " No parent found for "
+                  << " i = " << i 
+                  << " ks = " << ks
+                  << " kh = " << kh << " kf = " << kf << " ipar = " << ipar  << std::endl;
+      }
     }
     outlst[nout-1][15]=xctau;
+#if 1 /* 2007/11/28 This is necessary since we now save all the intermediate states */
+    // 2007/11/28  Fix quraks, gluons, W, Z, and H
+    if (((kfa >= 1 && kfa <= 10)) || kfa==21 || (kfa >= 23 && kfa <= 100)) {
+      Int_t firstchild = pyjets->K[3][i-1];
+      Int_t lastchild  = pyjets->K[4][i-1];
+      outlst[nout-1][11] = lastchild - firstchild + 1.;
+      outlst[nout-1][15] = 0.;
+      outlst[nout-1][16] = 0.;
+#if 0
+        std::cerr << " i = " << i 
+                  << " ks = " << ks
+                  << " kh = " << kh << " kf = " << kf 
+                  << " 1st = " << firstchild
+                  << " lst = " << lastchild << std::endl;
+#endif
+    }
+#endif
   }
   //C--
   //C  That's it.
