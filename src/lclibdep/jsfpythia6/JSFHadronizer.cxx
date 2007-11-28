@@ -54,6 +54,9 @@ extern int   pychge_(int *kf);
 extern void  pylist_(int *flag);
 extern int   pycomp_(int *kf);
 extern void  pyexec_();
+#ifndef __USE_TPYTHIA__
+extern void  pyinit_(char *frame, char *beam, char *target, double *ecm, int len1, int len2, int len3);
+#endif
 
 #if __PYTHIA_VERSION__ >= 6 
 extern void  pyhepc2_(int *flag, int *n, int *npad, int k[5][4000],
@@ -204,15 +207,79 @@ Bool_t JSFHadronizer::Initialize()
    tauint_(&inut, &iout, &JAK1, &JAK2, &ITDKRC,  &KEYA1, &XK0DEC);
 
 #ifdef __USE_TPYTHIA__
+#if 0
    fPythia->SetMDCY(23,1,0);
    fPythia->SetMDCY(24,1,0);
    fPythia->SetMDCY(33,1,0);
+#endif
+   // Invoke Pyinit with dummy arguments to initialize decay table
+   Char_t   *frame  = const_cast<Char_t *>("CMS");
+   Char_t   *beam   = const_cast<Char_t *>("e+");
+   Char_t   *target = const_cast<Char_t *>("e-");
+   Double_t  ecm    = 1000.;
+   fPythia->Pyinit(frame, beam, target, ecm);
 #else
    // Int_t one=1;
-   pydat3_.MDCY[0][22]=0;
-   pydat3_.MDCY[0][23]=0;
-   pydat3_.MDCY[0][32]=0;
+#if 0
+   pydat3_.MDCY[0][22]=0; // Z
+   pydat3_.MDCY[0][23]=0; // W
+   pydat3_.MDCY[0][32]=0; // Z'
 #endif
+   // Invoke Pyinit with dummy arguments to initialize decay table
+   Char_t   *frame  = const_cast<Char_t *>("CMS");
+   Char_t   *beam   = const_cast<Char_t *>("e+");
+   Char_t   *target = const_cast<Char_t *>("e-");
+   Double_t  ecm    = 1000.;
+   pyinit_(frame, beam, target, &ecm, 3, 2, 2);
+#endif
+   //--
+   // Select H decay mode if requested
+   //--
+   Int_t mdcyh = gJSF->Env()->GetValue("JSFHadronizer.DecayModeForH",0);
+   if (mdcyh) {
+     //--
+     // mdcyh =  1;	// H --> d dbar
+     //       =  2;	// H --> u ubar
+     //       =  3;	// H --> s sbar
+     //       =  4;	// H --> c cbar
+     //       =  5;	// H --> b bbar
+     //       =  6;	// H --> t tbar
+     //       =  7;	// H --> b' b'bar
+     //       =  8;	// H --> t' t'bar
+     //       =  9;	// H --> e- e+
+     //       = 10;	// H --> mu- mu+
+     //       = 11;	// H --> tau- tau+
+     //       = 12;	// H --> tau'- tau'+
+     //       = 13;	// H --> glue glue
+     //       = 14;	// H --> gamma gamma
+     //       = 15;	// H --> gamma Z0
+     //       = 16;	// H --> Z0 Z0
+     //       = 17;	// H --> W+ W-
+     //--
+     Int_t kh     = 25;
+#ifdef __USE_TPYTHIA__
+     Int_t kc    = fPythia->Pycomp(kh);
+     Int_t mdcy2 = fPythia->GetMDCY(kc,2);
+     Int_t mdcy3 = fPythia->GetMDCY(kc,3);
+     for (Int_t i=mdcy2; i<=mdcy2+mdcy3-1; i++) fPythia->SetMDME(i,1,0);
+     fPythia->SetMDME(mdcy2+mdcyh-1,1,1);
+#else
+     Int_t kc = pycomp_(&kh);
+     Int_t mdcy2 = pydat3_.MDCY[1][kc-1];
+     Int_t mdcy3 = pydat3_.MDCY[2][kc-1];
+     for (Int_t i=mdcy2; i<=mdcy2+mdcy3-1; i++) pydat3_.MDME[0][i-1] = 0;
+     pydat3_.MDME[0][mdcy2+mdcyh-2] = 1;
+#endif
+     cerr << " ---------------------------------------------" << endl
+          << " H decay restricted to mode: mdcyh = " << mdcyh << endl
+          << " mdcy2 = " << mdcy2                             << endl
+          << " mdcy3 = " << mdcy3                             << endl
+          << " ---------------------------------------------" << endl;
+#if 0
+     Int_t iprint = 12;
+     pylist_(&iprint);
+#endif
+   }
 
    return kTRUE ;
 
@@ -1206,7 +1273,9 @@ CC**********************************************************************
     //C--
     //C  Skip fundamental bosons except for photons.
     //C--
+#if 1 /* Store Z, W, and H */
     if( kfa >= 23 && kfa <= 100 ) { continue;}
+#endif
     //C--
     //C  Now store this particle in OUTLST.
     //C--
