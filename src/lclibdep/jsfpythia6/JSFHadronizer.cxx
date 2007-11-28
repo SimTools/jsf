@@ -1356,8 +1356,12 @@ std::cerr << "    : xctau = " << pydat2_.PMAS[3][pycomp_(&kf)-1]*0.1 << std::end
     }
     outlst[nout-1][15]=xctau;
 #if 1 /* 2007/11/28 This is necessary since we now save all the intermediate states */
-    // 2007/11/28  Fix quraks, gluons, W, Z, and H
-    if (((kfa >= 1 && kfa <= 10)) || kfa==21 || (kfa >= 23 && kfa <= 100)) {
+    // 2007/11/28  Fix quraks, gluons, W, Z, H, ....
+    //             Notice that final-state leptons may radiate photons. The intermediate
+    //             virtual leptons then have KS = 14. 
+    //             Real leptons that decay, on the other hand, have KS = 14.
+    if (((kfa >= 1 && kfa <= 10)) || kfa==21 || (kfa >= 23 && kfa <= 100) ||
+         ((kfa == 11 || kfa == 13 || kfa == 15) && ks == 14)) { // virtual leptons that radiate
       Int_t firstchild = pyjets->K[3][i-1];
       Int_t lastchild  = pyjets->K[4][i-1];
       outlst[nout-1][11] = lastchild - firstchild + 1.;
