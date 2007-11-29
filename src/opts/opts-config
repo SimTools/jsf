@@ -15,7 +15,6 @@ has_CLHEP()
   exit -1
 }
 
-
 # ---------------------------------------------
 has_LEDA()
 {
@@ -26,6 +25,15 @@ has_LEDA()
     exit -1
   fi
   if [ ! -e $LEDAROOT/include ] ; then
+    exit -1
+  fi
+  echo "yes"
+  exit 0
+}
+# ---------------------------------------------
+has_STDHEP()
+{
+  if [ "X$STDHEPDIR" == "X" ] ; then
     exit -1
   fi
   echo "yes"
@@ -74,7 +82,7 @@ print_help()
 {
 cat <<EOF
  opts-config [options]
- options = --has_CLHEP --has_Anlib --has_LCIO --has_LEDA --help
+ options = --has_CLHEP --has_Anlib --has_LCIO --has_LEDA --has__STDHEP --help
 EOF
 }
 
@@ -86,6 +94,7 @@ do
     --has_Anlib) has_Anlib ;;
     --has_LCIO)  has_LCIO ;;
     --has_LEDA)  has_LEDA ;;
+    --has_STDHEP)  has_STDHEP ;;
     *) print_help ;;
   esac
   shift

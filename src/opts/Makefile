@@ -2,11 +2,12 @@
 has_clhep  = $(shell ./opts-config --has_CLHEP)
 has_leda   = $(shell ./opts-config --has_LEDA)
 has_lcio   = $(shell ./opts-config --has_LCIO)
+has_stdhep = $(shell ./opts-config --has_STDHEP)
 has_jim    =
 
 subdirs    =
-ifeq ($(has_clhep),yes)
-subdirs   += stdhep-mcfio stdhep
+ifeq ($(has_stdhep),yes)
+subdirs   += stdhep
 endif
 ifeq ($(has_leda),yes)
 subdirs   += Anlib zvtop
