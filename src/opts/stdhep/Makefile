@@ -7,26 +7,17 @@ LIBNAME   = lib$(NAME)
 
 SharedLib = $(LIBNAME).$(DllSuf)
 
-SRCS      = JSFReadStdHep.$(SrcSuf)
+SRCS      = JSFReadStdHep.$(SrcSuf) THEPEV4.$(SrcSuf)
 
 OBJS      = $(subst .$(SrcSuf),.$(ObjSuf),$(SRCS)) \
-	    dummystdhep.o jsf_mcfio_init.o \
+	     jsf_mcfio_init.o \
 	    $(LIBNAME).$(ObjSuf)
 
 HDRS      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRCS))
 
-FFLAGS += -I../stdhep-mcfio/stdhep
-LIBS    += -L$(JSFROOT)/lib -lStdHepMCFIO -lFmcfio
-
-ifdef CLHEP_BASE_DIR
-LIBS	+= -L$(CLHEP_BASE_DIR)/lib
-endif
-LIBS    += -lCLHEP
-
-ifdef CLHEP_INCLUDE_DIR
-INCPATH  += -I$(CLHEP_INCLUDE_DIR)
-FFLAGS   += -I$(CLHEP_INCLUDE_DIR)
-endif
+CXXFLAGS += -I$(STDHEPDIR)/src/inc 
+FFLAGS += -I$(STDHEPDIR)/src/inc 
+LIBS += -L$(STDHEPDIR)/lib -lstdhep -lstdhepC -lFmcfio
 
 all: depend $(SharedLib)
 

@@ -17,28 +17,36 @@
 
 #include <TObject.h>
 #include "JSFReadGenerator.h"
-
+#include "THEPEV4.h"
+/*
 namespace StdHep {
 class StdRunInfo;
 class StdEvent;
 };
+*/
+
 
 class JSFReadStdHepBuf : public JSFReadGeneratorBuf
 {
 protected:
-
+  Int_t fEventNumber;      //!
+  THEPEV4 fHEPEV4;         // HEPEV4 data
 public:
   JSFReadStdHepBuf(const char *name="JSFReadStdHepBuf", 
 	     const char *title="JSFReadStdHep buffer",
 		  JSFReadGenerator *module=NULL);
   virtual ~JSFReadStdHepBuf();
 
+  inline Int_t GetEventNumber(){ return fEventNumber; }
+  inline Int_t GetNumberOfParticles(){ return fHEPEV4.GetNHEP(); }
+  inline THEPEV4  &GetHEPEV4(){ return fHEPEV4; }
+
   // add your own function here
-  virtual Bool_t ReadHepEvent(const Int_t maxhep, Int_t &nevhep, 
-	 Int_t &nhep, Int_t isthep[], Int_t idhep[], Int_t jmohep[][2], 
+  virtual Bool_t ReadHepEvent(const Int_t maxhep, Int_t &nevhep,
+	 Int_t &nhep, Int_t isthep[], Int_t idhep[], Int_t jmohep[][2],
          Int_t jdahep[][2], Double_t phep[][5], Double_t vhep[][4]);
 
-  ClassDef(JSFReadStdHepBuf,1)  // JSFReadStdHep event data buffer
+  ClassDef(JSFReadStdHepBuf,2)  // JSFReadStdHep event data buffer
 };
 
 
@@ -50,11 +58,8 @@ class JSFReadStdHep : public JSFReadGenerator
   std::string   fInFileName; // Input filename
   
   Int_t         fNReadBlock;
-  Int_t         fFormat; // Input file format(0=ASCII, 1=Binary(default)
   Int_t         fMCFIOStream; // Input file stream for MCFIO
-
-  StdHep::StdRunInfo  *fRunInfo; //!
-  StdHep::StdEvent    *fEvent;   //!
+  Int_t         fDebugLevel;  //
 
  public:
   JSFReadStdHep(const char *name="JSFReadStdHep", 
@@ -68,13 +73,9 @@ class JSFReadStdHep : public JSFReadGenerator
   virtual Bool_t Terminate();
   virtual Bool_t Process(Int_t ev=1);
   
-  //  void PrintVersion();
-  //  void Print();
   inline Int_t NReadBlock(){ return fNReadBlock; }
-  inline StdHep::StdRunInfo  *GetRunInfo(){ return fRunInfo; }
-  inline StdHep::StdEvent    *GetEvent(){ return fEvent; }
 
-  ClassDef(JSFReadStdHep, 1)  // JSFReadStdHep class
+  ClassDef(JSFReadStdHep, 2)  // JSFReadStdHep class
 
 };
 

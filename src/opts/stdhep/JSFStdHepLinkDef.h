@@ -8,5 +8,6 @@
 
 #pragma link C++ class JSFReadStdHep;
 #pragma link C++ class JSFReadStdHepBuf;
+#pragma link C++ class THEPEV4;
 
 #endif
