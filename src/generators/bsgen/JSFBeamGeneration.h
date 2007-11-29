@@ -46,13 +46,13 @@ class JSFBeamGeneration : public TNamed
   inline void     IncrementEventNumber(){ fNGenerated++; }
   inline Int_t    GetBeamDataFormat(){ return fBeamDataFormat; }
   inline TString &GetParameterName(){ return fParameterName; }
-  inline Double_t GetLuminosity(){ return fLuminosity; }
-  inline Double_t GetInitialElectronEnergy(){ return fEEInitial; }
-  inline Double_t GetInitialPositronEnergy(){ return fEPInitial; }
-  inline Double_t GetNominalEnergy(){ return fNominalE; }
-  inline Double_t GetIBWidth(){ return 0.0; }
+  inline virtual Double_t GetLuminosity(){ return fLuminosity; }
+  inline virtual Double_t GetInitialElectronEnergy(){ return fEEInitial; }
+  inline virtual Double_t GetInitialPositronEnergy(){ return fEPInitial; }
+  inline virtual Double_t GetNominalEnergy(){ return fNominalE; }
+  inline virtual Double_t GetIBWidth(){ return 0.0; }
 
-  inline Double_t GetRndm(){ return fRandom.Rndm(); }
+  inline virtual Double_t GetRndm(){ return fRandom.Rndm(); }
 
   virtual void Print();
 
@@ -131,8 +131,8 @@ class JSFBeamGenerationCain: public JSFBeamGeneration
                      ratio[1]=fLumRatio[1]; ratio[2]=fLumRatio[2]; }
   inline Double_t GetLumRatio(Int_t i){ return fLumRatio[i]; }
   inline Double_t GetBndOrder(){ return fBndOrder; }
-  inline EIBType  GetIBType(){ return fIBType;  }
-  inline Double_t GetIBWidth(){ return fIBWidth; }
+  inline virtual EIBType  GetIBType(){ return fIBType;  }
+  inline virtual Double_t GetIBWidth(){ return fIBWidth; }
   inline Double_t *GetPCnt(){ return fPCnt; }
   inline Int_t GetPCntSize(){ return fPCntSize; }
   inline TF2   *GetBS2DFunction(){ return fBS2DFunction; }
