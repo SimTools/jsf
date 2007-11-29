@@ -58,6 +58,8 @@
 #include "JSFQuickSimCommon.h"
 #include "JSFQuickSim.h"
 
+#include <iostream>
+
 extern "C" {
 extern void smrjin_();
 extern void dscswm_();
@@ -268,6 +270,11 @@ Bool_t JSFQuickSim::Process(Int_t ev)
 
    if ( fXAngle > 0.0 ) {
      if( !BoostInitial() ) return kFALSE;
+   }
+
+// Explicitely does LCFULL initialize to reset TBSbank
+   if( gJSF->Env()->GetValue("JSFQuickSim.DoLCFULLProcess",0) == 1 ) {
+      gJSFLCFULL->Process(ev);
    }
 
    if( !TBPUTGeneratorParticles() ) return kFALSE;
