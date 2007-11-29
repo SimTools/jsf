@@ -206,6 +206,7 @@ Bool_t JSFHadronizer::Initialize()
    Int_t iout=6;
    tauint_(&inut, &iout, &JAK1, &JAK2, &ITDKRC,  &KEYA1, &XK0DEC);
 
+   Double_t  mh     = gJSF->Env()->GetValue("JSFHadronizer.HiggsMass",120.);
 #ifdef __USE_TPYTHIA__
 #if 0
    fPythia->SetMDCY(23,1,0);
@@ -217,6 +218,7 @@ Bool_t JSFHadronizer::Initialize()
    Char_t   *beam   = const_cast<Char_t *>("e+");
    Char_t   *target = const_cast<Char_t *>("e-");
    Double_t  ecm    = 1000.;
+   fPythia->SetPMAS(25,1,mh);
    fPythia->Pyinit(frame, beam, target, ecm);
 #else
    // Int_t one=1;
@@ -230,6 +232,7 @@ Bool_t JSFHadronizer::Initialize()
    Char_t   *beam   = const_cast<Char_t *>("e+");
    Char_t   *target = const_cast<Char_t *>("e-");
    Double_t  ecm    = 1000.;
+   pydat2_.PMAS[0][24] = mh;
    pyinit_(frame, beam, target, &ecm, 3, 2, 2);
 #endif
    //--
@@ -275,10 +278,11 @@ Bool_t JSFHadronizer::Initialize()
           << " mdcy2 = " << mdcy2                             << endl
           << " mdcy3 = " << mdcy3                             << endl
           << " ---------------------------------------------" << endl;
-#if 0
-     Int_t iprint = 12;
-     pylist_(&iprint);
-#endif
+     Int_t iprint = gJSF->Env()->GetValue("JSFHadronizer.PrintDecayModeTable",0);
+     if (iprint) {
+       iprint = 12;
+       pylist_(&iprint);
+     }
    }
 
    return kTRUE ;
