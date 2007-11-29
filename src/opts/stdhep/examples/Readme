@@ -1,0 +1,8 @@
+ReasStdHep is an example to read a StdHep file prepared by 
+SLAC team.  
+
+Other directories, ReadTest, WriteStdHepHerwig, WriteStdHepPythia
+are invalid as a feature to read ASCIIformat StdHep file is 
+removed in 29-November-2007
+ 
+
