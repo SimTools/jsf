@@ -45,7 +45,7 @@ JSFReadStdHep::JSFReadStdHep(const char *name, const char *title, const bool mak
   fInFileName=gJSF->Env()->GetValue("JSFReadStdHep.InputFileName","");
   fNReadBlock=0;
   fMCFIOStream=0;
-  fDebugLevel = gJSF->Env()->GetValue("JSFReadStdHep.DebugLevel",1);
+  fDebugLevel = gJSF->Env()->GetValue("JSFReadStdHep.DebugLevel",0);
 }
 
 //_____________________________________________________________________________
