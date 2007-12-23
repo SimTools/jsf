@@ -59,7 +59,9 @@ JSFReadStdHep::~JSFReadStdHep()
 Bool_t JSFReadStdHep::Initialize()
 {
   // Initialize
-  jsf_mcfio_init_();
+  if ( IsWritable() ) {
+    jsf_mcfio_init_(); 
+  }
   return kTRUE;
 }
 
@@ -96,6 +98,7 @@ Bool_t JSFReadStdHep::Process(Int_t nev)
 //_____________________________________________________________________________
 Bool_t JSFReadStdHep::BeginRun(Int_t nrun)
 {
+  if ( IsWritable() ) {
   int lenfn=fInFileName.size();
   int ntries;
   int iok;
@@ -106,13 +109,16 @@ Bool_t JSFReadStdHep::BeginRun(Int_t nrun)
     std::cerr << fInFileName << std::endl;
     return kFALSE;
     }
+  }
   return kTRUE;
 } 
 
 //_____________________________________________________________________________
 Bool_t JSFReadStdHep::EndRun()
 {
-  stdxend_(&fMCFIOStream);
+  if ( IsWritable() ) {
+    stdxend_(&fMCFIOStream);
+  }
   return kTRUE;
 }
 
