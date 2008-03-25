@@ -108,6 +108,10 @@ using namespace std;
 #include "JSFModule.h"
 #include <TBenchmark.h>
 
+#if __GNUC__ >= 5 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
+#include <cstdlib>
+#endif
+
 // #include "JSFQuickSim.h"
 
 JSFSteer *JSFSteer::myself=0;

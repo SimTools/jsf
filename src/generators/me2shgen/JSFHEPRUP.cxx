@@ -21,6 +21,11 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+
+#if __GNUC__ >= 5 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
+#include <cstdlib>
+#endif
+
 using namespace std;
 
 // --- HEPEUP Common
