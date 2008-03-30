@@ -503,6 +503,16 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
   //         IE = NOELM(IP)
   //         CALL TBGET(1,'Spring:Parton_List',IE, NW, RBUF(1,IP), IRET )
   //100   CONTINUE
+  //
+#ifdef __USE_TPYTHIA__
+  Int_t mdcyzs = fPythia->GetMDCY(23,1);
+  Int_t mdcyws = fPythia->GetMDCY(24,1);
+  Int_t mdcyhs = fPythia->GetMDCY(25,1);
+#else
+  Int_t mdcyzs =  pydat3_.MDCY[0][22];
+  Int_t mdcyws =  pydat3_.MDCY[0][23];
+  Int_t mdcyws =  pydat3_.MDCY[0][24];
+#endif
 
   JSFGeneratorBuf *gbuf=(JSFGeneratorBuf*)EventBuf();
   TClonesArray &part=*(gbuf->GetParticles());
@@ -664,6 +674,11 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
 
     Int_t nin=0;
     for(Int_t k=0;k<30;k++){ ididit[k]=0; }
+
+    Int_t nzdk = 0;
+    Int_t nwdk = 0;
+    Int_t nhdk = 0;
+
     //C--
     //C  Loop over partons in this level and store their information
     //C  in RINLST and invoke LUFRAG to carry out parton showering 
@@ -702,6 +717,11 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
       Int_t id   = (Int_t)rbuf[ip-1][1];
       Int_t ida  = TMath::Abs(id);
       Int_t ndau = (Int_t)rbuf[ip-1][11];
+
+      if (ndau && ida==23) nzdk++;
+      if (ndau && ida==24) nwdk++;
+      if (ndau && ida==25) nhdk++;
+
       nin++;
       Int_t icf  = (Int_t)rbuf[ip-1][17];
       for(Int_t k=0;k<10;k++){ rinlst[nin-1][k]=0.0; }
@@ -765,8 +785,28 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
       printf("\n");
     }
 
+#ifdef __USE_TPYTHIA__
+    if (nzdk) fPythia->SetMDCY(23,1,0);
+    if (nwdk) fPythia->SetMDCY(24,1,0);
+    if (nhdk) fPythia->SetMDCY(33,1,0);
+#else
+    if (nzdk) pydat3_.MDCY[0][22] = 0;
+    if (nwdk) pydat3_.MDCY[0][23] = 0;
+    if (nhdk) pydat3_.MDCY[0][24] = 0;
+#endif
+
     Fragmentation(nin, rinlst, maxout, nsg, ishpr1, ishpr2,
 		  kstat, jstat, nout, rotlst, iret);
+
+#ifdef __USE_TPYTHIA__
+    if (nzdk) fPythia->SetMDCY(23,1,mdcyzs);
+    if (nwdk) fPythia->SetMDCY(24,1,mdcyws);
+    if (nhdk) fPythia->SetMDCY(33,1,mdcyhs);
+#else
+    if (nzdk) pydat3_.MDCY[0][22] = mdcyzs;
+    if (nwdk) pydat3_.MDCY[0][23] = mdcyws;
+    if (nhdk) pydat3_.MDCY[0][24] = mdcyhs;
+#endif
 
     if( iret < 0 ) {
       nret = -1;
