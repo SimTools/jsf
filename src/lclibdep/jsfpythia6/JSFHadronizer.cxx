@@ -38,6 +38,10 @@
 #define MRPY   MRLU
 #define RRPY   RRLU
 #endif
+#ifdef KF_DEBUG
+#include <iomanip>
+#include "TLorentzVector.h"
+#endif
 
 extern "C" {
 #if __GNUC_VERSION__ >= 4
@@ -662,12 +666,12 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
   //C--
 
   Double_t rinlst[30][10];
-  Double_t rotlst[400][20];
+  Double_t rotlst[4000][20];
   Int_t inelm=0;
   Int_t ididit[30];
   Int_t ishpr1[30], ishpr2[30];
   Int_t kstat[30], jstat[30], ishufl[30];
-  Int_t nout;
+  Int_t nout = 0;
 
   for(Int_t islv=1;islv<=nslvl;islv++){
     if( nptlv[islv-1] <= 0 ) { continue; }
@@ -821,17 +825,12 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
     //C--
     for(Int_t i=1;i<=nout;i++){
       rotlst[i-1][0] = i + inelm;
-      rotlst[i-1][12] = (Int_t)(rotlst[i-1][12]+0.1) + inelm;
-      if( rotlst[i-1][13] > 0 ) {
+      if (rotlst[i-1][11] > 0.0) rotlst[i-1][12] = (Int_t)(rotlst[i-1][12]+0.1) + inelm;
+      if( rotlst[i-1][13] > 0.0 ) {
 	rotlst[i-1][13] = (Int_t)(rotlst[i-1][13]+0.1) + inelm;
       }
       else {
-	for(Int_t j=1;j<=nptlv[islv-1];j++){
-	  if( jstat[j-1] == 0 ) { 
-	    rotlst[i-1][13] = -iptlv[islv-1][j-1];
-	    break;
-	  }	    
-	}
+        rotlst[i-1][13] = -iptlv[islv-1][ishufl[i-1]-1];
       }
       Int_t ie=i+inelm;
       new(part[ie-1]) JSFGeneratorParticle(&rotlst[i-1][0]);
@@ -868,21 +867,17 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
 	idau = idau+1;
       }
 #else
+      Float_t pin[4];
+      for (Int_t k=0; k<4; k++) pin[k]  = rbuf[ip-1][k+4];
+      Float_t pot[4];
+      for (Int_t k=0; k<4; k++) pot[k]  = rinlst[in-1][k+1];
       for(Int_t jdau=1;jdau<=ndau;jdau++){
         idau++;
         Float_t pdau[4];
         for (Int_t k=0; k<4; k++) pdau[k] = rbuf[idau-1][k+4];
-        Float_t pin[4];
-        for (Int_t k=0; k<4; k++) pin[k]  = rbuf[ip-1][k+4];
-        Float_t pot[4];
-        for (Int_t k=0; k<4; k++) pot[k]  = rinlst[in-1][k+1];
-#if 0
-        for (Int_t k=0; k<4; k++) cerr << "pdau[" << k << "] = " << pdau[k] << endl;
-        for (Int_t k=0; k<4; k++) cerr << "pin [" << k << "] = " << pin [k] << endl;
-        for (Int_t k=0; k<4; k++) cerr << "pot [" << k << "] = " << pot [k] << endl;
-#endif
         ubstfd_(pdau, pin, pdau);
         ubstbk_(pdau, pot, pdau);
+        for (Int_t k=0; k<4; k++) rbuf[idau-1][k+4] = pdau[k];
       }
 #endif
     }
@@ -954,7 +949,9 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
       }
       for(Int_t  i=1;i<=nout;i++){
 	rotlst[i-1][0] = i+inelm ;
-	rotlst[i-1][12] = (Int_t)(rotlst[i-1][12]+0.1) + inelm;
+	if (rotlst[i-1][11] > 0.0) {
+	  rotlst[i-1][12] = (Int_t)(rotlst[i-1][12]+0.1) + inelm;
+	}
 	if( rotlst[i-1][13] > 0.0 ) {
 	  rotlst[i-1][13] = (Int_t)(rotlst[i-1][13]+0.1) + inelm;
 	}
@@ -974,7 +971,6 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
     printf(" JSFHadronizer::Hadronize() .. Number of generator particles");
     printf(" is %d\n",npgen);
   }
-
 }
 
 //______________________________________________________________
@@ -1050,8 +1046,6 @@ CC**********************************************************************
   //C     IDHIST ( i ) : Address in OUTLST for particles in /LUJETS/
   //C--
 
-  Int_t idhist[4000];
-  for(Int_t k=0;k<4000;k++){ idhist[k]=0; }
   Int_t njoin, ijoin[4000];
   nret = 0 ;
 
@@ -1240,8 +1234,8 @@ CC**********************************************************************
 	kf=pyjets->K[1][i-1];
 	Int_t mp=i;
       label35:
-	Int_t mdf=pyjets->K[mp-1][3];
-	Int_t mdl=pyjets->K[mp-1][4];
+	Int_t mdf=pyjets->K[3][mp-1];
+	Int_t mdl=pyjets->K[4][mp-1];
 	if( mdf*mdl != 0 ) {
 	  for(Int_t m=mdf;m<=mdl;m++){
 	    if( pyjets->K[1][m-1] == kf ) {
@@ -1256,6 +1250,7 @@ CC**********************************************************************
         inlist[i-1][4]=pyjets->P[3][mp-1];
       }
     } // end of loop   for(Int_t i=1;i<=nin;i++){
+
     Int_t one=1;
 
     pyprep_(&one);
@@ -1308,21 +1303,7 @@ CC**********************************************************************
   for(Int_t i=1;i<=pyjets->N;i++){
     Int_t ks = pyjets->K[0][i-1]; // status code
           kf = pyjets->K[1][i-1]; // flavor code
-    Int_t kh = pyjets->K[2][i-1]; // parent
     kfa=TMath::Abs(kf);
-    idhist[i-1]=0;
-#if 0 /* 2007/11/28  Now store quraks and gluons, too! */
-    //C--
-    //C  Skip quarks and gluons.
-    //C--
-    if( ((kfa >= 1 && kfa <= 10)) || kfa==21 ) { continue; }
-#endif
-#if 0 /* 2007/11/28  Now store Z, W, and H, too! */
-    //C--
-    //C  Skip fundamental bosons except for photons.
-    //C--
-    if( kfa >= 23 && kfa <= 100 ) { continue;}
-#endif
     //C--
     //C  Now store this particle in OUTLST.
     //C--
@@ -1337,7 +1318,6 @@ CC**********************************************************************
       goto label900;
     }
     for(Int_t k=0;k<20;k++){ outlst[nout-1][k]=0; }
-    idhist[i-1]=nout;
     //C--
     Double_t chrg=0.0;
     Double_t xctau=0.0;
@@ -1378,48 +1358,29 @@ std::cerr << "    : xctau = " << pydat2_.PMAS[3][pycomp_(&kf)-1]*0.1 << std::end
     outlst[nout-1][6]=pyjets->P[2][i-1];
     outlst[nout-1][7]=pyjets->P[3][i-1];
     outlst[nout-1][11]=0.0;
+    outlst[nout-1][12]=0.0;
     //C--
-    if( kh == 0 ) {
-      outlst[nout-1][13]=0.0;
+    Int_t firstchild = pyjets->K[3][i-1];
+    Int_t lastchild  = pyjets->K[4][i-1];
+    Int_t ndau       = lastchild - firstchild + 1;
+    //C--
+    //C  Make sure that unstable partons are flagged as unstable
+    //C--
+    if ((kfa >= 1 && kfa <= 10) || kfa==21 || // quarks & gluons
+        (kfa >= 1100 && kfa <= 5509 && kfa%100 < 10) || // diquarks
+         ks == 14) { // partiocles that radiate
+      outlst[nout-1][11] = ndau > 0 ? ndau : 999999;
+      outlst[nout-1][12] = ndau > 0 ? firstchild : 999999;
+    } else if (firstchild || lastchild) {
+      outlst[nout-1][11] = ndau > 0 ? ndau : 999999;
+      outlst[nout-1][12] = ndau > 0 ? firstchild : 999999;
+    } else if (kfa == 23 || kfa == 24) { // undecayed Z/W
+      outlst[nout-1][11] = ndau > 0 ? ndau : 999999;
+      outlst[nout-1][12] = ndau > 0 ? firstchild : 999999;
     }
-    else {
-      Int_t ipar=idhist[kh-1];
-      if( ipar > 0 ) {
-	outlst[ipar-1][11] = outlst[ipar-1][11]+1.0;
-	Int_t ndau         = (Int_t)(outlst[ipar-1][11]+0.1);
-	if( ndau == 1 ) { outlst[ipar-1][12] = nout; }
-	outlst[nout-1][13] = ipar;
-      }
-      else {
-        std::cerr << ">>>>>>>> Error: JSFHadronizer::Fragmentation >>>>>>>"  << std::endl
-                  << " No parent found for "
-                  << " i = " << i 
-                  << " ks = " << ks
-                  << " kh = " << kh << " kf = " << kf << " ipar = " << ipar  << std::endl;
-      }
-    }
-    outlst[nout-1][15]=xctau;
-#if 1 /* 2007/11/28 This is necessary since we now save all the intermediate states */
-    // 2007/11/28  Fix quraks, gluons, W, Z, H, ....
-    //             Notice that final-state leptons may radiate photons. The intermediate
-    //             virtual leptons then have KS = 14. 
-    //             Real leptons that decay, on the other hand, have KS = 14.
-    if (((kfa >= 1 && kfa <= 10)) || kfa==21 || (kfa >= 23 && kfa <= 100) ||
-         ((kfa == 11 || kfa == 13 || kfa == 15) && ks == 14)) { // virtual leptons that radiate
-      Int_t firstchild = pyjets->K[3][i-1];
-      Int_t lastchild  = pyjets->K[4][i-1];
-      outlst[nout-1][11] = lastchild - firstchild + 1.;
-      outlst[nout-1][15] = 0.;
-      outlst[nout-1][16] = 0.;
-#if 0
-        std::cerr << " i = " << i 
-                  << " ks = " << ks
-                  << " kh = " << kh << " kf = " << kf 
-                  << " 1st = " << firstchild
-                  << " lst = " << lastchild << std::endl;
-#endif
-    }
-#endif
+
+    outlst[nout-1][13] = pyjets->K[2][i-1];
+    outlst[nout-1][15] = xctau;
   }
   //C--
   //C  That's it.
