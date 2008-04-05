@@ -133,7 +133,7 @@ PythiaGenerator::PythiaGenerator(const Char_t *name,
   Char_t bsfilename[1024];
   sscanf(env->GetValue("PythiaGenerator.BSFileName","undefined"),"%s",bsfilename);
   fBSFileName=bsfilename;
-  sscanf(env->GetValue("JSFBeamGeneration.Width","-1.0"),"%lg",&fBSwidth);
+  //  sscanf(env->GetValue("JSFBeamGeneration.Width","-1.0"),"%lg",&fBSwidth);
 
   sscanf(env->GetValue("PythiaGenerator.BSThreshold","10.0"),"%lg",&fBSThreshold);
 
@@ -206,14 +206,19 @@ Bool_t PythiaGenerator::Initialize()
      }  
 
     fBS=(JSFBeamGenerationCain*)fBSFile->Get(fBSname.Data());
-    if( fBSwidth < 0.0 ) {
-      fBSwidth=fBS->GetIBWidth();
-    }      
-    fBS->SetIBParameters( fEcm/2.0, fBSwidth , JSFBeamGenerationCain::kUniform ); 
+    fBS->SetIBParametersByEnv(fEcm/2.0);
+    fBSwidth=fBS->GetIBWidth();
+    //    if( fBSwidth < 0.0 ) {
+    //      fBSwidth=fBS->GetIBWidth();
+    //    }      
+    //    fBS->SetIBParameters( fEcm/2.0, fBSwidth , JSFBeamGenerationCain::kUniform ); 
     fBS->MakeBSMap();
     fBS->Print();
     //    fEcmMax=fEcm*(1+2*fBSwidth);
     fEcmMax=fEcm*(1+fBSwidth);
+    if( fBS->GetIBType() == JSFBeamGenerationCain::kGauss ) {
+      fEcmMax=fEcm*(1+8*fBSwidth);
+    }
 //    fPythia->Initialize(fFrame, fBeamParticle, fTargetParticle, fEcmMax);
     fPythia->Pyinit(fFrame, fBeamParticle, fTargetParticle, fEcmMax);
   }
