@@ -7,7 +7,8 @@ LIBNAME   = lib$(NAME)
 
 SharedLib = $(LIBNAME).$(DllSuf)
 
-SRCS      = JSFReadStdHep.$(SrcSuf) THEPEV4.$(SrcSuf)
+SRCS      = JSFReadStdHep.$(SrcSuf) THEPEV4.$(SrcSuf) \
+	    JSFWriteStdHep.$(SrcSuf) JSFStdHepStdCM.$(SrcSuf)
 
 OBJS      = $(subst .$(SrcSuf),.$(ObjSuf),$(SRCS)) \
 	     jsf_mcfio_init.o \

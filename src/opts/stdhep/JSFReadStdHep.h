@@ -17,6 +17,7 @@
 
 #include <TObject.h>
 #include "JSFReadGenerator.h"
+#include "JSFStdHepStdCM.h"
 #include "THEPEV4.h"
 /*
 namespace StdHep {
@@ -24,7 +25,6 @@ class StdRunInfo;
 class StdEvent;
 };
 */
-
 
 class JSFReadStdHepBuf : public JSFReadGeneratorBuf
 {
@@ -60,6 +60,9 @@ class JSFReadStdHep : public JSFReadGenerator
   Int_t         fNReadBlock;
   Int_t         fMCFIOStream; // Input file stream for MCFIO
   Int_t         fDebugLevel;  //
+  JSFStdHepStdCM  fStdHepCM; // StdHep BeginRun/EndRUn information
+
+  static Bool_t   fIsInitialized;  //!  
 
  public:
   JSFReadStdHep(const char *name="JSFReadStdHep", 
@@ -74,6 +77,10 @@ class JSFReadStdHep : public JSFReadGenerator
   virtual Bool_t Process(Int_t ev=1);
   
   inline Int_t NReadBlock(){ return fNReadBlock; }
+  inline void   SetStdHepCM(){ fStdHepCM.LoadStdHepCM(); }
+  inline JSFStdHepStdCM   GetStdHepCM(){ return fStdHepCM; }
+
+  static Bool_t IsInitialized(){ return fIsInitialized; }
 
   ClassDef(JSFReadStdHep, 2)  // JSFReadStdHep class
 

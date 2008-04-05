@@ -1,0 +1,7 @@
+Example to run PythiaGenerator and output result 
+into a StdHep file.  To run, do 
+
+$  jsf -b -q --maxevt=N gui.C
+
+where N is a number of events to generate
+

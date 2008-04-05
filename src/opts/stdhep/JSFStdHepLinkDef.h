@@ -6,8 +6,10 @@
 
 #include "JSFConfig.h"
 
+#pragma link C++ class JSFWriteStdHep;
 #pragma link C++ class JSFReadStdHep;
 #pragma link C++ class JSFReadStdHepBuf;
+#pragma link C++ class JSFStdHepStdCM;
 #pragma link C++ class THEPEV4;
 
 #endif

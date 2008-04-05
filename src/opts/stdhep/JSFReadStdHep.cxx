@@ -26,9 +26,13 @@ extern "C" {
   extern void jsf_mcfio_init_();
   extern void stdxropen_(const char *fname, int *nentries, 
 			int *istream,int *iok, int lfname);
+  extern void stdxrinit_(const char *fname, int *nentries, 
+			int *istream,int *iok, int lfname);
   extern void stdxrd_(int *iflag, int *istream, int *iok);
   extern void stdxend_(int *istream);
 };
+
+Bool_t JSFReadStdHep::fIsInitialized=kFALSE;
 
 //_____________________________________________________________________________
 JSFReadStdHep::JSFReadStdHep(const char *name, const char *title, const bool makebuf )
@@ -58,9 +62,9 @@ JSFReadStdHep::~JSFReadStdHep()
 //_____________________________________________________________________________
 Bool_t JSFReadStdHep::Initialize()
 {
-  // Initialize
   if ( IsWritable() ) {
     jsf_mcfio_init_(); 
+    fIsInitialized=kTRUE;
   }
   return kTRUE;
 }
@@ -69,10 +73,15 @@ Bool_t JSFReadStdHep::Initialize()
 Bool_t JSFReadStdHep::Process(Int_t nev)
 {
 // 
+  JSFGenerator::Process(nev);
+
   int lok=0;
   int flag=0;
 
-  while( lok == 0 ) {
+  Bool_t skip=kTRUE;
+  Int_t iloop=0;
+  static Int_t nrec=0;
+  while( lok == 0 && skip ) {
     stdxrd_(&flag, &fMCFIOStream, &lok);
     if( lok != 0 ) return kFALSE;
     else if ( flag == 1 || flag == 4) {
@@ -86,10 +95,30 @@ Bool_t JSFReadStdHep::Process(Int_t nev)
 		  << " " ;
 	buf->GetHEPEV4().Print();
       }
-      return kTRUE;
+      nrec++;
+      if( nrec >= nev ) {
+	skip = kFALSE;
+	return kTRUE;
+      }
+      std::cerr << "JSFReadStdHep .. Skipping Record# " << nrec << std::endl;
+    }
+    else if ( flag == 100 ) {
+      std::cerr << "JSFReadStdHep .. Get StdHep BeginRun " << std::endl;
+      fStdHepCM.LoadStdHepCM();
+      fStdHepCM.Print();
+    }
+    else if ( flag == 200 ) {
+      std::cerr << "JSFReadStdHep .. Get StdHep EndRun " << std::endl;
+      fStdHepCM.LoadStdHepCM();
+      fStdHepCM.Print();
     }
     else {
-      std::cerr << "read one record .. flag=" << flag << ") not recognized " << std::endl;
+      std::cerr << "read one record .. flag=(" << flag << ") not recognized " << std::endl;
+    }
+    iloop++;
+    if( iloop > 10000000 ) {
+      std::cerr << "JSFReadStdHep .. Too many loops ( 10000000 ) . Forced termination" << std::endl;
+      skip=kFALSE;
     }
   }
   return kFALSE;
@@ -103,13 +132,17 @@ Bool_t JSFReadStdHep::BeginRun(Int_t nrun)
   int ntries;
   int iok;
   std::cerr << fInFileName << " will be opened" << std::endl;
-  stdxropen_(fInFileName.data(),&ntries, &fMCFIOStream, &iok, lenfn);
+  //  stdxropen_(fInFileName.data(),&ntries, &fMCFIOStream, &iok, lenfn);
+  stdxrinit_(fInFileName.data(),&ntries, &fMCFIOStream, &iok, lenfn);
   if( iok != 0 ) { 
     std::cerr << "Error  JSFReadStdHep::BeginRun failed to open file ";
     std::cerr << fInFileName << std::endl;
     return kFALSE;
     }
   }
+  //  std::cerr << "instream=" << fMCFIOStream << std::endl;
+  fIsInitialized=kTRUE;
+
   return kTRUE;
 } 
 
