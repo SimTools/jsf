@@ -67,7 +67,7 @@ class JSFBeamGeneration : public TNamed
   virtual void Generate(TLorentzVector &ecm, TLorentzVector &vtx);
   virtual void GenBeamStrahlung(TLorentzVector &ecm, TLorentzVector &vtx);
 
-  ClassDef(JSFBeamGeneration,2)  // Virtual class of  Beam Spectrum generation
+  ClassDef(JSFBeamGeneration,3)  // Virtual class of  Beam Spectrum generation
 
 };
 
@@ -98,7 +98,11 @@ class JSFBeamGenerationCain: public JSFBeamGeneration
   //--- Parameter for initial beam spread.
   EIBType  fIBType;      // Type of nominal energy spread
   Double_t fIBWidth;     // Relative width(sigma) of initial beam spread
+  Double_t fIBWidthEMinus; // Initial beam energy spread of E-Minus beam
+  Double_t fIBWidthEPlus;  // Initial beam energy spread of E-Plus beam
   // if fIBType=kUniform, fIBWidth is half width of beam spread.
+  // if IBWidthEMinus(EPlus) is negative, fIBWidth is used.
+
 
   //--- Parameters for generation of 2D part.
   Int_t    fMdiv;     // No. of division in one axis 
@@ -133,6 +137,9 @@ class JSFBeamGenerationCain: public JSFBeamGeneration
   inline Double_t GetBndOrder(){ return fBndOrder; }
   inline virtual EIBType  GetIBType(){ return fIBType;  }
   inline virtual Double_t GetIBWidth(){ return fIBWidth; }
+  inline virtual Double_t GetIBWidthEMinus(){ return ( fIBWidthEMinus > 0 ? fIBWidthEMinus : fIBWidth ) ; } 
+  inline virtual Double_t GetIBWidthEPlus(){   return ( fIBWidthEPlus > 0 ? fIBWidthEPlus : fIBWidth ) ; } 
+
   inline Double_t *GetPCnt(){ return fPCnt; }
   inline Int_t GetPCntSize(){ return fPCntSize; }
   inline TF2   *GetBS2DFunction(){ return fBS2DFunction; }
@@ -147,6 +154,9 @@ class JSFBeamGenerationCain: public JSFBeamGeneration
   
   void SetIBParameters(const Double_t width, const EIBType type=kUniform);
   void SetIBParameters(const Double_t nominalE, const Double_t width, const EIBType type=kUniform);
+  void SetIBParameters(const Double_t nominalE, const Double_t widthEMinus, 
+		       const Double_t widthEPlus, const EIBType type=kUniform);
+  void SetIBParametersByEnv(const Double_t nominalE=-1.0);
 
   //  virtual void Generate(Double_t &eminus, Double_t &eplus);
   virtual void GenEnergySpread(Double_t &eminus, Double_t &eplus);
@@ -166,7 +176,7 @@ class JSFBeamGenerationCain: public JSFBeamGeneration
   Double_t BS2DFunction(Double_t *x, Double_t *p); //
   Double_t PolFunc6(Double_t *x, Double_t *p);    
 
-  ClassDef(JSFBeamGenerationCain,1)  // Generate CAIN Beam Spectrum
+  ClassDef(JSFBeamGenerationCain,2)  // Generate CAIN Beam Spectrum
 };
 
 #endif

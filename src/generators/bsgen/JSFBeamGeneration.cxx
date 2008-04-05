@@ -78,6 +78,9 @@ void jsfbeamgend_(const Double_t *xebm, const Double_t *xebp,
   // ep0:  e+ energy after initial beam energy spread ( without BS )
 
     if( gJSFBeamGenerationCain == 0 ) {
+      JSFBeamGenerationCain::EIBType bstype=JSFBeamGenerationCain::kUniform;
+      double bswidthMinus=-1.0;
+      double bswidthPlus=-1.0;
 #ifdef NOJSF
       const Char_t *bsfile="bsfile.root";
       const Char_t *bspara="350_nominal.root";
@@ -90,6 +93,13 @@ void jsfbeamgend_(const Double_t *xebm, const Double_t *xebp,
       Double_t e0=0;
       std::stringstream sbswidth(gJSF->Env()->GetValue("JSFBeamGeneration.Width","0.0005"));
       sbswidth >> bswidth ;
+      std::stringstream sbswidthMinus(gJSF->Env()->GetValue("JSFBeamGeneration.WidthEMinus","-1.0"));
+      sbswidthMinus >> bswidthMinus ;
+      std::stringstream sbswidthPlus(gJSF->Env()->GetValue("JSFBeamGeneration.WidthEPlus","-1.0"));
+      sbswidthPlus >> bswidthPlus ;
+      // 1 = Uniform, 2=Gaus
+      Int_t ibtype=gJSF->Env()->GetValue("JSFBeamGeneration.IBType",0);
+      if ( ibtype == 2 ) { bstype=JSFBeamGenerationCain::kGauss; }
       std::stringstream se0(gJSF->Env()->GetValue("JSFBeamGeneration.NominalEnergy","-100.0"));
       se0 >> e0 ;
       if ( e0 < 0.0 ) { e0 = *enominal; }
@@ -98,8 +108,12 @@ void jsfbeamgend_(const Double_t *xebm, const Double_t *xebp,
       TDirectory *cdir=gDirectory;
       gJSFBeamFile=new TFile(bsfile);
       gJSFBeamGenerationCain=(JSFBeamGenerationCain*)gJSFBeamFile->Get(bspara);
-      gJSFBeamGenerationCain->SetIBParameters(e0, bswidth, 
-					      JSFBeamGenerationCain::kUniform);
+      if( bswidthMinus > 0.0 && bswidthPlus > 0.0 ) {
+	gJSFBeamGenerationCain->SetIBParameters(e0, bswidthMinus, bswidthPlus, bstype);
+      }
+      else {
+        gJSFBeamGenerationCain->SetIBParameters(e0, bswidth, bstype);
+      }
       gJSFBeamGenerationCain->Print();
       gJSFBeamGenerationCain->MakeBSMap();
       cdir->cd();
@@ -122,7 +136,7 @@ void jsfbeaminit_(Int_t *itype, Int_t *ibtyp, Double_t *bmwidth)
     //   Generate beam energy, eminus and eplus
     //   energy is in unit of GeV.
     //   itype=0-27 to select Beam Strauhlung spectrum
-    //   If ibtyp=1, use uniform initial beam spread
+    //   If ibtyp=1, use uniform initial beam spread, 2=Gaus form
 
     Char_t *bsname[28]={"x250_n63", "jlca300", "jlca500", "jlcy300", "jlcy500",
 			"trc250", "trc300", "trc350", "trc400", 
@@ -415,6 +429,8 @@ void JSFBeamGenerationCain::SetIBParameters( const Double_t width, const EIBType
 {
   fIBType=type;
   fIBWidth=width;
+  fIBWidthEMinus=-1.0;
+  fIBWidthEPlus=-1.0;
 }
 
 //_____________________________________________________
@@ -424,7 +440,46 @@ void JSFBeamGenerationCain::SetIBParameters(const Double_t nominalE,
   fIBType=type;
   fIBWidth=width;
   fNominalE=nominalE;
+  fIBWidthEMinus=-1.0;
+  fIBWidthEPlus=-1.0;
 }
+
+//_____________________________________________________
+void JSFBeamGenerationCain::SetIBParameters(const Double_t nominalE,
+		      const Double_t widthEMinus, const Double_t widthEPlus, const EIBType type )
+{
+  fIBType=type;
+  //  fIBWidth=width;
+  fNominalE=nominalE;
+  fIBWidthEMinus=widthEMinus;
+  fIBWidthEPlus=widthEPlus;
+  if( fIBWidthEMinus > 0.0 && fIBWidthEPlus > 0.0 ) {
+    fIBWidth=(fIBWidthEPlus+fIBWidthEMinus)*0.5; 
+  }
+
+}
+
+//_____________________________________________________
+void JSFBeamGenerationCain::SetIBParametersByEnv(const Double_t nominalE)
+{
+
+  std::stringstream sbswidth(gJSF->Env()->GetValue("JSFBeamGeneration.Width","0.00000"));
+  sbswidth >> fIBWidth ;
+  std::stringstream sbswidthMinus(gJSF->Env()->GetValue("JSFBeamGeneration.WidthEMinus","-1.0"));
+  sbswidthMinus >> fIBWidthEMinus ;
+  std::stringstream sbswidthPlus(gJSF->Env()->GetValue("JSFBeamGeneration.WidthEPlus","-1.0"));
+  sbswidthPlus >> fIBWidthEPlus ;
+  // 1 = Uniform, 2=Gaus
+  fIBType=JSFBeamGenerationCain::kUniform;
+  Int_t ibtype=gJSF->Env()->GetValue("JSFBeamGeneration.IBType",0);
+  if ( ibtype == 2 ) { fIBType=JSFBeamGenerationCain::kGauss; }
+  //  fIBWidth=width;
+  if(nominalE > 0.0 ) fNominalE=nominalE;
+  if( fIBWidthEMinus > 0.0 && fIBWidthEPlus > 0.0 ) {
+    fIBWidth=(fIBWidthEPlus+fIBWidthEMinus)*0.5; 
+  }
+}
+
 
 //_____________________________________________________
 void JSFBeamGenerationCain::Print()
@@ -435,6 +490,8 @@ void JSFBeamGenerationCain::Print()
   btname[0]="Uniform";
   btname[1]="Gauss";
   printf("  Type of Initial beam energy spread : %s\n",btname[GetIBType()-1].Data());
+  printf("  Energy spread of EMinus Beam : %g\n",GetIBWidthEMinus());
+  printf("  Energy spread of EPlus  Beam : %g\n",GetIBWidthEPlus());
   printf("  Relative luminosity of each region (%g, %g, %g)\n",
 	 fLumRatio[0], fLumRatio[1], fLumRatio[2]);
 
@@ -454,12 +511,12 @@ void JSFBeamGenerationCain::GenEnergySpread(Double_t &eminus, Double_t &eplus)
   
   switch( GetIBType() ) {
     case kUniform:
-      eminus=GetNominalEnergy()*(1+2*GetIBWidth()*(0.5-GetRndm()));
-      eplus =GetNominalEnergy()*(1+2*GetIBWidth()*(0.5-GetRndm()));
+      eminus=GetNominalEnergy()*(1+2*GetIBWidthEMinus()*(0.5-GetRndm()));
+      eplus =GetNominalEnergy()*(1+2*GetIBWidthEPlus()*(0.5-GetRndm()));
       break;
     case kGauss: 
-      eminus=GetNominalEnergy()*GetGauss(1.0, GetIBWidth());
-      eplus =GetNominalEnergy()*GetGauss(1.0, GetIBWidth());
+      eminus=GetNominalEnergy()*GetGauss(1.0, GetIBWidthEMinus());
+      eplus =GetNominalEnergy()*GetGauss(1.0, GetIBWidthEPlus());
       break;
     default:
       printf("Error at JSFBeamGenerationCain::GenEnergySpread\n");
