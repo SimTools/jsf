@@ -56,6 +56,8 @@ class JSFWriteStdHep : public JSFModule
   // Static function
   static void StdXWINIT(std::string ifilename, std::string ititle,
 		 Int_t ntry, Int_t &iostream, Int_t &iok);
+  static void StdXWOPEN(std::string ifilename, std::string ititle,
+		 Int_t ntry, Int_t &iostream, Int_t &iok);
   static void StdFLPYXSEC(Int_t ntry);
   static void StdXWRT(Int_t ldbl, Int_t iostream, Int_t &lok);
   static void StdXEND(Int_t iostream);

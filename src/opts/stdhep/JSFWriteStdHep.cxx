@@ -120,6 +120,19 @@ void JSFWriteStdHep::StdXWINIT(std::string ifilename, std::string ititle,
 }
 
 //_____________________________________________________________
+void JSFWriteStdHep::StdXWOPEN(std::string ifilename, std::string ititle,
+			 Int_t ntry, Int_t &iostream, Int_t &iok)
+{
+  const Char_t *filename=ifilename.data();
+  Int_t lfilename=ifilename.length();
+  const Char_t *title=ititle.data();
+  Int_t ltitle=ititle.length();
+  
+  stdxwopen_(filename, title, &ntry, &iostream, &iok, lfilename, ltitle);  
+
+}
+
+//_____________________________________________________________
 void JSFWriteStdHep::StdXWRT(Int_t ilbl, Int_t ostream, Int_t &iok)
 {
   stdxwrt_(&ilbl, &ostream, &iok);
