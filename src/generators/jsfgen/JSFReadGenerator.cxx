@@ -324,6 +324,8 @@ Bool_t JSFReadGeneratorBuf::ReadOneRecord()
 
     Float_t dl=0.0;
     //    if( mother < 0 ) xctau=0.0;
+    if( mother < 0 ) xctau=0.0;
+    
 
     p(0)=phep[i][3]; p(1)=phep[i][0]; p(2)=phep[i][1]; p(3)=phep[i][2];
     v(0)=vhep[i][3]; v(1)=vhep[i][0]; v(2)=vhep[i][1]; v(3)=vhep[i][2];
