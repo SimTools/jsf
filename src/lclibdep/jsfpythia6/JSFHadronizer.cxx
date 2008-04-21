@@ -778,7 +778,8 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
       ishpr1[is-1]=ishufl[isgrp[islv-1][is-1][0]-1];
       ishpr2[is-1]=ishufl[isgrp[islv-1][is-1][1]-1];
     }
-    Int_t maxout=400;
+    //    Int_t maxout=400;
+    Int_t maxout=4000;
     Int_t iret;
     if( fDebug > 0 ) {
       printf(" Before JSFHadronize::Fragmentaion call \n");
@@ -933,7 +934,8 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
       kstat[0]     = 0 ;
       jstat[0]     = 0 ;
       Int_t nin = 1;
-      Int_t n400=400;
+      //      Int_t n400=400;
+      Int_t n400=4000;
       Int_t zero=0;
       Int_t iret;
 
