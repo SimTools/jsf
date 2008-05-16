@@ -161,8 +161,8 @@ JSFGeneratorParticle::JSFGeneratorParticle(JSFGeneratorParticle& g)
   fNdaughter=g.fNdaughter ; fFirstDaughter=g.fFirstDaughter;
   fMother=g.fMother ; fLifeTime=g.fLifeTime;
   fDecayLength=g.fDecayLength;
-  fSecondMother=-1;
-  fStatus=-9999;
+  fSecondMother=g.fSecondMother;
+  fStatus=g.fStatus;
 
 }
 

@@ -334,6 +334,7 @@ Bool_t JSFReadGeneratorBuf::ReadOneRecord()
     new(particles[is-1]) JSFGeneratorParticle(iser, id, mass, charge,
 	              p, v, ndaughter, firstdaughter, mother,
 		      xctau, dl);
+    ((JSFGeneratorParticle*)particles[is-1])->SetStatus(isthep[i]);
   }
 
   SetNparticles(iser);
