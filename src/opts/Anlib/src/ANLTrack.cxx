@@ -7,9 +7,10 @@
 //*    Track Class for JLC analysis
 //* (Requires)
 //*     class TVector
+//*     class TObjNum
+//*     class JSFSIMDST, etc
 //*     class JSFLTKCLTrack
 //*     class ANL4DVector
-//*     class JSFSIMDST, etc
 //* (Provides)
 //*     class ANLTrack
 //* (Update Recored)
@@ -24,6 +25,9 @@
 //*    2001/10/22  K.Ikematsu   Added TObjNum class from FlavourGetter class.
 //*    2002/02/08  K.Fujii      fMSNPriHad is now a pointer.
 //*                             Added operator=.
+//*    2008/07/15  K.Ikematsu   Changed EFlavourGetterDetectorID to
+//*                             EDetectorID.
+//*                             Moved TObjNum class to $LEDAROOT/src/utils/.
 //*
 //* $Id$
 //*************************************************************************
@@ -40,7 +44,7 @@ ClassImp(ANLTrack)
 //*  Constructors
 //*--
 ANLTrack::ANLTrack() : ANL4DVector(0.), fTrackPtr(0), fGen(0),
-		       fMSNPriHad(0), fColorSingletID(9999) {}
+                       fMSNPriHad(0), fColorSingletID(9999) {}
 ANLTrack::ANLTrack(const TObject *track) :
   ANL4DVector(((JSFLTKCLTrack *)track)->GetPV()),
   fTrackPtr(track), fMSNPriHad(0), fColorSingletID(9999) {
@@ -49,7 +53,7 @@ ANLTrack::ANLTrack(const TObject *track) :
   fGen   = evt->GetGeneratorParticles();
 }
 ANLTrack::ANLTrack(const TVector &pv, const TObject *ptr) :
-  ANL4DVector(pv), fTrackPtr(ptr), fGen(0), fMSNPriHad(0), 
+  ANL4DVector(pv), fTrackPtr(ptr), fGen(0), fMSNPriHad(0),
   fColorSingletID(9999) {}
 
 //*--
@@ -76,7 +80,7 @@ Double_t ANLTrack::GetCharge() const {
   return ((JSFLTKCLTrack *)fTrackPtr)->GetCharge();
 }
 Double_t ANLTrack::GetConeEnergy(const Double_t cth,
-				 const TObjArray *tracks) const {
+                                 const TObjArray *tracks) const {
   Double_t e = 0.;
   TIter next(tracks);
   ANLTrack *t;
@@ -125,7 +129,7 @@ void ANLTrack::SetColorSingletID() {
     Double_t egen = 0.;
     for ( Int_t i = 0; i < ncdctrk; i++ ) {
       if ( GetEGeneratorParticle(kECDC, ctp, i) > egen ) {
-	ScanThroughDecayChain(kECDC, ctp, i);
+        ScanThroughDecayChain(kECDC, ctp, i);
       }
       egen = GetEGeneratorParticle(kECDC, ctp, i);
     }
@@ -141,7 +145,7 @@ void ANLTrack::SetColorSingletID() {
     Double_t egen = 0.;
     for ( Int_t i = 0; i < nemgen; i++ ) {
       if ( GetEGeneratorParticle(kEEMC, ctp, i) > egen ) {
-	ScanThroughDecayChain(kEEMC, ctp, i);
+        ScanThroughDecayChain(kEEMC, ctp, i);
       }
       egen = GetEGeneratorParticle(kEEMC, ctp, i);
     }
@@ -158,21 +162,21 @@ void ANLTrack::SetColorSingletID() {
 }
 
 const ANLTrack & ANLTrack::operator=(const ANLTrack & track) {
-	*(ANL4DVector *)this = (ANL4DVector)track;
-	fTrackPtr 	= track.fTrackPtr;
-	fGen	  	= track.fGen;
-	if (fMSNPriHad) {
-		delete fMSNPriHad;
-		fMSNPriHad = 0;
-	}
-	if (track.fMSNPriHad) fMSNPriHad = new TObjArray(*track.fMSNPriHad);
-	fColorSingletID = track.fColorSingletID;
-	return *this;
+  *(ANL4DVector *)this = (ANL4DVector)track;
+  fTrackPtr 	= track.fTrackPtr;
+  fGen	  	= track.fGen;
+  if (fMSNPriHad) {
+    delete fMSNPriHad;
+    fMSNPriHad = 0;
+  }
+  if (track.fMSNPriHad) fMSNPriHad = new TObjArray(*track.fMSNPriHad);
+  fColorSingletID = track.fColorSingletID;
+  return *this;
 }
 
 //_____________________________________________________________________
-void ANLTrack::ScanThroughDecayChain(EFlavourGetterDetectorID id,
-				     JSFLTKCLTrack *ctp, Int_t i) {
+void ANLTrack::ScanThroughDecayChain(EDetectorID id,
+                                     JSFLTKCLTrack *ctp, Int_t i) {
 
 #ifdef __DEBUG__
   cerr << "i = " << i << endl;
@@ -244,8 +248,8 @@ void ANLTrack::ScanThroughDecayChain(EFlavourGetterDetectorID id,
 }
 
 //_____________________________________________________________________
-Double_t ANLTrack::GetEGeneratorParticle(EFlavourGetterDetectorID id,
-					 JSFLTKCLTrack *ctp, Int_t i) {
+Double_t ANLTrack::GetEGeneratorParticle(EDetectorID id,
+                                         JSFLTKCLTrack *ctp, Int_t i) {
 
   Double_t egen = 0.;
   Int_t gmsn = 0;

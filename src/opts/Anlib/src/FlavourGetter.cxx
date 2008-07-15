@@ -22,6 +22,8 @@
 //*    2001/08/02  K.Ikematsu   Added fPIDOffVT and fSNOffVT members
 //*    2001/10/23  K.Ikematsu   Moved TObjNum class to ANLTrack class
 //*    2001/12/18  K.Ikematsu   Added SetThetaCut method
+//*    2008/07/15  K.Ikematsu   Changed EFlavourGetterDetectorID to
+//*                             EDetectorID.
 //*
 //* $Id$
 //*************************************************************************
@@ -185,8 +187,8 @@ void FlavourGetter::SearchPrimaryHadron(const ANLTrack &t) {
 }
 
 //_____________________________________________________________________
-void FlavourGetter::ScanThroughDecayChain(EFlavourGetterDetectorID id,
-					  JSFLTKCLTrack *ctp, Int_t i) {
+void FlavourGetter::ScanThroughDecayChain(EDetectorID id,
+                                          JSFLTKCLTrack *ctp, Int_t i) {
 
 #ifdef __DEBUG__
   cerr << "i = " << i << endl;
@@ -212,10 +214,10 @@ void FlavourGetter::ScanThroughDecayChain(EFlavourGetterDetectorID id,
 
 #ifdef __DEBUG__
     cerr << "(PID, S.N, M.S.N, DLength) = ("
-	 << gpid << ","
-	 << gsn  << ","
-	 << gmsn << ","
-	 << gdln << ")" << endl;
+         << gpid << ","
+         << gsn  << ","
+         << gmsn << ","
+         << gdln << ")" << endl;
 #endif
 
     if ( gdln > 0 ) {
@@ -348,18 +350,18 @@ Int_t TTL4JFlavourGetter::operator()(const ANLJet &jet) {
 #ifdef __DEBUG__
   if ( spdn->GetID() == 11 || spdn->GetID() == 13 ||  spdn->GetID() == 15 ) {
     cerr << "W- decayed leptonically" << endl
-	 << "Th(bbar_j,b_j,up_j,dnbar_j) = ("
-	 << thetaspbbarj  << ","
-	 << thetaspbj     << ","
-	 << thetaspupj    << ","
-	 << thetaspdnbarj << ")" << endl;
+         << "Th(bbar_j,b_j,up_j,dnbar_j) = ("
+         << thetaspbbarj  << ","
+         << thetaspbj     << ","
+         << thetaspupj    << ","
+         << thetaspdnbarj << ")" << endl;
   } else {
     cerr << "W+ decayed leptonically" << endl
-	 << "Th(bbar_j,b_j,upbar_j,dn_j) = ("
-	 << thetaspbbarj  << ","
-	 << thetaspbj     << ","
-	 << thetaspupbarj << ","
-	 << thetaspdnj    << ")" << endl;
+         << "Th(bbar_j,b_j,upbar_j,dn_j) = ("
+         << thetaspbbarj  << ","
+         << thetaspbj     << ","
+         << thetaspupbarj << ","
+         << thetaspdnj    << ")" << endl;
   }
 #endif
 
@@ -370,54 +372,54 @@ Int_t TTL4JFlavourGetter::operator()(const ANLJet &jet) {
     } else {
 #ifdef __DEBUG__
       cerr << "Th(bottom_j) = "
-	   << TMath::Min(thetaspbbarj,thetaspbj) << endl;
+           << TMath::Min(thetaspbbarj,thetaspbj) << endl;
 #endif
       return 0;
     }
   } else {
     if ( spdn->GetID() == 11 || spdn->GetID() == 13 ||  spdn->GetID() == 15 ) {
       if ( (Double_t)noffvtrkfromchad/noffvtrkinjet >= kCHadRatioCut ) {
-	if ( thetaspupj < fThetaCut ) return 2;
-	else if ( thetaspdnbarj < fThetaCut ) return -1;
-	else {
+        if ( thetaspupj < fThetaCut ) return 2;
+        else if ( thetaspdnbarj < fThetaCut ) return -1;
+        else {
 #ifdef __DEBUG__
-	  cerr << "Th(charm_j) = " << thetaspupj << endl;
+          cerr << "Th(charm_j) = " << thetaspupj << endl;
 #endif
-	  return 0;
-	}
+          return 0;
+        }
       } else {
-	if ( TMath::Min(thetaspupj,thetaspdnbarj) < fThetaCut ) {
-	  if ( thetaspupj < thetaspdnbarj ) return 1;
-	  else return -1;
-	} else {
+        if ( TMath::Min(thetaspupj,thetaspdnbarj) < fThetaCut ) {
+          if ( thetaspupj < thetaspdnbarj ) return 1;
+          else return -1;
+        } else {
 #ifdef __DEBUG__
-	  cerr << "Th(light_j) = "
-	       << TMath::Min(thetaspupj,thetaspdnbarj) << endl;
+          cerr << "Th(light_j) = "
+               << TMath::Min(thetaspupj,thetaspdnbarj) << endl;
 #endif
-	  return 0;
-	}
+          return 0;
+        }
       }
     } else {
       if ( (Double_t)noffvtrkfromchad/noffvtrkinjet >= kCHadRatioCut ) {
-	if ( thetaspupbarj < fThetaCut ) return -2;
-	else if ( thetaspdnj < fThetaCut ) return 1;
-	else {
+        if ( thetaspupbarj < fThetaCut ) return -2;
+        else if ( thetaspdnj < fThetaCut ) return 1;
+        else {
 #ifdef __DEBUG__
-	  cerr << "Th(charm_j) = " << thetaspupbarj << endl;
+          cerr << "Th(charm_j) = " << thetaspupbarj << endl;
 #endif
-	  return 0;
-	}
+          return 0;
+        }
       } else {
-	if ( TMath::Min(thetaspupbarj,thetaspdnj) < fThetaCut ) {
-	  if ( thetaspupbarj < thetaspdnj ) return -1;
-	  else return 1;
-	} else {
+        if ( TMath::Min(thetaspupbarj,thetaspdnj) < fThetaCut ) {
+          if ( thetaspupbarj < thetaspdnj ) return -1;
+          else return 1;
+        } else {
 #ifdef __DEBUG__
-	  cerr << "Th(light_j) = "
-	       << TMath::Min(thetaspupbarj,thetaspdnj) << endl;
+          cerr << "Th(light_j) = "
+               << TMath::Min(thetaspupbarj,thetaspdnj) << endl;
 #endif
-	  return 0;
-	}
+          return 0;
+        }
       }
     }
   }

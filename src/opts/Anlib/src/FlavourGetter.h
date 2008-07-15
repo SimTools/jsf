@@ -1,5 +1,5 @@
-#ifndef __FLAVOURGETTER__
-#define __FLAVOURGETTER__
+#ifndef FLAVOURGETTER_H
+#define FLAVOURGETTER_H
 //*************************************************************************
 //* =====================
 //*  FlavourGetter Class
@@ -24,11 +24,12 @@
 //*    2001/08/02  K.Ikematsu   Added fPIDOffVT and fSNOffVT members
 //*    2001/10/23  K.Ikematsu   Moved TObjNum class to ANLTrack class
 //*    2001/12/18  K.Ikematsu   Added SetThetaCut method
+//*    2008/07/15  K.Ikematsu   Changed EFlavourGetterDetectorID to
+//*                             EDetectorID.
 //*
 //* $Id$
 //*************************************************************************
 //
-#include <stdlib.h>
 #include <stdlib.h>
 #include "JSFSteer.h"
 #include "JSFModule.h"
@@ -37,7 +38,7 @@
 #include "JSFSpring.h"
 #include "ANLTrack.h"
 #include "ANLJetFinder.h"
-////typedef enum FlavourGetter::EFlavourGetterDetectorID {kECDC,kEEMC};
+
 //_____________________________________________________________________
 //  -------------------
 //  FlavourGetter Class
@@ -71,8 +72,8 @@ protected:
 
 private:
   void      SearchPrimaryHadron(const ANLTrack &t);
-  void      ScanThroughDecayChain(EFlavourGetterDetectorID id,
-				  JSFLTKCLTrack *ctp, Int_t i);
+  void      ScanThroughDecayChain(EDetectorID id,
+                                  JSFLTKCLTrack *ctp, Int_t i);
 private:
   TClonesArray     *fGen;         //! Pointer to GeneratorParticles Array
   TObjArray         fPIDPriHad;   //  Array of primary hadron's PID
@@ -82,7 +83,7 @@ private:
   TObjArray         fPIDOffVT;    //  Array of off-vertex hadron's PID
   TObjArray         fSNOffVT;     //  Array of off-vertex hadron's S.N
 
-  ClassDef(FlavourGetter, 2)      //  FlavourGetter class
+  ClassDef(FlavourGetter, 3)      //  FlavourGetter class
 };
 
 //_____________________________________________________________________

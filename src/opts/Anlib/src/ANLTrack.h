@@ -1,5 +1,5 @@
-#ifndef __ANLTRACK__
-#define __ANLTRACK__
+#ifndef ANLTRACK_H
+#define ANLTRACK_H
 //*************************************************************************
 //* ==================
 //*  ANLTrack Classes
@@ -9,9 +9,10 @@
 //*    Track Class for JLC analysis
 //* (Requires)
 //*     class TVector
+//*     class TObjNum
+//*     class JSFSIMDST, etc
 //*     class JSFLTKCLTrack
 //*     class ANL4DVector
-//*     class JSFSIMDST, etc
 //* (Provides)
 //*     class ANLTrack
 //* (Update Recored)
@@ -25,20 +26,25 @@
 //*                             fColorSingletID member.
 //*    2001/10/22  K.Ikematsu   Added TObjNum class from FlavourGetter class.
 //*    2002/02/08  K.Fujii      fMSNPriHad is now a pointer.
-//*				Added operator=.
+//*                             Added operator=.
+//*    2008/07/15  K.Ikematsu   Changed EFlavourGetterDetectorID to
+//*                             EDetectorID.
+//*                             Moved TObjNum class to $LEDAROOT/src/utils/.
 //*
 //* $Id$
 //*************************************************************************
 //
 #include <iostream>
 #include <stdlib.h>
-#include "JSFLTKCLTrack.h"
+#include "TObjNum.h"
 #include "JSFSteer.h"
 #include "JSFModule.h"
 #include "JSFSIMDST.h"
 #include "JSFGeneratorParticle.h"
+#include "JSFLTKCLTrack.h"
 #include "ANL4DVector.h"
-typedef enum EFlavourGetterDetectorID {kECDC,kEEMC};
+
+enum EDetectorID {kECDC, kEEMC};
 
 using namespace std;
 //_____________________________________________________________________
@@ -67,9 +73,9 @@ public:
   virtual   const ANLTrack & operator=(const ANLTrack & track);
 
 private:
-  void      ScanThroughDecayChain(EFlavourGetterDetectorID id,
-				  JSFLTKCLTrack *ctp, Int_t i);
-  Double_t  GetEGeneratorParticle(EFlavourGetterDetectorID id,
+  void      ScanThroughDecayChain(EDetectorID id,
+                                  JSFLTKCLTrack *ctp, Int_t i);
+  Double_t  GetEGeneratorParticle(EDetectorID id,
                                   JSFLTKCLTrack *ctp, Int_t i);
 
 private:
@@ -79,43 +85,7 @@ private:
                                   //  (corresponding to PartonID)
   Int_t         fColorSingletID;  // ColorSinglet ID
 
-  ClassDef(ANLTrack,2)  // ANLTrack class
-};
-
-//_____________________________________________________________________
-//  -------------
-//  TObjNum Class
-//  -------------
-//
-// TObjNum is a simple container for an integer.
-//
-class TObjNum : public TObject {
-private:
-  Int_t  num;
-
-public:
-  TObjNum(Int_t i = 0) : num(i) {}
-
-  ~TObjNum() {
-#ifdef __DEBUG__
-    cerr << "~TObjNum = " << num << endl;
-#endif
-  }
-
-  void    SetNum(Int_t i) { num = i; }
-  Int_t   GetNum() { return num; }
-  void    Print(Option_t *) const { Printf("TObjNum = %d", num); }
-  ULong_t Hash() const { return num; }
-  Bool_t  IsEqual(const TObject *obj) const { return num == ((TObjNum*)obj)->num; }
-  Bool_t  IsSortable() const { return kTRUE; }
-  Int_t   Compare(const TObject *obj) const {
-    if (num > ((TObjNum*)obj)->num)
-      return 1;
-    else if (num < ((TObjNum*)obj)->num)
-      return -1;
-    else
-      return 0;
-  }
+  ClassDef(ANLTrack, 3)  // ANLTrack class
 };
 
 #endif
