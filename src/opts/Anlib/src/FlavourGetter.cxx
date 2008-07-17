@@ -6,6 +6,7 @@
 //* (Description)
 //*    A flavour of jets getting class
 //* (Requires)
+//*     class TObjInt
 //*     class ANLJetFinder
 //*     class ANLTrack
 //*     class JSFSIMDST, etc
@@ -24,6 +25,7 @@
 //*    2001/12/18  K.Ikematsu   Added SetThetaCut method
 //*    2008/07/15  K.Ikematsu   Changed EFlavourGetterDetectorID to
 //*                             EDetectorID.
+//*    2008/07/17  K.Ikematsu   Replaced TObjNum with TObjInt.
 //*
 //* $Id$
 //*************************************************************************
@@ -80,8 +82,8 @@ Int_t FlavourGetter::operator()(const ANLJet &jet) {
 
 #if 0
   TIter nextprihadpid(&fPIDPriHad);
-  TObjNum *prihadpidp;
-  while ((prihadpidp = (TObjNum *)nextprihadpid())) {
+  TObjInt *prihadpidp;
+  while ((prihadpidp = (TObjInt *)nextprihadpid())) {
     // fPIDPriHad : Not Yet contained primary hadron's PIDs contributing to
     //              the HDC cluster from neutral combined tracks.
     Int_t prihadpid = TMath::Abs(prihadpidp->GetNum());
@@ -95,8 +97,8 @@ Int_t FlavourGetter::operator()(const ANLJet &jet) {
 #endif
 
   TIter nextoffvtrkpid(&fPIDOffVT);
-  TObjNum *offvtrkpidp;
-  while ((offvtrkpidp = (TObjNum *)nextoffvtrkpid())) {
+  TObjInt *offvtrkpidp;
+  while ((offvtrkpidp = (TObjInt *)nextoffvtrkpid())) {
     Int_t offvtrkpid = TMath::Abs(offvtrkpidp->GetNum());
 #ifdef __DEBUG__
     cerr << "FlavourGetter::operator() : PID(offv trk) = " << offvtrkpid << endl;
@@ -240,14 +242,14 @@ void FlavourGetter::ScanThroughDecayChain(EDetectorID id,
        TMath::Abs(gpidoffvt) != 310  && TMath::Abs(gpidoffvt) != 3122 &&
        TMath::Abs(gpidoffvt) != 3112 && TMath::Abs(gpidoffvt) != 3222 &&
        TMath::Abs(gpidoffvt) != 3322 && TMath::Abs(gpidoffvt) != 3334 ) {
-    TObjNum *gpidoffvtp = new TObjNum(gpidoffvt);
-    TObjNum *gsnoffvtp  = new TObjNum(gsnoffvt);
+    TObjInt *gpidoffvtp = new TObjInt(gpidoffvt);
+    TObjInt *gsnoffvtp  = new TObjInt(gsnoffvt);
     fPIDOffVT.Add(gpidoffvtp);  // *gpidoffvtp, *gsnoffvtp and *gmsnoffvtp stays
     fSNOffVT.Add(gsnoffvtp);    // but (TObjArray *)obj->SetOwner() deletes its elements.
   }
-  TObjNum *gpidp = new TObjNum(gpid);
-  TObjNum *gsnp  = new TObjNum(gsn);
-  TObjNum *gmsnp = new TObjNum(gmsn);
+  TObjInt *gpidp = new TObjInt(gpid);
+  TObjInt *gsnp  = new TObjInt(gsn);
+  TObjInt *gmsnp = new TObjInt(gmsn);
   fPIDPriHad.Add(gpidp);  // *gpidp, *gsnp and *gmsnp stays
   fSNPriHad.Add(gsnp);    // but (TObjArray *)obj->SetOwner() deletes
   fMSNPriHad.Add(gmsnp);  // its elements.
@@ -288,8 +290,8 @@ Int_t TTL4JFlavourGetter::operator()(const ANLJet &jet) {
   SetDataArray(jet);
 
   TIter nextptnid(&GetPartonID());
-  TObjNum *ptnidp;
-  while ((ptnidp = (TObjNum *)nextptnid())) {
+  TObjInt *ptnidp;
+  while ((ptnidp = (TObjInt *)nextptnid())) {
     // fMSNPriHad : Not Yet contained primary hadron's Mother S.N contributing to
     //              the HDC cluster from neutral combined tracks.
     Int_t partonid = TMath::Abs(ptnidp->GetNum());
@@ -303,8 +305,8 @@ Int_t TTL4JFlavourGetter::operator()(const ANLJet &jet) {
   }
 
   TIter nextoffvtrkpid(&GetOffVertexHadronPID());
-  TObjNum *offvtrkpidp;
-  while ((offvtrkpidp = (TObjNum *)nextoffvtrkpid())) {
+  TObjInt *offvtrkpidp;
+  while ((offvtrkpidp = (TObjInt *)nextoffvtrkpid())) {
     Int_t offvtrkpid = TMath::Abs(offvtrkpidp->GetNum());
 #ifdef __DEBUG__
     cerr << "FlavourGetter::operator() : PID(offv trk) = " << offvtrkpid << endl;

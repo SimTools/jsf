@@ -9,7 +9,7 @@
 //*    Track Class for JLC analysis
 //* (Requires)
 //*     class TVector
-//*     class TObjNum
+//*     class TObjInt
 //*     class JSFSIMDST, etc
 //*     class JSFLTKCLTrack
 //*     class ANL4DVector
@@ -30,13 +30,14 @@
 //*    2008/07/15  K.Ikematsu   Changed EFlavourGetterDetectorID to
 //*                             EDetectorID.
 //*                             Moved TObjNum class to $LEDAROOT/src/utils/.
+//*    2008/07/17  K.Ikematsu   Replaced TObjNum with TObjInt.
 //*
 //* $Id$
 //*************************************************************************
 //
 #include <iostream>
 #include <stdlib.h>
-#include "TObjNum.h"
+#include "TObjInt.h"
 #include "JSFSteer.h"
 #include "JSFModule.h"
 #include "JSFSIMDST.h"

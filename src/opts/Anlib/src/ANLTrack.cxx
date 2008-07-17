@@ -7,7 +7,7 @@
 //*    Track Class for JLC analysis
 //* (Requires)
 //*     class TVector
-//*     class TObjNum
+//*     class TObjInt
 //*     class JSFSIMDST, etc
 //*     class JSFLTKCLTrack
 //*     class ANL4DVector
@@ -28,6 +28,7 @@
 //*    2008/07/15  K.Ikematsu   Changed EFlavourGetterDetectorID to
 //*                             EDetectorID.
 //*                             Moved TObjNum class to $LEDAROOT/src/utils/.
+//*    2008/07/17  K.Ikematsu   Replaced TObjNum with TObjInt.
 //*
 //* $Id$
 //*************************************************************************
@@ -135,8 +136,8 @@ void ANLTrack::SetColorSingletID() {
     }
 
     TIter nextid(fMSNPriHad);
-    TObjNum *idp;
-    while ((idp = (TObjNum *)nextid())) {
+    TObjInt *idp;
+    while ((idp = (TObjInt *)nextid())) {
       fColorSingletID = idp->GetNum();
     }
     // If ncdctrk > 0 && nemgen > 0 such as electron candidate,
@@ -151,8 +152,8 @@ void ANLTrack::SetColorSingletID() {
     }
 
     TIter nextid(fMSNPriHad);
-    TObjNum *idp;
-    while ((idp = (TObjNum *)nextid())) {
+    TObjInt *idp;
+    while ((idp = (TObjInt *)nextid())) {
       fColorSingletID = idp->GetNum();
     }
   }
@@ -230,18 +231,18 @@ void ANLTrack::ScanThroughDecayChain(EDetectorID id,
        TMath::Abs(gpidoffvt) != 310  && TMath::Abs(gpidoffvt) != 3122 &&
        TMath::Abs(gpidoffvt) != 3112 && TMath::Abs(gpidoffvt) != 3222 &&
        TMath::Abs(gpidoffvt) != 3322 && TMath::Abs(gpidoffvt) != 3334 ) {
-    TObjNum *gpidoffvtp = new TObjNum(gpidoffvt);
-    TObjNum *gsnoffvtp  = new TObjNum(gsnoffvt);
+    TObjInt *gpidoffvtp = new TObjInt(gpidoffvt);
+    TObjInt *gsnoffvtp  = new TObjInt(gsnoffvt);
     fPIDOffVT.Add(gpidoffvtp);  // *gpidoffvtp, *gsnoffvtp and *gmsnoffvtp stays
     fSNOffVT.Add(gsnoffvtp);    // but (TObjArray *)obj->SetOwner() deletes its elements.
   }
   */
-  ////TObjNum *gpidp = new TObjNum(gpid);
-  ////TObjNum *gsnp  = new TObjNum(gsn);
+  ////TObjInt *gpidp = new TObjInt(gpid);
+  ////TObjInt *gsnp  = new TObjInt(gsn);
 #ifdef __DEBUG__
   cerr << "ANLTrack::ScanThroughDecayChain() : gmsn = " << gmsn << endl;
 #endif
-  TObjNum *gmsnp = new TObjNum(gmsn);
+  TObjInt *gmsnp = new TObjInt(gmsn);
   ////fPIDPriHad.Add(gpidp);  // *gpidp, *gsnp and *gmsnp stays
   ////fSNPriHad.Add(gsnp);    // but (TObjArray *)obj->SetOwner() deletes
   fMSNPriHad->Add(gmsnp);  // its elements.

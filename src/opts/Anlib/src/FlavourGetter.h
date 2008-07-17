@@ -8,6 +8,7 @@
 //* (Description)
 //*    A flavour of jets getting class
 //* (Requires)
+//*     class TObjInt
 //*     class ANLJetFinder
 //*     class ANLTrack
 //*     class JSFSIMDST, etc
@@ -26,6 +27,7 @@
 //*    2001/12/18  K.Ikematsu   Added SetThetaCut method
 //*    2008/07/15  K.Ikematsu   Changed EFlavourGetterDetectorID to
 //*                             EDetectorID.
+//*    2008/07/17  K.Ikematsu   Replaced TObjNum with TObjInt.
 //*
 //* $Id$
 //*************************************************************************
