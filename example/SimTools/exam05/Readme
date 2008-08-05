@@ -1,0 +1,21 @@
+examples/JSF_QuickSim/exam05
+
+An example to read a StdHep file ( generator file )
+and output new StdHep file after event selection.
+
+OutputStdhepEvents.C defines a class to be used for
+event selection.  
+Example to use OutputStdhepEvents class will be found in 
+UserAnalysis.C.  It is prepared to select large acoplanar 
+bhabha events where electron/positron is produced at large angle.
+
+To run the program, do
+
+$  bhabha.sh 
+
+Input file name, output file name, etc are described in 
+this script.
+
+5-August-2008  
+Akiya Miyamoto
+
