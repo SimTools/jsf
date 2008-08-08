@@ -60,7 +60,10 @@ ANLTrack::ANLTrack(const TVector &pv, const TObject *ptr) :
 //*--
 //*  Destructor
 //*--
-ANLTrack::~ANLTrack() {}
+ANLTrack::~ANLTrack()
+{
+   delete fMSNPriHad;
+}
 
 //*--
 //*  Getters
