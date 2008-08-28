@@ -60,6 +60,7 @@ class JSFReadStdHep : public JSFReadGenerator
   Int_t         fNReadBlock;
   Int_t         fMCFIOStream; // Input file stream for MCFIO
   Int_t         fDebugLevel;  //
+  Int_t         fPrintSkipMessage; //
   JSFStdHepStdCM  fStdHepCM; // StdHep BeginRun/EndRUn information
 
   static Bool_t   fIsInitialized;  //!  
@@ -82,7 +83,7 @@ class JSFReadStdHep : public JSFReadGenerator
 
   static Bool_t IsInitialized(){ return fIsInitialized; }
 
-  ClassDef(JSFReadStdHep, 2)  // JSFReadStdHep class
+  ClassDef(JSFReadStdHep, 3)  // JSFReadStdHep class
 
 };
 

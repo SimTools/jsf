@@ -50,6 +50,7 @@ JSFReadStdHep::JSFReadStdHep(const char *name, const char *title, const bool mak
   fNReadBlock=0;
   fMCFIOStream=0;
   fDebugLevel = gJSF->Env()->GetValue("JSFReadStdHep.DebugLevel",0);
+  fPrintSkipMessage = gJSF->Env()->GetValue("JSFReadStdHep.PrintSkipMessage",1000);
 }
 
 //_____________________________________________________________________________
@@ -100,7 +101,9 @@ Bool_t JSFReadStdHep::Process(Int_t nev)
 	skip = kFALSE;
 	return kTRUE;
       }
+      if( nrec%fPrintSkipMessage == 1 ) {
       std::cerr << "JSFReadStdHep .. Skipping Record# " << nrec << std::endl;
+      }  
     }
     else if ( flag == 100 ) {
       std::cerr << "JSFReadStdHep .. Get StdHep BeginRun " << std::endl;
