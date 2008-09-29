@@ -103,7 +103,7 @@ Double_t ANLVTXTagger::Getb(const ANLTrack &t){
     // Access to Helix parameters
 
     JSFCDCTrack cdct(*cdctp);
-    cdct.MovePivotToIP(fParam);
+    if (!cdct.MovePivotToIP(fParam)) return 0.;
     Float_t helix[5];
     cdct.GetHelix(helix);
     Double_t dr   = helix[0];
@@ -151,7 +151,7 @@ Double_t ANLVTXTagger::Getbnorm(const ANLTrack &t){
     // Access to Helix parameters
 
     JSFCDCTrack cdct(*cdctp);
-    cdct.MovePivotToIP(fParam);
+    if (!cdct.MovePivotToIP(fParam)) return 0.;
     Float_t helix[5];
     cdct.GetHelix(helix);
     Double_t err[15];

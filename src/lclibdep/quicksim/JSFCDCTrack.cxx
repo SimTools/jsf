@@ -466,7 +466,63 @@ Bool_t JSFCDCTrack::MovePivotToIP(JSFQuickSimParam *spar)
   //   (3) Include multiple-scatteing efect in the beam pipe.
   //   (4) Move pivot to IP.
   // Geometry information is obtained from JSFQuickSimParam
-  
+#if 1
+  Float_t field = spar->GetBField();
+  Int_t nvtx = GetNVTX();
+  Double_t rnow = 999999.;
+  if (GetNVTX()) { // require at least one vtx hit
+    for (Int_t ivht=nvtx-1; ivht>=0; ivht--) {
+      JSFVTXHit *vht = GetVTXHit(ivht);
+      Int_t    layer = vht->GetLayerNumber();
+      Double_t rvht  = vht->GetR();
+      Double_t fivht = vht->GetPhi();
+      Double_t zvht  = vht->GetZ();
+      JSFRPhiZ ref(rvht,fivht,zvht);
+      JSF3DV   piv = ref.XYZ();
+      Float_t pivot[3]={piv.x, piv.y, piv.z};
+      MovePivot(pivot, field);
+      JSFHelixParameter hp = GetHelix();
+      Double_t pnorm = TMath::Sqrt(1.0+hp.tanl*hp.tanl);
+      Double_t costh = (-hp.pivot.x*TMath::Sin(hp.phi0) + 
+                         hp.pivot.y*TMath::Cos(hp.phi0)) / (rvht*pnorm);
+      if (costh < 0. )    costh = -costh;
+      if (costh < 0.001)  costh=0.001;   // Too small costh is unnatural 
+      Float_t radl = spar->GetVTXThickness(layer)/costh;
+      AddMSError(radl);  // Include MS at the first layer of VXT
+      rnow = rvht;
+    }
+  } else {
+    return kFALSE;
+  } 
+  // if a hit exists on layer 1, include multiple scattering effect at BP
+  if (rnow <= spar->GetVTXRadius(2) - 0.01) {
+    JSFHelicalTrack helix = GetHelicalTrack();
+    helix.SetBfield(field);
+    Double_t rbp = spar->GetVTXRadius(0);
+    Double_t zbp = spar->GetVTXZplus(0);
+    Double_t phi0, phi1;
+    Int_t maxloop = 5;
+    Int_t ncros = helix.OriginToCylinder(rbp, zbp, phi0, phi1, maxloop);
+    if (ncros != 0) { // the track intersects with the beampipe
+      JSF3DV piv = helix.GetCoordinate(phi1);
+      Float_t pivot[3] = {piv.x, piv.y, piv.z};
+      // Move to the beampipe.
+      MovePivot(pivot, field);
+      JSFHelixParameter hp = GetHelix();
+      Double_t pnorm = TMath::Sqrt(1.0+hp.tanl*hp.tanl);
+      Double_t costh = (-pivot[0]*TMath::Sin(hp.phi0)+pivot[1]*TMath::Cos(hp.phi0))
+                        / (rbp*pnorm);
+      if (costh < 0.0)   costh = -costh;
+      if (costh < 0.001) costh = 0.001; // Too small costh is unnatural 
+      Float_t rad0 = spar->GetVTXThickness(0)/costh;
+      AddMSError(rad0);
+    }
+  }
+  Float_t ip[3]={0.0, 0.0, 0.0};
+  MovePivot(ip, field);
+
+  return kTRUE;
+#else
   // First make sure input parameter is correct.
 
   JSFHelixParameter hp=GetHelix();
@@ -584,7 +640,7 @@ Bool_t JSFCDCTrack::MovePivotToIP(JSFQuickSimParam *spar)
   MovePivot(ip, field);
 
   return kTRUE;
-
+#endif
 }
 
 #if __ROOT_FULLVERSION__ >= 30000
