@@ -282,11 +282,11 @@ Bool_t JSFHadronizer::Initialize()
           << " mdcy2 = " << mdcy2                             << endl
           << " mdcy3 = " << mdcy3                             << endl
           << " ---------------------------------------------" << endl;
-     Int_t iprint = gJSF->Env()->GetValue("JSFHadronizer.PrintDecayModeTable",0);
-     if (iprint) {
-       iprint = 12;
-       pylist_(&iprint);
-     }
+   }
+   Int_t iprint = gJSF->Env()->GetValue("JSFHadronizer.PrintDecayModeTable",0);
+   if (iprint) {
+     iprint = 12;
+     pylist_(&iprint);
    }
 
    return kTRUE ;
