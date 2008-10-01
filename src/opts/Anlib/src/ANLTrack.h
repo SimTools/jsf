@@ -58,6 +58,7 @@ public:
   ANLTrack();
   ANLTrack(const TObject *track);
   ANLTrack(const TVector &pv, const TObject *ptr);
+  ANLTrack(const ANLTrack &track);
   virtual ~ANLTrack();
 
   virtual   Bool_t IsElectron() const;

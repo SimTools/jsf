@@ -57,6 +57,22 @@ ANLTrack::ANLTrack(const TVector &pv, const TObject *ptr) :
   ANL4DVector(pv), fTrackPtr(ptr), fGen(0), fMSNPriHad(0),
   fColorSingletID(9999) {}
 
+ANLTrack::ANLTrack(const ANLTrack & track)
+        : ANL4DVector(track),
+          fTrackPtr(track.fTrackPtr),
+          fGen(track.fGen),
+	  fColorSingletID(track.fColorSingletID)
+{
+  if (track.fMSNPriHad) {
+    fMSNPriHad = new TObjArray;
+    TIter next(track.fMSNPriHad);
+    TObjInt *iobjp;
+    while ((iobjp = static_cast<TObjInt *>(next()))) {
+      fMSNPriHad->Add(new TObjInt(iobjp->GetNum()));
+    }
+  }
+}
+
 //*--
 //*  Destructor
 //*--
@@ -173,7 +189,16 @@ const ANLTrack & ANLTrack::operator=(const ANLTrack & track) {
     delete fMSNPriHad;
     fMSNPriHad = 0;
   }
+#if 0
   if (track.fMSNPriHad) fMSNPriHad = new TObjArray(*track.fMSNPriHad);
+#else
+  fMSNPriHad = new TObjArray;
+  TIter next(track.fMSNPriHad);
+  TObjInt *iobjp;
+  while ((iobjp = static_cast<TObjInt *>(next()))) {
+    fMSNPriHad->Add(new TObjInt(iobjp->GetNum()));
+  }
+#endif
   fColorSingletID = track.fColorSingletID;
   return *this;
 }
