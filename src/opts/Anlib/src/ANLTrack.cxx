@@ -29,6 +29,7 @@
 //*                             EDetectorID.
 //*                             Moved TObjNum class to $LEDAROOT/src/utils/.
 //*    2008/07/17  K.Ikematsu   Replaced TObjNum with TObjInt.
+//*    2008/10/03  K.Fujii      Fixed copy constructor and substitution operator.
 //*
 //* $Id$
 //*************************************************************************
@@ -61,6 +62,7 @@ ANLTrack::ANLTrack(const ANLTrack & track)
         : ANL4DVector(track),
           fTrackPtr(track.fTrackPtr),
           fGen(track.fGen),
+	  fMSNPriHad(0),
 	  fColorSingletID(track.fColorSingletID)
 {
   if (track.fMSNPriHad) {
@@ -70,6 +72,7 @@ ANLTrack::ANLTrack(const ANLTrack & track)
     while ((iobjp = static_cast<TObjInt *>(next()))) {
       fMSNPriHad->Add(new TObjInt(iobjp->GetNum()));
     }
+    fMSNPriHad->SetOwner();
   }
 }
 
@@ -186,20 +189,21 @@ const ANLTrack & ANLTrack::operator=(const ANLTrack & track) {
   fTrackPtr 	= track.fTrackPtr;
   fGen	  	= track.fGen;
   if (fMSNPriHad) {
+    fMSNPriHad->Clear();
     delete fMSNPriHad;
     fMSNPriHad = 0;
   }
-#if 0
-  if (track.fMSNPriHad) fMSNPriHad = new TObjArray(*track.fMSNPriHad);
-#else
-  fMSNPriHad = new TObjArray;
-  TIter next(track.fMSNPriHad);
-  TObjInt *iobjp;
-  while ((iobjp = static_cast<TObjInt *>(next()))) {
-    fMSNPriHad->Add(new TObjInt(iobjp->GetNum()));
+  if (track.fMSNPriHad) {
+    fMSNPriHad = new TObjArray;
+    TIter next(track.fMSNPriHad);
+    TObjInt *iobjp;
+    while ((iobjp = static_cast<TObjInt *>(next()))) {
+      fMSNPriHad->Add(new TObjInt(iobjp->GetNum()));
+    }
+    fMSNPriHad->SetOwner();
   }
-#endif
   fColorSingletID = track.fColorSingletID;
+
   return *this;
 }
 
