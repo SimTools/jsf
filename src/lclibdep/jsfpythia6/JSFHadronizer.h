@@ -34,6 +34,8 @@
 #include "JSFSpring.h"
 #endif
 
+#define __SAVE_TPYTHIA6__
+
 class JSFHadronizer : public JSFFULLGenerator {
 protected:
    JSFSpring  *fSpring;    //! Pointer to spring module
@@ -43,7 +45,11 @@ protected:
    Int_t    fMRPY[6];   // random seed for Jetset
    Float_t  fRRPY[100]; //
 #if __PYTHIA_VERSION__ >= 6
+#ifdef __SAVE_TPYTHIA6__
    TPythia6   *fPythia; //
+#else
+   TPythia6   *fPythia; //!
+#endif
 #endif
    Bool_t   fDoesShower;  // Does shower, if TRUE.
 #ifndef __LCLIBRAN_USE_RANMAR__
@@ -81,7 +87,11 @@ public:
 #if __PYTHIA_VERSION__ <= 5 
    ClassDef(JSFHadronizer,3)  // Debug structure
 #else
+#ifndef __SAVE_TPYTHIA6__
    ClassDef(JSFHadronizer,4)  // Debug structure
+#else
+   ClassDef(JSFHadronizer,5)  // Debug structure
+#endif
 #endif
 #endif
 };

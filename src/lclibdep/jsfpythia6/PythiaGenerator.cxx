@@ -152,7 +152,11 @@ PythiaGenerator::PythiaGenerator(const Char_t *name,
   for(Int_t i=0;i<6;i++){ fMRPY[i]=0; }
   for(Int_t i=0;i<100;i++){ fRRPY[i]=0.0; }
 #if __PYTHIA_VERSION__ >= 6 
+#if 0
   fPythia = new TPythia6();
+#else
+  fPythia = TPythia6::Instance();
+#endif
 #else
   fPythia = new TPythia();
 #endif

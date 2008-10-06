@@ -41,7 +41,11 @@ JSFPythiaHadronizer::JSFPythiaHadronizer(const char *name, const char *title)
   fEventBuf = new JSFPythiaHadronizerBuf("JSFPythiaHadronizerBuf",
 	    "JSF Pythia Shower/Hadronizer ",this);
 
+#if 0
   fPythia = new TPythia6();
+#else
+  fPythia = TPythia6::Instance();
+#endif
 
   fHEPEUPFormat = gJSF->Env()->GetValue("PythiaHadronizer.HEPEUPFormat",0);
 
