@@ -64,10 +64,10 @@ has_LCIO()
   if [ "X$LCIO" == "X" ] ; then
     exit -1
   fi
-  if [ ! -e $LCIO/lib/liblcio.a ] ; then
+  if [ ! -e $LCIO/lib/liblcio.a -a ! -e $LCIO/lib/liblcio.so ] ; then
     exit -1
   fi
-  if [ ! -e $LCIO/sio/lib/libsio.a ] ; then
+  if [ ! -e $LCIO/sio/lib/libsio.a ! -e $LCIO/lib/libsio.so ] ; then
     exit -1
   fi
 
