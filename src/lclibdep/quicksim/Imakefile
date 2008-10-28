@@ -50,7 +50,7 @@ else
 LIBS     = -L$(LCLIBROOT)/lib $(EXTRALDOPT) \
         -lSIMJLC -lLTKCL -lLCFULL -lTBS \
         -lGENUTIL -lFORTLIB \
-        $(EXTRALIBS) -lgfortran -lgfortranbegin /* -lnsl */
+        $(EXTRALIBS) $(GFORTRANLIBDIR) -lgfortran -lgfortranbegin /* -lnsl */
 endif
 
 
