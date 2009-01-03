@@ -192,7 +192,7 @@ JSFHadronizer::JSFHadronizer(const char *name, const char *title)
 JSFHadronizer::~JSFHadronizer()
 {
 #if __PYTHIA_VERSION__ >= 6
-  delete fPythia;
+  //delete fPythia;
 #endif
 
 }
