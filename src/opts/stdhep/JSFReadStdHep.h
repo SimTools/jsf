@@ -14,11 +14,16 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 #include <TObject.h>
 #include "JSFReadGenerator.h"
 #include "JSFStdHepStdCM.h"
 #include "THEPEV4.h"
+// #include "TString.h"
+// #include "TObjString.h"
+// #include "TObjArray.h"
+
 /*
 namespace StdHep {
 class StdRunInfo;
@@ -56,7 +61,13 @@ class JSFReadStdHep : public JSFReadGenerator
  protected:
   std::ifstream fInStream;   //! Input File stream
   std::string   fInFileName; // Input filename
-  
+
+  std::vector<std::string> fFNStack; // Used to read multiple files.
+  std::vector<std::string>::iterator  fFNIter; // 
+
+//  TObjArray     *fFNArray;  // Used to read multiple files.
+//  TIter         *fFNIter;  
+
   Int_t         fNReadBlock;
   Int_t         fMCFIOStream; // Input file stream for MCFIO
   Int_t         fDebugLevel;  //
@@ -71,6 +82,8 @@ class JSFReadStdHep : public JSFReadGenerator
 		const Bool_t makebuf=kTRUE);
   virtual ~JSFReadStdHep();
 
+  void Print();
+  
   virtual Bool_t Initialize();
   virtual Bool_t BeginRun(Int_t runno=1);
   virtual Bool_t EndRun();
@@ -83,7 +96,7 @@ class JSFReadStdHep : public JSFReadGenerator
 
   static Bool_t IsInitialized(){ return fIsInitialized; }
 
-  ClassDef(JSFReadStdHep, 3)  // JSFReadStdHep class
+  ClassDef(JSFReadStdHep, 4)  // JSFReadStdHep class
 
 };
 

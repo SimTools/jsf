@@ -67,7 +67,38 @@ Bool_t JSFReadStdHep::Initialize()
     jsf_mcfio_init_(); 
     fIsInitialized=kTRUE;
   }
+
+  int lenfn=fInFileName.size();
+
+  if( fInFileName.substr(0,1) != std::string("@") ) { 
+    fFNStack.push_back( fInFileName.c_str() );
+  }
+  else { // Load file names from a file.
+    std::cerr << "JSFReasStdHep::Initialize  "
+	      <<"input file names are obtained from" 
+	      << fInFileName.substr(1,lenfn-1) << std::endl;
+    std::ifstream fin(fInFileName.substr(1,lenfn-1).c_str());
+    Char_t infile[1024];
+    while( ! fin.eof() ) {
+      fin >> infile ;
+      if( fin.eof() ) break;      
+      fFNStack.push_back( infile );
+    }
+  }
+  fFNIter=fFNStack.begin();
+
   return kTRUE;
+}
+
+//_____________________________________________________________________________
+void JSFReadStdHep::Print()
+{
+  std::vector<std::string>::iterator iv;
+  std::cout << "JSFReadStdHep Input file" << std::endl; 
+  for(iv=fFNStack.begin();iv!=fFNStack.end();++iv) {
+    std::cout << *iv << std::endl;
+  }
+  std::cout << " ... " << fFNStack.size() << " files. " << std::endl;
 }
 
 //_____________________________________________________________________________
@@ -83,8 +114,30 @@ Bool_t JSFReadStdHep::Process(Int_t nev)
   Int_t iloop=0;
   static Int_t nrec=0;
   while( lok == 0 && skip ) {
-    stdxrd_(&flag, &fMCFIOStream, &lok);
-    if( lok != 0 ) return kFALSE;
+retry:  stdxrd_(&flag, &fMCFIOStream, &lok);
+    if( lok != 0 ) {
+      std::cerr << "JSFReadStdHep::Process ... Read end of file." << std::endl;
+      fFNIter++;
+      if( fFNIter >= fFNStack.end() ) {
+	std::cerr << "JSFReadStdHep::Process ... No more input files." <<std::endl; 
+        return kFALSE;
+      }
+      stdxend_(&fMCFIOStream);
+      std::string infile=*fFNIter;
+      std::cerr << infile << " will be opened" << std::endl;
+      Int_t lenfn=infile.size();
+    //    stdxrinit_(infile.Data(),&ntries, &fMCFIOStream, &iok, lenfn);
+      Int_t ntries;
+      Int_t iok;
+      stdxropen_(infile.c_str(),&ntries, &fMCFIOStream, &iok, lenfn);
+      if( iok != 0 ) { 
+        std::cerr << "Error  JSFReadStdHep::Process failed to open file ";
+        std::cerr << infile << std::endl;
+        return kFALSE;
+      }
+      goto retry;
+
+    }
     else if ( flag == 1 || flag == 4) {
       JSFReadStdHepBuf *buf=(JSFReadStdHepBuf*)EventBuf();
       buf->ReadOneRecord();
@@ -131,16 +184,21 @@ Bool_t JSFReadStdHep::Process(Int_t nev)
 Bool_t JSFReadStdHep::BeginRun(Int_t nrun)
 {
   if ( IsWritable() ) {
-  int lenfn=fInFileName.size();
-  int ntries;
-  int iok;
-  std::cerr << fInFileName << " will be opened" << std::endl;
+
+    fFNIter=fFNStack.begin();
+
+    std::string infile=*fFNIter;
+
+    int ntries;
+    int iok;
+    std::cerr << infile << " will be opened" << std::endl;
   //  stdxropen_(fInFileName.data(),&ntries, &fMCFIOStream, &iok, lenfn);
-  stdxrinit_(fInFileName.data(),&ntries, &fMCFIOStream, &iok, lenfn);
-  if( iok != 0 ) { 
-    std::cerr << "Error  JSFReadStdHep::BeginRun failed to open file ";
-    std::cerr << fInFileName << std::endl;
-    return kFALSE;
+    Int_t lenfn=infile.size();
+    stdxrinit_(infile.c_str(),&ntries, &fMCFIOStream, &iok, lenfn);
+    if( iok != 0 ) { 
+      std::cerr << "Error  JSFReadStdHep::BeginRun failed to open file ";
+      std::cerr << infile << std::endl;
+      return kFALSE;
     }
   }
   //  std::cerr << "instream=" << fMCFIOStream << std::endl;
