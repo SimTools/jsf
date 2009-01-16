@@ -34,7 +34,7 @@
 #include "JSFSpring.h"
 #endif
 
-#define __SAVE_TPYTHIA6__
+//#define __SAVE_TPYTHIA6__
 
 class JSFHadronizer : public JSFFULLGenerator {
 protected:
