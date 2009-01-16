@@ -775,8 +775,22 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
     //C--
     Int_t nsg=nsgrp[islv-1];
     for(Int_t is=1;is<=nsg;is++){
-      ishpr1[is-1]=ishufl[isgrp[islv-1][is-1][0]-1];
-      ishpr2[is-1]=ishufl[isgrp[islv-1][is-1][1]-1];
+
+      //ishpr1[is-1]=ishufl[isgrp[islv-1][is-1][0]-1];
+      //ishpr2[is-1]=ishufl[isgrp[islv-1][is-1][1]-1];
+
+      // changed by daniel jeans to allow fragmentation of single particles
+      ishpr1[is-1] = isgrp[islv-1][is-1][0]-1>=0 ? ishufl[isgrp[islv-1][is-1][0]-1] : 0;
+      ishpr2[is-1] = isgrp[islv-1][is-1][1]-1>=0 ? ishufl[isgrp[islv-1][is-1][1]-1] : 0;
+      // ensure that zero entry is the second one (in case of passing single particle)
+      if (ishpr1[is-1]==0) {
+        int temp = ishpr1[is-1];
+        ishpr1[is-1] = ishpr2[is-1];
+        ishpr2[is-1] = temp;
+      }
+
+
+
     }
     //    Int_t maxout=400;
     Int_t maxout=4000;
@@ -1194,12 +1208,16 @@ CC**********************************************************************
       for(Int_t is=0;is<nspar;is++){
 	Int_t ip1=ispar1[is];
 	Int_t ip2=ispar2[is];
-	Double_t qmx=TMath::Power(pyjets->P[3][ip1-1]+pyjets->P[3][ip2-1],2) 
-	  - TMath::Power(pyjets->P[0][ip1-1]+pyjets->P[0][ip2-1],2) 
-	  - TMath::Power(pyjets->P[1][ip1-1]+pyjets->P[1][ip2-1],2) 
-	  - TMath::Power(pyjets->P[2][ip1-1]+pyjets->P[2][ip2-1],2);
-	qmx = TMath::Sqrt(qmx)-pyjets->P[4][ip1-1]-pyjets->P[4][ip2-1];
-	qmx = TMath::Max(qmx, 1.);
+
+	Double_t qmx = 1;
+	if (ip2>0) {
+	  qmx=TMath::Power(pyjets->P[3][ip1-1]+pyjets->P[3][ip2-1],2) 
+	    - TMath::Power(pyjets->P[0][ip1-1]+pyjets->P[0][ip2-1],2) 
+	    - TMath::Power(pyjets->P[1][ip1-1]+pyjets->P[1][ip2-1],2) 
+	    - TMath::Power(pyjets->P[2][ip1-1]+pyjets->P[2][ip2-1],2);
+	  qmx = TMath::Sqrt(qmx)-pyjets->P[4][ip1-1]-pyjets->P[4][ip2-1];
+	  qmx = TMath::Max(qmx, 1.);
+	} 
 
 	pyshow_(&ip1, &ip2, &qmx);
 
