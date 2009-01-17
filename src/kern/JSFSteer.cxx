@@ -174,6 +174,7 @@ JSFSteer::JSFSteer(const char *name, const char *title)
 
   fIsInitialized = kFALSE ;
   fIsTerminated  = kFALSE ;
+  fIsGetEvent    = kFALSE ;
   fLastRun       = 0 ;
 //  fRun           = 0 ;
   fRunEnded      = kFALSE;
