@@ -421,7 +421,7 @@ Bool_t JSFReadPartonBuf::SetPartons()
 		// update parent/daughter indices
 		std::vector <int> indices; indices.push_back(2); indices.push_back(3);
 		for (int ij=0; ij<npart+nextra+1; ij++) {
-		  for (uint jjj=2; jjj<4; jjj++) {
+		  for (int jjj=2; jjj<4; jjj++) {
 		    if      (idat[ij][jjj]==npart+nextra+1)   idat[ij][jjj]=insertPos+1;
 		    else if (idat[ij][jjj]==insertPos+1) idat[ij][jjj]=movePos+1;
 		    else if (idat[ij][jjj]>movePos)      idat[ij][jjj]++;
