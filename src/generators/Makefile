@@ -3,7 +3,11 @@ SHELL   = /bin/bash
 MFLAGS	=
 CURRDIR	= .
 
+ifeq ($(shell ls $(ROOTSYS)/lib/libPythia6.so 2> /dev/null),)
 SUBDIRS1 = pythia6 bases
+else
+SUBDIRS1 = bases
+endif
 SUBDIRS2 = bsgen jsfgen me2shgen
 SUBDIRS3 = herwig
 SUBDIRS  = $(SUBDIRS1) $(SUBDIRS2) $(SUBDIRS3)
