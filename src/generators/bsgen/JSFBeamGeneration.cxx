@@ -577,20 +577,35 @@ Double_t JSFBeamGenerationCain::GetWeight(const Double_t xebm, const Double_t xe
 
   Double_t weight=-1.0;
   // First generate initial beam energy
-  if(  GetIBType() != kUniform ) {
+  //  if(  GetIBType() != kUniform ) {
+  //    printf("Fatal error in JSFBeamGenerationCain::GetWeight") ;
+  //    printf("Initial beam shape other than uniform is not supported yet\n");
+  //    return weight;
+  //  }
+  Double_t em=1.;
+  Double_t ep=1.;
+  if(  GetIBType() == kUniform ) {
+    em=1+2*GetIBWidth()*(0.5-xebm);
+    ep=1+2*GetIBWidth()*(0.5-xebp);
+  }else if(GetIBType() == kGauss){
+    em = 1. - GetIBWidth() * sqrt(3)/3.14 * log(1/xebm - 1.);
+    ep = 1. - GetIBWidth() * sqrt(3)/3.14 * log(1/xebp - 1.);
+  }else{
     printf("Fatal error in JSFBeamGenerationCain::GetWeight") ;
-    printf("Initial beam shape other than uniform is not supported yet\n");
+    printf("Initial beam shape other than uniform and gauss is not supported yet\n");
     return weight;
   }
 
-  Double_t em=1+2*GetIBWidth()*(0.5-xebm);
-  Double_t ep=1+2*GetIBWidth()*(0.5-xebp);
-
   fLastEMinus0=em;
   fLastEPlus0=ep;
-  
+
+  //  xeminus=em;
+  //  xeplus =ep;
+  //  weight=1.0;
+
   // Decide beamstraulung spectrum.
   // Assume eminus and eplus symmetry
+
   Double_t xbnd=TMath::Sqrt(GetLumRatio(0));
   weight=0.0;
   if( xbsm < xbnd && xbsp < xbnd ) {
@@ -622,7 +637,7 @@ Double_t JSFBeamGenerationCain::GetWeight(const Double_t xebm, const Double_t xe
     xeplus*=ep;
     weight*=(1.0-GetLumRatio(1))/((1-xbnd)*(1-xbnd));
   }
-
+  
   return weight;  
 
 }
