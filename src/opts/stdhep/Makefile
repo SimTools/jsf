@@ -16,7 +16,7 @@ OBJS      = $(subst .$(SrcSuf),.$(ObjSuf),$(SRCS)) \
 
 HDRS      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRCS))
 
-CXXFLAGS += -I$(STDHEPDIR)/src/inc 
+CXXFLAGS += -g -I$(STDHEPDIR)/src/inc 
 FFLAGS += -I$(STDHEPDIR)/src/inc 
 LIBS += -L$(STDHEPDIR)/lib -lstdhep -lstdhepC -lFmcfio
 

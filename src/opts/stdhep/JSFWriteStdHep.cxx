@@ -19,8 +19,10 @@
 #include "JSFParticleData.h"
 #include "stdhep.h"
 #include "TPythia6.h"
+#include "hepev4.h"
 
 ClassImp(JSFWriteStdHep)
+THEPEV4 *JSFWriteStdHep::fHEPEV4=0;
 
 extern "C" {
   extern void stdxwinit_(const char *filename, const char *title, 
@@ -47,9 +49,8 @@ JSFWriteStdHep::JSFWriteStdHep(const char *name, const char *title )
   fNTries=gJSF->Env()->GetValue("JSFWriteStdHep.NTries",10);
   fOutStream=0;
   fDebugLevel = gJSF->Env()->GetValue("JSFWriteStdHep.DebugLevel",0);
-
-  //   fDoXWInit=gJSF->Env()->GetValue("JSFWriteStdHep.DoXWInit",kTRUE);
-  fConvertJetset=gJSF->Env()->GetValue("JSFWriteStdHep.ConvertJetset",kTRUE);
+  fEventSource=gJSF->Env()->GetValue("JSFWriteStdHep.EventSource",1);
+  fProcessID=gJSF->Env()->GetValue("JSFWriteStdHep.ProcessID",0);
   fWriteBeginRun=kTRUE;
   fWriteEndRun=kTRUE;
 }
@@ -69,6 +70,16 @@ Bool_t JSFWriteStdHep::Initialize()
   //  if ( IsWritable() ) {
   //    jsf_mcfio_init_(); 
   //  }
+
+  std::cout << "JSFWriteStdHep::Initialize === runParameter " << std::endl;
+  std::cout << "  Output File Name : " << fOutFileName << std::endl;
+  std::cout << "  Output File Title: " << fOutTitle << std::endl;
+  std::cout << "  NTries           : " << fNTries << std::endl;
+  std::cout << "  Debug Level      : " << fDebugLevel << std::endl;
+  std::cout << "  Event Source     : " << fEventSource << std::endl;
+  std::cout << "    =0 /HEPEVT/, =1 /JETSET/, =2 JSFGenerator " << std::endl;
+  std::cout << "  ProcessID        : " << fProcessID << std::endl;
+  std::cout << "==============================================" << std::endl;
 
   return kTRUE;
 }
@@ -170,15 +181,128 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
       return kFALSE;
     }
   }
+  
+//    Double_t esum=0.0;
+//    Double_t pxsum=0.0;
+//    Double_t pysum=0.0;
+//    Double_t pzsum=0.0;
 
-//  int flag=0;
-
-  if( fConvertJetset ) {
+  // Here we convert JETSET to HEPEVT before Write-Stdhep is called.
+  if( fEventSource == 1 ) {
     TPythia6 *py6=TPythia6::Instance();
     Int_t mconv=1; // Convert from JETSET to HEPEVT
     py6->Pyhepc(mconv);
   }
   
+  // Fill HEPEVT common block from JSFGenerator
+  else if( fEventSource==2 ) {
+    JSFGenerator *gen=(JSFGenerator*)gJSF->FindModule("JSFGenerator");
+    JSFGeneratorBuf *gevt=(JSFGeneratorBuf*)gen->EventBuf();
+    TClonesArray *pa=gevt->GetParticles();
+
+    hepevt_.nevhep=nev;
+    hepevt_.nhep=gevt->GetNparticles();
+
+    Int_t j;
+
+	std::cerr << " fHEPEV4=" << fHEPEV4 << std::endl;
+
+    hepev4_.eventweightlh = fHEPEV4 ? fHEPEV4->GetEventWeight() : 1.0 ;
+    hepev4_.alphaqedlh= fHEPEV4 ? fHEPEV4->GetAlphaQED() : 0.0 ;
+    hepev4_.alphaqcdlh= fHEPEV4 ? fHEPEV4->GetAlphaQCD() : 0.0 ;
+    if( fHEPEV4 ) {
+      for (j=0;j<10;j++) { hepev4_.scalelh[j]=fHEPEV4->GetScale(j); }
+    }
+    else {
+      for (j=0;j<10;j++) { hepev4_.scalelh[j]=0.0; }
+    }
+    hepev4_.idruplh=fHEPEV4 ? fHEPEV4->GetEventID() : fProcessID ;
+
+
+
+    for(j=0;j<gevt->GetNparticles();j++){
+      JSFGeneratorParticle *p=(JSFGeneratorParticle*)pa->At(j);
+#if 0
+//    p->ls("all");
+//    p->ls();
+#endif
+      if( fHEPEV4 ) { 
+	hepev4_.spinlh[j][0]=fHEPEV4->GetSpin(j, 0);
+      	hepev4_.spinlh[j][1]=fHEPEV4->GetSpin(j, 1);
+      	hepev4_.spinlh[j][2]=fHEPEV4->GetSpin(j, 2);
+      	hepev4_.icolorflowlh[j][0]=fHEPEV4->GetColorFlow(j, 0);
+      	hepev4_.icolorflowlh[j][1]=fHEPEV4->GetColorFlow(j, 1);
+      }
+      else {
+	hepev4_.spinlh[j][0]=0.0;
+      	hepev4_.spinlh[j][1]=0.0;
+      	hepev4_.spinlh[j][2]=0.0;
+      	hepev4_.icolorflowlh[j][0]=0;
+      	hepev4_.icolorflowlh[j][1]=0;
+      }
+
+      hepevt_.isthep[j]=13;
+      hepevt_.idhep[j]=p->GetID();
+      hepevt_.jmohep[j][0]=p->GetMother();
+      hepevt_.jmohep[j][1]=0;
+      hepevt_.jdahep[j][0]=p->GetFirstDaughter();
+      hepevt_.jdahep[j][1]=p->GetFirstDaughter()+p->GetNDaughter()-1;
+
+
+      if (p->GetNDaughter() == 0 ) {
+	hepevt_.isthep[j]=1; 
+        if( p->GetMother() < 0 ) { hepevt_.jmohep[j][0] = 0 ; }
+        hepevt_.jdahep[j][0]=0;
+        hepevt_.jdahep[j][1]=0;
+      }	
+      else if( p->GetMother() < 0 || p->GetNDaughter() > 1000 ) {
+        hepevt_.isthep[j]=13;	
+        hepevt_.jdahep[j][0]=0;
+        hepevt_.jdahep[j][1]=0;
+      }
+      else if ( p->GetNDaughter() > 0 ) {
+        Int_t id=p->GetFirstDaughter();
+        JSFGeneratorParticle *pd=(JSFGeneratorParticle*)pa->At(id-1);
+	if( pd->GetNDaughter() > 1000 ) {
+          hepevt_.isthep[j]=13;
+	  hepevt_.jdahep[j][0]=p->GetNDaughter();
+	  hepevt_.jdahep[j][1]=p->GetFirstDaughter();
+	}
+	else {
+          hepevt_.isthep[j]=2; 
+        }
+      } 
+//      std::cerr << " j=" << j << " isthep=" << hepevt_.isthep[j]
+//        << " jdahep=" << hepevt_.jdahep[j][0] << " " 
+//	<< hepevt_.jdahep[j][1]
+//	<< " ndau=" << p->fNdaughter
+//	<< " n1st=" << p->fFirstDaughter
+//	<< " mod="  << p->fMother
+//	<< std::endl;
+
+      hepevt_.phep[j][0]=p->GetPx();
+      hepevt_.phep[j][1]=p->GetPy();
+      hepevt_.phep[j][2]=p->GetPz();
+      hepevt_.phep[j][3]=p->GetE();
+      hepevt_.phep[j][4]=p->GetMass();
+      hepevt_.vhep[j][0]=p->GetX();
+      hepevt_.vhep[j][1]=p->GetY();
+      hepevt_.vhep[j][2]=p->GetZ();
+      hepevt_.vhep[j][3]=p->GetT();
+
+//      if ( hepevt_.isthep[j]==1 ) {
+//	esum+= hepevt_.phep[j][3];
+//        pxsum+=hepevt_.phep[j][0];
+//        pysum+=hepevt_.phep[j][1];
+//        pzsum+=hepevt_.phep[j][2];
+//      }
+    }
+  }
+
+//  std::cerr << "JSFWriteStdHep::... esum=" << esum 
+//	<< " pxsum=" << pxsum << " pysum=" << pysum
+//	<< " pzsum=" << pzsum << std::endl;
+
   Int_t ldlb=1;
   stdxwrt_(&ldlb, &fOutStream, &lok);
 
@@ -187,58 +311,6 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
 	      << nev << std::endl;
     return kFALSE;
   }
-
-#if 0
-  // Fill HEPEVT common block from JSFGenerator
-
-  Float_t data[20];
-  Int_t i;
-  for(i=0;i<20;i++){ data[i]=0.0;}
-  JSFGenerator *gen=(JSFGenerator*)gJSF->FindModule("JSFGenerator");
-  JSFGeneratorBuf *gevt=(JSFGeneratorBuf*)gen->EventBuf();
-  TClonesArray *pa=gevt->GetParticles();
-  Int_t j;
-  for(j=0;j<gevt->GetNparticles();j++){
-    JSFGeneratorParticle *p=(JSFGeneratorParticle*)pa->At(j);
-#if 0
-    p->ls("all");
-#endif
-    data[0]=p->fSer;
-    data[1]=p->fID;
-    data[2]=p->fMass;
-    data[3]=p->fCharge;
-    data[4]=p->fP[1];
-    data[5]=p->fP[2];
-    data[6]=p->fP[3];
-    data[7]=p->fP[0];
-    data[8]=p->fX[1];
-    data[9]=p->fX[2];
-    data[10]=p->fX[3];
-    data[11]=p->fNdaughter;
-    data[12]=p->fFirstDaughter;
-    data[13]=p->fMother;
-    data[14]=p->fX[0];
-    data[15]=p->fLifeTime;
-    data[16]=p->fDecayLength;
-    Int_t ielm=j+1;
-    if( ielm != p->fSer ){
-      printf("Warning JSFQuickSim::TBPUTGeneratorParticles");
-      printf("  Particle Serial number(%d) and ",p->fSer);
-      printf(" element number(%d) is inconsistent.\n",ielm);
-    }
-    gJSFLCFULL->TBPUT(1,"Generator:Particle_List",ielm,20,(Int_t*)data,iret);
-  }
-
-  for(i=0;i<20;i++){ data[i]=0.0;}
-  data[0]=gevt->GetEventNumber();
-  data[1]=gevt->GetDate();
-  data[2]=gevt->GetTime();
-  data[4]=gevt->GetStartSeed();
-  data[5]=gevt->GetEcm();
-  gJSFLCFULL->TBPUT(1,"Generator:Header",1,20,(Int_t*)data,iret);  
-
-
-#endif
 
   return kTRUE;
 }

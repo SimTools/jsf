@@ -18,7 +18,7 @@
 #include <TObject.h>
 #include "JSFModule.h"
 #include "JSFStdHepStdCM.h"
-// #include "THEPEV4.h"
+#include "THEPEV4.h"
 
 // *******************************************************
 class JSFWriteStdHep : public JSFModule
@@ -32,12 +32,16 @@ class JSFWriteStdHep : public JSFModule
   Int_t         fOutStream; // Index to array ixdrstd holfing stream pointer
   Int_t         fDebugLevel;  //
   //  Bool_t        fDoXWInit; // Does StdXWInit if true
-  Bool_t        fConvertJetset;  // Does conversion of JETSET Common
+ //  Bool_t        fConvertJetset;  // Does conversion of JETSET Common
+  Int_t	        fEventSource;   // Event source
+	// =0, /hepevt/, =1 /jetset/, 2=JSFGenerator
   Bool_t        fWriteBeginRun; //! True if beginRun is not written yet
   Bool_t        fWriteEndRun;   //! True if endRun is not written yet
+  Int_t         fProcessID;     // If fHEPEV4 is not set, fProcessID is write as HEPEV4 data. 
 
   JSFStdHepStdCM   fStdHepCM; 
-
+  static THEPEV4 *fHEPEV4; // HEPEV4 event associated to this event
+    // User should create and delete THEPEV4 object, in order to store his own HEPEV4 info.
  public:
   JSFWriteStdHep(const char *name="JSFWriteStdHep", 
 		 const char *title="JSFWriteStdHep");
@@ -50,7 +54,7 @@ class JSFWriteStdHep : public JSFModule
   virtual Bool_t Process(Int_t ev=1);
 
   //  void DoXWInit(Bool_t flag=kTRUE){ fDoXWInit=flag; }
-  void DoConvertJetset(Bool_t flag=kTRUE){ fConvertJetset=flag; }
+  //  void DoConvertJetset(Bool_t flag=kTRUE){ fConvertJetset=flag; }
   JSFStdHepStdCM  *GetStdHepCM(){ return &fStdHepCM;} 
   
   // Static function
@@ -61,8 +65,11 @@ class JSFWriteStdHep : public JSFModule
   static void StdFLPYXSEC(Int_t ntry);
   static void StdXWRT(Int_t ldbl, Int_t iostream, Int_t &lok);
   static void StdXEND(Int_t iostream);
+  static void SetHEPEV4(THEPEV4 *hepev4){ fHEPEV4=hepev4; }
+  Int_t  GetProcessID(){ return fProcessID; }
+  void   SetProcessID(Int_t pid){ fProcessID=pid; } 
   
-  ClassDef(JSFWriteStdHep, 1)  // JSFWriteStdHep class
+  ClassDef(JSFWriteStdHep, 2)  // JSFWriteStdHep class
 
 };
 
