@@ -1,0 +1,89 @@
+This directory include a set of files to 
+- run PhysSim generator, e+e- --> W+W- events
+- create a stdhep file from PhysSim data
+- Example to read the stdhep file and run simulation
+
+Details are described below.
+
+==============================================================
+./
+=============================================================
+README 
+       : This file
+setup.bash 
+       : Setup environment variables. 
+         
+==============================================================
+prod/
+==============================================================
+This directory is for the calculation of bases file, bases.root.
+They should be taken from a prod directory of PhysSim.
+
+This directory contains an example for e+e- --> W+W- events.
+User should modify at least jsf.conf and WWSpring.so 
+according to your generator.
+
+runBases.sh is to run Bases and create a file, bases.root.
+
+==============================================================
+writestdhep/
+==============================================================
+runSpring.sh is a script to run Spring and create a stdhep file.
+
+Read the file, jsf.conf, carefully and set parameters properly 
+to match your generator.
+
+Data in HEPEV4 common block is essentially nothing as a default.
+If you'd like to save it by your self, a procedure to do it is, 
+- create THEPEV4 object and store information in it.
+- Store the address of THEPEV4 object by 
+  JSFWriteStdHep::SetHEPEV4( your_address )
+  JSFWriteStdHep copies the info of HEPEV4 and store it in 
+  output file.  The information in the object should be updated 
+  properly event by event.  If your_address is 0, default 
+  value is written.
+
+When the address of THEPEV4 object is not set, default 
+values of HEPEV4 are written to the file, except ProcessID.
+The process ID can be set by the JSF parameter, 
+JSFWriteStdHep.ProcessID
+
+==============================================================
+readstdhep-fortran/
+==============================================================
+An example to read stdhep file and create histogram.
+To run, do
+$ make
+$ run.sh
+It reads a file, writestdhep/ww.stdhep, and create a root file
+containing histograms.
+This program is originated from the example in StdHep release,
+but modified to analize /hepev4/ data.
+
+==============================================================
+readstdhep-jsf/
+==============================================================
+Run jsf quicksim, reading stdhep file, writestdhep/ww.stdhep
+
+==============================================================
+Mokka/
+==============================================================
+Example to run Mokka, reading a stdhepfile in ../writestdhepww.stdhep
+
+When you run your own job, make sure to change,
+
+lcioFilename
+lcioEventParameter string Process
+lcioEventParameter fload CrossSection_fb
+and 
+dbHost, if necessary,
+in the file, sample.steer 
+
+and 
+
+input file name in the file, sample.g4
+
+Sample script to run Mokka is runMokka.sh
+
+
+

@@ -1,0 +1,18 @@
+/Mokka/init/startEventNumber 0
+/Mokka/init/userInitString TIMEOUT_TO_RELAX_TMP 120
+/Mokka/init/userInitInt SLEEP_BEFORE_RETRY 5
+/Mokka/init/detectorModel ILD_00
+/Mokka/init/user consult
+/Mokka/init/dbPasswd consult
+/Mokka/init/lcioDetailedShowerMode false
+/Mokka/init/physicsListName LCPhys
+/Mokka/init/TPCCut 0.01 MeV
+/Mokka/init/rangeCut 0.2 mm
+/Mokka/init/lcioWriteCompleteHepEvt true
+/Mokka/init/lcioWriteMode WRITE_NEW
+/Mokka/init/mcRunNumber 0
+/Mokka/init/randomSeed 0
+/Mokka/init/lcioFilename ww.slcio
+/Mokka/init/dbHost 192.168.220.105
+/Mokka/init/lcioEventParameter string Process physsim-ww
+/Mokka/init/lcioEventParameter float CrossSection_fb 18086.1
