@@ -265,8 +265,8 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
         JSFGeneratorParticle *pd=(JSFGeneratorParticle*)pa->At(id-1);
 	if( pd->GetNDaughter() > 1000 ) {
           hepevt_.isthep[j]=13;
-	  hepevt_.jdahep[j][0]=p->GetNDaughter();
-	  hepevt_.jdahep[j][1]=p->GetFirstDaughter();
+//	  hepevt_.jdahep[j][0]=p->GetNDaughter();
+//	  hepevt_.jdahep[j][1]=p->GetFirstDaughter();
 	}
 	else {
           hepevt_.isthep[j]=2; 
