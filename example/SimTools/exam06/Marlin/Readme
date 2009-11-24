@@ -1,0 +1,16 @@
+Example to run Marlin.
+
+Marlin reads a Mokka file.
+GearOutput.xml should be updated to match your detector configuration.
+GearOutput.xml is created by Mokka.
+Output file, number of events to analize, defined in stdreco.xml 
+should be modified properly to match your condition.
+
+runMarlin.sh corresponds to ilcsoft/v01-06.
+For other version, runMarlin.sh and stdreco.xml 
+needs to be modified.
+
+written by A.Miyamoto
+24-Nov-2009
+
+
