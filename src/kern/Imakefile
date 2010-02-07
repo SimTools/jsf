@@ -46,12 +46,12 @@ install:: $(HDRJSF) libJSF.$(DylibSuf) jsf
 	install -p -m 755 jsf $(JSFBINDIR)
 
 jsf: jsfmain.o libJSF.$(DylibSuf)
-	$(CXX) jsfmain.o -L.  -lJSF \
+	$(CXX) $(LDFLAGS) jsfmain.o -L.  -lJSF \
 	$(ROOTLIBS) $(ROOTGLIBS) \
 	-o $@ $(DYLDEXTRALIBS)
 
 jsfstatic: jsfmain.o 
-	$(CXX) -static jsfmain.o -L./  -lJSF \
+	$(CXX) $(LDFLAGS) -static jsfmain.o -L./  -lJSF \
 	$(ROOTLIBS) $(ROOTGLIBS) \
 	-o $@ $(DYLDEXTRALIBS)
 
