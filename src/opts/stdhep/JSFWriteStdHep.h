@@ -19,6 +19,7 @@
 #include "JSFModule.h"
 #include "JSFStdHepStdCM.h"
 #include "THEPEV4.h"
+#include "JSFSpring.h"
 
 // *******************************************************
 class JSFWriteStdHep : public JSFModule
@@ -34,10 +35,13 @@ class JSFWriteStdHep : public JSFModule
   //  Bool_t        fDoXWInit; // Does StdXWInit if true
  //  Bool_t        fConvertJetset;  // Does conversion of JETSET Common
   Int_t	        fEventSource;   // Event source
-	// =0, /hepevt/, =1 /jetset/, 2=JSFGenerator
+	// =0, /hepevt/, =1 /jetset/, 2=JSFGenerator, 3=JSFGenerator+SpringParton
   Bool_t        fWriteBeginRun; //! True if beginRun is not written yet
   Bool_t        fWriteEndRun;   //! True if endRun is not written yet
-  Int_t         fProcessID;     // If fHEPEV4 is not set, fProcessID is write as HEPEV4 data. 
+  Int_t         fProcessID;     // If fHEPEV4 is not set, fProcessID is write as HEPEV4 data
+
+
+	JSFSpring *fSpring;
 
   JSFStdHepStdCM   fStdHepCM; 
   static THEPEV4 *fHEPEV4; // HEPEV4 event associated to this event

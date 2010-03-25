@@ -53,6 +53,24 @@ JSFWriteStdHep::JSFWriteStdHep(const char *name, const char *title )
   fProcessID=gJSF->Env()->GetValue("JSFWriteStdHep.ProcessID",0);
   fWriteBeginRun=kTRUE;
   fWriteEndRun=kTRUE;
+
+	if(fEventSource == 3){
+		TList *list=gJSF->Modules();
+		TIter  next(list);
+		JSFModule *module;
+		while( (module=(JSFModule*)next()) ){
+			if( module->InheritsFrom("JSFSpring") ){ 
+				if( fSpring ) { 
+					printf("Find module %s , inherited from JSFSpring\n",fSpring->GetName());
+					printf("More than one JSFSpring are defined.");
+					printf(" Specify correspinding Hadronizer explicityly\n");
+				}
+				fSpring=(JSFSpring*)module;
+			}
+		}
+		if( !fSpring ){ Error("JSFHadronizer","No JSFSpring class was found"); }            			
+	}
+
 }
 
 //_____________________________________________________________________________
@@ -195,12 +213,13 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
   }
   
   // Fill HEPEVT common block from JSFGenerator
-  else if( fEventSource==2 ) {
+  else if( fEventSource==2 || fEventSource == 3) {
+
     JSFGenerator *gen=(JSFGenerator*)gJSF->FindModule("JSFGenerator");
     JSFGeneratorBuf *gevt=(JSFGeneratorBuf*)gen->EventBuf();
     TClonesArray *pa=gevt->GetParticles();
 
-    hepevt_.nevhep=nev;
+   hepevt_.nevhep=nev;
     hepevt_.nhep=gevt->GetNparticles();
 
     Int_t j;
@@ -219,9 +238,44 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
     hepev4_.idruplh=fHEPEV4 ? fHEPEV4->GetEventID() : fProcessID ;
 
 
+		Int_t nSpringParton = 0;
+		if(fEventSource==3){
+			JSFSpringBuf *spevt=(JSFSpringBuf*)fSpring->EventBuf();
+			TClonesArray *ps=spevt->GetPartons();
 
-    for(j=0;j<gevt->GetNparticles();j++){
-      JSFGeneratorParticle *p=(JSFGeneratorParticle*)pa->At(j);
+			nSpringParton=spevt->GetNpartons();
+			hepevt_.nhep += nSpringParton;
+
+			for(Int_t j=0;j<nSpringParton;j++){
+				JSFSpringParton *p=(JSFSpringParton*)ps->At(j);
+
+				hepev4_.spinlh[j][0]=0.0;
+      	hepev4_.spinlh[j][1]=0.0;
+      	hepev4_.spinlh[j][2]=0.0;
+      	hepev4_.icolorflowlh[j][0]=0;
+      	hepev4_.icolorflowlh[j][1]=0;
+
+				hepevt_.isthep[j]=2;
+				hepevt_.idhep[j]=p->GetID();
+				hepevt_.jmohep[j][0]=p->GetMother();
+				hepevt_.jmohep[j][1]=0;
+				hepevt_.jdahep[j][0]=p->GetFirstDaughter();
+				hepevt_.jdahep[j][1]=p->GetFirstDaughter()+p->GetNDaughter()-1;
+
+				hepevt_.phep[j][0]=p->GetPx();
+				hepevt_.phep[j][1]=p->GetPy();
+				hepevt_.phep[j][2]=p->GetPz();
+				hepevt_.phep[j][3]=p->GetE();
+				hepevt_.phep[j][4]=p->GetMass();
+				hepevt_.vhep[j][0]=0;
+				hepevt_.vhep[j][1]=0;
+				hepevt_.vhep[j][2]=0;
+				hepevt_.vhep[j][3]=0;
+			}
+		}
+
+    for(j=nSpringParton;j<gevt->GetNparticles()+nSpringParton;j++){
+      JSFGeneratorParticle *p=(JSFGeneratorParticle*)pa->At(j-nSpringParton);
 #if 0
 //    p->ls("all");
 //    p->ls();
@@ -243,10 +297,10 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
 
       hepevt_.isthep[j]=13;
       hepevt_.idhep[j]=p->GetID();
-      hepevt_.jmohep[j][0]=p->GetMother();
+      hepevt_.jmohep[j][0]=p->GetMother()+nSpringParton;
       hepevt_.jmohep[j][1]=0;
-      hepevt_.jdahep[j][0]=p->GetFirstDaughter();
-      hepevt_.jdahep[j][1]=p->GetFirstDaughter()+p->GetNDaughter()-1;
+      hepevt_.jdahep[j][0]=p->GetFirstDaughter()+nSpringParton;
+      hepevt_.jdahep[j][1]=p->GetFirstDaughter()+p->GetNDaughter()-1+nSpringParton;
 
 
       if (p->GetNDaughter() == 0 ) {
@@ -263,10 +317,10 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
       else if ( p->GetNDaughter() > 0 ) {
         Int_t id=p->GetFirstDaughter();
         JSFGeneratorParticle *pd=(JSFGeneratorParticle*)pa->At(id-1);
-	if( pd->GetNDaughter() > 1000 ) {
+	if( !pd || pd->GetNDaughter() > 1000 ) {
           hepevt_.isthep[j]=13;
-//	  hepevt_.jdahep[j][0]=p->GetNDaughter();
-//	  hepevt_.jdahep[j][1]=p->GetFirstDaughter();
+					//	  hepevt_.jdahep[j][0]=p->GetNDaughter();
+					//hepevt_.jdahep[j][1]=p->GetFirstDaughter();
 	}
 	else {
           hepevt_.isthep[j]=2; 
