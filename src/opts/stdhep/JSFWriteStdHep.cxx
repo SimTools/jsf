@@ -224,7 +224,7 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
 
     Int_t j;
 
-	std::cerr << " fHEPEV4=" << fHEPEV4 << std::endl;
+//	std::cerr << " fHEPEV4=" << fHEPEV4 << std::endl;
 
     hepev4_.eventweightlh = fHEPEV4 ? fHEPEV4->GetEventWeight() : 1.0 ;
     hepev4_.alphaqedlh= fHEPEV4 ? fHEPEV4->GetAlphaQED() : 0.0 ;
@@ -247,6 +247,7 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
 			hepevt_.nhep += nSpringParton;
 
 			for(Int_t j=0;j<nSpringParton;j++){
+
 				JSFSpringParton *p=(JSFSpringParton*)ps->At(j);
 
 				hepev4_.spinlh[j][0]=0.0;
@@ -316,7 +317,7 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
       }
       else if ( p->GetNDaughter() > 0 ) {
         Int_t id=p->GetFirstDaughter();
-        JSFGeneratorParticle *pd=(JSFGeneratorParticle*)pa->At(id-1);
+        JSFGeneratorParticle *pd=id>0 && id<1000 ? (JSFGeneratorParticle*)pa->At(id-1) : 0 ;
 	if( !pd || pd->GetNDaughter() > 1000 ) {
           hepevt_.isthep[j]=13;
 					//	  hepevt_.jdahep[j][0]=p->GetNDaughter();
