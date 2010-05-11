@@ -201,7 +201,9 @@ JSFHadronizer::~JSFHadronizer()
 Bool_t JSFHadronizer::Initialize()
 {
 #if __GNUC_VERSION__  >= 4
+#if __JSF_HOSTTYPE__ != KEKCC
    pydatawrapper_();
+#endif
 #endif
 
 // Initialize tauola
