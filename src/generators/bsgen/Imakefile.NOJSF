@@ -9,6 +9,7 @@ CXXFLAGS += -DNOJSF
 CERNLIB = /proj/soft/ext/cern/opr/lib 
 
 JSFINSTALLDIR = .
+FC=g77
 ObjSuf=o
 DllSuf=so
 CXX=g++
@@ -35,7 +36,7 @@ HDRS    = $(subst .$(SrcSuf),.h,$(SRC))
 SAMPLELIBS= $(shell root-config --libs) \
 	-Li$(CERNLIB) -lpacklib
 
-all:: lib$(PROGNAME).$(DllSuf)
+all:: lib$(PROGNAME).$(DllSuf) bssample
 
 install:: lib$(PROGNAME).$(DllSuf)
 	install -p -m 755 lib$(PROGNAME).$(DllSuf) $(JSFINSTALLDIR)/lib
@@ -57,7 +58,7 @@ lib$(PROGNAME).$(SrcSuf): $(HDRS) $(PROGNAME)LinkDef.h
 	$(HDRS) $(PROGNAME)LinkDef.h 
 
 bssample: bssample.o bssample_dummy.o
-	g77 -o bssample bssample.o lib$(PROGNAME).$(DllSuf) \
+	$(FC) -o bssample bssample.o lib$(PROGNAME).$(DllSuf) \
 	$(SAMPLELIBS) bssample_dummy.o
 
 clean::

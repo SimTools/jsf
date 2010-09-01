@@ -462,7 +462,11 @@ void JSFBeamGenerationCain::SetIBParameters(const Double_t nominalE,
 //_____________________________________________________
 void JSFBeamGenerationCain::SetIBParametersByEnv(const Double_t nominalE)
 {
-
+#ifdef NOJSF
+  std::cout << "Fatal error in JSFBeamGenerationCain::SetIBParametersByEnv " << std::endl;
+  std::cout << "SetIBParametersByEnv was called, but this library is not built with JSF support" << std::endl;
+  exit(0);
+#else
   std::stringstream sbswidth(gJSF->Env()->GetValue("JSFBeamGeneration.Width","0.00000"));
   sbswidth >> fIBWidth ;
   std::stringstream sbswidthMinus(gJSF->Env()->GetValue("JSFBeamGeneration.WidthEMinus","-1.0"));
@@ -478,6 +482,7 @@ void JSFBeamGenerationCain::SetIBParametersByEnv(const Double_t nominalE)
   if( fIBWidthEMinus > 0.0 && fIBWidthEPlus > 0.0 ) {
     fIBWidth=(fIBWidthEPlus+fIBWidthEMinus)*0.5; 
   }
+#endif
 }
 
 
@@ -659,7 +664,7 @@ void JSFBeamGenerationCain::GenBeamStrahlung(TLorentzVector &pecm, TLorentzVecto
 //_______________________________________________________
 Double_t JSFBeamGenerationCain::GenBSEnergy1(const Double_t eini, const Double_t xrand)
 {
-  Double_t x=( xrand < 0.0 ? x=GetRndm() : x=xrand );
+  Double_t x=( xrand < 0.0 ? GetRndm() : xrand );
   Double_t ebl;
   if( x < fPEdgeLimit ) {
     ebl=fPEdge1[0]*x*x + fPEdge1[1]*x + fPEdge1[2];
