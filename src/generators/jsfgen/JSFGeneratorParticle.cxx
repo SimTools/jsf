@@ -37,13 +37,20 @@ void JSFGeneratorParticle::ls(Option_t *opt)
   static Bool_t tline = kFALSE;
   TString sopt(opt);
   sopt.ToLower();
+  Int_t outform=1;
+  if ( sopt.Contains("form2") ) { outform=2; } 
   if (!tline || sopt.Contains("title")) {
     cout << "------------------------------------------------------"
          << "------------------------------------------------------"
          << "-------------------------------"
-         << endl
-         << "  No   PID     Q    Mass Mother   Ndau  1stDau     "
-         << "  ctau       DL        E       Px       Py       Pz   " 
+         << endl;
+    if ( outform == 2 ) {
+      cout  << "  No   PID     Q    Mass St Mom     Ndau  1stDau     " ;
+    }
+    else {
+      cout  << "  No   PID     Q    Mass Mother   Ndau  1stDau     ";
+    }
+    cout << "  ctau       DL        E       Px       Py       Pz   " 
          << "    Vt       Vx       Vy       Vz" 
          << endl
          << "------------------------------------------------------"
@@ -52,14 +59,23 @@ void JSFGeneratorParticle::ls(Option_t *opt)
          << endl;
     tline = kTRUE;
   }
+  if ( sopt.Contains("only") ) { return ; }
   cout << setw( 4) << fSer
        << setw( 6) << fID
        << setw( 6) << setprecision(2) << showpoint << fixed << fCharge
-       << setw( 8) << setprecision(3) << showpoint << fixed << fMass 
-       << setw( 7) << fMother
-       << setw( 7) << (TMath::Abs(fNdaughter) > 1000 ? -99999 : fNdaughter)
-       << setw( 8) << fFirstDaughter
-       << setw(11) << setprecision(3) << showpoint << fixed << fLifeTime
+       << setw( 8) << setprecision(3) << showpoint << fixed << fMass ;
+  if ( outform==2 ) {
+    cout << setw( 3) << fStatus
+         << setw( 4) << fMother
+         << setw(10) << fNdaughter
+         << setw(10) << fFirstDaughter;
+  }
+  else {
+    cout << setw( 7) << fMother
+         << setw( 7) << (TMath::Abs(fNdaughter) > 1000 ? -99999 : fNdaughter) 
+         << setw( 8) << fFirstDaughter;
+  }
+  cout << setw(11) << setprecision(3) << showpoint << fixed << fLifeTime
        << setw( 9) << setprecision(3) << showpoint << fixed << fDecayLength
        << setw( 9) << setprecision(2) << showpoint << fixed << fP[0]
        << setw( 9) << setprecision(2) << showpoint << fixed << fP[1]

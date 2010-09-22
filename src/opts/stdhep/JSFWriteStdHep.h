@@ -20,6 +20,7 @@
 #include "JSFStdHepStdCM.h"
 #include "THEPEV4.h"
 #include "JSFSpring.h"
+#include <TString.h>
 
 // *******************************************************
 class JSFWriteStdHep : public JSFModule
@@ -40,12 +41,17 @@ class JSFWriteStdHep : public JSFModule
   Bool_t        fWriteEndRun;   //! True if endRun is not written yet
   Int_t         fProcessID;     // If fHEPEV4 is not set, fProcessID is write as HEPEV4 data
 
+  Int_t         fCurrentNumberOfFiles;  // Number of files writeen so far.
+  Int_t         fCurrentOutputSizeInkB; // Output data size size to the current file (in kB)
+  Int_t         fMaxOutputSizeInkB;  // Output data size max.(kB unit)
+  Int_t         fMaxNumberOfFiles;  // Maximum number of files.
 
 	JSFSpring *fSpring;
 
   JSFStdHepStdCM   fStdHepCM; 
   static THEPEV4 *fHEPEV4; // HEPEV4 event associated to this event
     // User should create and delete THEPEV4 object, in order to store his own HEPEV4 info.
+  void HepEvtCheckAndMod();
  public:
   JSFWriteStdHep(const char *name="JSFWriteStdHep", 
 		 const char *title="JSFWriteStdHep");
@@ -72,6 +78,10 @@ class JSFWriteStdHep : public JSFModule
   static void SetHEPEV4(THEPEV4 *hepev4){ fHEPEV4=hepev4; }
   Int_t  GetProcessID(){ return fProcessID; }
   void   SetProcessID(Int_t pid){ fProcessID=pid; } 
+
+  Int_t  GetCurrentNumberOfFiles(){ return fCurrentNumberOfFiles; }
+  Int_t  GetCurrentOutputSizeInkB(){ return fCurrentOutputSizeInkB; }
+  TString GetStdHepFileName(Int_t iseq);
   
   ClassDef(JSFWriteStdHep, 2)  // JSFWriteStdHep class
 

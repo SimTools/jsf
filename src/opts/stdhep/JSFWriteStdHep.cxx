@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <string>
+#include <stack>
 
 #include "JSFSteer.h"
 #include "JSFWriteStdHep.h"
@@ -35,6 +36,7 @@ extern "C" {
   extern void jsf_mcfio_init_();
   extern void stdflpyxsec_(int *ntries);
   extern void stdxend_(int *istream);
+  extern void heplst_(int *mlst);
 };
 
 //_____________________________________________________________________________
@@ -71,6 +73,10 @@ JSFWriteStdHep::JSFWriteStdHep(const char *name, const char *title )
 		if( !fSpring ){ Error("JSFHadronizer","No JSFSpring class was found"); }            			
 	}
 
+  fCurrentOutputSizeInkB=0;
+  fCurrentNumberOfFiles=0;
+  fMaxOutputSizeInkB=gJSF->Env()->GetValue("JSFWriteStdHep.OutputSizePerFileInkB",1900000);
+  fMaxNumberOfFiles=gJSF->Env()->GetValue("JSFWriteStdHep.MaxNumberOfFiles",99);
 }
 
 //_____________________________________________________________________________
@@ -97,6 +103,8 @@ Bool_t JSFWriteStdHep::Initialize()
   std::cout << "  Event Source     : " << fEventSource << std::endl;
   std::cout << "    =0 /HEPEVT/, =1 /JETSET/, =2 JSFGenerator " << std::endl;
   std::cout << "  ProcessID        : " << fProcessID << std::endl;
+  std::cout << "  Data size per file in kB : " << fMaxOutputSizeInkB << std::endl;
+  std::cout << "  Max. number of files     : " << fMaxNumberOfFiles << std::endl;
   std::cout << "==============================================" << std::endl;
 
   return kTRUE;
@@ -105,27 +113,29 @@ Bool_t JSFWriteStdHep::Initialize()
 Bool_t JSFWriteStdHep::BeginRun(Int_t nrun)
 {
 
-  const Char_t *filename=fOutFileName.data();
-  Int_t lfilename=fOutFileName.length();
+  fCurrentOutputSizeInkB=0;
+  fCurrentNumberOfFiles+=1;
+  TString filename=GetStdHepFileName(fCurrentNumberOfFiles);
+  Int_t lfilename=filename.Length();
   const Char_t *title=fOutTitle.data();
   Int_t ltitle=fOutTitle.length();
   
   Int_t iok=0;
 
   if ( JSFReadStdHep::IsInitialized() ) {
-    stdxwopen_(filename, title, &fNTries, &fOutStream, &iok, lfilename, ltitle);
+    stdxwopen_(filename.Data(), title, &fNTries, &fOutStream, &iok, lfilename, ltitle);
   }
   else {
     stdxwinit_(filename, title, &fNTries, &fOutStream, &iok, lfilename, ltitle);
   }
   if( iok != 0 ) {
     std::cerr << "Fatal error to open StdHep output file. LOK=" << iok << std::endl;
-    std::cerr << "  Output file name : " << fOutFileName << std::endl;
+    std::cerr << "  Output file name : " << filename << std::endl;
     std::cerr << "  Output title     : " << fOutTitle << std::endl;
     std::cerr << "  NTries           : " << fNTries << std::endl;
     exit(0);
   }
-  std::cerr << "StdHep Output file was opened. File is " <<fOutFileName 
+  std::cerr << "StdHep Output file was opened. File is " <<filename 
 	    << " Title is " << fOutTitle << std::endl;
 
   fWriteBeginRun=kTRUE;
@@ -133,7 +143,34 @@ Bool_t JSFWriteStdHep::BeginRun(Int_t nrun)
   return kTRUE;
 } 
 
+//_____________________________________________________________
+TString JSFWriteStdHep::GetStdHepFileName(Int_t iseq)
+{
+//  If fOutFileName ends with ".stdhep", returns fOutFileName,
+//  If Not, return fOutFileName+"_${iseq}.stdhep
+//
+   TString ftest(fOutFileName.data());
+   if ( ftest.EndsWith(".stdhep") ) {
+	return ftest;
+   }
+   if ( iseq < 10 ) {
+     ftest+="_0";
+   }
+   else if ( iseq < 100 ) {
+     ftest+="_";
+   }
+   else {
+     std::cerr << "Fatal Error: File sequence number exceeds 99 "
+      << " in JSFWriteStdHep::MakeStdhepFileName(..) " << std::endl;
+     exit(0);
+   }
+   ftest+=iseq;
+   ftest+=".stdhep";
 
+   std::cout << " GetStdHepFileName is " << ftest << std::endl;
+   return ftest;
+
+}
 
 //_____________________________________________________________
 void JSFWriteStdHep::StdXWINIT(std::string ifilename, std::string ititle,
@@ -145,7 +182,7 @@ void JSFWriteStdHep::StdXWINIT(std::string ifilename, std::string ititle,
   Int_t ltitle=ititle.length();
   
   stdxwinit_(filename, title, &ntry, &iostream, &iok, lfilename, ltitle);  
-
+  
 }
 
 //_____________________________________________________________
@@ -158,7 +195,6 @@ void JSFWriteStdHep::StdXWOPEN(std::string ifilename, std::string ititle,
   Int_t ltitle=ititle.length();
   
   stdxwopen_(filename, title, &ntry, &iostream, &iok, lfilename, ltitle);  
-
 }
 
 //_____________________________________________________________
@@ -310,6 +346,9 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
         hepevt_.jdahep[j][0]=0;
         hepevt_.jdahep[j][1]=0;
       }	
+      else if( p->GetMother() < 0 && abs(p->GetID()) == 15 ) {
+        hepevt_.isthep[j]=2;  // Special treatment of primary tau decay
+      }	
       else if( p->GetMother() < 0 || p->GetNDaughter() > 1000 ) {
         hepevt_.isthep[j]=13;	
         hepevt_.jdahep[j][0]=0;
@@ -352,11 +391,57 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
 //        pzsum+=hepevt_.phep[j][2];
 //      }
     }
+    HepEvtCheckAndMod();
   }
 
 //  std::cerr << "JSFWriteStdHep::... esum=" << esum 
 //	<< " pxsum=" << pxsum << " pysum=" << pysum
 //	<< " pzsum=" << pzsum << std::endl;
+
+  if ( fCurrentOutputSizeInkB > fMaxOutputSizeInkB ) {
+     if ( fCurrentNumberOfFiles >= fMaxNumberOfFiles ) {
+        std::cout << "Warning: Number of output stdhep files reached limit (" 
+          << fMaxNumberOfFiles << ") in JSFWriteStdhep::Process().  Job will be terminated"
+          << std::endl;
+        std::cout << "Last event and end run record is not written to the file." << std::endl;
+        gJSF->SetReturnCode(JSFSteer::kJSFTerminate);
+        return kTRUE;
+     }
+     StdXEND(fOutStream);
+     std::cout << "stdhep file is closed after writting about " << fCurrentOutputSizeInkB 
+       << " kB of data.  Current file number is " << fCurrentNumberOfFiles << std::endl;
+     std::cout << "Last event number of this file is " << gJSF->GetEventNumber()-1 << std::endl;
+
+     fCurrentNumberOfFiles++;
+     fCurrentOutputSizeInkB=0;
+     TString nextfile=GetStdHepFileName(fCurrentNumberOfFiles);
+
+     const Char_t *nextfilename=nextfile.Data();
+     Int_t   lnextfilename=nextfile.Length();
+     const Char_t *title=fOutTitle.data();
+     Int_t   ltitle=fOutTitle.length();
+     Int_t iok=0;
+     stdxwopen_(nextfilename, title, &fNTries, &fOutStream, &iok, lnextfilename, ltitle);
+     if ( iok != 0 ) {
+       std::cout << "Fatal error to open StdHep output file. LOK=" << iok << std::endl;
+       std::cout << "  Output file name : " << nextfilename << std::endl;
+       std::cout << "  Output title     : " << fOutTitle << std::endl;
+       std::cout << "  NTries           : " << fNTries << std::endl;
+       exit(0);
+     }
+     std::cout << "StdHep Output file was opened. File is " << nextfilename
+            << " Title is " << fOutTitle << std::endl;
+
+     stdflpyxsec_(&fNTries);
+     Int_t ilbl=100;
+     stdxwrt_(&ilbl, &fOutStream, &lok);
+
+     if( lok != 0 ) {
+       std::cout << "Error in JSFWriteEvent::Process() .. failed to write beging run record " << std::endl;
+       std::cerr << "  Output file name : " << nextfilename << std::endl;
+       exit(0);
+     }
+  }
 
   Int_t ldlb=1;
   stdxwrt_(&ldlb, &fOutStream, &lok);
@@ -366,10 +451,58 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
 	      << nev << std::endl;
     return kFALSE;
   }
+// * Check Output data size.
+  Int_t nhep=hepevt_.nhep;
+  Double_t outsize=(Double_t)(( 8*( 13+3*nhep+9*nhep ) + 4*( 1+2*nhep+2+6*nhep) )/ 1000.0);
+  Int_t ioutsize=(Int_t)(outsize*0.77);
+  fCurrentOutputSizeInkB+=ioutsize;
 
   return kTRUE;
 }
 
+
+//____________________________________________________________________________
+void JSFWriteStdHep::HepEvtCheckAndMod()
+{
+// Make sure that Particles of Status 1 or 2 is not the parent of particles 
+// of status =13.  Mokka (lcio's StdhepReader fails in such case, because 
+// it re-creates the mother-daughter relation from daughter information.
+// This is the case of Mokka-v01-06
+//
+  bool imod=false;
+  for(int i=hepevt_.nhep-1; i>=0 ; i--) {
+    if ( hepevt_.jdahep[i][0] == 0 && hepevt_.jdahep[i][1]==0 ) { continue; }
+    if ( hepevt_.isthep[i] == 13 ) { continue ; }
+    
+    std::stack<int> s;
+    for(int ip=hepevt_.jdahep[i][0];ip<=hepevt_.jdahep[i][1];ip++) {
+      s.push(ip-1);
+    }
+    while( ! s.empty() ) {
+      int j=s.top();
+      s.pop();
+      if ( hepevt_.isthep[j] == 13 ) {
+        if ( ! imod ) {
+          std::cout << "JSFWriteStdhep::HepEvtCheckAndMod ... Special editting of HepEvt record to avoid error in Mokka" << std::endl;
+        }
+        std::cout << "JSFWriteStdhep::HepEvtCheckAndMod:  Status code of line " << i << " is changed from " << hepevt_.isthep[i] << " to 13" << std::endl;
+        hepevt_.isthep[i] = 13;
+        imod=true;
+        break; 
+      }
+      else if ( hepevt_.jdahep[j][0] != 0 && hepevt_.jdahep[j][1] != 0 ) {
+        for(int jp=hepevt_.jdahep[j][0];jp<=hepevt_.jdahep[j][1];jp++) {
+          s.push(jp-1);
+        }
+      }
+    }
+  }
+  if ( imod ) {
+    int mlst=1;
+    std::cout << "JSFWriteStdHep::HepEvtCheckAndMod ... Dump hepevt record after modification." << std::endl; 
+    heplst_(&mlst);
+  }
+}
 
 //_____________________________________________________________________________
 Bool_t JSFWriteStdHep::EndRun()
@@ -386,6 +519,13 @@ Bool_t JSFWriteStdHep::EndRun()
       return kFALSE;
     }
   }
+
+  std::cout << "JSFWriteStdHep reached EndRun.. " << std::endl;
+  std::cout << "   Last event number : " << gJSF->GetEventNumber() << std::endl;
+  std::cout << "   Last file number  : " << fCurrentNumberOfFiles << std::endl;
+  std::cout << "   Size of last file : " << fCurrentOutputSizeInkB << " kB " << std::endl;
+  std::cout << "   Last file name    : " << GetStdHepFileName(fCurrentNumberOfFiles) << std::endl; 
+
   //  }
   return kTRUE;
 }
