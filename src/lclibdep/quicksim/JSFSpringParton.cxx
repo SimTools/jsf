@@ -54,16 +54,56 @@
 #include "JSFConfig.h"
 #include "JSFSpringParton.h"
 
+#include <iostream>
+#include <iomanip>
 
 ClassImp(JSFSpringParton)
 
 
 // ---------------------------------------------------------------
-void JSFSpringParton::ls(Option_t *)
+void JSFSpringParton::ls(Option_t *opt)
 {
-  printf(" Particle ID=%d  Mass=%g GeV Charge=%g",fID, fMass, fCharge);
-  printf(" (E,Px,Py,Pz)=(%g,%g,%g,%g) (GeV)",fP[0],fP[1],fP[2],fP[3]);
-  printf("\n");
+  using namespace std;
+  TString sopt(opt);
+  sopt.ToLower();
+  Int_t outform=1;
+  if ( sopt.Contains("form2")) { outform=2; }
+  if ( sopt.Contains("title") && outform != 1 ) {
+    cout << "------------------------------------------------------"
+         << "------------------------------------------------------"
+         << "-------------------------------"
+         << endl 
+         << "  No   PID     Q    Mass Mother   Ndau  1stDau     "
+         << "Helicity ColorID ShowerInf       E       Px       Py       Pz   "
+         << endl
+         << "------------------------------------------------------"
+         << "------------------------------------------------------"
+         << "-------------------------------"
+         << endl;
+  }
+  if ( sopt.Contains("only") ) { return ; }
+  
+  if ( outform==2 ) {
+    cout << setw( 4) << fSer 
+         << setw( 6) << fID 
+         << setw( 6) << setprecision(2) << showpoint << fixed << fCharge
+         << setw( 8) << setprecision(3) << showpoint << fixed << fMass 
+         << setw( 7) << fMother
+         << setw( 9) << fNdaughter
+         << setw( 8) << fFirstDaughter
+         << setw( 8) << fHelicity
+         << setw( 8) << fColorID
+         << setw( 8) << fShowerInfo
+         << setw( 9) << setprecision(2) << showpoint << fixed << fP[0]
+         << setw( 9) << setprecision(2) << showpoint << fixed << fP[1]
+         << setw( 9) << setprecision(2) << showpoint << fixed << fP[2]
+         << setw( 9) << setprecision(2) << showpoint << fixed << fP[3]
+         << endl;
+  } else {
+    printf(" Particle ID=%d  Mass=%g GeV Charge=%g",fID, fMass, fCharge);
+    printf(" (E,Px,Py,Pz)=(%g,%g,%g,%g) (GeV)",fP[0],fP[1],fP[2],fP[3]);
+    printf("\n");
+  }
 }
 
 
