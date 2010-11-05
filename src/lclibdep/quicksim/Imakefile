@@ -42,17 +42,19 @@ HDR	      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRC)) \
 		$(NAME)LinkDef.h
 
 ifneq ($(FC),gfortran)
+#if defined(__G77EGCS_LIBNAME__)
+LIBF2C        = -l$(G77EGCS_LIBNAME)
+#endif
 LIBS     = -L$(LCLIBROOT)/lib $(EXTRALDOPT) \
         -lSIMJLC -lLTKCL -lLCFULL -lTBS \
         -lGENUTIL -lFORTLIB \
-        $(EXTRALIBS) -lg2c /* -lnsl */
+        $(EXTRALIBS) $(LIBF2C) /* -lnsl */
 else
 LIBS     = -L$(LCLIBROOT)/lib $(EXTRALDOPT) \
         -lSIMJLC -lLTKCL -lLCFULL -lTBS \
         -lGENUTIL -lFORTLIB \
         $(EXTRALIBS) $(GFORTRANLIBDIR) -lgfortran -lgfortranbegin /* -lnsl */
 endif
-
 
 /*----------------------------------------------------------------------*/
 /*  Make targets							*/
