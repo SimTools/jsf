@@ -41,7 +41,9 @@ INSTALLHDR    = $(HDR) JSFParticleData.h
 ifeq ($(FC),gfortran)
 LIBS	      = $(GFORTRANLIBDIR) -lgfortran -lgfortranbegin /* -lnsl */
 else
+#if defined(__G77EGCS_LIBNAME__)
 LIBS	      = -lg2c /* -lnsl */
+#endif
 endif
 
 /*----------------------------------------------------------------------*/
