@@ -556,16 +556,6 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
     rbuf[j][17]=p->fColorID;
     rbuf[j][18]=p->fShowerInfo;
 
-    if( debug ) {
-      std::cerr << "SP j=" << j << " Ser=" << p->fSer << " id=" << p->fID
-        << " mother=" << p->fMother << " 1stDau=" << p->fFirstDaughter
-        << " ndau=" << p->fNdaughter << " E=" << p->fP[0]
-        << " mass=" << p->fMass << " shower=" << p->fShowerInfo << std::endl;
-    }
-
-
-
-
   }
 
   //C--
