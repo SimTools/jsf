@@ -319,7 +319,16 @@ Bool_t JSFHadronizer::Process(Int_t ev)
 
   Hadronize(fSpring, iret);
 
-  if ( iret < 0 ) return kFALSE;
+  if ( iret < 0 ) {  
+    if ( gJSF->Env()->GetValue("JSFHadronizer.ExitOnError",1) == 1 ) {
+      return kFALSE;
+    }
+    else {
+      gJSF->SetReturnCode(JSFSteer::kJSFSkipRestModules);
+      std::cout << "Warning  JSFHadronizer::Process requested the event " << gJSF->GetEventNumber() << " to be skipped" << std::endl;
+      return kTRUE;
+    }
+  }
 
   if( fDebug > 0 ) {
     printf(" End of JSFHadronizer::Process()\n");
@@ -525,7 +534,6 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
   nret=0;
   Int_t npgen=0;
 
-
   JSFSpringBuf *spevt=(JSFSpringBuf*)spring->EventBuf();
   TClonesArray *ps=spevt->GetPartons();
   Int_t npart=spevt->GetNpartons();
@@ -547,6 +555,17 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
     rbuf[j][16]=p->fHelicity;
     rbuf[j][17]=p->fColorID;
     rbuf[j][18]=p->fShowerInfo;
+
+    if( debug ) {
+      std::cerr << "SP j=" << j << " Ser=" << p->fSer << " id=" << p->fID
+        << " mother=" << p->fMother << " 1stDau=" << p->fFirstDaughter
+        << " ndau=" << p->fNdaughter << " E=" << p->fP[0]
+        << " mass=" << p->fMass << " shower=" << p->fShowerInfo << std::endl;
+    }
+
+
+
+
   }
 
   //C--
