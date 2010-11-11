@@ -494,6 +494,18 @@ void JSFWriteStdHep::HepEvtCheckAndMod()
         for(int jp=hepevt_.jdahep[j][0];jp<=hepevt_.jdahep[j][1];jp++) {
           s.push(jp-1);
         }
+        if( s.size() > (unsigned int)hepevt_.nhep ) {
+	  std::cerr << "######## F A T A L    E R R O R ##########################################################" << std::endl;
+	  std::cerr << "Fatal error in JSFWriteStdHep::HepEvtCheckAndMod -- Stack size exceeded the number of particles " << std::endl;
+          std::cerr << " Stack size=" << s.size() << " number of particles =" << hepevt_.nhep << " Event number=" << gJSF->GetEventNumber() << std::endl;
+	  std::cerr << " Error happened while verifying " << i << "-th partile " << std::endl;
+          std::cerr << " This error can happen by an error in generator data, wrong mother-daughter relation, etc." << std::endl;
+          std::cerr << " List of HepEvt buffer will follow." << std::endl;
+          int mlst=1;
+          heplst_(&mlst);
+          std::cerr << " Please check your generator.  The execution is fored to end here." << std::endl;
+          exit(-1);
+        }
       }
     }
   }
