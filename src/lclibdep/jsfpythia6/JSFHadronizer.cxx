@@ -1385,6 +1385,21 @@ std::cerr << "    : xctau = " << pydat2_.PMAS[3][pycomp_(&kf)-1]*0.1 << std::end
     Int_t firstchild = pyjets->K[3][i-1];
     Int_t lastchild  = pyjets->K[4][i-1];
     Int_t ndau       = lastchild - firstchild + 1;
+
+    // Durty edit to avoid error 
+    if ( firstchild == 0 && lastchild != 0 ) {
+       if( ks == 1 && ( abs(kf) == 11 || abs(kf) == 13 ) ) { 
+	  std::cout << "Warning JSFHadronizer::Fragmentation encountered strange pointers to first and last child" << std::endl;
+          std::cout << "  firstchild=" << firstchild << " lastchild=" << lastchild << " at event number " << gJSF->GetEventNumber() << std::endl;
+          std::cout << "  Errorneous line is " << i << " ks=" << ks << " kf=" << kf << " E=" << pyjets->P[3][i-1] << std::endl;
+          std::cout << "  To fix, lastchild and ndau are set to 0" << std::endl;
+          std::cout << "  Event listing of this Fragmentation will follow " << std::endl;
+          pylist_(&two);
+	  ndau=0;
+	  lastchild=0;
+        }
+     }
+
     //C--
     //C  Make sure that unstable partons are flagged as unstable
     //C--
