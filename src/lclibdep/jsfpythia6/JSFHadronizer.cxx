@@ -919,7 +919,7 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
     Int_t ip = inoshw[jp-1];
     Int_t id = (Int_t)rbuf[ip-1][1];
     Int_t ida = TMath::Abs(id);
-    if( ida > 25 && ida != 220000 && ida != 1000022 ) {
+    if( ida > 25 && ida != 220000 && ida != 1000022 && ida != 1000015) {
       printf("Warning in JSFHadronizer::Hadronize");
       printf(" Particle ID=%d is not recognized.\n",id);
       continue;
@@ -929,7 +929,7 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
     //C--
     if( ida==12 || ida==14 || ida==16 ||
 	ida==11 || ida==13 || ida==22 ||
-	ida==220000 || ida==1000022 ) {
+	ida==220000 || ida==1000022 || ida==1000015) {
       inelm++;
       for(Int_t k=0;k<20;k++){ rtmp[k]=0; }
       rtmp[0]=inelm;
