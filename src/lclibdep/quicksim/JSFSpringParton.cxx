@@ -71,21 +71,21 @@ void JSFSpringParton::ls(Option_t *opt)
   if ( sopt.Contains("title") && outform != 1 ) {
     cout << "------------------------------------------------------"
          << "------------------------------------------------------"
-         << "-------------------------------"
+         << "---------------------------------"
          << endl 
-         << "  No   PID     Q    Mass Mother   Ndau  1stDau     "
+         << "  No     PID     Q    Mass Mother   Ndau  1stDau     "
          << "Helicity ColorID ShowerInf       E       Px       Py       Pz   "
          << endl
          << "------------------------------------------------------"
          << "------------------------------------------------------"
-         << "-------------------------------"
+         << "---------------------------------"
          << endl;
   }
   if ( sopt.Contains("only") ) { return ; }
   
   if ( outform==2 ) {
     cout << setw( 4) << fSer 
-         << setw( 6) << fID 
+         << setw( 8) << fID 
          << setw( 6) << setprecision(2) << showpoint << fixed << fCharge
          << setw( 8) << setprecision(3) << showpoint << fixed << fMass 
          << setw( 7) << fMother

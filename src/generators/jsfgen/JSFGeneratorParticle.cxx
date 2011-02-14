@@ -42,26 +42,26 @@ void JSFGeneratorParticle::ls(Option_t *opt)
   if (!tline || sopt.Contains("title")) {
     cout << "------------------------------------------------------"
          << "------------------------------------------------------"
-         << "-------------------------------"
+         << "---------------------------------"
          << endl;
     if ( outform == 2 ) {
-      cout  << "  No   PID     Q    Mass St Mom     Ndau  1stDau     " ;
+      cout  << "  No     PID     Q    Mass St Mom     Ndau  1stDau     " ;
     }
     else {
-      cout  << "  No   PID     Q    Mass Mother   Ndau  1stDau     ";
+      cout  << "  No     PID     Q    Mass Mother   Ndau  1stDau     ";
     }
     cout << "  ctau       DL        E       Px       Py       Pz   " 
          << "    Vt       Vx       Vy       Vz" 
          << endl
          << "------------------------------------------------------"
          << "------------------------------------------------------"
-         << "-------------------------------"
+         << "---------------------------------"
          << endl;
     tline = kTRUE;
   }
   if ( sopt.Contains("only") ) { return ; }
   cout << setw( 4) << fSer
-       << setw( 6) << fID
+       << setw( 8) << fID
        << setw( 6) << setprecision(2) << showpoint << fixed << fCharge
        << setw( 8) << setprecision(3) << showpoint << fixed << fMass ;
   if ( outform==2 ) {
