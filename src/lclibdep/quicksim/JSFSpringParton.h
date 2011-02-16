@@ -32,6 +32,7 @@ public:
   Int_t     fHelicity;  // parton helicity
   Int_t     fColorID;   // Color singlet group ID
   Int_t     fShowerInfo; // ShowerLevel*100 + Shower-PairID
+  Double_t  fLifeTime;   // ctau [cm]
 
 public:
   JSFSpringParton() {}
@@ -39,12 +40,13 @@ public:
   JSFSpringParton(Int_t Ser, Int_t ID, Double_t Mass, Double_t Charge,
          TVector& P, 
 	 Int_t Ndaughter, Int_t FirstDaughter, Int_t Mother,
-		  Int_t Helicity, Int_t ColorID, Int_t ShowerInfo){
+		  Int_t Helicity, Int_t ColorID, Int_t ShowerInfo, 
+		  Double_t ctau = 0.){
          fSer = Ser ; fID=ID; fMass=Mass; fCharge=Charge;
 	 for(Int_t i=0;i<4;i++){ fP[i]=P(i) ; }
 	 fNdaughter=Ndaughter ; fFirstDaughter=FirstDaughter ;
 	 fMother=Mother; fHelicity=Helicity, fColorID=ColorID; 
-         fShowerInfo=ShowerInfo ; }
+         fShowerInfo=ShowerInfo ; fLifeTime=ctau; }
 
 
   JSFSpringParton(Int_t Ser, Int_t ID, Double_t Mass, Double_t Charge,
@@ -52,7 +54,7 @@ public:
          fSer = Ser ; fID=ID; fMass=Mass; fCharge=Charge;
 	 for(Int_t i=0;i<4;i++){ fP[i]=P(i) ; }
 	 fNdaughter=0; fFirstDaughter=0;
-	 fMother=0; fHelicity=0 ; fColorID=0; fShowerInfo=0;}
+	 fMother=0; fHelicity=0 ; fColorID=0; fShowerInfo=0; fLifeTime=0.;}
 
   JSFSpringParton(Float_t data[]);
 
@@ -77,6 +79,7 @@ public:
   Int_t GetHelicity(){ return fHelicity;}
   Int_t GetColorID(){ return fColorID;}
   Int_t GetShowerInfo(){ return fShowerInfo;}
+  Double_t GetLifeTime() { return fLifeTime; }
 
   TVector GetPV(){ TVector p(4) ; 
           p(0)=fP[0] ; p(1) =fP[1] ; p(2)=fP[2] ; p(3)=fP[3] ; return p ; }
@@ -87,7 +90,7 @@ public:
 
   virtual ~JSFSpringParton() {}
 
-  ClassDef(JSFSpringParton,2)  //A JSFSpringParton segment
+  ClassDef(JSFSpringParton,3)  //A JSFSpringParton segment
 };
 
 #endif

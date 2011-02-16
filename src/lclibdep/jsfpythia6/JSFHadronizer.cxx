@@ -552,10 +552,12 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
     rbuf[j][11]=p->fNdaughter;
     rbuf[j][12]=p->fFirstDaughter;
     rbuf[j][13]=p->fMother;
+#if 1
+    rbuf[j][15]=p->fLifeTime;
+#endif
     rbuf[j][16]=p->fHelicity;
     rbuf[j][17]=p->fColorID;
     rbuf[j][18]=p->fShowerInfo;
-
   }
 
   //C--
@@ -613,7 +615,11 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
     }
     nslvl = TMath::Max(nslvl, islv);
     if( islv <= 0 ) {
+#if 0
       if ( ndau <= 0 ) {
+#else
+      if ( ndau <= 0 || rbuf[ip-1][15] > 0.) {
+#endif
 	nnoshw = nnoshw + 1 ;
 	inoshw[nnoshw-1] = ip;
       }
@@ -919,28 +925,40 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
     Int_t ip = inoshw[jp-1];
     Int_t id = (Int_t)rbuf[ip-1][1];
     Int_t ida = TMath::Abs(id);
-    if( ida > 25 && ida != 220000 && ida != 1000022 && ida != 1000015) {
+    if( ida > 25 && ida != 220000 && ida != 1000022 && ida != 1000015 && ida != 1000039) {
       printf("Warning in JSFHadronizer::Hadronize");
       printf(" Particle ID=%d is not recognized.\n",id);
       continue;
     }
     //C--
-    //C  Neutrinos, e, mu, gamma, and LSP.
+    //C  Neutrinos, e, mu, gamma, LSP, neutralino 1,
+    //C  stau 1 (~L): 1000015, gravitino: 1000039
     //C--
     if( ida==12 || ida==14 || ida==16 ||
 	ida==11 || ida==13 || ida==22 ||
-	ida==220000 || ida==1000022 || ida==1000015) {
+	ida==220000 || ida==1000022 || ida==1000015 || ida==1000039) {
       inelm++;
       for(Int_t k=0;k<20;k++){ rtmp[k]=0; }
       rtmp[0]=inelm;
       rtmp[1]=id;
       rtmp[2]=rbuf[ip-1][2];
-      rtmp[3]=-id%2;
+      rtmp[3]=(ida != 1000039 ? -id%2 : 0);
       rtmp[4]=rbuf[ip-1][4];
       rtmp[5]=rbuf[ip-1][5];
       rtmp[6]=rbuf[ip-1][6];
       rtmp[7]=rbuf[ip-1][7];
+#if 0
       rtmp[13]=-ip;
+#else
+      rtmp[11]=rbuf[ip-1][11];  // # daughters
+      rtmp[12]=-rbuf[ip-1][12]; // 1st daughter
+      rtmp[13]=-ip;             // mother
+      Double_t xctau=rbuf[ip-1][15];  // ctau
+      rtmp[15]=xctau;
+      if (rtmp[15]>0.) {
+        rtmp[16]=gRandom->Exp(xctau);
+      }
+#endif
       new(part[inelm-1]) JSFGeneratorParticle(rtmp);
       npgen++;
     }
@@ -992,6 +1010,24 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
       inelm = inelm + nout;
     }
   }
+#if 1
+  // Fix daughter pointers
+  for(Int_t  i=1;i<=npgen;i++){
+    Int_t idau = static_cast<JSFGeneratorParticle *>(part[i-1])->fFirstDaughter;
+    if( idau < 0 ){
+      Int_t ndau = static_cast<JSFGeneratorParticle *>(part[i-1])->fNdaughter;
+      for(Int_t j=i+1;j<=npgen;j++){
+        Int_t ip = static_cast<JSFGeneratorParticle *>(part[j-1])->fMother;
+	if( ip == idau ){
+          static_cast<JSFGeneratorParticle *>(part[i-1])->fFirstDaughter=j;
+	}
+	if( -ip >=-idau && -ip <= -idau+ndau-1  ){
+          static_cast<JSFGeneratorParticle *>(part[j-1])->fMother=i;
+	}
+      }
+    }
+  }
+#endif
   gbuf->SetNparticles(npgen);
 
   if( fDebug > 0 ) {
