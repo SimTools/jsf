@@ -420,8 +420,11 @@ void JSFBeamGenerationCain::SetBSParameters(const Int_t beamdataformat, const TS
 
   printf(" fNominalE in JSFBeamGeneration is %g\n",fNominalE);
   printf(" GetNominalEnergy is %g\n",GetNominalEnergy());
+#if defined(__BUILD_BITS__) && __BUILD_BITS__ == -m64 
+  printf(" Address of this object is %lx\n",(ULong_t)this);
+#else
   printf(" Address of this object is %x\n",(UInt_t)this);
-
+#endif
 }
 
 //_____________________________________________________

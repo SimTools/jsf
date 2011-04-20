@@ -276,12 +276,20 @@ Int_t JSFEnv::ReadFile(const char *n, EEnvLevel l)
          *col=0;
 	 while( (*(col-1)==' ') ) { 
 	   col--;  
-	   if( (UInt_t)inp-(UInt_t)col < 2 ) { 
+#if defined(__BUILD_BITS__) && __BUILD_BITS__ == -m64
+           if( (ULong_t)inp-(ULong_t)col < 2 ) {
+#else
+           if( (UInt_t)inp-(UInt_t)col < 2 ) {
+#endif
 	     printf("Fatal error in JSFEnv::ReadFile ..");
 	     printf("No valid parameter name is found. Last input line was\n");
 	     printf("[%s]\n",inp);
 	     printf("while looking at last character [%c]\n",*col);
-	     printf(" col=%d inp=%d\n",(UInt_t)col, (UInt_t)inp);
+#if defined(__BUILD_BITS__) && __BUILD_BITS__ == -m64
+             printf(" col=%ld inp=%ld\n",(ULong_t)col, (ULong_t)inp);
+#else
+             printf(" col=%d inp=%d\n",(UInt_t)col, (UInt_t)inp);
+#endif
 	     gSystem->Exit(-1);
 	   }
  	   *col=0;

@@ -98,7 +98,11 @@ InputDialog::InputDialog(const char *prompt, const char *defval, char *retstr,
 
    // command to be executed by buttons and text entry widget
    char cmd[128];
+#if defined(__BUILD_BITS__) && __BUILD_BITS__ == -m64
+   sprintf(cmd, "{long r__ptr=0x%lx; ((InputDialog*)r__ptr)->ProcessMessage($MSG,$PARM1,$PARM2);}", (ULong_t)this);
+#else
    sprintf(cmd, "{long r__ptr=0x%x; ((InputDialog*)r__ptr)->ProcessMessage($MSG,$PARM1,$PARM2);}", (UInt_t)this);
+#endif
 
    // Set width and height of widget automatically.
    Int_t tline=line;

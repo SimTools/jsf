@@ -483,7 +483,11 @@ JSFGUIFrame::JSFGUIFrame(const TGWindow *p, UInt_t w, UInt_t h,
      gROOT->LoadMacro(gJSF->Env()->GetValue("JSFGUI.UserMenuMacro","UserMenuMacro.C"));
      fMenuUser = new TGPopupMenu(fClient->GetRoot());
      Char_t cmd[256];
+#if defined(__BUILD_BITS__) && __BUILD_BITS__ == -m64
+     sprintf(cmd,"UserMenu((TGPopupMenu*)0x%lx);",(ULong_t)fMenuUser);
+#else
      sprintf(cmd,"UserMenu((TGPopupMenu*)0x%x);",(UInt_t)fMenuUser);
+#endif
      gROOT->ProcessLine(cmd);
      fMenuUser->Associate(this);
      fMenuBar->AddPopup("UserMenu", fMenuUser, fMenuBarItemLayout);
@@ -771,7 +775,11 @@ void JSFGUIFrame::Update()
 
   //***********************
   if( fMenuUser ) {
+#if defined(__BUILD_BITS__) && __BUILD_BITS__ == -m64
+    sprintf(wrk,"UserMenuUpdate((TGPopupMenu*)0x%lx);",(ULong_t)fMenuUser);
+#else
     sprintf(wrk,"UserMenuUpdate((TGPopupMenu*)0x%x);",(UInt_t)fMenuUser);
+#endif
     gROOT->ProcessLine(wrk);
   }
 
@@ -843,8 +851,13 @@ cyan is +Xand purple is +Y directions",    icontype, buttons, &retval);
 	      }
 	      else {
 		if( fMenuUser ) {
-		  sprintf(wrkstr,"UserMenuProcessMessage((TGPopupMenu*)0x%x,%ld);",
-			  (UInt_t)fMenuUser, parm1);
+#if defined(__BUILD_BITS__) && __BUILD_BITS__ == -m64
+                  sprintf(wrkstr,"UserMenuProcessMessage((TGPopupMenu*)0x%lx,%ld);",
+                          (ULong_t)fMenuUser, parm1);
+#else
+                  sprintf(wrkstr,"UserMenuProcessMessage((TGPopupMenu*)0x%x,%ld);",
+                          (UInt_t)fMenuUser, parm1);
+#endif
 		  gROOT->ProcessLine(wrkstr);
 		}
 	      }

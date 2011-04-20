@@ -356,9 +356,15 @@ void JSFSpring::Streamer(TBuffer &R__b)
      else if(  R__v > 3 ) {
        JSFSpring::Class()->ReadBuffer(R__b, this, R__v, R__s, R__c);
        if( !fBases ) {
-	 sprintf(cmdstr,"bases=new %s(\"%s\",\"%s\") ; \n\
-         bases->SetSpring((Int_t)%d);", fBasesClassName.Data(), 
-		fBasesObjectName.Data(), fBasesObjectTitle.Data(),(Int_t)this);
+#if defined(__BUILD_BITS__ ) && __BUILD_BITS__ == -m64
+         sprintf(cmdstr,"bases=new %s(\"%s\",\"%s\") ; \n\
+         bases->SetSpring((ULong_t)%ld);", fBasesClassName.Data(),
+                fBasesObjectName.Data(), fBasesObjectTitle.Data(),(ULong_t)this);
+#else
+         sprintf(cmdstr,"bases=new %s(\"%s\",\"%s\") ; \n\
+         bases->SetSpring((UInt_t)%d);", fBasesClassName.Data(),
+                fBasesObjectName.Data(), fBasesObjectTitle.Data(),(UInt_t)this);
+#endif
 	 gROOT->ProcessLine(cmdstr);
        }
        return;
@@ -372,8 +378,13 @@ void JSFSpring::Streamer(TBuffer &R__b)
      lc=R__b.ReadStaticArray(name);
      lc=R__b.ReadStaticArray(title);
      if( !fBases ) {
+#if defined(__BUILD_BITS__) && __BUILD_BITS__ == -m64
        sprintf(cmdstr,"bases=new %s(\"%s\",\"%s\") ; \n\
-        bases->SetSpring((Int_t)%d);", cname, name, title,(Int_t)this);
+        bases->SetSpring((ULong_t)%ld);", cname, name, title,(ULong_t)this);
+#else
+       sprintf(cmdstr,"bases=new %s(\"%s\",\"%s\") ; \n\
+        bases->SetSpring((UInt_t)%d);", cname, name, title,(UInt_t)this);
+#endif
        gROOT->ProcessLine(cmdstr);
      }
 

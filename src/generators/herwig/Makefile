@@ -1,6 +1,9 @@
 
 include $(LCBASEDIR)/conf/common.gmk
 
+FC=$(shell jsf-config --fc)
+BUILDBITS=$(shell jsf-config --bits)
+
 SharedLib = libTHerwig.$(DllSuf)
 
 INCPATH = -I. -I$(JSFROOT)/include -I$(ROOTSYS)/include -I$(LCBASEDIR)/include
