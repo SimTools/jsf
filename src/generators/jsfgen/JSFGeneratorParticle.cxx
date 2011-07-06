@@ -39,6 +39,7 @@ void JSFGeneratorParticle::ls(Option_t *opt)
   sopt.ToLower();
   Int_t outform=1;
   if ( sopt.Contains("form2") ) { outform=2; } 
+  if ( sopt.Contains("form3") ) { outform=3; } 
   if (!tline || sopt.Contains("title")) {
     cout << "------------------------------------------------------"
          << "------------------------------------------------------"
@@ -46,14 +47,23 @@ void JSFGeneratorParticle::ls(Option_t *opt)
          << endl;
     if ( outform == 2 ) {
       cout  << "  No     PID     Q    Mass St Mom     Ndau  1stDau     " ;
+      cout  << "  ctau       DL        E       Px       Py       Pz   " 
+            << "    Vt       Vx       Vy       Vz" 
+            << endl;
+    }
+    else if ( outform == 3 ) {
+      cout  << "  No     PID     Q    Mass St Mom ND  1D [IC1,IC2] " ;
+      cout  << "  ctau       DL        E       Px       Py       Pz   " 
+            << "  PolX   PolY   PolZ  Hel." 
+            << endl;
     }
     else {
       cout  << "  No     PID     Q    Mass Mother   Ndau  1stDau     ";
+      cout  << "  ctau       DL        E       Px       Py       Pz   " 
+            << "    Vt       Vx       Vy       Vz" 
+           << endl;
     }
-    cout << "  ctau       DL        E       Px       Py       Pz   " 
-         << "    Vt       Vx       Vy       Vz" 
-         << endl
-         << "------------------------------------------------------"
+    cout << "------------------------------------------------------"
          << "------------------------------------------------------"
          << "---------------------------------"
          << endl;
@@ -70,22 +80,49 @@ void JSFGeneratorParticle::ls(Option_t *opt)
          << setw(10) << fNdaughter
          << setw(10) << fFirstDaughter;
   }
+  else if ( outform == 3 ) {
+    cout << setw( 3) << fStatus
+         << setw( 4) << fMother
+         << setw( 3) << fNdaughter
+         << setw( 4) << fFirstDaughter;
+  }
   else {
     cout << setw( 7) << fMother
          << setw( 7) << (TMath::Abs(fNdaughter) > 1000 ? -99999 : fNdaughter) 
          << setw( 8) << fFirstDaughter;
   }
-  cout << setw(11) << setprecision(3) << showpoint << fixed << fLifeTime
-       << setw( 9) << setprecision(3) << showpoint << fixed << fDecayLength
-       << setw( 9) << setprecision(2) << showpoint << fixed << fP[0]
-       << setw( 9) << setprecision(2) << showpoint << fixed << fP[1]
-       << setw( 9) << setprecision(2) << showpoint << fixed << fP[2]
-       << setw( 9) << setprecision(2) << showpoint << fixed << fP[3]
-       << setw( 9) << setprecision(3) << showpoint << fixed << fX[0]
-       << setw( 9) << setprecision(3) << showpoint << fixed << fX[1]
-       << setw( 9) << setprecision(3) << showpoint << fixed << fX[2]
-       << setw( 9) << setprecision(3) << showpoint << fixed << fX[3]
-       << endl;
+  if( outform != 3 ) {
+    cout << setw(11) << setprecision(3) << showpoint << fixed << fLifeTime
+         << setw( 9) << setprecision(3) << showpoint << fixed << fDecayLength
+         << setw( 9) << setprecision(2) << showpoint << fixed << fP[0]
+         << setw( 9) << setprecision(2) << showpoint << fixed << fP[1]
+         << setw( 9) << setprecision(2) << showpoint << fixed << fP[2]
+         << setw( 9) << setprecision(2) << showpoint << fixed << fP[3]
+         << setw( 9) << setprecision(3) << showpoint << fixed << fX[0]
+         << setw( 9) << setprecision(3) << showpoint << fixed << fX[1]
+         << setw( 9) << setprecision(3) << showpoint << fixed << fX[2]
+         << setw( 9) << setprecision(3) << showpoint << fixed << fX[3]
+         << endl;
+  }
+  else {
+    cout << " [" << setw(3) << fColorFlow[0] 
+	 << ","  << setw(3) << fColorFlow[1] << "] " ;
+    float pa= sqrt( fP[1]*fP[1]+fP[2]*fP[2]+fP[3]*fP[3]);
+    float aspin = sqrt( fSpin[0]*fSpin[0] + fSpin[1]*fSpin[1] + fSpin[2]*fSpin[2] );
+    float prod=pa != 0.0 && aspin != 0.0 ? (fP[1]*fSpin[0]+fP[2]*fSpin[1]+fP[3]*fSpin[2])/pa/aspin : 0.0 ;
+    cout << setw( 9) << setprecision(3) << showpoint << fixed << fLifeTime
+         << setw( 9) << setprecision(3) << showpoint << fixed << fDecayLength
+         << setw( 9) << setprecision(2) << showpoint << fixed << fP[0]
+         << setw( 9) << setprecision(2) << showpoint << fixed << fP[1]
+         << setw( 9) << setprecision(2) << showpoint << fixed << fP[2]
+         << setw( 9) << setprecision(2) << showpoint << fixed << fP[3]
+         << setw( 7) << setprecision(3) << showpoint << fixed << fSpin[0]
+         << setw( 7) << setprecision(3) << showpoint << fixed << fSpin[1]
+         << setw( 7) << setprecision(3) << showpoint << fixed << fSpin[2]
+         << setw( 7) << setprecision(3) << showpoint << fixed << prod
+         << endl;
+
+  }
 #else
   printf(" Particle ID=%d",fID);
   printf(" Mass=%g GeV Charge=%g",fMass, fCharge);
@@ -113,7 +150,8 @@ JSFGeneratorParticle::JSFGeneratorParticle(Int_t Ser,
   fMother=Mother; fLifeTime=LifeTime ; fDecayLength=DecayLength; 
   fSecondMother=-1;
   fStatus=-9999;
-
+  fSpin[0]=0.0;   fSpin[1]=0.0;   fSpin[2]=0.0;
+  fColorFlow[0]=0;   fColorFlow[1]=0;
 }
 
 
@@ -127,6 +165,8 @@ JSFGeneratorParticle::JSFGeneratorParticle(Int_t Ser,
   fMother=0; fLifeTime=0.0; fDecayLength=0.0; 
   fSecondMother=-1;
   fStatus=-9999;
+  fSpin[0]=0.0;   fSpin[1]=0.0;   fSpin[2]=0.0;
+  fColorFlow[0]=0;   fColorFlow[1]=0;
 }
 
 // ---------------------------------------------------------------
@@ -139,32 +179,79 @@ JSFGeneratorParticle::JSFGeneratorParticle(Int_t Ser,
   fMother=0; fLifeTime=0.0; fDecayLength=0.0; 
   fSecondMother=-1;
   fStatus=-9999;
+  fSpin[0]=0.0;   fSpin[1]=0.0;   fSpin[2]=0.0;
+  fColorFlow[0]=0;   fColorFlow[1]=0;
 }
 
 
 // ---------------------------------------------------------------
 JSFGeneratorParticle::JSFGeneratorParticle(Float_t data[])
 {
-   fSer=(Int_t)data[0];  
-   fID=(Int_t)data[1] ; fMass=data[2] ; fCharge=data[3];
-   fP[1]=data[4] ; fP[2]=data[5] ; fP[3]=data[6] ; fP[0]=data[7];
-   fX[1]=data[8] ; fX[2]=data[9] ; fX[3]=data[10]; fX[0]=data[14];
-   fNdaughter=(Int_t)data[11] ; fFirstDaughter=(Int_t)data[12] ;
-   fMother=(Int_t)data[13]; fLifeTime=data[15];
-   fDecayLength=data[16];
+   SetDataByFloat(data);
+}
+
+// ---------------------------------------------------------------
+JSFGeneratorParticle::JSFGeneratorParticle(Float_t data[], Int_t idata[])
+{
+   SetDataByFloat(data);
+   fStatus=idata[kStatus];
+   fSecondMother=idata[kSecondMother];
+   fColorFlow[0]=idata[kColorFlow0];
+   fColorFlow[1]=idata[kColorFlow1];
+}
+
+// ---------------------------------------------------------------
+void JSFGeneratorParticle::SetDataByFloat(Float_t data[])
+{
+// Format of Data 
+   fSer=(Int_t)data[kSerial];
+   fID=(Int_t)data[kID] ; fMass=data[kMass] ; fCharge=data[kCharge];
+   fP[1]=data[kPx] ; fP[2]=data[kPy] ; fP[3]=data[kPz] ; fP[0]=data[kE];
+   fX[1]=data[kX] ; fX[2]=data[kY] ; fX[3]=data[kZ]; fX[0]=data[kT];
+   fNdaughter=(Int_t)data[kNDaughter] ; fFirstDaughter=(Int_t)data[kFirstDaughter] ;
+   fMother=(Int_t)data[kMother]; fLifeTime=data[kLifeTime];
+   fDecayLength=data[kDecayLength];
+   fSpin[0]=data[kSpinX];
+   fSpin[1]=data[kSpinY];
+   fSpin[2]=data[kSpinZ];
+   fColorFlow[0]=0;
+   fColorFlow[1]=0;
    fSecondMother=-1;
    fStatus=-9999;
 }
+
 // ---------------------------------------------------------------
 JSFGeneratorParticle::JSFGeneratorParticle(Double_t data[])
 {
-   fSer=(Int_t)data[0];  
-   fID=(Int_t)data[1] ; fMass=data[2] ; fCharge=data[3];
-   fP[1]=data[4] ; fP[2]=data[5] ; fP[3]=data[6] ; fP[0]=data[7];
-   fX[1]=data[8] ; fX[2]=data[9] ; fX[3]=data[10]; fX[0]=data[14];
-   fNdaughter=(Int_t)data[11] ; fFirstDaughter=(Int_t)data[12] ;
-   fMother=(Int_t)data[13]; fLifeTime=data[15];
-   fDecayLength=data[16];
+   SetDataByDouble(data);
+}
+
+// ---------------------------------------------------------------
+JSFGeneratorParticle::JSFGeneratorParticle(Double_t data[], Int_t idata[])
+{
+   SetDataByDouble(data);
+   fStatus=idata[kStatus];
+//   fMother=idata[1];
+   fSecondMother=idata[kSecondMother];
+   fColorFlow[0]=idata[kColorFlow0];
+   fColorFlow[1]=idata[kColorFlow1];
+}
+
+// ---------------------------------------------------------------
+void JSFGeneratorParticle::SetDataByDouble(Double_t data[])
+{
+   fSer=(Int_t)data[kSerial];
+   fID=(Int_t)data[kID] ; fMass=data[kMass] ; fCharge=data[kCharge];
+   fP[1]=data[kPx] ; fP[2]=data[kPy] ; fP[3]=data[kPz] ; fP[0]=data[kE];
+   fX[1]=data[kX] ; fX[2]=data[kY] ; fX[3]=data[kZ]; fX[0]=data[kT];
+   fNdaughter=(Int_t)data[kNDaughter] ; fFirstDaughter=(Int_t)data[kFirstDaughter] ;
+   fMother=(Int_t)data[kMother]; fLifeTime=data[kLifeTime];
+   fDecayLength=data[kDecayLength];
+   fSpin[0]=data[kSpinX];
+   fSpin[1]=data[kSpinY];
+   fSpin[2]=data[kSpinZ];
+   fColorFlow[0]=0;
+   fColorFlow[1]=0;
    fSecondMother=-1;
    fStatus=-9999;
 }
@@ -179,11 +266,10 @@ JSFGeneratorParticle::JSFGeneratorParticle(JSFGeneratorParticle& g)
   fDecayLength=g.fDecayLength;
   fSecondMother=g.fSecondMother;
   fStatus=g.fStatus;
-
+  fSpin[0]=g.fSpin[0];   fSpin[1]=g.fSpin[1];  fSpin[2]=g.fSpin[2];
+  fColorFlow[0]=g.fColorFlow[0];   fColorFlow[1]=g.fColorFlow[1];
 }
 
-
-#if __ROOT_FULLVERSION__ >= 30000
 //______________________________________________________________________________
 void JSFGeneratorParticle::Streamer(TBuffer &R__b)
 {
@@ -215,43 +301,3 @@ void JSFGeneratorParticle::Streamer(TBuffer &R__b)
    }
 }
 
-#else
-
-
-//______________________________________________________________________________
-void JSFGeneratorParticle::Streamer(TBuffer &R__b)
-{
-   // Stream an object of class JSFGeneratorParticle.
-
-   if (R__b.IsReading()) {
-      Version_t R__v = R__b.ReadVersion(); if (R__v) { }
-      TObject::Streamer(R__b);
-      R__b >> fSer;
-      R__b >> fID;
-      R__b >> fMass;
-      R__b >> fCharge;
-      R__b.ReadStaticArray(fP);
-      R__b.ReadStaticArray(fX);
-      R__b >> fNdaughter;
-      R__b >> fFirstDaughter;
-      R__b >> fMother;
-      R__b >> fLifeTime;
-      R__b >> fDecayLength;
-   } else {
-      R__b.WriteVersion(JSFGeneratorParticle::IsA());
-      TObject::Streamer(R__b);
-      R__b << fSer;
-      R__b << fID;
-      R__b << fMass;
-      R__b << fCharge;
-      R__b.WriteArray(fP, 4);
-      R__b.WriteArray(fX, 4);
-      R__b << fNdaughter;
-      R__b << fFirstDaughter;
-      R__b << fMother;
-      R__b << fLifeTime;
-      R__b << fDecayLength;
-   }
-}
-
-#endif

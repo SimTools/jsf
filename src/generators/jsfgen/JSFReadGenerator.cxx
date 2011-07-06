@@ -55,8 +55,8 @@ ClassImp(JSFReadGeneratorBuf)
 extern "C" {
 extern void readgenopen_(Int_t *unit, Char_t *name, Int_t len);
 extern void readgenclose_(Int_t *unit);
-extern void openfortranfile_(Int_t *unit, Char_t *name, Char_t *form,
-			Char_t *status, Int_t lenn, Int_t lenform, Int_t lenstatus);
+extern void openfortranfile_(Int_t *unit, const Char_t *name, const Char_t *form,
+		const Char_t *status, Int_t lenn, Int_t lenform, Int_t lenstatus);
 extern void readgenhepevt_(Int_t *iunit, const Int_t *maxhep,
 	Int_t *endian, Int_t *nvers, Int_t *nevhep, Int_t *nhep,
         Int_t isthep[], Int_t idhep[],
@@ -106,8 +106,8 @@ Bool_t JSFReadGenerator::BeginRun(Int_t nrun)
     readgenopen_(&fUnit, fDataFileName, lenf);
    }
   else if( string(fFormat) == string("HEPEVT_ASCII") ) {
-    Char_t *form="formatted";
-    Char_t *status="old"; 
+    const Char_t *form="formatted";
+    const Char_t *status="old"; 
     Int_t lform=strlen(form);
     Int_t lstatus=strlen(status); 
 	 openfortranfile_(&fUnit,fDataFileName,form,status,lenf,lform,lstatus);

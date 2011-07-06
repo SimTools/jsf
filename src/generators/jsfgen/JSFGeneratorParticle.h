@@ -21,20 +21,35 @@
 class JSFGeneratorParticle : public TObject {
 
 public:
-  Int_t  fSer;        // particle serial number ( 1 to n )
-  Int_t  fID;         // Particle ID a la PDG.
+enum EGeneratorParticle_Idata 
+     { kStatus=0, kSecondMother=1, kColorFlow0=2, kColorFlow1=3, 
+       kIdataSize=4  } ;
+enum EGeneratorParticle_Rdata
+     { kSerial=0, kID=1, kMass=2, kCharge=3, 
+       kPx=4, kPy=5, kPz=6, kE=7, kX=8, kY=9, kZ=10, kT=14,
+       kNDaughter=11, kFirstDaughter=12, kMother=13,
+       kLifeTime=15,  kDecayLength=16, 
+       kSpinX=17,     kSpinY=18,  kSpinZ=19,
+       kRdataSize=20 } ;
+
+public:
+  Int_t    fSer;        // particle serial number ( 1 to n )
+  Int_t    fID;         // Particle ID a la PDG.
   Float_t  fMass;    // Particle mass (GeV);
   Float_t  fCharge;  // Charge
-  Float_t    fP[4];    // four momentum (E,Px,Py,Pz), GeV
-  Float_t    fX[4];    // (t,x,y,z) (cm and nsec)
-  Int_t     fNdaughter;     // Number of daughter particles ( =0 for stable )
-  Int_t     fFirstDaughter; // Serial number of 1st daughter
-  Int_t     fMother;  // Serial number of mother particle ( =0 for initial)
+  Float_t  fP[4];    // four momentum (E,Px,Py,Pz), GeV
+  Float_t  fX[4];    // (t,x,y,z) (cm and nsec)
+  Int_t    fNdaughter;     // Number of daughter particles ( =0 for stable )
+  Int_t    fFirstDaughter; // Serial number of 1st daughter
+  Int_t    fMother;  // Serial number of mother particle ( =0 for initial)
   Float_t  fLifeTime; // Particle life time ( c x nsec, =0 for stable, cm)
   Float_t  fDecayLength;  // Decay length (cm, =0 for stable)
 // If fDecayLength <= 0, vertex point is re-evaluated using fLifeTime.
   Int_t    fSecondMother;   // Serial Number of 2nd mother
   Int_t    fStatus;      // Particle status code.
+// Followling variables are extended since version 5
+  Float_t  fSpin[3]; 
+  Int_t    fColorFlow[2];
 
 public:
   JSFGeneratorParticle():fSer(0),fID(0),fMass(0.0),fCharge(0.0),
@@ -54,7 +69,11 @@ public:
 
   JSFGeneratorParticle(Float_t data[]);
   JSFGeneratorParticle(Double_t data[]);
+  JSFGeneratorParticle(Float_t data[], Int_t idata[]);
+  JSFGeneratorParticle(Double_t data[],Int_t idata[]);
   JSFGeneratorParticle(JSFGeneratorParticle& g);
+  void SetDataByFloat(Float_t data[]);
+  void SetDataByDouble(Double_t data[]);
 
   inline Float_t GetPx(){ return fP[1] ;}
   inline Float_t GetPy(){ return fP[2] ;}
@@ -80,6 +99,9 @@ public:
   Int_t GetMother(){ return (Int_t)fMother; }
   Float_t GetLifeTime(){ return fLifeTime; }
   Float_t GetDecayLength(){ return fDecayLength;}
+//
+  const Float_t *GetSpin(){ return fSpin; }
+  const Int_t   *GetColorFlow(){ return fColorFlow; }   
 
   TVector GetPV(){ TVector p(4) ; 
           p(0)=fP[0] ; p(1) =fP[1] ; p(2)=fP[2] ; p(3)=fP[3] ; return p ; }
@@ -112,7 +134,7 @@ public:
 
   inline Bool_t HasSecondMother(){ return ( fSecondMother < 0 ? kFALSE : kTRUE ) ; }
 
-  ClassDef(JSFGeneratorParticle, 4)  //A JSFGeneratorParticle segment
+  ClassDef(JSFGeneratorParticle, 5)  //A JSFGeneratorParticle segment
 };
 
 //**********************
