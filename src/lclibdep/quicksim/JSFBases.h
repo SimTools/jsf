@@ -112,11 +112,11 @@ class JSFBases: public TNamed, public BasesSpring
     Int_t    GetNoOfIterate( );
 
 // Histograms
-    void  H1Init(Char_t *hn, Char_t *title, Int_t nbin, Double_t xlow, Double_t xhigh);
-    void  H1Fill(Char_t *hn, Double_t x, Double_t fx );
-    void  H2Init(Char_t *hn, Char_t *title, Int_t nbinx, Double_t xlow, Double_t xhigh,
+    void  H1Init(const Char_t *hn, const Char_t *title, Int_t nbin, Double_t xlow, Double_t xhigh);
+    void  H1Fill(const Char_t *hn, Double_t x, Double_t fx );
+    void  H2Init(const Char_t *hn, const Char_t *title, Int_t nbinx, Double_t xlow, Double_t xhigh,
                   Int_t nbiny, Double_t ylow, Double_t yhigh);
-    void  H2Fill(Char_t *hn, Double_t x, Double_t y, Double_t fx );
+    void  H2Fill(const Char_t *hn, Double_t x, Double_t y, Double_t fx );
     void  EndIntegration(Int_t step);
 
 // For histogramming package

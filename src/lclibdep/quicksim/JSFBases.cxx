@@ -221,7 +221,7 @@ Int_t JSFBases::GetNoOfIterate( )
 
 // For histogramming package
 //_________________________________________________________
-void JSFBases::H1Init(Char_t *hn, Char_t *title, Int_t nbin, Double_t xlow, Double_t xhigh)
+void JSFBases::H1Init(const Char_t *hn, const Char_t *title, Int_t nbin, Double_t xlow, Double_t xhigh)
 { 
 // Create histogram object to save Bases and Spring result
 //
@@ -239,7 +239,7 @@ void JSFBases::H1Init(Char_t *hn, Char_t *title, Int_t nbin, Double_t xlow, Doub
 }
 
 //_________________________________________________________
-void JSFBases::H1Fill(Char_t *hn, Double_t x, Double_t fx)
+void JSFBases::H1Fill(const Char_t *hn, Double_t x, Double_t fx)
 { 
 // Fill Histogram
 
@@ -250,8 +250,8 @@ void JSFBases::H1Fill(Char_t *hn, Double_t x, Double_t fx)
   else { 
     if( Flag_bases() > 1 ) { // Accumulate only during second integration loop
       Char_t hstn[128];
-      Char_t *hnsuf;
-      hnsuf="BS"; 
+      const Char_t *hnsuf="BS";
+//      hnsuf="BS"; 
       sprintf(hstn,"%s%s",hn,hnsuf);
       ((TH1D*)(fBSHash1->FindObject(hstn)))->Fill(x, fx*GetWeight());
     }
@@ -260,7 +260,7 @@ void JSFBases::H1Fill(Char_t *hn, Double_t x, Double_t fx)
 }
 
 //_________________________________________________________
-void JSFBases::H2Init(Char_t *hn, Char_t *title, Int_t nbinx, Double_t xlow, Double_t xhigh,
+void JSFBases::H2Init(const Char_t *hn, const Char_t *title, Int_t nbinx, Double_t xlow, Double_t xhigh,
 		      Int_t nbiny, Double_t ylow, Double_t yhigh)
 { 
   Char_t hstn[128];
@@ -277,7 +277,7 @@ void JSFBases::H2Init(Char_t *hn, Char_t *title, Int_t nbinx, Double_t xlow, Dou
 }
 
 //_________________________________________________________
-void JSFBases::H2Fill(Char_t *hn, Double_t x, Double_t y, Double_t fx)
+void JSFBases::H2Fill(const Char_t *hn, Double_t x, Double_t y, Double_t fx)
 { 
   if( fIsSpring ) { 
     JSFBasesTempHist *th=((JSFBasesTempHist*)(fTempHash2->FindObject(hn)));
@@ -286,8 +286,8 @@ void JSFBases::H2Fill(Char_t *hn, Double_t x, Double_t y, Double_t fx)
   else { 
     if( Flag_bases() > 1 ) { // Integrate only in 2nd integration loop.
       Char_t hstn[128];
-      Char_t *hnsuf;
-      hnsuf="BS"; 
+      const Char_t *hnsuf="BS";
+//      hnsuf="BS"; 
       sprintf(hstn,"%s%s",hn,hnsuf);
       ((TH2D*)(fBSHash2->FindObject(hstn)))->Fill(x, y, fx*GetWeight());
     }

@@ -117,6 +117,7 @@ JSFSpringParton::JSFSpringParton(Float_t data[])
    fMother=(Int_t)data[13];
    fHelicity=(Int_t)data[16] ; fColorID=(Int_t)data[17]; 
    fShowerInfo=(Int_t)data[18];
+   fPyjetsPosition=(Int_t)data[19];
 }
 
 #if __ROOT_FULLVERSION >= 30000

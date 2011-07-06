@@ -139,7 +139,6 @@ Bool_t JSFSpring::Process(Int_t ev)
     JSFSpringBuf *buf=(JSFSpringBuf*)fEventBuf;
     if ( !buf->SetPartons() ) return kFALSE; 
   }
-
   return kTRUE;
 }
 
@@ -339,6 +338,37 @@ void JSFSpring::PrintRandomSeed(Int_t num)
 }
 
 
+// _______________________________________________________________
+void JSFSpring::GetPy6frmProb(Int_t nseq, Double_t prob[7])
+{
+// vector containing p12, p13, p21, p23, p31, p32, ptop should be returned.
+// values are used as arguments of py6frm call in JSFHadronizer.
+  std::cout << "Error!! Dummy function, JSFSpring::GetPy6frmProb, was called." << std::endl;
+
+  return;
+}
+
+// ________________________________________________________________
+void JSFSpring::GetPy4frmArgs(Int_t nseq, Double_t &atotsq,
+                  Double_t &a1sq, Double_t &a2sq, Int_t &istart)
+{
+// parameters for Py4frm in JSFHadronizer should be returned.
+  std::cout << "Error!! Dummy function, JSFSpring::GetPyfrmArguments, was called." << std::endl;
+  return;
+
+}
+
+//_________________________________________________________________
+void JSFSpring::DoHadronize(Int_t &iret)
+{
+  std::cout << "Error!! Dummy Hadronizer in JSFSpring was called." << std::endl;
+  std::cout << "Inpulement DoHadronize(&iret) function in your JSFSpring class." << std::endl;
+  std::cout << "This function is called from JSFHadronizer, instead of defult Hadronizer() when " << std::endl;
+  std::cout << "  JSFHadronizerType=3" << std::endl;
+
+}
+
+
 #if __ROOT_FULLVERSION__ >= 30000
 //_____________________________________________________________________________
 void JSFSpring::Streamer(TBuffer &R__b)
@@ -453,3 +483,4 @@ void JSFSpring::Streamer(TBuffer &R__b)
 }
 
 #endif
+

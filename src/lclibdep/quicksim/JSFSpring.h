@@ -69,6 +69,7 @@ protected:
    Bool_t     fSetSeed; //! true to copy fSeedRdm and fSeedIa1 to bases common.
    Bool_t     fPrintHist; //! Print histogram
    Bool_t     fPrintInfo; //! Print information
+   std::string  fPygiveCommand ; 
 
 public:
    JSFSpring(const char *name="JSFSpring", 
@@ -85,11 +86,19 @@ public:
    virtual Bool_t GetLastRunInfo();
 
    virtual JSFBases *GetBases() { return fBases; }
-   
+
+   virtual void   GetPy6frmProb(Int_t nseq, Double_t prob[7]);
+   virtual void   GetPy4frmArgs(Int_t nseq, Double_t &atotsq, 
+                  Double_t &a1sq, Double_t &a2sq, Int_t &istart);
+   virtual void   DoHadronize(int &iret);
+
+   void        SetPygiveCommandForHadronizer(const Char_t* cmd){ fPygiveCommand=std::string(cmd); }
+   const std::string GetPygiveCommandForHadronizer(){ return fPygiveCommand; }
+ 
    void SetBases(JSFBases *bases){ fBases=bases; 
    if( fBases->GetSpring() != this ) fBases->SetSpring(this) ; }
    void DoBases(){ fDoBases=kTRUE; }
-   void ReadBases(const char *name);
+   void ReadBases(const Char_t *name);
    void Spring();
    void Spring(Int_t maxtry);
    
