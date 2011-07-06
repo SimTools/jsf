@@ -53,7 +53,7 @@ LIBS =  -L$(TAUOLADIR) -ltauola -L$(PHOTOSDIR) -lphotos
 LIBS += -L$(PYTHIADIR)/lib -lpythia6422
 LIBS += -L$(WHIZDIR)/a6f/lib -linclude -L$(WHIZDIR)/lib -lwhizard
 LIBS +=   $(PYTHIADIR)/lib/pythia6_common_address.o
-LIBS +=   $(PYTHIADUR)/lib/tpythia6_called_from_cc.o
+LIBS +=   $(PYTHIADIR)/lib/tpythia6_called_from_cc.o
 else
 
 CXXFLAGS += -D__TAUOLA_MINOR_VERSION__=5
