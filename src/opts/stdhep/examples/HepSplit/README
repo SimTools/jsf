@@ -1,0 +1,15 @@
+hepsplit is a program to split a big stdhep file to 
+small files with small number of events. This tool 
+is useful to run jobs at many grid nodes, avoiding
+file transfers of a big file to many nodes.
+
+To build, set STDHEPDIR to your stdhep directory 
+then do make.
+
+To run program, 
+$ ./hepsplit
+
+Command options are displayed by 
+$ ./hepsplit --help
+
+ 
