@@ -37,6 +37,13 @@
 //#define __SAVE_TPYTHIA6__
 
 class JSFHadronizer : public JSFFULLGenerator {
+
+  typedef struct {
+    bool done;
+    float rbuf[20];
+    int   ibuf[7];
+  } GenP_t ;
+
 protected:
    JSFSpring  *fSpring;    //! Pointer to spring module
    Bool_t      fCopySpringClassDataToBank; //! 
@@ -57,10 +64,25 @@ protected:
    Int_t    fRASET1IJ97[2]; // 
 #endif
 
+   Int_t   fHadronizerType;
+   Int_t   fTauola_Keypol;
+   Int_t   fFSQEDRadiation;
+
+   static JSFHadronizer *fInstance;
+   Float_t *fHelicity;     //! Particle helicity, used in Pytaud
+   Int_t   *fColor;        //! color flow info al a hepeup
+   Int_t   *fAntiColor;    //! Anti-color flow al a hepeup
+
+   void SetColorFlow(int ip, int npgen0, int ibuf[]);
+   void SetColorFlowInfo(int *lastColorID);
+
 public:
    JSFHadronizer(const char *name="JSFHadronizer", 
 		 const char *title="JSFHadronizer");
    virtual ~JSFHadronizer();
+
+   static JSFHadronizer *Instance();
+   void   Pytaud(int *itau, int *iorig, int *kforig, int *ndecay);
 
    virtual Bool_t Initialize();
    virtual Bool_t Process(Int_t event);
@@ -70,6 +92,8 @@ public:
    void SetCopySpringClassDataToBank(Bool_t flag){
      fCopySpringClassDataToBank= flag ;}
    Bool_t GetCopySpringClassDataToBank(){return fCopySpringClassDataToBank ; }
+   TPythia6 *GetTPythia(){ return fPythia; }
+
 
 
    void Fragmentation(const Int_t nin, Double_t inlist[][10],
@@ -78,8 +102,11 @@ public:
 		      const Int_t kstat[],  const Int_t jstat[],
 		      Int_t &nout, Double_t outlst[][20],
 		      Int_t &nret);
-   void Hadronize(JSFSpring *spring, Int_t &nret);
 
+   void Hadronize(JSFSpring *spring, Int_t &nret);
+   void HadronizeNew(JSFSpring *spring, Int_t &nret);
+   void Hepevt2GeneratorParticle(Int_t &npgen, JSFGeneratorBuf *gbuf);
+   void SetPythiaDBDStandard(Double_t mh=120.0, Double_t mw=0.3605E-2);
 
 #ifndef __LCLIBRAN_USE_RANMAR__
    ClassDef(JSFHadronizer,2)  // Debug structure

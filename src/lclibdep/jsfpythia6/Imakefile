@@ -30,18 +30,36 @@ INC		= $(JSFINSTALLDIR)/include
 
 SRC		= JSFHadronizer.$(SrcSuf) \
 		JSFMergeEvent.$(SrcSuf) \
-		PythiaGenerator.$(SrcSuf)
+		PythiaGenerator.$(SrcSuf) 
 
 OBJ	      = $(subst .$(SrcSuf),.$(ObjSuf),$(SRC)) \
 		JSFParticleData.$(ObjSuf) \
-		ranmar.$(ObjSuf) \
 		$(LIBNAME).$(ObjSuf)
+
+
+RANMAR	      = ranmar.$(ObjSuf) 
 
 HDR	      = $(subst .$(SrcSuf),.$(HdrSuf),$(SRC)) \
 		LinkDef.h
 
 ifeq ($(PYTHIAVERSION),6)
 LIBS	      = -L$(LCLIBROOT)/lib -lTAUOLA -lFORTLIB
+FOBJS         = 
+ifneq ($(TAUOLADIR),)
+FOBJS  = fmessage.o tralo4.o
+RANMAR =  
+CXXFLAGS += -D__TAUOLA_MINOR_VERSION__=7
+LIBS =  -L$(TAUOLADIR) -ltauola -L$(PHOTOSDIR) -lphotos 
+LIBS += -L$(PYTHIADIR)/lib -lpythia6422
+LIBS += -L$(WHIZDIR)/a6f/lib -linclude -L$(WHIZDIR)/lib -lwhizard
+LIBS +=   $(PYTHIADIR)/lib/pythia6_common_address.o
+LIBS +=   $(PYTHIADUR)/lib/tpythia6_called_from_cc.o
+else
+
+CXXFLAGS += -D__TAUOLA_MINOR_VERSION__=5
+
+endif
+
 else
 LIBS          = -L$(LCLIBROOT)/lib -lFORTLIB \
                 $(ROOTLIBS) $(ROOTGLIBS) \
@@ -64,9 +82,9 @@ CXXFLAGS     += -D__PYTHIA_VERSION__=$(PYTHIAVERSION) -D__USE_TPYTHIA__
 
 all::  $(LIBNAME).$(DllSuf)
 
-$(LIBNAME).$(DllSuf): $(OBJ)
+$(LIBNAME).$(DllSuf): $(OBJ) $(FOBJS) $(RANMAR)
 	@echo "Linking $@ "
-	$(LD) $(SOFLAGS)  $(OBJ) $(LIBS) -o $(LIBNAME).$(DllSuf)
+	$(LD) $(SOFLAGS)  $(OBJ) $(RANMAR) $(FOBJS) $(LIBS) -o $(LIBNAME).$(DllSuf)
 
 install:: $(LIBNAME).$(DllSuf)
 	mkdir -p $(JSFINSTALLDIR)/lib $(JSFINCDIR)

@@ -16,30 +16,13 @@
 //
 //////////////////////////////////////////////////////////////////
 
+#include <iomanip>
 #include "TRandom.h"
 #include "JSFSteer.h"
 #include "JSFLCFULL.h"  
 #include "JSFHadronizer.h"
 
-#if __PYTHIA_VERSION__ <= 5 
-#define pyjoin_ lujoin_
-#define pyshow_ lushow_
-#define pyprep_ luprep_
-#define pychge_ luchge_
-#define pylist_ lulist_
-#define pycomp_ lucomp_
-#define pyexec_ luexec_
-
-#define pydat1_ ludat1_
-#define pydat2_ ludat2_
-#define pydat3_ ludat3_
-#define pydatr_ ludatr_
-#define pyjets_ lujets_
-#define MRPY   MRLU
-#define RRPY   RRLU
-#endif
 #ifdef KF_DEBUG
-#include <iomanip>
 #include "TLorentzVector.h"
 #endif
 
@@ -47,10 +30,13 @@ extern "C" {
 #if __GNUC_VERSION__ >= 4
 extern void  pydatawrapper_();
 #endif
+#if __TAUOLA_MINOR_VERSION__ < 7
 extern void  tauint_(int *inut, int *iout, int *jak1, 
 		     int *jak2, int *itdkrc, int *keya1, float *xk0dec);
 extern void  taudec_(int *kto, int *npnt, float *heltau, float p4tau[4]);
-
+#else
+extern void  tauola_(int *mode, int *keypol);
+#endif
 extern void  pyjoin_(int *njoin, int ijoin[]);
 extern void  pyshow_(int *ip1, int *ip2, double *qmax);
 extern void  pyprep_(int *ip);
@@ -58,87 +44,69 @@ extern int   pychge_(int *kf);
 extern void  pylist_(int *flag);
 extern int   pycomp_(int *kf);
 extern void  pyexec_();
-#ifndef __USE_TPYTHIA__
-extern void  pyinit_(char *frame, char *beam, char *target, double *ecm, int len1, int len2, int len3);
-#endif
+extern void  pyhepc_(int *mconv);
+extern void  py6frm_(double *p12, double *p13, double *p21, double *p23, double *p31, double *p32,
+                     double *ptop, int *irad, int *irau, int *icom);
+extern void  py2frm_(int *irad, int *itau, int *icom);
+extern void  py4frm_(double *atotsq, double *a1sq, double *a2sq, int *istrat, 
+	  	    int *irad, int *itau, int *icom);
+extern void  pygive_(const char* cmd, int len);
+extern void  fmessage_(const char *msg, int len);
+extern void  dexay_(int *kto, float pol[4]);
+extern double pyr_(int *dummy);
 
-#if __PYTHIA_VERSION__ >= 6 
 extern void  pyhepc2_(int *flag, int *n, int *npad, int k[5][4000],
                                 double p[5][4000], double v[5][4000],
                                 int mstu[200], double paru[200],
                                 int mstj[200], double parj[200],
                                 int kchg[4][500], double pmas[4][500],
                                 double parf[2000], double vckm[4][4]);
-#else
-extern void  luhepc2_(int *flag, int *n, int k[5][4000], float p[5][4000], 
-                                                         float v[5][4000],
-                                 int mstu[200], float paru[200],
-                                 int mstj[200], float parj[200],
-                                 int kchg[3][500], float pmas[4][500],
-                                 float parf[2000], float vckm[4][4]);
-#endif
 extern void  ubstfd_(float pb[4], float pr[4], float pa[4]);
 extern void  ubstbk_(float pb[4], float pr[4], float pa[4]);
 };
 
-
+#if __TAUOLA_MINOR_VERSION__ < 7 
 Int_t JAK1, JAK2, ITDKRC, KEYA1;
 Float_t XK0DEC;
+#endif
 
 ClassImp(JSFHadronizer)
 
-#if __PYTHIA_VERSION__ <= 5
+typedef struct { 
+int nevhep;             /* The event number */
+int nhep;               /* The number of entries in this event */
+int isthep[4000];     /* The Particle id */
+int idhep[4000];      /* The particle id */
+int jmohep[4000][2];    /* The position of the mother particle */
+int jdahep[4000][2];    /* Position of the first daughter... */
+double phep[4000][5];    /* 4-Momentum, mass */
+double vhep[4000][4];    /* Vertex information */
+} Hepevt_t ;
 
 typedef struct {
-  Int_t   MSTU[200]; 
-  Float_t PARU[200];
-  Int_t   MSTJ[200]; 
-  Float_t PARJ[200];
-} Pydat1_t;
+  int np1;
+  int np2;
+} Taupos_t;
 
 typedef struct {
-  Int_t   KCHG[3][500]; 
-  Float_t PMAS[4][500];
-  Float_t PARF[2000];
-  Float_t VCKM[4][4];
-} Pydat2_t;
+  float p4tau[4];
+} P4tau_t;
+extern P4tau_t  p4tau_;
 
-typedef struct {
-  Int_t   MDCY[3][500];
-  Int_t   MDME[2][2000];
-  Float_t BRAT[2000];
-  Int_t   KFDP[5][2000];
-} Pydat3_t;
-
-typedef struct {  // Common for JETSET random variables
-  Int_t   MRPY[6];
-  Float_t RRPY[100];
-} Pydatr_t;
-
-typedef struct {
-  Int_t   N;
-  Int_t   K[5][4000];
-  Float_t P[5][4000];
-  Float_t V[5][4000];
-} Pyjets_t;
-
-#endif
-
+extern Taupos_t taupos_;
+extern Hepevt_t hepevt_;
 extern Pydat1_t pydat1_;
 extern Pydat2_t pydat2_;
 extern Pydat3_t pydat3_;
 extern Pydatr_t pydatr_;
 extern Pyjets_t pyjets_;
 
-/*
-#ifndef __LCLIBRAN_USE_RANMAR__ 
-typedef struct { // Commo for Tauola random variables
-  Float_t  u[98];
-  Int_t ij97[2];
-} COMMON_RASET1;
-extern COMMON_RASET1 raset1_;
-#endif
-*/
+extern "C" void pytaud_(int *itau, int *iorig, int *kforig, int *ndecay)
+{
+  JSFHadronizer::Instance()->Pytaud(itau, iorig, kforig, ndecay);
+};
+
+JSFHadronizer *JSFHadronizer::fInstance=0;
 
 //_____________________________________________________________________________
 JSFHadronizer::JSFHadronizer(const char *name, const char *title)
@@ -151,6 +119,12 @@ JSFHadronizer::JSFHadronizer(const char *name, const char *title)
 
   fSpring=0;
   fCopySpringClassDataToBank=kTRUE;
+  fInstance=this;
+
+  int helsize=sizeof(pyjets_.K)/20;
+  fHelicity=new Float_t[helsize];
+  fColor   = new Int_t[helsize];
+  fAntiColor = new Int_t[helsize]; 
 
   TList *list=gJSF->Modules();
   TIter  next(list);
@@ -158,42 +132,43 @@ JSFHadronizer::JSFHadronizer(const char *name, const char *title)
   while( (module=(JSFModule*)next()) ){
     if( module->InheritsFrom("JSFSpring") ){ 
       if( fSpring ) { 
-	 printf("Find module %s , inherited from JSFSpring\n",fSpring->GetName());
-	 printf("More than one JSFSpring are defined.");
-	 printf(" Specify correspinding Hadronizer explicityly\n");
+	 std::cout << "Find module " << fSpring->GetName() << " inherited from JSFSpring" << std::endl;
+	 std::cout << "More than one JSFSpring are defined." << std::endl;
+	 std::cout << " Specify correspinding Hadronizer explicityly" << std::endl;
       }
       fSpring=(JSFSpring*)module;
+//      std::cout << fSpring->GetName() << " is used by JSFHadronizer " << std::endl;
     }
   }
   if( !fSpring ){ Error("JSFHadronizer","No JSFSpring class was found"); }
 
-  
+#if __TAUOLA_MINOR_VERSION__ < 7   
   JAK1 = gJSF->Env()->GetValue("JSFHadronizer.JAK1",0);
   JAK2 = gJSF->Env()->GetValue("JSFHadronizer.JAK2",0);
   ITDKRC = gJSF->Env()->GetValue("JSFHadronizer.ITDKRC",1);
   KEYA1 = gJSF->Env()->GetValue("JSFHadronizer.KEYA1",1);
-  fIHLON = gJSF->Env()->GetValue("JSFHadronizer.IHLON",1);
   sscanf(gJSF->Env()->GetValue("JSFHadronizer.XK0DEC","0.001"),"%g",&XK0DEC);
+#endif
 
+  fIHLON = gJSF->Env()->GetValue("JSFHadronizer.IHLON",1);
   fDebug = gJSF->Env()->GetValue("JSFHadronizer.DebugFlag",0);
 
-  fDoesShower = gJSF->Env()->GetValue("JSFHadronizer.PartonShower",1);
+  fDoesShower = gJSF->Env()->GetValue("JSFHadronizer.PartonShower",1); // Obsolute 
+  fHadronizerType = gJSF->Env()->GetValue("JSFHadronizer.Type",1); //(1,2)=(old,new)
+// KEYPOL=1 to include polarization effect
+//  fTauola_Keypol  = gJSF->Env()->GetValue("JSFHadronizer.Tauola_Keypol",1);
+  fFSQEDRadiation = gJSF->Env()->GetValue("JSFHadronizer.FSQEDRadiation",1); // (0,1)=(0ff,on)
+  fTauola_Keypol  = fIHLON ; 
 
-#if __PYTHIA_VERSION__ >= 6
-#if 0
-  fPythia = new TPythia6();
-#else
   fPythia = TPythia6::Instance();
-#endif
-#endif
 }
 
 //_____________________________________________________________________________
 JSFHadronizer::~JSFHadronizer()
 {
-#if __PYTHIA_VERSION__ >= 6
-  //delete fPythia;
-#endif
+  if ( fHelicity )  { delete fHelicity; }
+  if ( fColor )     { delete fColor; }
+  if ( fAntiColor ) { delete fAntiColor; }
 
 }
 
@@ -206,14 +181,49 @@ Bool_t JSFHadronizer::Initialize()
 #endif
 #endif
 
-// Initialize tauola
+// Print message
+   int tvers=__TAUOLA_MINOR_VERSION__ ;
+   std::cout << "### JSFHadronizer initialization ##########################" << std::endl
+	<< "   Spring Name           : " << fSpring->GetName() << std::endl
+	<< "   JSFHadronizer.Type    : " << fHadronizerType << "            : (1,2,3)=(old,new,JSFSpring)" << std::endl
+        << "   Final state QED rad.  : " << fFSQEDRadiation << "            : (0,1)=(off,on)"  << std::endl
+	<< "   Tau polarization      : " << fIHLON          << "            : (0,1)=(off,on)"  << std::endl
+        << "   Tauola m.version used : " << tvers << std::endl;
+#if __TAUOLA_MINOR_VERSION__ < 7 
+   std::cout 
+	<< "   Tauola parameter    : JAK1=" << JAK1 << " JAK2=" << JAK2 
+	<< " ITDKRC=" << ITDKRC << " KEYA1=" << KEYA1 << " XK0DEC=" << XK0DEC << std::endl;
+#else
+   std::cout 
+        << "   Tau polarization      : " << fTauola_Keypol << "            : (0,1) = (off, on)" << std::endl;
+#endif
+//   std::cout 
+//	<< "   PYGIVE command given by Spring : " << fSpring->GetPygiveCommandForHadronizer() << std::endl;        
+   std::cout << std::endl;
 
+// Initialize tauola
+#if __TAUOLA_MINOR_VERSION__ < 7
    Int_t inut=5;
    Int_t iout=6;
    tauint_(&inut, &iout, &JAK1, &JAK2, &ITDKRC,  &KEYA1, &XK0DEC);
-
+#endif
    Double_t  mh     = gJSF->Env()->GetValue("JSFHadronizer.HiggsMass",120.);
-#ifdef __USE_TPYTHIA__
+   Double_t  wh     = gJSF->Env()->GetValue("JSFHadronizer.HiggsWidth",0.3605e-2);
+
+   Int_t hparameter_set=gJSF->Env()->GetValue("JSFHadronizer.ParameterSet",0);
+   std::cout << "   Pythia parameter set  : " << hparameter_set 
+	     << "            : (0,1)=(default, DBD_standard) " << std::endl;
+   if ( hparameter_set == 1 ) {
+      SetPythiaDBDStandard(mh, wh);
+   }
+   else {
+     fPythia->SetPMAS(25,1,mh);
+     fPythia->SetPMAS(25,2,wh);
+     std::cout << "   Pythia Higgs mass    : " << mh << std::endl;
+     std::cout << "          Higgs width   : " << wh << std::endl;
+
+   }
+
 #if 0
    fPythia->SetMDCY(23,1,0);
    fPythia->SetMDCY(24,1,0);
@@ -224,23 +234,12 @@ Bool_t JSFHadronizer::Initialize()
    Char_t   *beam   = const_cast<Char_t *>("e+");
    Char_t   *target = const_cast<Char_t *>("e-");
    Double_t  ecm    = 1000.;
-   fPythia->SetPMAS(25,1,mh);
    fPythia->Pyinit(frame, beam, target, ecm);
-#else
-   // Int_t one=1;
-#if 0
-   pydat3_.MDCY[0][22]=0; // Z
-   pydat3_.MDCY[0][23]=0; // W
-   pydat3_.MDCY[0][32]=0; // Z'
-#endif
-   // Invoke Pyinit with dummy arguments to initialize decay table
-   Char_t   *frame  = const_cast<Char_t *>("CMS");
-   Char_t   *beam   = const_cast<Char_t *>("e+");
-   Char_t   *target = const_cast<Char_t *>("e-");
-   Double_t  ecm    = 1000.;
-   pydat2_.PMAS[0][24] = mh;
-   pyinit_(frame, beam, target, &ecm, 3, 2, 2);
-#endif
+
+   const std::string pygivecmd=fSpring->GetPygiveCommandForHadronizer();
+   if ( pygivecmd.size() > 0 ) {
+     pygive_(pygivecmd.c_str(),pygivecmd.size());
+   }
    //--
    // Select H decay mode if requested
    //--
@@ -266,30 +265,41 @@ Bool_t JSFHadronizer::Initialize()
      //       = 17;	// H --> W+ W-
      //--
      Int_t kh     = 25;
-#ifdef __USE_TPYTHIA__
+
      Int_t kc    = fPythia->Pycomp(kh);
      Int_t mdcy2 = fPythia->GetMDCY(kc,2);
      Int_t mdcy3 = fPythia->GetMDCY(kc,3);
-     for (Int_t i=mdcy2; i<=mdcy2+mdcy3-1; i++) fPythia->SetMDME(i,1,0);
-     fPythia->SetMDME(mdcy2+mdcyh-1,1,1);
-#else
-     Int_t kc = pycomp_(&kh);
-     Int_t mdcy2 = pydat3_.MDCY[1][kc-1];
-     Int_t mdcy3 = pydat3_.MDCY[2][kc-1];
-     for (Int_t i=mdcy2; i<=mdcy2+mdcy3-1; i++) pydat3_.MDME[0][i-1] = 0;
-     pydat3_.MDME[0][mdcy2+mdcyh-2] = 1;
-#endif
-     cerr << " ---------------------------------------------" << endl
-          << " H decay restricted to mode: mdcyh = " << mdcyh << endl
-          << " mdcy2 = " << mdcy2                             << endl
-          << " mdcy3 = " << mdcy3                             << endl
-          << " ---------------------------------------------" << endl;
+     if( mdcyh < 100 ) {
+       for (Int_t i=mdcy2; i<=mdcy2+mdcy3-1; i++) fPythia->SetMDME(i,1,0);
+       fPythia->SetMDME(mdcy2+mdcyh-1,1,1);
+       cout << " ---------------------------------------------" << endl
+            << " H decay restricted to mode: mdcyh = " << mdcyh << endl
+            << " mdcy2 = " << mdcy2                             << endl
+            << " mdcy3 = " << mdcy3                             << endl
+            << " ---------------------------------------------" << endl;
+     }
+     else {
+       Int_t kdcyh=mdcyh%100;
+       fPythia->SetMDME(mdcy2+kdcyh-1,1,0);
+       cout << " ---------------------------------------------" << endl ;
+       cout << " H decay to mode: mdcyh =" << kdcyh << " is suppressed." << endl;
+     }
+     cout << " H Decay mode definition" << endl;
+     cout << "   1(d dbar), 2(u ubar), 3(s sbar), 4(c cbar), 5(b bbar), 6(ttbar)" << endl;
+     cout << "   7(b'b'bar), 8(t't'bar), 9(e-e+), 10(mu-mu+), 11(tau-tau+), 12(tau'-tau'+)" << endl;
+     cout << "   13(glue glue), 14(gamma gamma), 15(gamma Z0), 16(Z0 Z0), 17(W+W-)" << endl;
    }
+
    Int_t iprint = gJSF->Env()->GetValue("JSFHadronizer.PrintDecayModeTable",0);
    if (iprint) {
      iprint = 12;
      pylist_(&iprint);
    }
+#if __TAUOLA_MINOR_VERSION__ >= 7
+   fPythia->SetMSTJ(28,1); 
+   Int_t tauola_mode=-1;
+   tauola_(&tauola_mode, &fTauola_Keypol);
+#endif
 
    return kTRUE ;
 
@@ -308,16 +318,20 @@ Bool_t JSFHadronizer::Process(Int_t ev)
   Int_t i;
   for(i=0;i<6;i++){ fMRPY[i]=pydatr_.MRPY[i];}
   for(i=0;i<100;i++){ fRRPY[i]=pydatr_.RRPY[i];}
-/*
-#ifndef __LCLIBRAN_USE_RANMAR__
-  for(i=0;i<98;i++){ fRASET1U[i]=raset1_.u[i];}
-  for(i=0;i<2;i++){ fRASET1IJ97[i]=raset1_.ij97[i];}
-#endif
-*/
 
   Int_t iret;
 
-  Hadronize(fSpring, iret);
+
+  if( fHadronizerType == 1 ) {    // Use Old Hadronizer code
+    Hadronize(fSpring, iret);
+  }
+  else if ( fHadronizerType == 3 ) { // Use Hadronizer provided by JSFSpring module
+    fSpring->DoHadronize(iret);
+  }
+  else {
+    HadronizeNew(fSpring, iret);  // Use new hadronizer
+  }
+
 
   if ( iret < 0 ) {  
     if ( gJSF->Env()->GetValue("JSFHadronizer.ExitOnError",1) == 1 ) {
@@ -325,7 +339,8 @@ Bool_t JSFHadronizer::Process(Int_t ev)
     }
     else {
       gJSF->SetReturnCode(JSFSteer::kJSFSkipRestModules);
-      std::cout << "Warning  JSFHadronizer::Process requested the event " << gJSF->GetEventNumber() << " to be skipped" << std::endl;
+      std::cout << "Warning  JSFHadronizer::Process requested the event " 
+	<< gJSF->GetEventNumber() << " to be skipped" << std::endl;
       return kTRUE;
     }
   }
@@ -343,12 +358,6 @@ Bool_t JSFHadronizer::EndRun()
   Int_t i;
   for(i=0;i<6;i++){ fMRPY[i]=pydatr_.MRPY[i];}
   for(i=0;i<100;i++){ fRRPY[i]=pydatr_.RRPY[i];}
-/*
-#ifndef __LCLIBRAN_USE_RANMAR__
-  for(i=0;i<98;i++){ fRASET1U[i]=raset1_.u[i];}
-  for(i=0;i<2;i++){ fRASET1IJ97[i]=raset1_.ij97[i];}
-#endif
-*/
 
   if( fFile->IsWritable() ) {
     if( !JSFFULLGenerator::EndRun() ) return kFALSE;
@@ -519,15 +528,9 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
   //         CALL TBGET(1,'Spring:Parton_List',IE, NW, RBUF(1,IP), IRET )
   //100   CONTINUE
   //
-#ifdef __USE_TPYTHIA__
   Int_t mdcyzs = fPythia->GetMDCY(23,1);
   Int_t mdcyws = fPythia->GetMDCY(24,1);
   Int_t mdcyhs = fPythia->GetMDCY(25,1);
-#else
-  Int_t mdcyzs =  pydat3_.MDCY[0][22];
-  Int_t mdcyws =  pydat3_.MDCY[0][23];
-  Int_t mdcyws =  pydat3_.MDCY[0][24];
-#endif
 
   JSFGeneratorBuf *gbuf=(JSFGeneratorBuf*)EventBuf();
   TClonesArray &part=*(gbuf->GetParticles());
@@ -821,28 +824,16 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
       printf("\n");
     }
 
-#ifdef __USE_TPYTHIA__
     if (nzdk) fPythia->SetMDCY(23,1,0);
     if (nwdk) fPythia->SetMDCY(24,1,0);
     if (nhdk) fPythia->SetMDCY(33,1,0);
-#else
-    if (nzdk) pydat3_.MDCY[0][22] = 0;
-    if (nwdk) pydat3_.MDCY[0][23] = 0;
-    if (nhdk) pydat3_.MDCY[0][24] = 0;
-#endif
 
     Fragmentation(nin, rinlst, maxout, nsg, ishpr1, ishpr2,
 		  kstat, jstat, nout, rotlst, iret);
 
-#ifdef __USE_TPYTHIA__
     if (nzdk) fPythia->SetMDCY(23,1,mdcyzs);
     if (nwdk) fPythia->SetMDCY(24,1,mdcyws);
     if (nhdk) fPythia->SetMDCY(33,1,mdcyhs);
-#else
-    if (nzdk) pydat3_.MDCY[0][22] = mdcyzs;
-    if (nwdk) pydat3_.MDCY[0][23] = mdcyws;
-    if (nhdk) pydat3_.MDCY[0][24] = mdcyhs;
-#endif
 
     if( iret < 0 ) {
       nret = -1;
@@ -1098,11 +1089,7 @@ C*    95/02/10  K.Fujii		New version for JETSET7.3.
 C*
 CC**********************************************************************
 */
-#ifdef __USE_TPYTHIA__
   Pyjets_t *pyjets=fPythia->GetPyjets();
-#else
-  Pyjets_t *pyjets = &pyjets_;
-#endif
 
   //C--
   //C  Pointer from /LUJETS/ to OUTLST.
@@ -1138,6 +1125,7 @@ CC**********************************************************************
   //C  TAUOLA parameters should be read in by FLNPAR from FT05.
   //C--
      
+#if __TAUOLA_MINOR_VERSION__ < 7
       Int_t kto;
       if( kf <= 0 ) {
 	kto=1;
@@ -1150,17 +1138,15 @@ CC**********************************************************************
       for(Int_t i=0;i<10;i++){ tinlst[i]=(Float_t)inlist[0][i]; }
 
       taudec_(&kto,&one, &pol, &tinlst[1]);
-#if __PYTHIA_VERSION__ >= 6
+#else
+      std::cerr << "Fatal error in JSFHadronize::Fragmentation(...) :: Old hadronizer was used with newer tauola version.";
+      exit(-1);
+#endif
+
       pyhepc2_(&two, 
                &pyjets_.N, &pyjets_.NPAD, pyjets_.K, pyjets_.P, pyjets_.V,
                 pydat1_.MSTU, pydat1_.PARU, pydat1_.MSTJ, pydat1_.PARJ,
                 pydat2_.KCHG, pydat2_.PMAS, pydat2_.PARF, pydat2_.VCKM);
-#else
-      luhepc2_(&two, 
-               &pyjets_.N, pyjets_.K, pyjets_.P, pyjets_.V,
-                pydat1_.MSTU, pydat1_.PARU, pydat1_.MSTJ, pydat1_.PARJ,
-                pydat2_.KCHG, pydat2_.PMAS, pydat2_.PARF, pydat2_.VCKM);
-#endif
       if( fDebug > 0 ) {
 	printf(" Tau decay .. \n");
 	pylist_(&one);
@@ -1268,7 +1254,6 @@ CC**********************************************************************
 
 	pyshow_(&ip1, &ip2, &qmx);
 
-#ifdef __USE_TPYTHIA__
 	if( fPythia->GetMSTU(23) != 0 || fPythia->GetMSTU(24) != 0 
 	    || fPythia->GetMSTU(28) != 0 ) {
 	  printf(" Warning .. JSFHadronizer::Fragmentation\n");
@@ -1283,7 +1268,6 @@ CC**********************************************************************
 	  nret=-1;
 	  return; 
 	}
-#endif
       }
     }
     //C--
@@ -1331,7 +1315,6 @@ CC**********************************************************************
     printf(" After pyexec...\n");
     pylist_(&one);
   }
-#ifdef __USE_TPYTHIA__
   if( fPythia->GetMSTU(23) != 0 || fPythia->GetMSTU(24) != 0 
       || fPythia->GetMSTU(28) != 0 ) {
     printf(" Warning .. JSFHadronizer::Fragmentation\n");
@@ -1345,21 +1328,6 @@ CC**********************************************************************
     nret=-1;
     return; 
   }
-#else
-  if( pydat1_.MSTU[22] != 0 || pydat1_.MSTU[23] != 0 
-      || pydat1_.MSTU[27] != 0 ) {
-    printf(" Warning .. JSFHadronizer::Fragmentation\n");
-    printf(" Possible error in LUEXEC detected.");
-    printf(" MSTU(23)=%d MSTU(24)=%d MSTU(28)=%d",
-	   pydat1_.MSTU[22], pydat1_.MSTU[23], pydat1_.MSTU[27]),
-    printf(" This event will be skipped.\n");
-    pydat1_.MSTU[22] = 0;
-    pydat1_.MSTU[23] = 0;
-    pydat1_.MSTU[27] = 0;
-    //nret=-1;
-    return; 
-  }
-#endif
   //C--
   //C  Output particles after fragmentations and decays.
   //C--
@@ -1395,13 +1363,8 @@ CC**********************************************************************
     }
     else {
       chrg = ((Double_t)pychge_(&kf))/3.0;
-#ifdef __USE_TPYTHIA__
       Int_t kc=fPythia->Pycomp(kf);
       xctau=fPythia->GetPMAS(kc,4)*0.1;
-#else
-      Int_t kc = pycomp_(&kf);
-      xctau    = pydat2_.PMAS[3][kc-1]*0.1;
-#endif
 #if 0
 std::cerr << "hadr: &pychge = " << (void *)&pychge_ << std::endl;
 std::cerr << "    : ichg = " << pychge_(&kf) << std::endl;
@@ -1473,3 +1436,551 @@ std::cerr << "    : xctau = " << pydat2_.PMAS[3][pycomp_(&kf)-1]*0.1 << std::end
   }
   return ;
 }
+
+// ___________________________________________________________
+void JSFHadronizer::HadronizeNew(JSFSpring *spring, Int_t &nret)
+{
+//(Function)
+// Hadronize spring partons, using py2frm, py4frm, py6frm of pythia 
+//  stored them as JSFGenerator particles.
+//  JSFSpringParton::fPyjetsPositon are used to feed /PYJETS/
+//  
+//  fPyjetsPosition should be filled by JSFSpring::Pyevnt as
+//  real*4 value.  It's format is 
+//     fPyjetsPosition = LEVEL*1000 + NFERMIONS*100 + LOC
+//  where
+//     LOC is the line number of this partons in /PYJETS/
+//     NFERMION is either 2, 4, or 6 corresponding to 
+//         py2frm, py4frm, py6frm.
+//     LEVEL is a number from 0 to N. Particles with same level
+//         are saved to /PYJETS/ and then hadronized by pyNfrm.
+//       
+//  When LEVEL=0, SpringPartons are copied to /PYJETS/ without changing 
+//  the partile ordering and setting status=21 ( documentation line ).
+//
+//  Particles decayed by Spring, top for example, 
+//  should have fPyjetsPosition < 0 so that they are not hadronized by pyNfrm routines. 
+//  Stable particles which need to be decayed and hadronized by JSFHadronizer
+//  should be a part of LEVEL=0 particles
+//
+//  In order to use py4frm and py6frm, Spring module should provide arguments 
+//  to these subroutine by overriding JSFSpring::GetPy6frmProb(...) or 
+//  JSFSpring::GetPy4frmArgs(...)
+//  
+
+  Pyjets_t *pyjets=fPythia->GetPyjets();
+  JSFGeneratorBuf *gbuf=(JSFGeneratorBuf*)EventBuf();
+//   TClonesArray &part=*(gbuf->GetParticles());
+  nret=0;
+  pyjets->N=0;
+  hepevt_.nevhep=gJSF->GetEventNumber();
+  hepevt_.nhep=0;
+  int npgen=0;
+  int ncid=100;
+  int lastColor=0;
+
+  JSFSpringBuf *spevt=(JSFSpringBuf*)spring->EventBuf();
+  TClonesArray *ps=spevt->GetPartons();
+  Int_t npart=spevt->GetNpartons();
+
+  std::vector<GenP_t> sparticles;
+
+//  std::cout << "JSFHadronizer .. npart=" << npart << std::endl;
+  for(Int_t j=0;j<npart;j++){
+    JSFSpringParton *p=(JSFSpringParton*)ps->At(j);
+    GenP_t sp;
+    for(int i=0;i<20;i++){ sp.rbuf[i]=0; }
+    sp.rbuf[0]=p->fSer;
+    sp.rbuf[1]=p->fID;
+    sp.rbuf[2]=p->fMass;
+    sp.rbuf[3]=p->fCharge;
+    sp.rbuf[4]=p->fP[1];
+    sp.rbuf[5]=p->fP[2];
+    sp.rbuf[6]=p->fP[3];
+    sp.rbuf[7]=p->fP[0];
+    sp.rbuf[11]=p->fNdaughter;
+    sp.rbuf[12]=p->fFirstDaughter;
+    sp.rbuf[13]=p->fMother;
+    sp.rbuf[15]=p->fLifeTime;
+    sp.rbuf[16]=p->fHelicity;
+    sp.rbuf[17]=p->fColorID;
+    sp.rbuf[18]=p->fShowerInfo;
+    sp.rbuf[19]=p->fPyjetsPosition;
+    sp.ibuf[0]=21;   // status
+    sp.ibuf[1]=p->fMother; // first mother;
+    sp.ibuf[2]=0;  // second mother;
+    sp.ibuf[3]=p->fFirstDaughter ; // first daughter;
+    sp.ibuf[4]=p->fFirstDaughter==0 ? 0 : p->fFirstDaughter+p->fNdaughter-1 ; // last daughter
+    sp.ibuf[5]=0;  // colorID a la hepeup
+    sp.ibuf[6]=0;  // anti-colorID a la hepeup
+    if( p->fID > 0 && p->fID < 10 ) {   // ColorID of quark
+      sp.ibuf[5]=p->fColorID < 100 ? p->fColorID+100 : p->fColorID;
+      ncid=ncid<sp.ibuf[5] ? sp.ibuf[5] : ncid;
+      if ( ncid > lastColor ) { lastColor=ncid; }
+    }
+    else if ( p->fID > -10 && p->fID < 0 ) { // ColorID of anti-quark
+      sp.ibuf[6]=p->fColorID < 100 ? p->fColorID+100 : p->fColorID;
+      ncid=ncid<sp.ibuf[6] ? sp.ibuf[6] : ncid;
+      if ( ncid > lastColor ) { lastColor=ncid; }
+    }
+    sp.done=false;
+    sparticles.push_back(sp);
+//
+// Fill /pyjets/ by SpringParton info.
+//
+    int ip=pyjets->N;
+    pyjets->K[0][ip]=21; // status code
+    pyjets->K[1][ip]=sp.rbuf[1];
+    pyjets->K[2][ip]=sp.ibuf[1];
+    pyjets->K[3][ip]=sp.ibuf[3];
+    pyjets->K[4][ip]=sp.ibuf[4];
+    for(int i=0;i<4;i++) { pyjets->P[i][ip]=sp.rbuf[i+4]; }
+    pyjets->P[4][ip]=sp.rbuf[2];
+    for(int i=0;i<5;i++) { pyjets->V[i][ip]=0.0 ; }
+    fHelicity[ip]=sp.rbuf[16];
+    fColor[ip] = sp.ibuf[5];
+    fAntiColor[ip]=sp.ibuf[6];
+    pyjets->N++;
+  }
+  int ipspring=pyjets->N;
+
+//  int two=2;
+//  int five=5;
+//
+// Pick lv-th partons, fill /PYJETS/, then hadronize 
+// by py2frm, py4frm, py6frm.
+
+  for(int lv=0;lv<20;lv++) {
+    int nfound=0;
+    int nfermi=0;
+    if( lv != 0 ) { pyjets->N=0; }
+    int morig[100];
+    int iplast=0;
+    int jmin=lv==0 ? sparticles.size() : 0 ; 
+    for(unsigned int j=jmin; j<sizeof(pyjets_.K)/20; j++) { 
+	fHelicity[j]=0.0 ;
+	fColor[j]=0.0 ;
+	fAntiColor[j]=0.0 ;
+    }
+    for(unsigned int j=0; j < sparticles.size() ; j++) {
+      int jpos=sparticles[j].rbuf[19];
+//      std::cout << " j=" << j << " jpos=" << jpos << std::endl;
+      if( jpos < 0 ) { continue; }
+      int iv=jpos/1000;
+      if( iv != lv ) { continue ; }
+      nfound++;
+      nfermi=(jpos%1000)/100;
+      int ip=lv==0 ? jpos%100+ipspring : jpos%100 ;
+      pyjets->N++;
+      pyjets->K[0][ip]=1; // status code
+      pyjets->K[1][ip]=sparticles[j].rbuf[1];
+      pyjets->K[2][ip]=0;
+      pyjets->K[3][ip]=0;
+      pyjets->K[4][ip]=0;
+      for(int i=0;i<4;i++) { pyjets->P[i][ip]=sparticles[j].rbuf[i+4]; }
+      pyjets->P[4][ip]=sparticles[j].rbuf[2];
+      for(int i=0;i<5;i++) { pyjets->V[i][ip]=0.0 ; }
+      fHelicity[ip]=sparticles[j].rbuf[16];
+      fColor[ip]=sparticles[j].ibuf[5] == 0 ? 0 : sparticles[j].ibuf[5] ;
+      fAntiColor[ip]=sparticles[j].ibuf[6] == 0 ? 0 : sparticles[j].ibuf[6] ;
+      morig[ip]=j;
+      iplast=ip;
+    }
+//    if( lv != 0 ) { continue ; }
+
+    if( nfound == 0 ) { break; }
+    int irad=fFSQEDRadiation;
+    irad=0;
+    int itau=1; // (0,1)=(no pytaud, pytaud call)
+    int icom=1; // (0,1)=(hepevt, pyjets)
+    std::string msg;
+    if( nfermi == 2 ) { 
+      py2frm_(&irad, &itau, &icom);
+    }
+    else if( nfermi == 4 ) {
+      double atotsq;
+      double a1sq;
+      double a2sq;
+      int istrat;
+      fSpring->GetPy4frmArgs(lv, atotsq, a1sq, a2sq, istrat);
+      py4frm_(&atotsq, &a1sq, &a2sq, &istrat, &irad, &itau, &icom);
+    }
+    else if( nfermi == 6 ) {
+      double pcomb[7];
+      fSpring->GetPy6frmProb(lv, pcomb);
+      py6frm_(&pcomb[0],&pcomb[1],&pcomb[2],&pcomb[3],&pcomb[4],&pcomb[5],&pcomb[6],
+              &irad,&itau,&icom);
+    }
+    else {
+      std::cout << "JSFHadronizer::HadronizerNew .. nfermi=" << nfermi << " not supported yet." 
+ 	  << std::endl;
+      exit(-1);
+    }
+
+    if( fPythia->GetMSTU(23) != 0 || fPythia->GetMSTU(24) != 0
+      || fPythia->GetMSTU(28) != 0 ) {
+      std::cout <<" Warning .. JSFHadronizer::Fragmentation" << std::endl;
+      std::cout << "Possible error in PYEXEC detected."
+              << " MSTU(23)=" << fPythia->GetMSTU(23)
+              << " MSTU(24)=" << fPythia->GetMSTU(24)
+              << " MSTU(28)=" << fPythia->GetMSTU(28)
+              << " This event will be skipped." << std::endl;
+      std::cout << " Event number is " << gJSF->GetEventNumber() << std::endl;
+      fPythia->SetMSTU(23,0);
+      fPythia->SetMSTU(24,0);
+      fPythia->SetMSTU(28,0);
+      int two=2;
+      nret=-1;
+      pylist_(&two);
+      return;
+    }
+    int one=1;
+//  Correct pointer to mother"
+    if( lv > 0 ) {
+      for(int ip=0;ip<iplast;ip++) {
+        int j=morig[ip];
+        pyjets->K[2][ip]=sparticles[j].ibuf[1];
+      }
+    }
+
+    SetColorFlowInfo(&lastColor);
+    pyhepc_(&one);
+    if( pyjets->N != hepevt_.nhep ) {
+      std::cout << "Error in JSFHadronizer::HadronizeNew ... "
+	<< " Entryies in /PYJETS/ and /HEPEVT/ are different." << std::endl;
+      std::cout << "  pyjets->N=" << pyjets->N << "  hepevt_.nhep=" << hepevt_.nhep << std::endl;
+      std::cout << "  Program will stop here." << std::endl;
+      exit(-1);
+    }
+    Hepevt2GeneratorParticle(npgen, gbuf);
+  }
+}
+
+//___________________________________________________________________________
+void JSFHadronizer::SetColorFlowInfo(int *lastColor) 
+{
+// Analyize /PYJETS/ and set color flow info.
+// Particles with status=3, 13, 14 are scanned and corresponding fColor[], 
+// fAntiColor[] of quarks are set, if it is not set yet.
+  int nc=*lastColor;
+  Pyjets_t *pyjets=fPythia->GetPyjets();
+  for(int ip=0;ip<pyjets->N;ip++) {
+    if( pyjets->K[0][ip] == 42 || pyjets->K[0][ip] == 52 ) {
+      std::cout << "Warning!! Evt#" << gJSF->GetEventNumber() 
+		<< ".  JSFHadronizer::SetColorFlowInfo( ) .. status code " << pyjets->K[0][ip] 
+	 	<< " is not supported. Not color flow info is set. ip= " << ip << std::endl;
+    }
+    if( pyjets->K[0][ip] != 3 && pyjets->K[0][ip] != 13 && pyjets->K[0][ip] != 14 ) { continue ; }
+
+    int k4=pyjets->K[3][ip];
+    int k5=pyjets->K[4][ip];
+    if( k4==0 || k5 == 0 ) { continue; }
+    int pid=pyjets->K[1][ip];
+    if( abs(pid) > 10 && pid != 21 ) { continue ; }
+    int icfrom=(k4%100000000)/10000;
+    int icto  = k4%10000;
+    int iafrom=(k5%100000000)/10000;
+    int iato  = k5%10000; 
+
+    int ncnow=pid>0 ? fColor[ip] : fAntiColor[ip] ;
+    if ( ncnow == 0 ) {
+      if ( pid > 0 && pid < 10 ) {
+         ncnow=fAntiColor[icfrom-1]!=0 ? fAntiColor[icfrom-1] : nc+1 ;
+         fColor[ip]=ncnow;
+      }
+      else if ( pid > -10 && pid < 0 ) {
+         ncnow=fColor[iafrom-1]!=0 ? fColor[iafrom-1] : nc+1 ;
+         fAntiColor[ip]=ncnow;
+      }
+    }
+// loop over daughter particles.
+    while( icto != 0 ) {
+      fColor[icto-1]=ncnow;
+      if ( pyjets->K[1][icto-1] == 21 ) { fAntiColor[icto-1]=ncnow; }
+      k4=pyjets->K[3][icto-1];
+      k5=pyjets->K[4][icto-1];
+      icfrom=(k4%100000000)/10000;
+      icto  = k4%10000;
+      if( pyjets->K[0][icto-1] != 3 && pyjets->K[0][icto-1] != 13 
+       && pyjets->K[0][icto-1] != 14 ) { icto=0; }
+    }  
+    while( iato != 0 ) {
+      fAntiColor[iato-1]=ncnow;
+      if( pyjets->K[1][iato-1] == 21) { fColor[iato-1]=ncnow; }
+      k4=pyjets->K[3][iato-1];
+      k5=pyjets->K[4][iato-1];
+      iafrom=(k5%100000000)/10000;
+      iato  = k5%10000;
+      if( pyjets->K[0][iato-1] != 3 && pyjets->K[0][iato-1] != 13 
+       && pyjets->K[0][iato-1] != 14 ) { iato=0; }
+    }  
+    nc=ncnow;
+  }
+
+  *lastColor=nc;
+
+}
+
+
+// __________________________________________________________________________
+void JSFHadronizer::Hepevt2GeneratorParticle(Int_t &npgen, JSFGeneratorBuf *gbuf)
+{
+// Copy /HEPEVT/ to JSFGeneratorParticles
+  TClonesArray &part=*(gbuf->GetParticles());
+  int npgen0=npgen;
+  for(int j=0;j<hepevt_.nhep;j++){
+    double rbuf[JSFGeneratorParticle::kRdataSize];
+    int    ibuf[JSFGeneratorParticle::kIdataSize];
+    for(unsigned int i=0;i<20;i++) { rbuf[i]=0.0; }
+    rbuf[JSFGeneratorParticle::kSerial]=j+1+npgen0;
+    int pid=hepevt_.idhep[j];  // pid
+    rbuf[JSFGeneratorParticle::kID]=pid;  // PID
+    rbuf[JSFGeneratorParticle::kMass]=hepevt_.phep[j][4]; // Mass
+    double charge=fPythia->Pychge(pid)/3.0;
+    int    kc=fPythia->Pycomp(pid);
+    double xctau=fPythia->GetPMAS(kc,4)*0.1;
+    rbuf[JSFGeneratorParticle::kCharge]=charge;
+    for(unsigned int i=0;i<4;i++) { 
+        rbuf[i+JSFGeneratorParticle::kPx]=hepevt_.phep[j][i]; 
+    }
+    for(unsigned int i=0;i<4;i++) { 
+        rbuf[i+JSFGeneratorParticle::kX]=hepevt_.vhep[j][i]*0.1; }
+    int    firstchild=hepevt_.jdahep[j][0];
+    int    lastchild=hepevt_.jdahep[j][1];
+    int    firstmother=hepevt_.jmohep[j][0];
+    int    lastmother=hepevt_.jmohep[j][1];
+    rbuf[JSFGeneratorParticle::kNDaughter]
+	= firstchild==0 ? 0 : lastchild-firstchild+1;
+    rbuf[JSFGeneratorParticle::kFirstDaughter]
+        = firstchild==0 ? 0 : firstchild+npgen0;
+    rbuf[JSFGeneratorParticle::kMother]
+        = firstmother==0 ? 0 : firstmother+npgen0;
+    rbuf[JSFGeneratorParticle::kLifeTime]=xctau;
+// Set polarization vector
+    float pa=sqrt(rbuf[JSFGeneratorParticle::kPx]*rbuf[JSFGeneratorParticle::kPx]
+		+ rbuf[JSFGeneratorParticle::kPy]*rbuf[JSFGeneratorParticle::kPy]
+		+ rbuf[JSFGeneratorParticle::kPz]*rbuf[JSFGeneratorParticle::kPz]);
+    rbuf[JSFGeneratorParticle::kSpinX]=fHelicity[j]*rbuf[JSFGeneratorParticle::kPx]/pa;
+    rbuf[JSFGeneratorParticle::kSpinY]=fHelicity[j]*rbuf[JSFGeneratorParticle::kPy]/pa;
+    rbuf[JSFGeneratorParticle::kSpinZ]=fHelicity[j]*rbuf[JSFGeneratorParticle::kPz]/pa;
+
+    ibuf[JSFGeneratorParticle::kStatus]=hepevt_.isthep[j];
+    ibuf[JSFGeneratorParticle::kSecondMother]
+        = lastmother==0 ? 0 : lastmother+npgen0;
+    ibuf[JSFGeneratorParticle::kColorFlow0]=fColor[j];
+    ibuf[JSFGeneratorParticle::kColorFlow1]=fAntiColor[j];
+//
+    new(part[npgen]) JSFGeneratorParticle(&rbuf[0], &ibuf[0]);
+    npgen++;
+  }
+
+  gbuf->SetNparticles(npgen);
+
+}
+
+//_____________________________________________________________
+void JSFHadronizer::SetColorFlow(int ip, int npgen0, int ibuf[])
+{
+  Pyjets_t *pyjets=fPythia->GetPyjets();
+  int status=pyjets->K[0][ip];
+  int pid=pyjets->K[1][ip];
+  ibuf[JSFGeneratorParticle::kColorFlow0]=0;
+  ibuf[JSFGeneratorParticle::kColorFlow1]=0;
+  int ki4=pyjets->K[3][ip];
+  int ki5=pyjets->K[4][ip];
+
+  if ( status == 3 || status == 13 || status == 14 ) {
+    if( pid > 0 && pid < 10 ) { 
+      ibuf[JSFGeneratorParticle::kColorFlow0]=(ki4%100000000)/10000+npgen0; // color flow from
+      ibuf[JSFGeneratorParticle::kColorFlow1]=ki4%10000+npgen0;             // color flow to
+    }
+    else if ( pid > -10 && pid < 0 ) {
+      ibuf[JSFGeneratorParticle::kColorFlow0]=(ki5%100000000)/10000+npgen0; // anti-color flow from
+      ibuf[JSFGeneratorParticle::kColorFlow1]=ki5%10000+npgen0;             // anti-color flow to
+    } 
+  }
+  else if ( status == 42 || status == 52 ) {
+      ibuf[JSFGeneratorParticle::kColorFlow0]=ki4%10000+npgen0;   // IC1
+      ibuf[JSFGeneratorParticle::kColorFlow1]=ki5%10000+npgen0;   // IC3
+  }
+}
+
+//______________________________________________________________
+JSFHadronizer *JSFHadronizer::Instance()
+{
+  if( !fInstance ) { fInstance=new JSFHadronizer(); }
+  return fInstance;
+}
+
+//_______________________________________________________________
+void JSFHadronizer::Pytaud(int *itau, int *iorig, int *kforig, int *ndecay)
+{
+// Decays tau using tauola.  for Pythia. Just for a single tau decay
+// Pyhita information is store in /PYJETS/.  Copy tau info to /HEPEVT/
+// Insert the result to /PYJETS/
+
+  int ip=*itau-1;
+
+  int kp=0;
+  hepevt_.nhep=1;
+  hepevt_.isthep[kp]=1;
+  int  pid=pyjets_.K[1][ip];
+  hepevt_.idhep[kp]=pyjets_.K[1][ip];
+  hepevt_.jmohep[kp][0]=0;
+  hepevt_.jmohep[kp][1]=0;
+  hepevt_.jdahep[kp][0]=0;
+  hepevt_.jdahep[kp][1]=0;
+  for(int i=0;i<5;i++) { hepevt_.phep[kp][i]=pyjets_.P[i][ip]; }
+  for(int i=0;i<4;i++) { hepevt_.vhep[kp][i]=pyjets_.V[i][ip]; }
+
+// Set polarization vector.
+  float pol[4];
+  for(int i=0;i<4;i++) { pol[i]=0.0 ; }
+  float ap=sqrt(hepevt_.phep[0][0]*hepevt_.phep[0][0]
+          + hepevt_.phep[0][1]*hepevt_.phep[0][1] + hepevt_.phep[0][2]*hepevt_.phep[0][2]);
+  float heltau=fHelicity[ip]*fIHLON;
+
+// If helicity is 0, try to estimate from parent
+  if( fHelicity[ip] == 0 ) {
+    if( abs(*kforig) == 24 ) { // W+- 
+      heltau=*kforig>0 ? fIHLON : -fIHLON ; 
+    }
+    else if( abs(*kforig) == 37 ) { // H+-
+      heltau=*kforig>0 ? -fIHLON : fIHLON ; 
+    }
+    else if( *kforig == 25 || *kforig == 23 ) { // H0(25) or Z(23)
+      int dummy=0;
+      float a_tau=0.15;
+      float prob_tau_left=*kforig==25 ? 0.5 : (a_tau+1.0/2.0) ; 
+      heltau=(float)pyr_(&dummy) > prob_tau_left ? 1 : -1 ;
+      float hsign=*kforig==25 ? -1.0 : 1.0 ; 
+      fHelicity[ip]=heltau>0.0 ? 1 : -1 ;
+      if ( *iorig > 0 ) { // Consider correlation between two daughters
+        int jtau3=pyjets_.K[3][*iorig-1];
+        int jtau4=pyjets_.K[4][*iorig-1];
+        int jttau=jtau3==*itau ? jtau4 : jtau3 ;
+        if( jtau4-jtau3 != 1 || abs(pyjets_.K[1][jttau-1]) != 15 ) {
+           int two=2;
+           pylist_(&two);
+           std::cerr << "Error in JSFHadronizer::Pytaud  tau in Higgs/Z decay is not tau+, tau- " 
+		<< " *itau=" << *itau << " *iorig=" << *iorig 
+		<< " *kforig=" << *kforig << " jtau3=" << jtau3 
+	        << " jtau4=" << jtau4 << std::endl;
+           std::cerr << " jttau=" << jttau << " K[1][jttau-1] =" << pyjets_.K[1][jttau-1]
+	        << std::endl;
+           std::cerr << " Program will stop here " << std::endl;
+           exit(-1);
+        }
+        fHelicity[jttau-1]=hsign*heltau;
+      }
+    }
+
+    fHelicity[ip]=heltau>0.0 ? 1 : -1 ;
+  }
+  pol[0]=heltau*hepevt_.phep[0][0]/ap;
+  pol[1]=heltau*hepevt_.phep[0][1]/ap;
+  pol[2]=heltau*hepevt_.phep[0][2]/ap;
+
+  taupos_.np1=1;
+  taupos_.np2=1;
+  for(int i=0;i<4;i++) { p4tau_.p4tau[i]=hepevt_.phep[kp][i]; }
+
+  int kto=2;
+  if( pid <= 0 ) { kto=1; }
+  dexay_(&kto, pol);
+
+  Pyjets_t *pyjets=fPythia->GetPyjets();
+  int np=pyjets->N;
+  int np0=np;
+  pyjets->K[3][ip]=hepevt_.jdahep[0][0]+np0-1;
+  pyjets->K[4][ip]=hepevt_.jdahep[0][1]+np0-1;
+//
+  for(int j=1;j<hepevt_.nhep;j++) {
+    for(int i=0;i<4;i++) { pyjets->V[i][np]=hepevt_.vhep[j][i]; }
+    for(int i=0;i<5;i++) { pyjets->P[i][np]=hepevt_.phep[j][i]; }
+    if( hepevt_.isthep[j] == 1 ) { 
+       pyjets->K[0][np]=1 ; // status code
+       pyjets->K[3][np]=0 ; // first daughter
+       pyjets->K[4][np]=0 ; // last daughter
+    }
+    else {
+       pyjets->K[0][np]=11;
+       pyjets->K[3][np]=hepevt_.jdahep[j][0]+np0-1;
+       pyjets->K[4][np]=hepevt_.jdahep[j][1]+np0-1;
+    }
+
+    pyjets->K[1][np]=hepevt_.idhep[j];
+    int ipmo=hepevt_.jmohep[j][0]-1;
+    int idmo=ipmo>=0 ? abs(hepevt_.idhep[ipmo]) : -1 ;
+    if( idmo != 15 && idmo >= 0 ) {
+      pyjets->K[2][np]=hepevt_.jmohep[j][0]+np0-1;
+    }
+    else if ( idmo == 15 )  {
+      pyjets->K[2][np]=*itau;
+    }
+    else {
+      std::cerr << "Error in JSFHadronizer::Pytaud ...  illegal mother id. idmo=" 
+                << idmo << std::endl;
+      std::cerr << "Program will stop here." << std::endl;
+      exit(-1);
+    }
+    np++;
+  }
+
+  *ndecay=hepevt_.nhep-1;
+
+  return;
+}
+
+
+// ___________________________________________________________________________
+void JSFHadronizer::SetPythiaDBDStandard(Double_t mh, Double_t wh)
+{
+// Set OPAL tuned hadronization parameter
+// Set OPAL tune parameters
+  fPythia->SetPMAS(25,1,mh);
+  fPythia->SetPMAS(25,2,wh);
+  fPythia->SetMSTJ(41,2);
+  fPythia->SetMSTU(22,20);
+  fPythia->SetMSTJ(28,2);  // Tau decay : (0,1,2) = (pydecy, pytaud when mother known, allways pytaud) 
+  fPythia->SetPARJ(21,0.40000);
+  fPythia->SetPARJ(41,0.11000);
+  fPythia->SetPARJ(42,0.52000);
+  fPythia->SetPARJ(81,0.25000);
+  fPythia->SetPARJ(82,1.90000);
+  fPythia->SetMSTJ(11,3);
+  fPythia->SetPARJ(54,-0.03100);
+  fPythia->SetPARJ(55,-0.00200);
+  fPythia->SetPARJ(1,0.08500);
+  fPythia->SetPARJ(3,0.45000);
+  fPythia->SetPARJ(4,0.02500);
+  fPythia->SetPARJ(2,0.31000);
+  fPythia->SetPARJ(11,0.60000);
+  fPythia->SetPARJ(12,0.40000);
+  fPythia->SetPARJ(13,0.72000);
+  fPythia->SetPARJ(14,0.43000);
+  fPythia->SetPARJ(15,0.08000);
+  fPythia->SetPARJ(16,0.08000);
+  fPythia->SetPARJ(17,0.17000);
+  fPythia->SetMSTP( 3,1);
+
+  std::cout << " === Pythia hadronization parameters : DBD standard value ==================" << std::endl;
+  std::cout << "   PMAS(25,1) : " << fPythia->GetPMAS(25,1) << "           : Higgs mass " << std::endl;
+  std::cout << "   PMAS(25,2) : " << fPythia->GetPMAS(25,2) << "           : Higgs width " << std::endl;
+
+  std::cout << "   MSTJ(11) : " << fPythia->GetMSTJ(11) << "  : Choice of fragmentation function " << std::endl;
+  std::cout << "   MSTJ(28) : " << fPythia->GetMSTJ(28) 
+            << "   :  Tau decay : (0,1,2) = (pydecy, pytaud when mother known, allways pytaud) " 
+            << std::endl;
+  std::cout << "   MSTJ(41) : " << fPythia->GetMSTJ(41) << "   : Type of branching in shower " << std::endl;
+  std::cout << "   MSTP( 3) : " << fPythia->GetMSTP(3)  << "   : Selection of Lambda in Alpha_s " << std::endl;
+  std::cout << "   MSTU(22) : " << fPythia->GetMSTU(22) << "  : Maximum number of errors that are printed." << std::endl;
+
+  Int_t ipPARJ[18]={1,2,3,4,11,   12,13,14,15,16,  17,21,41,32,54,  55,81,82};
+  for(Int_t i=0;i<18;i++) {
+    std::cout << "   PARJ(" << setw(2) << i << ") : " << fPythia->GetPARJ(ipPARJ[i]) << std::endl;
+  }
+  std::cout << " ===========================================================================" << std::endl;
+
+}
+
