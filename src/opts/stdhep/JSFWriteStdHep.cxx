@@ -55,6 +55,7 @@ JSFWriteStdHep::JSFWriteStdHep(const char *name, const char *title )
   fProcessID=gJSF->Env()->GetValue("JSFWriteStdHep.ProcessID",0);
   fWriteBeginRun=kTRUE;
   fWriteEndRun=kTRUE;
+  fNumberOfWriteEvents=0;
 
 	if(fEventSource == 3){
 		TList *list=gJSF->Modules();
@@ -95,17 +96,30 @@ Bool_t JSFWriteStdHep::Initialize()
   //    jsf_mcfio_init_(); 
   //  }
 
-  std::cout << "JSFWriteStdHep::Initialize === runParameter " << std::endl;
-  std::cout << "  Output File Name : " << fOutFileName << std::endl;
-  std::cout << "  Output File Title: " << fOutTitle << std::endl;
-  std::cout << "  NTries           : " << fNTries << std::endl;
-  std::cout << "  Debug Level      : " << fDebugLevel << std::endl;
-  std::cout << "  Event Source     : " << fEventSource << std::endl;
+  TString ftest(fOutFileName.data());
+  Int_t iMNO=fMaxNumberOfFiles;
+  if ( ftest.EndsWith(".stdhep") ) {
+     fMaxNumberOfFiles=1;
+  }
+
+
+
+
+  std::cout << "#### JSFWriteStdHep::Initialize === runParameter " << std::endl;
+  std::cout << "  Stdhep Output File Name : " << fOutFileName << std::endl;
+  std::cout << "  Stdhep Output File Title: " << fOutTitle << std::endl;
+  std::cout << "  Stdhep NTries           : " << fNTries << std::endl;
+  std::cout << "  Stdhep Debug Level      : " << fDebugLevel << std::endl;
+  std::cout << "  Event Source            : " << fEventSource << std::endl;
   std::cout << "    =0 /HEPEVT/, =1 /JETSET/, =2 JSFGenerator " << std::endl;
-  std::cout << "  ProcessID        : " << fProcessID << std::endl;
-  std::cout << "  Data size per file in kB : " << fMaxOutputSizeInkB << std::endl;
+  std::cout << "  Stdhep ProcessID        : " << fProcessID << std::endl;
+  std::cout << "  Data size/file in kB    : " << fMaxOutputSizeInkB << std::endl;
   std::cout << "  Max. number of files     : " << fMaxNumberOfFiles << std::endl;
-  std::cout << "==============================================" << std::endl;
+  if( iMNO != fMaxNumberOfFiles ) { 
+    std::cout << "     ( Max. number of files was changed from " << iMNO
+  	      << " to 1 because Output File Name ends with .stdhep )" << std::endl;
+    std::cout << "==============================================" << std::endl;
+  }
 
   return kTRUE;
 }
@@ -149,6 +163,7 @@ TString JSFWriteStdHep::GetStdHepFileName(Int_t iseq)
 //  If fOutFileName ends with ".stdhep", returns fOutFileName,
 //  If Not, return fOutFileName+"_${iseq}.stdhep
 //
+
    TString ftest(fOutFileName.data());
    if ( ftest.EndsWith(".stdhep") ) {
 	return ftest;
@@ -167,7 +182,7 @@ TString JSFWriteStdHep::GetStdHepFileName(Int_t iseq)
    ftest+=iseq;
    ftest+=".stdhep";
 
-   std::cout << " GetStdHepFileName is " << ftest << std::endl;
+//   std::cerr << " GetStdHepFileName is " << ftest << std::endl;
    return ftest;
 
 }
@@ -393,6 +408,12 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
     }
     HepEvtCheckAndMod();
   }
+//
+// Output hepevt common as it is.
+//
+  else if ( fEventSource == 4 ) {
+    ForEventSource4(nev);
+  }
 
 //  std::cerr << "JSFWriteStdHep::... esum=" << esum 
 //	<< " pxsum=" << pxsum << " pysum=" << pysum
@@ -451,6 +472,7 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
 	      << nev << std::endl;
     return kFALSE;
   }
+  fNumberOfWriteEvents++;
 // * Check Output data size.
   Int_t nhep=hepevt_.nhep;
   Double_t outsize=(Double_t)(( 8*( 13+3*nhep+9*nhep ) + 4*( 1+2*nhep+2+6*nhep) )/ 1000.0);
@@ -533,14 +555,68 @@ Bool_t JSFWriteStdHep::EndRun()
   }
 
   std::cout << "JSFWriteStdHep reached EndRun.. " << std::endl;
-  std::cout << "   Last event number : " << gJSF->GetEventNumber() << std::endl;
-  std::cout << "   Last file number  : " << fCurrentNumberOfFiles << std::endl;
-  std::cout << "   Size of last file : " << fCurrentOutputSizeInkB << " kB " << std::endl;
-  std::cout << "   Last file name    : " << GetStdHepFileName(fCurrentNumberOfFiles) << std::endl; 
+  std::cout << "   Last event number      : " << gJSF->GetEventNumber() << std::endl;
+  std::cout << "   Number of write events : " << fNumberOfWriteEvents << std::endl;
+  std::cout << "   Last file number       : " << fCurrentNumberOfFiles << std::endl;
+  std::cout << "   Size of last file      : " << fCurrentOutputSizeInkB << " kB " << std::endl;
+  std::cout << "   Last file name         : " << GetStdHepFileName(fCurrentNumberOfFiles) << std::endl; 
 
   //  }
   return kTRUE;
 }
+
+//____________________________________________________________________________
+void JSFWriteStdHep::ForEventSource4(int nev)
+{
+    JSFGenerator *gen=(JSFGenerator*)gJSF->FindModule("JSFGenerator");
+    JSFGeneratorBuf *gevt=(JSFGeneratorBuf*)gen->EventBuf();
+    TClonesArray *pa=gevt->GetParticles();
+
+    hepevt_.nevhep=nev;
+    hepevt_.nhep=gevt->GetNparticles();
+
+    Int_t j;
+
+    hepev4_.eventweightlh = 1.0;
+    hepev4_.alphaqedlh= 0.0 ;
+    hepev4_.alphaqcdlh= 0.0 ;
+    for (j=0;j<10;j++) { hepev4_.scalelh[j]=0.0; }
+    hepev4_.idruplh=fProcessID ;
+
+
+    for(j=0;j<gevt->GetNparticles();j++){
+      JSFGeneratorParticle *p=(JSFGeneratorParticle*)pa->At(j);
+      const float *spinv=p->GetSpin();
+      const int   *colorflow=p->GetColorFlow();
+      hepev4_.spinlh[j][0]=spinv[0];
+      hepev4_.spinlh[j][1]=spinv[1];
+      hepev4_.spinlh[j][2]=spinv[2];
+      hepev4_.icolorflowlh[j][0]=colorflow[0];
+      hepev4_.icolorflowlh[j][1]=colorflow[1];
+
+      hepevt_.isthep[j]=p->GetStatus();
+      hepevt_.idhep[j]=p->GetID();
+      hepevt_.jmohep[j][0]=p->GetMother();
+      hepevt_.jmohep[j][1]=p->GetSecondMother();
+      hepevt_.jdahep[j][0]=p->GetFirstDaughter();
+      hepevt_.jdahep[j][1]=p->GetFirstDaughter()+p->GetNDaughter()-1;
+      if( p->GetNDaughter() == 0 ) {
+        hepevt_.jdahep[j][1]=0;
+      }
+
+      hepevt_.phep[j][0]=p->GetPx();
+      hepevt_.phep[j][1]=p->GetPy();
+      hepevt_.phep[j][2]=p->GetPz();
+      hepevt_.phep[j][3]=p->GetE();
+      hepevt_.phep[j][4]=p->GetMass();
+      hepevt_.vhep[j][0]=p->GetX();
+      hepevt_.vhep[j][1]=p->GetY();
+      hepevt_.vhep[j][2]=p->GetZ();
+      hepevt_.vhep[j][3]=p->GetT();
+
+   }
+}
+
 
 //_____________________________________________________________________________
 Bool_t JSFWriteStdHep::Terminate()

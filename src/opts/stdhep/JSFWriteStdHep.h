@@ -41,6 +41,7 @@ class JSFWriteStdHep : public JSFModule
   Bool_t        fWriteEndRun;   //! True if endRun is not written yet
   Int_t         fProcessID;     // If fHEPEV4 is not set, fProcessID is write as HEPEV4 data
 
+  Int_t         fNumberOfWriteEvents;   // Number of events written in file.
   Int_t         fCurrentNumberOfFiles;  // Number of files writeen so far.
   Int_t         fCurrentOutputSizeInkB; // Output data size size to the current file (in kB)
   Int_t         fMaxOutputSizeInkB;  // Output data size max.(kB unit)
@@ -78,6 +79,8 @@ class JSFWriteStdHep : public JSFModule
   static void SetHEPEV4(THEPEV4 *hepev4){ fHEPEV4=hepev4; }
   Int_t  GetProcessID(){ return fProcessID; }
   void   SetProcessID(Int_t pid){ fProcessID=pid; } 
+
+  void   ForEventSource4(int nev);
 
   Int_t  GetCurrentNumberOfFiles(){ return fCurrentNumberOfFiles; }
   Int_t  GetCurrentOutputSizeInkB(){ return fCurrentOutputSizeInkB; }
