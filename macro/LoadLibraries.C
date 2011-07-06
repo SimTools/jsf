@@ -18,7 +18,9 @@ Int_t LoadLibraries(JSFEnv *env=0)
   LoadLibraryWithMessage("libJSFQuickSim.so");
 
   if ( pyversion == 6 ) {
-    LoadLibraryWithMessage("libPythia6.so");
+    if( env->GetValue("JSFHadronizer.LoadPythia",1) != 0 ) {
+      LoadLibraryWithMessage("libPythia6.so");
+    }
     LoadLibraryWithMessage("libJSFPythia6.so");
     LoadLibraryWithMessage("libEG.so");
     LoadLibraryWithMessage("libEGPythia6.so");
