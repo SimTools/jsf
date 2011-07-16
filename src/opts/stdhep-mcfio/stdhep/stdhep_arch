@@ -90,10 +90,10 @@ ifeq "$(UNAME)" "Linux24"
     LOCAL = -lnsl
 endif
 ifeq "$(UNAME)" "Darwin"
-    CC=gcc
-    CPP=gcc -E
+    CC=gcc-32
+    CPP=gcc-32 -E
 ifneq ($(shell which gfortran 2>&1 | grep -vc 'no gfortran'),0)
-    F77=gfortran
+    F77=gfortran-32
 else
     F77=g77
 endif
