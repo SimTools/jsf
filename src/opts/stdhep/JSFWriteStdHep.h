@@ -40,6 +40,7 @@ class JSFWriteStdHep : public JSFModule
   Bool_t        fWriteBeginRun; //! True if beginRun is not written yet
   Bool_t        fWriteEndRun;   //! True if endRun is not written yet
   Int_t         fProcessID;     // If fHEPEV4 is not set, fProcessID is write as HEPEV4 data
+  Int_t         fComputeTime;   // Compute the production time, useful for long-lived particles
 
   Int_t         fNumberOfWriteEvents;   // Number of events written in file.
   Int_t         fCurrentNumberOfFiles;  // Number of files writeen so far.

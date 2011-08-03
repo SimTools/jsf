@@ -53,6 +53,7 @@ JSFWriteStdHep::JSFWriteStdHep(const char *name, const char *title )
   fDebugLevel = gJSF->Env()->GetValue("JSFWriteStdHep.DebugLevel",0);
   fEventSource=gJSF->Env()->GetValue("JSFWriteStdHep.EventSource",1);
   fProcessID=gJSF->Env()->GetValue("JSFWriteStdHep.ProcessID",0);
+  fComputeTime=gJSF->Env()->GetValue("JSFWriteStdHep.ComputeTime",0);
   fWriteBeginRun=kTRUE;
   fWriteEndRun=kTRUE;
   fNumberOfWriteEvents=0;
@@ -307,7 +308,7 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
       	hepev4_.icolorflowlh[j][0]=0;
       	hepev4_.icolorflowlh[j][1]=0;
 
-				hepevt_.isthep[j]=2;
+				hepevt_.isthep[j]=102;
 				hepevt_.idhep[j]=p->GetID();
 				hepevt_.jmohep[j][0]=p->GetMother();
 				hepevt_.jmohep[j][1]=0;
@@ -325,6 +326,33 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
 				hepevt_.vhep[j][3]=0;
 			}
 		}
+
+
+    // compute the production time from the parent's decay distance
+    map<Int_t,Double_t> endTimeMap;
+    if ( fComputeTime == 1 ) {
+      for(j=0;j<gevt->GetNparticles();j++){
+        JSFGeneratorParticle *p=(JSFGeneratorParticle*)pa->At(j);
+        Int_t parentId = p->GetMother();
+        Double_t production_time(0);
+        Double_t propagation_time(0);
+        if ( parentId > 0 )
+          production_time = endTimeMap[parentId-1];
+        Int_t dauid=p->GetFirstDaughter();
+        if ( dauid > 0 ) {
+          JSFGeneratorParticle *pdau = (JSFGeneratorParticle*)pa->At(dauid-1);
+          TLorentzVector vec( p->GetPx(), p->GetPy(), p->GetPz(), p->GetE() );
+          Double_t beta = vec.Beta();
+          TVector3 vtx( p->GetX(), p->GetY(), p->GetZ() );
+          TVector3 dauvtx( pdau->GetX(), pdau->GetY(), pdau->GetZ() );
+          TVector3 delta( dauvtx - vtx );
+          propagation_time = delta.Mag() / beta; // delta T = delta X / beta (in unit of c=1)
+        }
+        endTimeMap[j] = production_time + propagation_time;
+        //printf("mother %d produced at %.2e, daughter %d (%d) propgated %.2e\n",
+            //parentId, production_time, j+1, p->GetID(), propagation_time);
+      }
+    }
 
     for(j=nSpringParton;j<gevt->GetNparticles()+nSpringParton;j++){
       JSFGeneratorParticle *p=(JSFGeneratorParticle*)pa->At(j-nSpringParton);
@@ -349,11 +377,15 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
 
       hepevt_.isthep[j]=13;
       hepevt_.idhep[j]=p->GetID();
-      hepevt_.jmohep[j][0]=p->GetMother()+nSpringParton;
-      hepevt_.jmohep[j][1]=0;
+      if (p->GetMother() < 0) {
+        hepevt_.jmohep[j][0]=0;
+        hepevt_.jmohep[j][1]=0;
+      } else {
+        hepevt_.jmohep[j][0]=p->GetMother()+nSpringParton;
+        hepevt_.jmohep[j][1]=0;
+      }
       hepevt_.jdahep[j][0]=p->GetFirstDaughter()+nSpringParton;
       hepevt_.jdahep[j][1]=p->GetFirstDaughter()+p->GetNDaughter()-1+nSpringParton;
-
 
       if (p->GetNDaughter() == 0 ) {
 	hepevt_.isthep[j]=1; 
@@ -363,6 +395,9 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
       }	
       else if( p->GetMother() < 0 && abs(p->GetID()) == 15 ) {
         hepevt_.isthep[j]=2;  // Special treatment of primary tau decay
+      }	
+      else if( p->GetMother() < 0 && abs(p->GetID()) == 1000015 ) {
+        hepevt_.isthep[j]=2;  // Special treatment for semistable stau
       }	
       else if( p->GetMother() < 0 || p->GetNDaughter() > 1000 ) {
         hepevt_.isthep[j]=13;	
@@ -389,6 +424,7 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
 //	<< " mod="  << p->fMother
 //	<< std::endl;
 
+
       hepevt_.phep[j][0]=p->GetPx();
       hepevt_.phep[j][1]=p->GetPy();
       hepevt_.phep[j][2]=p->GetPz();
@@ -398,6 +434,11 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
       hepevt_.vhep[j][1]=p->GetY();
       hepevt_.vhep[j][2]=p->GetZ();
       hepevt_.vhep[j][3]=p->GetT();
+      if ( fComputeTime == 1 ) {
+        if ( p->GetMother() > 0 ) {
+          hepevt_.vhep[j][3]=endTimeMap[p->GetMother()-1];
+        }
+      }
 
 //      if ( hepevt_.isthep[j]==1 ) {
 //	esum+= hepevt_.phep[j][3];
