@@ -138,7 +138,7 @@ void jsfbeaminit_(Int_t *itype, Int_t *ibtyp, Double_t *bmwidth)
     //   itype=0-27 to select Beam Strauhlung spectrum
     //   If ibtyp=1, use uniform initial beam spread, 2=Gaus form
 
-    Char_t *bsname[28]={"x250_n63", "jlca300", "jlca500", "jlcy300", "jlcy500",
+    const Char_t *bsname[28]={"x250_n63", "jlca300", "jlca500", "jlcy300", "jlcy500",
 			"trc250", "trc300", "trc350", "trc400", 
 			"trc450", "trc500", "trc1000",
 		"250_nominal", "350_largeY", "350_nominal", "500_lowP", // 16-19 
