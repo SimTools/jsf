@@ -46,7 +46,7 @@ ifeq ($(PYTHIAVERSION),6)
 LIBS	      = -L$(LCLIBROOT)/lib -lTAUOLA -lFORTLIB
 FOBJS         = 
 ifneq ($(TAUOLADIR),)
-FOBJS  = fmessage.o tralo4.o
+FOBJS  = fmessage.o tralo4.o pydecy.o
 RANMAR =  
 CXXFLAGS += -D__TAUOLA_MINOR_VERSION__=7
 LIBS =  -L$(TAUOLADIR) -ltauola -L$(PHOTOSDIR) -lphotos 

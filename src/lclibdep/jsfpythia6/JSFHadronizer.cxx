@@ -63,6 +63,7 @@ extern void  pyhepc2_(int *flag, int *n, int *npad, int k[5][4000],
                                 double parf[2000], double vckm[4][4]);
 extern void  ubstfd_(float pb[4], float pr[4], float pa[4]);
 extern void  ubstbk_(float pb[4], float pr[4], float pa[4]);
+// extern void  heplst_(int *flag);
 };
 
 #if __TAUOLA_MINOR_VERSION__ < 7 
@@ -946,9 +947,10 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
       rtmp[13]=-ip;             // mother
       Double_t xctau=rbuf[ip-1][15];  // ctau
       rtmp[15]=xctau;
-      if (rtmp[15]>0.) {
-        rtmp[16]=gRandom->Exp(xctau);
-      }
+//      if (rtmp[15]>0.) {
+//        rtmp[16]=gRandom->Exp(xctau);
+//      }
+      rtmp[16]=0;
 #endif
       new(part[inelm-1]) JSFGeneratorParticle(rtmp);
       npgen++;
@@ -1634,6 +1636,7 @@ void JSFHadronizer::HadronizeNew(JSFSpring *spring, Int_t &nret)
       pylist_(&two);
       return;
     }
+
     int one=1;
 //  Correct pointer to mother"
     if( lv > 0 ) {
@@ -1645,6 +1648,10 @@ void JSFHadronizer::HadronizeNew(JSFSpring *spring, Int_t &nret)
 
     SetColorFlowInfo(&lastColor);
     pyhepc_(&one);
+//    int two=2;
+//    heplst_(&two);
+
+
     if( pyjets->N != hepevt_.nhep ) {
       std::cout << "Error in JSFHadronizer::HadronizeNew ... "
 	<< " Entryies in /PYJETS/ and /HEPEVT/ are different." << std::endl;
@@ -1743,8 +1750,12 @@ void JSFHadronizer::Hepevt2GeneratorParticle(Int_t &npgen, JSFGeneratorBuf *gbuf
     for(unsigned int i=0;i<4;i++) { 
         rbuf[i+JSFGeneratorParticle::kPx]=hepevt_.phep[j][i]; 
     }
-    for(unsigned int i=0;i<4;i++) { 
+    for(unsigned int i=0;i<3;i++) { 
         rbuf[i+JSFGeneratorParticle::kX]=hepevt_.vhep[j][i]*0.1; }
+// Unit of JSFGeneratorParticle : cm, nsec
+// Unit of HEPEVT : mm, mm/c
+    double lightspeed=29.792458 ; // 29.792458 mm/nsec
+    rbuf[JSFGeneratorParticle::kT]=hepevt_.vhep[j][3]/lightspeed; 
     int    firstchild=hepevt_.jdahep[j][0];
     int    lastchild=hepevt_.jdahep[j][1];
     int    firstmother=hepevt_.jmohep[j][0];
@@ -1831,7 +1842,8 @@ void JSFHadronizer::Pytaud(int *itau, int *iorig, int *kforig, int *ndecay)
   hepevt_.jdahep[kp][0]=0;
   hepevt_.jdahep[kp][1]=0;
   for(int i=0;i<5;i++) { hepevt_.phep[kp][i]=pyjets_.P[i][ip]; }
-  for(int i=0;i<4;i++) { hepevt_.vhep[kp][i]=pyjets_.V[i][ip]; }
+//  for(int i=0;i<4;i++) { hepevt_.vhep[kp][i]=pyjets_.V[i][ip]; }
+
 
 // Set polarization vector.
   float pol[4];
@@ -1894,9 +1906,14 @@ void JSFHadronizer::Pytaud(int *itau, int *iorig, int *kforig, int *ndecay)
   int np0=np;
   pyjets->K[3][ip]=hepevt_.jdahep[0][0]+np0-1;
   pyjets->K[4][ip]=hepevt_.jdahep[0][1]+np0-1;
+
+//  for(int j=1;j<hepevt_.nhep;j++) {
+//    for(int i=0;i<4;i++) { hepevt_.vhep[j][i]=hepevt_.vhep[kp][i]; } // copy parent vertex position to daughters.
+//  }
+
 //
   for(int j=1;j<hepevt_.nhep;j++) {
-    for(int i=0;i<4;i++) { pyjets->V[i][np]=hepevt_.vhep[j][i]; }
+//     for(int i=0;i<4;i++) { pyjets->V[i][np]=hepevt_.vhep[j][i]; }
     for(int i=0;i<5;i++) { pyjets->P[i][np]=hepevt_.phep[j][i]; }
     if( hepevt_.isthep[j] == 1 ) { 
        pyjets->K[0][np]=1 ; // status code
@@ -1908,7 +1925,6 @@ void JSFHadronizer::Pytaud(int *itau, int *iorig, int *kforig, int *ndecay)
        pyjets->K[3][np]=hepevt_.jdahep[j][0]+np0-1;
        pyjets->K[4][np]=hepevt_.jdahep[j][1]+np0-1;
     }
-
     pyjets->K[1][np]=hepevt_.idhep[j];
     int ipmo=hepevt_.jmohep[j][0]-1;
     int idmo=ipmo>=0 ? abs(hepevt_.idhep[ipmo]) : -1 ;
