@@ -131,6 +131,10 @@ public:
   }
   inline void   SetTime(Double_t t) {  fX[0]=t ;  }
 
+  inline void   SetSpinAndColorflow(Float_t spin[3], Int_t colorflow[2]) {
+    for(Int_t i=0;i<3;i++){ fSpin[i]=spin[i]; }
+    for(Int_t i=0;i<2;i++){ fColorFlow[i]=colorflow[i]; }
+  }
 
   inline Bool_t HasSecondMother(){ return ( fSecondMother < 0 ? kFALSE : kTRUE ) ; }
 
