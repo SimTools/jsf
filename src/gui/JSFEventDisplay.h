@@ -64,7 +64,7 @@ public:
   Float_t  fSize; // Marker size./ line size.
 public:
   JSFEDProperty(){}
-  JSFEDProperty(Char_t *name, Int_t show=1, Int_t col=1, 
+  JSFEDProperty(const Char_t *name, Int_t show=1, Int_t col=1, 
                 Int_t type=1, Float_t size=1);
   virtual ~JSFEDProperty(){}
   void Update(TGPopupMenu *menu=NULL, Int_t menuid=0);

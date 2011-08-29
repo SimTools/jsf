@@ -63,7 +63,7 @@ JSFEnvGUIFrame::JSFEnvGUIFrame(const TGWindow *p, UInt_t w, UInt_t h)
   // ===================================================
   // Built buttons for set parameters
   // ===================================================
-   Char_t *sellabel[]={"Set", "Help"};
+   const Char_t *sellabel[]={"Set", "Help"};
    Int_t  idsellabel[]={B_PARA_SET, B_PARA_HELP};
    fCFSelect = new TGCompositeFrame(this, 60, 20, kHorizontalFrame);
    for(i=0;i<2;i++){
@@ -79,7 +79,7 @@ JSFEnvGUIFrame::JSFEnvGUIFrame(const TGWindow *p, UInt_t w, UInt_t h)
   // ===================================================
   // Built buttons at the end of pannel.
   // ===================================================
-  Char_t *bottomlabel[]={"Dismiss","Save", "About"};
+  const Char_t *bottomlabel[]={"Dismiss","Save", "About"};
   Int_t  idbottom[]={B_DISMISS, B_SAVE, B_ABOUT};
   fCFBottom    = new TGCompositeFrame(this, 60, 20, kHorizontalFrame);
   for(i=0;i<3;i++){

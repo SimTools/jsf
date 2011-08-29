@@ -720,7 +720,7 @@ void JSFGUIFrame::Update()
   }
 
   static const Int_t nproc=9;
-  Char_t *pname[nproc]={"ZH","gammagammaH", "eeH","nnH",
+  const Char_t *pname[nproc]={"ZH","gammagammaH", "eeH","nnH",
 			"gammaZ", "ZZ","WW","enW","twophoton"};
   Char_t wrkstr[64];
   for(i=M_GEN_PYEV_ZH;i<=M_GEN_PYEV_TWOPHOTON;i++){
@@ -1317,7 +1317,7 @@ void JSFGUIFrame::DoRunmodeMenuAction(Long_t parm1, Bool_t prompt)
 				0,               0 };
 
   static const Int_t nproc=9;
-  Char_t *pname[nproc]={"ZH","gammagammaH", "eeH","nnH",
+  const Char_t *pname[nproc]={"ZH","gammagammaH", "eeH","nnH",
 			"gammaZ", "ZZ","WW","enW","twophoton"};
   TGFileInfo fi;
 

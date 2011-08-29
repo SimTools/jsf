@@ -99,7 +99,7 @@ JSFEDHelix::~JSFEDHelix()
 
 
 //---------------------------------------------------------------------------
-JSFEDProperty::JSFEDProperty(Char_t *name, 
+JSFEDProperty::JSFEDProperty(const Char_t *name, 
 			     Int_t show, Int_t color, Int_t type, Float_t size )
 {
   strncpy(fName, name,24);
