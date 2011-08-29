@@ -594,7 +594,7 @@ Bool_t JSFQuickSimBuf::MakeJSFLTKCLTracks()
   if( tracks.GetEntries() > 0 ) {  tracks.Delete(); }
   Int_t nt=0;
 
-  Char_t *bankname[64]={ "Production:Combined_Gamma_Track",
+  const Char_t *bankname[64]={ "Production:Combined_Gamma_Track",
 			 "Production:Combined_Lepton_Track",
 			 "Production:Combined_Hadron_Track"};
   EJSFLTKCLTrackBank bank[3]={kCombinedGammaTrack, kCombinedLeptonTrack, 
@@ -758,7 +758,7 @@ Bool_t JSFQuickSimBuf::MakeCDCTracks()
   Int_t ncdc=0;
   Int_t i,nw,iret;
   Int_t itrkp[100]; 
-  Char_t *bankname="";
+  const Char_t *bankname="";
   Int_t nerrvx=((JSFQuickSim*)Module())->Param()->GetVTXNERRVX() ;
   if( nerrvx == 3 && fCDCTrackIsCDCVTX == 1 ) 
         bankname="Production:CDC_VTX;Track_Parameter";
@@ -777,7 +777,7 @@ Bool_t JSFQuickSimBuf::MakeCDCTracks()
       return kFALSE;
     }
     if( nerrvx == 3  && fCDCTrackIsCDCVTX == 1 ) {
-      Char_t *bnkcdc="Production:CDC;Track_Parameter";
+      const Char_t *bnkcdc="Production:CDC;Track_Parameter";
       Int_t nwt;  Int_t itrkpp[200];
       gJSFLCFULL->TBGET(1,bnkcdc,id,nwt,itrkpp,iret);
       itrkp[55]=itrkpp[55];

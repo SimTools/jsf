@@ -179,7 +179,7 @@ Bool_t JSFSIMDST::WriteParameters(Int_t nrun)
     return kFALSE;
   }
 
-  Char_t *com[200];
+  const Char_t *com[200];
   FILE *fd=fopen(fParamFileName,"w");
   
   Int_t i;
