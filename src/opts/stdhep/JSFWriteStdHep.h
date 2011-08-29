@@ -47,6 +47,7 @@ class JSFWriteStdHep : public JSFModule
   Int_t         fCurrentOutputSizeInkB; // Output data size size to the current file (in kB)
   Int_t         fMaxOutputSizeInkB;  // Output data size max.(kB unit)
   Int_t         fMaxNumberOfFiles;  // Maximum number of files.
+  Int_t         fStdxwrtMode;       // 1 to write only HEPEVT, 4=1+hepev4
 
 	JSFSpring *fSpring;
 
@@ -82,6 +83,7 @@ class JSFWriteStdHep : public JSFModule
   void   SetProcessID(Int_t pid){ fProcessID=pid; } 
 
   void   ForEventSource4(int nev);
+  void   ForEventSource5(int nev);
 
   Int_t  GetCurrentNumberOfFiles(){ return fCurrentNumberOfFiles; }
   Int_t  GetCurrentOutputSizeInkB(){ return fCurrentOutputSizeInkB; }

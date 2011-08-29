@@ -21,6 +21,7 @@
 #include "stdhep.h"
 #include "TPythia6.h"
 #include "hepev4.h"
+#include "TRandom.h"
 
 ClassImp(JSFWriteStdHep)
 THEPEV4 *JSFWriteStdHep::fHEPEV4=0;
@@ -54,6 +55,7 @@ JSFWriteStdHep::JSFWriteStdHep(const char *name, const char *title )
   fEventSource=gJSF->Env()->GetValue("JSFWriteStdHep.EventSource",1);
   fProcessID=gJSF->Env()->GetValue("JSFWriteStdHep.ProcessID",0);
   fComputeTime=gJSF->Env()->GetValue("JSFWriteStdHep.ComputeTime",0);
+  fStdxwrtMode=gJSF->Env()->GetValue("JSFWriteStdHep.StdxwrtMode",4);
   fWriteBeginRun=kTRUE;
   fWriteEndRun=kTRUE;
   fNumberOfWriteEvents=0;
@@ -430,13 +432,13 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
       hepevt_.phep[j][2]=p->GetPz();
       hepevt_.phep[j][3]=p->GetE();
       hepevt_.phep[j][4]=p->GetMass();
-      hepevt_.vhep[j][0]=p->GetX();
-      hepevt_.vhep[j][1]=p->GetY();
-      hepevt_.vhep[j][2]=p->GetZ();
-      hepevt_.vhep[j][3]=p->GetT();
+      hepevt_.vhep[j][0]=p->GetX()*10;
+      hepevt_.vhep[j][1]=p->GetY()*10;
+      hepevt_.vhep[j][2]=p->GetZ()*10;
+      hepevt_.vhep[j][3]=p->GetT()*10;
       if ( fComputeTime == 1 ) {
         if ( p->GetMother() > 0 ) {
-          hepevt_.vhep[j][3]=endTimeMap[p->GetMother()-1];
+          hepevt_.vhep[j][3]=endTimeMap[p->GetMother()-1]*10;
         }
       }
 
@@ -454,6 +456,9 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
 //
   else if ( fEventSource == 4 ) {
     ForEventSource4(nev);
+  }
+  else if ( fEventSource == 5 ) {
+    ForEventSource5(nev);
   }
 
 //  std::cerr << "JSFWriteStdHep::... esum=" << esum 
@@ -505,7 +510,7 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
      }
   }
 
-  Int_t ldlb=1;
+  Int_t ldlb=fStdxwrtMode;
   stdxwrt_(&ldlb, &fOutStream, &lok);
 
   if( lok != 0 ) {
@@ -517,6 +522,10 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
 // * Check Output data size.
   Int_t nhep=hepevt_.nhep;
   Double_t outsize=(Double_t)(( 8*( 13+3*nhep+9*nhep ) + 4*( 1+2*nhep+2+6*nhep) )/ 1000.0);
+  if( fStdxwrtMode == 4 ) {
+    outsize=(Double_t)(( 8*( 13+3*nhep+9*nhep + 13+3*nhep) 
+           + 4*( 1+2*nhep+2+6*nhep+1+2*nhep) )/ 1000.0);
+  }
   Int_t ioutsize=(Int_t)(outsize*0.77);
   fCurrentOutputSizeInkB+=ioutsize;
 
@@ -650,14 +659,109 @@ void JSFWriteStdHep::ForEventSource4(int nev)
       hepevt_.phep[j][2]=p->GetPz();
       hepevt_.phep[j][3]=p->GetE();
       hepevt_.phep[j][4]=p->GetMass();
-      hepevt_.vhep[j][0]=p->GetX();
-      hepevt_.vhep[j][1]=p->GetY();
-      hepevt_.vhep[j][2]=p->GetZ();
-      hepevt_.vhep[j][3]=p->GetT();
+      hepevt_.vhep[j][0]=p->GetX()*10.0;
+      hepevt_.vhep[j][1]=p->GetY()*10.0;
+      hepevt_.vhep[j][2]=p->GetZ()*10.0;
+      double lightspeed=29.792458 ; // 29.792458 mm/nsec
+      hepevt_.vhep[j][3]=p->GetT()*lightspeed;
 
    }
+
+//   int two=2;
+//   heplst_(&two);
 }
 
+
+// ______________________________________
+void JSFWriteStdHep::ForEventSource5(int nev)
+{
+    JSFGenerator *gen=(JSFGenerator*)gJSF->FindModule("JSFGenerator");
+    JSFGeneratorBuf *gevt=(JSFGeneratorBuf*)gen->EventBuf();
+    TClonesArray *pa=gevt->GetParticles();
+ 
+    hepevt_.nevhep=nev;
+    hepevt_.nhep=gevt->GetNparticles();
+
+    Int_t j;
+ 
+    hepev4_.eventweightlh = 1.0;
+    hepev4_.alphaqedlh= 0.0 ;
+    hepev4_.alphaqcdlh= 0.0 ;
+    for (j=0;j<10;j++) { hepev4_.scalelh[j]=0.0; }
+    hepev4_.idruplh=fProcessID ;
+ 
+    // randomize particle lifetime if nonzero
+    map<Int_t,Double_t> lifetimeMap;
+    for(j=0;j<gevt->GetNparticles();j++){
+      JSFGeneratorParticle *p=(JSFGeneratorParticle*)pa->At(j);
+      double lifetime = p->GetLifeTime();
+      if (lifetime > 0) {
+        double gamma = p->GetE() / p->GetMass();
+        double lifetimeRnd = gRandom->Exp( lifetime*gamma );
+        lifetimeMap[j] = lifetimeRnd;
+      } else {
+        lifetimeMap[j] = 0;
+      }
+    }
+
+    // compute the production time from the parent's lifetime
+    map<Int_t,Double_t> endTimeMap;
+    map<Int_t,Double_t> productionTimeMap;
+    for(j=0;j<gevt->GetNparticles();j++){
+      JSFGeneratorParticle *p=(JSFGeneratorParticle*)pa->At(j);
+      Int_t parentId = p->GetMother();
+      Double_t production_time(0);
+      Double_t propagation_time(0);
+
+      if ( parentId > 0 )
+        production_time = endTimeMap[parentId-1];
+
+      productionTimeMap[j] = production_time;
+
+      propagation_time = lifetimeMap[j];
+
+      endTimeMap[j] = production_time + propagation_time;
+      //printf("particle #%d [%d] propgated from %.2e to %.2e (diff=%.2e)\n",
+          //j, p->GetID(), production_time, endTimeMap[j], propagation_time);
+    }
+
+    for(j=0;j<gevt->GetNparticles();j++){
+      JSFGeneratorParticle *p=(JSFGeneratorParticle*)pa->At(j);
+      const float *spinv=p->GetSpin();
+      const int   *colorflow=p->GetColorFlow();
+      hepev4_.spinlh[j][0]=spinv[0];
+      hepev4_.spinlh[j][1]=spinv[1];
+      hepev4_.spinlh[j][2]=spinv[2];
+      hepev4_.icolorflowlh[j][0]=colorflow[0];
+      hepev4_.icolorflowlh[j][1]=colorflow[1];
+
+      //hepevt_.isthep[j]=p->GetStatus();
+      if (p->GetNDaughter() == 0 ) {
+        hepevt_.isthep[j]=1; 
+      } else {
+        hepevt_.isthep[j]=2; 
+      }
+      hepevt_.idhep[j]=p->GetID();
+      hepevt_.jmohep[j][0]=p->GetMother();
+      hepevt_.jmohep[j][1]=p->GetSecondMother();
+      hepevt_.jdahep[j][0]=p->GetFirstDaughter();
+      hepevt_.jdahep[j][1]=p->GetFirstDaughter()+p->GetNDaughter()-1;
+      if( p->GetNDaughter() == 0 ) {
+        hepevt_.jdahep[j][1]=0;
+      }
+
+      hepevt_.phep[j][0]=p->GetPx();
+      hepevt_.phep[j][1]=p->GetPy();
+      hepevt_.phep[j][2]=p->GetPz();
+      hepevt_.phep[j][3]=p->GetE();
+      hepevt_.phep[j][4]=p->GetMass();
+      hepevt_.vhep[j][0]=p->GetX()*10;
+      hepevt_.vhep[j][1]=p->GetY()*10;
+      hepevt_.vhep[j][2]=p->GetZ()*10;
+      //hepevt_.vhep[j][3]=p->GetT()*10;
+      hepevt_.vhep[j][3]=productionTimeMap[j]*10;
+   }
+}
 
 //_____________________________________________________________________________
 Bool_t JSFWriteStdHep::Terminate()

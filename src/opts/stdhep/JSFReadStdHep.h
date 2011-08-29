@@ -51,6 +51,8 @@ public:
 	 Int_t &nhep, Int_t isthep[], Int_t idhep[], Int_t jmohep[][2],
          Int_t jdahep[][2], Double_t phep[][5], Double_t vhep[][4]);
 
+  virtual Bool_t ReadOneRecord();
+
   ClassDef(JSFReadStdHepBuf,2)  // JSFReadStdHep event data buffer
 };
 

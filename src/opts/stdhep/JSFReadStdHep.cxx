@@ -268,6 +268,26 @@ Bool_t JSFReadStdHepBuf::ReadHepEvent(const Int_t maxhep, Int_t &nevhep,
   return kTRUE;
 }
 
+//____________________________________________________________________________
+Bool_t JSFReadStdHepBuf::ReadOneRecord()
+{
+  Bool_t ret=JSFReadGeneratorBuf::ReadOneRecord();
+  if( !ret ) { return ret; }
+
+  if( fHEPEV4.GetNHEP() == GetNParticles() ) {
+    TClonesArray *ps=GetParticles();
+    Float_t spin[3];
+    Int_t colorflow[2];
+    for(Int_t i=0;i<GetNParticles();i++){
+      JSFGeneratorParticle *p=(JSFGeneratorParticle*)ps->At(i);
+      for(Int_t k=0;k<3;k++){ spin[k]=fHEPEV4.GetSpin(i,k); }
+      for(Int_t k=0;k<2;k++){ colorflow[k]=fHEPEV4.GetColorFlow(i,k); }
+      p->SetSpinAndColorflow(spin, colorflow);
+    }
+  }
+  return kTRUE;
+}
+
 //_____________________________________________________________________________
 JSFReadStdHepBuf::~JSFReadStdHepBuf()
 {
