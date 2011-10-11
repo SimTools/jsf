@@ -22,7 +22,7 @@ ifdef CLHEP_INCLUDE_DIR
 INCPATH  += -I$(CLHEP_INCLUDE_DIR)
 endif
 
-INCPATH  += -I$(LCIO)/src/cpp/include -I$(LCIO)/sio/include
+INCPATH  += -I$(LCIO)/include 
 CXXFLAGS += -ansi -Wall -O3
 
 LCIOLIBS = $(shell jsf-config --lciolib)
