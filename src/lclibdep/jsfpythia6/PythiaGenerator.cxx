@@ -396,7 +396,12 @@ Bool_t PythiaGenerator::Process(Int_t ev)
      pv(1)=p->GetPx();
      pv(2)=p->GetPy();
      pv(3)=p->GetPz();
-     xv(0)=0.0; xv(1)=0.0 ; xv(2)=0.0 ; xv(3)=0.0 ; 
+//     xv(0)=0.0; xv(1)=0.0 ; xv(2)=0.0 ; xv(3)=0.0 ; 
+//   Make unit conversion correctly.
+     xv(0) = p->GetTime()/29.9792458;
+     xv(1) = p->GetVx()*0.10;
+     xv(2) = p->GetVy()*0.10;
+     xv(3) = p->GetVz()*0.10;
 #ifdef __USE_TPYTHIA__
      Int_t kc=fPythia->Pycomp(kf);
      charge=((Float_t)fPythia->Pychge(kf))/3.0;
@@ -460,7 +465,7 @@ const Char_t *PythiaGenerator::GetEventTypeString()
 { 
   Int_t itype=fPythia->GetMSTI(1);
   
-  static  Char_t *processname[400]={0};
+  const static  Char_t *processname[400]={0};
   processname[1]="e^{+}e^{-} #rightarrow #gamma/Z^{0} ";
   processname[22]="e^{+}e^{-} #rightarrow Z^{0} Z^{0}";
   processname[24]="e^{+}e^{-} #rightarrow Z^{0} H^{0}";

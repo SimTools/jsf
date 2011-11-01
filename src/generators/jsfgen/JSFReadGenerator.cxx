@@ -328,7 +328,10 @@ Bool_t JSFReadGeneratorBuf::ReadOneRecord()
     
 
     p(0)=phep[i][3]; p(1)=phep[i][0]; p(2)=phep[i][1]; p(3)=phep[i][2];
-    v(0)=vhep[i][3]; v(1)=vhep[i][0]; v(2)=vhep[i][1]; v(3)=vhep[i][2];
+
+//   v(0)=vhep[i][3]; v(1)=vhep[i][0]; v(2)=vhep[i][1]; v(3)=vhep[i][2];  
+//   convert unit from HEPEVT to JSFGenerator  ( fixed 30-Aug-2011, Akiya Miyamoto )
+    v(0)=vhep[i][3]/29.9792458; v(1)=vhep[i][0]*0.1; v(2)=vhep[i][1]*0.10; v(3)=vhep[i][2]*0.10;
 
     iser++;
     new(particles[is-1]) JSFGeneratorParticle(iser, id, mass, charge,
