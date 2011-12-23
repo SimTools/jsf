@@ -173,7 +173,8 @@ JSFQuickSim::~JSFQuickSim()
 {
   if( fParam ) delete fParam;
   if( fEventBuf  ) delete fEventBuf;
-
+  fParam = 0;
+  fEventBuf = 0;
 }
 
 //_____________________________________________________________________________
