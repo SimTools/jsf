@@ -38,6 +38,7 @@ extern "C" {
   extern void stdflpyxsec_(int *ntries);
   extern void stdxend_(int *istream);
   extern void heplst_(int *mlst);
+  extern void stdrotboost_(float *the, float *phi, float *bex, float *bey, float *bez);
 };
 
 //_____________________________________________________________________________
@@ -81,6 +82,8 @@ JSFWriteStdHep::JSFWriteStdHep(const char *name, const char *title )
   fCurrentNumberOfFiles=0;
   fMaxOutputSizeInkB=gJSF->Env()->GetValue("JSFWriteStdHep.OutputSizePerFileInkB",1900000);
   fMaxNumberOfFiles=gJSF->Env()->GetValue("JSFWriteStdHep.MaxNumberOfFiles",99);
+  fCrossingAngle=gJSF->Env()->GetValue("JSFWriteStdHep.CrossingAngle",3.144); // in unit of rad. 
+  //   No crossing angle boost, if angle greater than pi (3.14159 )
 }
 
 //_____________________________________________________________________________
@@ -121,8 +124,9 @@ Bool_t JSFWriteStdHep::Initialize()
   if( iMNO != fMaxNumberOfFiles ) { 
     std::cout << "     ( Max. number of files was changed from " << iMNO
   	      << " to 1 because Output File Name ends with .stdhep )" << std::endl;
-    std::cout << "==============================================" << std::endl;
   }
+  std::cout << "  Crossing angle (mrad)    : " << fCrossingAngle << std::endl;
+  std::cout << "==============================================" << std::endl;
 
   return kTRUE;
 }
@@ -461,6 +465,23 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
     ForEventSource5(nev);
   }
 
+// Do boost for crossing angle.
+  if( fCrossingAngle < 3.14159265 ) {
+    Float_t the=0.0;
+    Float_t phi=0.0;
+    Float_t bex=TMath::Sin(fCrossingAngle);
+    Float_t bey=0.0;
+    Float_t bez=0.0;
+    stdrotboost_(&the, &phi, &bex, &bey, &bez);
+
+    if( nev < 10 ) {
+      std::cout << " hepevt after crossing angle boost ... nev=" << nev << std::endl;
+      int mlst=1;
+      heplst_(&mlst);
+    }
+  }
+
+
 //  std::cerr << "JSFWriteStdHep::... esum=" << esum 
 //	<< " pxsum=" << pxsum << " pysum=" << pysum
 //	<< " pzsum=" << pzsum << std::endl;
@@ -509,6 +530,7 @@ Bool_t JSFWriteStdHep::Process(Int_t nev)
        exit(0);
      }
   }
+
 
   Int_t ldlb=fStdxwrtMode;
   stdxwrt_(&ldlb, &fOutStream, &lok);

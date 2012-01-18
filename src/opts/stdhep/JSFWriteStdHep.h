@@ -48,6 +48,7 @@ class JSFWriteStdHep : public JSFModule
   Int_t         fMaxOutputSizeInkB;  // Output data size max.(kB unit)
   Int_t         fMaxNumberOfFiles;  // Maximum number of files.
   Int_t         fStdxwrtMode;       // 1 to write only HEPEVT, 4=1+hepev4
+  Float_t       fCrossingAngle;     // Crossingle angle in unit of rad. no boost if > pi )
 
 	JSFSpring *fSpring;
 
