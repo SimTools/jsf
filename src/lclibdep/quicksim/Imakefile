@@ -68,7 +68,9 @@ $(LIBNAME).$(DllSuf): $(OBJ)
 
 $(LIBNAME).$(DylibSuf): $(OBJ)
 	@echo "Linking $@ "
-	$(LD) $(DYLDFLAGS) -single_module $(OBJ) $(LIBS) -o $(LIBNAME).$(DylibSuf)
+	$(LD) $(DYLDFLAGS) $(SINGLE_MODULE) $(OBJ) $(LIBS) -o $(LIBNAME).$(DylibSuf)
+
+# 	$(LD) $(DYLDFLAGS) -single_module $(OBJ) $(LIBS) -o $(LIBNAME).$(DylibSuf)
 
 exam:  JSFRandom.o  test.o
 	g77 -o exam JSFRandom.o test.o $(ROOTLIBS)	
