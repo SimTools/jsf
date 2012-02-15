@@ -32,7 +32,7 @@ INSTALL   = install -c -p
 #
 # Non-Darwin system
 else
-JSFCONFIGFC = ($(shell jsf-config --fc))
+JSFCONFIGFC = $(shell jsf-config --fc)
 #  ifneq ($(shell which gfortran 2>&1 | grep -vc 'no gfortran'),0)
 ifeq ($(JSFCONFIGFC),gfortran)
 FC        = gfortran
@@ -57,7 +57,7 @@ ifneq ($(UNAME),Darwin)
 OBJS +=  main.o
 endif
 
-JSFCONFIGFC = ($(shell jsf-config --fc))
+JSFCONFIGFC = $(shell jsf-config --fc)
 # ifneq ($(shell which gfortran 2>&1 | grep -vc 'no gfortran'),0)
 ifeq ($(JSFCONFIGFC),gfortran)
 OBJS +=  idate.o pydatawrapper.o
