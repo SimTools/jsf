@@ -87,10 +87,16 @@ endif
     MXTLIBS = -L/usr/X11R6/lib -lXm -lX11 -lXt -lXp -lXext -lm
 endif
 ifeq "$(UNAME)" "Darwin"
-    CC=gcc-32
 ifneq ($(shell which gfortran 2>&1 | grep -vc 'no gfortran'),0)
-    F77=gfortran-32
+    ifneq ($(shell root-config --arch),macosx64)
+        CC=gcc-32
+        F77=gfortran-32
+    else
+        CC=gcc
+        F77=gfortran
+    endif
 else
+    CC=gcc
     F77=g77
 endif
     CFLAGS= $(DFLG) -I/usr/X11R6/include 
