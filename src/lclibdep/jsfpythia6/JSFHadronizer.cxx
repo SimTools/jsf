@@ -89,10 +89,12 @@ typedef struct {
   int np2;
 } Taupos_t;
 
+#if __TAUOLA_MINOR_VERSION__ < 7
 typedef struct {
   float p4tau[4];
 } P4tau_t;
 extern P4tau_t  p4tau_;
+#endif
 
 extern Taupos_t taupos_;
 extern Hepevt_t hepevt_;
@@ -1895,7 +1897,9 @@ void JSFHadronizer::Pytaud(int *itau, int *iorig, int *kforig, int *ndecay)
 
   taupos_.np1=1;
   taupos_.np2=1;
+#if __TAUOLA_MINOR_VERSION__ < 7
   for(int i=0;i<4;i++) { p4tau_.p4tau[i]=hepevt_.phep[kp][i]; }
+#endif
 
   int kto=2;
   if( pid <= 0 ) { kto=1; }

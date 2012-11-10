@@ -46,14 +46,18 @@ ifeq ($(PYTHIAVERSION),6)
 LIBS	      = -L$(LCLIBROOT)/lib -lTAUOLA -lFORTLIB
 FOBJS         = 
 ifneq ($(TAUOLADIR),)
-FOBJS  = fmessage.o tralo4.o pydecy.o
 RANMAR =  
 CXXFLAGS += -D__TAUOLA_MINOR_VERSION__=7
 LIBS =  -L$(TAUOLADIR) -ltauola -L$(PHOTOSDIR) -lphotos 
-LIBS += -L$(PYTHIADIR)/lib -lpythia6422
 LIBS += -L$(WHIZDIR)/a6f/lib -linclude -L$(WHIZDIR)/lib -lwhizard
+ifneq ($(shell uname),Darwin)
+LIBS += -L$(PYTHIADIR)/lib -lpythia6422
 LIBS +=   $(PYTHIADIR)/lib/pythia6_common_address.o
 LIBS +=   $(PYTHIADIR)/lib/tpythia6_called_from_cc.o
+FOBJS  = fmessage.o tralo4.o pydecy.o
+else
+FOBJS  = fmessage.o
+endif
 else
 
 CXXFLAGS += -D__TAUOLA_MINOR_VERSION__=5
