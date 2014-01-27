@@ -231,6 +231,8 @@ Bool_t JSFHadronizer::Initialize()
    fPythia->SetMDCY(23,1,0);
    fPythia->SetMDCY(24,1,0);
    fPythia->SetMDCY(33,1,0);
+#else
+   fPythia->SetMDCY(33,1,0); // 33 used as a dark matter
 #endif
    // Invoke Pyinit with dummy arguments to initialize decay table
    Char_t   *frame  = const_cast<Char_t *>("CMS");
@@ -829,14 +831,14 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
 
     if (nzdk) fPythia->SetMDCY(23,1,0);
     if (nwdk) fPythia->SetMDCY(24,1,0);
-    if (nhdk) fPythia->SetMDCY(33,1,0);
+    if (nhdk) fPythia->SetMDCY(25,1,0);
 
     Fragmentation(nin, rinlst, maxout, nsg, ishpr1, ishpr2,
 		  kstat, jstat, nout, rotlst, iret);
 
     if (nzdk) fPythia->SetMDCY(23,1,mdcyzs);
     if (nwdk) fPythia->SetMDCY(24,1,mdcyws);
-    if (nhdk) fPythia->SetMDCY(33,1,mdcyhs);
+    if (nhdk) fPythia->SetMDCY(25,1,mdcyhs);
 
     if( iret < 0 ) {
       nret = -1;
