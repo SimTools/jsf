@@ -212,6 +212,8 @@ Bool_t JSFHadronizer::Initialize()
 #endif
    Double_t  mh     = gJSF->Env()->GetValue("JSFHadronizer.HiggsMass",120.);
    Double_t  wh     = gJSF->Env()->GetValue("JSFHadronizer.HiggsWidth",0.3605e-2);
+   Double_t  mhc    = gJSF->Env()->GetValue("JSFHadronizer.ChargedHiggsMass",150.);
+   Double_t  whc    = gJSF->Env()->GetValue("JSFHadronizer.ChargedHiggsWidth",0.1);
 
    Int_t hparameter_set=gJSF->Env()->GetValue("JSFHadronizer.ParameterSet",0);
    std::cout << "   Pythia parameter set  : " << hparameter_set 
@@ -225,6 +227,10 @@ Bool_t JSFHadronizer::Initialize()
      std::cout << "   Pythia Higgs mass    : " << mh << std::endl;
      std::cout << "          Higgs width   : " << wh << std::endl;
 
+     fPythia->SetPMAS(37,1,mhc);
+     fPythia->SetPMAS(37,2,whc);
+     std::cout << "   Pythia Charged Higgs mass    : " << mhc << std::endl;
+     std::cout << "          Charged Higgs width   : " << whc << std::endl;
    }
 
 #if 0
@@ -536,6 +542,7 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
   Int_t mdcyzs = fPythia->GetMDCY(23,1);
   Int_t mdcyws = fPythia->GetMDCY(24,1);
   Int_t mdcyhs = fPythia->GetMDCY(25,1);
+  Int_t mdcyhc = fPythia->GetMDCY(37,1);
 
   JSFGeneratorBuf *gbuf=(JSFGeneratorBuf*)EventBuf();
   TClonesArray &part=*(gbuf->GetParticles());
@@ -704,9 +711,10 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
     Int_t nin=0;
     for(Int_t k=0;k<30;k++){ ididit[k]=0; }
 
-    Int_t nzdk = 0;
-    Int_t nwdk = 0;
-    Int_t nhdk = 0;
+    Int_t nzdk  = 0;
+    Int_t nwdk  = 0;
+    Int_t nhdk  = 0;
+    Int_t nhcdk = 0;
 
     //C--
     //C  Loop over partons in this level and store their information
@@ -750,6 +758,7 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
       if (ndau && ida==23) nzdk++;
       if (ndau && ida==24) nwdk++;
       if (ndau && ida==25) nhdk++;
+      if (ndau && ida==37) nhcdk++;
 
       nin++;
       Int_t icf  = (Int_t)rbuf[ip-1][17];
@@ -829,16 +838,18 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
       printf("\n");
     }
 
-    if (nzdk) fPythia->SetMDCY(23,1,0);
-    if (nwdk) fPythia->SetMDCY(24,1,0);
-    if (nhdk) fPythia->SetMDCY(25,1,0);
+    if (nzdk)  fPythia->SetMDCY(23,1,0);
+    if (nwdk)  fPythia->SetMDCY(24,1,0);
+    if (nhdk)  fPythia->SetMDCY(25,1,0);
+    if (nhcdk) fPythia->SetMDCY(37,1,0);
 
     Fragmentation(nin, rinlst, maxout, nsg, ishpr1, ishpr2,
 		  kstat, jstat, nout, rotlst, iret);
 
-    if (nzdk) fPythia->SetMDCY(23,1,mdcyzs);
-    if (nwdk) fPythia->SetMDCY(24,1,mdcyws);
-    if (nhdk) fPythia->SetMDCY(25,1,mdcyhs);
+    if (nzdk)  fPythia->SetMDCY(23,1,mdcyzs);
+    if (nwdk)  fPythia->SetMDCY(24,1,mdcyws);
+    if (nhdk)  fPythia->SetMDCY(25,1,mdcyhs);
+    if (nhcdk) fPythia->SetMDCY(37,1,mdcyhc);
 
     if( iret < 0 ) {
       nret = -1;
@@ -921,7 +932,7 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
     Int_t ip = inoshw[jp-1];
     Int_t id = (Int_t)rbuf[ip-1][1];
     Int_t ida = TMath::Abs(id);
-    if( ida > 25 && ida != 220000 && ida != 1000022 && ida != 1000015 && ida != 1000039) {
+    if( ida > 25 && ida != 37 && ida != 220000 && ida != 1000022 && ida != 1000015 && ida != 1000039) {
       printf("Warning in JSFHadronizer::Hadronize");
       printf(" Particle ID=%d is not recognized.\n",id);
       continue;
@@ -960,9 +971,9 @@ void JSFHadronizer::Hadronize(JSFSpring *spring, Int_t &nret)
       npgen++;
     }
     //C--
-    //C  Tau (15), Z(23), W(24), and H(25).
+    //C  Tau (15), Z(23), W(24), H(25), and H+(37).
     //C--
-    else if( ida==15 || ida==23 || ida==24 || ida==25 ) {
+    else if( ida==15 || ida==23 || ida==24 || ida==25 || ida==37 ) {
       for(Int_t k=0;k<10;k++){ rinlst[k][0]=0; }
       rinlst[0][0] = rbuf[ip-1][1];
       rinlst[0][1] = rbuf[ip-1][4];
