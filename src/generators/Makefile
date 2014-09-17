@@ -4,7 +4,11 @@ MFLAGS	=
 CURRDIR	= .
 
 ifeq ($(shell ls $(ROOTSYS)/lib/libPythia6.so 2> /dev/null),)
+ifeq ($(shell ls $(PYTHIA_ROOT)/lib/libPythia6.so 2> /dev/null),)
 SUBDIRS1 = pythia6 bases
+else
+SUBDIRS1 = bases
+endif
 else
 SUBDIRS1 = bases
 endif
