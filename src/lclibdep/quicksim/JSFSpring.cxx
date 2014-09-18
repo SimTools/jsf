@@ -249,7 +249,7 @@ Bool_t JSFSpringBuf::SetPartons()
 }
 
 // ---------------------------------------------------------------
-void JSFSpring::WriteRandomSeed(Char_t *fw)
+void JSFSpring::WriteRandomSeed(const Char_t *fw)
 {
   Char_t fn[256];
   if( strlen(fw) == 0 ) {
@@ -281,7 +281,7 @@ void JSFSpring::WriteRandomSeed(Char_t *fw)
 
 
 // ---------------------------------------------------------------
-void JSFSpring::ReadRandomSeed(Char_t *fr)
+void JSFSpring::ReadRandomSeed(const Char_t *fr)
 {
   Char_t fn[256];
   if( strlen(fr) == 0 ) {
